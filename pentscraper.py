@@ -220,7 +220,7 @@ def main():
         index,cat_i,search_for,submissions = get_subreddit()                # Get subreddit name
         
         collected = get_posts(reddit,index,cat_i,search_for,submissions)    # Get posts in subreddit
-        overview = sort_posts(collected)                                    # Sort posts from 
+        overview = sort_posts(collected)                                    # Sort posts from collected
                              
         write_csv(index,cat_i,search_for,overview)                          # Create CSV
         
