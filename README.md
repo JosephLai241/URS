@@ -5,17 +5,17 @@ You will need to install the PRAW module in order for this program to work. `pip
 **NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6.
 
 This is a Reddit scraper I created using the Reddit API. It is designed specifically to scrape for penetration testing information within the following subreddits:
- - Pentesting
- - AskNetSec
- - HowToHack
- - netsec
- - hacking
- - netsecstudents
- - raspberry_pi
- - homelab
- - Kalilinux
- - Hacking_Tutorials
- - pentest
+ - r/Pentesting
+ - r/AskNetSec
+ - r/HowToHack
+ - r/netsec
+ - r/hacking
+ - r/netsecstudents
+ - r/raspberry_pi
+ - r/homelab
+ - r/Kalilinux
+ - r/Hacking_Tutorials
+ - r/pentest
 
 You can choose which category of posts to scrape each subreddit as well as how many results are returned. These options include:
  - Hot
