@@ -37,7 +37,7 @@ First, create your own Reddit account and then head over to https://old.reddit.c
 
 Click "create app". Name your app and choose "script" for the type of app. In the redirect URL, type in "http://localhost:8080" since this is a personal use app. You can also add a description and an about URL. 
 
-Once you create the app, you should see a string of 14 characters on the top left corner underneath "personal use script." That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. You'll need to save this information as it will be used in the program in order to use the Reddit API. You'll also have to provide your app name, Reddit account username and password as well. 
+Once you create the app, you should see a string of 14 characters on the top left corner underneath "personal use script." That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. Save this information as it will be used in the program in order to use the Reddit API. You will also have to provide your app name, Reddit account username and password as well. 
 
 This block of credentials is found on lines 14-18.
 
