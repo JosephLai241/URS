@@ -24,6 +24,10 @@ You can choose which category of posts to scrape each subreddit as well as how m
  - Top
  - Rising
  - Search - Users also have the option to search each subreddit for keywords; however, all search results are returned and the number of results the user specifically wants is disregarded.
+ 
+Once you configure the settings for the scrape, the program will write a .csv file to the same directory in which this scraper program is saved on your computer. The .csv file will include the Title, Score, ID, URL, Comment Count, Date Created, and the Text body of each post. 
+
+The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you have searched for a specific keyword in a subreddit, file names are formatted like so: "SUBREDDIT-Search-'KEYWORD' DATE.csv".
 
 # How to get Reddit API Credentials
 
