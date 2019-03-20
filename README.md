@@ -39,4 +39,6 @@ This block of credentials is found on lines 14-18.
 
 This program can be easily modified to scrape any subreddit(s). All you have to do is change the list of subreddits to scrape on line 21 to the subreddits you want. Also change the text in the subreddit selection loop as to avoid confusion.
 
-Enjoy!
+
+
+*Enjoy!*
