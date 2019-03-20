@@ -141,7 +141,7 @@ def get_subreddit():
             
     return index,cat_i,search_for,submissions
 
-### Get posts of subreddit. Return the dictionary "overview" when donezo
+### Get posts of subreddit
 def get_posts(reddit,index,cat_i,search_for,submissions):
     print("Getting posts...")
     subreddit = reddit.subreddit(search[index])
@@ -161,7 +161,7 @@ def get_posts(reddit,index,cat_i,search_for,submissions):
             
     return collected
     
-### Sort overview dictionary
+### Sort posts that were collected in the scrape and make a dictionary for csv creation
 def sort_posts(collected):
     print("Sorting posts...")
     overview = {"Title" : [], \
@@ -220,7 +220,7 @@ def main():
         index,cat_i,search_for,submissions = get_subreddit()                # Get subreddit name
         
         collected = get_posts(reddit,index,cat_i,search_for,submissions)    # Get posts in subreddit
-        overview = sort_posts(collected)                                    # Sort posts from collected
+        overview = sort_posts(collected)                                    # Sort posts from scrape, return dictionary
                              
         write_csv(index,cat_i,search_for,overview)                          # Create CSV
         
