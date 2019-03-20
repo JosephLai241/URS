@@ -161,7 +161,7 @@ def get_posts(reddit,index,cat_i,search_for,submissions):
             
     return collected
     
-### Sort posts that were collected in the scrape and make a dictionary for csv creation
+### Sort posts that were collected in the scrape and make a dictionary for CSV creation
 def sort_posts(collected):
     print("Sorting posts...")
     overview = {"Title" : [], \
