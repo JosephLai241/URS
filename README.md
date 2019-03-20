@@ -4,7 +4,7 @@ You will need to install the PRAW module in order for this program to work. `pip
 
 **NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6.
 
-This is a Reddit scraper I created using the Reddit API. It is designed specifically to scrape for information within the following subreddits:
+This is a Reddit scraper I created using the Reddit API. It is designed specifically to scrape for penetration testing information within the following subreddits:
  - Pentesting
  - AskNetSec
  - HowToHack
@@ -37,6 +37,6 @@ This block of credentials is found on lines 14-18.
 
 # How to modify this program to scrape other subreddits
 
-This program can be easily modified to scrape any subreddit(s). All you have to do is change the list of subreddits to scrape on line 21 to the subreddits you want.
+This program can be easily modified to scrape any subreddit(s). All you have to do is change the list of subreddits to scrape on line 21 to the subreddits you want. Also change the text in the subreddit selection loop as to avoid confusion.
 
 Enjoy!
