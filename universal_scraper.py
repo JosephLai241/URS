@@ -49,7 +49,7 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
 
 """))
             
-            print("\nChecking existence of subreddits...")        
+            print("\nChecking if subreddits exist...")        
             
             search_for = " ".join(search_for.split())                
             sub_list = [subreddit for subreddit in search_for.split(" ")]
