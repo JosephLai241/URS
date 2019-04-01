@@ -49,20 +49,20 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
 
 """))
             
-            print("\nChecking if subreddits exist...")        
+            print("\nChecking if subreddit(s) exist...")        
             
             search_for = " ".join(search_for.split())                
             sub_list = [subreddit for subreddit in search_for.split(" ")]
             found,not_found = existence(reddit,sub_list)
             
             if found:
-                print("\nThe following subreddits were found and will be searched in:")
-                print("-"*60)
+                print("\nThe following subreddit(s) were found and will be searched in:")
+                print("-"*62)
                 print(*found, sep = "\n")
             
             if not_found:
-                print("\nThe following subreddits were not found and will be skipped:")
-                print("-"*60)
+                print("\nThe following subreddit(s) were not found and will be skipped:")
+                print("-"*62)
                 print(*not_found, sep = "\n")
                  
             while True:                
