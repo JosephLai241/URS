@@ -32,4 +32,4 @@ Once you create the app, you should see a string of 14 characters on the top lef
 
 This block of credentials is found on lines 14-18.
 
-*Enjoy!*
+***Enjoy!***
