@@ -24,7 +24,7 @@ search = ["Pentesting","AskNetsec","HowToHack","netsec","hacking","netsecstudent
 ### Subreddit categories
 categories = ["Hot","New","Controversial","Top","Rising","Search"]
 
-### Subreddit search selection 
+### Subreddit search selection
 def get_subreddit():
     ### Subreddit selection loop
     while True:
