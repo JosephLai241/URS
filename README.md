@@ -1,7 +1,7 @@
 # Universal Reddit Scraper
 Universal Reddit scraper using the Reddit API (PRAW).
 
-Written in Python.
+Written in Python. Intended for use in a Linux terminal.
 
 You will need to install the PRAW module in order for this program to work. pip install praw or pip3 install praw depending on your system. You will also need your own Reddit account and API credentials.
 
