@@ -2,7 +2,7 @@
 """
 Created on Fri Mar  1 17:44:53 2019
 
-Reddit scraper using the Reddit API (PRAW)
+Universal Reddit scraper using the Reddit API (PRAW)
 
 @author: Joseph Lai
 """
@@ -87,7 +87,6 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
 ### Make dictionary from master list
 def create_dict(subs):
     master = dict((sub,[]) for sub in subs)
-
     return master
 
 ### Select post category and the number of results returned from each subreddit to be scraped
