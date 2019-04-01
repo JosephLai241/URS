@@ -11,6 +11,9 @@ from prawcore import NotFound
 import csv
 import datetime as dt
 
+### Get current date
+date = dt.datetime.now().strftime("%m-%d-%Y")
+
 ### Reddit API Credentials
 c_id = "14_CHAR_HERE"               # Personal Use Script (14 char)
 c_secret = "27_CHAR_HERE"           # Secret key (27 char)
@@ -192,9 +195,9 @@ def sort_posts(collected):
 def write_csv(sub,cat_i,search_for,overview):
     fname = ""
     if cat_i == 5:
-        fname = str(("%s-%s-'%s' %s.csv") % (sub,categories[cat_i],search_for,dt.datetime.now().strftime("%m-%d-%Y")))
+        fname = str(("%s-%s-'%s' %s.csv") % (sub,categories[cat_i],search_for,date))
     else:
-        fname = str(("%s-%s %s.csv") % (sub,categories[cat_i],dt.datetime.now().strftime("%m-%d-%Y")))
+        fname = str(("%s-%s %s.csv") % (sub,categories[cat_i],date))
         
     with open(fname, "w") as results:
         writer = csv.writer(results, delimiter = ",")
