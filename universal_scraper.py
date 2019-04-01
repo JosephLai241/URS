@@ -35,7 +35,7 @@ def existence(reddit,sub_list):
         
     return found,not_found
 
-### Select subreddit(s) to scrape
+### Specify subreddit(s) to scrape
 def get_subreddits(reddit):
     while True:
         try:        
@@ -59,7 +59,6 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
                 print("\nThe following subreddit(s) were found and will be searched in:")
                 print("-"*62)
                 print(*found, sep = "\n")
-            
             if not_found:
                 print("\nThe following subreddit(s) were not found and will be skipped:")
                 print("-"*62)
@@ -71,18 +70,16 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
                     if confirm.lower().strip() == "y":
                         subs = [sub for sub in found]
                         return subs
-                    
                     elif confirm.lower().strip() == "n":
-                        break                 
-                    
+                        break
                     elif confirm.isdigit() or len(confirm) > 1:
                         raise ValueError
 
                 except ValueError:
-                    print("\nNot an option!")
+                    print("Not an option! Try again.")
     
         except:
-            pass   
+            pass    ###### Add exception handling for incorrect Reddit credentials here
 
 ### Make dictionary from master list
 def create_dict(subs):
@@ -110,10 +107,8 @@ def get_settings(subs,master):
                     print("\nSelected search option")
 
                     search_for = str(input("\nWhat would you like to search for in r/%s? " % sub))
-                    
                     master[sub].append(cat_i)
                     master[sub].append(search_for)
-
                 else:
                     print("\nSelected post category: %s" % categories[cat_i])
                     
@@ -128,15 +123,13 @@ def get_settings(subs,master):
                                 break
 
                         except ValueError:
-                            print("\nNot an option! Try again.")    
-
+                            print("Not an option! Try again.")
                 break
             
             except IndexError:
-                print("\nNot an option! Try again.")
-            
+                print("Not an option! Try again.")
             except ValueError:
-                print("\nNot an option! Try again.")
+                print("Not an option! Try again.")
 
 ### Print scraping details for each sub
 def print_settings(master):
@@ -146,7 +139,6 @@ def print_settings(master):
     for sub,settings in master.items():
         cat_i = settings[0]
         specific = settings[1]
-        
         print("\n{:<25}{:<17}{:<30}".format(sub,categories[cat_i],specific))
 
     confirm = str(input("\nConfirm options? [Y/N] "))
@@ -219,14 +211,13 @@ def main():
                              	client_secret = c_secret, \
                              	user_agent = u_a, \
                              	username = usrnm, \
-                             	password = passwd)    # Connect to reddit
+                             	password = passwd)    # Connect to Reddit
             break
 
     	except praw.exceptions.APIException:    # Catch Reddit API error. REVIEW PARAMS
-    		print("Unable to connect to server. Try again.")
-    	
+    		print("Reddit API error. Try again.")
     	except praw.exceptions.ClientException:    # Catch client login error
-    		print("Unable to log in. Try again.")
+    		print("Client-side error. Try again.")
 
     ### Scraping loop
     while True:
@@ -253,14 +244,10 @@ def main():
                     repeat = input("\nScrape again? [Y/N] ")
                     if repeat.isdigit() or len(repeat) > 1:
                         raise ValueError
-
                     else:
                         return str(repeat)
             
                 except ValueError:
-                    print("Not an option! Try again.")
-                        
-                except len(repeat) > 1:
                     print("Not an option! Try again.")
 
         redo = another()
