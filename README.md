@@ -30,7 +30,7 @@ For Linux systems, if your python3 is not 3.6.x, you can make an alias for it in
 
 ![Screenshot 1](../assets/Reddit Scraper 1.png?raw=true)
 
-[[Universal-Reddit-Scraper/1.png?raw=true]]
+[[https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/1.png?raw=true]]
 
 # How to get Reddit API Credentials
 
