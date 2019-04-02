@@ -82,9 +82,10 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
                     print("Not an option! Try again.")
     
         except:
+            print("Error logging in. Check to see if you have provided correct credentials.")
             pass    ###### Add exception handling for incorrect Reddit credentials here
 
-### Make dictionary from master list
+### Make dictionary from subreddit list
 def create_dict(subs):
     master = dict((sub,[]) for sub in subs)
     return master
@@ -134,7 +135,7 @@ def get_settings(subs,master):
             except ValueError:
                 print("Not an option! Try again.")
 
-### Print scraping details for each sub
+### Print scraping details for each subreddit
 def print_settings(master):
     print("\n------------------Current settings for each subreddit-------------------")    
     print("\n{:<25}{:<17}{:<30}".format("Subreddit","Category","Number of results / Keyword(s)"))
@@ -149,7 +150,7 @@ def print_settings(master):
 
     return option
 
-### Get posts of subreddit. Return the dictionary "overview" when donezo
+### Get posts from subreddit. Return the dictionary collected when done
 def get_posts(reddit,sub,cat_i,search_for):
     print("\nGetting posts for r/%s..." % sub)
     subreddit = reddit.subreddit(sub)
@@ -169,7 +170,7 @@ def get_posts(reddit,sub,cat_i,search_for):
             
     return collected
 
-### Sort overview dictionary
+### Sort collected dictionary
 def sort_posts(collected):
     print("Sorting posts...")
     overview = {"Title" : [], \
