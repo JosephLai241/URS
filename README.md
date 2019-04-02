@@ -41,7 +41,7 @@ You can choose to just scrape a single subreddit, or enter a list of subreddits 
 
 ![Enter subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/enter.png)
 
-After entering the subreddit(s) you want to scrape, the program will check if the subreddit exists. It will separate the results from the check into a list of found subreddits and ones that are not found.
+After entering the subreddit(s) you want to scrape, the program will check if the subreddit exists. It will separate the results from the check into a list of valid and invalid subreddits.
 
 ![Check subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/checksubs.png)
 
