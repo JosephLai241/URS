@@ -59,8 +59,8 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
             found,not_found = existence(reddit,sub_list)
             
             if found:
-                print("\nThe following subreddit(s) were found and will be searched in:")
-                print("-"*62)
+                print("\nThe following subreddit(s) were found and will be scraped:")
+                print("-"*58)
                 print(*found, sep = "\n")
             if not_found:
                 print("\nThe following subreddit(s) were not found and will be skipped:")
