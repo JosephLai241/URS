@@ -76,6 +76,6 @@ This block of credentials is found on lines 15-19.
 # List of things I still have to add or change in this program
 - As of now, users would have to start over if they decide they are not satisfied with their scrape settings. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
 
-- I intended for this to be used in the terminal, specifically for Linux-based distros. Will look into a better way to print out the scraped results into the terminal instead of creating CSV files for each scrape. Or maybe I will add a "Display scrape results in terminal / Create CSV file / Both? [T/C/B] " option.
+- I intended for this to be used in the terminal, specifically for Linux-based distros. Will look into a better way to print out the scraped results into the terminal instead of creating CSV files for each scrape. Also considering adding a "Display scrape results in terminal / Create CSV file / Both? [T/C/B] " option.
 
 - I am still not exactly sure how to do PRAW exception handling, will have to look into that a bit more to catch invalid Reddit credentials, forbidden HTTP responses, etc.
