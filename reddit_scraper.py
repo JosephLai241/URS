@@ -40,18 +40,21 @@ def existence(reddit,sub_list):
 
 ### Specify subreddit(s) to scrape
 def get_subreddits(reddit):
-    while True:
-        try:        
-            search_for = str(input("""
+    print("""
   ========================================================================
            Reddit Scraper - Scrape Any Subreddit Of Your Choosing
   ========================================================================                       
-         **Scraper captures posts from all time on the subreddit**
-
+         **Scraper captures posts from all time on the subreddit**""")
+    
+    while True:
+        try:        
+            search_for = str(input("""
 Enter subreddit or a list of subreddits (separated by a space) to scrape:
 
 """))
-            
+            if not search_for:
+                raise ValueError
+                
             print("\nChecking if subreddit(s) exist...")        
             
             search_for = " ".join(search_for.split())                
@@ -69,18 +72,20 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
                  
             while True:                
                 try:
-                    confirm = input("\nConfirm selection? [Y/N] ")
-                    if confirm.lower().strip() == "y":
+                    confirm = input("\nConfirm selection? [Y/N] ").strip()
+                    if confirm.lower() == "y":
                         subs = [sub for sub in found]
                         return subs
-                    elif confirm.lower().strip() == "n":
+                    elif confirm.lower() == "n":
                         break
                     elif confirm.isdigit() or len(confirm) > 1:
                         raise ValueError
 
                 except ValueError:
                     print("Not an option! Try again.")
-    
+        
+        except ValueError:
+            print("No subreddits were specified! Try again.")
         except:
             print("Error logging in. Check to see if you have provided correct credentials.")
             pass    ###### Add exception handling for incorrect Reddit credentials here
@@ -110,16 +115,27 @@ def get_settings(subs,master):
                 if cat_i == 5:
                     print("\nSelected search option")
 
-                    search_for = str(input("\nWhat would you like to search for in r/%s? " % sub))
-                    master[sub].append(cat_i)
-                    master[sub].append(search_for)
+                    while True:
+                        try:
+                            search_for = str(input("\nWhat would you like to search for in r/%s? " % sub)).strip()
+                            
+                            if not search_for:
+                                raise ValueError
+                            else:
+                                master[sub].append(cat_i)
+                                master[sub].append(search_for)
+                                break
+
+                        except ValueError:
+                            print("Not an option! Try again.")
+                
                 else:
                     print("\nSelected post category: %s" % categories[cat_i])
                     
                     while True:                        
                         try:                            
-                            submissions = input(("\nHow many results do you want to capture from r/%s? ") % sub)
-                            if submissions.isalpha():
+                            submissions = input(("\nHow many results do you want to capture from r/%s? ") % sub).strip()
+                            if submissions.isalpha() or not submissions:
                                 raise ValueError
                             else:                            
                                 master[sub].append(cat_i)
@@ -145,10 +161,18 @@ def print_settings(master):
         specific = settings[1]
         print("\n{:<25}{:<17}{:<30}".format(sub,categories[cat_i],specific))
 
-    confirm = str(input("\nConfirm options? [Y/N] "))
-    option = confirm.lower().strip()
+    while True:
+        try:
+            confirm = input("\nConfirm options? [Y/N] ").strip()
+            if confirm.lower() == "y":            
+                return confirm
+            elif confirm.lower() == "n":
+                break                 
+            elif confirm.isdigit() or len(confirm) > 1:
+                raise ValueError
 
-    return option
+        except ValueError:
+            print("Not an option! Try again.")
 
 ### Get posts from subreddit. Return the dictionary collected when done
 def get_posts(reddit,sub,cat_i,search_for):
@@ -246,7 +270,7 @@ def main():
             while True:
                 try:
                     repeat = input("\nScrape again? [Y/N] ").strip()
-                    if repeat.isdigit() or len(repeat) > 1:
+                    if repeat.isdigit() or len(repeat) > 1 or not repeat:
                         raise ValueError
                     else:
                         return str(repeat)
@@ -254,8 +278,8 @@ def main():
                 except ValueError:
                     print("Not an option! Try again.")
 
-        redo = another()
-        if redo == "n":
+        repeat = another()
+        if repeat == "n":
             print("\nExiting.")
             break
 
