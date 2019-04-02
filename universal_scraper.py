@@ -245,7 +245,7 @@ def main():
         def another():
             while True:
                 try:
-                    repeat = input("\nScrape again? [Y/N] ")
+                    repeat = input("\nScrape again? [Y/N] ").strip()
                     if repeat.isdigit() or len(repeat) > 1:
                         raise ValueError
                     else:
