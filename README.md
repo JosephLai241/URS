@@ -28,7 +28,7 @@ The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you
 
 For Linux systems, if your python3 is not 3.6.x, you can make an alias for it in your .bashrc by adding `alias python3.6='/path/to/python3.6.x` at the bottom of the file. Usually the path is `/usr/bin/python3.6`. Now you'll be able to use Python 3.6.x by just typing `python3.6` in the terminal.
 
-![When you start the scraper, you'll be greeted with this welcome screen.](Reddit-Scraper/Reddit Scraper 1.png)
+![When you start the scraper, you'll be greeted with this welcome screen.](/Reddit-Scraper/Reddit Scraper 1.png)
 
 # How to get Reddit API Credentials
 
