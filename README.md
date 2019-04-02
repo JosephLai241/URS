@@ -31,9 +31,9 @@ First, you will have to provide your own Reddit credentials in this block of cod
 
 ![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/credentialblock.png)
 
-**More information on how to acquire your own credentials is at the bottom of this readme.** After changing the text, you'll be able to use this scraper.
+**More information on how to acquire your own credentials is at the bottom of this readme.** You have to provide valid credentials, otherwise the scraper will not work.
 
-When you initialize this program, you'll be greeted with this screen.
+When you initialize this program, you will be greeted with this screen.
 
 ![Start](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/welcome.png)
 
@@ -45,7 +45,7 @@ After entering the subreddit(s) you want to scrape, the program will check if th
 
 ![Check subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/checksubs.png)
 
-You will then have the option to choose the post category within the subreddit (Hot, New, Controversial, Top, Rising, Search). After choosing the category, you'll also have the option to choose how many results you'd like to be returned. Again, this only applies if you do not choose the Search option.
+You will then have the option to choose the post category within the subreddit (Hot, New, Controversial, Top, Rising, Search). After choosing the category, you will also have the option to choose how many results you would like to be returned. Again, this only applies if you do not choose the Search option.
 
 ![Settings 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/settings1.png)
 
