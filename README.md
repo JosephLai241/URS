@@ -37,7 +37,7 @@ This block of credentials is found on lines 15-19.
 
 For Linux-based systems, you can check which version of Python you are running using `python3 -V`. If your python3 is not 3.6.x, you can make an alias for it by editing your .bashrc and adding `alias python3.6='/path/to/python3.6.x'` at the bottom of the file. Usually the path is `/usr/bin/python3.6`. Now you will be able to use Python 3.6.x by just typing `python3.6` in the terminal.
 
-First, you will have to provide your own Reddit credentials in this block of code from lines 15-19.
+First, you will have to provide your own Reddit credentials in this block of code.
 
 ![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/credentialblock.png)
 
