@@ -1,7 +1,9 @@
 # Universal Reddit Scraper
 Universal Reddit scraper using the Reddit API (PRAW).
 
-Written in Python. Intended for use in a Linux terminal.
+Written in Python.
+
+For a command-line interface intended for use in a terminal, check out my [CLI version of this scraper](https://github.com/JosephLai241/Universal-Reddit-Scraper-CLI/tree/master).
 
 You will need to install the PRAW module in order for this program to work. `pip install praw` or `pip3 install praw` depending on your system. You will also need your own Reddit account and API credentials.
 
@@ -25,7 +27,7 @@ The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you
 
 # How to get Reddit API Credentials
 
-First, create your own Reddit account and then head over to [Reddit's apps page.](https://old.reddit.com/prefs/apps)
+First, create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps).
 
 Click "create app". Name your app and choose "script" for the type of app. In the redirect URL, type in "http://localhost:8080" since this is a personal use app. You can also add a description and an about URL. 
 
