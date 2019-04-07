@@ -3,7 +3,7 @@ Universal Reddit scraper using the Reddit API (PRAW).
 
 Written in Python.
 
-For a command-line interface intended for use in a Linux terminal, check out the [CLI version of this scraper](https://github.com/JosephLai241/Universal-Reddit-Scraper-CLI/tree/master).
+**For a command-line interface version of this project that is intended for use in a terminal, check out the [CLI version](https://github.com/JosephLai241/Universal-Reddit-Scraper-CLI/tree/master).**
 
 You will need to install the PRAW module in order for this program to work. `pip install praw` or `pip3 install praw` depending on your system. You will also need your own Reddit account and API credentials.
 
@@ -36,8 +36,6 @@ Once you create the app, you should see a string of 14 characters on the top lef
 This block of credentials is found on lines 15-19.
 
 # Screenshots / Walkthrough
-
-For Linux-based systems, you can check which version of Python you are running using `python3 -V`. If your python3 is not 3.6.x, you can make an alias for it by editing your .bashrc and adding `alias python3.6='/path/to/python3.6.x'` at the bottom of the file. Usually the path is `/usr/bin/python3.6`. Now you will be able to use Python 3.6.x by just typing `python3.6` in the terminal.
 
 First, you will have to provide your own Reddit credentials in this block of code.
 
@@ -78,6 +76,6 @@ When you confirm the settings, the program will write CSV files to the directory
 # List of things I still have to add or change in this program
 - As of now, users would have to start over if they decide they are not satisfied with their scrape settings. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
 
-- This program is optimized for use in the terminal, specifically for Linux-based distros. I will look into a way to neatly print out the scraped results into the terminal instead of creating CSV files for each scrape. Also considering adding a "Display scrape results in terminal / Create CSV file / Both? [T/C/B] " option.
+- ~~This program is optimized for use in the terminal, specifically for Linux-based distros. I will look into a way to neatly print out the scraped results into the terminal instead of creating CSV files for each scrape. Also considering adding a "Display scrape results in terminal / Create CSV file / Both? [T/C/B] " option.~~ I've decided to create a new repo for a command line optimized version of this project. The link to the CLI version of this project is located at the very top of this readme.
 
 - I am still not exactly sure how to do PRAW exception handling, will have to look into that a bit more to catch invalid Reddit credentials, forbidden HTTP responses, etc.
