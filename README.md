@@ -79,3 +79,5 @@ When you confirm the settings, the program will write CSV files to the directory
 - ~~This program is optimized for use in the terminal, specifically for Linux-based distros. I will look into a way to neatly print out the scraped results into the terminal instead of creating CSV files for each scrape. Also considering adding a "Display scrape results in terminal / Create CSV file / Both? [T/C/B] " option.~~ I've decided to create a new repo for a command line optimized version of this project. The link to the CLI version of this project is located at the very top of this readme.
 
 - I am still not exactly sure how to do PRAW exception handling, will have to look into that a bit more to catch invalid Reddit credentials, forbidden HTTP responses, etc.
+
+- Considering adding an option where users can specify the data fields they would like in the CSV files instead of the current default fields.
