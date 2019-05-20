@@ -9,7 +9,7 @@ You will need to install the PRAW module in order for this program to work. `pip
 
 **NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6.
 
-This is a universal Reddit scraper where you can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can also search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
+This is a universal Reddit scraper where you can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
 
 Options for which category of posts to scrape for are as follows:
 - Hot
