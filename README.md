@@ -1,7 +1,7 @@
 # Universal Reddit Scraper
 Universal Reddit scraper using the Reddit API (PRAW).
 
-Written in Python.
+Written in Python. Tested with Python 3.6.
 
 **For a command-line interface version of this project, check out the [CLI version](https://github.com/JosephLai241/Universal-Reddit-Scraper-CLI/tree/master). This project is still under development, but expect a full working version soon!**
 
