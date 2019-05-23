@@ -1,13 +1,13 @@
 # Universal Reddit Scraper
 Universal Reddit scraper using the Reddit API (PRAW).
 
-Written in Python. Tested with Python 3.6.
+Written in Python.
 
 **For a command-line interface version of this project, check out the [CLI version](https://github.com/JosephLai241/Universal-Reddit-Scraper-CLI/tree/master). This project is still under development, but expect a full working version soon!**
 
 You will need to install the PRAW module in order for this program to work. `pip install praw` or `pip3 install praw` depending on your system. You will also need your own Reddit account and API credentials.
 
-**NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6.
+**NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6. This project was written in Python 3 and tested with Python 3.6.
 
 This is a universal Reddit scraper where you can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
 
