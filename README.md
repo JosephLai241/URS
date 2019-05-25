@@ -1,5 +1,5 @@
 # Universal Reddit Scraper
-Universal Reddit scraper using the Reddit API (PRAW).
+Universal Reddit scraper using the Reddit API ([PRAW](https://pypi.org/project/praw/)).
 
 Written in Python.
 
