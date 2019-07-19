@@ -3,7 +3,7 @@ Universal Reddit scraper using the Reddit API ([PRAW](https://pypi.org/project/p
 
 Written in Python.
 
-**For a command-line interface version of this project, check out the [CLI version](https://github.com/JosephLai241/Universal-Reddit-Scraper-CLI/tree/master). This project is still under development, but expect a full working version soon!**
+**I previously said that I would make a new repo for the CLI version of this scraper. As I progressed in creating a CLI for the scraper, I realized I would like to integrate the normal scraper so that users can just use a flag to call the non-CLI scraper (the current version), so having two repos would be redundant. That being said, I have deleted the other repo and am going to replace the current scraper.py file with one that supports CLI, add an extra section in the walkthrough for CLI usage, and add a changelog section.**
 
 You will need to install the PRAW module in order for this program to work. `pip install praw` or `pip3 install praw` depending on your system. You will also need your own Reddit account and API credentials.
 
@@ -73,10 +73,11 @@ When you confirm the settings, the program will write CSV files to the directory
 
 ![CSVs created](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/csvcreated.png)
 
+# Changelog
+- **April 2, 2019:** Universal Reddit Scraper 1.0 finished. Does not include CLI support.
+
 # List of things I still have to add or change in this program
 - As of now, users would have to start over if they decide they are not satisfied with their scrape settings. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
-
-- ~~This program is optimized for use in the terminal, specifically for Linux-based distros. I will look into a way to neatly print out the scraped results into the terminal instead of creating CSV files for each scrape. Also considering adding a "Display scrape results in terminal / Create CSV file / Both? [T/C/B] " option.~~ I've decided to create a new repo for a command line optimized version of this project. The link to the CLI version of this project is located at the very top of this readme.
 
 - I am still not exactly sure how to do PRAW exception handling, will have to look into that a bit more to catch invalid Reddit credentials, forbidden HTTP responses, etc.
 
