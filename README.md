@@ -5,7 +5,11 @@ Written in Python.
 
 **I previously said that I would make a new repo for the CLI version of this scraper. As I progressed in creating a CLI for the scraper, I realized I would like to integrate the normal scraper so that users can just use a flag to call the non-CLI scraper (the current version), so having two repos would be redundant. That being said, I have deleted the other repo and am going to replace the current scraper.py file with one that supports CLI, add an extra section in the walkthrough for CLI usage, and add a changelog section.**
 
-You will need to install the PRAW module in order for this program to work. `pip install praw` or `pip3 install praw` depending on your system. You will also need your own Reddit account and API credentials.
+I provided a requirements.txt for a quick install of both the PRAW and argparse modules. 
+
+`pip install -r requirements.txt` 
+
+You will also need your own Reddit account and API credentials.
 
 **NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6. This project was written in Python 3 and tested with Python 3.6.
 
@@ -21,7 +25,9 @@ Options for which category of posts to scrape for are as follows:
 
 *NOTE:* If you choose to search for something within a subreddit, all the results are returned and you will not be able to specify how many results are returned.
 
-Once you configure the settings for the scrape, the program will write a .csv file to the same directory in which this scraper program is saved on your computer. The .csv file will include the Title, Score, ID, URL, Comment Count, Date Created, and the Text body of each post. 
+Once you configure the settings for the scrape, the program will write a .csv file to the same directory in which this scraper program is saved on your computer. 
+
+The .csv file will scrape the Title, Score, ID, URL, Comment Count, Date Created, and the Text body of each post. 
 
 The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you have searched for a specific keyword in a subreddit, file names are formatted like so: "SUBREDDIT-Search-'KEYWORD' DATE.csv".
 
@@ -35,6 +41,27 @@ Once you create the app, you should see a string of 14 characters on the top lef
 
 This block of credentials is found on lines 15-19.
 
+# Some Linux Tips
+
+- **Alias**
+  - If you do not want to type out the path to your Python3.6 every time you run the program, you can create an alias by adding a line in your .bashrc.
+  - `alias python3.6='/usr/bin/python3.6'`
+  - I named the alias "python3.6" and set the path to where my Python3.6 is located. Your Python3.6 may be located elsewhere. Use `which python3.6` to get the path to where it is installed on your machine.
+  - Now you will only have to prepend `python3.6` to run the scraper.
+    - `python3.6 scraper.py ...`
+
+- **`./`**
+  - You can even further simplify running the program by making the program executable.
+  - `sudo chmod +x scraper.py`
+  - Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. Again, you can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
+  - Now you will only have to prepend `./` to run the scraper.
+    - `./scraper.py ...`
+  - Troubleshooting
+    - If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim.
+      - `vim scraper.py`
+      - `:set fileformat=unix`
+      - `:wq!`
+
 # Screenshots / Walkthrough
 
 First, you will have to provide your own Reddit credentials in this block of code.
@@ -43,9 +70,40 @@ First, you will have to provide your own Reddit credentials in this block of cod
 
 **You have to provide valid credentials, otherwise the scraper will not work.**
 
-When you initialize this program, you will be greeted with this screen.
+## CLI scraper
 
-![Start](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/welcome.png)
+Telling the program to scrape by providing flags is much faster than the basic method.
+
+Provide the scraper with the `-s` flag to indicate a new subreddit, the post category, and finally, depending on the category selected, either enter the number of results you would like returned or keyword(s) to search for during the scrape.
+
+`-s SUBREDDIT CATEGORY RESULTS_OR_KEYWORDS`
+
+Category options are as follows:
+
+ - H,h - Hot
+ - N,n - New
+ - C,c - Controversial
+ - T,t - Top
+ - R,r - Rising  
+ - S,s - Search
+ 
+ You can scrape for multiple subreddits very quickly.
+ 
+ ![Multiple flags](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/multiple_flags.png)
+ 
+ The program will then print the title, check if the subreddit exists, then print out the scraping settings. If you enter subreddit(s) that do not exist, a list of the non-existent subreddit(s) will be printed.
+ 
+ ![Settings](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/subs_settings.png)
+ 
+ After confirming the settings, the program will write CSV files to the directory in which you saved the program.
+ 
+ ![Get, Sort, Write](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/get_sort_write.png)
+ 
+## Basic scraper
+
+If you do not want to use the command line flags, you can still use Universal Reddit Scraper 1.0 by providing the `-b` flag.
+
+![B Flag](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b_flag.png)
 
 You can choose to just scrape a single subreddit, or enter a list of subreddits separated by a space.
 
