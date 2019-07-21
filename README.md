@@ -39,39 +39,39 @@ This block of credentials is found on lines 15-19.
 
 First, you will have to provide your own Reddit credentials in this block of code.
 
-![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/credentialblock.png)
+![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/credentialblock.png)
 
 **You have to provide valid credentials, otherwise the scraper will not work.**
 
 When you initialize this program, you will be greeted with this screen.
 
-![Start](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/welcome.png)
+![Start](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/welcome.png)
 
 You can choose to just scrape a single subreddit, or enter a list of subreddits separated by a space.
 
-![Enter subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/enter.png)
+![Enter subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/enter.png)
 
 After entering the subreddit(s) you want to scrape, the program will check if the subreddit exists. It will separate the results from the check into a list of valid and invalid subreddits.
 
-![Check subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/checksubs.png)
+![Check subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/checksubs.png)
 
 You will then have the option to choose the post category within the subreddit (Hot, New, Controversial, Top, Rising, Search). After choosing the category, you will also have the option to choose how many results you would like to be returned. Again, this only applies if you do not choose the Search option.
 
-![Settings 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/settings1.png)
+![Settings 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/settings1.png)
 
 If you choose to search for keyword(s) within the subreddit, you will be greeted with these settings instead.
 
-![Settings 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/settings2.png)
+![Settings 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/settings2.png)
 
 After you have configured all settings for each subreddit, you will be greeted with the following screen which displays the settings you have configured.
 
-![Settings overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/overview.png)
+![Settings overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/overview.png)
 
 When you confirm the settings, the program will write CSV files to the directory in which you saved the program and display the title of the post, the score (number of upvotes) of each post, post ID, post URL, comment count, date created, and additional text (body) of the post if there is any.
 
-![Finish](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/finish.png)
+![Finish](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/finish.png)
 
-![CSVs created](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/csvcreated.png)
+![CSVs created](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/csvcreated.png)
 
 # Changelog
 - **April 2, 2019:** Universal Reddit Scraper 1.0 finished. Does not include CLI support.
