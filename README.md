@@ -76,7 +76,7 @@ First, you will have to provide your own Reddit credentials in this block of cod
 
 ## CLI scraper
 
-Telling the program to scrape by providing flags is much faster than the basic method.
+Scraping using flags is much faster than the basic scraper.
 
 Provide the scraper with the `-s` flag to indicate a new subreddit, the post category, and finally, depending on the category selected, either the number of results you would like returned or keyword(s) to search for during the scrape.
 
@@ -95,7 +95,7 @@ Category options are as follows:
  
  ![Multiple flags](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/multiple_flags.png)
  
- The program will then print the title, check if the subreddit exists, then print out the scraping settings. If you enter subreddit(s) that do not exist, a list of the non-existent subreddit(s) will be printed.
+ The program will then print the title, check if the subreddit exists, then print out the scraping settings. If you enter subreddit(s) that do not exist, a list of the invalid subreddit(s) will be printed.
  
  ![Settings](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/subs_settings.png)
  
