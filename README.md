@@ -99,6 +99,8 @@ Category options are as follows:
  
  ![Get, Sort, Write](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/get_sort_write.png)
  
+ Refer to the help message for more usage examples. You can do this by using the `-h` flag.
+ 
 ## Basic scraper
 
 If you do not want to use the command line flags, you can still use Universal Reddit Scraper 1.0 by providing the `-b` flag.
