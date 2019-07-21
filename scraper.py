@@ -85,7 +85,7 @@ EXAMPLES
 
 """)
 
-    ### Parser scraper and results returned flag
+    ### Parser scraper and basic flags
     parser.add_argument("-s","--sub", action="append", nargs=3, metavar="", help="specify subreddit to scrape")
     parser.add_argument("-b","--basic", action="store_true",help="initialize non-CLI Reddit scraper")
 
@@ -127,7 +127,7 @@ def check_args(parser,args):
             parser.exit()
             break
 
-### Check if the subreddits exist and confirm or reject settings
+### Check if the subreddits exist and list invalid subreddits if applicable
 def confirm_subs(reddit,sub_list):
     print("\nChecking if subreddit(s) exist...")
     found,not_found = existence(reddit,sub_list)
