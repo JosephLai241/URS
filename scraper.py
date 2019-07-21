@@ -49,7 +49,7 @@ def title():
     *Scraper captures posts from all time on the subreddit*""")
 
 #-------------------------------------------------------------------------------
-#                       Command-line Interface functions
+#                       Command-line Interface Functions
 #-------------------------------------------------------------------------------
 ### Get args
 def parse_args():
@@ -69,19 +69,23 @@ EXAMPLES
 
     Get the first 10 posts in r/all in the Hot posts category:
 
-        $ python cli_scraper.py -s all H 10
+        $ ./scraper.py -s all H 10
 
     Search for "United States of America" in r/worldnews:
 
-        $ python cli_scraper.py -s worldnews S "United States of America"
+        $ ./scraper.py -s worldnews S "United States of America"
 
     Like the non-CLI scraper, you can choose to scrape multiple subreddits at a time:
 
-        $ python cli_scraper.py -s askreddit C 10 -s dankmemes H 15 -s worldnews S "United States of America"
+        $ ./scraper.py -s askreddit C 10 -s dankmemes H 15 -s worldnews S "United States of America"
+        
+    If you want the basic scraper without providing flags, you can provide the program with the -b flag:
+        
+        $ ./scraper.py -b
 
 """)
 
-    ### Parser scraper and results returned flag[H,h]
+    ### Parser scraper and results returned flag
     parser.add_argument("-s","--sub", action="append", nargs=3, metavar="", help="specify subreddit to scrape")
     parser.add_argument("-b","--basic", action="store_true",help="initialize non-CLI Reddit scraper")
 
