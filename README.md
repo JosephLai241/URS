@@ -31,6 +31,10 @@ The .csv file will scrape the Title, Score, ID, URL, Comment Count, Date Created
 
 The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you have searched for a specific keyword in a subreddit, file names are formatted like so: "SUBREDDIT-Search-'KEYWORD' DATE.csv".
 
+# Changelog
+- **April 2, 2019:** Universal Reddit Scraper 1.0 finished. Does not include CLI support.
+- **July 20, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
+
 # How to get Reddit API Credentials
 
 First, create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps).
@@ -132,10 +136,6 @@ When you confirm the settings, the program will write CSV files to the directory
 ![Finish](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/finish.png)
 
 ![CSVs created](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/csvcreated.png)
-
-# Changelog
-- **April 2, 2019:** Universal Reddit Scraper 1.0 finished. Does not include CLI support.
-- **July 20, 2019:** Universal Reddit Scraper 2.0. Includes CLI support!
 
 # List of things I still have to add or change in this program
 - As of now, users would have to start over if they decide they are not satisfied with their scrape settings. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
