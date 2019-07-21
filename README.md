@@ -74,7 +74,7 @@ First, you will have to provide your own Reddit credentials in this block of cod
 
 Telling the program to scrape by providing flags is much faster than the basic method.
 
-Provide the scraper with the `-s` flag to indicate a new subreddit, the post category, and finally, depending on the category selected, either enter the number of results you would like returned or keyword(s) to search for during the scrape.
+Provide the scraper with the `-s` flag to indicate a new subreddit, the post category, and finally, depending on the category selected, either the number of results you would like returned or keyword(s) to search for during the scrape.
 
 `-s SUBREDDIT CATEGORY RESULTS_OR_KEYWORDS`
 
