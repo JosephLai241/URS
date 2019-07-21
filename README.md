@@ -75,6 +75,7 @@ When you confirm the settings, the program will write CSV files to the directory
 
 # Changelog
 - **April 2, 2019:** Universal Reddit Scraper 1.0 finished. Does not include CLI support.
+- **July 20, 2019:** Universal Reddit Scraper 2.0. Includes CLI support!
 
 # List of things I still have to add or change in this program
 - As of now, users would have to start over if they decide they are not satisfied with their scrape settings. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
