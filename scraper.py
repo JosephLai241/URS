@@ -9,7 +9,7 @@ Reddit scraper using the Reddit API (PRAW)
 import argparse
 import sys
 import praw
-from prawcore import NotFound
+from prawcore import NotFound, PrawcoreException
 import csv
 import datetime as dt
 
@@ -27,17 +27,24 @@ passwd = "REDDIT_PASSWORD_HERE"     # Reddit login password
 categories = ["Hot","New","Controversial","Top","Rising","Search"]
 short_cat = [cat[0] for cat in categories]
 
-### Check if subreddit exists
-def existence(reddit,sub_list):
+### Check if subreddit exists and catch PRAW exceptions
+def existence(reddit,sub_list,parser):
     found = []
     not_found = []
 
-    for sub in sub_list:
-        try:
-            reddit.subreddits.search_by_name(sub, exact = True)
-            found.append(sub)
-        except NotFound:
-            not_found.append(sub)
+    try:
+        for sub in sub_list:
+            try:
+                reddit.subreddits.search_by_name(sub, exact = True)
+                found.append(sub)
+            except NotFound:
+                not_found.append(sub)
+    except PrawcoreException as error:
+        print("\nERROR: %s" % error)
+        print("Please recheck Reddit credentials.")
+        if parser.parse_args().basic == False:
+            print("\nExiting.")
+            parser.exit()
 
     return found,not_found
 
@@ -78,9 +85,9 @@ EXAMPLES
     Like the non-CLI scraper, you can choose to scrape multiple subreddits at a time:
 
         $ ./scraper.py -s askreddit C 10 -s dankmemes H 15 -s worldnews S "United States of America"
-        
+
     If you want the basic scraper without providing flags, you can provide the program with the -b flag:
-        
+
         $ ./scraper.py -b
 
 """)
@@ -128,9 +135,9 @@ def check_args(parser,args):
             break
 
 ### Check if the subreddits exist and list invalid subreddits if applicable
-def confirm_subs(reddit,sub_list):
+def confirm_subs(reddit,sub_list,parser):
     print("\nChecking if subreddit(s) exist...")
-    found,not_found = existence(reddit,sub_list)
+    found,not_found = existence(reddit,sub_list,parser)
     if not_found:
         print("\nThe following subreddits were not found and will be skipped:")
         print("-"*60)
@@ -149,8 +156,7 @@ def get_cli_settings(args,master):
 #-------------------------------------------------------------------------------
 
 ### Select subreddit(s) to scrape
-def get_subreddits(reddit):
-    title()
+def get_subreddits(reddit,parser):
     while True:
         try:
             search_for = str(input("""
@@ -163,7 +169,7 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
             print("\nChecking if subreddit(s) exist...")
             search_for = " ".join(search_for.split())
             sub_list = [subreddit for subreddit in search_for.split(" ")]
-            found,not_found = existence(reddit,sub_list)
+            found,not_found = existence(reddit,sub_list,parser)
             if found:
                 print("\nThe following subreddits were found and will be scraped:")
                 print("-"*56)
@@ -192,7 +198,6 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
         except ValueError:
             print("No subreddits were specified! Try again.")
         except:
-            print("Error logging in. Check to see if you have provided correct credentials.")
             pass
 
 ### Make master dictionary from subreddit list
@@ -395,34 +400,21 @@ def another():
             print("Not an option! Try again.")
 
 def main():
-    ### Login loop
-    while True:
-        try:
-            reddit = praw.Reddit(client_id = c_id, \
-                                 client_secret = c_secret, \
-                             	 user_agent = u_a, \
-                             	 username = usrnm, \
-                                 password = passwd)    # Connect to reddit
-
-            break
-
-        except praw.exceptions.APIException as e:   # Catch Reddit API error. REVIEW PARAMS
-            print("\nThere was a server-side error. Try again.")
-            print(e.error_type)
-            print(e.message)
-            print(e.field)
-
-        except praw.exceptions.ClientException:     # Catch client login error
-            print("\nThere was a client-side error. Try again.")
+    ### Reddit Login
+    reddit = praw.Reddit(client_id = c_id, \
+                         client_secret = c_secret, \
+                         user_agent = u_a, \
+                         username = usrnm, \
+                         password = passwd)    # Connect to reddit
 
     ### Parse args and initialize basic or CLI scraper
     parser,args = parse_args()
+    title()
     if args.basic == False:
         ### CLI scraper
-        title()
         sub_list = create_sub_list(parser,args)
         check_args(parser,args)
-        subs = confirm_subs(reddit,sub_list)
+        subs = confirm_subs(reddit,sub_list,parser)
 
         master = create_dict(subs)
         get_cli_settings(args,master)
@@ -433,10 +425,10 @@ def main():
             print("Exiting.")
     else:
         ### Basic scraper
-        print("\nSelected basic scraper\n")
+        print("\nSelected basic scraper")
         while True:
             while True:
-                subs = get_subreddits(reddit)
+                subs = get_subreddits(reddit,parser)
                 master = create_dict(subs)
                 get_settings(subs,master)
                 confirm = print_settings(master,args)
