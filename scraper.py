@@ -391,7 +391,6 @@ def another():
                 raise ValueError
             else:
                 return str(repeat)
-                break
         except ValueError:
             print("Not an option! Try again.")
 
