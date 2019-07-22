@@ -1,15 +1,15 @@
 # Universal Reddit Scraper
-Universal Reddit scraper using the Reddit API ([PRAW](https://pypi.org/project/praw/)).
+Universal Reddit scraper using the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
 
 Written in Python.
 
-I provided a requirements.txt for a quick install of both the PRAW and argparse modules. 
+I provided a requirements.txt for a quick install of both `PRAW` and `argparse`. 
 
 `pip install -r requirements.txt` 
 
 You will also need your own Reddit account and API credentials.
 
-**NOTE:** PRAW currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6. This project was written in Python 3 and tested with Python 3.6.
+**NOTE:** `PRAW` currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6. This project was written in Python 3 and tested with Python 3.6.
 
 This is a universal Reddit scraper where you can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
 
@@ -60,9 +60,11 @@ This block of credentials is found on lines 15-19.
     - `./scraper.py ...`
   - Troubleshooting
     - If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim.
-      - `vim scraper.py`
-      - `:set fileformat=unix`
-      - `:wq!`
+      - ```
+        vim scraper.py
+        :set fileformat=unix
+        :wq!
+        ```
 
 # Screenshots / Walkthrough
 
@@ -136,8 +138,8 @@ When you confirm the settings, the program will write CSV files to the directory
 ![CSVs created](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/csvcreated.png)
 
 # List of things I still have to add or change in this program
-- As of now, users would have to start over if they decide they are not satisfied with their scrape settings. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
-
-- I am still not exactly sure how to do PRAW exception handling, will have to look into that a bit more to catch invalid Reddit credentials, forbidden HTTP responses, etc.
+- As of now, users would have to start over if they decide they are not satisfied with their scrape settings when using the basic scraper. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
 
 - Considering adding an option where users can specify the data fields they would like in the CSV files instead of the current default fields.
+
+- A user suggested that I could add database support so that CSV is not the only export option. Added it to the projects tab!
