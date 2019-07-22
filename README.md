@@ -3,8 +3,6 @@ Universal Reddit scraper using the Reddit API ([PRAW](https://pypi.org/project/p
 
 Written in Python.
 
-**I previously said that I would make a new repo for the CLI version of this scraper. As I progressed in creating a CLI for the scraper, I realized I would like to integrate the normal scraper so that users can just use a flag to call the non-CLI scraper (the current version), so having two repos would be redundant. That being said, I have deleted the other repo and am going to replace the current scraper.py file with one that supports CLI, add an extra section in the walkthrough for CLI usage, and add a changelog section.**
-
 I provided a requirements.txt for a quick install of both the PRAW and argparse modules. 
 
 `pip install -r requirements.txt` 
