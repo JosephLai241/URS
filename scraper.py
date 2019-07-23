@@ -381,7 +381,6 @@ def get_sort_write(reddit,args,master):
             write_csv(sub,cat_i,search_for,overview,args)
 
 def another():
-    options = ["y","n"]
     while True:
         try:
             repeat = input("\nScrape again? [Y/N] ").strip().lower()
