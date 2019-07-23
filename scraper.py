@@ -191,10 +191,8 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
                         raise ValueError
                     else:
                         raise ValueError
-
                 except ValueError:
                     print("Not an option! Try again.")
-
         except ValueError:
             print("No subreddits were specified! Try again.")
         except:
@@ -224,11 +222,9 @@ def get_settings(subs,master):
 
                 if cat_i == 5:
                     print("\nSelected search option")
-
                     while True:
                         try:
                             search_for = str(input("\nWhat would you like to search for in r/%s? " % sub)).strip()
-
                             if not search_for:
                                 raise ValueError
                             else:
@@ -237,13 +233,10 @@ def get_settings(subs,master):
                                         settings = [cat_i,search_for]
                                         master[sub].append(settings)
                                 break
-
                         except ValueError:
                             print("Not an option! Try again.")
-
                 else:
                     print("\nSelected post category: %s" % categories[cat_i])
-
                     while True:
                         try:
                             submissions = input("\nHow many results do you want to capture from r/%s? " % sub).strip()
@@ -255,12 +248,9 @@ def get_settings(subs,master):
                                         settings = [cat_i,int(submissions)]
                                         master[sub].append(settings)
                                 break
-
                         except ValueError:
                             print("Not an option! Try again.")
-
                 break
-
             except IndexError:
                 print("Not an option! Try again.")
             except ValueError:
@@ -292,7 +282,6 @@ def print_settings(master,args):
                 raise ValueError
             else:
                 raise ValueError
-
         except ValueError:
             print("Not an option! Try again.")
 
@@ -437,7 +426,6 @@ def main():
                 else:
                     parser.exit()
             get_sort_write(reddit,args,master)
-
             repeat = another()
             if repeat == "n":
                 print("\nExiting.")
