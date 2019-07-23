@@ -27,6 +27,9 @@ passwd = "REDDIT_PASSWORD_HERE"     # Reddit login password
 categories = ["Hot","New","Controversial","Top","Rising","Search"]
 short_cat = [cat[0] for cat in categories]
 
+### Confirm or deny options
+options = ["y","n"]
+
 ### Check if subreddit exists and catch PRAW exceptions
 def existence(reddit,sub_list,parser):
     found = []
@@ -129,7 +132,12 @@ def check_args(parser,args):
                 else:
                     len_counter += 1
         except ValueError:
-            print("ERROR IN FLAG %s.\n" % sub_counter)
+            error = "| ERROR IN FLAG %s |" % sub_counter
+            print()
+            print("-"*len(error))
+            print(error)
+            print("-"*len(error))
+            print()
             parser.print_help()
             parser.exit()
             break
@@ -181,15 +189,13 @@ Enter subreddit or a list of subreddits (separated by a space) to scrape:
 
             while True:
                 try:
-                    confirm = input("\nConfirm selection? [Y/N] ").strip()
-                    if confirm.lower() == "y":
+                    confirm = input("\nConfirm selection? [Y/N] ").strip().lower()
+                    if confirm == "y":
                         subs = [sub for sub in found]
                         return subs
-                    elif confirm.lower() == "n":
+                    elif confirm == "n":
                         break
-                    elif confirm.isdigit() or len(confirm) > 1:
-                        raise ValueError
-                    else:
+                    elif confirm not in options:
                         raise ValueError
                 except ValueError:
                     print("Not an option! Try again.")
@@ -273,14 +279,12 @@ def print_settings(master,args):
 
     while True:
         try:
-            confirm = input("\nConfirm options? [Y/N] ").strip()
-            if confirm.lower() == "y":
+            confirm = input("\nConfirm options? [Y/N] ").strip().lower()
+            if confirm == "y":
                 return confirm
-            elif confirm.lower() == "n":
+            elif confirm == "n":
                 break
-            elif confirm.isdigit() or len(confirm) > 1:
-                raise ValueError
-            else:
+            elif confirm not in options:
                 raise ValueError
         except ValueError:
             print("Not an option! Try again.")
@@ -380,11 +384,11 @@ def another():
     options = ["y","n"]
     while True:
         try:
-            repeat = input("\nScrape again? [Y/N] ").strip()
-            if repeat.isdigit() or len(repeat) > 1 or str(repeat) not in options or not repeat:
+            repeat = input("\nScrape again? [Y/N] ").strip().lower()
+            if repeat not in options:
                 raise ValueError
             else:
-                return str(repeat)
+                return repeat
         except ValueError:
             print("Not an option! Try again.")
 
