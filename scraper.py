@@ -63,7 +63,7 @@ def title():
 #-------------------------------------------------------------------------------
 ### Get args
 def parse_args():
-    parser = argparse.ArgumentParser(usage = "argparse_test.py [-h] [-b] [-s SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS]", \
+    parser = argparse.ArgumentParser(usage = "scraper.py [-h] [-b] [-s SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS]", \
                                     formatter_class = argparse.RawDescriptionHelpFormatter, \
                                     description = "Universal Reddit Scraper - Scrape any subreddit of your choosing", \
                                     epilog = """\
@@ -89,7 +89,7 @@ EXAMPLES
 
         $ ./scraper.py -s askreddit C 10 -s dankmemes H 15 -s worldnews S "United States of America"
 
-    If you want the basic scraper without providing flags, you can provide the program with the -b flag:
+    If you want the basic scraper without flags, you can use the -b flag:
 
         $ ./scraper.py -b
 
