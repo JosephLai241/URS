@@ -397,7 +397,7 @@ def main():
                          client_secret = c_secret, \
                          user_agent = u_a, \
                          username = usrnm, \
-                         password = passwd)    # Connect to reddit
+                         password = passwd)
 
     ### Parse args and initialize basic or CLI scraper
     parser,args = parse_args()
@@ -427,6 +427,7 @@ def main():
                 if confirm == "y":
                     break
                 else:
+                    print("\nExiting.")
                     parser.exit()
             get_sort_write(reddit,args,master)
             repeat = another()
