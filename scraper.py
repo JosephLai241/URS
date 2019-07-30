@@ -414,7 +414,7 @@ def main():
         if confirm == "y":
             get_sort_write(reddit,args,master)
         else:
-            print("Exiting.")
+            print("\nExiting.")
     else:
         ### Basic scraper
         print("\nSelected basic scraper")
