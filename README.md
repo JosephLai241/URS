@@ -30,8 +30,8 @@ The .csv file will scrape the Title, Score, ID, URL, Comment Count, Date Created
 The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you have searched for a specific keyword in a subreddit, file names are formatted like so: "SUBREDDIT-Search-'KEYWORD' DATE.csv".
 
 # Releases
-- **April 2, 2019:** Universal Reddit Scraper 1.0. Does not include CLI support.
-- **July 20, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
+- **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
+- **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
 
 # How to get Reddit API Credentials
 
