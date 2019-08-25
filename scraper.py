@@ -359,7 +359,7 @@ def write_csv(sub,cat_i,search_for,overview,args):
         else:
             fname = str(("%s-%s %s.csv") % (sub,categories[cat_i],date))
 
-    with open(fname, "w") as results:
+    with open(fname, "w", encoding = "utf-8") as results:
         writer = csv.writer(results, delimiter = ",")
         writer.writerow(overview.keys())
         writer.writerows(zip(*overview.values()))
