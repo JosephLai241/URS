@@ -32,6 +32,7 @@ The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you
 # Releases
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
+- **TBD:** Universal Reddit Scraper 3.0. Now includes support for exporting to JSON, scraping Redditors as well as comments on posts. Coming soon!
 
 # How to get Reddit API Credentials
 
