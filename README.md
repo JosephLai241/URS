@@ -9,7 +9,7 @@ I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`
 
 You will also need your own Reddit account and API credentials.
 
-**NOTE:** `PRAW` currently only supports Python 2.7, 3.3, 3.4, 3.5, and 3.6. This project was written in Python 3 and tested with Python 3.6.
+**NOTE:** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
 This is a universal Reddit scraper where you can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
 
