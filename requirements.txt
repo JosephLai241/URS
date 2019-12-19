@@ -1,2 +1,2 @@
-argparse
-praw
+argparse==1.4.0
+praw==6.4.0
