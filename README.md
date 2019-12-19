@@ -3,7 +3,7 @@ Universal Reddit scraper using the Reddit API ([`PRAW`](https://pypi.org/project
 
 Written in Python.
 
-I provided a requirements.txt for a quick install of both `PRAW` and `argparse`. 
+I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`](https://pypi.org/project/argparse/). 
 
 `pip install -r requirements.txt` 
 
