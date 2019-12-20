@@ -1,7 +1,10 @@
 # Universal Reddit Scraper
-Universal Reddit scraper using the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
 
-Written in Python.
+## URS 3.0 is in development. Redditor and comments scraping, and JSON support are currently unavailable, but are coming soon!
+
+This is a universal Reddit scraper where you can scrape Subreddits, Redditors, and comments on posts. 
+
+Written in Python and utilizes the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
 
 I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`](https://pypi.org/project/argparse/). 
 
@@ -11,9 +14,11 @@ You will also need your own Reddit account and API credentials.
 
 **NOTE:** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
-This is a universal Reddit scraper where you can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
+## Scraping Subreddits
 
-Options for which category of posts to scrape for are as follows:
+You can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
+
+Options for which category of posts you want to scrape are as follows:
 - Hot
 - New
 - Controversial
@@ -21,13 +26,62 @@ Options for which category of posts to scrape for are as follows:
 - Rising
 - Search
 
-*NOTE:* If you choose to search for something within a subreddit, all the results are returned and you will not be able to specify how many results are returned.
+***NOTE:*** If you choose to search for something within a subreddit, all the results are returned and you will not be able to specify how many results are returned.
 
-Once you configure the settings for the scrape, the program will write a .csv file to the same directory in which this scraper program is saved on your computer. 
+Once you configure the settings for the scrape, the program will save the results to either a .csv or .json file.
 
-The .csv file will scrape the Title, Score, ID, URL, Comment Count, Date Created, and the Text body of each post. 
+The Subreddit scrape will include the following attributes of each post:
 
-The file names are formatted as such: "SUBREDDIT-POST_CATEGORY DATE.csv". If you have searched for a specific keyword in a subreddit, file names are formatted like so: "SUBREDDIT-Search-'KEYWORD' DATE.csv".
+- Title
+- Upvotes
+- ID
+- URL
+- Comment Count
+- Date Created
+- Text body
+
+The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`. 
+
+If you have searched for a specific keyword in a subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`.
+
+## Scraping Redditor Profiles
+
+You can also scrape Redditor profiles and specify how many results are returned.
+
+Redditor scrapes will include the following attributes of each user:
+
+- Name
+- Fullname
+- ID
+- Date Created
+- Comment Karma
+- Link Karma
+- Is Employee?
+- Is Friend?
+- Is Mod?
+- Is Gold?
+- Submissions
+- Comments
+- Hot
+- New
+- Controversial
+- Top
+- Upvoted (may be forbidden)
+- Downvoted (may be forbidden)
+- Gilded
+- Gildings (may be forbidden)
+- Hidden (may be forbidden)
+- Saved (may be forbidden)
+
+***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file.
+
+***NOTE:*** The number of results returned will be applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes.
+
+The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`.
+
+## Scraping Post Comments
+
+*Section coming soon!*
 
 # Releases
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
@@ -46,17 +100,10 @@ This block of credentials is found on lines 15-19.
 
 # Some Linux Tips
 
-- **Alias**
-  - If you do not want to type out the path to your Python3.6 every time you run the program, you can create an alias by adding a line in your .bashrc.
-  - `alias python3.6='/usr/bin/python3.6'`
-  - I named the alias "python3.6" and set the path to where my Python3.6 is located. Your Python3.6 may be located elsewhere. Use `which python3.6` to get the path to where it is installed on your machine.
-  - Now you will only have to prepend `python3.6` to run the scraper.
-    - `python3.6 scraper.py ...`
-
 - **`./`**
-  - You can even further simplify running the program by making the program executable.
+  - You can further simplify running the program by making the program executable.
   - `sudo chmod +x scraper.py`
-  - Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. Again, you can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
+  - Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. You can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
   - Now you will only have to prepend `./` to run the scraper.
     - `./scraper.py ...`
   - Troubleshooting
