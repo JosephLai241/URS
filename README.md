@@ -10,9 +10,32 @@ I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`
 
 `pip install -r requirements.txt` 
 
-You will also need your own Reddit account and API credentials.
+You will also need your own Reddit account and API credentials. I have included a tutorial on how to do this below.
 
 **NOTE:** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
+
+## Table of Contents
+ - [Scraping Reddit](#scraping-reddit)
+ 
+    - [Scraping Subreddits](#scraping-subreddits)
+    
+    - [Scraping Redditors](#scraping-redditors)
+    
+    - [Scraping Post Comments](#scraping-post-comments)
+    
+ - [How to get Reddit API Credentials](#how-to-get-reddit-api-credentials)
+ 
+ - [Some Linux Tips](#some-linux-tips)
+ 
+ - [Walkthrough](#walkthrough)
+ 
+     - [CLI scraper](#cli-scraper)
+     
+     - [Basic scraper](#basic-scraper)
+    
+ - [Releases](#releases)
+ 
+# Scraping Reddit
 
 ## Scraping Subreddits
 
@@ -44,7 +67,7 @@ The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_F
 
 If you have searched for a specific keyword in a subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`.
 
-## Scraping Redditor Profiles
+## Scraping Redditors
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
@@ -83,11 +106,6 @@ The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`.
 
 *Section coming soon!*
 
-# Releases
-- **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
-- **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
-- **TBD:** Universal Reddit Scraper 3.0. Now includes support for exporting to JSON, scraping Redditors as well as comments on posts. Coming soon!
-
 # How to get Reddit API Credentials
 
 First, create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps).
@@ -100,21 +118,20 @@ This block of credentials is found on lines 15-19.
 
 # Some Linux Tips
 
-- **`./`**
-  - You can further simplify running the program by making the program executable.
-  - `sudo chmod +x scraper.py`
-  - Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. You can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
-  - Now you will only have to prepend `./` to run the scraper.
-    - `./scraper.py ...`
-  - Troubleshooting
-    - If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim.
-      - ```
-        vim scraper.py
-        :set fileformat=unix
-        :wq!
-        ```
+- You can further simplify running the program by making the program executable.
+- `sudo chmod +x scraper.py`
+- Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. You can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
+- Now you will only have to prepend `./` to run the scraper.
+  - `./scraper.py ...`
+- Troubleshooting
+  - If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim.
+    - ```
+      vim scraper.py
+      :set fileformat=unix
+      :wq!
+      ```
 
-# Screenshots / Walkthrough
+# Walkthrough
 
 First, you will have to provide your own Reddit credentials in this block of code.
 
@@ -185,9 +202,7 @@ When you confirm the settings, the program will write CSV files to the directory
 
 ![CSVs created](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/csvcreated.png)
 
-# List of things I still have to add or change in this program
-- As of now, users would have to start over if they decide they are not satisfied with their scrape settings when using the basic scraper. I might look into adding an option to either go back and redo the subreddit scrape settings or to completely start over. This way users will have options.
-
-- Considering adding an option where users can specify the data fields they would like in the CSV files instead of the current default fields.
-
-- A user suggested that I could add database support so that CSV is not the only export option. Added it to the projects tab!
+# Releases
+- **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
+- **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
+- **TBD:** Universal Reddit Scraper 3.0. Now includes support for exporting to JSON, scraping Redditors as well as comments on posts. Coming soon!
