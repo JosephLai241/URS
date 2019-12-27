@@ -2,7 +2,7 @@
 
 ## URS 3.0 is in development. Redditor and comments scraping, and JSON support are currently unavailable, but are coming soon!
 
-This is a universal Reddit scraper where you can scrape Subreddits, Redditors, and comments on posts. 
+This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
 Written in Python and utilizes the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
 
@@ -39,6 +39,8 @@ You will also need your own Reddit account and API credentials. I have included 
 
 ## Scraping Subreddits
 
+`./scraper.py -s SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
+
 You can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
 
 Options for which category of posts you want to scrape are as follows:
@@ -69,7 +71,7 @@ If you have searched for a specific keyword in a subreddit, file names are forma
 
 ## Scraping Redditors
 
-`./scraper.py -u USER NUM_OF_RESULTS --FILE_FORMAT`
+`./scraper.py -u USER N_RESULTS --FILE_FORMAT`
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
@@ -105,6 +107,8 @@ Redditor scrapes will include the following attributes of each user:
 The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`.
 
 ## Scraping Post Comments
+
+`./scraper.py -c URL N_RESULTS --FILE_FORMAT`
 
 *Section coming soon!*
 
