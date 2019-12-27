@@ -69,6 +69,8 @@ If you have searched for a specific keyword in a subreddit, file names are forma
 
 ## Scraping Redditors
 
+`./scraper.py -u USER NUM_OF_RESULTS --FILE_FORMAT`
+
 You can also scrape Redditor profiles and specify how many results are returned.
 
 Redditor scrapes will include the following attributes of each user:
