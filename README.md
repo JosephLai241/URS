@@ -73,7 +73,7 @@ The Subreddit scrape will include the following attributes of each post:
  - Text
 
 
-The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`. 
+The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`
 
 If you have searched for a specific keyword in a subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`.
 
@@ -112,7 +112,7 @@ Redditor scrapes will include the following attributes of each user:
 
 ***NOTE:*** The number of results returned will be applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes.
 
-The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`.
+The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`
 
 ## Scraping Post Comments
 
@@ -132,7 +132,7 @@ Comments scrapes will include the following attributes of each comment:
 
 ***NOTE:* These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.**
 
-The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`.
+The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`
 
 # How to get Reddit API Credentials
 
