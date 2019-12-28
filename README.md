@@ -1,6 +1,6 @@
 # Universal Reddit Scraper
 
-## URS 3.0 is in development. Redditor and comments scraping, and JSON support are currently unavailable, but are coming soon!
+## URS 3.0 is done! This Readme will be updated with a new walkthrough for all the new features soon.
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
@@ -118,7 +118,21 @@ The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`.
 
 `./scraper.py -c URL N_RESULTS --FILE_FORMAT`
 
-*Section coming soon!*
+You can scrape post comments and specify how many top-level comments are returned. Each top-level comment will be followed by any second and third-level comments.
+
+Comments scrapes will include the following attributes of each comment:
+
+ - Author
+ - Created
+ - Upvotes
+ - Text
+ - Edited?
+ - Is Submitter?
+ - Stickied?
+
+***NOTE:* These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.**
+
+The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`.
 
 # How to get Reddit API Credentials
 
@@ -146,6 +160,8 @@ This block of credentials is found on lines 15-19.
       ```
 
 # Walkthrough
+
+## NOTE: This walkthrough is for URS 2.0. URS 3.0 (beta) is now available. A full walkthrough for all new URS 3.0 features is coming soon!
 
 First, you will have to provide your own Reddit credentials in this block of code.
 
@@ -219,4 +235,4 @@ When you confirm the settings, the program will write CSV files to the directory
 # Releases
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
-- **TBD:** Universal Reddit Scraper 3.0. Now includes support for exporting to JSON, scraping Redditors as well as comments on posts. Coming soon!
+- **December 28, 2019:** Universal Reddit Scraper 3.0. Now includes support for exporting to JSON, scraping Redditors as well as comments on posts.
