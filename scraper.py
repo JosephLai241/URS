@@ -459,14 +459,13 @@ def sort_posts(args,collected):
             overview["Text"].append(post.selftext)
     elif args.json:
         overview = dict()
-        e_t = [title for title in titles]
         counter = 1
         for post in collected:
             e_p = [post.title,post.link_flair_text,post.author.name,\
                     dt.datetime.fromtimestamp(post.created).strftime("%m-%d-%Y %H:%M:%S"),\
                     post.score,post.upvote_ratio,post.id,post.edited,post.locked,\
                     post.over_18,post.spoiler,post.stickied,post.url,post.num_comments,post.selftext]
-            overview["Post %s" % counter] = {title:value for title,value in zip(e_t,e_p)}
+            overview["Post %s" % counter] = {title:value for title,value in zip(titles,e_p)}
             counter += 1
 
     return overview
