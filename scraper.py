@@ -10,7 +10,6 @@ import argparse
 import sys
 import praw
 from prawcore import NotFound, PrawcoreException
-from itertools import islice
 import csv
 import json
 import datetime as dt
