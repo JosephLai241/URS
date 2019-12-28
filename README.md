@@ -39,7 +39,7 @@ You will also need your own Reddit account and API credentials. I have included 
 
 ## Scraping Subreddits
 
-`./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
+`$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
 
 You can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
 
@@ -79,7 +79,7 @@ If you have searched for a specific keyword in a subreddit, file names are forma
 
 ## Scraping Redditors
 
-`./scraper.py -u USER N_RESULTS --FILE_FORMAT`
+`$ ./scraper.py -u USER N_RESULTS --FILE_FORMAT`
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
@@ -116,7 +116,7 @@ The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`
 
 ## Scraping Post Comments
 
-`./scraper.py -c URL N_RESULTS --FILE_FORMAT`
+`$ ./scraper.py -c URL N_RESULTS --FILE_FORMAT`
 
 You can scrape post comments and specify how many top-level comments are returned. Each top-level comment will be followed by any second and third-level comments.
 
