@@ -827,7 +827,7 @@ def main():
                     parser.exit()
             gsw_sub(reddit,args,s_master)
             repeat = another()
-            if repeat == "n":
+            if repeat == options[1]:
                 print("\nExiting.")
                 break
 
