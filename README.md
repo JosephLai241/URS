@@ -57,13 +57,22 @@ Once you configure the settings for the scrape, the program will save the result
 
 The Subreddit scrape will include the following attributes of each post:
 
-- Title
-- Upvotes
-- ID
-- URL
-- Comment Count
-- Date Created
-- Text body
+ - Title
+ - Flair
+ - Author
+ - Created
+ - Upvotes
+ - Upvote Ratio
+ - ID
+ - Is Original?
+ - Is Locked?
+ - NSFW?
+ - Is Spoiler?
+ - Stickied?
+ - URL
+ - Comment Count
+ - Text
+
 
 The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`. 
 
