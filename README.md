@@ -75,7 +75,7 @@ The Subreddit scrape will include the following attributes of each post:
 
 The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`
 
-If you have searched for a specific keyword in a subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`.
+If you have searched for a specific keyword in a subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`
 
 ## Scraping Redditors
 
