@@ -64,7 +64,6 @@ The Subreddit scrape will include the following attributes of each post:
  - Upvotes
  - Upvote Ratio
  - ID
- - Is Original?
  - Is Locked?
  - NSFW?
  - Is Spoiler?
