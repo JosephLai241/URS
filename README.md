@@ -218,7 +218,7 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
  
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
  
-Scraping 5 results for each of r/spez's user attributes:
+Scraping 5 results for each of r/spez's user attributes and export to CSV:
  
 ![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_1.png)
  
