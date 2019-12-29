@@ -209,7 +209,7 @@ Use the `-u` flag to indicate a Redditor and the number of results returned. The
 
 I recommend exporting Redditor scrapes to JSON because the format is much nicer to read, but the current CSV format may change once URS 3.0 is finalized. I chose to export to CSV for demonstration purposes.
  
-Scraping 5 results for each of r/spez's user attributes and export to CSV:
+Scraping 5 results for each of u/spez's user attributes and export to CSV:
  
 ![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_1.png)
  
