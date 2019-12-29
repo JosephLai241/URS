@@ -179,7 +179,7 @@ EXAMPLES
 
         $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --csv
 
-    You can choose to scrape multiple items at once:
+    You can scrape multiple items at once:
 
         $ ./scraper.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50 --json
 
