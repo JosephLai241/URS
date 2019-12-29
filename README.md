@@ -31,9 +31,15 @@ You will also need your own Reddit account and API credentials. I have included 
  
  - [Walkthrough](#walkthrough)
  
-     - [CLI scraper](#cli-scraper)
+     - [CLI Scrapers](#cli-scrapers)
      
-     - [Basic scraper](#basic-scraper)
+       - [Subreddit Scraper](#subreddit-scraper)
+       
+       - [Redditor Scraper](#redditor-scraper)
+       
+       - [Comments Scraper](#comments-scraper)
+     
+     - [Basic Scraper](#basic-scraper)
     
  - [Releases](#releases)
  
@@ -43,7 +49,7 @@ You will also need your own Reddit account and API credentials. I have included 
 
 `$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
 
-You can manually specify subreddits to scrape, specify which category of posts to scrape for each subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a subreddit and the scraper will get all posts that are returned from the search.
+You can manually specify Subreddits to scrape, specify which category of posts to scrape for each Subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all posts that are returned from the search.
 
 Options for which category of posts you want to scrape are as follows:
 - Hot
@@ -53,7 +59,7 @@ Options for which category of posts you want to scrape are as follows:
 - Rising
 - Search
 
-***NOTE:*** If you choose to search for something within a subreddit, all the results are returned and you will not be able to specify how many results are returned.
+***NOTE:*** If you choose to search for something within a Subreddit, all the results are returned and you will not be able to specify how many results are returned.
 
 Once you configure the settings for the scrape, the program will save the results to either a .csv or .json file.
 
@@ -77,7 +83,7 @@ The Subreddit scrape will include the following attributes of each post:
 
 The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`
 
-If you have searched for a specific keyword in a subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`
+If you have searched for a specific keyword in a Subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`
 
 ## Scraping Redditors
 
@@ -144,7 +150,7 @@ Click "create app". Name your app and choose "script" for the type of app. In th
 
 Once you create the app, you should see a string of 14 characters on the top left corner underneath "personal use script." That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. Save this information as it will be used in the program in order to use the Reddit API. You will also have to provide your app name, Reddit account username and password as well. 
 
-This block of credentials is found on lines 15-19.
+This block of credentials is found on lines 23-27.
 
 # Some Linux Tips
 
@@ -163,21 +169,25 @@ This block of credentials is found on lines 15-19.
 
 # Walkthrough
 
-## NOTE: This walkthrough is for URS 2.0. URS 3.0 (beta) is now available. A full walkthrough for all new URS 3.0 features is coming soon!
-
 First, you will have to provide your own Reddit credentials in this block of code.
 
 ![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/credentialblock.png)
 
 **You have to provide valid credentials, otherwise the scraper will not work.**
 
-## CLI scraper
+All exported files will be saved to the current working directory.
 
-Scraping using flags is much faster than the basic scraper.
+## CLI scrapers
 
-Provide the scraper with the `-s` flag to indicate a new subreddit, the post category, and finally, depending on the category selected, either the number of results you would like returned or keyword(s) to search for during the scrape.
+If you do not want to read the rest of this walkthrough, or forget the args, you can always consult the built-in help message by using `-h` or `--help`.
 
-`-s SUBREDDIT CATEGORY RESULTS_OR_KEYWORDS`
+![Help Message 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Help_1.png)
+
+### Subreddit scraper
+
+Scraping Subreddits using flags is much faster than the [basic scraper](#basic-scraper).
+
+Use the `-r` flag to indicate a Subreddit, the post category, and finally, depending on the category selected, either the number of results returned or keyword(s) to search for during the scrape.
 
 Category options are as follows:
 
@@ -188,43 +198,69 @@ Category options are as follows:
  - R,r - Rising  
  - S,s - Search
  
- You can scrape for multiple subreddits very quickly.
+Scraping 10 r/AskReddit posts in the Hot category and export to JSON:
  
- ![Multiple flags](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/multiple_flags.png)
+![Subreddit Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_1.png)
  
- The program will then print the title, check if the subreddit exists, then print out the scraping settings. If you enter subreddit(s) that do not exist, a list of the invalid subreddit(s) will be printed.
+The program will then display the type of scrape, check if the Subreddit(s) exist, and display the settings for each Subreddit. It will display a list of invalid Subreddits, if applicable. You can also include `-y` in your args if you want to skip this confirmation screen and immediately scrape.
  
- ![Settings](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/subs_settings.png)
+![Subreddit Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_2.png)
+
+**JSON Sample:**
+
+![JSON Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_json.png)
+
+**CSV Sample:**
+
+![CSV Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_csv.png)
  
- After confirming the settings, the program will write CSV files to the directory in which you saved the program.
+### Redditor Scraper
  
- ![Get, Sort, Write](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/get_sort_write.png)
+Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
  
- Refer to the help message for more usage examples. You can do this by using the `-h` flag.
+Scraping 5 results for each of r/spez's user attributes:
  
-## Basic scraper
+![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_1.png)
+ 
+There are a couple of user lists that are typically restricted and will raise an 403 HTTP Forbidden exception. If these lists are forbidden, the program will display the forbidden list and append "FORBIDDEN" to that section in the export file.
+ 
+![Redditor Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_2.png)
+ 
+**JSON Sample:**
+ 
+![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_json.png)
+ 
+**CSV Sample:**
+ 
+![Redditor CSV](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_csv.png)
+ 
+### Comments Scraper
+ 
+*Functionality is under construction. Coming soon!*
+ 
+## Basic Scraper
 
 If you do not want to use the command line flags, you can still use Universal Reddit Scraper 1.0 by providing the `-b` flag.
 
 ![B Flag](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b_flag.png)
 
-You can choose to just scrape a single subreddit, or enter a list of subreddits separated by a space.
+You can choose to just scrape a single Subreddit, or enter a list of Subreddits separated by a space.
 
 ![Enter subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/enter.png)
 
-After entering the subreddit(s) you want to scrape, the program will check if the subreddit exists. It will separate the results from the check into a list of valid and invalid subreddits.
+After entering the Subreddit(s) you want to scrape, the program will check if the Subreddit exists. It will separate the results from the check into a list of valid and invalid Subreddits.
 
 ![Check subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/checksubs.png)
 
-You will then have the option to choose the post category within the subreddit (Hot, New, Controversial, Top, Rising, Search). After choosing the category, you will also have the option to choose how many results you would like to be returned. Again, this only applies if you do not choose the Search option.
+You will then have the option to choose the post category within the Subreddit (Hot, New, Controversial, Top, Rising, Search). After choosing the category, you will also have the option to choose how many results you would like to be returned. Again, this only applies if you do not choose the Search option.
 
 ![Settings 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/settings1.png)
 
-If you choose to search for keyword(s) within the subreddit, you will be greeted with these settings instead.
+If you choose to search for keyword(s) within the Subreddit, you will be greeted with these settings instead.
 
 ![Settings 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/settings2.png)
 
-After you have configured all settings for each subreddit, you will be greeted with the following screen which displays the settings you have configured.
+After you have configured all settings for each Subreddit, you will be greeted with the following screen which displays the settings you have configured.
 
 ![Settings overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/overview.png)
 
@@ -237,4 +273,4 @@ When you confirm the settings, the program will write CSV files to the directory
 # Releases
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
-- **December 28, 2019:** Universal Reddit Scraper 3.0. Now includes support for exporting to JSON, scraping Redditors as well as comments on posts.
+- **December 28, 2019:** Universal Reddit Scraper 3.0 (beta). Now includes support for exporting to JSON, scraping Redditors as well as comments on posts.
