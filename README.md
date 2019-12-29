@@ -17,11 +17,11 @@ You will also need your own Reddit account and API credentials. I have included 
 ## Table of Contents
  - [Scraping Reddit](#scraping-reddit)
  
-    - [Scraping Subreddits](#scraping-subreddits)
+    - [Subreddits](#subreddits)
     
-    - [Scraping Redditors](#scraping-redditors)
+    - [Redditors](#redditors)
     
-    - [Scraping Post Comments](#scraping-post-comments)
+    - [Post Comments](#post-comments)
     
  - [How to get Reddit API Credentials](#how-to-get-reddit-api-credentials)
  
@@ -43,13 +43,13 @@ You will also need your own Reddit account and API credentials. I have included 
  
 # Scraping Reddit
 
-## Scraping Subreddits
+## Subreddits
 
 `$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
 
-You can manually specify Subreddits to scrape, specify which category of posts to scrape for each Subreddit, and how many results are returned. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all posts that are returned from the search.
+You can specify Subreddits, which category of posts, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all posts that are returned from the search.
 
-Options for which category of posts you want to scrape are as follows:
+These are the post category options:
 - Hot
 - New
 - Controversial
@@ -57,11 +57,11 @@ Options for which category of posts you want to scrape are as follows:
 - Rising
 - Search
 
-***NOTE:*** If you choose to search for something within a Subreddit, all the results are returned and you will not be able to specify how many results are returned.
+***NOTE:*** All results are returned if you search for something within a Subreddit, so you will not be able to specify how many results to keep.
 
 Once you configure the settings for the scrape, the program will save the results to either a .csv or .json file.
 
-The Subreddit scrape will include the following attributes of each post:
+The Subreddit scrape will include the following submission attributes:
 
  - Title
  - Flair
@@ -78,18 +78,17 @@ The Subreddit scrape will include the following attributes of each post:
  - Comment Count
  - Text
 
-
 The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`
 
-If you have searched for a specific keyword in a Subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORD' DATE.[FILE_FORMAT]"`
+If you have searched for keywords in a Subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORDS' DATE.[FILE_FORMAT]"`
 
-## Scraping Redditors
+## Redditors
 
 `$ ./scraper.py -u USER N_RESULTS --FILE_FORMAT`
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
-Redditor scrapes will include the following attributes of each user:
+Redditor scrapes will include the following Redditor attributes:
 
 - Name
 - Fullname
@@ -120,25 +119,13 @@ Redditor scrapes will include the following attributes of each user:
 
 The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`
 
-## Scraping Post Comments
+## Post Comments
 
 `$ ./scraper.py -c URL N_RESULTS --FILE_FORMAT`
 
-You can scrape post comments and specify how many top-level comments are returned. Each top-level comment will be followed by any second and third-level comments.
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.
 
-Comments scrapes will include the following attributes of each comment:
-
- - Author
- - Created
- - Upvotes
- - Text
- - Edited?
- - Is Submitter?
- - Stickied?
-
-***NOTE:* These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.**
-
-The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`
+*Comment scraping functionality currently has some issues and may be different once I figure out a better solution. Section coming soon!*
 
 # How to get Reddit API Credentials
 
@@ -181,6 +168,8 @@ If you do not want to read the rest of this walkthrough, or forget the args, you
 
 ![Help Message 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Help_1.png)
 
+----------------------------------------------------------------------------------------------------------------------------
+
 ### Subreddit scraper
 
 Scraping Subreddits using flags is much faster than the [basic scraper](#basic-scraper).
@@ -212,15 +201,19 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
 
 ![CSV Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_csv.png)
  
+---------------------------------------------------------------------------------------------------------------------------- 
+
 ### Redditor Scraper
  
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
+
+I recommend exporting Redditor scrapes to JSON because the format is much nicer to read, but the current CSV format may change once URS 3.0 is finalized. I chose to export to CSV for demonstration purposes.
  
 Scraping 5 results for each of r/spez's user attributes and export to CSV:
  
 ![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_1.png)
  
-There are a couple of user lists that are typically restricted and will raise an 403 HTTP Forbidden exception. If these lists are forbidden, the program will display the forbidden list and append "FORBIDDEN" to that section in the export file.
+There are a couple user lists that are typically restricted and will raise an 403 HTTP Forbidden exception. If you are forbidden from accessing a list, the program will display its name and append "FORBIDDEN" to that section in the export file.
  
 ![Redditor Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_2.png)
  
@@ -231,6 +224,8 @@ There are a couple of user lists that are typically restricted and will raise an
 **CSV Sample:**
  
 ![Redditor CSV](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_csv.png)
+ 
+----------------------------------------------------------------------------------------------------------------------------
  
 ### Comments Scraper
  
@@ -271,4 +266,8 @@ When you confirm the settings, the program will write CSV files to the directory
 # Releases
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
-- **December 28, 2019:** Universal Reddit Scraper 3.0 (beta). Now includes support for exporting to JSON, scraping Redditors as well as comments on posts.
+- **December 28, 2019:** Universal Reddit Scraper 3.0 (beta). 
+  - New features include:
+    - Exporting to JSON
+    - Scraping Redditors
+  - Comments scraping functionality is still under construction.
