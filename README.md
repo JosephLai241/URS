@@ -1,6 +1,8 @@
 # Universal Reddit Scraper
 
-## URS 3.0 is done! This Readme will be updated with a new walkthrough for all the new features soon.
+## URS 3.0 (beta) is done! This Readme will be updated with a new walkthrough for all the new features soon.
+
+## **12/28/19: Comments scraping functionality currently has some issues. Redditor scraping is ready to go.**
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
