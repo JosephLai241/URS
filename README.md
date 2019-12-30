@@ -228,7 +228,7 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
  
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
 
-I recommend exporting Redditor scrapes to JSON because the format is much nicer to read, but the current CSV format may change once URS 3.0 is finalized. I chose to export to CSV for demonstration purposes.
+I recommend exporting Redditor scrapes to JSON because the format is much nicer to read. There is also a bug that causes the export to exclude all but the top submission or comment to display in Submissions, Comments, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved lists.
  
 Scraping 5 results for each of u/spez's user attributes and export to CSV:
  
@@ -242,7 +242,7 @@ There are a couple user lists that are typically restricted and will raise an 40
  
 ![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_json1.png)
  
-**CSV Sample:**
+**CSV Sample (BUG IS PRESENT):**
  
 ![Redditor CSV](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_csv1.png)
  
