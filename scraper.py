@@ -576,35 +576,54 @@ class Listables():
         self.hidden = user.hidden(limit = limit)
         self.saved = user.saved(limit = limit)
 
+        self.s_types = ["Submissions","Comments","Mutts","Access"]
+
         self.mutt_names = ["Hot","New","Controversial","Top","Gilded"]
         self.mutts = [self.hot,self.new,self.controversial,self.top,self.gilded]
 
         self.access_names = ["Upvoted","Downvoted","Gildings","Hidden","Saved"]
         self.access = [self.upvoted,self.downvoted,self.gildings,self.hidden,self.saved]
 
+    ### Extracting submission or comment attributes
+    def extract(self,cat,obj,s_types,s_type):
+        for item in obj:
+            if isinstance(item,praw.models.Submission):
+                l = ["Title: %s" % item.title, "Created: %s" % dt.datetime.fromtimestamp(item.created).strftime("%m-%d-%Y %H:%M:%S"),\
+                        "Upvotes: %s" % item.score,"Upvote Ratio: %s" % item.upvote_ratio,\
+                        "ID: %s" % item.id,"NSFW? %s" % item.over_18,"Body: %s" % item.selftext]
+                if s_type == s_types[0]:
+                    self.overview["Submissions"].append(l)
+                elif s_type == s_types[2]:
+                    self.overview["%s" % cat.capitalize()].append(l)
+                elif s_type == s_types[3]:
+                    self.overview["%s (may be forbidden)" % cat.capitalize()].append(l)
+            elif isinstance(item,praw.models.Comment):
+                l = ["Created: %s" % dt.datetime.fromtimestamp(item.created_utc).strftime("%m-%d-%Y %H:%M:%S"),\
+                        "Score: %s" % item.score,"Text: %s" % item.body,"Parent ID: %s" % item.parent_id,\
+                        "Link ID: %s" % item.link_id,"Edited? %s" % item.edited,\
+                        "Stickied? %s" % item.stickied, "Replying to: %s" % item.submission.selftext,\
+                        "In Subreddit: %s" % item.submission.subreddit.display_name]
+                if s_type == s_types[1]:
+                    self.overview["Comments"].append(l)
+                elif s_type == s_types[2]:
+                    self.overview["%s" % cat.capitalize()].append(l)
+                elif s_type == s_types[3]:
+                    self.overview["%s (may be forbidden)" % cat.capitalize()].append(l)
+
     ### Sort Redditor submissions
     def sort_submissions(self):
-        for submission in self.submissions:
-            post = ["Title: %s" % submission.title, "Body: %s" % submission.selftext]
-            self.overview["Submissions"].append(post)
+        self.extract(None,self.submissions,self.s_types,self.s_types[0])
 
     ### Sort Redditor comments
     def sort_comments(self):
-        for comment in self.comments:
-            self.overview["Comments"].append(comment.body)
+        self.extract(None,self.comments,self.s_types,self.s_types[1])
 
     ### Sort hot, new, controversial, top, and gilded Redditor posts. The ListGenerator
     ### returns a mix of submissions and comments, so handling each differently is
     ### necessary
     def sort_mutts(self):
         for cat,obj in zip(self.mutt_names,self.mutts):
-            for post in obj:
-                if isinstance(post,praw.models.Submission):
-                    l = ["Title: %s" % post.title, "Body: %s" % post.selftext]
-                    self.overview["%s" % cat.capitalize()].append(l)
-                elif isinstance(post,praw.models.Comment):
-                    l = "Comment: %s" % post.body
-                    self.overview["%s" % cat.capitalize()].append(l)
+            self.extract(cat,obj,self.s_types,self.s_types[2])
 
     ### Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
     ### lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
@@ -612,13 +631,7 @@ class Listables():
     def sort_access(self):
         for cat,obj in zip(self.access_names,self.access):
             try:
-                for post in obj:
-                    if isinstance(post,praw.models.Submission):
-                        l = ["Title: %s" % post.title, "Body: %s" % post.selftext]
-                        self.overview["%s (may be forbidden)" % cat.capitalize()].append(l)
-                    elif isinstance(post,praw.models.Comment):
-                        l = "Comment: %s" % post.body
-                        self.overview["%s (may be forbidden)" % cat.capitalize()].append(l)
+                self.extract(cat,obj,self.s_types,self.s_types[3])
             except PrawcoreException as error:
                 print(("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % (cat.upper(),error))
                 self.overview["%s (may be forbidden)" % cat.capitalize()].append("FORBIDDEN")
