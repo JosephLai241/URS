@@ -590,7 +590,7 @@ class Listables():
             if isinstance(item,praw.models.Submission):
                 l = ["Title: %s" % item.title, "Created: %s" % dt.datetime.fromtimestamp(item.created).strftime("%m-%d-%Y %H:%M:%S"),\
                         "Upvotes: %s" % item.score,"Upvote Ratio: %s" % item.upvote_ratio,\
-                        "ID: %s" % item.id,"NSFW? %s" % item.over_18,"Body: %s" % item.selftext]
+                        "ID: %s" % item.id,"NSFW? %s" % item.over_18,"Text: %s" % item.selftext]
                 if s_type == s_types[0]:
                     self.overview["Submissions"].append(l)
                 elif s_type == s_types[2]:
