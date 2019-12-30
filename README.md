@@ -123,7 +123,7 @@ The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`
 
 `$ ./scraper.py -c URL N_RESULTS --FILE_FORMAT`
 
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.**
 
 *Comment scraping functionality currently has some issues and may be different once I figure out a better solution. Section coming soon!*
 
