@@ -584,7 +584,7 @@ class Listables():
         self.access_names = ["Upvoted","Downvoted","Gildings","Hidden","Saved"]
         self.access = [self.upvoted,self.downvoted,self.gildings,self.hidden,self.saved]
 
-    ### Extracting submission or comment attributes
+    ### Extracting submission or comment attributes and appending to overview dictionary
     def extract(self,cat,obj,s_types,s_type):
         for item in obj:
             if isinstance(item,praw.models.Submission):
