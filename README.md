@@ -65,7 +65,6 @@ The Subreddit scrape will include the following submission attributes:
 
  - Title
  - Flair
- - Author
  - Created
  - Upvotes
  - Upvote Ratio
