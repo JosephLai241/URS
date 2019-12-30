@@ -240,7 +240,7 @@ There are a couple user lists that are typically restricted and will raise an 40
  
 **JSON Sample:**
  
-![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_json.png)
+![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_json1.png)
  
 **CSV Sample:**
  
