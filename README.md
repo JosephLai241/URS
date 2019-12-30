@@ -244,7 +244,7 @@ There are a couple user lists that are typically restricted and will raise an 40
  
 **CSV Sample:**
  
-![Redditor CSV](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_csv.png)
+![Redditor CSV](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_csv1.png)
  
 ----------------------------------------------------------------------------------------------------------------------------
  
