@@ -112,6 +112,28 @@ Redditor scrapes will include the following Redditor attributes:
 - Hidden (may be forbidden)
 - Saved (may be forbidden)
 
+Of these attributes, Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved objects will include the following attributes:
+
+ - Title
+ - Created 
+ - Upvotes
+ - Upvote Ratio
+ - ID
+ - NSFW? 
+ - Text
+ 
+ Additionally, Comments will include the following attributes:
+ 
+ - Created
+ - Score
+ - Text
+ - Parent ID
+ - Link ID
+ - Edited?
+ - Stickied?
+ - Replying to (title of post or comment)
+ - In Subreddit (Subreddit name)
+ 
 ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file.
 
 ***NOTE:*** The number of results returned will be applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes.
