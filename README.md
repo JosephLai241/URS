@@ -288,3 +288,10 @@ After you have configured all settings for each Subreddit, you will be greeted w
     - Exporting to JSON
     - Scraping Redditors
   - Comments scraping functionality is still under construction.
+ - **December 31,2019:** Universal Reddit Scraper 3.0 (Official Release).
+   - Comments scraping functionality is now working!
+   - Added additional exception handling for creating filenames
+   - Minor code reformatting
+   - Simplified verbose output
+   - Added an additional Submission attribute when scraping Redditors
+   - Happy New Year!
