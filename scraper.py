@@ -30,12 +30,19 @@ s_t = ["sub","user","comments"]
 ### Export options
 eo = ["csv","json"]
 
+### Illegal filename characters
+illegal_chars = ["/","\\","?","%","*",":","|","<",">"]
+
 ### Subreddit categories
 categories = ["Hot","New","Controversial","Top","Rising","Search"]
 short_cat = [cat[0] for cat in categories]
 
 ### Confirm or deny options
 options = ["y","n"]
+
+### Convert UNIX time to readable format
+def convert_time(object):
+    return dt.datetime.fromtimestamp(object).strftime("%m-%d-%Y %H:%M:%S")
 
 #===============================================================================
 #                                   Titles
@@ -153,7 +160,7 @@ def parse_args():
                                     formatter_class = argparse.RawDescriptionHelpFormatter, \
                                     description = "Universal Reddit Scraper 3.0 - Scrape Subreddits, Redditors, or comments from posts", \
                                     epilog = r"""
-subreddit categories:
+Subreddit categories:
    H,h     selecting Hot category
    N,n     selecting New category
    C,c     selecting Controversial category
@@ -179,7 +186,7 @@ EXAMPLES
 
         $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --csv
 
-    You can scrape multiple items at once:
+    You can choose to scrape multiple items at once:
 
         $ ./scraper.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50 --json
 
@@ -250,7 +257,7 @@ def check_args(parser,args):
         e_title()
         parser.exit()
 
-### Check if the Subreddits exist and list invalid Subreddits if applicable
+### Check if Subreddits exist and list invalid Subreddits if applicable
 def confirm_subs(reddit,sub_list,parser):
     print("\nChecking if Subreddit(s) exist...")
     found,not_found = existence(reddit,sub_list,parser,s_t,s_t[0])
@@ -376,13 +383,24 @@ def get_settings(subs,s_master):
             except ValueError:
                 print("Not an option! Try again.")
 
+### Scrape again?
+def another():
+    while True:
+        try:
+            repeat = input("\nScrape again? [Y/N] ").strip().lower()
+            if repeat not in options:
+                raise ValueError
+            else:
+                return repeat
+        except ValueError:
+            print("Not an option! Try again.")
+
 #===============================================================================
 #                       Subreddit Scraping Functions
 #===============================================================================
 ### Make s_master dictionary from Subreddit list
 def c_s_dict(subs):
-    s_master = dict((sub,[]) for sub in subs)
-    return s_master
+    return dict((sub,[]) for sub in subs)
 
 ### Print scraping details for each Subreddit
 def print_settings(s_master,args):
@@ -412,13 +430,16 @@ def print_settings(s_master,args):
             print("Not an option! Try again.")
 
 ### Get Subreddit posts
-def get_posts(reddit,sub,cat_i,search_for):
+def get_posts(args,reddit,sub,cat_i,search_for):
     subreddit = reddit.subreddit(sub)
     if cat_i == short_cat[5] or cat_i == 5:
         print(("\nSearching posts in r/%s for '%s'...") % (sub,search_for))
         collected = subreddit.search("%s" % search_for)
     else:
-        print(("\nProcessing %s results from r/%s...") % (search_for,sub))
+        if args.sub:
+            print(("\nProcessing %s %s results from r/%s...") % (search_for,categories[short_cat.index(cat_i)],sub))
+        elif args.basic:
+            print(("\nProcessing %s %s results from r/%s...") % (search_for,categories[cat_i],sub))
         if cat_i == short_cat[0] or cat_i == 0:
             collected = subreddit.hot(limit = int(search_for))
         elif cat_i == short_cat[1] or cat_i == 1:
@@ -434,8 +455,8 @@ def get_posts(reddit,sub,cat_i,search_for):
 
 ### Sort collected dictionary. Reformat dictionary if exporting to JSON
 def sort_posts(args,collected):
-    print("Sorting posts...")
-    titles = ["Title","Flair","Author","Created","Upvotes","Upvote Ratio","ID",\
+    print("\nThis may take a while. Please wait.")
+    titles = ["Title","Flair","Created","Upvotes","Upvote Ratio","ID",\
                 "Edited?","Is Locked?","NSFW?","Is Spoiler?","Stickied?",\
                 "URL","Comment Count","Text"]
 
@@ -444,12 +465,14 @@ def sort_posts(args,collected):
         for post in collected:
             overview["Title"].append(post.title)
             overview["Flair"].append(post.link_flair_text)
-            overview["Author"].append(post.author.name)
-            overview["Created"].append(dt.datetime.fromtimestamp(post.created).strftime("%m-%d-%Y %H:%M:%S"))    # Convert UNIX time to readable format
+            overview["Created"].append(convert_time(post.created))
             overview["Upvotes"].append(post.score)
             overview["Upvote Ratio"].append(post.upvote_ratio)
             overview["ID"].append(post.id)
-            overview["Edited?"].append(post.edited)
+            if str(post.edited).isalpha():
+                overview["Edited?"].append(post.edited)
+            else:
+                overview["Edited?"].append(convert_time(post.edited))
             overview["Is Locked?"].append(post.locked)
             overview["NSFW?"].append(post.over_18)
             overview["Is Spoiler?"].append(post.spoiler)
@@ -461,9 +484,10 @@ def sort_posts(args,collected):
         overview = dict()
         counter = 1
         for post in collected:
-            e_p = [post.title,post.link_flair_text,post.author.name,\
-                    dt.datetime.fromtimestamp(post.created).strftime("%m-%d-%Y %H:%M:%S"),\
-                    post.score,post.upvote_ratio,post.id,post.edited,post.locked,\
+            edit_t = "%s" % post.edited if str(post.edited).isalpha() else "%s" % convert_time(post.edited)
+            e_p = [post.title,post.link_flair_text,\
+                    convert_time(post.created),\
+                    post.score,post.upvote_ratio,post.id,edit_t,post.locked,\
                     post.over_18,post.spoiler,post.stickied,post.url,post.num_comments,post.selftext]
             overview["Post %s" % counter] = {title:value for title,value in zip(titles,e_p)}
             counter += 1
@@ -480,9 +504,9 @@ def gsw_sub(reddit,args,s_master):
                 cat_i = each[0]
             search_for = each[1]
 
-            collected = get_posts(reddit,sub,cat_i,search_for)
+            collected = get_posts(args,reddit,sub,cat_i,search_for)
             overview = sort_posts(args,collected)
-            fname = sub_fname(args,cat_i,search_for,sub)
+            fname = r_fname(args,cat_i,search_for,sub,illegal_chars)
             if args.csv:
                 export(fname,overview,eo[0])
                 csv = "\nCSV file for r/%s created." % sub
@@ -493,46 +517,6 @@ def gsw_sub(reddit,args,s_master):
                 json = "\nJSON file for r/%s created." % sub
                 print(json)
                 print("-"*(len(json) - 1))
-
-#===============================================================================
-#                               Export Functions
-#===============================================================================
-### Determine file name format for Subreddit scraping
-def sub_fname(args,cat_i,search_for,sub):
-    fname = ""
-    if args.sub:
-        if cat_i == short_cat[5]:
-            fname = str(("r-%s-%s-'%s' %s") % (sub,categories[5],search_for,date))
-        else:
-            fname = str(("r-%s-%s %s") % (sub,categories[short_cat.index(cat_i)],date))
-    elif args.basic:
-        if cat_i == 5:
-            fname = str(("r-%s-%s-'%s' %s") % (sub,categories[cat_i],search_for,date))
-        else:
-            fname = str(("r-%s-%s %s") % (sub,categories[cat_i],date))
-
-    return fname
-
-### Determine file name format for Redditor or comments scraping
-def fname(args,string):
-    fname = ""
-    if args.user:
-        fname = str(("u-%s %s") % (string,date))
-    elif args.comments:
-        fname = str(("c-%s %s") % (string,date))
-
-    return fname
-
-### Write overview dictionary to CSV or JSON
-def export(fname,overview,f_type):
-    if f_type == eo[0]:
-        with open("%s.csv" % fname, "w", encoding = "utf-8") as results:
-            writer = csv.writer(results, delimiter = ",")
-            writer.writerow(overview.keys())
-            writer.writerows(zip(*overview.values()))
-    elif f_type == eo[1]:
-        with open("%s.json" % fname, "w", encoding = "utf-8") as results:
-            json.dump(overview,results,indent = 4)
 
 #===============================================================================
 #                           User Scraping Functions
@@ -550,8 +534,7 @@ def list_users(reddit,user_list,parser):
 
 ### Make u_master dictionary from Redditor list
 def c_u_dict(users):
-    u_master = dict((user,None) for user in users)
-    return u_master
+    return dict((user,None) for user in users)
 
 ### This class made my code so much cleaner man. It was created to reuse code where I had
 ### to pass different objects into numerous blocks of code. I never really messed
@@ -588,9 +571,10 @@ class Listables():
     def extract(self,cat,obj,s_types,s_type):
         for item in obj:
             if isinstance(item,praw.models.Submission):
-                l = ["Title: %s" % item.title, "Created: %s" % dt.datetime.fromtimestamp(item.created).strftime("%m-%d-%Y %H:%M:%S"),\
+                l = ["Title: %s" % item.title, "Created: %s" % convert_time(item.created),\
                         "Upvotes: %s" % item.score,"Upvote Ratio: %s" % item.upvote_ratio,\
-                        "ID: %s" % item.id,"NSFW? %s" % item.over_18,"Text: %s" % item.selftext]
+                        "ID: %s" % item.id,"NSFW? %s" % item.over_18,"In Subreddit: %s" % item.subreddit.display_name,\
+                        "Body: %s" % item.selftext]
                 if s_type == s_types[0]:
                     self.overview["Submissions"].append(l)
                 elif s_type == s_types[2]:
@@ -598,9 +582,10 @@ class Listables():
                 elif s_type == s_types[3]:
                     self.overview["%s (may be forbidden)" % cat.capitalize()].append(l)
             elif isinstance(item,praw.models.Comment):
-                l = ["Created: %s" % dt.datetime.fromtimestamp(item.created_utc).strftime("%m-%d-%Y %H:%M:%S"),\
+                l = ["Created: %s" % convert_time(item.created_utc),\
                         "Score: %s" % item.score,"Text: %s" % item.body,"Parent ID: %s" % item.parent_id,\
-                        "Link ID: %s" % item.link_id,"Edited? %s" % item.edited,\
+                        "Link ID: %s" % item.link_id,\
+                        "Edited? %s" % item.edited if str(item.edited).isalpha() else "Edited? %s" % convert_time(item.edited),\
                         "Stickied? %s" % item.stickied, "Replying to: %s" % item.submission.selftext,\
                         "In Subreddit: %s" % item.submission.subreddit.display_name]
                 if s_type == s_types[1]:
@@ -638,10 +623,9 @@ class Listables():
 
 ### Get and sort Redditor information
 def gs_user(reddit,user,limit):
-    print("\nGetting information for u/%s..." % user)
-    user = reddit.redditor(user)
-
     print(("\nProcessing %s results from u/%s's profile...") % (limit,user))
+    print("\nThis may take a while. Please wait.")
+    user = reddit.redditor(user)
     titles = ["Name","Fullname","ID","Date Created","Comment Karma","Link Karma", \
                 "Is Employee?","Is Friend?","Is Mod?","Is Gold?","Submissions","Comments", \
                 "Hot","New","Controversial","Top","Upvoted (may be forbidden)","Downvoted (may be forbidden)", \
@@ -651,7 +635,7 @@ def gs_user(reddit,user,limit):
     overview["Name"].append(user.name)
     overview["Fullname"].append(user.fullname)
     overview["ID"].append(user.id)
-    overview["Date Created"].append(dt.datetime.fromtimestamp(user.created_utc).strftime("%m-%d-%Y %H:%M:%S"))
+    overview["Date Created"].append(convert_time(user.created_utc))
     overview["Comment Karma"].append(user.comment_karma)
     overview["Link Karma"].append(user.link_karma)
     overview["Is Employee?"].append(user.is_employee)
@@ -670,7 +654,7 @@ def gs_user(reddit,user,limit):
 def w_user(reddit,users,u_master,args):
     for user,limit in u_master.items():
          overview = gs_user(reddit,user,limit)
-         f_name = fname(args,user)
+         f_name = u_fname(user,illegal_chars)
          if args.csv:
              export(f_name,overview,eo[0])
              csv = "\nCSV file for u/%s created." % user
@@ -698,64 +682,87 @@ def list_posts(reddit,post_list,parser):
 
 ### Make c_master dictionary from posts list
 def c_c_dict(posts):
-    c_master = dict((post,None) for post in posts)
-    return c_master
+    return dict((post,None) for post in posts)
 
-### Add list of dictionary of comments attributes to use when sorting comments
-def add_comment(titles,comment):
+### Add list of dictionary of comments attributes to use when sorting.
+### Handle deleted Redditors or edited time if applicable.
+def add_comment(titles,comment,usr):
     c_set = dict((title,None) for title in titles)
-    c_set[titles[0]] = comment.author.name
-    c_set[titles[1]] = dt.datetime.fromtimestamp(comment.created_utc).strftime("%m-%d-%Y %H:%M:%S")
-    c_set[titles[2]] = comment.score
-    c_set[titles[3]] = comment.body
-    c_set[titles[4]] = comment.edited
-    c_set[titles[5]] = comment.is_submitter
-    c_set[titles[6]] = comment.stickied
+    c_set[titles[0]] = comment.parent_id
+    c_set[titles[1]] = comment.id
+    if usr:
+        c_set[titles[2]] = comment.author.name
+    else:
+        c_set[titles[2]] = "[deleted]"
+    c_set[titles[3]] = convert_time(comment.created_utc)
+    c_set[titles[4]] = comment.score
+    c_set[titles[5]] = comment.body
+    if str(comment.edited).isalpha():
+        c_set[titles[6]] = comment.edited
+    else:
+        c_set[titles[6]] = convert_time(comment.edited)
+    c_set[titles[7]] = comment.is_submitter
+    c_set[titles[8]] = comment.stickied
 
     return [c_set]
 
-### Sort comments. Exit loop if replace_more() has timed out
-def s_comments(all,titles,submission):
-    for comment in submission.comments.list():
+### Recycle that code. Append comments to all dictionary differently if raw is
+### True or False
+def to_all(titles,comment,submission,all,bool,raw):
+    if raw:
+        add = add_comment(titles,comment,bool)
+        all[comment.id] = add
+    else:
         cpid = comment.parent_id.split("_",1)[1]
         if cpid == submission.id:
-            add = add_comment(titles,comment)
+            add = add_comment(titles,comment,bool)
             all[comment.id] = [add]
         elif cpid in all.keys():
-            append = add_comment(titles,comment)
+            append = add_comment(titles,comment,bool)
             all[cpid].append({comment.id:append})
         else:
             for parent_id,more_c in all.items():
                 for d in more_c:
                     if isinstance(d,dict):
-                        try:
-                            sub_set = add_comment(titles,comment)
-                            if cpid in d.keys():
-                                d[cpid].append({comment.id:sub_set})
-                            else:
-                                d[comment.id] = [sub_set]
-                        except AttributeError:
-                            print("\nLoad more comments timed out.")
-                            return
+                        sub_set = add_comment(titles,comment,bool)
+                        if cpid in d.keys():
+                            d[cpid].append({comment.id:sub_set})
+                        else:
+                            d[comment.id] = [sub_set]
+
+### Sort comments. Handle submission author name if Redditor has deleted their account
+def s_comments(all,titles,submission,raw):
+    for comment in submission.comments.list():
+        try:
+            to_all(titles,comment,submission,all,True,raw)
+        except AttributeError:
+            to_all(titles,comment,submission,all,False,raw)
 
 ### Get and sort comments from posts
 def gs_comments(reddit,post,limit):
     submission = reddit.submission(url=post)
-    print(("\nProcessing %s comments from Reddit post '%s'...") % (limit,submission.title))
-    titles = ["Author","Created","Upvotes","Text","Edited?","Is Submitter?","Stickied?"]
+    titles = ["Parent ID","Comment ID","Author","Created","Upvotes","Text","Edited?","Is Submitter?","Stickied?"]
     submission.comments.replace_more(limit=None)
 
     all = dict()
-    s_comments(all,titles,submission)
-    cut = {key: all[key] for key in list(all)[:int(limit)]}
-    return cut
+    if int(limit) == 0:
+        print("\nProcessing all comments in raw format from Reddit post '%s'..." % submission.title)
+        print("\nThis may take a while. Please wait.")
+        s_comments(all,titles,submission,True)
+    else:
+        print(("\nProcessing %s comments and including second and third-level replies from Reddit post '%s'...") % (limit,submission.title))
+        print("\nThis may take a while. Please wait.")
+        s_comments(all,titles,submission,False)
+        all = {key: all[key] for key in list(all)[:int(limit)]}
+
+    return all
 
 ### Get, sort, then write scraped comments to CSV or JSON
 def w_comments(reddit,post_list,c_master,args):
     for post,limit in c_master.items():
         title = reddit.submission(url=post).title
         overview = gs_comments(reddit,post,limit)
-        f_name = fname(args,title)
+        f_name = c_fname(title,illegal_chars)
         if args.csv:
             export(f_name,overview,eo[0])
             csv = "\nCSV file for '%s' comments created." % title
@@ -768,32 +775,71 @@ def w_comments(reddit,post_list,c_master,args):
             print("-"*(len(json) - 1))
 
 #===============================================================================
-def another():
-    while True:
-        try:
-            repeat = input("\nScrape again? [Y/N] ").strip().lower()
-            if repeat not in options:
-                raise ValueError
-            else:
-                return repeat
-        except ValueError:
-            print("Not an option! Try again.")
+#                               Export Functions
+#===============================================================================
+### Fix fname if illegal filename characters are present
+def fix(name,illegal_chars):
+    fix = ["_" if char in illegal_chars else char for char in name]
+    return "".join(fix)
 
+### Determine file name format for Subreddit scraping
+def r_fname(args,cat_i,search_for,sub,illegal_chars):
+    raw_n = ""
+    if args.sub:
+        if cat_i == short_cat[5]:
+            raw_n = str(("r-%s-%s-'%s' %s") % (sub,categories[5],search_for,date))
+            fname = fix(raw_n,illegal_chars)
+        else:
+            raw_n = str(("r-%s-%s %s") % (sub,categories[short_cat.index(cat_i)],date))
+            fname = fix(raw_n,illegal_chars)
+    elif args.basic:
+        if cat_i == 5:
+            raw_n = str(("r-%s-%s-'%s' %s") % (sub,categories[cat_i],search_for,date))
+            fname = fix(raw_n,illegal_chars)
+        else:
+            raw_n = str(("r-%s-%s %s") % (sub,categories[cat_i],date))
+            fname = fix(raw_n,illegal_chars)
+
+    return fname
+
+### Determine file name format for Redditor scraping
+def u_fname(string,illegal_chars):
+    raw_n = str(("u-%s %s") % (string,date))
+    return fix(raw_n,illegal_chars)
+
+### Determine file name format for comments scraping
+def c_fname(string,illegal_chars):
+    raw_n = str(("c-%s %s") % (string,date))
+    return fix(raw_n,illegal_chars)
+
+### Write overview dictionary to CSV or JSON
+def export(fname,overview,f_type):
+    if f_type == eo[0]:
+        with open("%s.csv" % fname, "w", encoding = "utf-8") as results:
+            writer = csv.writer(results, delimiter = ",")
+            writer.writerow(overview.keys())
+            writer.writerows(zip(*overview.values()))
+    elif f_type == eo[1]:
+        with open("%s.json" % fname, "w", encoding = "utf-8") as results:
+            json.dump(overview,results,indent = 4)
+
+#===============================================================================
+### Putting it all together
 def main():
     ### Reddit Login
     reddit = praw.Reddit(client_id = c_id, \
                          client_secret = c_secret, \
                          user_agent = u_a, \
                          username = usrnm, \
-                         password = passwd)    # Connect to reddit
+                         password = passwd)
 
     ### Parse and check args, and initialize Subreddit, Redditor, post comments,
-    ### and/or basic Subreddit scraper
+    ### or basic Subreddit scraper
     parser,args = parse_args()
     check_args(parser,args)
     title()
     if args.sub:
-        ### CLI scraper
+        ### Subreddit scraper
         r_title()
         sub_list = create_list(args,s_t,s_t[0])
         subs = confirm_subs(reddit,sub_list,parser)
