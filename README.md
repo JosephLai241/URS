@@ -1,7 +1,5 @@
 # Universal Reddit Scraper 3.0
 
-## **12/28/19: Comments scraping functionality currently has some issues. Redditor scraping and exporting to JSON are ready to go.**
-
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
 Written in Python and utilizes the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
