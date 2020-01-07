@@ -63,7 +63,7 @@ The Subreddit scrape will include the following submission attributes:
 
  - Title
  - Flair
- - Created
+ - Date Created
  - Upvotes
  - Upvote Ratio
  - ID
@@ -113,7 +113,7 @@ Redditor scrapes will include the following Redditor attributes:
 Of these attributes, Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved objects will include the following attributes:
 
  - Title
- - Created 
+ - Date Created 
  - Upvotes
  - Upvote Ratio
  - ID
@@ -122,7 +122,7 @@ Of these attributes, Submissions, Hot, New, Controversial, Top, Upvoted, Downvot
  
  Additionally, Comments will include the following attributes:
  
- - Created
+ - Date Created
  - Score
  - Text
  - Parent ID
@@ -144,7 +144,27 @@ The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`
 
 **These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended.**
 
-*Comment scraping functionality currently has some issues and may be different once I figure out a better solution. Section coming soon!*
+You can also scrape comments from posts and specify the number of results returned.
+
+Comments scrapes will include the following attributes:
+
+- Parent ID
+- Comment ID
+- Author
+- Date Created
+- Upvotes
+- Text
+- Edited?
+- Is Submitter?
+- Stickied?
+
+Comments scraping can either return structured JSON data down to third-level comment replies, or you can simply return a raw list of all comments with no structure.
+
+To return a raw list of all comments, specify `0` results to be returned from the scrape.
+
+***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the post, which may take a while depending on the post's popularity.
+
+The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`
 
 # How to get Reddit API Credentials
 
@@ -226,7 +246,7 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
  
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
 
-**I recommend exporting Redditor scrapes to JSON because the format is much nicer to read. There is also a bug that causes the CSV export to exclude all but the top submission or comment to display in Submissions, Comments, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved lists.**
+**This is currently for JSON ONLY. There is a [CSV export bug](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/3) that needs squashing. I will be replacing the following screenshots with JSON examples soon.**
  
 Scraping 5 results for each of u/spez's user attributes and export to CSV:
  
@@ -240,15 +260,17 @@ There are a couple user lists that are typically restricted and will raise an 40
  
 ![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_json1.png)
  
-**CSV Sample (BUG IS PRESENT):**
- 
-![Redditor CSV](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_csv1.png)
- 
 ----------------------------------------------------------------------------------------------------------------------------
  
 ### Comments Scraper
+
+Use the `-c` flag to indicate a post and the number of comments returned. The program will then display the type of scrape and check if the post(s) exist. It will display a list of invalid posts, if applicable.
+
+**I have designed this functionality to work best with JSON and strongly recommend this export option, however you will still be able to get your results if you choose to export to CSV instead.**
+
+Scraping 10 comments from [this Reddit post](https://www.reddit.com/r/ProgrammerHumor/comments/9ozauu/a_more_accurate_representation_of_what_happened/) and export to JSON:
  
-*Functionality is under construction. Coming soon!*
+*Section coming soon!*
  
 ## Basic Scraper
 
