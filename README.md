@@ -41,6 +41,8 @@ You will also need your own Reddit account and API credentials. I have included 
  
 # Scraping Reddit
 
+Scrape speeds will be determined by the speed of your internet connection.
+
 ## Subreddits
 
 `$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
