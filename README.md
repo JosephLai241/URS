@@ -15,6 +15,8 @@ You will also need your own Reddit account and API credentials. I have included 
 ## Table of Contents
  - [Scraping Reddit](#scraping-reddit)
  
+    - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
+ 
     - [Subreddits](#subreddits)
     
     - [Redditors](#redditors)
@@ -43,6 +45,37 @@ You will also need your own Reddit account and API credentials. I have included 
 
 Scrape speeds will be determined by the speed of your internet connection.
 
+## A Table of All Subreddit, Redditor, and Post Comments Attributes
+
+These attributes will be included in each scrape.
+
+Subreddits | Redditors | Post Comments
+---------- | --------- | -------------
+Title | Name | Parent ID
+Flair | Fullname | Comment ID
+Date Created | ID | Author
+Upvotes | Date Created | Date Created
+Upvote Ratio | Comment Karma | Upvotes
+ID | Link Karma | Text
+Is Locked? | Is Employee? | Edited? 
+NSFW? | Is Friend? | Is Submitter?
+Is Spoiler? | Is Mod? | Stickied?
+Stickied? | Is Gold? | 
+URL | Submissions* | 
+Comment Count | Comments*
+Text | Hot* | 
+&nbsp; | New* | 
+&nbsp; | Controversial* | 
+&nbsp; | Top* | 
+&nbsp; | Upvoted* (may be forbidden) | 
+&nbsp; | Downvoted* (may be forbidden) | 
+&nbsp; | Gilded* | 
+&nbsp; | Gildings* (may be forbidden) | 
+&nbsp; | Hidden* (may be forbidden) | 
+&nbsp; | Saved* (may be forbidden) | 
+
+\* Includes additional attributes; see [Redditors](#redditors) section for more information
+
 ## Subreddits
 
 `$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT`
@@ -61,22 +94,6 @@ These are the post category options:
 
 Once you configure the settings for the scrape, the program will save the results to either a .csv or .json file.
 
-The Subreddit scrape will include the following submission attributes:
-
- - Title
- - Flair
- - Date Created
- - Upvotes
- - Upvote Ratio
- - ID
- - Is Locked?
- - NSFW?
- - Is Spoiler?
- - Stickied?
- - URL
- - Comment Count
- - Text
-
 The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"`
 
 If you have searched for keywords in a Subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORDS' DATE.[FILE_FORMAT]"`
@@ -89,52 +106,19 @@ If you have searched for keywords in a Subreddit, file names are formatted as su
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
-Redditor scrapes will include the following Redditor attributes:
+Of these Redditor attributes, the following will include additional attributes:
 
-- Name
-- Fullname
-- ID
-- Date Created
-- Comment Karma
-- Link Karma
-- Is Employee?
-- Is Friend?
-- Is Mod?
-- Is Gold?
-- Submissions
-- Comments
-- Hot
-- New
-- Controversial
-- Top
-- Upvoted (may be forbidden)
-- Downvoted (may be forbidden)
-- Gilded
-- Gildings (may be forbidden)
-- Hidden (may be forbidden)
-- Saved (may be forbidden)
-
-Of these attributes, Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved objects will include the following attributes:
-
- - Title
- - Date Created 
- - Upvotes
- - Upvote Ratio
- - ID
- - NSFW? 
- - Text
- 
- Additionally, Comments will include the following attributes:
- 
- - Date Created
- - Score
- - Text
- - Parent ID
- - Link ID
- - Edited?
- - Stickied?
- - Replying to (title of post or comment)
- - In Subreddit (Subreddit name)
+Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved | Comments
+-------------------------------------------------------------------------------------------------- | --------
+Title | Date Created
+Date Created | Score
+Upvotes | Text
+Upvote Ratio | Parent ID
+ID | Link ID
+NSFW? | Edited?
+Text | Stickied?
+&nbsp; | Replying to (title of post or comment)
+&nbsp; | In Subreddit (Subreddit name)
  
 ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file.
 
@@ -149,18 +133,6 @@ The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"`
 **These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
 
 You can also scrape comments from posts and specify the number of results returned.
-
-Comments scrapes will include the following attributes:
-
-- Parent ID
-- Comment ID
-- Author
-- Date Created
-- Upvotes
-- Text
-- Edited?
-- Is Submitter?
-- Stickied?
 
 Comments scraping can either return structured JSON data down to third-level comment replies, or you can simply return a raw list of all comments with no structure.
 
