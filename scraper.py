@@ -456,7 +456,7 @@ def get_posts(args,reddit,sub,cat_i,search_for):
 ### Sort collected dictionary. Reformat dictionary if exporting to JSON
 def sort_posts(args,collected):
     print("\nThis may take a while. Please wait.")
-    titles = ["Title","Flair","Created","Upvotes","Upvote Ratio","ID",\
+    titles = ["Title","Flair","Date Created","Upvotes","Upvote Ratio","ID",\
                 "Edited?","Is Locked?","NSFW?","Is Spoiler?","Stickied?",\
                 "URL","Comment Count","Text"]
 
@@ -465,7 +465,7 @@ def sort_posts(args,collected):
         for post in collected:
             overview["Title"].append(post.title)
             overview["Flair"].append(post.link_flair_text)
-            overview["Created"].append(convert_time(post.created))
+            overview["Date Created"].append(convert_time(post.created))
             overview["Upvotes"].append(post.score)
             overview["Upvote Ratio"].append(post.upvote_ratio)
             overview["ID"].append(post.id)
@@ -571,7 +571,7 @@ class Listables():
     def extract(self,cat,obj,s_types,s_type):
         for item in obj:
             if isinstance(item,praw.models.Submission):
-                l = ["Title: %s" % item.title, "Created: %s" % convert_time(item.created),\
+                l = ["Title: %s" % item.title, "Date Created: %s" % convert_time(item.created),\
                         "Upvotes: %s" % item.score,"Upvote Ratio: %s" % item.upvote_ratio,\
                         "ID: %s" % item.id,"NSFW? %s" % item.over_18,"In Subreddit: %s" % item.subreddit.display_name,\
                         "Body: %s" % item.selftext]
@@ -582,7 +582,7 @@ class Listables():
                 elif s_type == s_types[3]:
                     self.overview["%s (may be forbidden)" % cat.capitalize()].append(l)
             elif isinstance(item,praw.models.Comment):
-                l = ["Created: %s" % convert_time(item.created_utc),\
+                l = ["Date Created: %s" % convert_time(item.created_utc),\
                         "Score: %s" % item.score,"Text: %s" % item.body,"Parent ID: %s" % item.parent_id,\
                         "Link ID: %s" % item.link_id,\
                         "Edited? %s" % item.edited if str(item.edited).isalpha() else "Edited? %s" % convert_time(item.edited),\
@@ -741,7 +741,7 @@ def s_comments(all,titles,submission,raw):
 ### Get and sort comments from posts
 def gs_comments(reddit,post,limit):
     submission = reddit.submission(url=post)
-    titles = ["Parent ID","Comment ID","Author","Created","Upvotes","Text","Edited?","Is Submitter?","Stickied?"]
+    titles = ["Parent ID","Comment ID","Author","Date Created","Upvotes","Text","Edited?","Is Submitter?","Stickied?"]
     submission.comments.replace_more(limit=None)
 
     all = dict()
