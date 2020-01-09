@@ -38,6 +38,8 @@ You will also need your own Reddit account and API credentials. I have included 
        - [Comments Scraper](#comments-scraper)
      
      - [Basic Scraper](#basic-scraper)
+     
+ - [Creating a Pull Request](#creating-a-pull-request)
     
  - [Releases](#releases)
  
@@ -276,7 +278,12 @@ After you have configured all settings for each Subreddit, you will be greeted w
 
 ![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b_6.png)
 
+# Creating a Pull Request
+
+I have provided a pull request template in the `assets` branch to properly document new changes/fixes to the repository.
+
 # Releases
+
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
 - **December 28, 2019:** Universal Reddit Scraper 3.0 (beta). 
