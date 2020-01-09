@@ -280,7 +280,7 @@ After you have configured all settings for each Subreddit, you will be greeted w
 
 # Creating a Pull Request
 
-I have provided a pull request template in the `assets` branch to properly document new changes/fixes to the repository.
+I have provided a pull request template in the `docs` folder to properly document new changes/fixes to the repository.
 
 # Releases
 
