@@ -193,6 +193,8 @@ Note that this will overwrite the old branch on the server, so make sure you are
 
 ## Community
 
+If the `issues` tab does not suffice, you can email me at urs_project@protonmail.com if you have additional comments, suggestions, or questions about this project.
+
 - If you know the answer (or a better solution to an existing answer) to a question that was listed in the `Issues` tab, feel free to contribute.
 
 - If you have a better implementation of existing code that will improve runtime or streamline existing code, follow the pull request process to suggest improvements.
