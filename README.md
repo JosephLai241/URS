@@ -14,33 +14,19 @@ You will also need your own Reddit account and API credentials. I have included 
 
 ## Table of Contents
  - [Scraping Reddit](#scraping-reddit)
- 
     - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
- 
     - [Subreddits](#subreddits)
-    
     - [Redditors](#redditors)
-    
     - [Post Comments](#post-comments)
-    
  - [How to get Reddit API Credentials](#how-to-get-reddit-api-credentials)
- 
  - [Some Linux Tips](#some-linux-tips)
- 
  - [Walkthrough](#walkthrough)
- 
      - [CLI Scrapers](#cli-scrapers)
-     
        - [Subreddit Scraper](#subreddit-scraper)
-       
        - [Redditor Scraper](#redditor-scraper)
-       
        - [Comments Scraper](#comments-scraper)
-     
      - [Basic Scraper](#basic-scraper)
-     
  - [Creating a Pull Request](#creating-a-pull-request)
-    
  - [Releases](#releases)
  
 # Scraping Reddit
