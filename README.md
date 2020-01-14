@@ -138,7 +138,7 @@ Click "create app". Name your app and choose "script" for the type of app. In th
 
 Once you create the app, you should see a string of 14 characters on the top left corner underneath "personal use script." That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. Save this information as it will be used in the program in order to use the Reddit API. You will also have to provide your app name, Reddit account username and password as well. 
 
-This block of credentials is found on lines 23-27.
+This block of credentials is found on lines 18-22.
 
 # Some Linux Tips
 
