@@ -136,23 +136,21 @@ First, create your own Reddit account and then head over to [Reddit's apps page]
 
 Click "are you a developer? create an app...". 
 
-[Create an app](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_1.png)
+![Create an app](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_1.png)
 
-Name your app and choose "script" for the type of app. In the redirect URL, type in "http://localhost:8080" since this is a personal use app. You can also add a description and an about URL. 
+Name your app, choose "script" for the type of app, and type "http://localhost:8080" in the redirect URI field since this is a personal use app. You can also add a description and an about URL. 
 
-[Enter Stuff In Boxes](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_2.png)
+![Enter Stuff In Boxes](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_2.png)
 
-Click the "edit" button to reveal more information.
+Click "create app", then "edit" to reveal more information.
 
-[Click Edit](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_3.png)
+![Click Edit](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_3.png)
 
-Once you create the app, you should see a string of 14 characters on the top left corner underneath "personal use script." That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. Save this information as it will be used in the program in order to use the Reddit API.
+You should see a string of 14 characters on the top left corner underneath "personal use script." That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. Save this information as it will be used in the program in order to use the Reddit API.
 
-[All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_4.png)
+![All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_4.png)
 
-You will also have to provide your app name, Reddit account username and password as well. 
-
-This block of credentials is found on lines 18-22.
+You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 18-22.
 
 # Some Linux Tips
 
