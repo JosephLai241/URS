@@ -1,6 +1,6 @@
 #!/usr/bin/python3.6
 """
-Created on Sat Jul 20 23:45:06 2019
+Created on Tue Dec 31 17:40:23 2019
 
 Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 
@@ -14,15 +14,15 @@ import csv
 import json
 import datetime as dt
 
-### Get current date
-date = dt.datetime.now().strftime("%m-%d-%Y")
-
 ### Reddit API Credentials
 c_id = "14_CHAR_HERE"               # Personal Use Script (14 char)
 c_secret = "27_CHAR_HERE"           # Secret key (27 char)
 u_a = "APP_NAME_HERE"               # App name
 usrnm = "REDDIT_USERNAME_HERE"      # Reddit username
 passwd = "REDDIT_PASSWORD_HERE"     # Reddit login password
+
+### Get current date
+date = dt.datetime.now().strftime("%m-%d-%Y")
 
 ### Scrape types
 s_t = ["sub","user","comments"]
@@ -116,7 +116,7 @@ def e_title():
 #===============================================================================
 #                                 Validation
 #===============================================================================
-### Check if Subreddit(s) or Redditor(s) exist and catch PRAW exceptions
+### Check if Subreddit(s), Redditor(s), or post exists and catch PRAW exceptions
 def existence(reddit,list,parser,s_t,l_type):
     found = []
     not_found = []
@@ -156,7 +156,7 @@ def existence(reddit,list,parser,s_t,l_type):
 #===============================================================================
 ### Get args
 def parse_args():
-    parser = argparse.ArgumentParser(usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [--csv|--json]", \
+    parser = argparse.ArgumentParser(usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]", \
                                     formatter_class = argparse.RawDescriptionHelpFormatter, \
                                     description = "Universal Reddit Scraper 3.0 - Scrape Subreddits, Redditors, or comments from posts", \
                                     epilog = r"""
@@ -330,7 +330,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
         except:
             pass
 
-### Select post category and the number of results returned from each Subreddit to be scraped
+### Select post category and the number of results returned from each Subreddit
 def get_settings(subs,s_master):
     for sub in subs:
         while True:
@@ -503,7 +503,6 @@ def gsw_sub(reddit,args,s_master):
             else:
                 cat_i = each[0]
             search_for = each[1]
-
             collected = get_posts(args,reddit,sub,cat_i,search_for)
             overview = sort_posts(args,collected)
             fname = r_fname(args,cat_i,search_for,sub,illegal_chars)
@@ -843,7 +842,6 @@ def main():
         r_title()
         sub_list = create_list(args,s_t,s_t[0])
         subs = confirm_subs(reddit,sub_list,parser)
-
         s_master = c_s_dict(subs)
         get_cli_settings(reddit,args,s_master,s_t,s_t[0])
         if args.y:
