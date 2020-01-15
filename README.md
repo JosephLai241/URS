@@ -1,4 +1,4 @@
-# Universal Reddit Scraper 3.0
+# Universal Reddit Scraper
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
@@ -19,14 +19,14 @@ You will also need your own Reddit account and API credentials. I have included 
     - [Redditors](#redditors)
     - [Post Comments](#post-comments)
  - [How to get Reddit API Credentials](#how-to-get-reddit-api-credentials)
- - [Some Linux Tips](#some-linux-tips)
  - [Walkthrough](#walkthrough)
      - [CLI Scrapers](#cli-scrapers)
        - [Subreddit Scraper](#subreddit-scraper)
        - [Redditor Scraper](#redditor-scraper)
        - [Comments Scraper](#comments-scraper)
      - [Basic Scraper](#basic-scraper)
- - [Creating a Pull Request](#creating-a-pull-request)
+ - [Some Linux Tips](#some-linux-tips)
+ - [Contributing](#contributing)
  - [Releases](#releases)
  
 # Scraping Reddit
@@ -154,21 +154,6 @@ You should see a string of 14 characters on the top left corner underneath "pers
 
 You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 18-22.
 
-# Some Linux Tips
-
-- You can further simplify running the program by making the program executable.
-- `sudo chmod +x scraper.py`
-- Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. You can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
-- Now you will only have to prepend `./` to run the scraper.
-  - `./scraper.py ...`
-- Troubleshooting
-  - If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim.
-    - ```
-      vim scraper.py
-      :set fileformat=unix
-      :wq!
-      ```
-
 # Walkthrough
 
 First, you will have to provide your own Reddit credentials in this block of code.
@@ -224,9 +209,9 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
  
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
 
-**This is currently for JSON ONLY. There is a [CSV export bug](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/3) that needs squashing. I will be replacing the following screenshots with JSON examples soon.**
+**This is currently for JSON ONLY. There is a [CSV export bug](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/3) that needs squashing.**
  
-Scraping 5 results for each of u/spez's user attributes and export to CSV:
+Scraping 5 results for each of u/spez's user attributes and export to JSON:
  
 ![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u-1.png)
  
@@ -300,23 +285,49 @@ After you have configured all settings for each Subreddit, you will be greeted w
 
 ![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b-6.png)
 
-# Creating a Pull Request
+# Some Linux Tips
 
-I have provided a pull request template in the `docs` folder to properly document new changes/fixes to the repository.
+- You can further simplify running the program by making the program executable.
+- `sudo chmod +x scraper.py`
+- Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. You can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
+- Now you will only have to prepend `./` to run the scraper.
+  - `./scraper.py ...`
+- Troubleshooting
+  - If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim.
+    - ```
+      vim scraper.py
+      :set fileformat=unix
+      :wq!
+      ```
+
+# Contributing
+
+I have decided URS 3.0 will be the last major iteration of this project that I will release. I believe the current features should satisfy users who need to scrape Reddit. However, you can still suggest new features that I can add. If there are good suggestions, and a good reason, for a new feature, I will consider adding it. You are also more than welcome to create a pull request, adding additional features or simply improving runtime or streamlining existing code yourself. If the pull request is approved, I will merge the pull request into the master branch, tag it as a new release, and credit you for contributing to this project.
+
+Make sure you follow the contributing guidelines when creating a pull request. See the [Contributing](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md) document for more information. 
 
 # Releases
 
 - **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
-- **December 28, 2019:** Universal Reddit Scraper 3.0 (beta). 
+- **December 28, 2019:** Universal Reddit Scraper 3.0 (Beta). 
   - New features include:
     - Exporting to JSON
     - Scraping Redditors
   - Comments scraping functionality is still under construction.
- - **December 31, 2019:** Universal Reddit Scraper 3.0 (Official Release).
+ - **December 31, 2019:** Universal Reddit Scraper 3.0 (Official).
    - Comments scraping functionality is now working!
    - Added additional exception handling for creating filenames
    - Minor code reformatting
    - Simplified verbose output
    - Added an additional Submission attribute when scraping Redditors
    - Happy New Year!
+ - **January 15, 2020:** Universal Reddit Scraper 3.0 (Final Release).
+   - Numerous changes to Readme
+   - Minor code reformatting
+   - Fulfilled community standards by adding the following docs:
+     - [Contributing guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)
+     - [Pull request template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
+     - Issue templates ([bug report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md) and [feature request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md))
+     - [Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)
+     - [License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)
