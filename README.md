@@ -171,7 +171,7 @@ You will also have to provide your app name, Reddit account username and passwor
 
 First, you will have to provide your own Reddit credentials in this block of code.
 
-![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/credentialblock.png)
+![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Creds.png)
 
 **You have to provide valid credentials, otherwise the scraper will not work.**
 
@@ -181,7 +181,7 @@ All exported files will be saved to the current working directory.
 
 If you do not want to read the rest of this walkthrough, or forget the args, you can always consult the built-in help message by using `-h` or `--help`.
 
-![Help Message 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Help_1.png)
+![Help Message](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/help.png)
 
 ----------------------------------------------------------------------------------------------------------------------------
 
@@ -210,11 +210,11 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
 
 **JSON Sample:**
 
-![JSON Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_json.png)
+![JSON Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r-json.png)
 
 **CSV Sample:**
 
-![CSV Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_csv.png)
+![CSV Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r-csv.png)
  
 ---------------------------------------------------------------------------------------------------------------------------- 
 
@@ -226,15 +226,15 @@ Use the `-u` flag to indicate a Redditor and the number of results returned. The
  
 Scraping 5 results for each of u/spez's user attributes and export to CSV:
  
-![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_1.png)
+![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u-1.png)
  
 There are a couple user lists that are typically restricted and will raise an 403 HTTP Forbidden exception. If you are forbidden from accessing a list, the program will display its name and append "FORBIDDEN" to that section in the export file.
  
-![Redditor Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_2.png)
+![Redditor Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u-2.png)
  
 **JSON Sample:**
  
-![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u_json1.png)
+![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/u-json.png)
  
 ----------------------------------------------------------------------------------------------------------------------------
  
@@ -244,9 +244,25 @@ Use the `-c` flag to indicate a post and the number of comments returned. The pr
 
 **I have designed this functionality to work best with JSON and strongly recommend this export option, however you will still be able to get your results if you choose to export to CSV instead.**
 
+There are two ways you can scrape comments with this program. You can indicate a number to return a structured JSON file that includes down to third-level replies. Or you can specify `0` comments to be returned and the program will return an unstructured JSON file of all comments.
+
+Here is an example of the structured JSON scrape:
+
 Scraping 10 comments from [this Reddit post](https://www.reddit.com/r/ProgrammerHumor/comments/9ozauu/a_more_accurate_representation_of_what_happened/) and export to JSON:
  
-*Section coming soon!*
+![Comments Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_1.png)
+
+![Comments Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_2.png)
+
+**Structured JSON Sample:**
+
+![Structured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_json.png)
+
+When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc.
+
+**Unstructured JSON Sample:**
+
+![Structured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_json_raw.png)
  
 ## Basic Scraper
 
@@ -274,7 +290,7 @@ After you have configured all settings for each Subreddit, you will be greeted w
 
 ![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b_5.png)
 
-![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b_6.png)
+![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/b-6.png)
 
 # Creating a Pull Request
 
