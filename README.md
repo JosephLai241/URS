@@ -204,7 +204,7 @@ Category options are as follows:
  
 Scraping 10 r/AskReddit posts in the Hot category and export to JSON:
  
-![Subreddit Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r_1.png)
+![Subreddit Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/r-1.png)
  
 The program will then display the type of scrape, check if the Subreddit(s) exist, and display the settings for each Subreddit. It will display a list of invalid Subreddits, if applicable. You can also include `-y` in your args if you want to skip this confirmation screen and immediately scrape.
  
@@ -248,7 +248,7 @@ Use the `-c` flag to indicate a post and the number of comments returned. The pr
 
 There are two ways you can scrape comments with this program. You can indicate a number to return a structured JSON file that includes down to third-level replies. Or you can specify `0` comments to be returned and the program will return an unstructured JSON file of all comments.
 
-Here is an example of the structured JSON scrape:
+**Structured Scrape**
 
 Scraping 10 comments from [this Reddit post](https://www.reddit.com/r/ProgrammerHumor/comments/9ozauu/a_more_accurate_representation_of_what_happened/) and export to JSON:
  
@@ -260,11 +260,17 @@ Scraping 10 comments from [this Reddit post](https://www.reddit.com/r/Programmer
 
 ![Structured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_json.png)
 
+**Unstructured Scrape**
+
 When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc.
+
+![Comments Scraping 3](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_4.png)
+
+![Comments Scraping 4](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_3.png)
 
 **Unstructured JSON Sample:**
 
-![Structured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_json_raw.png)
+![Unstructured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/c_json_raw.png)
  
 ## Basic Scraper
 
