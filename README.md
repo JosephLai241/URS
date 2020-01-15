@@ -126,6 +126,8 @@ Comments scraping can either return structured JSON data down to third-level com
 
 To return a raw list of all comments, specify `0` results to be returned from the scrape.
 
+When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc.
+
 ***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the post, which may take a while depending on the post's popularity.
 
 The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`
