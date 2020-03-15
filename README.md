@@ -10,7 +10,7 @@ I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`
 
 You will also need your own Reddit account and API credentials. I have included a tutorial on how to do this below.
 
-**NOTE:** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
+***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
 ## Table of Contents
  - [Scraping Reddit](#scraping-reddit)
@@ -20,6 +20,7 @@ You will also need your own Reddit account and API credentials. I have included 
     - [Post Comments](#post-comments)
  - [How to get Reddit API Credentials](#how-to-get-reddit-api-credentials)
  - [Walkthrough](#walkthrough)
+     - [2-Factor Authentication](#2-factor-authentication)
      - [CLI Scrapers](#cli-scrapers)
        - [Subreddit Scraper](#subreddit-scraper)
        - [Redditor Scraper](#redditor-scraper)
@@ -27,11 +28,14 @@ You will also need your own Reddit account and API credentials. I have included 
      - [Basic Scraper](#basic-scraper)
  - [Some Linux Tips](#some-linux-tips)
  - [Contributing](#contributing)
+ - [Contributors](#contributors)
  - [Releases](#releases)
  
 # Scraping Reddit
 
 Scrape speeds will be determined by the speed of your internet connection.
+
+All exported files will be saved to the current working directory.
 
 ## A Table of All Subreddit, Redditor, and Post Comments Attributes
 
@@ -162,9 +166,11 @@ First, you will have to provide your own Reddit credentials in this block of cod
 
 **You have to provide valid credentials, otherwise the scraper will not work.**
 
-**If you are using 2 factor authentication on your reddit account, set `passwd` to your password and current 2fa token in the form "password:token".**
+## 2-Factor Authentication
 
-All exported files will be saved to the current working directory.
+If you choose to use 2FA with your Reddit account, enter your password followed by a colon and then your 2FA token in the `passwd` field on line 22. For example, if your password is "p4ssw0rd" and your 2FA token is "123456", you will enter "p4ssw0rd:123456" in the `passwd` field.
+
+**2FA is NOT recommended for use with this program.** This is because PRAW will raise an OAuthException after one hour, prompting you to refresh your 2FA token and re-enter your credentials. Additionally, this means your 2FA token would be stored alongside your Reddit username and password, which would defeat the purpose of enabling 2FA in the first place. See [here](https://praw.readthedocs.io/en/latest/getting_started/authentication.html#two-factor-authentication) for more information.
 
 ## CLI scrapers
 
@@ -308,9 +314,14 @@ I have decided URS 3.0 will be the last major iteration of this project that I w
 
 Make sure you follow the contributing guidelines when creating a pull request. See the [Contributing](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md) document for more information. 
 
+# Contributors
+
+- **March 11, 2020:** User [ThereGoesMySanity](https://github.com/ThereGoesMySanity) created a [pull request](https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9) adding 2FA information to Readme.
+
+
 # Releases
 
-- **May 25, 2019** Universal Reddit Scraper 1.0. Does not include CLI support.
+- **May 25, 2019:** Universal Reddit Scraper 1.0. Does not include CLI support.
 - **July 29, 2019:** Universal Reddit Scraper 2.0. Now includes CLI support!
 - **December 28, 2019:** Universal Reddit Scraper 3.0 (Beta). 
   - New features include:
