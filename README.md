@@ -162,6 +162,8 @@ First, you will have to provide your own Reddit credentials in this block of cod
 
 **You have to provide valid credentials, otherwise the scraper will not work.**
 
+**If you are using 2 factor authentication on your reddit account, set `passwd` to your password and current 2fa token in the form "password:token".**
+
 All exported files will be saved to the current working directory.
 
 ## CLI scrapers
