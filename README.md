@@ -297,7 +297,7 @@ After you have configured all settings for each Subreddit, you will be greeted w
 
 - You can further simplify running the program by making the program executable.
 - `sudo chmod +x scraper.py`
-- Make sure the shebang at the top of scraper.py matches the location in which your Python3.6 is installed. You can use `which python3.6` to check. The default shebang is `#!/usr/bin/python3.6`.
+- Make sure the shebang at the top of scraper.py matches the location in which your Python is installed. You can use `which python` to check. The default shebang is `#!/usr/bin/python`.
 - Now you will only have to prepend `./` to run the scraper.
   - `./scraper.py ...`
 - Troubleshooting
