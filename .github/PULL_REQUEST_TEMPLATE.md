@@ -14,6 +14,7 @@ Please delete options that are not relevant.
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
+- [ ] Code refactor
 
 ## List All Changes That Have Been Made
 
@@ -29,9 +30,18 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] Test B
 
 **Test Configuration**
-* Python version:
-* Argparse version:
-* PRAW version:
+- Python version:
+- argparse: 
+- certifi: 
+- chardet: 
+- idna: 
+- praw: 
+- prawcore: 
+- requests: 
+- six: 
+- update-checker: 
+- urllib3: 
+- websocket-client: 
 
 ## Checklist
 
