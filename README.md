@@ -156,7 +156,7 @@ You should see a string of 14 characters on the top left corner underneath "pers
 
 ![All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/assets/Screenshots/Reddit_API/Creds_4_edit.png)
 
-You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 18-22.
+You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 27-31.
 
 # Walkthrough
 
