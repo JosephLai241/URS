@@ -8,7 +8,7 @@ Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 """
 import praw
 
-### Import global variables and scraper, validator, and export functions
+### Import CLI parser, global variables, scrapers and titles
 import src.cli as cli
 import src.global_vars as global_vars
 import src.scrapers.basic as basic
