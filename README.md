@@ -13,7 +13,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
 ## Table of Contents
-- [Why Are You Using Two APIs?](#why-both-praw-and-pushshift-io)
+- [Why Are You Using Two APIs?](#why-are-you-using-two-apis)
 - [Scraping Reddit](#scraping-reddit)
   - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
   - [Subreddits](#subreddits)
@@ -32,7 +32,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 - [Contributors](#contributors)
 - [Releases](#releases)
 
-# Why Both PRAW and Pushshift.io?
+# Why Are You Using Two APIs?
 
 I have received questions and enhancement suggestions for features that are not possible to implement with PRAW. One popular question that I have encountered is [if it is possible to scrape all posts in a specific Subreddit](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/13).
 
