@@ -4,34 +4,43 @@
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
-Written in Python and utilizes the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
+Written in Python and utilizes the official Reddit API ([`PRAW`](https://pypi.org/project/praw/)) and [Pushshift.io](https://pushshift.io/).
 
 I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`](https://pypi.org/project/argparse/). 
 
 `pip install -r requirements.txt` 
 
-You will also need your own Reddit account and API credentials. I have included a tutorial on how to do this below.
+You will need your own Reddit account and API credentials for PRAW. I have included a tutorial on how to do this below.
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
 ## Table of Contents
- - [Scraping Reddit](#scraping-reddit)
-    - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
-    - [Subreddits](#subreddits)
-    - [Redditors](#redditors)
-    - [Post Comments](#post-comments)
- - [How to get Reddit API Credentials](#how-to-get-reddit-api-credentials)
- - [Walkthrough](#walkthrough)
-     - [2-Factor Authentication](#2-factor-authentication)
-     - [CLI Scrapers](#cli-scrapers)
-       - [Subreddit Scraper](#subreddit-scraper)
-       - [Redditor Scraper](#redditor-scraper)
-       - [Comments Scraper](#comments-scraper)
-     - [Basic Scraper](#basic-scraper)
- - [Some Linux Tips](#some-linux-tips)
- - [Contributing](#contributing)
- - [Contributors](#contributors)
- - [Releases](#releases)
+- [Why Are You Using Two APIs?](#why-both-praw-and-pushshift-io)
+- [Scraping Reddit](#scraping-reddit)
+  - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
+  - [Subreddits](#subreddits)
+  - [Redditors](#redditors)
+  - [Post Comments](#post-comments)
+- [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW)
+- [Walkthrough](#walkthrough)
+    - [2-Factor Authentication](#2-factor-authentication)
+    - [CLI Scrapers](#cli-scrapers)
+      - [Subreddit Scraper](#subreddit-scraper)
+      - [Redditor Scraper](#redditor-scraper)
+      - [Comments Scraper](#comments-scraper)
+    - [Basic Scraper](#basic-scraper)
+- [Some Linux Tips](#some-linux-tips)
+- [Contributing](#contributing)
+- [Contributors](#contributors)
+- [Releases](#releases)
+
+# Why Both PRAW and Pushshift.io?
+
+I have received questions and enhancement suggestions for features that are not possible to implement with PRAW. One popular question that I have encountered is [if it is possible to scrape all posts in a specific Subreddit](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/13).
+
+This is where Pushshift.io comes into play. It is an alternative Reddit API and its current features allows us to access information on comments, submissions, and Subreddits. I think the Pushshift API is easier to work with and [its future looks very promising](https://github.com/pushshift/api#list-of-endpoints), however it is currently lacking the ability to scrape Redditor information. This functionality is already available with PRAW, whch is why I am using Pushshift for comments and Subreddit scraping, and PRAW for Redditor scraping.
+
+I would like to eventually make the full transition over to just using Pushshift.io when they finish developing the additional features they have listed in their repository.
  
 # Scraping Reddit
 
@@ -43,32 +52,32 @@ All exported files will be saved to the current working directory.
 
 These attributes will be included in each scrape.
 
-Subreddits | Redditors | Post Comments
----------- | --------- | -------------
-Title | Name | Parent ID
-Flair | Fullname | Comment ID
-Date Created | ID | Author
-Upvotes | Date Created | Date Created
-Upvote Ratio | Comment Karma | Upvotes
-ID | Link Karma | Text
-Is Locked? | Is Employee? | Edited? 
-NSFW? | Is Friend? | Is Submitter?
-Is Spoiler? | Is Mod? | Stickied?
-Stickied? | Is Gold? | 
-URL | Submissions* | 
+Subreddits    | Redditors     | Post Comments
+--------------|---------------|---------------
+Title         | Name          | Parent ID
+Flair         | Fullname      | Comment ID
+Date Created  | ID            | Author
+Upvotes       | Date Created  | Date Created
+Upvote Ratio  | Comment Karma | Upvotes
+ID            | Link Karma    | Text
+Is Locked?    | Is Employee?  | Edited? 
+NSFW?         | Is Friend?    | Is Submitter?
+Is Spoiler?   | Is Mod?       | Stickied?
+Stickied?     | Is Gold?      | 
+URL           | Submissions*  | 
 Comment Count | Comments*
-Text | Hot* | 
-&nbsp; | New* | 
-&nbsp; | Controversial* | 
-&nbsp; | Top* | 
-&nbsp; | Upvoted* (may be forbidden) | 
-&nbsp; | Downvoted* (may be forbidden) | 
-&nbsp; | Gilded* | 
-&nbsp; | Gildings* (may be forbidden) | 
-&nbsp; | Hidden* (may be forbidden) | 
-&nbsp; | Saved* (may be forbidden) | 
+Text          | Hot*  
+&nbsp;        | New* 
+&nbsp;        | Controversial* 
+&nbsp;        | Top* 
+&nbsp;        | Upvoted* (may be forbidden) 
+&nbsp;        | Downvoted* (may be forbidden) 
+&nbsp;        | Gilded* 
+&nbsp;        | Gildings* (may be forbidden) 
+&nbsp;        | Hidden* (may be forbidden) 
+&nbsp;        | Saved* (may be forbidden) 
 
-\* Includes additional attributes; see [Redditors](#redditors) section for more information
+\* Includes additional attributes; see [Redditors](#redditors) section for more information.
 
 ## Subreddits
 
@@ -104,15 +113,15 @@ Of these Redditor attributes, the following will include additional attributes:
 
 Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved | Comments
 -------------------------------------------------------------------------------------------------- | --------
-Title | Date Created
+Title        | Date Created
 Date Created | Score
-Upvotes | Text
+Upvotes      | Text
 Upvote Ratio | Parent ID
-ID | Link ID
-NSFW? | Edited?
-Text | Stickied?
-&nbsp; | Replying to (title of post or comment)
-&nbsp; | In Subreddit (Subreddit name)
+ID           | Link ID
+NSFW?        | Edited?
+Text         | Stickied?
+&nbsp;       | Replying to (title of post or comment)
+&nbsp;       | In Subreddit (Subreddit name)
  
 ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file.
 
@@ -138,7 +147,7 @@ When exporting raw comments, all top-level comments are listed first, followed b
 
 The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"`
 
-# How to get Reddit API Credentials
+# How to get Reddit API Credentials for PRAW
 
 First, create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps).
 
@@ -318,8 +327,9 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 
 # Contributors
 
-- **March 11, 2020:** User [ThereGoesMySanity](https://github.com/ThereGoesMySanity) created a [pull request](https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9) adding 2FA information to Readme.
-
+ Date          | User                                                      | Contribution
+---------------|-----------------------------------------------------------|--------------
+March 11, 2020 | [ThereGoesMySanity](https://github.com/ThereGoesMySanity) | Created a [pull request](https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9) adding 2FA information to Readme.
 
 # Releases
 
