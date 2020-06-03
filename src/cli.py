@@ -9,12 +9,9 @@ from . import global_vars, titles, validation
 short_cat = global_vars.short_cat
 s_t = global_vars.s_t
 
-### Get args
-def parse_args():
-    parser = argparse.ArgumentParser(usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]", \
-                                    formatter_class = argparse.RawDescriptionHelpFormatter, \
-                                    description = "Universal Reddit Scraper 3.0 - Scrape Subreddits, Redditors, or comments from posts", \
-                                    epilog = r"""
+usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
+description = "Universal Reddit Scraper 3.0 - Scrape Subreddits, submissions, Redditors, or comments from posts"
+epilog = r"""
 Subreddit categories:
    H,h     selecting Hot category
    N,n     selecting New category
@@ -49,20 +46,34 @@ EXAMPLES
 
         $ ./scraper.py -b --csv
 
-""")
+"""
 
-    ### Parser Subreddit, basic, Redditor, comments scraper, and skip confirmation flags
+### Get args
+def parse_args():
+    parser = argparse.ArgumentParser(usage = usage, \
+                                    formatter_class = argparse.RawDescriptionHelpFormatter, \
+                                    description = description, \
+                                    epilog = epilog)
+
+    ### Parser Subreddit, submissions, Redditor, comments, basic scraper, and skip confirmation flags
     scraper = parser.add_argument_group("Scraping options")
-    scraper.add_argument("-r","--sub",action="append",nargs=3,metavar="",help="specify Subreddit to scrape")
-    scraper.add_argument("-b","--basic",action="store_true",help="initialize non-CLI Subreddit scraper")
-    scraper.add_argument("-u","--user",action="append",nargs=2,metavar="",help="specify Redditor profile to scrape")
-    scraper.add_argument("-c","--comments",action="append",nargs=2,metavar="",help="specify the URL of the post to scrape comments")
-    scraper.add_argument("-y",action="store_true",help="skip Subreddit options confirmation and scrape immediately")
+    scraper.add_argument("-r", "--subreddit", action = "append", nargs = 3, metavar = "", 
+                            help = "specify Subreddit to scrape")
+    scraper.add_argument("-s", "--submission", action = "append", nargs = "*", 
+                            metavar = "", help = "search for keywords in any submission")
+    scraper.add_argument("-u", "--redditor", action = "append", nargs = 2, metavar = "", 
+                            help = "specify Redditor profile to scrape")
+    scraper.add_argument("-c", "--comments", action = "append", nargs = 2, metavar = "", 
+                            help = "specify the URL of the post to scrape comments")
+    scraper.add_argument("-b", "--basic", action = "store_true", 
+                            help = "initialize non-CLI Subreddit scraper")
+    scraper.add_argument("-y", action = "store_true", 
+                            help = "skip Subreddit options confirmation and scrape immediately")
 
     ### Export to CSV or JSON flags
-    expt = parser.add_mutually_exclusive_group(required=True)
-    expt.add_argument("--csv",action="store_true",help="export to CSV")
-    expt.add_argument("--json",action="store_true",help="export to JSON")
+    expt = parser.add_mutually_exclusive_group(required = True)
+    expt.add_argument("--csv", action = "store_true", help = "export to CSV")
+    expt.add_argument("--json", action = "store_true", help = "export to JSON")
 
     ### Print help message if no arguments are present
     if len(sys.argv[1:]) == 0:
@@ -70,10 +81,10 @@ EXAMPLES
         parser.exit()
 
     args = parser.parse_args()
-    return parser,args
+    return parser, args
 
 ### Create either Subreddit, Redditor, or posts list
-def create_list(args,s_t,l_type):
+def create_list(args, s_t, l_type):
     if l_type == s_t[0]:
         list = [sub[0] for sub in args.sub]
     elif l_type == s_t[1]:
@@ -84,7 +95,7 @@ def create_list(args,s_t,l_type):
     return list
 
 ### Check args and catching errors
-def check_args(parser,args):
+def check_args(parser, args):
     try:
         if args.sub:
             for subs in args.sub:
@@ -113,23 +124,23 @@ def check_args(parser,args):
         parser.exit()
 
 ### Check if Subreddits exist and list invalid Subreddits if applicable
-def confirm_subs(reddit,sub_list,parser):
+def confirm_subs(reddit, sub_list, parser):
     print("\nChecking if Subreddit(s) exist...")
-    found,not_found = validation.existence(reddit,sub_list,parser,s_t,s_t[0])
+    found, not_found = validation.existence(reddit, sub_list, parser, s_t, s_t[0])
     if not_found:
         print("\nThe following Subreddits were not found and will be skipped:")
-        print("-"*60)
+        print("-" * 60)
         print(*not_found, sep = "\n")
 
     subs = [sub for sub in found]
     return subs
 
 ### Get CLI scraping settings for Subreddits, Redditors, and post comments
-def get_cli_settings(reddit,args,master,s_t,s_type):
+def get_cli_settings(reddit, args, master, s_t, s_type):
     if s_type == s_t[0]:
         for sub_n in master:
             for sub in args.sub:
-                settings = [sub[1],sub[2]]
+                settings = [sub[1], sub[2]]
                 if sub_n == sub[0]:
                     master[sub_n].append(settings)
     elif s_type == s_t[1]:
