@@ -13,7 +13,7 @@ def fix(name, illegal_chars):
 ### Determine file name format for Subreddit scraping
 def r_fname(args, cat_i, search_for, sub, illegal_chars):
     raw_n = ""
-    if args.sub:
+    if args.subreddit:
         if cat_i == global_vars.short_cat[5]:
             raw_n = str(("r-%s-%s-'%s' %s") % 
                 (sub, global_vars.categories[5], search_for, global_vars.date))
