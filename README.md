@@ -40,7 +40,7 @@ I have received questions and enhancement suggestions for features that are not 
 
 This is where Pushshift.io comes into play. It is an alternative Reddit API and its current features allows us to access information on comments, submissions, and Subreddits. I think the Pushshift API is easier to work with and [its future looks very promising](https://github.com/pushshift/api#list-of-endpoints), however it is currently lacking the ability to scrape Redditor information. This functionality is already available with PRAW, whch is why I am using Pushshift for comments and Subreddit scraping, and PRAW for Redditor scraping.
 
-I would like to eventually make the full transition over to just using Pushshift.io when they finish developing the additional features they have listed in their repository.
+I would like to eventually make the full transition over to just using Pushshift when they finish developing the additional features they have listed in their repository.
  
 # Scraping Reddit
 
@@ -329,7 +329,7 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 
  Date          | User                                                      | Contribution
 ---------------|-----------------------------------------------------------|--------------
-March 11, 2020 | [ThereGoesMySanity](https://github.com/ThereGoesMySanity) | Created a [pull request](https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9) adding 2FA information to Readme.
+March 11, 2020 | [ThereGoesMySanity](https://github.com/ThereGoesMySanity) | Created a [pull request](https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9) adding 2FA information to Readme
 
 # Releases
 
