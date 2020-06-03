@@ -6,6 +6,7 @@ Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 
 @author: Joseph Lai
 """
+from colorama import init, Style
 import praw
 
 ### Import CLI parser, global variables, scrapers and titles
@@ -59,4 +60,8 @@ def main():
         basic.run_basic(args, basic_functions, options, parser, reddit, subreddit)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(Style.BRIGHT + "\nURS ABORTED.\n")
+        quit()
