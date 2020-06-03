@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-Created on Tue Dec 31 17:40:23 2019
+Created on Tue Jun 2 20:14:43 2020
 
 Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 
@@ -41,21 +41,21 @@ def main():
 
     ### Parse and check args, and initialize Subreddit, Redditor, post comments,
     ### or basic Subreddit scraper
-    parser,args = cli.parse_args()
-    cli.check_args(parser,args)
+    parser, args = cli.parse_args()
+    cli.check_args(parser, args)
     titles.title()
     if args.sub:
         ### Subreddit scraper
-        subreddit.run_subreddit(args,options,parser,reddit,s_t,subreddit_functions)
+        subreddit.run_subreddit(args, options, parser, reddit, s_t, subreddit_functions)
     if args.user:
         ### Redditor scraper
-        redditor.run_redditor(args,s_t,parser,reddit,redditor_functions)
+        redditor.run_redditor(args, s_t, parser, reddit, redditor_functions)
     if args.comments:
         ### Post comments scraper
-        comments.run_comments(args,comments_functions,parser,reddit,s_t)
+        comments.run_comments(args, comments_functions, parser, reddit, s_t)
     elif args.basic:
         ### Basic Subreddit scraper
-        basic.run_basic(args,basic_functions,options,parser,reddit,subreddit)
+        basic.run_basic(args, basic_functions, options, parser, reddit, subreddit)
 
 if __name__ == "__main__":
     main()
