@@ -60,9 +60,9 @@ submissions_params = ["after", "aggs", "author", "before", "contest_mode", "fiel
 
 ### Get args
 def parse_args():
-    parser = argparse.ArgumentParser(usage = usage, \
-                                    formatter_class = argparse.RawDescriptionHelpFormatter, \
-                                    description = description, \
+    parser = argparse.ArgumentParser(usage = usage,
+                                    formatter_class = argparse.RawDescriptionHelpFormatter,
+                                    description = description,
                                     epilog = epilog)
 
     ### Parser Subreddit, submissions, Redditor, comments, basic scraper, and skip confirmation flags
