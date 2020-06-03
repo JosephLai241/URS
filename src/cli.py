@@ -59,7 +59,7 @@ def parse_args():
     scraper = parser.add_argument_group("Scraping options")
     scraper.add_argument("-r", "--subreddit", action = "append", nargs = 3, metavar = "", 
                             help = "specify Subreddit to scrape")
-    scraper.add_argument("-s", "--submission", action = "append", nargs = "*", 
+    scraper.add_argument("-s", "--submission", nargs = "*", 
                             metavar = "", help = "search for keywords in any submission")
     scraper.add_argument("-u", "--redditor", action = "append", nargs = 2, metavar = "", 
                             help = "specify Redditor profile to scrape")
@@ -86,9 +86,9 @@ def parse_args():
 ### Create either Subreddit, Redditor, or posts list
 def create_list(args, s_t, l_type):
     if l_type == s_t[0]:
-        list = [sub[0] for sub in args.sub]
+        list = [sub[0] for sub in args.subreddit]
     elif l_type == s_t[1]:
-        list = [user[0] for user in args.user]
+        list = [user[0] for user in args.redditor]
     elif l_type == s_t[2]:
         list = [post[0] for post in args.comments]
 
@@ -97,8 +97,8 @@ def create_list(args, s_t, l_type):
 ### Check args and catching errors
 def check_args(parser, args):
     try:
-        if args.sub:
-            for subs in args.sub:
+        if args.subreddit:
+            for subs in args.subreddit:
                 len_counter = 0
                 if subs[1].upper() not in short_cat:
                     raise ValueError
@@ -111,8 +111,8 @@ def check_args(parser, args):
                         raise ValueError
                     else:
                         len_counter += 1
-        if args.user:
-            for user in args.user:
+        if args.redditor:
+            for user in args.redditor:
                 if user[1].isalpha():
                     raise ValueError
         if args.comments:
@@ -144,7 +144,7 @@ def get_cli_settings(reddit, args, master, s_t, s_type):
                 if sub_n == sub[0]:
                     master[sub_n].append(settings)
     elif s_type == s_t[1]:
-        for user in args.user:
+        for user in args.redditor:
             master[user[0]] = user[1]
     elif s_type == s_t[2]:
         for comments in args.comments:
