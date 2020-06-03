@@ -6,9 +6,7 @@ This is a universal Reddit scraper that can scrape Subreddits, Redditors, and co
 
 Written in Python and utilizes the official Reddit API ([`PRAW`](https://pypi.org/project/praw/)) and [Pushshift.io](https://pushshift.io/).
 
-I provided a requirements.txt for a quick install of both `PRAW` and [`argparse`](https://pypi.org/project/argparse/). 
-
-`pip install -r requirements.txt` 
+Run `pip install -r requirements.txt` to get all project dependencies.
 
 You will need your own Reddit account and API credentials for PRAW. I have included a tutorial on how to do this below.
 
