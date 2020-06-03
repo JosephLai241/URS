@@ -1,34 +1,38 @@
 #===============================================================================
 #                      Basic Subreddit Scraper Functions
 #===============================================================================
-from .. import global_vars
+from .. import export, global_vars
 
 ### Global variables
 categories = global_vars.categories
 options = global_vars.options
 
+s_t = global_vars.s_t
+
 ### Select Subreddit(s) to scrape and check if they exist
-def get_subreddits(reddit,parser):
+def get_subreddits(reddit, parser):
+    subreddit_prompt = """
+    Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
+
+    """
+
     while True:
         try:
-            search_for = str(input("""
-Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
-
-"""))
+            search_for = str(input(subreddit_prompt))
             if not search_for:
                 raise ValueError
 
             print("\nChecking if Subreddit(s) exist...")
             search_for = " ".join(search_for.split())
             sub_list = [subreddit for subreddit in search_for.split(" ")]
-            found,not_found = existence(reddit,sub_list,parser,s_t,s_t[0])
+            found, not_found = export.existence(reddit, sub_list, parser, s_t, s_t[0])
             if found:
                 print("\nThe following Subreddits were found and will be scraped:")
-                print("-"*56)
+                print("-" * 56)
                 print(*found, sep = "\n")
             if not_found:
                 print("\nThe following Subreddits were not found and will be skipped:")
-                print("-"*60)
+                print("-" * 60)
                 print(*not_found, sep = "\n")
 
             while True:
@@ -49,7 +53,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             pass
 
 ### Select post category and the number of results returned from each Subreddit
-def get_settings(subs,s_master):
+def get_settings(subs, s_master):
     for sub in subs:
         while True:
             try:
@@ -69,13 +73,15 @@ def get_settings(subs,s_master):
                     print("\nSelected search option")
                     while True:
                         try:
-                            search_for = str(input("\nWhat would you like to search for in r/%s? " % sub)).strip()
+                            search_for = str(input(
+                                "\nWhat would you like to search for in r/%s? " % 
+                                sub)).strip()
                             if not search_for:
                                 raise ValueError
                             else:
                                 for sub_n,values in s_master.items():
                                     if sub_n == sub:
-                                        settings = [cat_i,search_for]
+                                        settings = [cat_i, search_for]
                                         s_master[sub].append(settings)
                                 break
                         except ValueError:
@@ -84,13 +90,15 @@ def get_settings(subs,s_master):
                     print("\nSelected post category: %s" % categories[cat_i])
                     while True:
                         try:
-                            submissions = input("\nHow many results do you want to capture from r/%s? " % sub).strip()
+                            submissions = input(
+                                "\nHow many results do you want to capture from r/%s? " % 
+                                sub).strip()
                             if submissions.isalpha() or not submissions:
                                 raise ValueError
                             else:
                                 for sub_n,values in s_master.items():
                                     if sub_n == sub:
-                                        settings = [cat_i,int(submissions)]
+                                        settings = [cat_i, int(submissions)]
                                         s_master[sub].append(settings)
                                 break
                         except ValueError:

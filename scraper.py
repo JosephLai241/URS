@@ -33,10 +33,10 @@ passwd = "REDDIT_PASSWORD_HERE"     # Reddit login password
 ### Putting it all together
 def main():
     ### Reddit Login
-    reddit = praw.Reddit(client_id = c_id, \
-                         client_secret = c_secret, \
-                         user_agent = u_a, \
-                         username = usrnm, \
+    reddit = praw.Reddit(client_id = c_id,
+                         client_secret = c_secret,
+                         user_agent = u_a,
+                         username = usrnm,
                          password = passwd)
 
     ### Parse and check args, and initialize Subreddit, Redditor, post comments,
@@ -44,6 +44,7 @@ def main():
     parser, args = cli.parse_args()
     cli.check_args(parser, args)
     titles.title()
+    
     if args.sub:
         ### Subreddit scraper
         subreddit.run_subreddit(args, options, parser, reddit, s_t, subreddit_functions)

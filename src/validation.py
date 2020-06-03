@@ -5,7 +5,7 @@ import praw
 from prawcore import NotFound, PrawcoreException
 
 ### Check if Subreddit(s), Redditor(s), or post exists and catch PRAW exceptions
-def existence(reddit,list,parser,s_t,l_type):
+def existence(reddit, list, parser, s_t, l_type):
     found = []
     not_found = []
     try:
@@ -26,7 +26,7 @@ def existence(reddit,list,parser,s_t,l_type):
         elif l_type == s_t[2]:
             for post in list:
                 try:
-                    reddit.submission(url=post)
+                    reddit.submission(url = post)
                     found.append(post)
                 except praw.exceptions.ClientException:
                     not_found.append(post)
@@ -37,4 +37,4 @@ def existence(reddit,list,parser,s_t,l_type):
             print("\nExiting.")
             parser.exit()
 
-    return found,not_found
+    return found, not_found
