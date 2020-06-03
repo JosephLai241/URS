@@ -2,8 +2,12 @@
 #                        Redditor Scraping Functions
 #===============================================================================
 import praw
+
+from colorama import Fore, init, Style
 from prawcore import PrawcoreException
 from .. import export, global_vars, validation
+
+init(autoreset = True)
 
 ### Global variables
 convert_time = global_vars.convert_time
@@ -17,7 +21,7 @@ def list_users(reddit, user_list, parser):
     users, not_users = validation.existence(reddit, user_list, parser, s_t, s_t[1])
     if not_users:
         print("\nThe following Redditors were not found and will be skipped:")
-        print("-" * 55)
+        print("-" * 59)
         print(*not_users, sep = "\n")
 
     return users
@@ -118,12 +122,14 @@ class Listables():
             try:
                 self.extract(cat, obj, self.s_types, self.s_types[3])
             except PrawcoreException as error:
-                print(("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % (cat.upper(), error))
+                print(Style.BRIGHT + Fore.RED + ("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % 
+                    (cat.upper(), error))
                 self.overview["%s (may be forbidden)" % cat.capitalize()].append("FORBIDDEN")
 
 ### Get and sort Redditor information
 def gs_user(reddit, user, limit):
-    print(("\nProcessing %s results from u/%s's profile...") % (limit, user))
+    print(Style.BRIGHT + ("\nProcessing %s results from u/%s's profile...") % 
+            (limit, user))
     print("\nThis may take a while. Please wait.")
 
     user = reddit.redditor(user)
@@ -144,7 +150,7 @@ def gs_user(reddit, user, limit):
     overview["Is Friend?"].append(user.is_friend)
     overview["Is Mod?"].append(user.is_mod)
     overview["Is Gold?"].append(user.is_gold)
-    listable = Listables(user,overview, limit = int(limit))
+    listable = Listables(int(limit), overview, user)
     listable.sort_submissions()
     listable.sort_comments()
     listable.sort_mutts()
@@ -155,15 +161,15 @@ def gs_user(reddit, user, limit):
 ### Get, sort, then write scraped Redditor information to CSV or JSON
 def w_user(reddit, users, u_master, args):
     for user, limit in u_master.items():
-         overview = gs_user(reddit, user, limit)
-         f_name = export.u_fname(user, illegal_chars)
-         if args.csv:
-             export.export(f_name, overview, eo[0])
-             csv = "\nCSV file for u/%s created." % user
-             print(csv)
-             print("-" * (len(csv) - 1))
-         elif args.json:
-             export.export(f_name, overview, eo[1])
-             json = "\nJSON file for u/%s created." % user
-             print(json)
-             print("-" * (len(json) - 1))
+        overview = gs_user(reddit, user, limit)
+        f_name = export.u_fname(user, illegal_chars)
+        if args.csv:
+            export.export(f_name, overview, eo[0])
+            csv = "\nCSV file for u/%s created." % user
+            print(Style.BRIGHT + Fore.GREEN + csv)
+            print(Style.BRIGHT + Fore.GREEN + "-" * (len(csv) - 1))
+        elif args.json:
+            export.export(f_name, overview, eo[1])
+            json = "\nJSON file for u/%s created." % user
+            print(Style.BRIGHT + Fore.GREEN + json)
+            print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))

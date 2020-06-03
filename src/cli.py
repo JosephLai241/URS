@@ -3,7 +3,11 @@
 #===============================================================================
 import argparse
 import sys
+
+from colorama import Fore, init, Style
 from . import global_vars, titles, validation
+
+init(autoreset = True)
 
 ### Global variables
 short_cat = global_vars.short_cat
@@ -47,6 +51,12 @@ EXAMPLES
         $ ./scraper.py -b --csv
 
 """
+
+submissions_params = ["after", "aggs", "author", "before", "contest_mode", "fields", 
+                        "frequency", "ids", "is_video", "locked", "metadata", 
+                        "num_comments", "over_18", "q", "q:not", "score", "selftext", 
+                        "selftext:not", "size", "sort", "sort_type", "spoiler", 
+                        "stickied", "subreddit", "title", "title:not"]
 
 ### Get args
 def parse_args():
@@ -111,6 +121,15 @@ def check_args(parser, args):
                         raise ValueError
                     else:
                         len_counter += 1
+        if args.submission:
+            for i in range(0, len(args.submission)):
+                param = args.submission[i].split("=")[0]
+                if param not in submissions_params:
+                    print(Style.BRIGHT + Fore.RED + 
+                        "\nAN INVALID SUBMISSION PARAMETER WAS ENTERED\n")
+                    print(Style.BRIGHT + "CHOOSE FROM: %s\n" % 
+                        ", ".join(submissions_params))
+                    parser.exit()
         if args.redditor:
             for user in args.redditor:
                 if user[1].isalpha():
@@ -139,7 +158,7 @@ def confirm_subs(reddit, sub_list, parser):
 def get_cli_settings(reddit, args, master, s_t, s_type):
     if s_type == s_t[0]:
         for sub_n in master:
-            for sub in args.sub:
+            for sub in args.subreddit:
                 settings = [sub[1], sub[2]]
                 if sub_n == sub[0]:
                     master[sub_n].append(settings)

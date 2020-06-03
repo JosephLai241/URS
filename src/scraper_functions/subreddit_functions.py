@@ -1,7 +1,10 @@
 #===============================================================================
 #                       Subreddit Scraping Functions
 #===============================================================================
+from colorama import Fore, init, Style
 from .. import export, global_vars
+
+init(autoreset = True)
 
 ### Global variables
 categories = global_vars.categories
@@ -17,9 +20,10 @@ def c_s_dict(subs):
 
 ### Print scraping details for each Subreddit
 def print_settings(s_master, args):
-    print("\n------------------Current settings for each Subreddit-------------------")
-    print("\n{:<25}{:<17}{:<30}".format("Subreddit", "Category", "Number of results / Keyword(s)"))
-    print("-" * 72)
+    print(Style.BRIGHT + "\n------------------Current settings for each Subreddit-------------------")
+    print(Style.BRIGHT + "\n{:<25}{:<17}{:<30}".format("Subreddit", "Category", 
+            "Number of results / Keyword(s)"))
+    print(Style.BRIGHT + "-" * 72)
     for sub, settings in s_master.items():
         for each in settings:
             if args.basic == False:
@@ -46,14 +50,14 @@ def print_settings(s_master, args):
 def get_posts(args, reddit, sub, cat_i, search_for):
     subreddit = reddit.subreddit(sub)
     if cat_i == short_cat[5] or cat_i == 5:
-        print(("\nSearching posts in r/%s for '%s'...") % (sub, search_for))
+        print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % (sub, search_for))
         collected = subreddit.search("%s" % search_for)
     else:
-        if args.sub:
-            print(("\nProcessing %s %s results from r/%s...") % 
+        if args.subreddit:
+            print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
                 (search_for, categories[short_cat.index(cat_i)], sub))
         elif args.basic:
-            print(("\nProcessing %s %s results from r/%s...") % 
+            print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
                 (search_for, categories[cat_i], sub))
         if cat_i == short_cat[0] or cat_i == 0:
             collected = subreddit.hot(limit = int(search_for))
@@ -125,10 +129,10 @@ def gsw_sub(reddit, args, s_master):
             if args.csv:
                 export.export(fname, overview, eo[0])
                 csv = "\nCSV file for r/%s created." % sub
-                print(csv)
-                print("-" * (len(csv) - 1))
+                print(Style.BRIGHT + Fore.GREEN + csv)
+                print(Style.BRIGHT + Fore.GREEN + "-" * (len(csv) - 1))
             elif args.json:
                 export.export(fname, overview, eo[1])
                 json = "\nJSON file for r/%s created." % sub
-                print(json)
-                print("-" * (len(json) - 1))
+                print(Style.BRIGHT + Fore.GREEN + json)
+                print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))

@@ -1,9 +1,13 @@
 #===============================================================================
 #                                   Titles
 #===============================================================================
+from colorama import init, Style
+
+init(autoreset = True)
+
 ### Print Reddit scraper title
 def title():
-    print(r"""
+    print(Style.BRIGHT + r"""
                __  ______  _____    _____  ____
               / / / / __ \/ ___/   |__  / / __ \
              / / / / /_/ /\__ \     /_ < / / / /
@@ -15,7 +19,7 @@ def title():
 
 ### Print Subreddit scraper title
 def r_title():
-    print(r"""
+    print(Style.BRIGHT + r"""
        _____       __                  __    ___ __
       / ___/__  __/ /_  ________  ____/ /___/ (_) /______
       \__ \/ / / / __ \/ ___/ _ \/ __  / __  / / __/ ___/
@@ -25,7 +29,7 @@ def r_title():
 
 ### Print Redditor scraper title
 def u_title():
-    print(r"""
+    print(Style.BRIGHT + r"""
         ____           __    ___ __
        / __ \___  ____/ /___/ (_) /_____  __________
       / /_/ / _ \/ __  / __  / / __/ __ \/ ___/ ___/
@@ -35,7 +39,7 @@ def u_title():
 
 ### Print comments scraper title
 def c_title():
-    print(r"""
+    print(Style.BRIGHT + r"""
        ______                                     __
       / ____/___  ____ ___  ____ ___  ___  ____  / /______
      / /   / __ \/ __ `__ \/ __ `__ \/ _ \/ __ \/ __/ ___/
@@ -45,7 +49,7 @@ def c_title():
 
 ### Print basic scraper title
 def b_title():
-    print(r"""
+    print(Style.BRIGHT + r"""
                 __               _
                / /_  ____ ______(_)____
               / __ \/ __ `/ ___/ / ___/
@@ -57,7 +61,7 @@ def b_title():
 
 ### Print error title
 def e_title():
-    print(r"""
+    print(Style.BRIGHT + r"""
                 __________  ____  ____  ____
                / ____/ __ \/ __ \/ __ \/ __ \
               / __/ / /_/ / /_/ / / / / /_/ /

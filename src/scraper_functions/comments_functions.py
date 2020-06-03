@@ -1,7 +1,11 @@
 #===============================================================================
 #                        Post Comments Scraping Functions
 #===============================================================================
+from colorama import Fore, init, Style
+
 from .. import export, global_vars, validation
+
+init(autoreset = True)
 
 ### Global variables
 convert_time = global_vars.convert_time
@@ -87,12 +91,12 @@ def gs_comments(reddit, post, limit):
 
     all = dict()
     if int(limit) == 0:
-        print("\nProcessing all comments in raw format from Reddit post '%s'..." % 
+        print(Style.BRIGHT + "\nProcessing all comments in raw format from Reddit post '%s'..." % 
                 submission.title)
         print("\nThis may take a while. Please wait.")
         s_comments(all, titles, submission, True)
     else:
-        print(("\nProcessing %s comments and including second and third-level replies from Reddit post '%s'...") % 
+        print(Style.BRIGHT + ("\nProcessing %s comments including second and third-level replies from Reddit post '%s'...") % 
                 (limit, submission.title))
         print("\nThis may take a while. Please wait.")
         s_comments(all, titles, submission, False)
@@ -109,10 +113,10 @@ def w_comments(reddit, post_list, c_master, args):
         if args.csv:
             export.export(f_name, overview, eo[0])
             csv = "\nCSV file for '%s' comments created." % title
-            print(csv)
-            print("-" * (len(csv) - 1))
+            print(Style.BRIGHT + Fore.GREEN + csv)
+            print(Style.BRIGHT + Fore.GREEN + "-" * (len(csv) - 1))
         elif args.json:
             export.export(f_name, overview, eo[1])
             json = "\nJSON file for '%s' comments created." % title
-            print(json)
-            print("-" * (len(json) - 1))
+            print(Style.BRIGHT + Fore.GREEN + json)
+            print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))
