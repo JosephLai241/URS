@@ -7,20 +7,20 @@ import datetime as dt
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
 ### Scrape types
-s_t = ["sub","user","comments"]
+s_t = ["subreddit", "submission", "redditor", "comments"]
 
 ### Export options
-eo = ["csv","json"]
+eo = ["csv", "json"]
 
 ### Illegal filename characters
-illegal_chars = ["/","\\","?","%","*",":","|","<",">"]
+illegal_chars = ["/", "\\", "?", "%", "*", ":", "|", "<", ">"]
 
 ### Subreddit categories
-categories = ["Hot","New","Controversial","Top","Rising","Search"]
+categories = ["Hot", "New", "Controversial", "Top", "Rising", "Search"]
 short_cat = [cat[0] for cat in categories]
 
 ### Confirm or deny options
-options = ["y","n"]
+options = ["y", "n"]
 
 ### Convert UNIX time to readable format
 def convert_time(object):
