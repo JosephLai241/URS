@@ -69,7 +69,7 @@ def parse_args():
     scraper = parser.add_argument_group("Scraping options")
     scraper.add_argument("-r", "--subreddit", action = "append", nargs = 3, metavar = "", 
                             help = "specify Subreddit to scrape")
-    scraper.add_argument("-s", "--submission", nargs = "*", 
+    scraper.add_argument("-s", "--submission", action = "append", nargs = "*", 
                             metavar = "", help = "search for keywords in any submission")
     scraper.add_argument("-u", "--redditor", action = "append", nargs = 2, metavar = "", 
                             help = "specify Redditor profile to scrape")
@@ -122,14 +122,15 @@ def check_args(parser, args):
                     else:
                         len_counter += 1
         if args.submission:
-            for i in range(0, len(args.submission)):
-                param = args.submission[i].split("=")[0]
-                if param not in submissions_params:
-                    print(Style.BRIGHT + Fore.RED + 
-                        "\nAN INVALID SUBMISSION PARAMETER WAS ENTERED\n")
-                    print(Style.BRIGHT + "CHOOSE FROM: %s\n" % 
-                        ", ".join(submissions_params))
-                    parser.exit()
+            for submission in args.submission:
+                for i in range(0, len(submission)):
+                    param = submission[i].split("=")[0]
+                    if param not in submissions_params:
+                        print(Style.BRIGHT + Fore.RED + 
+                            "\nAN INVALID SUBMISSION PARAMETER WAS ENTERED\n")
+                        print(Style.BRIGHT + "CHOOSE FROM: %s\n" % 
+                            ", ".join(submissions_params))
+                        parser.exit()
         if args.redditor:
             for user in args.redditor:
                 if user[1].isalpha():
