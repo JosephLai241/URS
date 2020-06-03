@@ -1,5 +1,7 @@
 # Universal Reddit Scraper
 
+## PUSHSHIFT API IMPLEMENTATION IS CURRENTLY UNDER DEVELOPMENT
+
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
 Written in Python and utilizes the Reddit API ([`PRAW`](https://pypi.org/project/praw/)).
