@@ -13,6 +13,8 @@ import praw
 from . import cli, titles
 from .tools import Run
 
+init(autoreset = True)
+
 ### Reddit API Credentials
 c_id = "14_CHAR_HERE"               # Personal Use Script (14 char)
 c_secret = "27_CHAR_HERE"           # Secret key (27 char)
