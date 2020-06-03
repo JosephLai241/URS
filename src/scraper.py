@@ -6,19 +6,15 @@ Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 
 @author: Joseph Lai
 """
-from colorama import init, Style
+from colorama import Style, init
+
 import praw
 
 ### Import CLI parser, global variables, scrapers and titles
-import src.cli as cli
-import src.global_vars as global_vars
-import src.scrapers.basic as basic
-import src.scrapers.comments as comments
-import src.scrapers.redditor as redditor
-import src.scrapers.subreddit as subreddit
-import src.titles as titles
-from src.scraper_functions import (basic_functions, comments_functions,
-                                   redditor_functions, subreddit_functions)
+from . import cli, global_vars, titles
+from .scraper_functions import (basic_functions, comments_functions,
+                                redditor_functions, subreddit_functions)
+from .scrapers import basic, comments, redditor, subreddit
 
 ### Global variables
 options = global_vars.options
