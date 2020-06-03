@@ -3,7 +3,7 @@
 #===============================================================================
 from colorama import Fore, init, Style
 
-from .. import export, global_vars, validation
+from . import export, global_vars, validation
 
 init(autoreset = True)
 

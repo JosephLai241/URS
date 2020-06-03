@@ -2,7 +2,7 @@
 #                       Subreddit Scraping Functions
 #===============================================================================
 from colorama import Fore, init, Style
-from .. import export, global_vars
+from . import export, global_vars
 
 init(autoreset = True)
 

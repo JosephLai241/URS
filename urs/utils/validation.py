@@ -2,7 +2,10 @@
 #                                 Validation
 #===============================================================================
 import praw
+from colorama import Fore, init, Style
 from prawcore import NotFound, PrawcoreException
+
+init(autoreset = True)
 
 ### Check if Subreddit(s), Redditor(s), or post exists and catch PRAW exceptions
 def existence(reddit, list, parser, s_t, l_type):
@@ -31,10 +34,9 @@ def existence(reddit, list, parser, s_t, l_type):
                 except praw.exceptions.ClientException:
                     not_found.append(post)
     except PrawcoreException as error:
-        print("\nERROR: %s" % error)
-        print("Please recheck Reddit credentials.")
-        if parser.parse_args().basic == False:
-            print("\nExiting.")
-            parser.exit()
+        print(Style.BRIGHT + Fore.RED + "\nERROR: %s" % error)
+        print(Style.BRIGHT + Fore.RED + "Please recheck Reddit credentials.")
+        print(Style.BRIGHT + "\nExiting.")
+        parser.exit()
 
     return found, not_found

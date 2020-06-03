@@ -1,7 +1,7 @@
 #===============================================================================
 #                      Basic Subreddit Scraper Functions
 #===============================================================================
-from .. import export, global_vars
+from . import global_vars, validation
 
 ### Global variables
 categories = global_vars.categories
@@ -12,9 +12,9 @@ s_t = global_vars.s_t
 ### Select Subreddit(s) to scrape and check if they exist
 def get_subreddits(reddit, parser):
     subreddit_prompt = """
-    Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
+Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
-    """
+"""
 
     while True:
         try:
@@ -25,7 +25,7 @@ def get_subreddits(reddit, parser):
             print("\nChecking if Subreddit(s) exist...")
             search_for = " ".join(search_for.split())
             sub_list = [subreddit for subreddit in search_for.split(" ")]
-            found, not_found = export.existence(reddit, sub_list, parser, s_t, s_t[0])
+            found, not_found = validation.existence(reddit, sub_list, parser, s_t, s_t[0])
             if found:
                 print("\nThe following Subreddits were found and will be scraped:")
                 print("-" * 56)
@@ -49,8 +49,6 @@ def get_subreddits(reddit, parser):
                     print("Not an option! Try again.")
         except ValueError:
             print("No Subreddits were specified! Try again.")
-        except:
-            pass
 
 ### Select post category and the number of results returned from each Subreddit
 def get_settings(subs, s_master):

@@ -5,7 +5,7 @@ import praw
 
 from colorama import Fore, init, Style
 from prawcore import PrawcoreException
-from .. import export, global_vars, validation
+from . import export, global_vars, validation
 
 init(autoreset = True)
 

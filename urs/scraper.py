@@ -10,8 +10,9 @@ from colorama import Style, init
 import praw
 
 ### Import argparse and scrapers
-from . import cli, titles
-from .tools import Run
+from utils.cli import check_args, parse_args
+from utils.titles import title
+from tools import Run
 
 init(autoreset = True)
 
@@ -31,18 +32,16 @@ def main():
                          username = usrnm,
                          password = passwd)
 
-    ### Parse and check args, and initialize Subreddit, Redditor, post comments,
-    ### or basic Subreddit scraper
-    parser, args = cli.parse_args()
-    cli.check_args(parser, args)
-    titles.title()
+    ### Parse and check args, and initialize tools accordingly
+    parser, args = parse_args()
+    check_args(parser, args)
+    title()
 
     run = Run(args, parser, reddit)
-    
-    if args.sub:
+    if args.subreddit:
         ### Subreddit scraper
         run.subreddit()
-    if args.user:
+    if args.redditor:
         ### Redditor scraper
         run.redditor()
     if args.comments:
