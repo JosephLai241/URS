@@ -46,6 +46,8 @@ def c_fname(string, illegal_chars):
     raw_n = str(("c-%s %s") % (string, global_vars.date))
     return fix(raw_n, illegal_chars)
 
+### On the first run, create the directory scrapes/ and store a sub-directory 
+### corresponding with the date in which the user scraped data from Reddit 
 def make_directory():
     scrapes_dir = "../scrapes"
     if not os.path.isdir(scrapes_dir):
