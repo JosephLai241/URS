@@ -87,6 +87,8 @@ def gs_comments(reddit, post, limit):
     submission = reddit.submission(url = post)
     titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
                 "Text", "Edited?", "Is Submitter?", "Stickied?"]
+
+    print("\nGetting comments...")
     submission.comments.replace_more(limit = None)
 
     all = dict()
