@@ -88,18 +88,17 @@ def gs_comments(reddit, post, limit):
                 "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
     print("\nGetting comments...")
+    print("\nThis may take a while. Please wait.")
     submission.comments.replace_more(limit = None)
 
     all = dict()
     if int(limit) == 0:
         print(Style.BRIGHT + "\nProcessing all comments in raw format from Reddit post '%s'..." % 
                 submission.title)
-        print("\nThis may take a while. Please wait.")
         s_comments(all, titles, submission, True)
     else:
         print(Style.BRIGHT + ("\nProcessing %s comments including second and third-level replies from Reddit post '%s'...") % 
                 (limit, submission.title))
-        print("\nThis may take a while. Please wait.")
         s_comments(all, titles, submission, False)
         all = {key: all[key] for key in list(all)[:int(limit)]}
 
