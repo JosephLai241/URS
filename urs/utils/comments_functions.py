@@ -10,7 +10,6 @@ init(autoreset = True)
 ### Global variables
 convert_time = global_vars.convert_time
 eo = global_vars.eo
-illegal_chars = global_vars.illegal_chars
 s_t = global_vars.s_t
 
 ### Check if posts exist and list posts that are not found
@@ -111,7 +110,7 @@ def w_comments(reddit, post_list, c_master, args):
     for post, limit in c_master.items():
         title = reddit.submission(url = post).title
         overview = gs_comments(reddit, post, limit)
-        f_name = export.c_fname(title, illegal_chars)
+        f_name = export.c_fname(title, limit)
         if args.csv:
             export.export(f_name, overview, eo[0])
             csv = "\nCSV file for '%s' comments created." % title

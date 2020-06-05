@@ -10,7 +10,6 @@ init(autoreset = True)
 categories = global_vars.categories
 convert_time = global_vars.convert_time
 eo = global_vars.eo
-illegal_chars = global_vars.illegal_chars
 options = global_vars.options
 short_cat = global_vars.short_cat
 
@@ -125,7 +124,7 @@ def gsw_sub(reddit, args, s_master):
             search_for = each[1]
             collected = get_posts(args, reddit, sub, cat_i, search_for)
             overview = sort_posts(args, collected)
-            fname = export.r_fname(args, cat_i, search_for, sub, illegal_chars)
+            fname = export.r_fname(args, cat_i, search_for, sub)
             if args.csv:
                 export.export(fname, overview, eo[0])
                 csv = "\nCSV file for r/%s created." % sub

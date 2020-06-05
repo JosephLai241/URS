@@ -12,7 +12,6 @@ init(autoreset = True)
 ### Global variables
 convert_time = global_vars.convert_time
 eo = global_vars.eo
-illegal_chars = global_vars.illegal_chars
 s_t = global_vars.s_t
 
 ### Check if Redditor(s) exist and list Redditor(s) who are not found
@@ -162,7 +161,7 @@ def gs_user(reddit, user, limit):
 def w_user(reddit, users, u_master, args):
     for user, limit in u_master.items():
         overview = gs_user(reddit, user, limit)
-        f_name = export.u_fname(user, illegal_chars)
+        f_name = export.u_fname(user, limit)
         if args.csv:
             export.export(f_name, overview, eo[0])
             csv = "\nCSV file for u/%s created." % user

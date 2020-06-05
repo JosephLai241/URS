@@ -6,45 +6,50 @@ import json
 import os
 from . import global_vars
 
+illegal_chars = global_vars.illegal_chars
+
 ### Fix fname if illegal filename characters are present
-def fix(name, illegal_chars):
+def fix(name):
     fix = ["_" if char in illegal_chars else char for char in name]
     return "".join(fix)
 
 ### Determine file name format for Subreddit scraping
-def r_fname(args, cat_i, search_for, sub, illegal_chars):
+def r_fname(args, cat_i, search_for, sub):
     raw_n = ""
+    end = "result" if search_for.isdigit() and int(search_for) < 2 else "results"
     if args.subreddit:
         if cat_i == global_vars.short_cat[5]:
             raw_n = str(("r-%s-%s-'%s'") % 
                 (sub, global_vars.categories[5], search_for))
-            fname = fix(raw_n, illegal_chars)
+            fname = fix(raw_n)
         else:
-            raw_n = str(("r-%s-%s %s results") % 
+            raw_n = str(("r-%s-%s-%s-%s") % 
                 (sub, global_vars.categories[global_vars.short_cat.index(cat_i)], 
-                    search_for))
-            fname = fix(raw_n, illegal_chars)
+                    search_for, end))
+            fname = fix(raw_n)
     elif args.basic:
         if cat_i == 5:
             raw_n = str(("r-%s-%s-'%s'") % 
                 (sub, global_vars.categories[cat_i], search_for))
-            fname = fix(raw_n, illegal_chars)
+            fname = fix(raw_n)
         else:
-            raw_n = str(("r-%s-%s %s results") % 
-                (sub, global_vars.categories[cat_i], search_for))
-            fname = fix(raw_n, illegal_chars)
+            raw_n = str(("r-%s-%s-%s-%s") % 
+                (sub, global_vars.categories[cat_i], search_for, end))
+            fname = fix(raw_n)
 
     return fname
 
 ### Determine file name format for Redditor scraping
-def u_fname(string, illegal_chars):
-    raw_n = str(("u-%s %s") % (string, global_vars.date))
-    return fix(raw_n, illegal_chars)
+def u_fname(string, limit):
+    end = "result" if int(limit) < 2 else "results"
+    raw_n = str(("u-%s-%s-%s") % (string, limit, end))
+    return fix(raw_n)
 
 ### Determine file name format for comments scraping
-def c_fname(string, illegal_chars):
-    raw_n = str(("c-%s %s") % (string, global_vars.date))
-    return fix(raw_n, illegal_chars)
+def c_fname(string, limit):
+    end = "result" if int(limit) < 2 else "results"
+    raw_n = str(("c-%s-%s-%s") % (string, limit, end))
+    return fix(raw_n)
 
 ### On the first run, create the directory scrapes/ and store a sub-directory 
 ### corresponding with the date in which the user scraped data from Reddit 
