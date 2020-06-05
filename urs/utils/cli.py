@@ -97,6 +97,11 @@ def parse_args():
 def create_list(args, s_t, l_type):
     if l_type == s_t[0]:
         list = [sub[0] for sub in args.subreddit]
+    # elif l_type == s_t[1]:
+    #     list = []
+    #     for submission in args.submission:
+    #         # list.append([subm for subm in submission])
+    #         print(submission)
     elif l_type == s_t[1]:
         list = [user[0] for user in args.redditor]
     elif l_type == s_t[2]:
@@ -115,22 +120,23 @@ def check_args(parser, args):
                 for char in short_cat:
                     if str(subs[1]).upper() == char:
                         if str(subs[1]).upper() != "S" and subs[2].isalpha():
-                            raise ValueError
+                            if subs[2].upper() != "ALL":
+                                raise ValueError
                         break
                     elif len_counter == len(short_cat) - 1:
                         raise ValueError
                     else:
                         len_counter += 1
-        if args.submission:
-            for submission in args.submission:
-                for i in range(0, len(submission)):
-                    param = submission[i].split("=")[0]
-                    if param not in submissions_params:
-                        print(Style.BRIGHT + Fore.RED + 
-                            "\nAN INVALID SUBMISSION PARAMETER WAS ENTERED\n")
-                        print(Style.BRIGHT + "CHOOSE FROM: %s\n" % 
-                            ", ".join(submissions_params))
-                        parser.exit()
+        # if args.submission:
+        #     for submission in args.submission:
+        #         for i in range(0, len(submission)):
+        #             param = submission[i].split("=")[0]
+        #             if param not in submissions_params:
+        #                 print(Style.BRIGHT + Fore.RED + 
+        #                     "\nAN INVALID SUBMISSION PARAMETER WAS ENTERED\n")
+        #                 print(Style.BRIGHT + "CHOOSE FROM: %s\n" % 
+        #                     ", ".join(submissions_params))
+        #                 parser.exit()
         if args.redditor:
             for user in args.redditor:
                 if user[1].isalpha():

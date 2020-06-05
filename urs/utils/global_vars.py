@@ -7,7 +7,7 @@ import datetime as dt
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
 ### Scrape types
-s_t = ["subreddit", "submission", "redditor", "comments"]
+s_t = ["subreddit", "redditor", "comments"]
 
 ### Export options
 eo = ["csv", "json"]
