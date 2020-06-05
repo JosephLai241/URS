@@ -51,8 +51,9 @@ def c_fname(string, limit):
     raw_n = str(("c-%s-%s-%s") % (string, limit, end))
     return fix(raw_n)
 
-### On the first run, create the directory scrapes/ and store a sub-directory 
-### corresponding with the date in which the user scraped data from Reddit 
+### On the first run, create the directory scrapes/. Then make a sub-directory 
+### corresponding with the date in which the user scraped data from Reddit if it 
+### does not exist
 def make_directory():
     scrapes_dir = "../scrapes"
     if not os.path.isdir(scrapes_dir):
