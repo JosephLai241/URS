@@ -10,6 +10,7 @@ init(autoreset = True)
 ### Check if PRAW credentials are valid
 def validate_user(parser, reddit):
     print("\nLogging in...")
+    
     try:
         print(Style.BRIGHT + Fore.GREEN + "\nYou have successfully logged in as u/%s.\n" % 
                 reddit.user.me())
