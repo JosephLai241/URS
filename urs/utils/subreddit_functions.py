@@ -23,6 +23,7 @@ def print_settings(s_master, args):
     print(Style.BRIGHT + "\n{:<25}{:<17}{:<30}".format("Subreddit", "Category", 
             "Number of results / Keyword(s)"))
     print(Style.BRIGHT + "-" * 72)
+
     for sub, settings in s_master.items():
         for each in settings:
             if args.basic == False:
@@ -31,11 +32,13 @@ def print_settings(s_master, args):
             else:
                 cat_i = each[0]
                 specific = each[1]
+            
             print("\n{:<25}{:<17}{:<30}".format(sub, categories[cat_i], specific))
 
     while True:
         try:
             confirm = input("\nConfirm options? [Y/N] ").strip().lower()
+
             if confirm == options[0]:
                 return confirm
             elif confirm == options[1]:
@@ -45,31 +48,43 @@ def print_settings(s_master, args):
         except ValueError:
             print("Not an option! Try again.")
 
+def get_all(cat_i, sub):
+    url = "https://api.pushshift.io/reddit/search/comment/?q=science&subreddit=askscience&sort=asc&size=1"
+    url += "&subreddit=%s" % sub
+
+
 ### Get Subreddit posts
 def get_posts(args, reddit, sub, cat_i, search_for):
     subreddit = reddit.subreddit(sub)
-    if cat_i == short_cat[5] or cat_i == 5:
-        print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % (sub, search_for))
-        collected = subreddit.search("%s" % search_for)
-    else:
-        if args.subreddit:
-            print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
-                (search_for, categories[short_cat.index(cat_i)], sub))
-        elif args.basic:
-            print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
-                (search_for, categories[cat_i], sub))
-        if cat_i == short_cat[0] or cat_i == 0:
-            collected = subreddit.hot(limit = int(search_for))
-        elif cat_i == short_cat[1] or cat_i == 1:
-            collected = subreddit.new(limit = int(search_for))
-        elif cat_i == short_cat[2] or cat_i == 2:
-            collected = subreddit.controversial(limit = int(search_for))
-        elif cat_i == short_cat[3] or cat_i == 3:
-            collected = subreddit.top(limit = int(search_for))
-        elif cat_i == short_cat[4] or cat_i == 4:
-            collected = subreddit.rising(limit = int(search_for))
 
-    return collected
+    ### Scrape all submissions in Subreddit
+    if search_for.isalpha() and search_for.upper() == "ALL":
+        pass
+        return collected
+    else:
+        ### Scrape `n` number of submissions
+        if cat_i == short_cat[5] or cat_i == 5:
+            print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % (sub, search_for))
+            collected = subreddit.search("%s" % search_for)
+        else:
+            if args.subreddit:
+                print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
+                    (search_for, categories[short_cat.index(cat_i)], sub))
+            elif args.basic:
+                print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
+                    (search_for, categories[cat_i], sub))
+            if cat_i == short_cat[0] or cat_i == 0:
+                collected = subreddit.hot(limit = int(search_for))
+            elif cat_i == short_cat[1] or cat_i == 1:
+                collected = subreddit.new(limit = int(search_for))
+            elif cat_i == short_cat[2] or cat_i == 2:
+                collected = subreddit.controversial(limit = int(search_for))
+            elif cat_i == short_cat[3] or cat_i == 3:
+                collected = subreddit.top(limit = int(search_for))
+            elif cat_i == short_cat[4] or cat_i == 4:
+                collected = subreddit.rising(limit = int(search_for))
+
+        return collected
 
 ### Sort collected dictionary. Reformat dictionary if exporting to JSON
 def sort_posts(args, collected):
@@ -87,10 +102,8 @@ def sort_posts(args, collected):
             overview["Upvotes"].append(post.score)
             overview["Upvote Ratio"].append(post.upvote_ratio)
             overview["ID"].append(post.id)
-            if str(post.edited).isalpha():
-                overview["Edited?"].append(post.edited)
-            else:
-                overview["Edited?"].append(convert_time(post.edited))
+            overview["Edited?"].append(post.edited) if str(post.edited).isalpha() \
+                else overview["Edited?"].append(convert_time(post.edited))
             overview["Is Locked?"].append(post.locked)
             overview["NSFW?"].append(post.over_18)
             overview["Is Spoiler?"].append(post.spoiler)
@@ -102,8 +115,8 @@ def sort_posts(args, collected):
         overview = dict()
         counter = 1
         for post in collected:
-            edit_t = "%s" % post.edited if str(post.edited).isalpha() \
-                        else "%s" % convert_time(post.edited)
+            edit_t = "%s" % post.edited if str(post.edited).isalpha() else "%s" % \
+                        convert_time(post.edited)
             e_p = [post.title, post.link_flair_text, convert_time(post.created),
                     post.score, post.upvote_ratio, post.id, edit_t, post.locked,
                     post.over_18, post.spoiler, post.stickied, post.url, 
@@ -121,10 +134,12 @@ def gsw_sub(reddit, args, s_master):
                 cat_i = each[0].upper()
             else:
                 cat_i = each[0]
+
             search_for = each[1]
             collected = get_posts(args, reddit, sub, cat_i, search_for)
             overview = sort_posts(args, collected)
             fname = export.r_fname(args, cat_i, search_for, sub)
+            
             if args.csv:
                 export.export(fname, overview, eo[0])
                 csv = "\nCSV file for r/%s created." % sub
