@@ -14,10 +14,6 @@ class Run():
         self.options = global_vars.options
         self.s_t = global_vars.s_t
 
-        # self.comments_functions = comments_functions
-        # self.redditor_functions = redditor_functions
-        # self.subreddit_functions = subreddit_functions
-
     ### Run Subreddit scraper
     def subreddit(self):
         titles.r_title()
@@ -35,6 +31,12 @@ class Run():
                 subreddit_functions.gsw_sub(self.reddit, self.args, s_master)
             else:
                 print("\nCancelling.")
+
+    # ### Run submission scraper
+    # def submission(self):
+    #     titles.s_title()
+
+    #     submission_list = cli.create_list(self.args, self.s_t, self.s_t[1])
 
     ### Run Redditor scraper
     def redditor(self):
