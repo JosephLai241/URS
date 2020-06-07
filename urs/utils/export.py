@@ -16,7 +16,7 @@ def fix(name):
 ### Determine file name format for Subreddit scraping
 def r_fname(args, cat_i, search_for, sub):
     raw_n = ""
-    end = "result" if search_for.isdigit() and int(search_for) < 2 else "results"
+    end = "result" if isinstance(search_for, int) and int(search_for) < 2 else "results"
     if args.subreddit:
         if cat_i == global_vars.short_cat[5]:
             raw_n = str(("r-%s-%s-'%s'") % 
