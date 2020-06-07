@@ -1,6 +1,6 @@
 # Universal Reddit Scraper
 
-## I am going to finish an OOP refactor of the current codebase before I add new functionality to the program.
+## While I was working on the Pushshift refactor, I realized I could further improve upon my existing code. I am always striving to improve my programming skills and the quality of my code, so I am going to finish an OOP refactor of the current codebase before I add new functionality to the program.
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
