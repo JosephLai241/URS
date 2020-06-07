@@ -1,6 +1,6 @@
 # Universal Reddit Scraper
 
-## PUSHSHIFT API IMPLEMENTATION IS CURRENTLY UNDER DEVELOPMENT
+## I am going to finish an OOP refactor of the current codebase before I add new functionality to the program.
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
 
