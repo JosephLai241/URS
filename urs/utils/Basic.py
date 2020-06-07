@@ -11,7 +11,6 @@ init(autoreset = True)
 ### Global variables
 categories = global_vars.categories
 options = global_vars.options
-
 s_t = global_vars.s_t
 
 class PrintSubs():
