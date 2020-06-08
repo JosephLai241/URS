@@ -17,7 +17,7 @@ short_cat = global_vars.short_cat
 
 class PrintConfirm():
     """
-    Print Subreddit settings, then confirm settings.
+    Functions for printing Subreddit settings and confirm settings.
     """
 
     ### Print each Subreddit setting.
@@ -54,19 +54,19 @@ class PrintConfirm():
             except ValueError:
                 print("Not an option! Try again.")
 
-class GetPosts():
+class GetPostsSwitch():
     """
-    Implementing Pythonic switch case to determine which category to scrape a
-    Subreddit.
+    Implementing Pythonic switch case to determine which Subreddit category to
+    get results from.
     """
 
     ### Initialize objects that will be used in class methods.
-    def __init__(self, reddit, search_for):
-        self.hot = reddit.subreddit.hot(limit = int(search_for))
-        self.new = reddit.subreddit.new(limit = int(search_for))
-        self.controversial = reddit.subreddit.controversial(limit = int(search_for))
-        self.top = reddit.subreddit.top(limit = int(search_for))
-        self.rising = reddit.subreddit.rising(limit = int(search_for))
+    def __init__(self, search_for, subreddit):
+        self.hot = subreddit.hot(limit = int(search_for))
+        self.new = subreddit.new(limit = int(search_for))
+        self.controversial = subreddit.controversial(limit = int(search_for))
+        self.top = subreddit.top(limit = int(search_for))
+        self.rising = subreddit.rising(limit = int(search_for))
 
         self.switch = {
             0: self.hot,
@@ -80,6 +80,11 @@ class GetPosts():
     def scrape_sub(self, index):
         return self.switch.get(index)
 
+class GetPosts():
+    """
+    Get posts from a Subreddit.
+    """
+
     ### Return PRAW ListingGenerator for searching keywords.
     def collect_search(self, search_for, sub, subreddit):
         print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % 
@@ -88,7 +93,7 @@ class GetPosts():
         return subreddit.search("%s" % search_for)
 
     ### Return PRAW ListingGenerator for all other categories.
-    def collect_others(self, args, cat_i, search_for, sub):
+    def collect_others(self, args, cat_i, search_for, sub, subreddit):
         category = categories[short_cat.index(cat_i)] if args.subreddit \
             else categories[cat_i]
         index = short_cat.index(cat_i) if args.subreddit else cat_i
@@ -96,19 +101,19 @@ class GetPosts():
         print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
             (search_for, category, sub))
         
-        return self.scrape_sub(index)
+        return GetPostsSwitch(search_for, subreddit).scrape_sub(index)
 
     ### Get Subreddit posts and return the PRAW ListingGenerator.
     def get(self, args, reddit, sub, cat_i, search_for):
         subreddit = reddit.subreddit(sub)
 
-        self.collect_search(self, search_for, sub, subreddit) \
+        return self.collect_search(search_for, sub, subreddit) \
             if cat_i == short_cat[5] or cat_i == 5 \
-            else self.collect_others(self, args, cat_i, search_for, sub)
+            else self.collect_others(args, cat_i, search_for, sub, subreddit)
 
 class SortPosts():
     """
-    Sort posts based on export option.
+    Functions for sorting posts based on the export option.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -128,13 +133,13 @@ class SortPosts():
 
     ### Get post data.
     def get_data(self, post):
-        edited = self.fix_edit_date(self, post)
+        edited = self.fix_edit_date(post)
         post_data = [post.title, post.link_flair_text, convert_time(post.created), 
             post.score, post.upvote_ratio, post.id, edited, post.locked, 
             post.over_18, post.spoiler, post.stickied, post.url, 
             post.num_comments, post.selftext]
 
-        return edited, post_data
+        return post_data
 
     ### Append data to overview dictionary for CSV export.
     def csv_format(self, overview, post_data):
@@ -142,7 +147,7 @@ class SortPosts():
                 overview[title].append(data)
 
     ### Append data to overview dictionary for JSON export.
-    def json_format(self, count, post_data):
+    def json_format(self, count, overview, post_data):
         overview["Post %s" % count] = {
             title:value for title, value in zip(self.titles, post_data)}
     
@@ -150,29 +155,27 @@ class SortPosts():
     def sort(self, args, collected):
         print("\nThis may take a while. Please wait.")
 
-        overview = self.initialize_dict(self, args)
+        overview = self.initialize_dict(args)
 
         if args.csv:
             for post in collected:
-                post_data = self.get_data(self, post)
-                self.csv_format(self, overview, post_data)
+                post_data = self.get_data(post)
+                self.csv_format(overview, post_data)
         elif args.json:
             for count, post in enumerate(collected, start = 1):
-                post_data = self.get_data(self, post)
-                self.json_format(self, count, post_data)
+                post_data = self.get_data(post)
+                self.json_format(count, overview, post_data)
 
         return overview
 
 class GetSortWrite():
     """
-    Get, sort, then write scraped Subreddit posts to CSV or JSON.
+    Functions to get, sort, then write scraped Subreddit posts to CSV or JSON.
     """
 
     ### Get and sort posts.
     def get_sort(self, args, cat_i, each, reddit, search_for, sub):
-        collected = GetPosts(reddit, search_for).\
-                    get(args, reddit, sub, cat_i, search_for)
-        
+        collected = GetPosts().get(args, reddit, sub, cat_i, search_for)        
         return SortPosts().sort(args, collected)
 
     ### Write posts.
@@ -190,7 +193,7 @@ class GetSortWrite():
             print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))
 
     ### Get, sort, then write.
-    def gsw(self, reddit, args, s_master):
+    def gsw(self, args, reddit, s_master):
         for sub, settings in s_master.items():
             for each in settings:
                 cat_i = each[0].upper() if not args.basic else each[0]
@@ -202,7 +205,7 @@ class GetSortWrite():
 
 class RunSubreddit():
     """
-    Run Subreddit scraper.
+    Run the Subreddit scraper.
     """
 
     ### Create settings for each user input.
@@ -215,15 +218,15 @@ class RunSubreddit():
         return s_master
 
     ### Skip or print Subreddit scraping settings if the `-y` flag is entered.
-    ### Then write or quit scraping.
-    def print_write(self, s_master):
-        if self.args.y:
-            GetSortWrite().gsw(self.reddit, self.args, s_master)
+    ### Then write or quit scraper.
+    def print_write(self, args, reddit, s_master):
+        if args.y:
+            GetSortWrite().gsw(args, reddit, s_master)
         else:
-            PrintConfirm().print_settings(self.args, s_master)
+            PrintConfirm().print_settings(args, s_master)
             confirm = PrintConfirm().confirm_settings()
             
-            GetSortWrite().gsw(self.reddit, self.args, s_master) if confirm == self.options[0] \
+            GetSortWrite().gsw(args, reddit, s_master) if confirm == options[0] \
                 else print(Fore.RED + Style.BRIGHT + "\nCancelling.")
 
     ### Run Subreddit scraper.
@@ -231,4 +234,4 @@ class RunSubreddit():
         titles.r_title()
 
         s_master = self.create_settings(args, parser, reddit, s_t)
-        self.print_write(s_master)
+        self.print_write(args, reddit, s_master)
