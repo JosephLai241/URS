@@ -25,3 +25,11 @@ options = ["y", "n"]
 ### Convert UNIX time to readable format
 def convert_time(object):
     return dt.datetime.fromtimestamp(object).strftime("%m-%d-%Y %H:%M:%S")
+
+### Initialize a dictionary of keys with empty lists as values
+def make_list_dict(item):
+    return dict((obj, []) for obj in item)
+
+### Initialize a dictionary of keys with None as values 
+def make_none_dict(item):
+    return dict((obj, None) for obj in item)
