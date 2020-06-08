@@ -18,12 +18,18 @@ class PrintSubs():
     Print found and invalid Subreddits.
     """
 
-    ### Print valid and invalid Subreddits.
-    def print_subreddits(self, parser, reddit, search_for):
-        print("\nChecking if Subreddit(s) exist...")
+    ### Return a list of valid and invalid Subreddits.
+    def find_subs(self, parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
         found, not_found = validation.existence(reddit, sub_list, parser, s_t, s_t[0])
+
+        return found, not_found
+
+    ### Print valid and invalid Subreddits.
+    def print_subreddits(self, parser, reddit, search_for):
+        print("\nChecking if Subreddit(s) exist...")
+        found, not_found = self.find_subs(parser, reddit, search_for)
         if found:
             print("\nThe following Subreddits were found and will be scraped:")
             print("-" * 56)
@@ -56,6 +62,14 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             except ValueError:
                 print("No Subreddits were specified! Try again.")
 
+    ### Update Subreddit settings in master dictionary.
+    def update_master(self, cat_i, master, search_for, sub):
+        user_search = search_for if cat_i == 5 else int(search_for)
+        for sub_n, _ in master.items():
+            if sub_n == sub:
+                settings = [cat_i, user_search]
+                master[sub].append(settings)
+
     ### Get search settings.
     def get_search(self, cat_i, master, sub):
         while True:
@@ -66,10 +80,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 if not search_for:
                     raise ValueError
                 else:
-                    for sub_n,values in master.items():
-                        if sub_n == sub:
-                            settings = [cat_i, search_for]
-                            master[sub].append(settings)
+                    self.update_master(cat_i, master, search_for, sub)
                     break
             except ValueError:
                 print("Not an option! Try again.")
@@ -78,16 +89,13 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
     def get_n_results(self, cat_i, master, sub):
         while True:
             try:
-                submissions = input(
+                search_for = input(
                     Style.BRIGHT + "\nHow many results do you want to capture from r/" + 
                     sub + "? " + Style.RESET_ALL).strip()
-                if submissions.isalpha() or not submissions:
+                if search_for.isalpha() or not search_for:
                     raise ValueError
                 else:
-                    for sub_n,values in master.items():
-                        if sub_n == sub:
-                            settings = [cat_i, int(submissions)]
-                            master[sub].append(settings)
+                    self.update_master(cat_i, master, search_for, sub)
                     break
             except ValueError:
                 print("Not an option! Try again.")
