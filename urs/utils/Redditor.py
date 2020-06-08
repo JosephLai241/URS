@@ -72,13 +72,9 @@ class ProcessInteractions():
 
         self.mutts = [self.controversial, self.gilded, self.hot, self.new, self.top]
         self.mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
-        # self.mutts = [self.hot, self.new, self.controversial, self.top, self.gilded]
-        # self.mutt_names = ["Hot", "New", "Controversial", "Top", "Gilded"]
 
         self.access = [self.downvoted, self.gildings, self.hidden, self.saved, self.upvoted]
         self.access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
-        # self.access = [self.upvoted, self.downvoted, self.gildings, self.hidden, self.saved]
-        # self.access_names = ["Upvoted", "Downvoted", "Gildings", "Hidden", "Saved"]
 
     ### Make dictionary from zipped lists.
     def make_zip_dict(self, titles, items):
@@ -90,7 +86,6 @@ class ProcessInteractions():
             item.id, item.over_18, item.subreddit.display_name, item.selftext]
 
         return self.make_zip_dict(self.submission_titles, items)
-        # return dict((title, item) for title, item in zip(self.submission_titles, items))
 
     ### Make comment list.
     def make_comment_list(self, item):
@@ -101,7 +96,6 @@ class ProcessInteractions():
             item.submission.subreddit.display_name]
 
         return self.make_zip_dict(self.comment_titles, items)
-        # return dict((title, item) for title, item in zip(self.comment_titles, items))
 
     ### Determine how to append the list to the overview dictionary.
     def determine_append(self, cat, redditor_list, s_type):
@@ -115,34 +109,15 @@ class ProcessInteractions():
         index = self.s_types.index(s_type)
         self.overview[switch.get(index)].append(redditor_list)
 
-        # if s_type == self.s_types[0]:
-        #     self.overview["Submissions"].append(redditor_list)
-        # if s_type == self.s_types[1]:
-        #     self.overview["Comments"].append(redditor_list)
-        # elif s_type == self.s_types[2]:
-        #     self.overview["%s" % cat.capitalize()].append(redditor_list)
-        # elif s_type == self.s_types[3]:
-        #     self.overview["%s (may be forbidden)" % 
-        #         cat.capitalize()].append(redditor_list)
-
-    ### Extract submissions.
-    def extract_submission(self, cat, item, s_type):
-        submission_list = self.make_submission_list(item)
-        self.determine_append(cat, submission_list, s_type)
-
-    ### Extract comments.
-    def extract_comment(self, cat, item, s_type):
-        comment_list = self.make_comment_list(item)
-        self.determine_append(cat, comment_list, s_type)
-
     ### Extracting submission or comment attributes and appending to overview 
     ### dictionary.
     def extract(self, cat, obj, s_types, s_type):
         for item in obj:
-            if isinstance(item, praw.models.Submission):
-                self.extract_submission(cat, item, s_type)
-            elif isinstance(item, praw.models.Comment):
-                self.extract_comment(cat, item, s_type)
+            redditor_list = self.make_submission_list(item) \
+                if isinstance(item, praw.models.Submission) \
+                    else self.make_comment_list(item)
+
+            self.determine_append(cat, redditor_list, s_type) 
 
     ### Sort Redditor submissions.
     def sort_submissions(self):
@@ -180,11 +155,12 @@ class GetInteractions():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", "Link Karma",
-            "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", "Submissions", 
-            "Comments", "Hot", "New", "Controversial", "Top", "Upvoted (may be forbidden)",
-            "Downvoted (may be forbidden)", "Gilded", "Gildings (may be forbidden)",
-            "Hidden (may be forbidden)", "Saved (may be forbidden)"]
+        self.titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
+            "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", 
+            "Submissions", "Comments", "Hot", "New", "Controversial", "Top", 
+            "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", 
+            "Gildings (may be forbidden)", "Hidden (may be forbidden)", 
+            "Saved (may be forbidden)"]
 
     ### Make Redditor dictionary to store data.
     def make_user_profile(self, limit, reddit, user):
@@ -199,8 +175,6 @@ class GetInteractions():
 
     ### Get Redditor account information.
     def get_user_info(self, limit, overview, reddit, user):
-        # user_info_titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma",
-        #     "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?"]
         user_info_titles = self.titles[:10]
         user_info = [user.name, user.fullname, user.id, convert_time(user.created_utc),
             user.comment_karma, user.link_karma, user.is_employee, user.is_friend,
@@ -208,17 +182,6 @@ class GetInteractions():
 
         for title, user_item in zip(user_info_titles, user_info):
             overview[title].append(user_item) 
-
-        # overview["Name"].append(user.name)
-        # overview["Fullname"].append(user.fullname)
-        # overview["ID"].append(user.id)
-        # overview["Date Created"].append(convert_time(user.created_utc))
-        # overview["Comment Karma"].append(user.comment_karma)
-        # overview["Link Karma"].append(user.link_karma)
-        # overview["Is Employee?"].append(user.is_employee)
-        # overview["Is Friend?"].append(user.is_friend)
-        # overview["Is Mod?"].append(user.is_mod)
-        # overview["Is Gold?"].append(user.is_gold)
 
     ### Get Redditor interactions on Reddit.
     def get_user_interactions(self, limit, overview, user):
