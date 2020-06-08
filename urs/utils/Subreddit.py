@@ -10,8 +10,6 @@ init(autoreset = True)
 
 ### Global variables
 categories = global_vars.categories
-convert_time = global_vars.convert_time
-eo = global_vars.eo
 options = global_vars.options
 short_cat = global_vars.short_cat
 
@@ -118,6 +116,7 @@ class SortPosts():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
+        self.convert_time = global_vars.convert_time
         self.titles = ["Title", "Flair", "Date Created", "Upvotes", "Upvote Ratio", 
                         "ID", "Edited?", "Is Locked?", "NSFW?", "Is Spoiler?", 
                         "Stickied?", "URL", "Comment Count", "Text"]
@@ -129,12 +128,12 @@ class SortPosts():
     ### Fix "Edited?" date.
     def fix_edit_date(self, post):
         return str(post.edited) if str(post.edited).isalpha() \
-                else str(convert_time(post.edited))
+                else str(self.convert_time(post.edited))
 
     ### Get post data.
     def get_data(self, post):
         edited = self.fix_edit_date(post)
-        post_data = [post.title, post.link_flair_text, convert_time(post.created), 
+        post_data = [post.title, post.link_flair_text, self.convert_time(post.created), 
             post.score, post.upvote_ratio, post.id, edited, post.locked, 
             post.over_18, post.spoiler, post.stickied, post.url, 
             post.num_comments, post.selftext]
@@ -173,6 +172,10 @@ class GetSortWrite():
     Functions to get, sort, then write scraped Subreddit posts to CSV or JSON.
     """
 
+    ### Initialize objects that will be used in class methods.
+    def __init__(self):
+        self.eo = global_vars.eo
+
     ### Get and sort posts.
     def get_sort(self, args, cat_i, each, reddit, search_for, sub):
         collected = GetPosts().get(args, reddit, sub, cat_i, search_for)        
@@ -182,12 +185,12 @@ class GetSortWrite():
     def write(self, args, cat_i, overview, search_for, sub):
         fname = export.r_fname(args, cat_i, search_for, sub)
         if args.csv:
-            export.export(fname, overview, eo[0])
+            export.export(fname, overview, self.eo[0])
             csv = "\nCSV file for r/%s created." % sub
             print(Style.BRIGHT + Fore.GREEN + csv)
             print(Style.BRIGHT + Fore.GREEN + "-" * (len(csv) - 1))
         elif args.json:
-            export.export(fname, overview, eo[1])
+            export.export(fname, overview, self.eo[1])
             json = "\nJSON file for r/%s created." % sub
             print(Style.BRIGHT + Fore.GREEN + json)
             print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))
