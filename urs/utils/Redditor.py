@@ -5,7 +5,7 @@ import praw
 
 from colorama import Fore, init, Style
 from prawcore import PrawcoreException
-from . import cli, export, global_vars, titles, validation
+from . import cli, export, global_vars, Titles, validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -272,7 +272,7 @@ class RunRedditor():
 
     ### Run Redditor scraper.
     def run(self, args, parser, reddit):
-        titles.u_title()
+        Titles.Titles().u_title()
 
         user_list = cli.create_list(args, s_t, s_t[1])
         users = PrintUsers().list_users(parser, reddit, user_list)

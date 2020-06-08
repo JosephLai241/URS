@@ -2,7 +2,7 @@
 #                      Basic Subreddit Scraper Functions
 #===============================================================================
 from colorama import init, Style
-from . import global_vars, Subreddit, titles, validation
+from . import global_vars, Subreddit, Titles, validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
@@ -188,7 +188,7 @@ class RunBasic():
 
     ### Run basic Subreddit scraper.
     def run(self, args, parser, reddit):
-        titles.b_title()
+        Titles.Titles().b_title()
         
         while True:
             while True:                

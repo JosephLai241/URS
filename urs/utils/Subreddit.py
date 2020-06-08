@@ -2,7 +2,7 @@
 #                       Subreddit Scraping Functions
 #===============================================================================
 from colorama import Fore, init, Style
-from . import cli, export, global_vars, titles
+from . import cli, export, global_vars, Titles
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -234,7 +234,7 @@ class RunSubreddit():
 
     ### Run Subreddit scraper.
     def run(self, args, parser, reddit, s_t):
-        titles.r_title()
+        Titles.Titles().r_title()
 
         s_master = self.create_settings(args, parser, reddit, s_t)
         self.print_write(args, reddit, s_master)
