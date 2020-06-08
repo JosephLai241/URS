@@ -3,7 +3,7 @@
 #===============================================================================
 from colorama import Fore, init, Style
 from utils import (Basic, cli, comments_functions, global_vars,
-                   redditor_functions, Subreddit, titles)
+                   Redditor, Subreddit, titles)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
@@ -25,15 +25,8 @@ class Run():
 
     ### Run Redditor scraper
     def redditor(self):
-        titles.u_title()
-
-        user_list = cli.create_list(self.args, self.s_t, self.s_t[1])
-        users = redditor_functions.list_users(self.reddit, user_list, self.parser)
-        u_master = redditor_functions.c_u_dict(users)
-        cli.get_cli_settings(self.reddit, self.args, u_master, self.s_t, self.s_t[1])
-
-        redditor_functions.w_user(self.reddit, users, u_master, self.args)
-
+        Redditor.RunRedditor().run(self.args, self.parser, self.reddit)
+        
     ### Run comments scraper
     def comments(self):
         titles.c_title()
