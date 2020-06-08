@@ -1,8 +1,13 @@
 #===============================================================================
 #                           All Scrapers
 #===============================================================================
-from utils import (basic_functions, cli, comments_functions, global_vars,
-                   redditor_functions, subreddit_functions, titles)
+from colorama import Fore, init, Style
+from utils import (Basic, cli, comments_functions, global_vars,
+                   redditor_functions, Subreddit, titles)
+
+### Automate sending reset sequences to turn off color changes at the end of 
+### every print
+init(autoreset = True)
 
 ### All scraper functionality is contained within this class
 class Run():
@@ -16,27 +21,7 @@ class Run():
 
     ### Run Subreddit scraper
     def subreddit(self):
-        titles.r_title()
-
-        sub_list = cli.create_list(self.args, self.s_t, self.s_t[0])
-        subs = cli.confirm_subs(self.reddit, sub_list, self.parser)
-        s_master = subreddit_functions.c_s_dict(subs)
-        cli.get_cli_settings(self.reddit, self.args, s_master, self.s_t, self.s_t[0])
-
-        if self.args.y:
-            subreddit_functions.gsw_sub(self.reddit, self.args, s_master)
-        else:
-            confirm = subreddit_functions.print_settings(s_master, self.args)
-            if confirm == self.options[0]:
-                subreddit_functions.gsw_sub(self.reddit, self.args, s_master)
-            else:
-                print("\nCancelling.")
-
-    # ### Run submission scraper
-    # def submission(self):
-    #     titles.s_title()
-
-    #     submission_list = cli.create_list(self.args, self.s_t, self.s_t[1])
+        Subreddit.RunSubreddit().run(self.args, self.parser, self.reddit, self.s_t)
 
     ### Run Redditor scraper
     def redditor(self):
@@ -62,23 +47,4 @@ class Run():
 
     ### Run basic Subreddit scraper
     def basic(self):
-        titles.b_title()
-        
-        while True:
-            while True:
-                subs = basic_functions.get_subreddits(self.reddit, self.parser)
-                s_master = subreddit_functions.c_s_dict(subs)
-                basic_functions.get_settings(subs, s_master)
-
-                confirm = subreddit_functions.print_settings(s_master, self.args)
-                if confirm == self.options[0]:
-                    break
-                else:
-                    print("\nExiting.")
-                    self.parser.exit()
-            subreddit_functions.gsw_sub(self.reddit, self.args, s_master)
-            
-            repeat = basic_functions.another()
-            if repeat == self.options[1]:
-                print("\nExiting.")
-                break
+        Basic.RunBasic().run(self.args, self.parser, self.reddit)
