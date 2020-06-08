@@ -9,20 +9,23 @@ from . import global_vars, Subreddit, titles, validation
 init(autoreset = True)
 
 ### Global variables
-categories = global_vars.categories
 options = global_vars.options
-s_t = global_vars.s_t
 
 class PrintSubs():
     """
     Print found and invalid Subreddits.
     """
 
+    ### Initialize objects that will be used in class methods.
+    def __init__(self):
+        self.s_t = global_vars.s_t
+
     ### Return a list of valid and invalid Subreddits.
     def find_subs(self, parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        found, not_found = validation.existence(reddit, sub_list, parser, s_t, s_t[0])
+        found, not_found = validation.existence(reddit, sub_list, parser, \
+            self.s_t, self.s_t[0])
 
         return found, not_found
 
@@ -45,6 +48,10 @@ class GetInput():
     """
     Functions for handling user input.
     """
+
+    ### Initialize objects that will be used in class methods.
+    def __init__(self):
+        self.categories = global_vars.categories
 
     ### Enter Subreddit(s) to scrape and check if they exist.
     def get_subreddits(self, parser, reddit):
