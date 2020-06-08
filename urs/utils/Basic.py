@@ -2,14 +2,14 @@
 #                      Basic Subreddit Scraper Functions
 #===============================================================================
 from colorama import init, Style
-from . import global_vars, Subreddit, Titles, validation
+from . import Global, Subreddit, Titles, validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
 init(autoreset = True)
 
 ### Global variables
-options = global_vars.options
+options = Global.options
 
 class PrintSubs():
     """
@@ -18,7 +18,7 @@ class PrintSubs():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.s_t = global_vars.s_t
+        self.s_t = Global.s_t
 
     ### Return a list of valid and invalid Subreddits.
     def find_subs(self, parser, reddit, search_for):
@@ -51,7 +51,7 @@ class GetInput():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.categories = global_vars.categories
+        self.categories = Global.categories
 
     ### Enter Subreddit(s) to scrape and check if they exist.
     def get_subreddits(self, parser, reddit):
@@ -176,7 +176,7 @@ class RunBasic():
     def create_settings(self, parser, reddit):
         found = GetInput().get_subreddits(parser, reddit)
         subs = ConfirmInput().confirm_subreddits(found, parser)
-        master = global_vars.make_list_dict(subs)
+        master = Global.make_list_dict(subs)
         GetInput().get_settings(master, subs)
 
         return master

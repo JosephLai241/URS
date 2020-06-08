@@ -4,9 +4,9 @@
 import csv
 import json
 import os
-from . import global_vars
+from . import Global
 
-illegal_chars = global_vars.illegal_chars
+illegal_chars = Global.illegal_chars
 
 ### Fix fname if illegal filename characters are present
 def fix(name):
@@ -18,23 +18,23 @@ def r_fname(args, cat_i, search_for, sub):
     raw_n = ""
     end = "result" if isinstance(search_for, int) and int(search_for) < 2 else "results"
     if args.subreddit:
-        if cat_i == global_vars.short_cat[5]:
+        if cat_i == Global.short_cat[5]:
             raw_n = str(("r-%s-%s-'%s'") % 
-                (sub, global_vars.categories[5], search_for))
+                (sub, Global.categories[5], search_for))
             fname = fix(raw_n)
         else:
             raw_n = str(("r-%s-%s-%s-%s") % 
-                (sub, global_vars.categories[global_vars.short_cat.index(cat_i)], 
+                (sub, Global.categories[Global.short_cat.index(cat_i)], 
                     search_for, end))
             fname = fix(raw_n)
     elif args.basic:
         if cat_i == 5:
             raw_n = str(("r-%s-%s-'%s'") % 
-                (sub, global_vars.categories[cat_i], search_for))
+                (sub, Global.categories[cat_i], search_for))
             fname = fix(raw_n)
         else:
             raw_n = str(("r-%s-%s-%s-%s") % 
-                (sub, global_vars.categories[cat_i], search_for, end))
+                (sub, Global.categories[cat_i], search_for, end))
             fname = fix(raw_n)
 
     return fname
@@ -59,7 +59,7 @@ def make_directory():
     if not os.path.isdir(scrapes_dir):
         os.mkdir(scrapes_dir)
     
-    sub_path = "../scrapes/%s" % global_vars.date
+    sub_path = "../scrapes/%s" % Global.date
     if not os.path.isdir(sub_path):
         os.mkdir(sub_path)
     
@@ -69,13 +69,13 @@ def make_directory():
 def export(fname, overview, f_type):
     dir_path = make_directory()
 
-    if f_type == global_vars.eo[0]:
+    if f_type == Global.eo[0]:
         filename = dir_path + "/%s.csv" % fname
         with open(filename, "w", encoding = "utf-8") as results:
             writer = csv.writer(results, delimiter = ",")
             writer.writerow(overview.keys())
             writer.writerows(zip(*overview.values()))
-    elif f_type == global_vars.eo[1]:
+    elif f_type == Global.eo[1]:
         filename = dir_path + "/%s.json" % fname
         with open(filename, "w", encoding = "utf-8") as results:
             json.dump(overview, results, indent = 4)

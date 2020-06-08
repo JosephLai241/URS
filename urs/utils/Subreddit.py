@@ -2,16 +2,16 @@
 #                       Subreddit Scraping Functions
 #===============================================================================
 from colorama import Fore, init, Style
-from . import cli, export, global_vars, Titles
+from . import cli, export, Global, Titles
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
 
 ### Global variables
-categories = global_vars.categories
-options = global_vars.options
-short_cat = global_vars.short_cat
+categories = Global.categories
+options = Global.options
+short_cat = Global.short_cat
 
 class PrintConfirm():
     """
@@ -116,14 +116,14 @@ class SortPosts():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.convert_time = global_vars.convert_time
+        self.convert_time = Global.convert_time
         self.titles = ["Title", "Flair", "Date Created", "Upvotes", "Upvote Ratio", 
                         "ID", "Edited?", "Is Locked?", "NSFW?", "Is Spoiler?", 
                         "Stickied?", "URL", "Comment Count", "Text"]
 
     ### Initialize dictionary depending on export option.
     def initialize_dict(self, args):
-        return global_vars.make_list_dict(self.titles) if args.csv else dict()
+        return Global.make_list_dict(self.titles) if args.csv else dict()
 
     ### Fix "Edited?" date.
     def fix_edit_date(self, post):
@@ -174,7 +174,7 @@ class GetSortWrite():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.eo = global_vars.eo
+        self.eo = Global.eo
 
     ### Get and sort posts.
     def get_sort(self, args, cat_i, each, reddit, search_for, sub):
@@ -215,7 +215,7 @@ class RunSubreddit():
     def create_settings(self, args, parser, reddit, s_t):
         sub_list = cli.create_list(args, s_t, s_t[0])
         subs = cli.confirm_subs(reddit, sub_list, parser)
-        s_master = global_vars.make_list_dict(subs)
+        s_master = Global.make_list_dict(subs)
         cli.get_cli_settings(reddit, args, s_master, s_t, s_t[0])
 
         return s_master

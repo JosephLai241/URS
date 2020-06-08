@@ -3,14 +3,14 @@
 #===============================================================================
 from colorama import Fore, init, Style
 
-from . import export, global_vars, validation
+from . import export, Global, validation
 
 init(autoreset = True)
 
 ### Global variables
-convert_time = global_vars.convert_time
-eo = global_vars.eo
-s_t = global_vars.s_t
+convert_time = Global.convert_time
+eo = Global.eo
+s_t = Global.s_t
 
 ### Check if posts exist and list posts that are not found
 def list_posts(reddit, post_list, parser):

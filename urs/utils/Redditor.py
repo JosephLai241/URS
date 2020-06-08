@@ -5,15 +5,15 @@ import praw
 
 from colorama import Fore, init, Style
 from prawcore import PrawcoreException
-from . import cli, export, global_vars, Titles, validation
+from . import cli, export, Global, Titles, validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
 
 ### Global variables
-convert_time = global_vars.convert_time
-s_t = global_vars.s_t
+convert_time = Global.convert_time
+s_t = Global.s_t
 
 class PrintUsers():
     """
@@ -169,7 +169,7 @@ class GetInteractions():
         print("\nThis may take a while. Please wait.")
 
         user = reddit.redditor(user)
-        overview = global_vars.make_list_dict(self.titles)
+        overview = Global.make_list_dict(self.titles)
 
         return overview, user
 
@@ -206,7 +206,7 @@ class Write():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.eo = global_vars.eo
+        self.eo = Global.eo
 
     ### Export to either CSV or JSON.
     def determine_export(self, args, f_name, overview):
@@ -239,7 +239,7 @@ class RunRedditor():
 
         user_list = cli.create_list(args, s_t, s_t[1])
         users = PrintUsers().list_users(parser, reddit, user_list)
-        u_master = global_vars.make_none_dict(users)
+        u_master = Global.make_none_dict(users)
         cli.get_cli_settings(reddit, args, u_master, s_t, s_t[1])
 
         Write().write(args, reddit, u_master)

@@ -5,13 +5,13 @@ import argparse
 import sys
 
 from colorama import Fore, init, Style
-from . import global_vars, titles, validation
+from . import Global, Titles, validation
 
 init(autoreset = True)
 
 ### Global variables
-short_cat = global_vars.short_cat
-s_t = global_vars.s_t
+short_cat = Global.short_cat
+s_t = Global.s_t
 
 usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
 description = "Universal Reddit Scraper 3.0 - Scrape Subreddits, submissions, Redditors, or comments from posts"
@@ -52,12 +52,6 @@ EXAMPLES
 
 """
 
-submissions_params = ["after", "aggs", "author", "before", "contest_mode", "fields", 
-                        "frequency", "ids", "is_video", "locked", "metadata", 
-                        "num_comments", "over_18", "q", "q:not", "score", "selftext", 
-                        "selftext:not", "size", "sort", "sort_type", "spoiler", 
-                        "stickied", "subreddit", "title", "title:not"]
-
 ### Get args
 def parse_args():
     parser = argparse.ArgumentParser(usage = usage,
@@ -69,8 +63,6 @@ def parse_args():
     scraper = parser.add_argument_group("Scraping options")
     scraper.add_argument("-r", "--subreddit", action = "append", nargs = 3, metavar = "", 
                             help = "specify Subreddit to scrape")
-    scraper.add_argument("-s", "--submission", action = "append", nargs = "*", 
-                            metavar = "", help = "search for keywords in any submission")
     scraper.add_argument("-u", "--redditor", action = "append", nargs = 2, metavar = "", 
                             help = "specify Redditor profile to scrape")
     scraper.add_argument("-c", "--comments", action = "append", nargs = 2, metavar = "", 
@@ -97,11 +89,6 @@ def parse_args():
 def create_list(args, s_t, l_type):
     if l_type == s_t[0]:
         list = [sub[0] for sub in args.subreddit]
-    # elif l_type == s_t[1]:
-    #     list = []
-    #     for submission in args.submission:
-    #         # list.append([subm for subm in submission])
-    #         print(submission)
     elif l_type == s_t[1]:
         list = [user[0] for user in args.redditor]
     elif l_type == s_t[2]:
@@ -120,23 +107,12 @@ def check_args(parser, args):
                 for char in short_cat:
                     if str(subs[1]).upper() == char:
                         if str(subs[1]).upper() != "S" and subs[2].isalpha():
-                            if subs[2].upper() != "ALL":
-                                raise ValueError
+                            raise ValueError
                         break
                     elif len_counter == len(short_cat) - 1:
                         raise ValueError
                     else:
                         len_counter += 1
-        # if args.submission:
-        #     for submission in args.submission:
-        #         for i in range(0, len(submission)):
-        #             param = submission[i].split("=")[0]
-        #             if param not in submissions_params:
-        #                 print(Style.BRIGHT + Fore.RED + 
-        #                     "\nAN INVALID SUBMISSION PARAMETER WAS ENTERED\n")
-        #                 print(Style.BRIGHT + "CHOOSE FROM: %s\n" % 
-        #                     ", ".join(submissions_params))
-        #                 parser.exit()
         if args.redditor:
             for user in args.redditor:
                 if user[1].isalpha():
@@ -146,7 +122,7 @@ def check_args(parser, args):
                 if post[1].isalpha():
                     raise ValueError
     except ValueError:
-        titles.e_title()
+        Titles.Titles().e_title()
         parser.exit()
 
 ### Check if Subreddits exist and list invalid Subreddits if applicable
