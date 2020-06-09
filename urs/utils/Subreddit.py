@@ -2,7 +2,7 @@
 #                       Subreddit Scraping Functions
 #===============================================================================
 from colorama import Fore, init, Style
-from . import cli, export, Global, Titles
+from . import Cli, Export, Global, Titles, Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -12,6 +12,25 @@ init(autoreset = True)
 categories = Global.categories
 options = Global.options
 short_cat = Global.short_cat
+
+class CheckSubs():
+    """
+    Function for checking if Subreddit(s) exist. Print invalid Subreddits if
+    applicable.
+    """
+
+    ### Check if Subreddits exist and list invalid Subreddits if applicable
+    def confirm_subs(self, parser, reddit, s_t, sub_list):
+        print("\nChecking if Subreddit(s) exist...")
+        found, not_found = Validation.Validation().existence(s_t[0], sub_list, 
+            parser, reddit, s_t)
+        if not_found:
+            print("\nThe following Subreddits were not found and will be skipped:")
+            print("-" * 60)
+            print(*not_found, sep = "\n")
+
+        subs = [sub for sub in found]
+        return subs
 
 class PrintConfirm():
     """
@@ -80,7 +99,7 @@ class GetPostsSwitch():
 
 class GetPosts():
     """
-    Get posts from a Subreddit.
+    Functions for getting posts from a Subreddit.
     """
 
     ### Return PRAW ListingGenerator for searching keywords.
@@ -181,19 +200,23 @@ class GetSortWrite():
         collected = GetPosts().get(args, reddit, sub, cat_i, search_for)        
         return SortPosts().sort(args, collected)
 
+    ### Export to either CSV or JSON.
+    def determine_export(self, args, f_name, overview):
+        Export.Export().export(self.eo[1], f_name, overview) if args.json else \
+            Export.Export().export(self.eo[0], f_name, overview)
+
+    ### Set print length depending on string length.
+    def print_confirm(self, args, sub):
+        confirmation = "\nJSON file for r/%s created." % sub if args.json \
+            else "\nCSV file for r/%s created." % sub
+        print(Style.BRIGHT + Fore.GREEN + confirmation)
+        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
+
     ### Write posts.
     def write(self, args, cat_i, overview, search_for, sub):
-        fname = export.r_fname(args, cat_i, search_for, sub)
-        if args.csv:
-            export.export(fname, overview, self.eo[0])
-            csv = "\nCSV file for r/%s created." % sub
-            print(Style.BRIGHT + Fore.GREEN + csv)
-            print(Style.BRIGHT + Fore.GREEN + "-" * (len(csv) - 1))
-        elif args.json:
-            export.export(fname, overview, self.eo[1])
-            json = "\nJSON file for r/%s created." % sub
-            print(Style.BRIGHT + Fore.GREEN + json)
-            print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))
+        f_name = Export.NameFile().r_fname(args, cat_i, search_for, sub)
+        self.determine_export(args, f_name, overview)
+        self.print_confirm(args, sub)
 
     ### Get, sort, then write.
     def gsw(self, args, reddit, s_master):
@@ -203,7 +226,6 @@ class GetSortWrite():
                 search_for = each[1]
 
                 overview = self.get_sort(args, cat_i, each, reddit, search_for, sub)
-                
                 self.write(args, cat_i, overview, search_for, sub)
 
 class RunSubreddit():
@@ -213,10 +235,10 @@ class RunSubreddit():
 
     ### Create settings for each user input.
     def create_settings(self, args, parser, reddit, s_t):
-        sub_list = cli.create_list(args, s_t, s_t[0])
-        subs = cli.confirm_subs(reddit, sub_list, parser)
+        sub_list = Cli.create_list(args, s_t[0])
+        subs = CheckSubs().confirm_subs(parser, reddit, s_t, sub_list)
         s_master = Global.make_list_dict(subs)
-        cli.get_cli_settings(reddit, args, s_master, s_t, s_t[0])
+        Cli.GetScrapeSettings().get_settings(reddit, args, s_master, s_t[0])
 
         return s_master
 
