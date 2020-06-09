@@ -226,8 +226,8 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
  
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable.
 
-**This is currently for JSON ONLY. There is a [CSV export bug](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/3) that needs squashing.**
- 
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.** 
+
 Scraping 5 results for each of u/spez's user attributes and export to JSON:
  
 ![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_1.png)
