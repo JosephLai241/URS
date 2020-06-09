@@ -2,7 +2,7 @@
 #                      Basic Subreddit Scraper Functions
 #===============================================================================
 from colorama import init, Style
-from . import Global, Subreddit, Titles, validation
+from . import Global, Subreddit, Titles, Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
@@ -24,8 +24,8 @@ class PrintSubs():
     def find_subs(self, parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        found, not_found = validation.existence(reddit, sub_list, parser, \
-            self.s_t, self.s_t[0])
+        found, not_found = Validation.Validation().existence(self.s_t[0], sub_list, parser, 
+            reddit, self.s_t)
 
         return found, not_found
 
@@ -128,7 +128,7 @@ Select a category to display for r/%s
                         print("\nSelected search")
                         self.get_search(cat_i, master, sub)
                     else:
-                        print("\nSelected category: %s" % categories[cat_i])
+                        print("\nSelected category: %s" % self.categories[cat_i])
                         self.get_n_results(cat_i, master, sub)
                     break
                 except (IndexError, ValueError):
