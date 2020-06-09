@@ -235,10 +235,10 @@ class RunSubreddit():
 
     ### Create settings for each user input.
     def create_settings(self, args, parser, reddit, s_t):
-        sub_list = Cli.create_list(args, s_t[0])
+        sub_list = Cli.GetScrapeSettings().create_list(args, s_t[0])
         subs = CheckSubs().confirm_subs(parser, reddit, s_t, sub_list)
         s_master = Global.make_list_dict(subs)
-        Cli.GetScrapeSettings().get_settings(reddit, args, s_master, s_t[0])
+        Cli.GetScrapeSettings().get_settings(args, s_master, reddit, s_t[0])
 
         return s_master
 
