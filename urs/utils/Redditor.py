@@ -5,7 +5,7 @@ import praw
 
 from colorama import Fore, init, Style
 from prawcore import PrawcoreException
-from . import cli, export, Global, Titles, validation
+from . import Cli, Export, Global, Titles, Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -23,7 +23,8 @@ class PrintUsers():
     ### Check if Redditors exist and list Redditors who are not found.
     def list_users(self, parser, reddit, user_list):
         print("\nChecking if Redditor(s) exist...")
-        users, not_users = validation.existence(reddit, user_list, parser, s_t, s_t[1])
+        users, not_users = Validation.Validation().existence(s_t[1], user_list, 
+            parser, reddit, s_t)
         if not_users:
             print("\nThe following Redditors were not found and will be skipped:")
             print("-" * 59)
@@ -210,8 +211,8 @@ class Write():
 
     ### Export to either CSV or JSON.
     def determine_export(self, args, f_name, overview):
-        export.export(f_name, overview, self.eo[1]) if args.json else \
-            export.export(f_name, overview, self.eo[0])
+        Export.Export().export(self.eo[1], f_name, overview) if args.json else \
+            Export.Export().export(self.eo[0], f_name, overview)
 
     ### Set print length depending on string length.
     def print_confirm(self, args, user):
@@ -224,7 +225,7 @@ class Write():
     def write(self, args, reddit, u_master):
         for user, limit in u_master.items():
             overview = GetInteractions().get(limit, reddit, user)
-            f_name = export.u_fname(user, limit)
+            f_name = Export.NameFile().u_fname(limit, user)
             self.determine_export(args, f_name, overview)
             self.print_confirm(args, user)
 
@@ -237,9 +238,9 @@ class RunRedditor():
     def run(self, args, parser, reddit):
         Titles.Titles().u_title()
 
-        user_list = cli.create_list(args, s_t, s_t[1])
+        user_list = Cli.GetScrapeSettings().create_list(args, s_t[1])
         users = PrintUsers().list_users(parser, reddit, user_list)
         u_master = Global.make_none_dict(users)
-        cli.get_cli_settings(reddit, args, u_master, s_t, s_t[1])
+        Cli.GetScrapeSettings().get_settings(reddit, args, u_master, s_t[1])
 
         Write().write(args, reddit, u_master)
