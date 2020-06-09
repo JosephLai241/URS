@@ -2,8 +2,7 @@
 #                        Post Comments Scraping Functions
 #===============================================================================
 from colorama import Fore, init, Style
-
-from . import export, Global, validation
+from . import Export, Global, Validation
 
 init(autoreset = True)
 
@@ -15,7 +14,7 @@ s_t = Global.s_t
 ### Check if posts exist and list posts that are not found
 def list_posts(reddit, post_list, parser):
     print("\nChecking if post(s) exist...")
-    posts, not_posts = validation.existence(reddit, post_list, parser, s_t, s_t[2])
+    posts, not_posts = Validation.Validation().existence(reddit, post_list, parser, s_t, s_t[2])
     if not_posts:
         print("\nThe following posts were not found and will be skipped:")
         print("-" * 55)
@@ -109,14 +108,14 @@ def w_comments(reddit, post_list, c_master, args):
     for post, limit in c_master.items():
         title = reddit.submission(url = post).title
         overview = gs_comments(reddit, post, limit)
-        f_name = export.c_fname(title, limit)
+        f_name = Export.NameFile().c_fname(limit, title)
         if args.csv:
-            export.export(f_name, overview, eo[0])
+            Export.Export().export(eo[0], f_name, overview)
             csv = "\nCSV file for '%s' comments created." % title
             print(Style.BRIGHT + Fore.GREEN + csv)
             print(Style.BRIGHT + Fore.GREEN + "-" * (len(csv) - 1))
         elif args.json:
-            export.export(f_name, overview, eo[1])
+            Export.Export().export(eo[1], f_name, overview)
             json = "\nJSON file for '%s' comments created." % title
             print(Style.BRIGHT + Fore.GREEN + json)
             print(Style.BRIGHT + Fore.GREEN + "-" * (len(json) - 1))
