@@ -103,7 +103,7 @@ If you have searched for keywords in a Subreddit, file names are formatted as su
 
 `$ ./scraper.py -u USER N_RESULTS --FILE_FORMAT`
 
-**[Currently for JSON ONLY.](https://github.com/JosephLai241/Universal-Reddit-Scraper/issues/3)**
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
