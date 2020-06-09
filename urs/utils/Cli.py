@@ -89,7 +89,7 @@ EXAMPLES
             parser.exit()
 
         args = parser.parse_args()
-        return parser, args
+        return args, parser
 
 class GetScrapeSettings():
     """
@@ -113,7 +113,7 @@ class GetScrapeSettings():
     ### Create either Subreddit, Redditor, or posts list.
     def create_list(self, args, l_type):
         index = self.s_t.index(l_type)
-        list = [item[0] for item in list_switch(args, index)]
+        list = [item[0] for item in self.list_switch(args, index)]
 
         return list
 
