@@ -117,20 +117,38 @@ class GetScrapeSettings():
 
         return list
 
+    ### Get Subreddit settings.
+    def subreddit_settings(self, args, master):
+        for sub_n in master:
+            for sub in args.subreddit:
+                settings = [sub[1], sub[2]]
+                if sub_n == sub[0]:
+                    master[sub_n].append(settings)
+
+    ### Get settings for scraping items that only require two arguments 
+    ### (Redditor or comments scrapers).
+    def two_arg_settings(self, master, object):
+        for obj in object:
+            master[obj[0]] = obj[1]
+
+    # ### Switch to determine how to loop through CLI scraping settings.
+    # def settings_switch(self, args, index, master):
+    #     scrape_switch = {
+    #         0: self.subreddit_settings(args, master) if args.subreddit else None,
+    #         1: self.two_arg_settings(master, args.redditor) if args.redditor else None,
+    #         2: self.two_arg_settings(master, args.comments) if args.comments else None
+    #     }
+
+    #     return scrape_switch.get(index)
+
     ### Get CLI scraping settings for Subreddits, Redditors, and post comments.
     def get_settings(self, args, master, reddit, s_type):
         if s_type == self.s_t[0]:
-            for sub_n in master:
-                for sub in args.subreddit:
-                    settings = [sub[1], sub[2]]
-                    if sub_n == sub[0]:
-                        master[sub_n].append(settings)
+            self.subreddit_settings(args, master)
         elif s_type == self.s_t[1]:
-            for user in args.redditor:
-                master[user[0]] = user[1]
+            self.two_arg_settings(master, args.redditor)
         elif s_type == self.s_t[2]:
-            for comments in args.comments:
-                master[comments[0]] = comments[1]
+            self.two_arg_settings(master, args.comments)
 
 class CheckCli():
     """
@@ -141,27 +159,34 @@ class CheckCli():
     def __init__(self):
         self.short_cat = Global.short_cat
 
+    ### Check Subreddit args
+    def check_subreddit(self, args):
+        for subs in args.subreddit:
+            if subs[1].upper() not in self.short_cat:
+                raise ValueError
+            elif subs[1].upper() in self.short_cat:
+                if subs[1].upper() != "S":
+                    try:
+                        int(subs[2])
+                    except ValueError:
+                        raise ValueError
+
+    ### Check args for items that only require two arguments (Redditor or 
+    ### comments scrapers).
+    def check_two_arg(self, object):
+        for obj in object:
+            if obj[1].isalpha():
+                raise ValueError
+
     ### Check args and catching errors.
     def check_args(self, args, parser):
         try:
             if args.subreddit:
-                for subs in args.subreddit:
-                    if subs[1].upper() not in self.short_cat:
-                        raise ValueError
-                    elif subs[1].upper() in self.short_cat:
-                        if subs[1].upper() != "S":
-                            try:
-                                int(subs[2])
-                            except ValueError:
-                                raise ValueError
+                self.check_subreddit(args)
             if args.redditor:
-                for user in args.redditor:
-                    if user[1].isalpha():
-                        raise ValueError
+                self.check_two_arg(args.redditor)
             if args.comments:
-                for post in args.comments:
-                    if post[1].isalpha():
-                        raise ValueError
+                self.check_two_arg(args.comments)
         except ValueError:
             Titles.Titles().e_title()
             parser.exit()
