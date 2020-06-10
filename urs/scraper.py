@@ -6,54 +6,46 @@ Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 
 @author: Joseph Lai
 """
-from colorama import Style, init
+from colorama import Fore, init, Style
 import praw
 
-### Import argparse and scrapers
-from utils.cli import check_args, parse_args
-from utils.titles import title
-from tools import Run
+from utils.Logger import LogRuntime
+from Tools import Run
 
+### Automate sending reset sequences to turn off color changes at the end of 
+### every print
 init(autoreset = True)
 
-### Reddit API Credentials
-c_id = "14_CHAR_HERE"               # Personal Use Script (14 char)
-c_secret = "27_CHAR_HERE"           # Secret key (27 char)
-u_a = "APP_NAME_HERE"               # App name
-usrnm = "REDDIT_USERNAME_HERE"      # Reddit username
-passwd = "REDDIT_PASSWORD_HERE"     # Reddit login password
+class Main():
+    """
+    Putting it all together.
+    """
 
-### Putting it all together
-def main():
-    ### Reddit Login
-    reddit = praw.Reddit(client_id = c_id,
-                         client_secret = c_secret,
-                         user_agent = u_a,
-                         username = usrnm,
-                         password = passwd)
+    def __init__(self):
+        ### Reddit API Credentials
+        self.API = {
+            "client_id": "14_CHAR_HERE",        # Personal Use Script (14 char)
+            "client_secret": "27_CHAR_HERE",    # Secret key (27 char)
+            "user_agent": "APP_NAME_HERE",      # App name
+            "username": "REDDIT_USERNAME_HERE", # Reddit username
+            "password": "REDDIT_PASSWORD_HERE"  # Reddit login password
+        }
 
-    ### Parse and check args, and initialize tools accordingly
-    parser, args = parse_args()
-    check_args(parser, args)
-    title()
+    @LogRuntime.main_timer
+    def main(self):
+        ### Reddit Login
+        reddit = praw.Reddit(client_id = self.API["client_id"],
+                            client_secret = self.API["client_secret"],
+                            user_agent = self.API["user_agent"],
+                            username = self.API["username"],
+                            password = self.API["password"])
 
-    run = Run(args, parser, reddit)
-    if args.subreddit:
-        ### Subreddit scraper
-        run.subreddit()
-    if args.redditor:
-        ### Redditor scraper
-        run.redditor()
-    if args.comments:
-        ### Post comments scraper
-        run.comments()
-    elif args.basic:
-        ### Basic Subreddit scraper
-        run.basic()
+        run = Run(reddit)
+        run.run_urs()
 
 if __name__ == "__main__":
     try:
-        main()
+        Main().main()
     except KeyboardInterrupt:
-        print(Style.BRIGHT + "\nURS ABORTED.\n")
+        print(Style.BRIGHT + Fore.RED + "\n\nURS ABORTED BY USER.\n")
         quit()
