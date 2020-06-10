@@ -32,7 +32,7 @@ class Validation():
         found = []
         not_found = []
 
-        ### Check Subreddits
+        ### Check Subreddits.
         if l_type == s_t[0]:
             for sub in list:
                 try:
@@ -40,7 +40,7 @@ class Validation():
                     found.append(sub)
                 except NotFound:
                     not_found.append(sub)
-        ### Check Redditors
+        ### Check Redditors.
         elif l_type == s_t[1]:
             for user in list:
                 try:
@@ -48,7 +48,7 @@ class Validation():
                     found.append(user)
                 except NotFound:
                     not_found.append(user)
-        ### Check post URLs
+        ### Check post URLs.
         elif l_type == s_t[2]:
             for post in list:
                 try:

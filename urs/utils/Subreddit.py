@@ -1,5 +1,5 @@
 #===============================================================================
-#                       Subreddit Scraping Functions
+#                             Subreddit Scraping
 #===============================================================================
 from colorama import Fore, init, Style
 from . import Cli, Export, Global, Titles, Validation

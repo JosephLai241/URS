@@ -1,5 +1,5 @@
 #===============================================================================
-#                           All Scrapers
+#                   All Scrapers and Validation/Args Checking
 #===============================================================================
 from colorama import Fore, init, Style
 from utils import (Basic, Cli, comments_functions, Global,

@@ -16,12 +16,12 @@ class NameFile():
     def __init__(self):
         self.illegal_chars = Global.illegal_chars
 
-    ### Fix f_name if illegal filename characters are present
+    ### Fix f_name if illegal filename characters are present.
     def fix(self, name):
         fix = ["_" if char in self.illegal_chars else char for char in name]
         return "".join(fix)
 
-    ### Category name switch
+    ### Category name switch.
     def r_category(self, cat_i, category_n):
         switch = {
             0: Global.categories[5],
@@ -35,7 +35,7 @@ class NameFile():
 
         return switch.get(category_n)
 
-    ### Choose category name
+    ### Choose category name.
     def r_get_category(self, args, cat_i):
         if args.subreddit:
             category_n = 0 if cat_i == Global.short_cat[5] else 1
@@ -44,7 +44,7 @@ class NameFile():
 
         return category_n
 
-    ### Determine file name format for CLI scraper
+    ### Determine file name format for CLI scraper.
     def get_raw_n(self, args, cat_i, end, search_for, sub):
         category_n = self.r_get_category(args, cat_i)
         category = self.r_category(cat_i, category_n)
@@ -54,7 +54,7 @@ class NameFile():
             else str(("r-%s-%s-%s-%s") % 
                 (sub, category, search_for, end))
 
-    ### Determine file name format for Subreddit scraping
+    ### Determine file name format for Subreddit scraping.
     def r_fname(self, args, cat_i, search_for, sub):
         raw_n = ""
         end = "result" if isinstance(search_for, int) and int(search_for) < 2 \
@@ -65,13 +65,13 @@ class NameFile():
 
         return f_name
 
-    ### Determine file name format for Redditor scraping
+    ### Determine file name format for Redditor scraping.
     def u_fname(self, limit, string):
         end = "result" if int(limit) < 2 else "results"
         raw_n = str(("u-%s-%s-%s") % (string, limit, end))
         return self.fix(raw_n)
 
-    ### Determine file name format for comments scraping
+    ### Determine file name format for comments scraping.
     def c_fname(self, limit, string):
         end = "result" if int(limit) < 2 else "results"
         raw_n = str(("c-%s-%s-%s") % (string, limit, end))
@@ -84,19 +84,19 @@ class Export():
 
     ### On the first run, create the directory scrapes/. Then make a sub-directory 
     ### corresponding with the date in which the user scraped data from Reddit if it 
-    ### does not exist
+    ### does not exist.
     def make_directory(self):
         scrapes_dir = "../scrapes"
         if not os.path.isdir(scrapes_dir):
             os.mkdir(scrapes_dir)
         
-        sub_path = "../scrapes/%s" % Global.date
-        if not os.path.isdir(sub_path):
-            os.mkdir(sub_path)
+        dir_path = "../scrapes/%s" % Global.date
+        if not os.path.isdir(dir_path):
+            os.mkdir(dir_path)
         
-        return sub_path
+        return dir_path
 
-    ### Write overview dictionary to CSV or JSON
+    ### Write overview dictionary to CSV or JSON.
     def export(self, f_type, f_name, overview):
         dir_path = self.make_directory()
 
