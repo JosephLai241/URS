@@ -2,19 +2,14 @@
 """
 Created on Tue Jun 2 20:14:43 2020
 
-Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
+Universal Reddit Scraper 3.1
 
 @author: Joseph Lai
 """
-from colorama import Fore, init, Style
 import praw
 
 from utils.Logger import LogMain
 from Tools import Run
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print
-init(autoreset = True)
 
 class Main():
     """
