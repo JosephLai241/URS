@@ -4,7 +4,7 @@
 from colorama import Fore, init, Style
 
 from . import Cli, Export, Global, Titles, Validation
-from .Logger import LogRuntime
+from .Logger import LogExport, LogScraper
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -257,7 +257,8 @@ class RunSubreddit():
                 else print(Fore.RED + Style.BRIGHT + "\nCancelling.")
 
     ### Run Subreddit scraper.
-    @LogRuntime.scraper_timer(Global.s_t[0])
+    @LogExport.log_export
+    @LogScraper.scraper_timer(Global.s_t[0])
     def run(self, args, parser, reddit, s_t):
         Titles.Titles().r_title()
 
