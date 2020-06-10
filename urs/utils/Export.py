@@ -94,11 +94,9 @@ class Export():
         if not os.path.isdir(dir_path):
             os.mkdir(dir_path)
         
-        return dir_path
-
     ### Write overview dictionary to CSV or JSON.
     def export(self, f_type, f_name, overview):
-        dir_path = self.make_directory()
+        dir_path = "../scrapes/%s" % Global.date
 
         if f_type == Global.eo[0]:
             filename = dir_path + "/%s.csv" % f_name
