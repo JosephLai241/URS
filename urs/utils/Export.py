@@ -3,7 +3,6 @@
 #===============================================================================
 import csv
 import json
-import os
 
 from . import Global
 
@@ -82,29 +81,24 @@ class Export():
     Functions for creating directories and export the file.
     """
 
-    ### On the first run, create the directory scrapes/. Then make a sub-directory 
-    ### corresponding with the date in which the user scraped data from Reddit if it 
-    ### does not exist.
-    def make_directory(self):
-        scrapes_dir = "../scrapes"
-        if not os.path.isdir(scrapes_dir):
-            os.mkdir(scrapes_dir)
-        
-        dir_path = "../scrapes/%s" % Global.date
-        if not os.path.isdir(dir_path):
-            os.mkdir(dir_path)
+    ### Export to CSV
+    def write_csv(self, filename, overview):
+        with open(filename, "w", encoding = "utf-8") as results:
+                writer = csv.writer(results, delimiter = ",")
+                writer.writerow(overview.keys())
+                writer.writerows(zip(*overview.values()))
+
+    ### Export to JSON
+    def write_json(self, filename, overview):
+        with open(filename, "w", encoding = "utf-8") as results:
+                json.dump(overview, results, indent = 4)
         
     ### Write overview dictionary to CSV or JSON.
     def export(self, f_type, f_name, overview):
         dir_path = "../scrapes/%s" % Global.date
 
-        if f_type == Global.eo[0]:
-            filename = dir_path + "/%s.csv" % f_name
-            with open(filename, "w", encoding = "utf-8") as results:
-                writer = csv.writer(results, delimiter = ",")
-                writer.writerow(overview.keys())
-                writer.writerows(zip(*overview.values()))
-        elif f_type == Global.eo[1]:
-            filename = dir_path + "/%s.json" % f_name
-            with open(filename, "w", encoding = "utf-8") as results:
-                json.dump(overview, results, indent = 4)
+        filename = dir_path + "/%s.json" % f_name if f_type == Global.eo[1] else \
+            dir_path + "/%s.csv" % f_name
+
+        self.write_json(filename, overview) if f_type == Global.eo[1] else \
+            self.write_csv(filename, overview)
