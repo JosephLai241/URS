@@ -1,5 +1,5 @@
 #===============================================================================
-#                      Basic Subreddit Scraper Functions
+#                           Basic Subreddit Scraping
 #===============================================================================
 from colorama import init, Style
 from . import Global, Subreddit, Titles, Validation
