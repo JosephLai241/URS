@@ -9,7 +9,6 @@ from utils import (Basic, Cli, comments_functions, Global,
 ### every print.
 init(autoreset = True)
 
-### All scraper functionality is contained within this class.
 class Run():
     """
     Functions to call Cli and Subreddit, Redditor, Comments, and Basic scrapers.
