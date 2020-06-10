@@ -2,6 +2,7 @@
 #                                 Validation
 #===============================================================================
 import praw
+
 from colorama import Fore, init, Style
 from prawcore import NotFound, PrawcoreException
 
