@@ -6,10 +6,10 @@ from utils import (Basic, Cli, comments_functions, Global,
                    Redditor, Subreddit, Titles, Validation)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
-### every print
+### every print.
 init(autoreset = True)
 
-### All scraper functionality is contained within this class
+### All scraper functionality is contained within this class.
 class Run():
     """
     Functions to call Cli and Subreddit, Redditor, Comments, and Basic scrapers.
@@ -33,16 +33,16 @@ class Run():
 
         return args, parser
 
-    ### Switch for running scrapers
+    ### Switch for running scrapers.
     def run_urs(self):
         if self.args.subreddit:
-            ### Subreddit scraper
+            ### Run Subreddit scraper.
             Subreddit.RunSubreddit().run(self.args, self.parser, self.reddit, self.s_t)
         if self.args.redditor:
-            ### Redditor scraper
+            ### Run Redditor scraper.
             Redditor.RunRedditor().run(self.args, self.parser, self.reddit)
         if self.args.comments:
-            ### Post comments scraper
+            ### Run comments scraper.
             Titles.Titles().c_title()
 
             post_list = Cli.GetScrapeSettings().create_list(self.args, self.s_t[2])
@@ -52,6 +52,6 @@ class Run():
 
             comments_functions.w_comments(self.reddit, post_list, c_master, self.args)
         elif self.args.basic:
-            ### Basic Subreddit scraper
+            ### Run basic Subreddit scraper.
             Basic.RunBasic().run(self.args, self.parser, self.reddit)
         
