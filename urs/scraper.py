@@ -9,7 +9,7 @@ Universal Reddit Scraper 3.0 - Reddit scraper using the Reddit API (PRAW)
 from colorama import Fore, init, Style
 import praw
 
-from utils.Logger import LogRuntime
+from utils.Logger import LogMain
 from Tools import Run
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -31,7 +31,7 @@ class Main():
             "password": "REDDIT_PASSWORD_HERE"  # Reddit login password
         }
 
-    @LogRuntime.main_timer
+    @LogMain.master_timer
     def main(self):
         ### Reddit Login
         reddit = praw.Reddit(client_id = self.API["client_id"],
@@ -44,8 +44,4 @@ class Main():
         run.run_urs()
 
 if __name__ == "__main__":
-    try:
-        Main().main()
-    except KeyboardInterrupt:
-        print(Style.BRIGHT + Fore.RED + "\n\nURS ABORTED BY USER.\n")
-        quit()
+    Main().main()
