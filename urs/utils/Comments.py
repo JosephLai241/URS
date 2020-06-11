@@ -183,7 +183,7 @@ class Write():
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
-    ### Get, sort, then write scraped comments to CSV or JSON
+    ### Get, sort, then write scraped comments to CSV or JSON.
     def write(self, args, c_master, post_list, reddit):
         for post, limit in c_master.items():
             title = reddit.submission(url = post).title
