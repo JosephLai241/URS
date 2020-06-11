@@ -146,7 +146,7 @@ class LogScraper():
                 function(*args)
 
                 LogScraper._format_scraper_log(
-                    LogScraper._get_args_switch(args[1], scraper), scraper)
+                    LogScraper._get_args_switch(args[0], scraper), scraper)
 
                 runtime = "%s scraper finished in %.2f seconds." %\
                     (scraper.capitalize(), time.time() - start)
@@ -166,7 +166,7 @@ class LogExport():
         def wrapper(*args):
             try:
                 function(*args)
-                export_log = "Exporting scrapes to JSON files." if args[1].json else \
+                export_log = "Exporting scrapes to JSON files." if args[0].json else \
                     "Exporting scrapes to CSV files."
                 logging.info(export_log)
                 logging.info("")
