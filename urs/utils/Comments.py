@@ -21,14 +21,21 @@ class PrintPosts():
     """
 
     ### Check if posts exist and list posts that are not found.
-    def list_posts(self, reddit, post_list, parser):
+    @staticmethod
+    def list_posts(reddit, post_list, parser):
         print("\nChecking if post(s) exist...")
-        posts, not_posts = Validation.Validation().existence(s_t[2], post_list, 
+        posts, not_posts = Validation.Validation.existence(s_t[2], post_list, 
             parser, reddit, s_t)
         if not_posts:
-            print("\nThe following posts were not found and will be skipped:")
-            print("-" * 55)
+            print(Fore.YELLOW + Style.BRIGHT + 
+                "\nThe following posts were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "-" * 55)
             print(*not_posts, sep = "\n")
+
+        if not posts:
+            print(Fore.RED + Style.BRIGHT + "\nNo submissions to scrape!")
+            print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
+            quit()
 
         return posts
 
@@ -39,11 +46,11 @@ class GetComments():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
+        self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
             "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
     ### Handle deleted Redditors or edited time if applicable.
-    def fix_attributes(self, comment):
+    def _fix_attributes(self, comment):
         try:
             author_name = comment.author.name
         except AttributeError:
@@ -56,14 +63,14 @@ class GetComments():
 
     ### Add list of dictionary of comments attributes to use when sorting.
     def add_comment(self, comment):
-        c_set = Global.make_none_dict(self.titles)
+        c_set = Global.make_none_dict(self._titles)
 
-        author_name, edit_date = self.fix_attributes(comment)
+        author_name, edit_date = self._fix_attributes(comment)
         comment_attributes = [comment.parent_id, comment.id, author_name, 
             convert_time(comment.created_utc), comment.score, comment.body, edit_date, 
             comment.is_submitter, comment.stickied]
 
-        for title, attribute in zip(self.titles, comment_attributes):
+        for title, attribute in zip(self._titles, comment_attributes):
             c_set[title] = attribute
         
         return [c_set]
@@ -75,22 +82,26 @@ class SortComments():
     """
 
     ### Append comments in raw export format.
-    def raw_comments(self, all_dict, comment):
+    @staticmethod
+    def _raw_comments(all_dict, comment):
         add = GetComments().add_comment(comment)
         all_dict[comment.id] = add
 
     ### Append top level comments to all_dict.
-    def top_level_comment(self, all_dict, comment):
+    @staticmethod
+    def _top_level_comment(all_dict, comment):
         add = GetComments().add_comment(comment)
         all_dict[comment.id] = [add]
 
     ### Append second-level comments to all_dict.
-    def second_level_comment(self, all_dict, comment, cpid):
+    @staticmethod
+    def _second_level_comment(all_dict, comment, cpid):
         append = GetComments().add_comment(comment)
         all_dict[cpid].append({comment.id:append})
 
     ### Append third-level comments to all_dict.
-    def third_level_comment(self, all_dict, comment, cpid):
+    @staticmethod
+    def _third_level_comment(all_dict, comment, cpid):
         for more_comments in all_dict.values():
             for item in more_comments:
                 if isinstance(item, dict):
@@ -101,26 +112,29 @@ class SortComments():
                         item[cpid].append({comment.id:sub_set})
 
     ### Appending structured comments to all_dict.
-    def structured_comments(self, all_dict, comment, cpid, submission):
+    @staticmethod
+    def _structured_comments(all_dict, comment, cpid, submission):
         if cpid == submission.id:
-            self.top_level_comment(all_dict, comment)
+            SortComments._top_level_comment(all_dict, comment)
         elif cpid in all_dict.keys():
-            self.second_level_comment(all_dict, comment, cpid)
+            SortComments._second_level_comment(all_dict, comment, cpid)
         else:
-            self.third_level_comment(all_dict, comment, cpid)
+            SortComments._third_level_comment(all_dict, comment, cpid)
 
     ### Append comments to all dictionary differently if raw is True or False.
-    def to_all(self, all_dict, comment, raw, submission):
+    @staticmethod
+    def _to_all(all_dict, comment, raw, submission):
         if raw:
-            self.raw_comments(all_dict, comment)
+            SortComments._raw_comments(all_dict, comment)
         else:
             cpid = comment.parent_id.split("_", 1)[1]
-            self.structured_comments(all_dict, comment, cpid, submission)
+            SortComments._structured_comments(all_dict, comment, cpid, submission)
 
     ### Sort comments.
-    def sort(self, all_dict, raw, submission):
+    @staticmethod
+    def sort(all_dict, raw, submission):
         for comment in submission.comments.list():
-            self.to_all(all_dict, comment, raw, submission)
+            SortComments._to_all(all_dict, comment, raw, submission)
 
 class GetSort():
     """
@@ -129,14 +143,14 @@ class GetSort():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self, post, reddit):
-        self.submission = reddit.submission(url = post)
+        self._submission = reddit.submission(url = post)
 
         print(Fore.YELLOW + Style.BRIGHT + "\nResolving instances of MoreComments...")
         print("\nThis may take a while. Please wait.")
-        self.submission.comments.replace_more(limit = None)
+        self._submission.comments.replace_more(limit = None)
 
     ### Get comments in raw format.
-    def get_raw(self, all_dict, submission):
+    def _get_raw(self, all_dict, submission):
         print(Style.BRIGHT + 
             "\nProcessing all comments in raw format from Reddit post '%s'..." % 
                 submission.title)
@@ -144,7 +158,7 @@ class GetSort():
         SortComments().sort(all_dict, True, submission)
 
     ### Get comments in structured format.
-    def get_structured(self, all_dict, limit, submission):
+    def _get_structured(self, all_dict, limit, submission):
         plurality = "comment" if limit == 1 else "comments"
         print(Style.BRIGHT + 
             ("\nProcessing %s %s including second and third-level replies from Reddit post '%s'...") % 
@@ -157,8 +171,8 @@ class GetSort():
     def get_sort(self, limit, post, reddit):
         all_dict = dict()
 
-        self.get_raw(all_dict, self.submission) if int(limit) == 0 else \
-            self.get_structured(all_dict, limit, self.submission)
+        self._get_raw(all_dict, self._submission) if int(limit) == 0 else \
+            self._get_structured(all_dict, limit, self._submission)
 
         return all_dict
 
@@ -168,12 +182,14 @@ class Write():
     """
 
     ### Export to either CSV or JSON.
-    def determine_export(self, args, f_name, overview):
-        Export.Export().export(eo[1], f_name, overview) if args.json else \
-            Export.Export().export(eo[0], f_name, overview)
+    @staticmethod
+    def _determine_export(args, f_name, overview):
+        Export.Export.export(f_name, eo[1], overview) if args.json else \
+            Export.Export.export(f_name, eo[0], overview)
 
     ### Print confirmation message and set print length depending on string length.
-    def print_confirm(self, args, title):
+    @staticmethod
+    def _print_confirm(args, title):
         confirmation = "\nJSON file for '%s' comments created." % title \
             if args.json else \
                 "\nCSV file for '%s' comments created." % title
@@ -182,14 +198,15 @@ class Write():
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
     ### Get, sort, then write scraped comments to CSV or JSON.
-    def write(self, args, c_master, post_list, reddit):
+    @staticmethod
+    def write(args, c_master, post_list, reddit):
         for post, limit in c_master.items():
             title = reddit.submission(url = post).title
             overview = GetSort(post, reddit).get_sort(limit, post, reddit)
             f_name = Export.NameFile().c_fname(limit, title)
 
-            self.determine_export(args, f_name, overview)
-            self.print_confirm(args, title)
+            Write._determine_export(args, f_name, overview)
+            Write._print_confirm(args, title)
 
 class RunComments():
     """
@@ -197,14 +214,15 @@ class RunComments():
     """
 
     ### Run comments scraper.
+    @staticmethod
     @LogExport.log_export
     @LogScraper.scraper_timer(Global.s_t[2])
-    def run(self, args, parser, reddit):
+    def run(args, parser, reddit):
         Titles.Titles().c_title()
 
         post_list = Cli.GetScrapeSettings().create_list(args, s_t[2])
-        posts = PrintPosts().list_posts(reddit, post_list, parser)
+        posts = PrintPosts.list_posts(reddit, post_list, parser)
         c_master = Global.make_none_dict(posts)
         Cli.GetScrapeSettings().get_settings(args, c_master, reddit, s_t[2])
 
-        Write().write(args, c_master, post_list, reddit)
+        Write.write(args, c_master, post_list, reddit)

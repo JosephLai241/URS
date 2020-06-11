@@ -23,14 +23,21 @@ class PrintUsers():
     """
 
     ### Check if Redditors exist and list Redditors who are not found.
-    def list_users(self, parser, reddit, user_list):
+    @staticmethod
+    def list_users(parser, reddit, user_list):
         print("\nChecking if Redditor(s) exist...")
-        users, not_users = Validation.Validation().existence(s_t[1], user_list, 
+        users, not_users = Validation.Validation.existence(s_t[1], user_list, 
             parser, reddit, s_t)
         if not_users:
-            print("\nThe following Redditors were not found and will be skipped:")
-            print("-" * 59)
+            print(Fore.YELLOW + Style.BRIGHT + 
+                "\nThe following Redditors were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "-" * 59)
             print(*not_users, sep = "\n")
+
+        if not users:
+            print(Fore.RED + Style.BRIGHT + "\nNo Redditors to scrape!")
+            print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
+            quit()
 
         return users
 
@@ -51,57 +58,59 @@ class ProcessInteractions():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self, limit, overview, user):
-        self.overview = overview
+        self._overview = overview
 
-        self.comments = user.comments.new(limit = limit)
-        self.controversial = user.controversial(limit = limit)
-        self.downvoted = user.downvoted(limit = limit)
-        self.gilded = user.gilded(limit = limit)
-        self.gildings = user.gildings(limit = limit)
-        self.hidden = user.hidden(limit = limit)
-        self.hot = user.hot(limit = limit)
-        self.new = user.new(limit = limit)
-        self.saved = user.saved(limit = limit)
-        self.submissions = user.submissions.new(limit = limit)
-        self.top = user.top(limit = limit)
-        self.upvoted = user.upvoted(limit = limit)
+        self._comments = user.comments.new(limit = limit)
+        self._controversial = user.controversial(limit = limit)
+        self._downvoted = user.downvoted(limit = limit)
+        self._gilded = user.gilded(limit = limit)
+        self._gildings = user.gildings(limit = limit)
+        self._hidden = user.hidden(limit = limit)
+        self._hot = user.hot(limit = limit)
+        self._new = user.new(limit = limit)
+        self._saved = user.saved(limit = limit)
+        self._submissions = user.submissions.new(limit = limit)
+        self._top = user.top(limit = limit)
+        self._upvoted = user.upvoted(limit = limit)
 
-        self.comment_titles = ["Date Created", "Score", "Text", "Parent ID", "Link ID",
-            "Edited?", "Stickied?", "Replying to", "In Subreddit"]
-        self.submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio",
+        self._comment_titles = ["Date Created", "Score", "Text", "Parent ID", 
+            "Link ID", "Edited?", "Stickied?", "Replying to", "In Subreddit"]
+        self._submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio",
             "ID", "NSFW?", "In Subreddit", "Body"]
 
-        self.s_types = ["Submissions", "Comments", "Mutts", "Access"]
+        self._s_types = ["Submissions", "Comments", "Mutts", "Access"]
 
-        self.mutts = [self.controversial, self.gilded, self.hot, self.new, self.top]
-        self.mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
+        self._mutts = [self._controversial, self._gilded, self._hot, self._new, 
+            self._top]
+        self._mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
 
-        self.access = [self.downvoted, self.gildings, self.hidden, self.saved, self.upvoted]
-        self.access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
+        self._access = [self._downvoted, self._gildings, self._hidden, self._saved, 
+            self._upvoted]
+        self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
 
     ### Make dictionary from zipped lists.
-    def make_zip_dict(self, titles, items):
+    def _make_zip_dict(self, titles, items):
         return dict((title, item) for title, item in zip(titles, items))
 
     ### Make submission list.
-    def make_submission_list(self, item):
+    def _make_submission_list(self, item):
         items = [item.title, convert_time(item.created), item.score, item.upvote_ratio, 
             item.id, item.over_18, item.subreddit.display_name, item.selftext]
 
-        return self.make_zip_dict(self.submission_titles, items)
+        return self._make_zip_dict(self._submission_titles, items)
 
     ### Make comment list.
-    def make_comment_list(self, item):
+    def _make_comment_list(self, item):
         edit_date = item.edited if str(item.edited).isalpha() \
             else convert_time(item.edited)
         items = [convert_time(item.created_utc), item.score, item.body, item.parent_id, 
             item.link_id, edit_date, item.stickied, item.submission.selftext, 
             item.submission.subreddit.display_name]
 
-        return self.make_zip_dict(self.comment_titles, items)
+        return self._make_zip_dict(self._comment_titles, items)
 
     ### Determine how to append the list to the overview dictionary.
-    def determine_append(self, cat, redditor_list, s_type):
+    def _determine_append(self, cat, redditor_list, s_type):
         switch = {
             0: "Submissions",
             1: "Comments",
@@ -109,47 +118,47 @@ class ProcessInteractions():
             3: "%s (may be forbidden)" % cat.capitalize() if cat != None else None
         }
 
-        index = self.s_types.index(s_type)
-        self.overview[switch.get(index)].append(redditor_list)
+        index = self._s_types.index(s_type)
+        self._overview[switch.get(index)].append(redditor_list)
 
     ### Extracting submission or comment attributes and appending to overview 
     ### dictionary.
-    def extract(self, cat, obj, s_types, s_type):
+    def _extract(self, cat, obj, s_types, s_type):
         for item in obj:
-            redditor_list = self.make_submission_list(item) \
+            redditor_list = self._make_submission_list(item) \
                 if isinstance(item, praw.models.Submission) \
-                    else self.make_comment_list(item)
+                    else self._make_comment_list(item)
 
-            self.determine_append(cat, redditor_list, s_type) 
+            self._determine_append(cat, redditor_list, s_type) 
 
     ### Sort Redditor submissions.
     def sort_submissions(self):
-        self.extract(None, self.submissions, self.s_types, self.s_types[0])
+        self._extract(None, self._submissions, self._s_types, self._s_types[0])
 
     ### Sort Redditor comments.
     def sort_comments(self):
-        self.extract(None, self.comments, self.s_types, self.s_types[1])
+        self._extract(None, self._comments, self._s_types, self._s_types[1])
 
     ### Sort Controversial, Gilded, Hot, New and Top Redditor posts. The ListingGenerator
     ### returns a mix of submissions and comments, so handling each differently is
     ### necessary.
     def sort_mutts(self):
-        for cat, obj in zip(self.mutt_names, self.mutts):
-            self.extract(cat, obj, self.s_types, self.s_types[2])
+        for cat, obj in zip(self._mutt_names, self._mutts):
+            self._extract(cat, obj, self._s_types, self._s_types[2])
 
     ### Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
     ### lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
     ### handling is necessary.
     def sort_access(self):
-        for cat, obj in zip(self.access_names, self.access):
+        for cat, obj in zip(self._access_names, self._access):
             try:
-                self.extract(cat, obj, self.s_types, self.s_types[3])
+                self._extract(cat, obj, self._s_types, self._s_types[3])
             except PrawcoreException as error:
                 print(Style.BRIGHT + Fore.RED + 
                     ("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % 
                         (cat.upper(), error))
                 
-                self.overview["%s (may be forbidden)" % 
+                self._overview["%s (may be forbidden)" % 
                     cat.capitalize()].append("FORBIDDEN")
 
 class GetInteractions():
@@ -159,7 +168,7 @@ class GetInteractions():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
+        self._titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
             "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", 
             "Submissions", "Comments", "Hot", "New", "Controversial", "Top", 
             "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", 
@@ -167,20 +176,20 @@ class GetInteractions():
             "Saved (may be forbidden)"]
 
     ### Make Redditor dictionary to store data.
-    def make_user_profile(self, limit, reddit, user):
+    def _make_user_profile(self, limit, reddit, user):
         plurality = "results" if int(limit) > 1 else "result"
         print(Style.BRIGHT + ("\nProcessing %s %s from u/%s's profile...") % 
             (limit, plurality, user))
         print("\nThis may take a while. Please wait.")
 
         user = reddit.redditor(user)
-        overview = Global.make_list_dict(self.titles)
+        overview = Global.make_list_dict(self._titles)
 
         return overview, user
 
     ### Get Redditor account information.
-    def get_user_info(self, limit, overview, reddit, user):
-        user_info_titles = self.titles[:10]
+    def _get_user_info(self, limit, overview, reddit, user):
+        user_info_titles = self._titles[:10]
         user_info = [user.name, user.fullname, user.id, convert_time(user.created_utc),
             user.comment_karma, user.link_karma, user.is_employee, user.is_friend,
             user.is_mod, user.is_gold]
@@ -189,7 +198,7 @@ class GetInteractions():
             overview[title].append(user_item) 
 
     ### Get Redditor interactions on Reddit.
-    def get_user_interactions(self, limit, overview, user):
+    def _get_user_interactions(self, limit, overview, user):
         interactions = ProcessInteractions(int(limit), overview, user)
         interactions.sort_submissions()
         interactions.sort_comments()
@@ -198,9 +207,9 @@ class GetInteractions():
 
     ### Get Redditor information and interactions.
     def get(self, limit, reddit, user):
-        overview, user = self.make_user_profile(limit, reddit, user)
-        self.get_user_info(limit, overview, reddit, user)
-        self.get_user_interactions(limit, overview, user)
+        overview, user = self._make_user_profile(limit, reddit, user)
+        self._get_user_info(limit, overview, reddit, user)
+        self._get_user_interactions(limit, overview, user)
 
         return overview
 
@@ -211,15 +220,15 @@ class Write():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.eo = Global.eo
+        self._eo = Global.eo
 
     ### Export to either CSV or JSON.
-    def determine_export(self, args, f_name, overview):
-        Export.Export().export(self.eo[1], f_name, overview) if args.json else \
-            Export.Export().export(self.eo[0], f_name, overview)
+    def _determine_export(self, args, f_name, overview):
+        Export.Export.export(f_name, self._eo[1], overview) if args.json else \
+            Export.Export.export(f_name, self._eo[0], overview)
 
     ### Print confirmation message and set print length depending on string length.
-    def print_confirm(self, args, user):
+    def _print_confirm(self, args, user):
         confirmation = "\nJSON file for u/%s created." % user if args.json \
             else "\nCSV file for u/%s created." % user
         print(Style.BRIGHT + Fore.GREEN + confirmation)
@@ -231,8 +240,8 @@ class Write():
             overview = GetInteractions().get(limit, reddit, user)
             f_name = Export.NameFile().u_fname(limit, user)
 
-            self.determine_export(args, f_name, overview)
-            self.print_confirm(args, user)
+            self._determine_export(args, f_name, overview)
+            self._print_confirm(args, user)
 
 class RunRedditor():
     """
@@ -240,9 +249,10 @@ class RunRedditor():
     """
 
     ### Run Redditor scraper.
+    @staticmethod
     @LogExport.log_export
     @LogScraper.scraper_timer(s_t[1])
-    def run(self, args, parser, reddit):
+    def run(args, parser, reddit):
         Titles.Titles().u_title()
 
         user_list = Cli.GetScrapeSettings().create_list(args, s_t[1])

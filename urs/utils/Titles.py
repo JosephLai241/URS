@@ -13,7 +13,8 @@ class Titles():
     """
 
     ### Print Reddit scraper title
-    def title(self):
+    @staticmethod
+    def title():
         print(Style.BRIGHT + r"""
                 __  ______  _____    _____  ___
                / / / / __ \/ ___/   |__  / <  /
@@ -25,7 +26,8 @@ class Titles():
 """)
 
     ### Print Subreddit scraper title
-    def r_title(self):
+    @staticmethod
+    def r_title():
         print(Style.BRIGHT + r"""
      _____       __                  __    ___ __
     / ___/__  __/ /_  ________  ____/ /___/ (_) /______
@@ -35,7 +37,8 @@ class Titles():
 """)
 
     ### Print Redditor scraper title
-    def u_title(self):
+    @staticmethod
+    def u_title():
         print(Style.BRIGHT + r"""
        ____           __    ___ __
       / __ \___  ____/ /___/ (_) /_____  __________
@@ -45,7 +48,8 @@ class Titles():
 """)
 
     ### Print comments scraper title
-    def c_title(self):
+    @staticmethod
+    def c_title():
         print(Style.BRIGHT + r"""
       ______                                     __
      / ____/___  ____ ___  ____ ___  ___  ____  / /______
@@ -55,7 +59,8 @@ class Titles():
 """)
 
     ### Print basic scraper title
-    def b_title(self):
+    @staticmethod
+    def b_title():
         print(Style.BRIGHT + r"""
        __               _
       / /_  ____ ______(_)____
@@ -67,7 +72,8 @@ class Titles():
 """)
 
     ### Print error title
-    def e_title(self):
+    @staticmethod
+    def e_title():
         print(Style.BRIGHT + r"""
                   __________  ____  ____  ____
                  / ____/ __ \/ __ \/ __ \/ __ \

@@ -16,34 +16,33 @@ class Run():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self, reddit):
-        self.reddit = reddit
-        self.args, self.parser = self.login_and_args()
+        self._reddit = reddit
+        self._args, self._parser = self._login_and_args()
 
-        self.options = Global.options
-        self.s_t = Global.s_t
+        self._s_t = Global.s_t
 
     ### Print title, then run checks for CLI args and PRAW credentials.
-    def login_and_args(self):
-        Titles.Titles().title()
+    def _login_and_args(self):
+        Titles.Titles.title()
 
         args, parser = Cli.Parser().parse_args()
-        Validation.Validation().validate_user(parser, self.reddit)
+        Validation.Validation.validate_user(parser, self._reddit)
         Cli.CheckCli().check_args(args, parser)
 
         return args, parser
 
     ### Switch for running scrapers.
     def run_urs(self):
-        if self.args.subreddit:
+        if self._args.subreddit:
             ### Run Subreddit scraper.
-            Subreddit.RunSubreddit().run(self.args, self.parser, self.reddit, self.s_t)
-        if self.args.redditor:
+            Subreddit.RunSubreddit.run(self._args, self._parser, self._reddit, self._s_t)
+        if self._args.redditor:
             ### Run Redditor scraper.
-            Redditor.RunRedditor().run(self.args, self.parser, self.reddit)
-        if self.args.comments:
+            Redditor.RunRedditor.run(self._args, self._parser, self._reddit)
+        if self._args.comments:
             ### Run comments scraper.
-            Comments.RunComments().run(self.args, self.parser, self.reddit)
-        elif self.args.basic:
+            Comments.RunComments.run(self._args, self._parser, self._reddit)
+        elif self._args.basic:
             ### Run basic Subreddit scraper.
-            Basic.RunBasic().run(self.args, self.parser, self.reddit)
+            Basic.RunBasic.run(self._args, self._parser, self._reddit)
         

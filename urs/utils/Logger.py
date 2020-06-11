@@ -39,6 +39,7 @@ class LogMain():
             logging.info("")
 
             start = time.time()
+            
             try:
                 function(*args)
             except KeyboardInterrupt:
@@ -61,7 +62,7 @@ class LogScraper():
 
     ### Get scraper type for logging.
     @staticmethod
-    def get_args_switch(args, scraper):
+    def _get_args_switch(args, scraper):
         scrapers = {
             Global.s_t[0]: [arg_set for arg_set in args.subreddit] if args.subreddit \
                 else None,
@@ -76,17 +77,17 @@ class LogScraper():
     ### Replace the second tuple item with the full category name if Subreddit
     ### scraper is selected.
     @staticmethod
-    def subreddit_tuple(each_arg):
+    def _subreddit_tuple(each_arg):
         args_list = list(each_arg)
         args_list[1] = Global.categories[Global.short_cat.index(each_arg[1].upper())] 
         return tuple(args_list)
 
     ### Get the full Subreddit category name for each Subreddit tuple.
     @staticmethod
-    def format_subreddit_settings(scraper, scraper_args):
+    def _format_subreddit_settings(scraper, scraper_args):
         args = []
         for each_arg in scraper_args:
-            settings = LogScraper.subreddit_tuple(each_arg) if scraper == Global.s_t[0] \
+            settings = LogScraper._subreddit_tuple(each_arg) if scraper == Global.s_t[0] \
                 else tuple(each_arg)
 
             args.append(settings)
@@ -95,7 +96,7 @@ class LogScraper():
 
     ### Format Subreddit log differently if user searched for keywords.
     @staticmethod
-    def format_subreddit_log(each_arg):
+    def _format_subreddit_log(each_arg):
         return "Scraping r/%s for %s %s results..." % each_arg \
             if each_arg[1] != Global.categories[5] else \
                 "Searching and scraping r/%s for posts containing '%s'..." % \
@@ -103,13 +104,13 @@ class LogScraper():
 
     ### Format Redditor log depending on number of results scraped.
     @staticmethod
-    def format_redditor_log(each_arg):
+    def _format_redditor_log(each_arg):
         plurality = "results" if int(each_arg[1]) > 1 else "result"
         return "Scraping %s %s for u/%s..." % (each_arg[1], plurality, each_arg[0])
 
     ### Format comments log depending on raw or structured export.
     @staticmethod
-    def format_comments_log(each_arg):
+    def _format_comments_log(each_arg):
         plurality = "comments" if int(each_arg[1]) > 1 else "comment"
         return "Processing %s %s and including second and third-level replies from Reddit post %s" % \
             (each_arg[1], plurality, each_arg[0]) if int(each_arg[1]) > 0 else \
@@ -118,15 +119,15 @@ class LogScraper():
     ### Format string for log file depending on what was scraped, then log the 
     ### string.
     @staticmethod
-    def format_scraper_log(scraper, args_list):
-        args = LogScraper.format_subreddit_settings(scraper, args_list)
+    def _format_scraper_log(scraper, args_list):
+        args = LogScraper._format_subreddit_settings(scraper, args_list)
         for each_arg in args:
             formats = {
-                Global.s_t[0]: LogScraper.format_subreddit_log(each_arg) \
+                Global.s_t[0]: LogScraper._format_subreddit_log(each_arg) \
                     if scraper == Global.s_t[0] else None,
-                Global.s_t[1]: LogScraper.format_redditor_log(each_arg) \
+                Global.s_t[1]: LogScraper._format_redditor_log(each_arg) \
                     if scraper == Global.s_t[1] else None,
-                Global.s_t[2]: LogScraper.format_comments_log(each_arg) \
+                Global.s_t[2]: LogScraper._format_comments_log(each_arg) \
                     if scraper == Global.s_t[2] else None
             }
 
@@ -144,8 +145,8 @@ class LogScraper():
 
                 function(*args)
 
-                LogScraper.format_scraper_log(scraper, 
-                    LogScraper.get_args_switch(args[1], scraper))
+                LogScraper._format_scraper_log(scraper, 
+                    LogScraper._get_args_switch(args[1], scraper))
 
                 runtime = "%s scraper finished in %.2f seconds." %\
                     (scraper.capitalize(), time.time() - start)
