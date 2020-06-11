@@ -119,7 +119,7 @@ class LogScraper():
     ### Format string for log file depending on what was scraped, then log the 
     ### string.
     @staticmethod
-    def _format_scraper_log(scraper, args_list):
+    def _format_scraper_log(args_list, scraper):
         args = LogScraper._format_subreddit_settings(scraper, args_list)
         for each_arg in args:
             formats = {
@@ -145,8 +145,8 @@ class LogScraper():
 
                 function(*args)
 
-                LogScraper._format_scraper_log(scraper, 
-                    LogScraper._get_args_switch(args[1], scraper))
+                LogScraper._format_scraper_log(
+                    LogScraper._get_args_switch(args[1], scraper), scraper)
 
                 runtime = "%s scraper finished in %.2f seconds." %\
                     (scraper.capitalize(), time.time() - start)
