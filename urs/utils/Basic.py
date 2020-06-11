@@ -1,8 +1,9 @@
 #===============================================================================
 #                           Basic Subreddit Scraping
 #===============================================================================
-from colorama import init, Style
+from colorama import Fore, init, Style
 from . import Global, Subreddit, Titles, Validation
+from .Logger import LogExport, LogScraper
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
@@ -18,21 +19,21 @@ class PrintSubs():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.s_t = Global.s_t
+        self._s_t = Global.s_t
 
     ### Return a list of valid and invalid Subreddits.
-    def find_subs(self, parser, reddit, search_for):
+    def _find_subs(self, parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        found, not_found = Validation.Validation().existence(self.s_t[0], sub_list, parser, 
-            reddit, self.s_t)
+        found, not_found = Validation.Validation.existence(self._s_t[0], sub_list, 
+            parser, reddit, self._s_t)
 
         return found, not_found
 
     ### Print valid and invalid Subreddits.
     def print_subreddits(self, parser, reddit, search_for):
         print("\nChecking if Subreddit(s) exist...")
-        found, not_found = self.find_subs(parser, reddit, search_for)
+        found, not_found = self._find_subs(parser, reddit, search_for)
         if found:
             print("\nThe following Subreddits were found and will be scraped:")
             print("-" * 56)
@@ -51,7 +52,7 @@ class GetInput():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self.categories = Global.categories
+        self._categories = Global.categories
 
     ### Enter Subreddit(s) to scrape and check if they exist.
     def get_subreddits(self, parser, reddit):
@@ -70,7 +71,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 print("No Subreddits were specified! Try again.")
 
     ### Update Subreddit settings in master dictionary.
-    def update_master(self, cat_i, master, search_for, sub):
+    def _update_master(self, cat_i, master, search_for, sub):
         user_search = search_for if cat_i == 5 else int(search_for)
         for sub_n, _ in master.items():
             if sub_n == sub:
@@ -78,7 +79,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 master[sub].append(settings)
 
     ### Get search settings.
-    def get_search(self, cat_i, master, sub):
+    def _get_search(self, cat_i, master, sub):
         while True:
             try:
                 search_for = str(input(
@@ -87,13 +88,13 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 if not search_for:
                     raise ValueError
                 else:
-                    self.update_master(cat_i, master, search_for, sub)
+                    self._update_master(cat_i, master, search_for, sub)
                     break
             except ValueError:
                 print("Not an option! Try again.")
 
     ### Get number of results.
-    def get_n_results(self, cat_i, master, sub):
+    def _get_n_results(self, cat_i, master, sub):
         while True:
             try:
                 search_for = input(
@@ -102,7 +103,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 if search_for.isalpha() or not search_for:
                     raise ValueError
                 else:
-                    self.update_master(cat_i, master, search_for, sub)
+                    self._update_master(cat_i, master, search_for, sub)
                     break
             except ValueError:
                 print("Not an option! Try again.")
@@ -126,10 +127,10 @@ Select a category to display for r/%s
 
                     if cat_i == 5:
                         print("\nSelected search")
-                        self.get_search(cat_i, master, sub)
+                        self._get_search(cat_i, master, sub)
                     else:
-                        print("\nSelected category: %s" % self.categories[cat_i])
-                        self.get_n_results(cat_i, master, sub)
+                        print("\nSelected category: %s" % self._categories[cat_i])
+                        self._get_n_results(cat_i, master, sub)
                     break
                 except (IndexError, ValueError):
                     print("Not an option! Try again.")
@@ -140,7 +141,8 @@ class ConfirmInput():
     """
 
     ### Confirm Subreddits that were entered.
-    def confirm_subreddits(self, found, parser):
+    @staticmethod
+    def confirm_subreddits(found, parser):
         while True:
             try:
                 confirm = input("\nConfirm selection? [Y/N] ").strip().lower()
@@ -156,7 +158,8 @@ class ConfirmInput():
                 print("Not an option! Try again.")    
 
     ### Scrape again?
-    def another(self):
+    @staticmethod
+    def another():
         while True:
             try:
                 repeat = input("\nScrape again? [Y/N] ").strip().lower()
@@ -173,28 +176,33 @@ class RunBasic():
     """
 
     ### Create settings for each user input.
-    def create_settings(self, parser, reddit):
+    @staticmethod
+    def _create_settings(parser, reddit):
         found = GetInput().get_subreddits(parser, reddit)
-        subs = ConfirmInput().confirm_subreddits(found, parser)
+        subs = ConfirmInput.confirm_subreddits(found, parser)
         master = Global.make_list_dict(subs)
         GetInput().get_settings(master, subs)
 
         return master
 
     ### Print Subreddit scraping settings. Then write or quit scraper.
-    def print_confirm(self, args, master):
+    @staticmethod
+    def _print_confirm(args, master):
         Subreddit.PrintConfirm().print_settings(args, master)
         return Subreddit.PrintConfirm().confirm_settings()
 
     ### Run basic Subreddit scraper.
-    def run(self, args, parser, reddit):
-        Titles.Titles().b_title()
+    @staticmethod
+    @LogExport.log_export
+    @LogScraper.scraper_timer(Global.s_t[0])
+    def run(args, parser, reddit):
+        Titles.Titles.b_title()
         
         while True:
             while True:                
-                master = self.create_settings(parser, reddit)
+                master = RunBasic._create_settings(parser, reddit)
 
-                confirm = self.print_confirm(args, master)
+                confirm = RunBasic._print_confirm(args, master)
                 if confirm == options[0]:
                     break
                 else:
@@ -203,7 +211,7 @@ class RunBasic():
             
             Subreddit.GetSortWrite().gsw(args, reddit, master)
             
-            repeat = ConfirmInput().another()
+            repeat = ConfirmInput.another()
             if repeat == options[1]:
-                print(Style.BRIGHT + "\nExiting.")
+                print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                 break
