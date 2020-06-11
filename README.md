@@ -13,10 +13,10 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 ## Table of Contents
 
 * [URS Overview](#urs-overview)
-  + [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
+  + [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
   + [Subreddits](#subreddits)
   + [Redditors](#redditors)
-  + [Post Comments](#post-comments)
+  + [Submission Comments](#submission-comments)
 * [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW)
 * [Walkthrough](#walkthrough)
     - [2-Factor Authentication](#2-factor-authentication)
@@ -36,36 +36,36 @@ Scrape speeds will be determined by the speed of your internet connection.
 
 All exported files will be saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories will automatically be created when you run the scraper. 
 
-## A Table of All Subreddit, Redditor, and Post Comments Attributes
+## A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
 These attributes will be included in each scrape. 
 
-| Subreddits    | Redditors                     | Post Comments |
-|---------------|-------------------------------|---------------|
-| Title         | Name                          | Parent ID     |
-| Flair         | Fullname                      | Comment ID    |
-| Date Created  | ID                            | Author        |
-| Upvotes       | Date Created                  | Date Created  |
-| Upvote Ratio  | Comment Karma                 | Upvotes       |
-| ID            | Link Karma                    | Text          |
-| Is Locked?    | Is Employee?                  | Edited?       |
-| NSFW?         | Is Friend?                    | Is Submitter? |
-| Is Spoiler?   | Is Mod?                       | Stickied?     |
-| Stickied?     | Is Gold?                      |               |
-| URL           | Submissions*                  |               |
-| Comment Count | Comments*                     |               |
-| Text          | Hot*                          |               |
-| &nbsp;        | New*                          |               |
-| &nbsp;        | Controversial*                |               |
-| &nbsp;        | Top*                          |               |
-| &nbsp;        | Upvoted* (may be forbidden)   |               |
-| &nbsp;        | Downvoted* (may be forbidden) |               |
-| &nbsp;        | Gilded*                       |               |
-| &nbsp;        | Gildings* (may be forbidden)  |               |
-| &nbsp;        | Hidden* (may be forbidden)    |               |
-| &nbsp;        | Saved* (may be forbidden)     |               |
+| Subreddits    | Redditors                      | Submission Comments |
+|---------------|--------------------------------|---------------------|
+| Title         | Name                           | Parent ID           |
+| Flair         | Fullname                       | Comment ID          |
+| Date Created  | ID                             | Author              |
+| Upvotes       | Date Created                   | Date Created        |
+| Upvote Ratio  | Comment Karma                  | Upvotes             |
+| ID            | Link Karma                     | Text                |
+| Is Locked?    | Is Employee?                   | Edited?             |
+| NSFW?         | Is Friend?                     | Is Submitter?       |
+| Is Spoiler?   | Is Mod?                        | Stickied?           |
+| Stickied?     | Is Gold?                       |                     |
+| URL           | \*Submissions                  |                     |
+| Comment Count | \*Comments                     |                     |
+| Text          | \*Hot                          |                     |
+| &nbsp;        | \*New                          |                     |
+| &nbsp;        | \*Controversial                |                     |
+| &nbsp;        | \*Top                          |                     |
+| &nbsp;        | \*Upvoted (may be forbidden)   |                     |
+| &nbsp;        | \*Downvoted (may be forbidden) |                     |
+| &nbsp;        | \*Gilded                       |                     |
+| &nbsp;        | \*Gildings (may be forbidden)  |                     |
+| &nbsp;        | \*Hidden (may be forbidden)    |                     |
+| &nbsp;        | \*Saved (may be forbidden)     |                     |
 
-\* Includes additional attributes; see [Redditors](#redditors) section for more information. 
+\*Includes additional attributes; see [Redditors](#redditors) section for more information. 
 
 ## Subreddits
 
@@ -86,15 +86,15 @@ These are the submission categories:
 
 Once you confirm the settings for the scrape, the program will save the results to either a `.csv` or `.json` file. 
 
-The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY.[FILE_FORMAT]"` 
+The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-results.[FILE_FORMAT]"` 
 
-If you searched for keywords, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORDS'.[FILE_FORMAT]"` 
+If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
 
 ## Redditors
 
 `$ ./scraper.py -u USER N_RESULTS --FILE_FORMAT` 
 
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work. **
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
 
 You can also scrape Redditor profiles and specify how many results are returned. 
 
@@ -117,15 +117,15 @@ Of these Redditor attributes, the following will include additional attributes:
 
 ***NOTE:*** The number of results returned will be applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
 
-The file names will follow this format: `"u-USERNAME DATE.[FILE_FORMAT]"` 
+The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-results.[FILE_FORMAT]"` 
 
-## Post Comments
+## Submission Comments
 
 `$ ./scraper.py -c URL N_RESULTS --FILE_FORMAT` 
 
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work. **
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
 
-You can also scrape comments from posts and specify the number of results returned. 
+You can also scrape comments from submissions and specify the number of results returned. 
 
 Comments scraping can either return structured JSON data down to third-level comment replies, or you can simply return a raw list of all comments with no structure. 
 
@@ -133,9 +133,11 @@ To return a raw list of all comments, specify `0` results to be returned from th
 
 When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc. 
 
-***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the post, which may take a while depending on the post's popularity. 
+Of all scrapers included in this program, this takes the longest to scrape. Scraping speed will also depend on the post's popularity and your internet connection speed.
 
-The file names will follow this format: `"c-POST_TITLE DATE.[FILE_FORMAT]"` 
+***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
+
+The file names will follow this format: `"c-[POST_TITLE]-[N_RESULTS]-results.[FILE_FORMAT]"` 
 
 # How to get Reddit API Credentials for PRAW
 
