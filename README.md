@@ -1,4 +1,4 @@
- <center> <h1> <b> <i> Universal Reddit Scraper </i> </b> </h1> </center>
+ <h1 style="text-align:center"> <b> <i> Universal Reddit Scraper </i> </b> </h1>
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments from submissions. 
 
