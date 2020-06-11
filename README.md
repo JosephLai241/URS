@@ -1,6 +1,6 @@
-# Universal Reddit Scraper
+ <center> <h1> <b> <i> Universal Reddit Scraper </i> </b> </h1> </center>
 
-This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments on posts. 
+This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments from submissions. 
 
 Written in Python and utilizes the official Reddit API ([ `PRAW` ](https://pypi.org/project/praw/)).
 
@@ -8,11 +8,10 @@ Run `pip install -r requirements.txt` to get all project dependencies.
 
 You will need your own Reddit account and API credentials for PRAW. I have included a tutorial on how to do this below. 
 
-***NOTE:*** `PRAW` is currently supported on Python 3. 5+. This project was tested with Python 3. 6. 
+***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
 ## Table of Contents
 
-* [Why Are You Using Two APIs?](#why-are-you-using-two-apis)
 * [URS Overview](#urs-overview)
   + [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
   + [Subreddits](#subreddits)
@@ -31,13 +30,11 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 * [Contributors](#contributors)
 * [Releases](#releases)
 
-
-
 # URS Overview
 
 Scrape speeds will be determined by the speed of your internet connection. 
 
-All exported files will be saved to the current working directory. 
+All exported files will be saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories will automatically be created when you run the scraper. 
 
 ## A Table of All Subreddit, Redditor, and Post Comments Attributes
 
@@ -74,9 +71,9 @@ These attributes will be included in each scrape.
 
 `$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
-You can specify Subreddits, which category of posts, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all posts that are returned from the search. 
+You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all submissions that are returned from the search. 
 
-These are the post category options:
+These are the submission categories:
 
 * Hot
 * New
@@ -85,13 +82,13 @@ These are the post category options:
 * Rising
 * Search
 
-***NOTE:*** All results are returned if you search for something within a Subreddit, so you will not be able to specify how many results to keep. 
+***NOTE:*** All results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep. 
 
-Once you configure the settings for the scrape, the program will save the results to either a . csv or . json file. 
+Once you confirm the settings for the scrape, the program will save the results to either a `.csv` or `.json` file. 
 
-The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY DATE.[FILE_FORMAT]"` 
+The file names will follow this format: `"r-SUBREDDIT-POST_CATEGORY.[FILE_FORMAT]"` 
 
-If you have searched for keywords in a Subreddit, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORDS' DATE.[FILE_FORMAT]"` 
+If you searched for keywords, file names are formatted as such: `"r-SUBREDDIT-Search-'KEYWORDS'.[FILE_FORMAT]"` 
 
 ## Redditors
 
