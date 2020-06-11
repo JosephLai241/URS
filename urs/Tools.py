@@ -2,7 +2,7 @@
 #                   All Scrapers and Validation/Args Checking
 #===============================================================================
 from colorama import Fore, init, Style
-from utils import (Basic, Cli, comments_functions, Global,
+from utils import (Basic, Cli, Comments, Global,
                    Redditor, Subreddit, Titles, Validation)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -42,14 +42,7 @@ class Run():
             Redditor.RunRedditor().run(self.args, self.parser, self.reddit)
         if self.args.comments:
             ### Run comments scraper.
-            Titles.Titles().c_title()
-
-            post_list = Cli.GetScrapeSettings().create_list(self.args, self.s_t[2])
-            posts = comments_functions.list_posts(self.reddit, post_list, self.parser)
-            c_master = comments_functions.c_c_dict(posts)
-            Cli.get_cli_settings(self.reddit, self.args, c_master, self.s_t, self.s_t[2])
-
-            comments_functions.w_comments(self.reddit, post_list, c_master, self.args)
+            Comments.RunComments().run(self.args, self.parser, self.reddit)
         elif self.args.basic:
             ### Run basic Subreddit scraper.
             Basic.RunBasic().run(self.args, self.parser, self.reddit)
