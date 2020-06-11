@@ -50,8 +50,8 @@ class NameFile():
 
         return str(("r-%s-%s-'%s'") % (sub, category, search_for)) \
             if cat_i == Global.short_cat[5] \
-            else str(("r-%s-%s-%s-%s") % 
-                (sub, category, search_for, end))
+                else str(("r-%s-%s-%s-%s") % 
+                    (sub, category, search_for, end))
 
     ### Determine file name format for Subreddit scraping.
     def r_fname(self, args, cat_i, search_for, sub):
@@ -72,8 +72,12 @@ class NameFile():
 
     ### Determine file name format for comments scraping.
     def c_fname(self, limit, string):
-        end = "result" if int(limit) < 2 else "results"
-        raw_n = str(("c-%s-%s-%s") % (string, limit, end))
+        if int(limit) != 0:
+            end = "result" if int(limit) < 2 else "results"
+            raw_n = str(("c-%s-%s-%s") % (string, limit, end))
+        else:
+            raw_n = str(("c-%s-%s") % (string, "RAW"))
+        
         return self.fix(raw_n)
 
 class Export():
@@ -81,17 +85,17 @@ class Export():
     Functions for creating directories and export the file.
     """
 
-    ### Export to CSV
+    ### Export to CSV.
     def write_csv(self, filename, overview):
         with open(filename, "w", encoding = "utf-8") as results:
-                writer = csv.writer(results, delimiter = ",")
-                writer.writerow(overview.keys())
-                writer.writerows(zip(*overview.values()))
+            writer = csv.writer(results, delimiter = ",")
+            writer.writerow(overview.keys())
+            writer.writerows(zip(*overview.values()))
 
-    ### Export to JSON
+    ### Export to JSON.
     def write_json(self, filename, overview):
         with open(filename, "w", encoding = "utf-8") as results:
-                json.dump(overview, results, indent = 4)
+            json.dump(overview, results, indent = 4)
         
     ### Write overview dictionary to CSV or JSON.
     def export(self, f_type, f_name, overview):
