@@ -13,7 +13,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 ## Table of Contents
 
 * [URS Overview](#urs-overview)
-  + [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
+  + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
   + [Subreddits](#subreddits)
   + [Redditors](#redditors)
   + [Submission Comments](#submission-comments)
@@ -100,19 +100,18 @@ You can also scrape Redditor profiles and specify how many results are returned.
 
 Of these Redditor attributes, the following will include additional attributes:
 
-| Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved | Comments                               |
-|----------------------------------------------------------------------------------------------------|----------------------------------------|
-| Title                                                                                              | Date Created                           |
-| Date Created                                                                                       | Score                                  |
-| Upvotes                                                                                            | Text                                   |
-| Upvote Ratio                                                                                       | Parent ID                              |
-| ID                                                                                                 | Link ID                                |
-| NSFW?                                                                                              | Edited?                                |
-| Text                                                                                               | Stickied?                              |
-| &nbsp;                                                                                             | Replying to (title of post or comment) |
-| &nbsp;                                                                                             | In Subreddit (Subreddit name)          |
+| Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved | Comments                                     |
+|----------------------------------------------------------------------------------------------------|----------------------------------------------|
+| Title                                                                                              | Date Created                                 |
+| Date Created                                                                                       | Score                                        |
+| Upvotes                                                                                            | Text                                         |
+| Upvote Ratio                                                                                       | Parent ID                                    |
+| ID                                                                                                 | Link ID                                      |
+| NSFW?                                                                                              | Edited?                                      |
+| Text                                                                                               | Stickied?                                    |
+| &nbsp;                                                                                             | Replying to (title of submission or comment) |
+| &nbsp;                                                                                             | In Subreddit (Subreddit name)                |
 
- 
 ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file. 
 
 ***NOTE:*** The number of results returned will be applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
@@ -133,7 +132,7 @@ To return a raw list of all comments, specify `0` results to be returned from th
 
 When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc. 
 
-Of all scrapers included in this program, this takes the longest to scrape. Scraping speed will also depend on the post's popularity and your internet connection speed.
+Of all scrapers included in this program, this takes the longest to scrape. Scraping speed will also depend on the submission's popularity and your internet connection speed.
 
 ***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
 
@@ -187,7 +186,7 @@ If you do not want to read the rest of this walkthrough, or forget the args, you
 
 Scraping Subreddits using flags is much faster than the [basic scraper](#basic-scraper). 
 
-Use the `-r` flag to indicate a Subreddit, the post category, and finally, depending on the category selected, either the number of results returned or keyword(s) to search for during the scrape. 
+Use the `-r` flag to indicate a Subreddit, the submission category, and finally, depending on the category selected, either the number of results returned or keyword(s) to search for during the scrape. 
 
 Category options are as follows:
 
@@ -199,13 +198,10 @@ Category options are as follows:
  - S, s - Search
  
 Scraping 10 r/AskReddit posts in the Hot category and export to JSON:
- 
 
 ![Subreddit Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_1.png)
 
- 
-The program will then display the type of scrape, check if the Subreddit(s) exist, and display the settings for each Subreddit. It will display a list of invalid Subreddits, if applicable. You can also include `-y` in your args if you want to skip this confirmation screen and immediately scrape. 
- 
+The program will then display the type of scrape, check if the Subreddit(s) exist, and display the settings for each Subreddit. It will display a list of invalid Subreddits if applicable. You can also include `-y` in your args if you want to skip this confirmation screen and immediately scrape. 
 
 ![Subreddit Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_2.png)
 
@@ -217,48 +213,39 @@ The program will then display the type of scrape, check if the Subreddit(s) exis
 
 ![CSV Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_csv.png)
 
- 
 ---------------------------------------------------------------------------------------------------------------------------- 
 
 ### Redditor Scraper
 
- 
 Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable. 
 
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work. ** 
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.** 
 
 Scraping 5 results for each of u/spez's user attributes and export to JSON:
- 
 
 ![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_1.png)
 
- 
 There are a couple user lists that are typically restricted and will raise an 403 HTTP Forbidden exception. If you are forbidden from accessing a list, the program will display its name and append "FORBIDDEN" to that section in the export file. 
- 
 
 ![Redditor Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_2.png)
 
- 
 **JSON Sample:**
- 
 
 ![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_json.png)
 
- 
 ----------------------------------------------------------------------------------------------------------------------------
- 
 
 ### Comments Scraper
 
-Use the `-c` flag to indicate a post and the number of comments returned. The program will then display the type of scrape and check if the post(s) exist. It will display a list of invalid posts, if applicable. 
+Use the `-c` flag to indicate a submission and the number of comments returned. The program will then display the type of scrape and check if the submission(s) exist. It will display a list of invalid posts, if applicable. 
 
-**I have designed this functionality to work best with JSON and strongly recommend this export option, however you will still be able to get your results if you choose to export to CSV instead. **
+**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.** 
 
 There are two ways you can scrape comments with this program. You can indicate a number to return a structured JSON file that includes down to third-level replies. Or you can specify `0` comments to be returned and the program will return an unstructured JSON file of all comments. 
 
 **Structured Scrape**
 
-Scraping 10 comments from [this Reddit post](https://www.reddit.com/r/ProgrammerHumor/comments/9ozauu/a_more_accurate_representation_of_what_happened/) and export to JSON:
+Scraping 10 comments from [this Reddit submission](https://www.reddit.com/r/ProgrammerHumor/comments/9ozauu/a_more_accurate_representation_of_what_happened/) and export to JSON:
  
 
 ![Comments Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_1.png)
@@ -281,11 +268,9 @@ When exporting raw comments, all top-level comments are listed first, followed b
 
 ![Unstructured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_json_raw.png)
 
- 
-
 ## Basic Scraper
 
-I kept URS 1. 0's functionality after I added CLI support, in case anyone prefers to use it over CLI arguments. **It only scrapes Subreddits**; Redditor and post comments scraping would require you to use CLI arguments. 
+I kept URS 1.0's functionality after I added CLI support, in case anyone prefers to use it over CLI arguments. **It only scrapes Subreddits**; Redditor and submission comments scraping would require you to use CLI arguments. 
 
 You can access the basic scraper by using the `-b` flag and an export option. 
 
@@ -297,9 +282,9 @@ After entering the Subreddit(s) you want to scrape, the program will check if th
 
 ![Check Subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_2.png)
 
-You will then choose the post category within the Subreddit (Hot, New, Controversial, Top, Rising, Search). After choosing the category, you will also choose how many results you would like to be returned. 
+You will then choose the submission category within the Subreddit (Hot, New, Controversial, Top, Rising, or Search). After choosing the category, you will also choose how many results you would like to be returned. 
 
-![Post Category Options](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_3.png)
+![Submission Category Options](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_3.png)
 
 If you choose to search for keyword(s) within the Subreddit, you will be greeted with these settings instead. 
 
@@ -329,7 +314,11 @@ After you have configured all settings for each Subreddit, you will be greeted w
 
 # Contributing
 
-I have decided URS 3. 0 will be the last major iteration of this project that I will release. I believe the current features should satisfy users who need to scrape Reddit. However, you can still suggest new features that I can add. If there are good suggestions, and a good reason, for a new feature, I will consider adding it. You are also more than welcome to create a pull request, adding additional features or simply improving runtime or streamlining existing code yourself. If the pull request is approved, I will merge the pull request into the master branch, tag it as a new release, and credit you for contributing to this project. 
+I believe the current features should satisfy users who need to scrape Reddit; however, I will continue adding small features as I learn more about computer science.
+
+You can suggest new features or changes by going to the Issues tab, creating a new issue, and tagging it as an enhancement. If there are good suggestions and a good reason for adding a feature, I will consider adding it. 
+
+You are also more than welcome to create a pull request, adding additional features, improving runtime, or streamlining existing code. If the pull request is approved, I will merge the pull request into the master branch and credit you for contributing to this project.
 
 Make sure you follow the contributing guidelines when creating a pull request. See the [Contributing](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md) document for more information. 
 
@@ -341,34 +330,11 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 
 # Releases
 
-* **May 25, 2019:** Universal Reddit Scraper v1.0. Does not include CLI support. 
-* **July 29, 2019:** Universal Reddit Scraper v2.0. Now includes CLI support!
-* **December 28, 2019:** Universal Reddit Scraper v3.0 (Beta). 
-	+ New features include:
-    	- Exporting to JSON
-    	- Scraping Redditors
-  	+ Comments scraping functionality is still under construction. 
-
-* **December 31, 2019:** Universal Reddit Scraper v3.0 (Official)
-  	+ Comments scraping functionality is now working!
-  	+ Added additional exception handling for creating filenames
-  	+ Minor code reformatting
-  	+ Simplified verbose output
-  	+ Added an additional Submission attribute when scraping Redditors
-  	+ Happy New Year!
-
-* **January 15, 2020:** Universal Reddit Scraper v3.0 (Final Release)
-	+ Numerous changes to Readme
-	+ Minor code reformatting
-	+ Fulfilled community standards by adding the following docs:
-  		- [Contributing guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)
-  		- [Pull request template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
-  		- Issue templates ([bug report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md) and [feature request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md))
-  		- [Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)
-  		- [License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)
-
-* **TBD:** Universal Reddit Scraper v3.1
-	+ ***Major*** code refactor. Applied OOP concepts to all existing code and rewrote methods in attempt to improve readability and scalability.
-	+ Scrapes will now be stored in the `scrapes/` directory and in a subdirectory corresponding to the date of the scrape. This directory will be automatically created for you on the first run. Each date subdirectory will also be automatically created when the scraper is run.
-	+ Added logger decorators. `scrapes.log` will be stored in the same subdirectory corresponding to the date of the scrape. This log stores what is happening during each scrape, which scrapes were ran, and any errors that might arise.
-	+ Improved naming convention for scrape files.
+| Date | Version | Changelog | 
+|------|---------|-----------|
+| **May 25, 2019:** | URS v1.0 | <ul> <li>Its inception</li> </ul> |
+| **July 29, 2019:** | URS v2.0 | <ul> <li>Now includes CLI support!</li> </ul> |
+| **December 28, 2019:** | URS v3.0 (beta) | <ul> <li>Added JSON export</li> <li>Added Redditor Scraping</li> <li>Comments scraping is still under construction.</li> </ul> | 
+| **December 31, 2019:** | URS v3.0 (Official) | <ul> <li>Comments scraping functionality is now working!</li> <li>Added additional exception handling for creating filenames</li> <li>Minor code reformatting</li> <li>Simplified verbose output</li> <li>Added an additional submission attribute when scraping Redditors</li> <li>Happy New Year!</li> </ul> |
+| **January 15, 2020:** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme</li> <li>Minor code reformatting</li> <li>Fulfilled community standards by adding the following docs:</li> <ul> <li>[Contributing Guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)</li> <li>[Pull Request Template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)</li> <li>Issue templates:</li> <ul> <li>[Bug Report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md)</li> <li>[Feature Request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md)</li> </ul> <li>[Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)</li> <li>[License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)</li> </ul> </ul> |
+| **TBD:** | URS v3.1 | <ul> <li>***Major*** code refactor. Applied OOP concepts to all existing code and rewrote methods in attempt to improve readability and scalability.</li> <li>Scrapes will now be stored in the `scrapes/` directory and in a subdirectory corresponding to the date of the scrape. These directories will be automatically created for you when you run URS.</li> <li>Added logger decorators. `scrapes.log` will be stored in the same subdirectory corresponding to the date of the scrape. This log stores what is happening during each scrape, which scrapes were ran, and any errors that might arise.</li> <li>Improved naming convention for scripts.</li> <li>***UPDATE COMMUNITY DOCS WHEN DONE REFACTORING***</li> </ul>
