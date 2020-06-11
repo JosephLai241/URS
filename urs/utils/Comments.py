@@ -42,7 +42,7 @@ class GetComments():
         self.titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
             "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
-    ### Catch comments attributes if applicable.
+    ### Handle deleted Redditors or edited time if applicable.
     def fix_attributes(self, comment):
         try:
             author_name = comment.author.name
@@ -55,7 +55,6 @@ class GetComments():
         return author_name, edit_date
 
     ### Add list of dictionary of comments attributes to use when sorting.
-    ### Handle deleted Redditors or edited time if applicable.
     def add_comment(self, comment):
         c_set = Global.make_none_dict(self.titles)
 
@@ -118,8 +117,7 @@ class SortComments():
             cpid = comment.parent_id.split("_", 1)[1]
             self.structured_comments(all_dict, comment, cpid, submission)
 
-    ### Sort comments. Handle submission author name if Redditor has deleted 
-    ### their account.
+    ### Sort comments.
     def sort(self, all_dict, raw, submission):
         for comment in submission.comments.list():
             self.to_all(all_dict, comment, raw, submission)
