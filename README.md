@@ -141,37 +141,37 @@ The file names will follow this format: `"c-[POST_TITLE]-[N_RESULTS]-results.[FI
 
 # How to get Reddit API Credentials for PRAW
 
-First, create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps). 
+1) Create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps). 
 
-Click "are you a developer? create an app... ". 
+2) Click "are you a developer? create an app... ". 
 
-![Create an app](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_1. png)
+![Create an app](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_1.png)
 
-Name your app, choose "script" for the type of app, and type "http://localhost:8080" in the redirect URI field since this is a personal use app. You can also add a description and an about URL. 
+3) Name your app, choose "script" for the type of app, and type "http://localhost:8080" in the redirect URI field since this is a personal use app. You can also add a description and an about URL. 
 
-![Enter Stuff In Boxes](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_2. png)
+![Enter Stuff In Boxes](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_2.png)
 
-Click "create app", then "edit" to reveal more information. 
+4) Click "create app", then "edit" to reveal more information. 
 
-![Click Edit](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_3. png)
+![Click Edit](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_3.png)
 
-You should see a string of 14 characters on the top left corner underneath "personal use script. " That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. Save this information as it will be used in the program in order to use the Reddit API. 
+5) You should see a string of 14 characters on the top left corner underneath "personal use script. " That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. **Save this information as it will be used in the program in order to use the Reddit API**. 
 
-![All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_4. png)
+![All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_4.png)
 
-You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 27-31. 
+You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 22-26. 
 
 # Walkthrough
 
-First, you will have to provide your own Reddit credentials in this block of code located in `scraper.py` . 
+First, you will have to provide your own Reddit credentials in this block of code located in `scraper.py`. 
 
 ![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/creds.png)
 
-**You have to provide valid credentials, otherwise the scraper will not work. **
+URS will raise an error if you entered invalid credentials.
 
 ## 2-Factor Authentication
 
-If you choose to use 2FA with your Reddit account, enter your password followed by a colon and then your 2FA token in the `passwd` field on line 22. For example, if your password is "p4ssw0rd" and your 2FA token is "123456", you will enter "p4ssw0rd:123456" in the `passwd` field. 
+If you choose to use 2FA with your Reddit account, enter your password followed by a colon and then your 2FA token in the `password` field on line 26. For example, if your password is "p4ssw0rd" and your 2FA token is "123456", you will enter "p4ssw0rd:123456" in the `password` field. 
 
 **2FA is NOT recommended for use with this program. ** This is because PRAW will raise an OAuthException after one hour, prompting you to refresh your 2FA token and re-enter your credentials. Additionally, this means your 2FA token would be stored alongside your Reddit username and password, which would defeat the purpose of enabling 2FA in the first place. See [here](https://praw.readthedocs.io/en/latest/getting_started/authentication.html#two-factor-authentication) for more information. 
 
