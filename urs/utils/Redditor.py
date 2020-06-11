@@ -13,7 +13,7 @@ from .Logger import LogExport, LogScraper
 ### every print.
 init(autoreset = True)
 
-### Global variables
+### Global variables.
 convert_time = Global.convert_time
 s_t = Global.s_t
 
@@ -55,16 +55,16 @@ class ProcessInteractions():
 
         self.comments = user.comments.new(limit = limit)
         self.controversial = user.controversial(limit = limit)
-        self.downvoted = user.downvoted(limit = limit)          # May be forbidden
+        self.downvoted = user.downvoted(limit = limit)
         self.gilded = user.gilded(limit = limit)
-        self.gildings = user.gildings(limit = limit)            # May be forbidden
-        self.hidden = user.hidden(limit = limit)                # May be forbidden
+        self.gildings = user.gildings(limit = limit)
+        self.hidden = user.hidden(limit = limit)
         self.hot = user.hot(limit = limit)
         self.new = user.new(limit = limit)
-        self.saved = user.saved(limit = limit)                  # May be forbidden
+        self.saved = user.saved(limit = limit)
         self.submissions = user.submissions.new(limit = limit)
         self.top = user.top(limit = limit)
-        self.upvoted = user.upvoted(limit = limit)              # May be forbidden
+        self.upvoted = user.upvoted(limit = limit)
 
         self.comment_titles = ["Date Created", "Score", "Text", "Parent ID", "Link ID",
             "Edited?", "Stickied?", "Replying to", "In Subreddit"]
@@ -147,7 +147,8 @@ class ProcessInteractions():
             except PrawcoreException as error:
                 print(Style.BRIGHT + Fore.RED + 
                     ("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % 
-                    (cat.upper(), error))
+                        (cat.upper(), error))
+                
                 self.overview["%s (may be forbidden)" % 
                     cat.capitalize()].append("FORBIDDEN")
 
@@ -167,10 +168,9 @@ class GetInteractions():
 
     ### Make Redditor dictionary to store data.
     def make_user_profile(self, limit, reddit, user):
-        print(Style.BRIGHT + ("\nProcessing %s results from u/%s's profile...") % 
-            (limit, user)) if int(limit) > 1 else \
-                print(Style.BRIGHT + ("\nProcessing %s result from u/%s's profile...") % 
-                    (limit, user))
+        plurality = "results" if int(limit) > 1 else "result"
+        print(Style.BRIGHT + ("\nProcessing %s %s from u/%s's profile...") % 
+            (limit, plurality, user))
         print("\nThis may take a while. Please wait.")
 
         user = reddit.redditor(user)
@@ -218,7 +218,7 @@ class Write():
         Export.Export().export(self.eo[1], f_name, overview) if args.json else \
             Export.Export().export(self.eo[0], f_name, overview)
 
-    ### Set print length depending on string length.
+    ### Print confirmation message and set print length depending on string length.
     def print_confirm(self, args, user):
         confirmation = "\nJSON file for u/%s created." % user if args.json \
             else "\nCSV file for u/%s created." % user
@@ -230,6 +230,7 @@ class Write():
         for user, limit in u_master.items():
             overview = GetInteractions().get(limit, reddit, user)
             f_name = Export.NameFile().u_fname(limit, user)
+
             self.determine_export(args, f_name, overview)
             self.print_confirm(args, user)
 
@@ -240,7 +241,7 @@ class RunRedditor():
 
     ### Run Redditor scraper.
     @LogExport.log_export
-    @LogScraper.scraper_timer(Global.s_t[1])
+    @LogScraper.scraper_timer(s_t[1])
     def run(self, args, parser, reddit):
         Titles.Titles().u_title()
 
