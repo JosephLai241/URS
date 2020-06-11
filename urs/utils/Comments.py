@@ -6,9 +6,11 @@ from colorama import Fore, init, Style
 from . import Cli, Export, Global, Titles, Validation
 from .Logger import LogExport, LogScraper
 
+### Automate sending reset sequences to turn off color changes at the end of 
+### every print.
 init(autoreset = True)
 
-### Global variables
+### Global variables.
 convert_time = Global.convert_time
 eo = Global.eo
 s_t = Global.s_t
@@ -40,11 +42,8 @@ class GetComments():
         self.titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
             "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
-    ### Add list of dictionary of comments attributes to use when sorting.
-    ### Handle deleted Redditors or edited time if applicable.
-    def add_comment(self, comment):
-        c_set = Global.make_none_dict(self.titles)
-
+    ### Catch comments attributes if applicable.
+    def fix_attributes(self, comment):
         try:
             author_name = comment.author.name
         except AttributeError:
@@ -53,6 +52,14 @@ class GetComments():
         edit_date = comment.edited if str(comment.edited).isalpha() \
             else convert_time(comment.edited)
 
+        return author_name, edit_date
+
+    ### Add list of dictionary of comments attributes to use when sorting.
+    ### Handle deleted Redditors or edited time if applicable.
+    def add_comment(self, comment):
+        c_set = Global.make_none_dict(self.titles)
+
+        author_name, edit_date = self.fix_attributes(comment)
         comment_attributes = [comment.parent_id, comment.id, author_name, 
             convert_time(comment.created_utc), comment.score, comment.body, edit_date, 
             comment.is_submitter, comment.stickied]
@@ -68,7 +75,7 @@ class SortComments():
     specified (raw or structured).
     """
 
-    ### Raw export.
+    ### Append comments in raw export format.
     def raw_comments(self, all_dict, comment):
         add = GetComments().add_comment(comment)
         all_dict[comment.id] = add
@@ -115,10 +122,7 @@ class SortComments():
     ### their account.
     def sort(self, all_dict, raw, submission):
         for comment in submission.comments.list():
-            try:
-                self.to_all(all_dict, comment, raw, submission)
-            except AttributeError:
-                self.to_all(all_dict, comment, raw, submission)
+            self.to_all(all_dict, comment, raw, submission)
 
 class GetSort():
     """
