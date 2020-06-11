@@ -104,15 +104,15 @@ class LogScraper():
     ### Format Redditor log depending on number of results scraped.
     @staticmethod
     def format_redditor_log(each_arg):
-        return "Scraping %s results for u/%s..." % (each_arg[1], each_arg[0]) \
-            if int(each_arg[1]) > 1 else \
-                "Scraping %s result for u/%s..." % (each_arg[1], each_arg[0])
+        plurality = "results" if int(each_arg[1]) > 1 else "result"
+        return "Scraping %s %s for u/%s..." % (each_arg[1], plurality, each_arg[0])
 
     ### Format comments log depending on raw or structured export.
     @staticmethod
     def format_comments_log(each_arg):
-        return "Processing %s comments and including second and third-level replies from Reddit post %s" % \
-            (each_arg[1], each_arg[0]) if int(each_arg[1]) > 0 else \
+        plurality = "comments" if int(each_arg[1]) > 1 else "comment"
+        return "Processing %s %s and including second and third-level replies from Reddit post %s" % \
+            (each_arg[1], plurality, each_arg[0]) if int(each_arg[1]) > 0 else \
                 "Processing all comments in raw format from Reddit post %s" % each_arg[0]
 
     ### Format string for log file depending on what was scraped, then log the 
@@ -171,5 +171,6 @@ class LogExport():
                 logging.info("")
             except Exception as e:
                 logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
+                logging.critical(e)
 
         return wrapper
