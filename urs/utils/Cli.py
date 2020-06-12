@@ -19,7 +19,12 @@ class Parser():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
-        self._description = "Universal Reddit Scraper 3.1 - Scrape Subreddits, submissions, Redditors, or comments from submissions"
+        self._description = r"""
+Universal Reddit Scraper 3.1 - Scrape Subreddits, submissions, Redditors, or comments from submissions
+
+Author: Joseph Lai
+Contact: urs_project@protonmail.com
+"""
         self._epilog = r"""
 Subreddit categories:
    H,h     selecting Hot category
@@ -31,29 +36,35 @@ Subreddit categories:
 
 EXAMPLES
 
-    Get the first 10 posts in r/all in the Hot category and export to JSON:
+Get the first 10 posts in r/askreddit in the Hot category and export to JSON:
 
-        $ ./scraper.py -r all h 10 --json
+    $ ./scraper.py -r askreddit h 10 --json
 
-    Search for "United States of America" in r/worldnews and export to CSV:
+Search for "United States of America" in r/worldnews and export to CSV:
 
-        $ ./scraper.py -r worldnews s "United States of America" --csv
+    $ ./scraper.py -r worldnews s "United States of America" --csv
 
-    Scraping 50 results from u/spez's Reddit account:
+Scraping 15 results from u/spez's Reddit account:
 
-        $ ./scraper.py -u spez 50 --json
+    $ ./scraper.py -u spez 15 --json
 
-    Scraping 25 comments from this r/TIFU post:
+Scraping 25 comments from this r/TIFU post:
+(Returns a structured JSON file that includes down to third-level replies)
 
-        $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --csv
+    $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --json
 
-    You can scrape multiple items at once:
+Scraping all comments from the same r/TIFU post:
+(Returns an unstructured JSON file of all comments in level order, ie. top-level first, followed by second-level, then third-level, etc.)
 
-        $ ./scraper.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50 --json
+    $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --json
 
-    You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include this flag with any items besides export options:
+You can scrape multiple items at once:
 
-        $ ./scraper.py -b --csv
+    $ ./scraper.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50 --json
+
+You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include this flag with any items besides export options:
+
+    $ ./scraper.py -b --csv
 
 """
 
@@ -66,7 +77,7 @@ EXAMPLES
         scraper.add_argument("-u", "--redditor", action = "append", nargs = 2, 
             metavar = "", help = "specify Redditor profile to scrape")
         scraper.add_argument("-c", "--comments", action = "append", nargs = 2, 
-            metavar = "", help = "specify the URL of the post to scrape comments")
+            metavar = "", help = "specify the URL of the submission to scrape comments")
         scraper.add_argument("-b", "--basic", action = "store_true", 
             help = "initialize non-CLI Subreddit scraper")
         scraper.add_argument("-y", action = "store_true", 
@@ -182,6 +193,6 @@ class CheckCli():
             if args.comments:
                 self._check_two_arg(args.comments)
         except ValueError:
-            Titles.Titles().e_title()
+            Titles.Titles.e_title()
             parser.exit()
 
