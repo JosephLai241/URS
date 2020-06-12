@@ -1,4 +1,8 @@
-# ***Universal Reddit Scraper***
+     __  __  _ __   ____  
+    /\ \/\ \/\`'__\/',__\ 
+    \ \ \_\ \ \ \//\__, `\
+     \ \____/\ \_\\/\____/
+      \/___/  \/_/ \/___/ 
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments from submissions. 
 
@@ -9,6 +13,8 @@ Run `pip install -r requirements.txt` to get all project dependencies.
 You will need your own Reddit account and API credentials for PRAW. I have included a tutorial on how to do this below. 
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
+
+### Whether you are using this scraper for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal! If you have enjoyed using this program, found it useful, or have any additional questions, please send me an email at [urs_project@protonmail.com](mailto:urs_project@protonmail.com)!
 
 ## Table of Contents
 
