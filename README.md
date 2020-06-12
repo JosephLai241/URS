@@ -151,11 +151,11 @@ URS supports exporting to either CSV or JSON.
 
 Here are my recommendations for scrape exports:
 
-| Scraper            | File Format |
-|--------------------|-------------|
-| Subreddit or Basic | CSV or JSON |
-| Redditor           | JSON        |
-| Comments           | JSON        |
+| Scraper         | File Format |
+|-----------------|-------------|
+| Subreddit/Basic | CSV or JSON |
+| Redditor        | JSON        |
+| Comments        | JSON        |
 
 Exporting Subreddit scrapes will work well with either format.
 
