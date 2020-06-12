@@ -1,7 +1,7 @@
 #===============================================================================
 #                                   Titles
 #===============================================================================
-from colorama import init, Style
+from colorama import Fore, init, Style
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -15,71 +15,80 @@ class Titles():
     ### Print Reddit scraper title
     @staticmethod
     def title():
-        print(Style.BRIGHT + r"""
-                __  ______  _____    _____  ___
-               / / / / __ \/ ___/   |__  / <  /
-              / / / / /_/ /\__ \     /_ <  / / 
-             / /_/ / _, _/___/ /   ___/ / / /  
-             \____/_/ |_|/____/   /____(_)_/   
-         =========================================
-      Scrape Subreddits, Redditors, and post comments
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ __  __  _ __   ____  
+/\ \/\ \/\`'__\/',__\ 
+\ \ \_\ \ \ \//\__, `\
+ \ \____/\ \_\\/\____/
+  \/___/  \/_/ \/___/ 
 """)
 
     ### Print Subreddit scraper title
     @staticmethod
     def r_title():
-        print(Style.BRIGHT + r"""
-     _____       __                  __    ___ __
-    / ___/__  __/ /_  ________  ____/ /___/ (_) /______
-    \__ \/ / / / __ \/ ___/ _ \/ __  / __  / / __/ ___/
-    ___/ / /_/ / /_/ / /  /  __/ /_/ / /_/ / / /_(__  )
-   /____/\__,_/_.___/_/   \___/\__,_/\__,_/_/\__/____/
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ _ __  
+/\`'__\
+\ \ \/ 
+ \ \_\ 
+  \/_/ 
 """)
 
     ### Print Redditor scraper title
     @staticmethod
     def u_title():
-        print(Style.BRIGHT + r"""
-       ____           __    ___ __
-      / __ \___  ____/ /___/ (_) /_____  __________
-     / /_/ / _ \/ __  / __  / / __/ __ \/ ___/ ___/
-    / _, _/  __/ /_/ / /_/ / / /_/ /_/ / /  (__  )
-   /_/ |_|\___/\__,_/\__,_/_/\__/\____/_/  /____/
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ __  __  
+/\ \/\ \ 
+\ \ \_\ \
+ \ \____/
+  \/___/ 
 """)
 
     ### Print comments scraper title
     @staticmethod
     def c_title():
-        print(Style.BRIGHT + r"""
-      ______                                     __
-     / ____/___  ____ ___  ____ ___  ___  ____  / /______
-    / /   / __ \/ __ `__ \/ __ `__ \/ _ \/ __ \/ __/ ___/
-   / /___/ /_/ / / / / / / / / / / /  __/ / / / /_(__  )
-   \____/\____/_/ /_/ /_/_/ /_/ /_/\___/_/ /_/\__/____/
+        print(Fore.WHITE + Style.BRIGHT + r"""
+  ___   
+ /'___\ 
+/\ \__/ 
+\ \____\
+ \/____/
 """)
 
     ### Print basic scraper title
     @staticmethod
     def b_title():
-        print(Style.BRIGHT + r"""
-       __               _
-      / /_  ____ ______(_)____
-     / __ \/ __ `/ ___/ / ___/
-    / /_/ / /_/ (__  ) / /__
-   /_.___/\__,_/____/_/\___/
-   ---------------------------
-    *Only scrapes Subreddits*
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ __        
+/\ \       
+\ \ \____  
+ \ \ '__`\ 
+  \ \ \L\ \
+   \ \_,__/
+    \/___/... Only scrapes Subreddits. 
 """)
 
     ### Print error title
     @staticmethod
     def e_title():
-        print(Style.BRIGHT + r"""
-                  __________  ____  ____  ____
-                 / ____/ __ \/ __ \/ __ \/ __ \
-                / __/ / /_/ / /_/ / / / / /_/ /
-               / /___/ _, _/ _, _/ /_/ / _, _/
-              /_____/_/ |_/_/ |_|\____/_/ |_|
-              =================================
-   Please recheck args or refer to help for usage examples.
+        print(Fore.RED + Style.BRIGHT + r"""
+   __   
+ /'__`\ 
+/\  __/ 
+\ \____\
+ \/____/... Please recheck args or refer to help for usage examples.
+""")
+
+    ### PRAW error title
+    @staticmethod
+    def p_title():
+        print(Fore.RED + Style.BRIGHT + r"""
+ _____   
+/\ '__`\ 
+\ \ \L\ \
+ \ \ ,__/... Please recheck API credentials or your internet connection.
+  \ \ \/ 
+   \ \_\ 
+    \/_/
 """)
