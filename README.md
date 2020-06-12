@@ -93,7 +93,7 @@ These are the submission categories:
 
 Once you confirm the settings for the scrape, the program will save the results to either a `.csv` or `.json` file. 
 
-The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-results.[FILE_FORMAT]"` 
+The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
 
 If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
 
@@ -123,7 +123,7 @@ Of these Redditor attributes, the following will include additional attributes:
 
 ***NOTE:*** The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
 
-The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-results.[FILE_FORMAT]"` 
+The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
 
 ## Submission Comments
 
@@ -143,7 +143,7 @@ Of all scrapers included in this program, this takes the longest to scrape. Scra
 
 ***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
 
-The file names will follow this format: `"c-[POST_TITLE]-[N_RESULTS]-results.[FILE_FORMAT]"` 
+The file names will follow this format: `"c-[POST_TITLE]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
 
 ## Exporting
 
