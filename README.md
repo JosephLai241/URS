@@ -23,14 +23,15 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
   + [Subreddits](#subreddits)
   + [Redditors](#redditors)
   + [Submission Comments](#submission-comments)
-* [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW)
-* [Walkthrough](#walkthrough)
-    - [2-Factor Authentication](#2-factor-authentication)
-    - [CLI Scrapers](#cli-scrapers)
-      - [Subreddit Scraper](#subreddit-scraper)
-      - [Redditor Scraper](#redditor-scraper)
-      - [Comments Scraper](#comments-scraper)
-    - [Basic Scraper](#basic-scraper)
+  + [Exporting](#exporting)
+* [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW) UPDATE LINK IN DOCS/
+* [Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
+    - [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
+    - [CLI Scrapers](#cli-scrapers) UPDATE LINK IN DOCS/
+      - [Subreddit Scraper](#subreddit-scraper) UPDATE LINK IN DOCS/
+      - [Redditor Scraper](#redditor-scraper) UPDATE LINK IN DOCS/
+      - [Comments Scraper](#comments-scraper) UPDATE LINK IN DOCS/
+    - [Basic Scraper](#basic-scraper) UPDATE LINK IN DOCS/
 * [Some Linux Tips](#some-linux-tips)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
@@ -38,13 +39,13 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 # URS Overview
 
-Scrape speeds will be determined by the speed of your internet connection. 
+Scrape speeds are determined by the speed of your internet connection. 
 
-All exported files will be saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories will automatically be created when you run the scraper. 
+All exported files are saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories are automatically created when you run the scraper. 
 
 ## A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
-These attributes will be included in each scrape. 
+These attributes are included in each scrape. 
 
 | Subreddits    | Redditors                      | Submission Comments |
 |---------------|--------------------------------|---------------------|
@@ -120,7 +121,7 @@ Of these Redditor attributes, the following will include additional attributes:
 
 ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file. 
 
-***NOTE:*** The number of results returned will be applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
+***NOTE:*** The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
 
 The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-results.[FILE_FORMAT]"` 
 
@@ -144,163 +145,23 @@ Of all scrapers included in this program, this takes the longest to scrape. Scra
 
 The file names will follow this format: `"c-[POST_TITLE]-[N_RESULTS]-results.[FILE_FORMAT]"` 
 
-# How to get Reddit API Credentials for PRAW
+## Exporting
 
-1) Create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps). 
+URS supports exporting to either CSV or JSON.
 
-2) Click "are you a developer? create an app... ". 
+Here are my recommendations for scrape exports:
 
-![Create an app](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_1.png)
+| Scraper            | File Format |
+|--------------------|-------------|
+| Subreddit or Basic | CSV or JSON |
+| Redditor           | JSON        |
+| Comments           | JSON        |
 
-3) Name your app, choose "script" for the type of app, and type "http://localhost:8080" in the redirect URI field since this is a personal use app. You can also add a description and an about URL. 
+Exporting Subreddit scrapes will work well with either format.
 
-![Enter Stuff In Boxes](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_2.png)
+JSON is the more practical option for Redditor and submission comments scraping. It is much easier to read the scrape results since Redditor scraping returns Redditor attributes that include additional submission or comment attributes. Comments scraping is especially easier to read because structured exports look similar to threads on Reddit. You can process all the information pertaining to a comment much quicker compared to CSV.
 
-4) Click "create app", then "edit" to reveal more information. 
-
-![Click Edit](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_3.png)
-
-5) You should see a string of 14 characters on the top left corner underneath "personal use script. " That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. **Save this information as it will be used in the program in order to use the Reddit API**. 
-
-![All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_4.png)
-
-You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 22-26. 
-
-# Walkthrough
-
-First, you will have to provide your own Reddit credentials in this block of code located in `scraper.py`. 
-
-![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/creds.png)
-
-URS will raise an error if you entered invalid credentials.
-
-## 2-Factor Authentication
-
-If you choose to use 2FA with your Reddit account, enter your password followed by a colon and then your 2FA token in the `password` field on line 26. For example, if your password is "p4ssw0rd" and your 2FA token is "123456", you will enter "p4ssw0rd:123456" in the `password` field. 
-
-**2FA is NOT recommended for use with this program. ** This is because PRAW will raise an OAuthException after one hour, prompting you to refresh your 2FA token and re-enter your credentials. Additionally, this means your 2FA token would be stored alongside your Reddit username and password, which would defeat the purpose of enabling 2FA in the first place. See [here](https://praw.readthedocs.io/en/latest/getting_started/authentication.html#two-factor-authentication) for more information. 
-
-## CLI scrapers
-
-If you do not want to read the rest of this walkthrough, or forget the args, you can always consult the built-in help message by using `-h` or `--help` . 
-
-![Help Message](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/help.png)
-
-----------------------------------------------------------------------------------------------------------------------------
-
-### Subreddit scraper
-
-Scraping Subreddits using flags is much faster than the [basic scraper](#basic-scraper). 
-
-Use the `-r` flag to indicate a Subreddit, the submission category, and finally, depending on the category selected, either the number of results returned or keyword(s) to search for during the scrape. 
-
-Category options are as follows:
-
- - H, h - Hot
- - N, n - New
- - C, c - Controversial
- - T, t - Top
- - R, r - Rising  
- - S, s - Search
- 
-Scraping 10 r/AskReddit posts in the Hot category and export to JSON:
-
-![Subreddit Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_1.png)
-
-The program will then display the type of scrape, check if the Subreddit(s) exist, and display the settings for each Subreddit. It will display a list of invalid Subreddits if applicable. You can also include `-y` in your args if you want to skip this confirmation screen and immediately scrape. 
-
-![Subreddit Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_2.png)
-
-**JSON Sample:**
-
-![JSON Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_json.png)
-
-**CSV Sample:**
-
-![CSV Sample](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/r_csv.png)
-
----------------------------------------------------------------------------------------------------------------------------- 
-
-### Redditor Scraper
-
-Use the `-u` flag to indicate a Redditor and the number of results returned. The program will then display the type of scrape and check if the Redditor(s) exist. It will display a list of invalid Redditors, if applicable. 
-
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.** 
-
-Scraping 5 results for each of u/spez's user attributes and export to JSON:
-
-![Redditor Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_1.png)
-
-There are a couple user lists that are typically restricted and will raise an 403 HTTP Forbidden exception. If you are forbidden from accessing a list, the program will display its name and append "FORBIDDEN" to that section in the export file. 
-
-![Redditor Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_2.png)
-
-**JSON Sample:**
-
-![Redditor JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/u_json.png)
-
-----------------------------------------------------------------------------------------------------------------------------
-
-### Comments Scraper
-
-Use the `-c` flag to indicate a submission and the number of comments returned. The program will then display the type of scrape and check if the submission(s) exist. It will display a list of invalid posts, if applicable. 
-
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.** 
-
-There are two ways you can scrape comments with this program. You can indicate a number to return a structured JSON file that includes down to third-level replies. Or you can specify `0` comments to be returned and the program will return an unstructured JSON file of all comments. 
-
-**Structured Scrape**
-
-Scraping 10 comments from [this Reddit submission](https://www.reddit.com/r/ProgrammerHumor/comments/9ozauu/a_more_accurate_representation_of_what_happened/) and export to JSON:
- 
-
-![Comments Scraping 1](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_1.png)
-
-![Comments Scraping 2](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_2.png)
-
-**Structured JSON Sample:**
-
-![Structured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_json.png)
-
-**Unstructured Scrape**
-
-When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc. 
-
-![Comments Scraping 3](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_3.png)
-
-![Comments Scraping 4](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_4.png)
-
-**Unstructured JSON Sample:**
-
-![Unstructured JSON](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/c_json_raw.png)
-
-## Basic Scraper
-
-I kept URS 1.0's functionality after I added CLI support, in case anyone prefers to use it over CLI arguments. **It only scrapes Subreddits**; Redditor and submission comments scraping would require you to use CLI arguments. 
-
-You can access the basic scraper by using the `-b` flag and an export option. 
-
-You can just scrape a single Subreddit, or enter a list of Subreddits separated by a space. 
-
-![B Flag](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_1.png)
-
-After entering the Subreddit(s) you want to scrape, the program will check if the Subreddit exists. It will separate the results into a list of valid and invalid Subreddits. 
-
-![Check Subs](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_2.png)
-
-You will then choose the submission category within the Subreddit (Hot, New, Controversial, Top, Rising, or Search). After choosing the category, you will also choose how many results you would like to be returned. 
-
-![Submission Category Options](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_3.png)
-
-If you choose to search for keyword(s) within the Subreddit, you will be greeted with these settings instead. 
-
-![Search](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_4.png)
-
-After you have configured all settings for each Subreddit, you will be greeted with the following screen which displays all of your settings. After confirming, the program will scrape the Subreddits based on your parameters. 
-
-![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_5.png)
-
-![Settings Overview](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/b_6.png)
+## See [In-Depth Walkthrough]() for a more in-depth guide with screenshots. UPDATE LINK TO DOCS/
 
 # Some Linux Tips
 
@@ -343,4 +204,4 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 | **December 28, 2019** | URS v3.0 (beta) | <ul> <li>Added JSON export.</li> <li>Added Redditor Scraping.</li> <li>Comments scraping is still under construction.</li> </ul> | 
 | **December 31, 2019** | URS v3.0 (Official) | <ul> <li>Comments scraping functionality is now working!</li> <li>Added additional exception handling for creating filenames.</li> <li>Minor code reformatting.</li> <li>Simplified verbose output.</li> <li>Added an additional submission attribute when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
 | **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>Fulfilled community standards by adding the following docs:</li> <ul> <li>[Contributing Guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)</li> <li>[Pull Request Template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)</li> <li>Issue templates:</li> <ul> <li>[Bug Report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md)</li> <li>[Feature Request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md)</li> </ul> <li>[Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)</li> <li>[License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)</li> </ul> </ul> |
-| **TBD** | URS v3.1 | <ul> <li>***Major*** code refactor. Applied OOP concepts to existing code and rewrote methods in attempt to improve readability, maintenance, and scalability.</li> <li>Scrapes will now be exported to the `scrapes/` directory within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added log decorators that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log will be stored in the same subdirectory corresponding to the date of the scrape.</li> <li>Added color to terminal output.</li> <li>Improved naming convention for scripts.</li> <li>***UPDATE COMMUNITY DOCS WHEN DONE REFACTORING.***</li> <li>Numerous changes to Readme.</li> </ul> | 
+| **TBD** | URS v3.1 | <ul> <li>***Major*** code refactor. Applied OOP concepts to existing code and rewrote methods in attempt to improve readability, maintenance, and scalability.</li> <li>Scrapes will now be exported to the `scrapes/` directory within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added log decorators that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>Added color to terminal output.</li> <li>Improved naming convention for scripts.</li> <li>***UPDATE COMMUNITY DOCS WHEN DONE REFACTORING.***</li> <li>Numerous changes to Readme.</li> </ul> | 
