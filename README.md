@@ -25,7 +25,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
   + [Submission Comments](#submission-comments)
   + [Exporting](#exporting)
 * [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW) UPDATE LINK IN DOCS/
-* [Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
+* [In-Depth Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
     - [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
     - [CLI Scrapers](#cli-scrapers) UPDATE LINK IN DOCS/
       - [Subreddit Scraper](#subreddit-scraper) UPDATE LINK IN DOCS/
@@ -149,7 +149,7 @@ The file names will follow this format: `"c-[POST_TITLE]-[N_RESULTS]-result(s).[
 
 URS supports exporting to either CSV or JSON.
 
-Here are my recommendations for scrape exports:
+Here are my recommendations for scrape exports.
 
 | Scraper         | File Format |
 |-----------------|-------------|
@@ -161,7 +161,7 @@ Exporting Subreddit scrapes will work well with either format.
 
 JSON is the more practical option for Redditor and submission comments scraping. It is much easier to read the scrape results since Redditor scraping returns Redditor attributes that include additional submission or comment attributes. Comments scraping is especially easier to read because structured exports look similar to threads on Reddit. You can process all the information pertaining to a comment much quicker compared to CSV.
 
-## See [In-Depth Walkthrough]() for a more in-depth guide with screenshots. UPDATE LINK TO DOCS/
+### See [In-Depth Walkthrough]() for a more detailed guide with screenshots. UPDATE LINK TO DOCS/
 
 # Some Linux Tips
 
@@ -174,7 +174,7 @@ JSON is the more practical option for Redditor and submission comments scraping.
   + If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim. 
 
 	``` 
-    vim scraper.py
+    $ vim scraper.py
     :set fileformat=unix
     :wq!
     ```
