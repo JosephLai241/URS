@@ -7,6 +7,8 @@ import requests
 from colorama import Fore, init, Style
 from prawcore import NotFound, PrawcoreException
 
+from . import Titles
+
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
 init(autoreset = True)
@@ -25,11 +27,8 @@ class Validation():
             print(Style.BRIGHT + Fore.GREEN + "\nYou have successfully logged in as u/%s.\n" % 
                     reddit.user.me())
         except PrawcoreException as error:
-            print(Style.BRIGHT + Fore.RED + "\nERROR!")
-            print(Style.Bright + Fore.RED + "\n%s" % error)
-            print(Style.BRIGHT + Fore.RED + 
-                "\nPlease recheck Reddit credentials or your internet connection.")
-            print(Style.BRIGHT + Fore.RED + "\nExiting.\n")
+            Titles.Titles.p_title()
+            print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s\n" % error)
             parser.exit()
 
     ### Check Subreddits.
