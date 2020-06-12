@@ -139,7 +139,6 @@ class LogScraper():
         def decorator(function):
             def wrapper(*args):
                 start = time.time()
-                
                 start_log = "Running %s scraper..." % scraper.capitalize()
                 logging.info((start_log))
 
@@ -161,14 +160,27 @@ class LogExport():
     Decorator for logging exporting files.
     """
 
+    ### Get export type for logging.
+    @staticmethod
+    def _get_export_switch(args):
+        export_options = {
+            0: "Exporting to JSON.",
+            1: "Exporting to CSV."
+        }
+
+        if args.json:
+            return export_options.get(0)
+        elif args.csv:
+            return export_options.get(1)
+
+    ### Wrapper for logging the export option.
     @staticmethod
     def log_export(function):
         def wrapper(*args):
             try:
                 function(*args)
-                export_log = "Exporting scrapes to JSON files." if args[0].json else \
-                    "Exporting scrapes to CSV files."
-                logging.info(export_log)
+
+                logging.info(LogExport._get_export_switch(args[0]))
                 logging.info("")
             except Exception as e:
                 logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
