@@ -145,7 +145,7 @@ class GetSort():
     def __init__(self, post, reddit):
         self._submission = reddit.submission(url = post)
 
-        print(Fore.YELLOW + Style.BRIGHT + "\nResolving instances of MoreComments...")
+        print(Fore.CYAN + Style.BRIGHT + "\nResolving instances of MoreComments...")
         print("\nThis may take a while. Please wait.")
         self._submission.comments.replace_more(limit = None)
 
