@@ -8,32 +8,26 @@ Universal Reddit Scraper 3.1
 """
 import praw
 
-from utils.Logger import LogMain
+from Credentials import API
 from Tools import Run
+
+from utils.Logger import LogMain
 
 class Main():
     """
     Putting it all together.
     """
 
-    def __init__(self):
-        ### Reddit API Credentials
-        self.API = {
-            "client_id": "14_CHAR_HERE",        # Personal Use Script (14 char)
-            "client_secret": "27_CHAR_HERE",    # Secret key (27 char)
-            "user_agent": "APP_NAME_HERE",      # App name
-            "username": "REDDIT_USERNAME_HERE", # Reddit username
-            "password": "REDDIT_PASSWORD_HERE"  # Reddit login password
-        }
-
+    @staticmethod
     @LogMain.master_timer
-    def main(self):
+    def main():
         ### Reddit Login
-        reddit = praw.Reddit(client_id = self.API["client_id"],
-                            client_secret = self.API["client_secret"],
-                            user_agent = self.API["user_agent"],
-                            username = self.API["username"],
-                            password = self.API["password"])
+        reddit = praw.Reddit(
+            client_id = API["client_id"],
+            client_secret = API["client_secret"],
+            user_agent = API["user_agent"],
+            username = API["username"],
+            password = API["password"])
 
         run = Run(reddit)
         run.run_urs()
