@@ -5,8 +5,9 @@ import logging
 import time
 
 from colorama import Fore, init, Style
+from prawcore import PrawcoreException
 
-from . import DirInit, Global
+from . import DirInit, Global, Titles
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -44,14 +45,54 @@ class LogMain():
                 function(*args)
             except KeyboardInterrupt:
                 print(Style.BRIGHT + Fore.RED + "\n\nURS ABORTED BY USER.\n")
-                logging.critical("")
-                logging.critical("URS ABORTED BY USER.\n")
+                logging.warning("")
+                logging.warning("URS ABORTED BY USER.\n")
                 quit()
 
             runtime = "URS completed scrapes in %.2f seconds.\n" % \
                 (time.time() - start)
             
             logging.info((runtime))
+
+        return wrapper
+
+class LogError():
+    """
+    Decorator for logging PRAW or args errors.
+    """
+    
+    ### Wrapper for logging PRAW errors.
+    @staticmethod
+    def log_login(function):
+        def wrapper(parser, reddit):
+            print("\nLogging in...")
+
+            try:
+                function(parser, reddit)
+                logging.info("Successfully logged in as u/%s" % reddit.user.me())
+                logging.info("")
+            except PrawcoreException as error:
+                Titles.Titles.p_title()
+                print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s\n" % 
+                    error)
+                logging.critical("LOGIN FAILED.")
+                logging.critical("PRAWCORE EXCEPTION: %s" % error)
+                logging.critical("EXITING.\n")
+                parser.exit()
+
+        return wrapper
+
+    ### Wrapper for logging args errors.
+    @staticmethod
+    def log_args(function):
+        def wrapper(self, args, parser):
+            try:
+                function(self, args, parser)
+            except ValueError:
+                Titles.Titles.e_title()
+                logging.critical("INVALID ARGUMENTS GIVEN.")
+                logging.critical("EXITING.\n")
+                parser.exit()
 
         return wrapper
 
@@ -184,6 +225,6 @@ class LogExport():
                 logging.info("")
             except Exception as e:
                 logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
-                logging.critical(e)
+                logging.critical("%s\n" % e)
 
         return wrapper
