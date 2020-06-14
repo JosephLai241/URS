@@ -8,6 +8,7 @@ from colorama import Fore, init, Style
 from prawcore import NotFound, PrawcoreException
 
 from . import Titles
+from .Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
@@ -20,16 +21,10 @@ class Validation():
 
     ### Check if PRAW credentials are valid.
     @staticmethod
+    @LogError.log_login
     def validate_user(parser, reddit):
-        print("\nLogging in...")
-        
-        try:
-            print(Style.BRIGHT + Fore.GREEN + "\nYou have successfully logged in as u/%s.\n" % 
-                    reddit.user.me())
-        except PrawcoreException as error:
-            Titles.Titles.p_title()
-            print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s\n" % error)
-            parser.exit()
+        print(Style.BRIGHT + Fore.GREEN + 
+            "\nYou have successfully logged in as u/%s.\n" % reddit.user.me())
 
     ### Check Subreddits.
     @staticmethod
