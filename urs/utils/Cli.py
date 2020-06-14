@@ -176,11 +176,17 @@ class CheckCli():
                     except ValueError:
                         raise ValueError
 
+    ### Check Redditor args
+    def _check_redditor(self, args):
+        for users in args.redditor:
+            if users[1].isalpha() or int(users[1]) == 0:
+                raise ValueError
+
     ### Check args for items that only require two arguments (Redditor or 
     ### comments scrapers).
-    def _check_two_arg(self, object):
-        for obj in object:
-            if obj[1].isalpha():
+    def _check_comments(self, args):
+        for comments in args.comments:
+            if comments[1].isalpha():
                 raise ValueError
 
     ### Check args and catching errors.
@@ -189,9 +195,9 @@ class CheckCli():
             if args.subreddit:
                 self._check_subreddit(args)
             if args.redditor:
-                self._check_two_arg(args.redditor)
+                self._check_redditor(args)
             if args.comments:
-                self._check_two_arg(args.comments)
+                self._check_comments(args)
         except ValueError:
             Titles.Titles.e_title()
             parser.exit()
