@@ -22,7 +22,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
-**Whether you are using this scraper for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email (address is in the Email badge). I look forward to hearing from you!**
+**Whether you are using this scraper for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email to the address in the Email badge. I look forward to hearing from you!**
 
 ## Table of Contents
 
@@ -34,12 +34,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
   + [Exporting](#exporting)
 * [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW) UPDATE LINK IN DOCS/
 * [In-Depth Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
-    - [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
-    - [CLI Scrapers](#cli-scrapers) UPDATE LINK IN DOCS/
-      - [Subreddit Scraper](#subreddit-scraper) UPDATE LINK IN DOCS/
-      - [Redditor Scraper](#redditor-scraper) UPDATE LINK IN DOCS/
-      - [Comments Scraper](#comments-scraper) UPDATE LINK IN DOCS/
-    - [Basic Scraper](#basic-scraper) UPDATE LINK IN DOCS/
+* [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
 * [Some Linux Tips](#some-linux-tips)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
