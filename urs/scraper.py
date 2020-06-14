@@ -9,9 +9,9 @@ Universal Reddit Scraper 3.1
 import praw
 
 from Credentials import API
-from Tools import Run
 
 from utils.Logger import LogMain
+from utils.Tools import Run
 
 class Main():
     """
