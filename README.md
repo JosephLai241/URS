@@ -22,7 +22,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
-### Whether you are using this scraper for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal! If you have enjoyed using this program, found it useful, or have any additional questions, please send me an email at [urs_project@protonmail.com](mailto:urs_project@protonmail.com)!
+**Whether you are using this scraper for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email (address is in the Email badge). I look forward to hearing from you!**
 
 ## Table of Contents
 
