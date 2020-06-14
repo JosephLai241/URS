@@ -6,10 +6,10 @@
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python)
 ![Travis](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
-![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&link=mailto:urs_project@protonmail.com=mailto:urs_project@protonmail.com)
+![GitHub Release Date](https://img.shields.io/github/release-date/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
-![GitHub Release Date](https://img.shields.io/github/release-date/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
+![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&link=mailto:urs_project@protonmail.com=mailto:urs_project@protonmail.com)
 
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments from submissions. 
