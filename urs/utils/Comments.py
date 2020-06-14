@@ -102,15 +102,14 @@ class SortComments():
     ### Append third-level comments to all_dict.
     @staticmethod
     def _third_level_comment(all_dict, comment, cpid):
-        for more_comments in all_dict.values():
-            for item in more_comments:
-                if isinstance(item, dict):
-                    sub_set = GetComments().add_comment(comment)
-                    if cpid not in item.keys():
-                        item[comment.id] = [sub_set]
-                    else:
-                        item[cpid].append({comment.id:sub_set})
-
+        for all_comments in all_dict.values():
+            for top_level_or_reply in all_comments:
+                if isinstance(top_level_or_reply, dict):
+                    ### Indicates this is a reply and not a top-level comment
+                    third_level = GetComments().add_comment(comment)
+                    if cpid in top_level_or_reply.keys():
+                        top_level_or_reply[cpid].append({comment.id: third_level})
+                    
     ### Appending structured comments to all_dict.
     @staticmethod
     def _structured_comments(all_dict, comment, cpid, submission):
@@ -159,22 +158,23 @@ class GetSort():
 
     ### Get comments in structured format.
     def _get_structured(self, all_dict, limit, submission):
-        plurality = "comment" if limit == 1 else "comments"
+        plurality = "comment" if int(limit) == 1 else "comments"
         print(Style.BRIGHT + 
-            ("\nProcessing %s %s including second and third-level replies from Reddit post '%s'...") % 
+            ("\nProcessing %s %s in structured format from Reddit post '%s'...") % 
                 (limit, plurality, submission.title))
 
         SortComments().sort(all_dict, False, submission)
-        all_dict = {key: all_dict[key] for key in list(all_dict)[:int(limit)]}
+        return {key: all_dict[key] for key in list(all_dict)[:int(limit)]}
 
     ### Get comments from posts.
     def get_sort(self, limit, post, reddit):
         all_dict = dict()
 
-        self._get_raw(all_dict, self._submission) if int(limit) == 0 else \
-            self._get_structured(all_dict, limit, self._submission)
-
-        return all_dict
+        if int(limit) == 0:
+            self._get_raw(all_dict, self._submission)
+            return all_dict
+        else:
+            return self._get_structured(all_dict, limit, self._submission)
 
 class Write():
     """
