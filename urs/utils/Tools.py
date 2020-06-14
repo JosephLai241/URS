@@ -2,7 +2,7 @@
 #                   All Scrapers and Validation/Args Checking
 #===============================================================================
 from colorama import Fore, init, Style
-from utils import (Basic, Cli, Comments, Global,
+from . import (Basic, Cli, Comments, Global,
                    Redditor, Subreddit, Titles, Validation)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
