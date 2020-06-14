@@ -1,10 +1,6 @@
 # In-Depth Walkthrough
 
-First, you will have to provide your own Reddit credentials in this block of code located in `scraper.py`. 
-
-### UPDATE BLOCK
-
-![Reddit credentials](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/creds.png)
+**First, you will have to provide your own Reddit credentials in the block of credentials found in `Credentials.py`.**
 
 URS will raise an error if you entered invalid credentials.
 

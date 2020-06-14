@@ -18,6 +18,4 @@
 
 ![All Info](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/Screenshots/Reddit%20API/api_4.png)
 
-You will also have to provide your app name, Reddit account username and password in the block of credentials found on lines 22-26. 
-
-# ADD BLOCK SCREENSHOT HERE
+You will also have to provide your app name, Reddit account username and password in the block of credentials found in `Credentials.py`.
