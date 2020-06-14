@@ -28,8 +28,7 @@ class LogMain():
 
     ### Configure logging settings.
     logging.basicConfig(filename = DIR_PATH + "/scrapes.log", 
-                        format = LOG_FORMAT,
-                        level = logging.INFO)
+        format = LOG_FORMAT, level = logging.INFO)
     
     ### Wrapper for logging the amount of time it took to execute main(). Handle
     ### KeyboardInterrupt if user cancels scraping.
@@ -60,7 +59,7 @@ class LogError():
     """
     Decorator for logging PRAW or args errors.
     """
-    
+
     ### Wrapper for logging PRAW errors.
     @staticmethod
     def log_login(function):
@@ -76,8 +75,7 @@ class LogError():
                 print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s\n" % 
                     error)
                 logging.critical("LOGIN FAILED.")
-                logging.critical("PRAWCORE EXCEPTION: %s" % error)
-                logging.critical("EXITING.\n")
+                logging.critical("PRAWCORE EXCEPTION: %s\n" % error)
                 parser.exit()
 
         return wrapper
@@ -90,15 +88,14 @@ class LogError():
                 function(self, args, parser)
             except ValueError:
                 Titles.Titles.e_title()
-                logging.critical("INVALID ARGUMENTS GIVEN.")
-                logging.critical("EXITING.\n")
+                logging.critical("INVALID ARGUMENTS GIVEN.\n")
                 parser.exit()
 
         return wrapper
 
 class LogScraper():
     """
-    Decorator for logging runtimes and program events. 
+    Decorator for logging scraper runtimes and events.
     """
 
     ### Get scraper type for logging.
@@ -195,6 +192,21 @@ class LogScraper():
 
             return wrapper
         return decorator
+
+    ### Wrapper for logging if the user cancelled Subreddit scraping at the
+    ### confirmation page.
+    @staticmethod
+    def log_cancel(function):
+        def wrapper(*args):
+            try:
+                function(*args)
+            except KeyboardInterrupt:
+                print(Fore.RED + Style.BRIGHT + "\nCancelling.\n")
+                logging.warning("")
+                logging.warning("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
+                quit()
+            
+        return wrapper
 
 class LogExport():
     """
