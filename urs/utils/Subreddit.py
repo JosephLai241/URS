@@ -249,7 +249,7 @@ class RunSubreddit():
 
     ### Create settings for each user input.
     @staticmethod
-    def create_settings(args, parser, reddit, s_t):
+    def _create_settings(args, parser, reddit, s_t):
         sub_list = Cli.GetScrapeSettings().create_list(args, s_t[0])
         subs = CheckSubs.confirm_subs(parser, reddit, s_t, sub_list)
         s_master = Global.make_list_dict(subs)
@@ -257,18 +257,26 @@ class RunSubreddit():
 
         return s_master
 
+    ### Print the confirm screen if the user did not specify the `-y` flag.
+    @staticmethod
+    @LogScraper.log_cancel
+    def _confirm_write(args, reddit, s_master):
+        PrintConfirm.print_settings(args, s_master)
+        confirm = PrintConfirm.confirm_settings()
+
+        if confirm == options[0]:
+            GetSortWrite().gsw(args, reddit, s_master)
+        else:
+            raise KeyboardInterrupt
+
     ### Skip or print Subreddit scraping settings if the `-y` flag is entered.
     ### Then write or quit scraper.
     @staticmethod
-    def print_write(args, reddit, s_master):
+    def _write_file(args, reddit, s_master):
         if args.y:
             GetSortWrite().gsw(args, reddit, s_master)
         else:
-            PrintConfirm.print_settings(args, s_master)
-            confirm = PrintConfirm.confirm_settings()
-            
-            GetSortWrite().gsw(args, reddit, s_master) if confirm == options[0] \
-                else print(Fore.RED + Style.BRIGHT + "\nCancelling.\n")
+            RunSubreddit._confirm_write(args, reddit, s_master)
 
     ### Run Subreddit scraper.
     @staticmethod
@@ -277,5 +285,5 @@ class RunSubreddit():
     def run(args, parser, reddit, s_t):
         Titles.Titles.r_title()
 
-        s_master = RunSubreddit.create_settings(args, parser, reddit, s_t)
-        RunSubreddit.print_write(args, reddit, s_master)
+        s_master = RunSubreddit._create_settings(args, parser, reddit, s_t)
+        RunSubreddit._write_file(args, reddit, s_master)
