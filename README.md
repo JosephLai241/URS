@@ -6,10 +6,8 @@
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python)
 ![Travis](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
-![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
+![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&link=mailto:urs_project@protonmail.com=mailto:urs_project@protonmail.com)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub Release Date](https://img.shields.io/github/release-date/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 
