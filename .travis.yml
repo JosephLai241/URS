@@ -10,8 +10,7 @@ python:
 
 ### Command to install dependencies
 install:
-  - pip install -U pip
-  - python setup.py develop
+  - pip install -e .
 
 ### Command to run tests
 script: pytest
