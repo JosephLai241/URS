@@ -72,10 +72,10 @@ class LogError():
                 logging.info("")
             except PrawcoreException as error:
                 Titles.Titles.p_title()
-                print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s\n" % 
+                print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s.\n" % 
                     error)
                 logging.critical("LOGIN FAILED.")
-                logging.critical("PRAWCORE EXCEPTION: %s\n" % error)
+                logging.critical("PRAWCORE EXCEPTION: %s.\n" % error)
                 parser.exit()
 
         return wrapper
@@ -150,7 +150,7 @@ class LogScraper():
     @staticmethod
     def _format_comments_log(each_arg):
         plurality = "comments" if int(each_arg[1]) > 1 else "comment"
-        return "Processing %s %s and including second and third-level replies from Reddit post %s" % \
+        return "Processing %s %s in structured format from Reddit post %s" % \
             (each_arg[1], plurality, each_arg[0]) if int(each_arg[1]) > 0 else \
                 "Processing all comments in raw format from Reddit post %s" % each_arg[0]
 
