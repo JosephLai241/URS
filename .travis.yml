@@ -11,6 +11,7 @@ python:
 
 ### Command to install dependencies
 install:
+  - pip install -U pip
   - python setup.py install
 
 ### Command to run tests
