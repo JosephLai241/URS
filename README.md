@@ -45,7 +45,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 Scrape speeds may vary depending on the number of results returned for Subreddit or Redditor scraping, or the submission's popularity (total number of comments) for submission comments scraping. It is also impacted by your internet connection speed. 
 
-All exported files are saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories are automatically created when you run URS. 
+All exported files are saved within the `scrapes/` directory and stored in a sub-directory labeled with the date. These directories are automatically created when you run URS. 
 
 ## A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
