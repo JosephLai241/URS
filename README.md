@@ -42,7 +42,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 # URS Overview
 
-Scrape speeds are determined by the speed of your internet connection. 
+Scrape speeds may vary depending on the number of results returned for Subreddit or Redditor scraping, and the submission's popularity (total number of comments) for submission comments scraping. Speeds are also determined by your internet connection. 
 
 All exported files are saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories are automatically created when you run the scraper. 
 
@@ -81,7 +81,15 @@ These attributes are included in each scrape.
 
 `$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
-You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all submissions that are returned from the search. 
+You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all submissions that are returned from the search.
+
+Some categories include additional time filters. Here is a table of how each is sorted.
+
+| Category | Sorted By/Time Filter     | 
+|---------------|----------------------|
+| Controversial | Time filter: all     |
+| Search        | Sorted by: Relevance |
+| Top           | Time filter: all     |
 
 These are the submission categories:
 
@@ -106,7 +114,19 @@ If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-
 
 **These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
 
-You can also scrape Redditor profiles and specify how many results are returned. 
+You can also scrape Redditor profiles and specify how many results are returned.
+
+Some Redditor attributes are sorted differently. Here is a table of how each is sorted.
+
+| Attribute Name | Sorted By/Time Filter                      |
+|----------------|--------------------------------------------|
+| Comments       | Sorted by: new                             |
+| Controversial  | Time filter: all                           |
+| Gilded         | Sorted by: new                             |
+| Hot            | Dependent on other Redditors' interactions |
+| New            | Sorted by: new                             |
+| Submissions    | Sorted by: new                             |
+| Top            | Time filter: all                           |
 
 Of these Redditor attributes, the following will include additional attributes:
 
@@ -134,7 +154,7 @@ The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FI
 
 **These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
 
-You can also scrape comments from submissions and specify the number of results returned. 
+You can also scrape comments from submissions and specify the number of results returned. Comments are sorted by "Best", which is the default sorting option when you visit a submission.
 
 Comments scraping can either return structured JSON data down to third-level comment replies, or you can simply return a raw list of all comments with no structure. 
 
@@ -142,7 +162,7 @@ To return a raw list of all comments, specify `0` results to be returned from th
 
 When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc. 
 
-Of all scrapers included in this program, this takes the longest to scrape. Scraping speed will also depend on the submission's popularity and your internet connection speed.
+Of all scrapers included in this program, this takes the longest to execute. PRAW returns submission comments in level order: all top-level comments are listed first, followed by all second-level comments, then third, etc. This means scrape speeds are proportional to the submission's popularity. Your internet connection speed is also another aspect to consider.
 
 ***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
 
