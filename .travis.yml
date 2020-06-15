@@ -11,7 +11,7 @@ python:
 
 ### Command to install dependencies
 install:
-  - pip install -r requirements.txt
+  - python setup.py install
 
 ### Command to run tests
 script: pytest
