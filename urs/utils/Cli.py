@@ -19,7 +19,7 @@ class Parser():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._usage = "scraper.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
+        self._usage = "Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
         self._description = r"""
 Universal Reddit Scraper 3.1 - Scrape Subreddits, submissions, Redditors, or comments from submissions
 
@@ -39,33 +39,33 @@ EXAMPLES
 
 Get the first 10 posts in r/askreddit in the Hot category and export to JSON:
 
-    $ ./scraper.py -r askreddit h 10 --json
+    $ ./Urs.py -r askreddit h 10 --json
 
 Search for "United States of America" in r/worldnews and export to CSV:
 
-    $ ./scraper.py -r worldnews s "United States of America" --csv
+    $ ./Urs.py -r worldnews s "United States of America" --csv
 
 Scraping 15 results from u/spez's Reddit account:
 
-    $ ./scraper.py -u spez 15 --json
+    $ ./Urs.py -u spez 15 --json
 
 Scraping 25 comments from this r/TIFU post:
 (Returns a structured JSON file that includes down to third-level replies)
 
-    $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --json
+    $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --json
 
 Scraping all comments from the same r/TIFU post:
 (Returns an unstructured JSON file of all comments in level order, ie. top-level first, followed by second-level, then third-level, etc.)
 
-    $ ./scraper.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --json
+    $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --json
 
 You can scrape multiple items at once:
 
-    $ ./scraper.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50 --json
+    $ ./Urs.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50 --json
 
 You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include this flag with any items besides export options:
 
-    $ ./scraper.py -b --csv
+    $ ./Urs.py -b --csv
 
 """
 
@@ -73,16 +73,16 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
     ### confirmation flags.
     @staticmethod
     def _add_flags(parser):
-        scraper = parser.add_argument_group("Scraping options")
-        scraper.add_argument("-r", "--subreddit", action = "append", nargs = 3, 
+        urs = parser.add_argument_group("Scraping options")
+        urs.add_argument("-r", "--subreddit", action = "append", nargs = 3, 
             metavar = "", help = "specify Subreddit to scrape")
-        scraper.add_argument("-u", "--redditor", action = "append", nargs = 2, 
+        urs.add_argument("-u", "--redditor", action = "append", nargs = 2, 
             metavar = "", help = "specify Redditor profile to scrape")
-        scraper.add_argument("-c", "--comments", action = "append", nargs = 2, 
+        urs.add_argument("-c", "--comments", action = "append", nargs = 2, 
             metavar = "", help = "specify the URL of the submission to scrape comments")
-        scraper.add_argument("-b", "--basic", action = "store_true", 
+        urs.add_argument("-b", "--basic", action = "store_true", 
             help = "initialize non-CLI Subreddit scraper")
-        scraper.add_argument("-y", action = "store_true", 
+        urs.add_argument("-y", action = "store_true", 
             help = "skip Subreddit options confirmation and scrape immediately")
 
     ### Add export flags.
@@ -206,4 +206,3 @@ class CheckCli():
             CheckCli._check_redditor(args)
         if args.comments:
             CheckCli._check_comments(args)
-    
