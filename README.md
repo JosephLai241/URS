@@ -180,7 +180,7 @@ Here are my recommendations for scrape exports.
 | Redditor        | JSON        |
 | Comments        | JSON        |
 
-Exporting Subreddit scrapes will work well with either format.
+Subreddit scrapes will work well with either format.
 
 JSON is the more practical option for Redditor and submission comments scraping. It is much easier to read the scrape results since Redditor scraping returns Redditor attributes that include additional submission or comment attributes. Comments scraping is especially easier to read because structured exports look similar to threads on Reddit. You can process all the information pertaining to a comment much quicker compared to CSV.
 
