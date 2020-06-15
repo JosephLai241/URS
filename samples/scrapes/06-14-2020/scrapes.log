@@ -1,4 +1,4 @@
-*NOTE: lines starting with `###` are just comments explaining the different types of errors you might see when using URS. You will not see these comments in your log file. I am also omitting my Reddit username.
+*NOTE: Lines starting with `###` are just comments explaining the different types of errors you might see when using URS. You will not see these comments in your log file. I am also omitting my Reddit username.
 
 ### The error message if you provide invalid PRAW credentials.
 
@@ -66,7 +66,3 @@
 [2020-06-14 20:45:46,912] [INFO]: Exporting to JSON.
 [2020-06-14 20:45:46,912] [INFO]: 
 [2020-06-14 20:45:46,913] [INFO]: URS completed scrapes in 798.26 seconds.
-[2020-06-14 21:02:52,247] [INFO]: Initializing URS...
-[2020-06-14 21:02:52,247] [INFO]: 
-[2020-06-14 21:02:52,452] [CRITICAL]: LOGIN FAILED.
-[2020-06-14 21:02:52,453] [CRITICAL]: PRAWCORE EXCEPTION: received 401 HTTP response.
