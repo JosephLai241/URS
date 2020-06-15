@@ -86,11 +86,11 @@ You can specify Subreddits, the submission category, and how many results are re
 
 Some categories include additional time filters. Here is a table of how each is sorted.
 
-| Category | Sorted By/Time Filter     | 
-|---------------|----------------------|
-| Controversial | Time filter: all     |
-| Search        | Sorted by: Relevance |
-| Top           | Time filter: all     |
+| Category      | Sorted By/Time Filter | 
+|---------------|-----------------------|
+| Controversial | Time filter: all      |
+| Search        | Sorted by: Relevance  |
+| Top           | Time filter: all      |
 
 These are the submission categories:
 
