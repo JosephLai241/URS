@@ -25,6 +25,17 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 **Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email to the address in the email badge. I look forward to hearing from you!**
 
+## URS v3.1 TODO
+
+* ~~Figure out how to integrate Travis CI~~
+* ~~Sign up for ReadTheDocs~~
+    + Learn how to generate docs (Sphinx)
+* Add more tests
+* Replace old screenshots
+* Update links in ToC
+* Look further into packaging Python projects
+* When everything is finalized, deploy to PyPI
+
 ## Table of Contents
 
 * [URS Overview](#urs-overview)
