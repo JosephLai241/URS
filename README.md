@@ -22,7 +22,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
-**Whether you are using this scraper for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email to the address in the Email badge. I look forward to hearing from you!**
+**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email to the address in the email badge. I look forward to hearing from you!**
 
 ## Table of Contents
 
@@ -42,9 +42,9 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 # URS Overview
 
-Scrape speeds may vary depending on the number of results returned for Subreddit or Redditor scraping, and the submission's popularity (total number of comments) for submission comments scraping. Speeds are also determined by your internet connection. 
+Scrape speeds may vary depending on the number of results returned for Subreddit or Redditor scraping, or the submission's popularity (total number of comments) for submission comments scraping. It is also impacted by your internet connection speed. 
 
-All exported files are saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories are automatically created when you run the scraper. 
+All exported files are saved within the directory `scrapes/` and stored in a sub-directory labeled with the date. These directories are automatically created when you run URS. 
 
 ## A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
@@ -79,9 +79,9 @@ These attributes are included in each scrape.
 
 ## Subreddits
 
-`$ ./scraper.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
+`$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
-You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and the scraper will get all submissions that are returned from the search.
+You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and URS will get all submissions that are returned from the search.
 
 Some categories include additional time filters. Here is a table of how each is sorted.
 
@@ -102,17 +102,15 @@ These are the submission categories:
 
 ***NOTE:*** All results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep. 
 
-Once you confirm the settings for the scrape, the program will save the results to either a `.csv` or `.json` file. 
-
 The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
 
 If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
 
 ## Redditors
 
-`$ ./scraper.py -u USER N_RESULTS --FILE_FORMAT` 
+`$ ./Urs.py -u USER N_RESULTS --FILE_FORMAT` 
 
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
+**Designed for JSON only. Exporting to CSV is not recommended, but it will still work.**
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
@@ -150,19 +148,26 @@ The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FI
 
 ## Submission Comments
 
-`$ ./scraper.py -c URL N_RESULTS --FILE_FORMAT` 
+`$ ./Urs.py -c URL N_RESULTS --FILE_FORMAT` 
 
-**These scrapes were designed to be used with JSON only. Exporting to CSV is not recommended, but it will still work.**
+**Designed for JSON only. Exporting to CSV is not recommended, but it will still work.**
 
-You can also scrape comments from submissions and specify the number of results returned. Comments are sorted by "Best", which is the default sorting option when you visit a submission.
+You can also scrape comments from submissions and specify the number of results returned. 
 
-Comments scraping can either return structured JSON data down to third-level comment replies, or you can simply return a raw list of all comments with no structure. 
+Comments are sorted by "Best", which is the default sorting option when you visit a submission.
 
-To return a raw list of all comments, specify `0` results to be returned from the scrape. 
+There are two ways you can scrape comments: structured or raw. This is determined by the number you pass into `N_RESULTS`:
 
-When exporting raw comments, all top-level comments are listed first, followed by second-level, third-level, etc. 
+| Scrape Type | N_RESULTS      |
+|-------------|----------------|
+| Structured  | N_RESULTS >= 1 |
+| Raw         | N_RESULTS = 0  |
 
-Of all scrapers included in this program, this takes the longest to execute. PRAW returns submission comments in level order: all top-level comments are listed first, followed by all second-level comments, then third, etc. This means scrape speeds are proportional to the submission's popularity. Your internet connection speed is also another aspect to consider.
+Structured scrapes resemble comment threads on Reddit and will include down to third-level comment replies. 
+
+Raw scrapes do not resemble comment threads, but returns all comments on a submission in level order: all top-level comments are listed first, followed by all second-level comments, then third, etc.
+
+Of all scrapers included in this program, this usually takes the longest to execute. PRAW returns submission comments in level order, which means scrape speeds are proportional to the submission's popularity.
 
 ***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
 
@@ -196,16 +201,15 @@ You can still export Redditor data and submission comments to CSV, but you will 
 
 # Some Linux Tips
 
-* You can further simplify running the program by making the program executable. 
-* `sudo chmod +x scraper.py` 
-* Make sure the shebang at the top of scraper. py matches the location in which your Python is installed. You can use `which python` to check. The default shebang is `#!/usr/bin/python` . 
-* Now you will only have to prepend `./` to run the scraper. 
-  + `./scraper.py ...` 
+* You can further simplify running the program by making the program executable: `sudo chmod +x Urs.py` 
+* Make sure the shebang at the top of `Urs.py` matches the location in which your Python3 is installed. You can use `which python` and then `python --version` to check. The default shebang is `#!/usr/bin/python`. 
+* Now you will only have to prepend `./` to run URS. 
+  + `./Urs.py ...` 
 * Troubleshooting
-  + If you run the scraper with `./` and are greeted with a bad interpreter error, you will have to set the fileformat to UNIX. I did this using Vim. 
+  + You will have to set the fileformat to UNIX if you run URS with `./` and are greeted with a bad interpreter error. I did this using Vim. 
 
 	``` 
-    $ vim scraper.py
+    $ vim Urs.py
     :set fileformat=unix
     :wq!
     ```
