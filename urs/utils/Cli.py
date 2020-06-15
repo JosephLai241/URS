@@ -73,27 +73,51 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
     ### confirmation flags.
     def _add_flags(self, parser):
         urs = parser.add_argument_group("Scraping options")
-        urs.add_argument("-r", "--subreddit", action = "append", nargs = 3, 
-            metavar = "", help = "specify Subreddit to scrape")
-        urs.add_argument("-u", "--redditor", action = "append", nargs = 2, 
-            metavar = "", help = "specify Redditor profile to scrape")
-        urs.add_argument("-c", "--comments", action = "append", nargs = 2, 
-            metavar = "", help = "specify the URL of the submission to scrape comments")
-        urs.add_argument("-b", "--basic", action = "store_true", 
+        urs.add_argument(
+            "-r", "--subreddit", 
+            action = "append", 
+            nargs = 3, 
+            metavar = "", 
+            help = "specify Subreddit to scrape")
+        urs.add_argument(
+            "-u", "--redditor", 
+            action = "append", 
+            nargs = 2, 
+            metavar = "", 
+            help = "specify Redditor profile to scrape")
+        urs.add_argument(
+            "-c", "--comments", 
+            action = "append", 
+            nargs = 2, 
+            metavar = "", 
+            help = "specify the URL of the submission to scrape comments")
+        urs.add_argument(
+            "-b", "--basic", 
+            action = "store_true", 
             help = "initialize non-CLI Subreddit scraper")
-        urs.add_argument("-y", action = "store_true", 
+        urs.add_argument(
+            "-y", 
+            action = "store_true", 
             help = "skip Subreddit options confirmation and scrape immediately")
 
     ### Add export flags.
     def _add_export(self, parser):
         expt = parser.add_mutually_exclusive_group(required = True)
-        expt.add_argument("--csv", action = "store_true", help = "export to CSV")
-        expt.add_argument("--json", action = "store_true", help = "export to JSON")
+        expt.add_argument(
+            "--csv", 
+            action = "store_true", 
+            help = "export to CSV")
+        expt.add_argument(
+            "--json", 
+            action = "store_true", 
+            help = "export to JSON")
 
     ### Get args.
     def parse_args(self):
-        parser = argparse.ArgumentParser(description = self._description,
-            epilog = self._epilog, formatter_class = argparse.RawDescriptionHelpFormatter,
+        parser = argparse.ArgumentParser(
+            description = self._description,
+            epilog = self._epilog, 
+            formatter_class = argparse.RawDescriptionHelpFormatter,
             usage = self._usage)
 
         self._add_flags(parser)
