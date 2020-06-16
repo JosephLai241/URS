@@ -100,7 +100,7 @@ The TODO list below details what is missing or needs to be finished before the o
                 * `after_success`
                     + `codecov` (submit coverage)
     + Codecov
-        * Sign up for Codecov
+        * ~~Sign up for Codecov~~
         * Add URS repo
         * Add coverage badge to README
 * ReadTheDocs
