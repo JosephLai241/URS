@@ -43,6 +43,8 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
+**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. Please send me an email or leave a note by clicking on the Email or Say Thanks! badge. I look forward to hearing from you!**
+
 ## Information for URS v3.1.0b1 (Beta) Release
 
 **The beta is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
@@ -117,8 +119,6 @@ The TODO list below details what is missing and needs to be finished before the 
         * Complete `setup.py` and any other related documents/scripts for packaging
         * Create new API token
         * Install and upload URS with `twine`
-
-**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. Please send me an email or leave a note by clicking on the Email or Say Thanks! badge. I look forward to hearing from you!**
 
 # URS Overview
 
