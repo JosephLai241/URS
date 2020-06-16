@@ -41,7 +41,7 @@ class TestConvertTime():
 
     def test_convert_time(self):
         unix_time = 1592291124
-        converted_time = "06-16-2020 03:05:24"
+        converted_time = "06-16-2020 07:05:24"
 
         assert Global.convert_time(unix_time) == converted_time
 

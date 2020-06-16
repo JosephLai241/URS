@@ -231,7 +231,7 @@ class TestWriteCSVAndWriteJSON():
     """
 
     def test_write_csv(self):
-        filename = os.path.join(sys.path[0], "tests/test_csv_writing.csv")
+        filename = os.path.join(sys.path[0], "test_csv_writing.csv")
         overview = {
             "this": [1, 2],
             "is": [3, 4],
@@ -251,7 +251,7 @@ class TestWriteCSVAndWriteJSON():
         os.remove(filename)
 
     def test_write_json(self):
-        filename = os.path.join(sys.path[0], "tests/test_json_writing.json")
+        filename = os.path.join(sys.path[0], "test_json_writing.json")
         overview = {
             'test_1': {'this': 1, 'is': 1, 'a': 1, 'test': 1},
             'test_2': {'this': 2, 'is': 2, 'a': 2, 'test': 2}
