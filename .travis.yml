@@ -16,7 +16,7 @@ before_install:
 
 ### Command to install dependencies
 install:
-  - pip install -e .
+  - pip install .
 
 ### Command to run tests
 script: pytest --cov=./
