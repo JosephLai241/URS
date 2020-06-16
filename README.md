@@ -4,12 +4,12 @@
      \ \____/\ \_\\/\____/
       \/___/  \/_/ \/___/ 
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python)
-[![Build Status](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)](https://travis-ci.org/JosephLai241/Universal-Reddit-Scraper)
-![GitHub Release Date](https://img.shields.io/github/release-date/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
+[![Build Status](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=travis-ci&logoColor=white)](https://travis-ci.org/JosephLai241/Universal-Reddit-Scraper)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
-[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge)](mailto:urs_project@protonmail.com)
+[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)](mailto:urs_project@protonmail.com)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)](https://saythanks.io/to/jlai24142%40gmail.com)
 
 
@@ -23,11 +23,11 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
-**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email by clicking on the email badge. I look forward to hearing from you!**
+**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email by clicking on the email badge or through the Say Thanks! badge. I look forward to hearing from you!**
 
 ## Information for URS v3.1.0b1 (Beta) Release
 
-**The beta version is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
+Besides updating the README and deploying to ReadTheDocs and PyPI, **the beta is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
 
 I will continue adding unit tests to `tests/`. I think there are some aspects of URS that I will not be able to write unit tests for because it would be impractical, e.g., testing user validation would expose my personal PRAW credentials. I will not be writing a test for that function unless there is a way to test and push the code to Github without including my credentials. Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue.
 
