@@ -4,6 +4,11 @@ import sys
 
 from urs.utils import Cli, Global
 
+### Function names are pretty self-explanatory, so I will not be adding comments 
+### above the functions.
+
+### Includes a total of  tests.
+
 class MakeArgs():
     """
     Making dummy args to test Cli.py functions.
@@ -309,4 +314,3 @@ class TestGetScrapeSettingsSubredditSettingsMethod():
     161 in Cli.py.
     """
 
-    
