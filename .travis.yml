@@ -21,7 +21,9 @@ install:
   - pip install .
 
 ### Command to run tests
-script: pytest --cov=./
+script: 
+  - pytest --cov=./
 
 ### Push coverage report to Codecov after running tests
-after_success: codecov
+after_success: 
+  - codecov
