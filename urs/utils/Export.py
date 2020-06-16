@@ -99,7 +99,7 @@ class Export():
         with open(filename, "w", encoding = "utf-8") as results:
             json.dump(overview, results, indent = 4)
 
-    ### Get filename extension
+    ### Get filename extension.
     @staticmethod
     def _get_filename_extension(f_name, f_type):
         dir_path = "../scrapes/%s" % Global.date
