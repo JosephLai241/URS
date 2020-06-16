@@ -9,6 +9,8 @@ from urs.utils import Export, Global
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
 
+### Includes a total of 26 tests.
+
 class MakeArgs():
     """
     Making dummy args to test Export.py functions.
