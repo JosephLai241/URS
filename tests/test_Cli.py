@@ -175,6 +175,7 @@ class TestParserParseArgsMethod():
             sys.argv.append(arg)
 
         sys.argv = sys.argv[1:]
+        print(sys.argv)
 
         args, _ = Cli.Parser().parse_args()
         
