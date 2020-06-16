@@ -5,10 +5,12 @@
       \/___/  \/_/ \/___/ 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)](https://pypi.org/project/praw/)
 [![Build Status](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=travis-ci&logoColor=white)](https://travis-ci.org/JosephLai241/Universal-Reddit-Scraper)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
+
 [![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)](mailto:urs_project@protonmail.com)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)](https://saythanks.io/to/jlai24142%40gmail.com)
 
@@ -63,9 +65,12 @@ The TODO list below details what is missing or needs to be finished before the o
 
 * Finish unit tests
 * Finish integrating Travis CI
-* Update Codecov through Travis CI and add coverage badge
+* Update Codecov through Travis CI
 * Update docs
     * Update the following in README: 
+        + Add PyPI badge
+        + Add ReadTheDocs badge
+        + Add coverage badge
         + Add demo GIF at the top of the README
         + Doc links in the ToC
     * Update screenshots in In-Depth Walkthrough
