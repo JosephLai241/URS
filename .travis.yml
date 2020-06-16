@@ -13,6 +13,7 @@ before_install:
   - python --version
   - pip install -U pip
   - pip install -U pytest pytest-cov
+  - pip install -r requirements.txt
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 ### Command to install dependencies
