@@ -15,8 +15,8 @@
 ## Table of Contents
 
 * [Introduction](#introduction)
-* [Information for URS v3.1.0b1 (Beta) Release](#information-for-urs-v3.1.0b1-Release)
-* [URS v3.1.0 Official Release TODO list](#urs-v3.1.0-official-release-todo-list)
+* [Information for URS v3.1.0b1 (Beta) Release](#information-for-urs-v310b1-beta-release)
+* [URS v3.1.0 Official Release TODO list](#urs-v310-official-release-todo-list)
 * [URS Overview](#urs-overview)
   + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
   + [Subreddits](#subreddits)
