@@ -150,12 +150,12 @@ class GetScrapeSettings():
 
         return switch.get(index)
 
-    ### Create either Subreddit, Redditor, or posts list.
+    ### Create either Subreddit, Redditor, or submissions list.
     def create_list(self, args, l_type):
         index = self._s_t.index(l_type)
-        list = [item[0] for item in self._list_switch(args, index)]
+        item_list = [item[0] for item in self._list_switch(args, index)]
 
-        return list
+        return item_list
 
     ### Get Subreddit settings.
     def _subreddit_settings(self, args, master):
