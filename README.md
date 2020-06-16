@@ -5,12 +5,12 @@
       \/___/  \/_/ \/___/ 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python)
-![Travis](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
+[![Build Status](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)](https://travis-ci.org/JosephLai241/Universal-Reddit-Scraper)
 ![GitHub Release Date](https://img.shields.io/github/release-date/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
-![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&link=mailto:urs_project@protonmail.com=mailto:urs_project@protonmail.com)
-![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge&link=https://saythanks.io/to/jlai24142%40gmail.com&link=https://saythanks.io/to/jlai24142%40gmail.com)
+[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge)](mailto:urs_project@protonmail.com)
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)](https://saythanks.io/to/jlai24142%40gmail.com)
 
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments from submissions. 
@@ -25,16 +25,63 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 **Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email to the address in the email badge. I look forward to hearing from you!**
 
-## URS v3.1 TODO
+## Information for URS v3.1.0b1 (Beta) Release
 
-* ~~Figure out how to integrate Travis CI~~
-* ~~Sign up for ReadTheDocs~~
-    + Learn how to generate docs (Sphinx)
-* Add more tests
+**The beta version is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
+
+I will continue adding unit tests to `tests/`. I think there are some aspects of URS that I will not be able to write unit tests for because it would be impractical, e.g., testing user validation would expose my personal PRAW credentials. I will not be writing a test for that function unless there is a way to test and push the code to Github without including my credentials. Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue.
+
+## URS v3.1.0 Official Release TODO list
+
+### Overview
+
+* Finish unit tests
+* Finish integrating Travis CI
+* Update Codecov through Travis CI and add coverage badge
+* Set up ReadTheDocs documentation
+* Finish packaging URS
+* Deploy URS to PyPI
+
+### Details
+
+* Travis CI
+    + ~~Sign up for Travis CI~~
+    + ~~Add URS repo~~
+    + ~~Add build badge to README~~'
+    + ~~Create `.travis.yml` config file~~
+        * Codecov integration
+            + `before_install`
+                * `python --version`
+                * `pip install -U pip`
+                * `pip install -U pytest`
+                * `pip install codecov`
+            + `install`
+                * Change script to `pip install ".[test]" .`? (install package and test dependencies)
+            + `after_success`
+                * `codecov` (submit coverage)
+* Codecov
+    + Sign up for Codecov
+    + Add URS repo
+    + Add coverage badge to README
+* ReadTheDocs
+    + ~~Sign up for ReadTheDocs~~
+    + Learn how to generate docs (Sphinx or manual docs?)
+    + Rewrite README in .rst?
+    + Restructure `docs/` so that RTD can build my documentation
+* Finish writing tests
+* Add demo GIF under ASCII art title
 * Replace old screenshots
 * Update links in ToC
-* Look further into packaging Python projects
-* When everything is finalized, deploy to PyPI
+* Finish packaging URS
+    + `setup.py`
+        * Change Development Status Classifier in `setup.py` once 3.1.0 is completed
+        * Add `download_url` from the new tag (copy link address of tar.gz link)
+        * Add `install_requires` to define all dependencies 
+    + When everything is finalized, deploy to PyPI
+        * ~~Sign up for PyPI~~
+        * Complete `setup.py` and any other related documents/scripts for packaging
+        * Create new API token
+        * Install and upload URS with `twine`
 
 ## Table of Contents
 
@@ -247,8 +294,8 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 | Release Date | Version | Changelog | 
 |--------------|---------|-----------|
 | **May 25, 2019** | URS v1.0 | <ul> <li>Its inception.</li> </ul> |
-| **July 29, 2019** | URS v2.0 | <ul> <li>Now includes CLI support!</li> </ul> |
-| **December 28, 2019** | URS v3.0 (beta) | <ul> <li>Added JSON export.</li> <li>Added Redditor Scraping.</li> <li>Comments scraping is still under construction.</li> </ul> | 
-| **December 31, 2019** | URS v3.0 (Official) | <ul> <li>Comments scraping functionality is now working!</li> <li>Added additional exception handling for creating filenames.</li> <li>Minor code reformatting.</li> <li>Simplified verbose output.</li> <li>Added an additional submission attribute when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
-| **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>Fulfilled community standards by adding the following docs:</li> <ul> <li>[Contributing Guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)</li> <li>[Pull Request Template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)</li> <li>Issue templates:</li> <ul> <li>[Bug Report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md)</li> <li>[Feature Request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md)</li> </ul> <li>[Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)</li> <li>[License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)</li> </ul> </ul> |
-| **TBD** | URS v3.1 | <ul> <li>***Major*** code refactor. Applied OOP concepts to existing code and rewrote methods in attempt to improve readability, maintenance, and scalability.</li> <li>Scrapes will now be exported to the `scrapes/` directory within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added log decorators that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>Integrated Travis CI.</li> <ul> <li>Added tests for each file (pytest).</li> </ul> <li>Replaced bulky titles with minimalist titles for a cleaner look.</li> <li>Added color to terminal output.</li> <li>Improved naming convention for scripts.</li> <li>***UPDATE COMMUNITY DOCS WHEN DONE REFACTORING.***</li> <li>Numerous changes to Readme. The most significant change was splitting and storing walkthroughs in `docs/`.</li> </ul> | 
+| **July 29, 2019** | URS v2.0 | <ul> <li>Now includes **CLI support**!</li> </ul> |
+| **December 28, 2019** | URS v3.0 (beta) | <ul> <li>Added **JSON** export.</li> <li>Added **Redditor Scraping**.</li> <li>Comments scraping is still under construction.</li> </ul> | 
+| **December 31, 2019** | URS v3.0 (Official) | <ul> <li>**Comments scraping is now working**!</li> <li>**Added additional exception handling** for creating filenames.</li> <li>Minor code reformatting.</li> <li>**Simplified verbose output**.</li> <li>**Added an additional submission attribute** when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
+| **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)</li> <li>[Pull Request Template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)</li> <li>Issue templates:</li> <ul> <li>[Bug Report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md)</li> <li>[Feature Request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md)</li> </ul> <li>[Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)</li> <li>[License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)</li> </ul> </ul> |
+| **TBD** | URS v3.1.0b1 (beta) | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI**.</li> <ul> <li>***In the process of adding unit tests for Travis and Codecov (`pytest` + `codecov` ).***</li> </ul> <li>***UPDATE COMMUNITY DOCS WHEN DONE REFACTORING.***</li> <li>Numerous changes to Readme. The most significant change was splitting and **storing walkthroughs in `docs/`**.</li> <ul> <li>Might have to restructure `docs/` for ReadTheDocs build. </ul> </ul> | 
