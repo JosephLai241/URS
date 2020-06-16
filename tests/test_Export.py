@@ -11,7 +11,7 @@ from urs.utils import Export, Global
 
 class MakeArgs():
     """
-    Making dummy args to test export functions.
+    Making dummy args to test Export.py functions.
     """
 
     @staticmethod
