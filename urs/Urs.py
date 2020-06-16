@@ -2,7 +2,7 @@
 """
 Created on Tue Jun 2 20:14:43 2020
 
-Universal Reddit Scraper 3.1
+Universal Reddit Scraper 3.1.0.
 
 @author: Joseph Lai
 """
@@ -29,8 +29,7 @@ class Main():
             username = API["username"],
             password = API["password"])
 
-        run = Run(reddit)
-        run.run_urs()
+        Run(reddit).run_urs()
 
 if __name__ == "__main__":
     Main().main()
