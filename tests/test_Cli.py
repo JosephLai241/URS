@@ -174,6 +174,8 @@ class TestParserParseArgsMethod():
         for arg in input_args:
             sys.argv.append(arg)
 
+        sys.argv = sys.argv[1:]
+
         args, _ = Cli.Parser().parse_args()
         
         assert args.subreddit == [["test_subreddit", "h", "10"]]
