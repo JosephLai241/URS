@@ -12,6 +12,26 @@
 [![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)](mailto:urs_project@protonmail.com)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)](https://saythanks.io/to/jlai24142%40gmail.com)
 
+## Table of Contents
+
+* [Introduction](#introduction)
+* [Information for URS v3.1.0b1 (Beta) Release](#information-for-urs-v3.1.0b1-Release)
+* [URS v3.1.0 Official Release TODO list](#urs-v3.1.0-official-release-todo-list)
+* [URS Overview](#urs-overview)
+  + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
+  + [Subreddits](#subreddits)
+  + [Redditors](#redditors)
+  + [Submission Comments](#submission-comments)
+  + [Exporting](#exporting)
+* [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW) UPDATE LINK IN DOCS/
+* [In-Depth Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
+* [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
+* [Some Linux Tips](#some-linux-tips)
+* [Contributing](#contributing)
+* [Contributors](#contributors)
+* [Releases](#releases)
+
+# Introduction
 
 This is a universal Reddit scraper that can scrape Subreddits, Redditors, and comments from submissions. 
 
@@ -23,9 +43,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
-**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. Please send me an email or leave a note by clicking on the Email or Say Thanks! badge. I look forward to hearing from you!**
-
-## Information for URS v3.1.0b1 (Beta) Release
+## Information for URS v3.1.0b1 Release
 
 **The beta is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
 
@@ -100,21 +118,7 @@ The TODO list below details what is missing and needs to be finished before the 
         * Create new API token
         * Install and upload URS with `twine`
 
-## Table of Contents
-
-* [URS Overview](#urs-overview)
-  + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
-  + [Subreddits](#subreddits)
-  + [Redditors](#redditors)
-  + [Submission Comments](#submission-comments)
-  + [Exporting](#exporting)
-* [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW) UPDATE LINK IN DOCS/
-* [In-Depth Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
-* [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
-* [Some Linux Tips](#some-linux-tips)
-* [Contributing](#contributing)
-* [Contributors](#contributors)
-* [Releases](#releases)
+**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. Please send me an email or leave a note by clicking on the Email or Say Thanks! badge. I look forward to hearing from you!**
 
 # URS Overview
 
