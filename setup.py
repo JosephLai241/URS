@@ -52,7 +52,7 @@ KEYWORDS = [
 
 LICENSE = "MIT"
 
-PACKAGES = find_packages(include = ["urs"])
+PACKAGES = find_packages()
 
 REQUIRES_PYTHON = ">=3.5"
 
