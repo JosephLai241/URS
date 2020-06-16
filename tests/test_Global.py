@@ -5,6 +5,8 @@ from urs.utils import Global
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
 
+### Includes a total of 10 tests.
+
 class TestGlobalVariables():
     """
     Testing all global variables found on lines 7-23 in Global.py.
