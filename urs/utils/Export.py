@@ -49,7 +49,7 @@ class NameFile():
         category = self._r_category(cat_i, category_n)
 
         return str(("r-%s-%s-'%s'") % (sub, category, search_for)) \
-            if cat_i == Global.short_cat[5] \
+            if cat_i == Global.short_cat[5] or cat_i == 5 \
                 else str(("r-%s-%s-%s-%s") % 
                     (sub, category, search_for, end))
 
@@ -98,14 +98,19 @@ class Export():
     def _write_json(filename, overview):
         with open(filename, "w", encoding = "utf-8") as results:
             json.dump(overview, results, indent = 4)
+
+    ### Get filename extension
+    @staticmethod
+    def _get_filename_extension(f_name, f_type):
+        dir_path = "../scrapes/%s" % Global.date
+
+        return dir_path + "/%s.json" % f_name if f_type == Global.eo[1] else \
+            dir_path + "/%s.csv" % f_name
         
     ### Write overview dictionary to CSV or JSON.
     @staticmethod
     def export(f_name, f_type, overview):
-        dir_path = "../scrapes/%s" % Global.date
-
-        filename = dir_path + "/%s.json" % f_name if f_type == Global.eo[1] else \
-            dir_path + "/%s.csv" % f_name
+        filename = Export._get_filename_extension(f_name, f_type)
 
         Export._write_json(filename, overview) if f_type == Global.eo[1] else \
             Export._write_csv(filename, overview)
