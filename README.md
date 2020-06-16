@@ -47,7 +47,7 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ## Information for URS v3.1.0b1 (Beta) Release
 
-**The beta is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
+**The beta is merely missing unit tests for Travis CI/Codecov and has unfinished packaging scripts**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
 
 I will continue merging unit tests to `tests/` for however long it takes me to learn more about unit testing, continuous integration, and finish writing the tests. 
 
@@ -55,7 +55,7 @@ I think there are some aspects of URS that I will not be able to write unit test
 
 Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue or best unit testing practices. I will be using the `pytest` testing framework.
 
-The TODO list below details what is missing and needs to be finished before the official v3.1.0 release.
+The TODO list below details what is missing or needs to be finished before the official v3.1.0 release.
 
 ## URS v3.1.0 Official Release TODO list
 
@@ -82,7 +82,7 @@ The TODO list below details what is missing and needs to be finished before the 
     + Travis CI
         * ~~Sign up for Travis CI~~
         * ~~Add URS repo~~
-        * ~~Add build badge to README~~'
+        * ~~Add build badge to README~~
         * ~~Create `.travis.yml` config file~~
             + Codecov integration
                 * `before_install`
