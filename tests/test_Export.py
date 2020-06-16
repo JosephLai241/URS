@@ -224,7 +224,7 @@ class TestCFname():
 
         assert Export.NameFile().c_fname(limit, string) == "c-test-RAW"
 
-class TestWriteCSVOrJSON():
+class TestWriteCSVAndWriteJSON():
     """
     Testing _write_csv() function on line 90 and _write_json() function on line 
     98 in Export.py.
