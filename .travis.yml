@@ -7,10 +7,19 @@ python:
   - 3.6
   - 3.7
   - 3.8
+  
+### Scripts to run before installation
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest pytest-cov
 
 ### Command to install dependencies
 install:
   - pip install -e .
 
 ### Command to run tests
-script: pytest
+script: pytest --cov=./
+
+### Push coverage report to Codecov after running tests
+after_success: codecov
