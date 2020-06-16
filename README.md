@@ -23,13 +23,19 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
-**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. If you have questions or comments, please send me an email by clicking on the email badge or through the Say Thanks! badge. I look forward to hearing from you!**
+**Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. Please send me an email or leave a note by clicking on the Email or Say Thanks! badge. I look forward to hearing from you!**
 
 ## Information for URS v3.1.0b1 (Beta) Release
 
-Besides updating the README and deploying to ReadTheDocs and PyPI, **the beta is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
+**The beta is merely missing unit tests for Travis CI and Codecov**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
 
-I will continue adding unit tests to `tests/`. I think there are some aspects of URS that I will not be able to write unit tests for because it would be impractical, e.g., testing user validation would expose my personal PRAW credentials. I will not be writing a test for that function unless there is a way to test and push the code to Github without including my credentials. Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue.
+I will continue merging unit tests to `tests/` for however long it takes me to learn more about unit testing, continuous integration, and finish writing the tests. 
+
+I think there are some aspects of URS that I will not be able to write unit tests for because it would be impractical, e.g., testing user validation would expose my personal PRAW credentials. I will not be writing a test for that function unless there is a way to test and push the code to Github without including my credentials. 
+
+Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue or best unit testing practices. I will be using the `pytest` testing framework.
+
+The TODO list below details what is missing and needs to be finished before the official v3.1.0 release.
 
 ## URS v3.1.0 Official Release TODO list
 
@@ -38,40 +44,51 @@ I will continue adding unit tests to `tests/`. I think there are some aspects of
 * Finish unit tests
 * Finish integrating Travis CI
 * Update Codecov through Travis CI and add coverage badge
+* Update docs
+    * Update the following in README: 
+        + Add demo GIF at the top of the README
+        + Doc links in the ToC
+    * Update screenshots in In-Depth Walkthrough
+    * Review and update community docs
+        + Update style guide
 * Set up ReadTheDocs documentation
 * Finish packaging URS
 * Deploy URS to PyPI
 
 ### Details
 
-* Travis CI
-    + ~~Sign up for Travis CI~~
-    + ~~Add URS repo~~
-    + ~~Add build badge to README~~'
-    + ~~Create `.travis.yml` config file~~
-        * Codecov integration
-            + `before_install`
-                * `python --version`
-                * `pip install -U pip`
-                * `pip install -U pytest`
-                * `pip install codecov`
-            + `install`
-                * Change script to `pip install ".[test]" .`? (install package and test dependencies)
-            + `after_success`
-                * `codecov` (submit coverage)
-* Codecov
-    + Sign up for Codecov
-    + Add URS repo
-    + Add coverage badge to README
+* Continuous Integration and Coverage
+    + Finish writing unit tests
+    + Travis CI
+        * ~~Sign up for Travis CI~~
+        * ~~Add URS repo~~
+        * ~~Add build badge to README~~'
+        * ~~Create `.travis.yml` config file~~
+            + Codecov integration
+                * `before_install`
+                    + `python --version`
+                    + `pip install -U pip`
+                    + `pip install -U pytest`
+                    + `pip install codecov`
+                * `install`
+                    + Change script to `pip install ".[test]" .`? (install package and test dependencies)
+                * `after_success`
+                    + `codecov` (submit coverage)
+    + Codecov
+        * Sign up for Codecov
+        * Add URS repo
+        * Add coverage badge to README
 * ReadTheDocs
     + ~~Sign up for ReadTheDocs~~
     + Learn how to generate docs (Sphinx or manual docs?)
     + Rewrite README in .rst?
     + Restructure `docs/` so that RTD can build my documentation
-* Finish writing tests
-* Add demo GIF under ASCII art title
-* Replace old screenshots
-* Update links in ToC
+* Github Docs
+    + Replace old screenshots in In-Depth Walkthrough
+    + Add demo GIF under ASCII art title
+    + Update links in ToC
+    + Review and update community docs
+        * Update style guide as well
 * Finish packaging URS
     + `setup.py`
         * Change Development Status Classifier in `setup.py` once 3.1.0 is completed
@@ -294,7 +311,7 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 | Release Date | Version | Changelog | 
 |--------------|---------|-----------|
 | **May 25, 2019** | URS v1.0 | <ul> <li>Its inception.</li> </ul> |
-| **July 29, 2019** | URS v2.0 | <ul> <li>Now includes **CLI support**!</li> </ul> |
+| **July 29, 2019** | URS v2.0 | <ul> <li>Now **includes CLI support**!</li> </ul> |
 | **December 28, 2019** | URS v3.0 (beta) | <ul> <li>Added **JSON** export.</li> <li>Added **Redditor Scraping**.</li> <li>Comments scraping is still under construction.</li> </ul> | 
 | **December 31, 2019** | URS v3.0 (Official) | <ul> <li>**Comments scraping is now working**!</li> <li>**Added additional exception handling** for creating filenames.</li> <li>Minor code reformatting.</li> <li>**Simplified verbose output**.</li> <li>**Added an additional submission attribute** when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
 | **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)</li> <li>[Pull Request Template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)</li> <li>Issue templates:</li> <ul> <li>[Bug Report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md)</li> <li>[Feature Request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md)</li> </ul> <li>[Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)</li> <li>[License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)</li> </ul> </ul> |
