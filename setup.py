@@ -17,7 +17,7 @@ DESCRIPTION = "URS: An advanced Reddit scraping & OSINT command-line tool."
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 
 CLASSIFIERS = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
 
     "Intended Audience :: Information Technology", 
     "Intended Audience :: Other Audience", 
@@ -32,7 +32,6 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3 :: Only", 
 
     "Topic :: Terminals", 
