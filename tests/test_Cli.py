@@ -1,5 +1,6 @@
 import argparse
 import pytest
+import re
 import sys
 
 from urs.utils import Cli, Global
@@ -98,7 +99,7 @@ class TestParserAddFlagsMethod():
     """
 
     def test_add_flags_method_subreddit_flag(self):
-        test_subreddit_args = [['test_subreddit', 'h', '10']]
+        test_subreddit_args = [["test_subreddit", "h", "10"]]
         
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_flags(parser)
@@ -108,7 +109,7 @@ class TestParserAddFlagsMethod():
         assert args.subreddit == test_subreddit_args
 
     def test_add_flags_method_redditor_flag(self):
-        test_subreddit_args = [['test_redditor', '10']]
+        test_subreddit_args = [["test_redditor", "10"]]
         
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_flags(parser)
@@ -118,7 +119,7 @@ class TestParserAddFlagsMethod():
         assert args.redditor == test_subreddit_args
 
     def test_add_flags_method_comments_flag(self):
-        test_subreddit_args = [['test_url', '10']]
+        test_subreddit_args = [["test_url", "10"]]
         
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_flags(parser)
@@ -236,6 +237,15 @@ class TestParserParseArgsMethod():
         assert args.comments == [["test_url", "10"]]
         assert args.csv == True
 
+    def test_parse_args_method_no_args_were_entered(self):
+        sys.argv = [sys.argv[0]]
+
+        try:
+            _, _ = Cli.Parser().parse_args()
+            assert False
+        except SystemExit:
+            assert True
+
 class TestGetScrapeSettingsInitMethod():
     """
     Testing GetScrapeSettings class __init__() method found on line 134 in Cli.py.
@@ -316,3 +326,203 @@ class TestGetScrapeSettingsSubredditSettingsMethod():
     161 in Cli.py.
     """
 
+    def test_subreddit_settings_one_subreddit(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
+        master = {"test_subreddit": []}
+        Cli.GetScrapeSettings()._subreddit_settings(args, master)
+
+        assert master == {"test_subreddit": [["h", "10"]]}
+
+class TestGetScrapeSettingsTwoArgsSettingsMethod():
+    """
+    Testing GetScrapeSettings class _two_arg_settings() method found on line 170
+    in Cli.py.
+    """
+
+    def test_two_arg_settings_one_arg_redditor(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
+        master = {"test_redditor": None}
+        Cli.GetScrapeSettings()._two_arg_settings(master, args.redditor)
+
+        assert master == {"test_redditor": "10"}
+
+    def test_two_arg_settings_one_arg_comments(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--comments", ["test_url", "2"]])
+        master = {"test_url": None}
+        Cli.GetScrapeSettings()._two_arg_settings(master, args.comments)
+
+        assert master == {"test_url": "2"}
+
+class TestGetScrapeSettingsGetSettingsMethod():
+    """
+    Testing GetScrapeSettings class get_settings() method found on line 175 in 
+    Cli.py.
+    """
+
+    def test_get_settings_with_subreddit_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
+        master = {"test_subreddit": []}
+        s_type = Global.s_t[0]
+        Cli.GetScrapeSettings().get_settings(args, master, s_type)
+
+        assert master == {"test_subreddit": [["h", "10"]]}
+
+    def test_get_settings_with_redditor_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
+        master = {"test_redditor": None}
+        s_type = Global.s_t[1]
+        Cli.GetScrapeSettings().get_settings(args, master, s_type)
+
+        assert master == {"test_redditor": "10"}
+
+    def test_get_settings_with_comments_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--comments", ["test_url", "2"]])
+        master = {"test_url": None}
+        s_type = Global.s_t[2]
+        Cli.GetScrapeSettings().get_settings(args, master, s_type)
+
+        assert master == {"test_url": "2"}
+
+class TestCheckCliInitMethod():
+    """
+    Testing CheckCli class __init__() method found on line 189 in Cli.py.
+    """
+
+    def test_check_cli_init_method_short_cat_instance_variable(self):
+        assert Cli.CheckCli()._short_cat == Global.short_cat
+
+    def test_check_cli_init_method_special_chars_instance_variable(self):
+        assert Cli.CheckCli()._special_chars == \
+            re.compile('[@_!#$%^&*()<>?/\\|}{~:]')
+
+class TestCheckCliCheckSubredditMethod():
+    """
+    Testing CheckCli class _check_subreddit() method found on line 193 in Cli.py.
+    """
+
+    def test_check_subreddit_with_correct_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
+        Cli.CheckCli()._check_subreddit(args)
+
+        assert args.subreddit == [["test_subreddit", "h", "10"]]
+
+    def test_check_subreddit_with_invalid_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "w", "asdf"]])
+        
+        try:
+            Cli.CheckCli()._check_subreddit(args)
+            assert False
+        except ValueError:
+            assert True
+
+class TestCheckCliCheckRedditorMethod():
+    """
+    Testing CheckCli class _check_redditor() method found on line 205 in Cli.py.
+    """
+
+    def test_check_redditor_with_correct_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
+        Cli.CheckCli()._check_redditor(args)
+
+        assert args.redditor == [["test_redditor", "10"]]
+
+    def test_check_redditor_with_invalid_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--redditor", ["10", "test_redditor"]])
+        
+        try:
+            Cli.CheckCli()._check_redditor(args)
+            assert False
+        except ValueError:
+            assert True
+
+class TestCheckCliCheckCommentsMethod():
+    """
+    Testing CheckCli class _check_comments() method found on line 212 in Cli.py.
+    """
+
+    def test_check_comments_with_correct_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--comments", ["test_url", "2"]])
+        Cli.CheckCli()._check_comments(args)
+
+        assert args.comments == [["test_url", "2"]]
+
+    def test_check_comments_with_invalid_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--comments", ["2", "test_url"]])
+        
+        try:
+            Cli.CheckCli()._check_comments(args)
+            print(args.comments)
+            assert False
+        except ValueError:
+            assert True
+
+class TestCheckCliCheckArgsMethod():
+    """
+    Testing CheckCli class check_args() method found on line 224 in Cli.py.
+    """
+
+    def test_check_args_with_valid_subreddit_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
+
+        Cli.CheckCli().check_args(args, parser)
+
+        assert args.subreddit == [["test_subreddit", "h", "10"]] 
+
+    def test_check_args_with_invalid_subreddit_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "w", "asdf"]])
+
+        try:
+            Cli.CheckCli().check_args(args, parser)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_check_args_with_valid_redditor_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
+
+        Cli.CheckCli().check_args(args, parser)
+
+        assert args.redditor == [["test_redditor", "10"]]
+
+    def test_check_args_with_invalid_redditor_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--redditor", ["10", "test_redditor"]])
+
+        try:
+            Cli.CheckCli().check_args(args, parser)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_check_args_with_valid_comments_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--comments", ["test_url", "2"]])
+
+        Cli.CheckCli().check_args(args, parser)
+
+        assert args.comments == [["test_url", "2"]]
+
+    def test_check_args_with_invalid_comments_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--comments", ["2", "test_url"]])
+
+        try:
+            Cli.CheckCli().check_args(args, parser)
+            assert False
+        except SystemExit:
+            assert True
