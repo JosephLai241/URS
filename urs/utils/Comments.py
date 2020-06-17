@@ -223,6 +223,6 @@ class RunComments():
         post_list = Cli.GetScrapeSettings().create_list(args, s_t[2])
         posts = PrintPosts.list_posts(reddit, post_list, parser)
         c_master = Global.make_none_dict(posts)
-        Cli.GetScrapeSettings().get_settings(args, c_master, reddit, s_t[2])
+        Cli.GetScrapeSettings().get_settings(args, c_master, s_t[2])
 
         Write.write(args, c_master, post_list, reddit)

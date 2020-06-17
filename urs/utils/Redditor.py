@@ -258,6 +258,6 @@ class RunRedditor():
         user_list = Cli.GetScrapeSettings().create_list(args, s_t[1])
         users = PrintUsers().list_users(parser, reddit, user_list)
         u_master = Global.make_none_dict(users)
-        Cli.GetScrapeSettings().get_settings(args, u_master, reddit, s_t[1])
+        Cli.GetScrapeSettings().get_settings(args, u_master, s_t[1])
 
         Write().write(args, reddit, u_master)
