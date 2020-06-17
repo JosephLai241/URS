@@ -2,6 +2,7 @@
 #                       Command-line Interface Functions
 #===============================================================================
 import argparse
+import re
 import sys
 
 from colorama import Fore, init, Style
@@ -172,7 +173,7 @@ class GetScrapeSettings():
             master[obj[0]] = obj[1]
 
     ### Get CLI scraping settings for Subreddits, Redditors, and post comments.
-    def get_settings(self, args, master, reddit, s_type):
+    def get_settings(self, args, master, s_type):
         if s_type == self._s_t[0]:
             self._subreddit_settings(args, master)
         elif s_type == self._s_t[1]:
@@ -188,6 +189,7 @@ class CheckCli():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._short_cat = Global.short_cat
+        self._special_chars = re.compile('[@_!#$%^&*()<>?/\\|}{~:]')
 
     ### Check Subreddit args
     def _check_subreddit(self, args):
@@ -204,14 +206,17 @@ class CheckCli():
     ### Check Redditor args
     def _check_redditor(self, args):
         for users in args.redditor:
-            if users[1].isalpha() or int(users[1]) == 0:
+            if users[1].isalpha() or \
+                self._special_chars.search(users[1]) != None or \
+                    int(users[1]) == 0:
                 raise ValueError
 
     ### Check args for items that only require two arguments (Redditor or 
     ### comments scrapers).
     def _check_comments(self, args):
         for comments in args.comments:
-            if comments[1].isalpha():
+            if comments[1].isalpha() or \
+                self._special_chars.search(comments[1]) != None:
                 raise ValueError
 
     ### Check args and catching errors.
