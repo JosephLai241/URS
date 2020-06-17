@@ -3,3 +3,5 @@ env/*
 .vscode/*
 
 scrapes/*
+
+URS.egg-info/*
