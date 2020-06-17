@@ -3,6 +3,8 @@ from urs import Credentials
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
 
+### Includes a total of 5 tests.
+
 class TestDefaultCredentialsDictionary():
     """
     Testing the default `API` dictionary found on line 5 in Credentials.py.
