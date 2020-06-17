@@ -7,6 +7,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
 [![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)](https://pypi.org/project/praw/)
 [![Build Status](https://img.shields.io/travis/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=travis-ci&logoColor=white)](https://travis-ci.org/JosephLai241/Universal-Reddit-Scraper)
+[![Codecov](https://img.shields.io/codecov/c/github/JosephLai241/Universal-Reddit-Scraper?logo=codecov&logoColor=white&style=for-the-badge)]()
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
@@ -84,6 +85,19 @@ The TODO list below details what is missing or needs to be finished before the o
 
 * Continuous Integration and Coverage
     + Finish writing unit tests
+        * Basic
+        * ~~Cli~~
+        * Comments
+        * DirInit
+        * ~~Export~~
+        * ~~Global~~
+        * Logger
+        * Redditor
+        * Subreddit
+        * Tools
+        * Validation
+        * Credentials
+        * Urs
     + Travis CI
         * ~~Sign up for Travis CI~~
         * ~~Add URS repo~~
@@ -101,8 +115,9 @@ The TODO list below details what is missing or needs to be finished before the o
                     + `codecov` (submit coverage)
     + Codecov
         * ~~Sign up for Codecov~~
-        * Add URS repo
-        * Add coverage badge to README
+        * ~~Add URS repo~~
+        * ~~Add coverage badge to README~~
+        * Update badge link once merged with `master` branch
 * ReadTheDocs
     + ~~Sign up for ReadTheDocs~~
     + Learn how to generate docs (Sphinx or manual docs?)
