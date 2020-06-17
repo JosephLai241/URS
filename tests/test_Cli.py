@@ -8,7 +8,7 @@ from urs.utils import Cli, Global
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
 
-### Includes a total of  tests.
+### Includes a total of 44 tests.
 
 class MakeArgs():
     """
