@@ -151,8 +151,8 @@ class SortPosts():
     def __init__(self):
         self._convert_time = Global.convert_time
         self._titles = ["Title", "Flair", "Date Created", "Upvotes", "Upvote Ratio", 
-                        "ID", "Edited?", "Is Locked?", "NSFW?", "Is Spoiler?", 
-                        "Stickied?", "URL", "Comment Count", "Text"]
+            "ID", "Edited?", "Is Locked?", "NSFW?", "Is Spoiler?", "Stickied?", 
+            "URL", "Comment Count", "Text"]
 
     ### Initialize dictionary depending on export option.
     def _initialize_dict(self, args):
