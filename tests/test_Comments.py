@@ -3,17 +3,22 @@ from urs.utils import Comments
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
 
-class TestPrintPostsListPostsMethod():
+### Includes a total of 29 tests.
+
+class TestCheckSubmissionsListPostsMethod():
     """
-    Testing PrintPosts class list_posts() method found on line 25 in Comments.py.
+    Testing CheckSubmissions class list_posts() method found on line 25 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
 
-    def test_list_posts_printing_invalid_subreddits(self):
+    def test_list_submissions_valid_subreddits(self):
         pass
 
-    def test_list_posts_no_subreddits_left_to_process(self):
+    def test_list_submissions_invalid_subreddits(self):
+        pass
+
+    def test_list_submissions_no_subreddits_left_to_process(self):
         pass
 
 class TestGetCommentsInitMethod():
