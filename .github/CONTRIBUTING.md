@@ -23,7 +23,13 @@ Thank you for using the Universal Reddit Scraper! Since I am the only one develo
 
 ### How URS Was Born
 
-I initially created a Reddit scraper hard-coded to scrape Subreddits related to penetration testing, which is a field that I am studying. I sent the program to my friend [Luke Schenk](https://github.com/LukeDSchenk) since he is also pursuing pentesting, and he suggested that I could make a Reddit scraper that could scrape any Subreddit that I fed to the program, and URS 1.0 was born. Later on, Luke also introduced me to argparse, which is used to create command-line interface applications, so CLI support was added, spawning URS 2.0. CLI support made adding exporting to JSON, Redditor scraping, as well as post comments scraping functionality much easier to integrate, so URS 3.0 incorporated all of these new functions. I was still unsatisfied with the quality of my code, so I decided to do an OOP refactor and restructured URS, added color to terminal output, added logger decorators, and integrated Travis CI and Codecov. These changes will allow scalability, readability, and maintenance to be easier in the future.
+I initially created a Reddit scraper hard-coded to scrape Subreddits related to penetration testing, which is a field that I am studying. I sent the program to my friend [Luke Schenk](https://github.com/LukeDSchenk) since he is also pursuing pentesting, and he suggested that I could make a Reddit scraper that could scrape any Subreddit that I fed to the program, and URS 1.0.0 was born. 
+
+Later on, Luke also introduced me to argparse, which is used to create command-line interface applications, so CLI support was added, spawning URS 2.0.0.
+
+CLI support made adding exporting to JSON, Redditor scraping, as well as post comments scraping functionality much easier to integrate, so URS 3.0.0 incorporated all of these new functions. 
+
+I was still unsatisfied with the quality of my code, so I decided to do an OOP refactor and restructured URS, added color to terminal output, added logger decorators, and integrated Travis CI and Codecov. These changes will allow scalability, readability, and maintenance to be easier in the future. This spawned the release of URS 3.1.0.
 
 ### So What's Next?
 
