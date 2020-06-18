@@ -152,7 +152,7 @@ class ConfirmInput():
                 elif confirm not in options:
                     raise ValueError
                 else:
-                    print(Style.BRIGHT + "\nExiting.")
+                    print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                     parser.exit()
             except ValueError:
                 print("Not an option! Try again.")    
@@ -206,7 +206,7 @@ class RunBasic():
                 if confirm == options[0]:
                     break
                 else:
-                    print(Style.BRIGHT + "\nExiting.")
+                    print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                     parser.exit()
             
             Subreddit.GetSortWrite().gsw(args, reddit, master)
