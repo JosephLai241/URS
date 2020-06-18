@@ -50,13 +50,19 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 ## Information for URS v3.1.0b1 (Beta) Release
 
-**The beta is merely missing unit tests for Travis CI/Codecov and has unfinished packaging scripts**. All other functionality detailed in the [Releases](#releases) section of the README have been implemented and tested without unit tests.
+**The actual functionality of the program should be good to go**. 
+
+Continue cloning, installing requirements using `pip install -r requirements.txt` to install project dependencies.
+
+It is merely missing a couple things that need to be finished before the final release, mainly documents and working packaging scripts.
 
 I will continue merging unit tests to `tests/` for however long it takes me to learn more about unit testing, continuous integration, and finish writing the tests. 
 
 I think there are some aspects of URS that I will not be able to write unit tests for because it would be impractical, e.g., testing user validation would expose my personal PRAW credentials. I will not be writing a test for that function unless there is a way to test and push the code to Github without including my credentials. 
 
 Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue or best unit testing practices. I will be using the `pytest` testing framework.
+
+See the [Releases](#releases) section for what will be included in the final URS 3.1.0 release.
 
 The TODO list below details what is missing or needs to be finished before the official v3.1.0 release.
 
@@ -84,7 +90,7 @@ The TODO list below details what is missing or needs to be finished before the o
 ### Details
 
 * Continuous Integration and Coverage
-    + Finish writing unit tests
+    + Finish writing unit tests for:
         * Basic
         * ~~Cli~~
         * Comments
@@ -95,8 +101,8 @@ The TODO list below details what is missing or needs to be finished before the o
         * Redditor
         * Subreddit
         * Tools
-        * Validation
-        * Credentials
+        * Validation(?)
+        * ~~Credentials~~
         * Urs
     + Travis CI
         * ~~Sign up for Travis CI~~
@@ -110,7 +116,7 @@ The TODO list below details what is missing or needs to be finished before the o
                     + `pip install -U pytest`
                     + `pip install codecov`
                 * `install`
-                    + Change script to `pip install ".[test]" .`? (install package and test dependencies)
+                    + Change script to `pip install .` (install package)
                 * `after_success`
                     + `codecov` (submit coverage)
     + Codecov
