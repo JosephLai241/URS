@@ -1,19 +1,10 @@
 # Contributing Guide
 
-Thank you for using the Universal Reddit Scraper! Since I was the only one developing URS, I have spent a lot of time creating it, and it has drastically evolved since its first iteration. 
-
-### How URS Was Born
-
-I initially created a Reddit scraper hard-coded to scrape Subreddits related to penetration testing, which is a field that I am studying. I sent the program to my friend [Luke Schenk](https://github.com/LukeDSchenk) since he is also pursuing pentesting, and he suggested that I could make a Reddit scraper that could scrape any Subreddit that I fed to the program, and URS 1.0 was born. Later on, Luke also introduced me to argparse, which is used to create command-line interface applications, so CLI support was added, spawning URS 2.0. CLI support made adding exporting to JSON, Redditor scraping, as well as post comments scraping functionality much easier to integrate, so URS 3.0 incorporated all of these new functions. I decided to end URS releases at 3.0 because the scraper can now scrape Subreddits, Redditors, and comments on posts, truly becoming a universal Reddit scraper.
-
-### So What's Next?
-
-Although I believe the current features (of URS 3.0) will satisfy users who need to scrape Reddit, I have not incorporated all the features that [PRAW](https://pypi.org/project/praw/) has to offer. New features are more than welcome! Just submit a pull request and fill out the pull request template located in the `assets` branch of this repository. 
-
-Please keep all changes consistent with the name of this project. This means that the code submitted in pull requests will not be hard-coded to scrape specific Subreddits, Redditors, or Comments within Reddit. This is a *universal* Reddit scraper, so its users should be able to pass Reddit objects that they would like to scrape, rather than specific items that are integrated in the program.
+Thank you for using the Universal Reddit Scraper! Since I am the only one developing URS, I have spent a lot of time creating it, and it has drastically evolved since its first iteration. I appreciate every single one of its users and never would have imagined so many people would actually use this little project.
 
 # Table of Contents 
-
+ - [How URS Was Born](#how-urs-was-born)
+ - [So What's Next?](#so-whats-next)
  - [Code of Conduct](#code-of-conduct)
  - [Important Resources](#important-resources)
  - [Questions](#questions)
@@ -30,6 +21,15 @@ Please keep all changes consistent with the name of this project. This means tha
  - [Community](#community)
 	- [Real World Use of This Program](#real-world-use-of-this-program)
 
+### How URS Was Born
+
+I initially created a Reddit scraper hard-coded to scrape Subreddits related to penetration testing, which is a field that I am studying. I sent the program to my friend [Luke Schenk](https://github.com/LukeDSchenk) since he is also pursuing pentesting, and he suggested that I could make a Reddit scraper that could scrape any Subreddit that I fed to the program, and URS 1.0 was born. Later on, Luke also introduced me to argparse, which is used to create command-line interface applications, so CLI support was added, spawning URS 2.0. CLI support made adding exporting to JSON, Redditor scraping, as well as post comments scraping functionality much easier to integrate, so URS 3.0 incorporated all of these new functions. I was still unsatisfied with the quality of my code, so I decided to do an OOP refactor and restructured URS, added color to terminal output, added logger decorators, and integrated Travis CI and Codecov. These changes will allow scalability, readability, and maintenance to be easier in the future.
+
+### So What's Next?
+
+Although I believe the current features will satisfy users who need to scrape Reddit, I have not incorporated all the features that [PRAW](https://pypi.org/project/praw/) has to offer. You are more than welcome to create a pull request! Just be sure to fill out the pull request template when you do so I have a better idea as to what you are trying to change or add.
+
+Please keep all changes consistent with the name of this project. This means that the code submitted in pull requests will not be hard-coded to scrape specific Subreddits, Redditors, or submissions within Reddit. This is a *universal* Reddit scraper, so its users should be able to pass Reddit objects that they would like to scrape, rather than specific items that are integrated in the program.
 
 ## Code of Conduct
 
@@ -38,19 +38,20 @@ Code of Conduct may be added in the future.
 ## Important Resources
 
  - [PRAW](https://praw.readthedocs.io/en/latest/)
- - [Argparse](https://pypi.org/project/argparse/)
-
+ 
 ## Questions
 
 Please submit questions in the `issues` tab and apply the `question` label.
+
+Alternatively, feel free to send me an email at [urs_project@protonmail.com](mailto:urs_project@protonmail.com).
 
 ## Feature Requests
 
 Please submit feature requests in the `issues` tab and apply the `enhancement` label.
 
-Please provide the feature you would like to see, why you need it, and how it will work. Discuss your ideas transparently and get community feedback before proceeding.
+Please provide the feature you would like to see, why you need it, and how it will work. Discuss your ideas transparently so I can better understand why this feature is necessary.
 
-Major Changes that you wish to contribute to the project should be discussed first in an GitHub issue that clearly outlines the changes and benefits of the feature.
+Major changes that you wish to contribute to the project should be discussed first in an GitHub issue that clearly outlines the changes and benefits of the feature.
 
 Small Changes can directly be crafted and submitted to the GitHub Repository as a Pull Request. See the section about Pull Request Submission Guidelines, and for detailed information the core development documentation.
 
@@ -68,48 +69,15 @@ Should you have a suggestion for the documentation, you can open an issue with a
 
 For large fixes, please build and test the documentation before submitting the PR to be sure you haven't accidentally introduced any layout or formatting issues.
 
-For new features, please include screenshots of the feature running in a terminal within the `Walkthrough` section of the Readme.
+For new features, please include screenshots or a demo GIF of the feature running in a terminal.
 
 ## Contributing Code
 
 The dependencies for this project are listed in the `requirements.txt` file. The versions of argparse and PRAW in `requirements.txt` are what I used when I tested this program.
 
-### Style and Code Guidelines
+## Style Guide
 
-Comments or code should be wrapped at 80 characters in length, if possible.
-
-`if/elif/else` blocks should have no blank lines within the block. `try/except` blocks follow the same style.
-
-Each function or global variable requires a comment above it explain what the function does or what the variable is used for.
-
-Initialize each comment with three hashes:
-
-```
-### This is an example of the comment format
-```
-
-If a new feature is added and new functions are introduced, try to format functions so that the run order executes from top to bottom.
-
-```
-This is an example of what a new function block should look like:
-
-
-#===============================================================================
-#			[Function/Feature Name Here] Functions
-#===============================================================================
-def func_1():
-	First function to run...
-def func_2():
-	Second function to run...
-def func_3():
-	Third function to run...
-```
-
-Working on your first open source project or pull request? Her are some helpful tutorials:
-
-* [How to Contribute to an Open Source Project on GitHub][2]
-* [Make a Pull Request][3]
-* [First Timers Only][4]
+See [Style Guide]() for more information. (UPDATE LINK HERE)
 
 ### Getting Started
 
