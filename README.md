@@ -26,9 +26,9 @@
   + [Redditors](#redditors)
   + [Submission Comments](#submission-comments)
   + [Exporting](#exporting)
-* [How to get Reddit API Credentials for PRAW](#how-to-get-reddit-api-credentials-for-PRAW) UPDATE LINK IN DOCS/
-* [In-Depth Walkthrough](#walkthrough) UPDATE LINK IN DOCS/
-* [2-Factor Authentication](#2-factor-authentication) UPDATE LINK IN DOCS/
+* [How to get Reddit API Credentials for PRAW](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md)
+* [In-Depth Walkthrough](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/In-Depth%20Walkthrough.md)
+* [2-Factor Authentication](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md)
 * [Some Linux Tips](#some-linux-tips)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
