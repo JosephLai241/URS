@@ -123,7 +123,7 @@ class ProcessInteractions():
 
     ### Extracting submission or comment attributes and appending to overview 
     ### dictionary.
-    def _extract(self, cat, obj, s_types, s_type):
+    def _extract(self, cat, obj, s_type):
         for item in obj:
             redditor_list = self._make_submission_list(item) \
                 if isinstance(item, praw.models.Submission) \
@@ -133,18 +133,18 @@ class ProcessInteractions():
 
     ### Sort Redditor submissions.
     def sort_submissions(self):
-        self._extract(None, self._submissions, self._s_types, self._s_types[0])
+        self._extract(None, self._submissions, self._s_types[0])
 
     ### Sort Redditor comments.
     def sort_comments(self):
-        self._extract(None, self._comments, self._s_types, self._s_types[1])
+        self._extract(None, self._comments, self._s_types[1])
 
     ### Sort Controversial, Gilded, Hot, New and Top Redditor posts. The ListingGenerator
     ### returns a mix of submissions and comments, so handling each differently is
     ### necessary.
     def sort_mutts(self):
         for cat, obj in zip(self._mutt_names, self._mutts):
-            self._extract(cat, obj, self._s_types, self._s_types[2])
+            self._extract(cat, obj, self._s_types[2])
 
     ### Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
     ### lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
@@ -152,7 +152,7 @@ class ProcessInteractions():
     def sort_access(self):
         for cat, obj in zip(self._access_names, self._access):
             try:
-                self._extract(cat, obj, self._s_types, self._s_types[3])
+                self._extract(cat, obj, self._s_types[3])
             except PrawcoreException as error:
                 print(Style.BRIGHT + Fore.RED + 
                     ("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % 
@@ -188,7 +188,7 @@ class GetInteractions():
         return overview, user
 
     ### Get Redditor account information.
-    def _get_user_info(self, limit, overview, reddit, user):
+    def _get_user_info(self, overview, user):
         user_info_titles = self._titles[:10]
         user_info = [user.name, user.fullname, user.id, convert_time(user.created_utc),
             user.comment_karma, user.link_karma, user.is_employee, user.is_friend,
@@ -208,7 +208,7 @@ class GetInteractions():
     ### Get Redditor information and interactions.
     def get(self, limit, reddit, user):
         overview, user = self._make_user_profile(limit, reddit, user)
-        self._get_user_info(limit, overview, reddit, user)
+        self._get_user_info(overview, user)
         self._get_user_interactions(limit, overview, user)
 
         return overview

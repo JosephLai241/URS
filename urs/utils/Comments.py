@@ -167,7 +167,7 @@ class GetSort():
         return {key: all_dict[key] for key in list(all_dict)[:int(limit)]}
 
     ### Get comments from posts.
-    def get_sort(self, limit, post, reddit):
+    def get_sort(self, limit):
         all_dict = dict()
 
         if int(limit) == 0:
@@ -199,10 +199,10 @@ class Write():
 
     ### Get, sort, then write scraped comments to CSV or JSON.
     @staticmethod
-    def write(args, c_master, post_list, reddit):
+    def write(args, c_master, reddit):
         for post, limit in c_master.items():
             title = reddit.submission(url = post).title
-            overview = GetSort(post, reddit).get_sort(limit, post, reddit)
+            overview = GetSort(post, reddit).get_sort(limit)
             f_name = Export.NameFile().c_fname(limit, title)
 
             Write._determine_export(args, f_name, overview)
@@ -225,4 +225,4 @@ class RunComments():
         c_master = Global.make_none_dict(posts)
         Cli.GetScrapeSettings().get_settings(args, c_master, s_t[2])
 
-        Write.write(args, c_master, post_list, reddit)
+        Write.write(args, c_master, reddit)

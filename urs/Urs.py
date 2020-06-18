@@ -32,4 +32,4 @@ class Main():
         Run(reddit).run_urs()
 
 if __name__ == "__main__":
-    Main().main()
+    Main.main()

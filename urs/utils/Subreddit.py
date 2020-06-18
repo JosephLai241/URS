@@ -210,7 +210,7 @@ class GetSortWrite():
         self._eo = Global.eo
 
     ### Get and sort posts.
-    def _get_sort(self, args, cat_i, each, reddit, search_for, sub):
+    def _get_sort(self, args, cat_i, reddit, search_for, sub):
         collected = GetPosts.get(args, reddit, sub, cat_i, search_for)        
         return SortPosts().sort(args, collected)
 
@@ -239,7 +239,7 @@ class GetSortWrite():
                 cat_i = each[0].upper() if not args.basic else each[0]
                 search_for = each[1]
 
-                overview = self._get_sort(args, cat_i, each, reddit, search_for, sub)
+                overview = self._get_sort(args, cat_i, reddit, search_for, sub)
                 self._write(args, cat_i, overview, search_for, sub)
 
 class RunSubreddit():
