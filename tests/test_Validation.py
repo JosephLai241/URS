@@ -1,5 +1,10 @@
 from urs.utils import Validation
 
+### Function names are pretty self-explanatory, so I will not be adding comments 
+### above the functions.
+
+### Includes a total of 20 tests.
+
 class TestValidationValidateUserMethod():
     """
     Testing Validation class validate_user() method found on line 25 in 
