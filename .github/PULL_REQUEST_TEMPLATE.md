@@ -20,7 +20,7 @@ If it fixes an open issue, link the issue in this pull request like so:
 
 Fixes [#issue_number_here](put-link-to-issue-here).
 
-If it does not fix an open issue, delete this block of text and put "Not Applicable." here.
+If it does not fix an open issue, delete this block and put "Not Applicable." here.
 
 ## Type of change
 
