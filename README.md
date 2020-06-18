@@ -13,6 +13,7 @@ You will also need your own Reddit account and API credentials. I have included 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
 ## Table of Contents
+ - [Information for URS v3.1.0b1 (beta)](
  - [Scraping Reddit](#scraping-reddit)
     - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
     - [Subreddits](#subreddits)
@@ -30,6 +31,33 @@ You will also need your own Reddit account and API credentials. I have included 
  - [Contributing](#contributing)
  - [Contributors](#contributors)
  - [Releases](#releases)
+ 
+# Information for URS v3.1.0b1 (beta)
+
+**URS 3.1.0b1 is working and should have no problems running**. You can clone it by running `git clone --single-branch --branch beta https://github.com/JosephLai241/Universal-Reddit-Scraper.git`.
+
+I have been working on an OOP refactor so that scalability, readability, and future maintenance will be easier. In addition to improving the quality of my code, I have added some new features:
+
+* Exported files will now be stored in the directory `scrapes/` and within a subdirectory labeled with the date of the scrape. These directories are automatically created for you when you run URS.
+* URS will now write logs detailing which scrapes you ran, what you scraped for, and any errors that may occur during runtime. These logs are written when you run the program and stored in the same subdirectory as the exported files. There will be a log file written in each date subdirectory so you can easily refer back to what you ran or what happened on a specific day.
+* Integrated Travis CI and Codecov. The build badge for Travis CI is working and clickable. I am going to link the coverage badge to Codecov once v3.1.0 is finalized.
+* Added color output so that it is easier to see errors or any important messages.
+* Replaced bulky ASCII art with more minimalist art for a cleaner look.
+* Moved How To Get PRAW Credentials, Walkthrough, and Two-Factor Authentication sections to `docs/` so that the main README is shorter.
+
+I have also modified the project structure quite a bit, most notably:
+
+* The PRAW credentials block has been moved to a separate file titled `Credentials.py`.
+* All scripts have been moved to the `urs/` directory and renamed. **`scraper.py` is now `Urs.py`**.
+
+New URS functionality is complete. I only label it a beta because I still have to finalize a couple things before merging the `OOP-refactor` branch with the `master` branch:
+
+* I have yet to finish writing unit tests for URS. I am not completely sure how I can write unit tests for some aspects of URS, primarily relating to parts that need my personal API credentials. Either I will have to find a way to test without exposing my personal credentials or I will not write unit tests for those areas. I still have to do more research. If you have any suggestions for how to do this, or just tips for unit testing, please open a new issue and label it with the `suggestion` label!
+* I plan on publishing URS to PyPI, but the packaging scripts are unfinished/need review.
+* I also plan on deploying docs for ReadTheDocs, but have yet to learn how to use the platform.
+* Lastly, I have to finalize the new Github docs (update screenshots, badges, links, add a demo GIF under the title, etc.).
+
+See the README on the [beta branch](https://github.com/JosephLai241/Universal-Reddit-Scraper/tree/beta) for more details. 
  
 # Scraping Reddit
 
