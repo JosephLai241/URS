@@ -17,14 +17,14 @@ init(autoreset = True)
 convert_time = Global.convert_time
 s_t = Global.s_t
 
-class PrintUsers():
+class CheckRedditors():
     """
     Function for printing found and invalid Redditors.
     """
 
     ### Check if Redditors exist and list Redditors who are not found.
     @staticmethod
-    def list_users(parser, reddit, user_list):
+    def list_redditors(parser, reddit, user_list):
         print("\nChecking if Redditor(s) exist...")
         users, not_users = Validation.Validation.existence(s_t[1], user_list, 
             parser, reddit, s_t)
@@ -89,7 +89,7 @@ class ProcessInteractions():
         self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
 
     ### Make dictionary from zipped lists.
-    def _make_zip_dict(self, titles, items):
+    def _make_zip_dict(self, items, titles):
         return dict((title, item) for title, item in zip(titles, items))
 
     ### Make submission list.
@@ -97,7 +97,7 @@ class ProcessInteractions():
         items = [item.title, convert_time(item.created), item.score, item.upvote_ratio, 
             item.id, item.over_18, item.subreddit.display_name, item.selftext]
 
-        return self._make_zip_dict(self._submission_titles, items)
+        return self._make_zip_dict(items, self._submission_titles)
 
     ### Make comment list.
     def _make_comment_list(self, item):
@@ -107,7 +107,7 @@ class ProcessInteractions():
             item.link_id, edit_date, item.stickied, item.submission.selftext, 
             item.submission.subreddit.display_name]
 
-        return self._make_zip_dict(self._comment_titles, items)
+        return self._make_zip_dict(items, self._comment_titles)
 
     ### Determine how to append the list to the overview dictionary.
     def _determine_append(self, cat, redditor_list, s_type):
@@ -256,7 +256,7 @@ class RunRedditor():
         Titles.Titles().u_title()
 
         user_list = Cli.GetScrapeSettings().create_list(args, s_t[1])
-        users = PrintUsers().list_users(parser, reddit, user_list)
+        users = CheckRedditors().list_redditors(parser, reddit, user_list)
         u_master = Global.make_none_dict(users)
         Cli.GetScrapeSettings().get_settings(args, u_master, s_t[1])
 
