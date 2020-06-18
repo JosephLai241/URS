@@ -172,7 +172,7 @@ class SecondClass():
 
 # Comments
 
-***Every single class and method requires at least one comment with proper grammar and punctuation***. By doing this, I will easily be able to tell which class most likely contains the method I am looking for.
+***Every single class and method requires at least one comment with proper grammar and punctuation***. By doing this, I will easily be able to tell which class most likely contains the method I am looking for. Comments will also follow the ~80 character word wrap rule.
 
 ## Class Comments
 
@@ -227,6 +227,9 @@ class Write():
     Functions for writing scraped Redditor information to CSV or JSON.
     """
 
+    ### Initialize objects that will be used in class methods.
+    def __init__(self):
+        self._eo = Global.eo
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
@@ -243,7 +246,7 @@ class Write():
         then calls _print_confirm()
 ```
 
-Python does not have true "private" methods, but we can indicate that they are only supposed to be called within the class by prepending an underscore in front of the method name. 
+Python does not have true "private" methods or variables, but we can indicate that they are only supposed to be called within the class by prepending an underscore in front of the method or variable name. 
 
 `write()` is called outside of the `Write` class, which is why an underscore is not prepended. `_determine_export()` and `_print_confirm()` are called by `write()` but are not called outside the function, hence why they are prepended with an underscore.
 
