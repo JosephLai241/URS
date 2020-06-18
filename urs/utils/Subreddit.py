@@ -15,7 +15,7 @@ categories = Global.categories
 options = Global.options
 short_cat = Global.short_cat
 
-class CheckSubs():
+class CheckSubreddits():
     """
     Function for checking if Subreddit(s) exist. Print invalid Subreddits if
     applicable.
@@ -23,7 +23,7 @@ class CheckSubs():
 
     ### Check if Subreddits exist and list invalid Subreddits if applicable
     @staticmethod
-    def confirm_subs(parser, reddit, s_t, sub_list):
+    def list_subreddits(parser, reddit, s_t, sub_list):
         print("\nChecking if Subreddit(s) exist...")
         subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, 
             parser, reddit, s_t)
@@ -251,7 +251,7 @@ class RunSubreddit():
     @staticmethod
     def _create_settings(args, parser, reddit, s_t):
         sub_list = Cli.GetScrapeSettings().create_list(args, s_t[0])
-        subs = CheckSubs.confirm_subs(parser, reddit, s_t, sub_list)
+        subs = CheckSubreddits.list_subreddits(parser, reddit, s_t, sub_list)
         s_master = Global.make_list_dict(subs)
         Cli.GetScrapeSettings().get_settings(args, s_master, s_t[0])
 
