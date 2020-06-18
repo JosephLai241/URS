@@ -15,14 +15,14 @@ convert_time = Global.convert_time
 eo = Global.eo
 s_t = Global.s_t
 
-class PrintPosts():
+class CheckSubmissions():
     """
     Function for printing found and invalid Reddit posts.
     """
 
     ### Check if posts exist and list posts that are not found.
     @staticmethod
-    def list_posts(reddit, post_list, parser):
+    def list_submissions(reddit, post_list, parser):
         print("\nChecking if post(s) exist...")
         posts, not_posts = Validation.Validation.existence(s_t[2], post_list, 
             parser, reddit, s_t)
@@ -221,7 +221,7 @@ class RunComments():
         Titles.Titles().c_title()
 
         post_list = Cli.GetScrapeSettings().create_list(args, s_t[2])
-        posts = PrintPosts.list_posts(reddit, post_list, parser)
+        posts = CheckSubmissions.list_submissions(reddit, post_list, parser)
         c_master = Global.make_none_dict(posts)
         Cli.GetScrapeSettings().get_settings(args, c_master, s_t[2])
 
