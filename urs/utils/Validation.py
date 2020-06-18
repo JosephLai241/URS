@@ -28,7 +28,7 @@ class Validation():
 
     ### Check Subreddits.
     @staticmethod
-    def _check_subs(found, not_found, object_list, reddit):
+    def _check_subreddits(found, not_found, object_list, reddit):
         for sub in object_list:
             try:
                 reddit.subreddits.search_by_name(sub, exact = True)
@@ -38,7 +38,7 @@ class Validation():
 
     ### Check Redditors.
     @staticmethod
-    def _check_users(found, not_found, object_list, reddit):
+    def _check_redditors(found, not_found, object_list, reddit):
         for user in object_list:
             try:
                 reddit.redditor(user).id
@@ -48,7 +48,7 @@ class Validation():
 
     ### Check posts.
     @staticmethod
-    def _check_posts(found, not_found, object_list, reddit):
+    def _check_submissions(found, not_found, object_list, reddit):
         for post in object_list:
             try:
                 reddit.submission(url = post).title
@@ -64,12 +64,12 @@ class Validation():
 
         ### Check Subreddits.
         if l_type == s_t[0]:
-            Validation._check_subs(found, not_found, object_list, reddit)
+            Validation._check_subreddits(found, not_found, object_list, reddit)
         ### Check Redditors.
         elif l_type == s_t[1]:
-            Validation._check_users(found, not_found, object_list, reddit)
+            Validation._check_redditors(found, not_found, object_list, reddit)
         ### Check post URLs.
         elif l_type == s_t[2]:
-            Validation._check_posts(found, not_found, object_list, reddit)
+            Validation._check_submissions(found, not_found, object_list, reddit)
 
         return found, not_found
