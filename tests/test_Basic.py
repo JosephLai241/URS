@@ -74,7 +74,140 @@ class TestGetInputInitMethod():
 class TestGetInputGetSubredditsMethod():
     """
     Testing GetInput class get_subreddits() method found on line 58 in Basic.py.
+    I need to find a way to simulate user input for this function. Passing this
+    test for now.
     """
 
     def test_get_input_get_subreddits_no_input_from_user(self):
+        pass
+
+    def test_get_input_get_subreddits_valid_input(self):
+        pass
+
+class TestGetInputUpdateMasterMethod():
+    """
+    Testing GetInput class _update_master() method found on line 74 in Basic.py.
+    """
+
+    def test_update_master_not_search_category(self):
+        cat_i = 0
+        test_master = {"test_subreddit": []}
+        search_for = 10
+        sub = "test_subreddit"
+
+        Basic.GetInput()._update_master(cat_i, test_master, search_for, sub)
+
+        assert test_master == {"test_subreddit": [[0, 10]]}
+
+    def test_update_master_search_category(self):
+        cat_i = 5
+        test_master = {"test_subreddit": []}
+        search_for = "test string"
+        sub = "test_subreddit"
+
+        Basic.GetInput()._update_master(cat_i, test_master, search_for, sub)
+
+        assert test_master == {"test_subreddit": [[5, "test string"]]}
+
+class TestGetInputGetSearchMethod():
+    """
+    Testing GetInput class _get_search() method found on line 82 in Basic.py.
+    I need to find a way to simulate user input for this function. Passing this
+    test for now. 
+    """
+
+    def test_get_input_search_for_is_a_number(self):
+        pass
+
+    def test_get_input_search_for_is_a_string(self):
+        pass
+
+    def test_get_input_search_for_no_input(self):
+        pass
+
+class TestGetInputGetNResultsMethod():
+    """
+    Testing GetInput class _get_n_results() method found on line 82 in Basic.py.
+    I need to find a way to simulate user input for this function. Passing this
+    test for now. 
+    """
+
+    def test_get_n_results_normal_input(self):
+        pass
+
+    def test_get_n_results_invalid_input(self):
+        pass
+
+    def test_get_n_results_no_input(self):
+        pass
+
+class TestGetInputGetSettingsMethod():
+    """
+    Testing GetInput class get_settings() method found on line 112 in Basic.py.
+    I need to find a way to simulate user input for this function. Passing this
+    test for now.
+    """
+
+    def test_get_settings_selected_search_option(self):
+        pass
+
+    def test_get_settings_selected_other_category_option(self):
+        pass
+
+    def test_get_settings_invalid_option_out_of_range(self):
+        pass
+
+    def test_get_settings_invalid_option_is_not_a_number(self):
+        pass
+
+class TestConfirmInputConfirmSubredditsMethod():
+    """
+    Testing GetInput class confirm_subreddits() method found on line 145 in Basic.py.
+    I need to find a way to simulate user input for this function. Passing this
+    test for now.
+    """
+
+    def test_confirm_subreddits_selected_yes(self):
+        pass
+
+    def test_confirm_subreddits_selected_no(self):
+        pass
+
+    def test_confirm_subreddits_invalid_option(self):
+        pass
+
+class TestConfirmInputAnotherMethod():
+    """
+    Testing GetInput class another() method found on line 162 in Basic.py.
+    I need to find a way to simulate user input for this function. Passing this
+    test for now.
+    """
+
+    def test_another_selected_yes(self):
+        pass
+
+    def test_another_selected_no(self):
+        pass
+
+    def test_another_invalid_option(self):
+        pass
+
+class TestRunBasicCreateSettingsMethod():
+    """
+    Testing RunBasic class _create_settings() method found on line 180 in Basic.py.
+    Waiting to figure out how to test user input before testing this function.
+    Passing for now.
+    """
+
+    def test_create_settings(self):
+        pass
+
+class TestRunBasicPrintConfirmMethod():
+    """
+    Testing RunBasic class _print_confirm() method found on line 190 in Basic.py.
+    Waiting to figure out how to test user input before testing this function.
+    Passing for now.
+    """
+
+    def test_print_confirm(self):
         pass
