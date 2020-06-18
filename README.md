@@ -13,7 +13,7 @@ You will also need your own Reddit account and API credentials. I have included 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.6.
 
 ## Table of Contents
- - [Information for URS v3.1.0b1 (beta)](
+ - [Information for URS v3.1.0b1 (beta)](#information-for-urs-v310b1-beta)
  - [Scraping Reddit](#scraping-reddit)
     - [Table of All Subreddit, Redditor, and Post Comments Attributes](#a-table-of-all-subreddit-redditor-and-post-comments-attributes)
     - [Subreddits](#subreddits)
