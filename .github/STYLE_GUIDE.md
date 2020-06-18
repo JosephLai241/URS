@@ -18,7 +18,7 @@ Tabs are set at 4 spaces wide for all scripts.
 
 # Word Wrap
 
-Word wrap should be 80-83 characters per line. You can set a ruler in your editor to display a ruler at 80 characters, which is very useful for following the wrap guideline.
+Word wrap should be 80-83 characters per line. You can modify your editor settings to display a horizontal ruler at 80 characters, which is very useful for following the wrap guideline.
 
 Use `\` to write a line of code in multiple lines.
 
