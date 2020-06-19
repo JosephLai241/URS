@@ -1,42 +1,42 @@
 ---
-name: Bug report
+name: Bug Report
 about: Fill out this issue template to help me improve URS.
-title: ''
+title: "Bug Report"
 labels: bug
 assignees: JosephLai241
-
 ---
 
-**Describe the bug**
+**Describe The Bug**
 
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**Steps To Reproduce**
 
 Steps to reproduce the behavior:
 
-```
-Example:
-1. Run: ./scraper.py -u spez 5 --csv
-2. Open Redditor scrape which was exported to CSV ("u-spez 1-10-2020.csv").
-3. CSV columns are blank, indicating export functionality is not working properly.
-```
+* Put the summary for this block of commands here.
+    + Ran `put_a_command_here`
+        * If applicable, provide additional information below each bullet point.
+    + Then ran `put_another_command_here`
 
-**Expected behavior**
+**Expected Behavior**
 
 A clear and concise description of what you expected to happen.
 
+**Actual Behavior**
+
+A clear and concise description of what actually happened.
+
 **Screenshots**
 
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots or a code block of the ***entire*** traceback to help explain your problem.
 
-**Machine Specs (please complete the following information):**
+**Machine Specs**
 
- - OS: [e.g. Linux Mint 19.3 "Tricia"]
- - Python: [e.g. Python 3.6]
- - PRAW: [e.g. PRAW 6.4.0]
- - Argparse: [e.g. argparse 1.4.0]
+* OS: [e.g. Arch Linux x86_64]
+* Python: [e.g. Python 3.8.2]
+* PRAW: [e.g. PRAW 7.0.0]
 
-**Additional context**
+**Additional Context**
 
 Add any other context about the problem here.
