@@ -2,6 +2,7 @@
 #                             Subreddit Scraping
 #===============================================================================
 from colorama import Fore, init, Style
+from prettytable import PrettyTable
 
 from . import Cli, Export, Global, Titles, Validation
 from .Logger import LogExport, LogScraper
@@ -47,24 +48,26 @@ class PrintConfirm():
 
     ### Print each Subreddit setting.
     @staticmethod
-    def _print_each(args, s_master):
+    def _print_each(args, pretty_subs, s_master):
         for sub, settings in s_master.items():
             for each in settings:
                 cat_i = short_cat.index(each[0].upper()) if not args.basic \
                     else each[0]
                 specific = each[1]
                 
-                print("\n{:<25}{:<17}{:<30}".format(sub, categories[cat_i], specific))
+                pretty_subs.add_row([sub, categories[cat_i], specific])
 
     ### Print scraping details for each Subreddit.
     @staticmethod
     def print_settings(args, s_master):
-        print(Style.BRIGHT + "\n------------------Current settings for each Subreddit-------------------")
-        print(Style.BRIGHT + "\n{:<25}{:<17}{:<30}".format("Subreddit", "Category", 
-                "Number of results / Keyword(s)"))
-        print(Style.BRIGHT + "-" * 72)
+        print(Fore.CYAN + Style.BRIGHT + "\nCurrent settings for each Subreddit")
+        pretty_subs = PrettyTable()
+        pretty_subs.field_names = ["Subreddit", "Category", 
+            "Number of results / Keywords"]
 
-        PrintConfirm._print_each(args, s_master)
+        PrintConfirm._print_each(args, pretty_subs, s_master)
+        pretty_subs.align = "l"
+        print(pretty_subs)
 
     ### Confirm scraping options.
     @staticmethod
