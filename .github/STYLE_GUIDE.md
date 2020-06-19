@@ -7,6 +7,7 @@
 * [Word Wrap](#word-wrap)
 * [Whitespace](#whitespace)
 * [Comments](#comments)
+* [Method Parameters](#method-parameters)
 * [URS Code](#urs-code)
 * [Unit Testing Code](#unit-testing-code)
 
@@ -35,27 +36,27 @@ If you have a long line of code, try to separate it by any special characters or
 Take a look at this `redditor_list` variable that is set by a [ternary operator](https://book.pythontips.com/en/latest/ternary_operators.html):
 
 ```python
-redditor_list = self._make_submission_list(item) if isinstance(item, praw.models.Submission) else self._make_comment_list(item)
+redditor_list = _make_submission_list(item) if isinstance(item, praw.models.Submission) else _make_comment_list(item)
 ```
 
 This line greatly exceeds the 80 character count. In cases like these, wrap the line like so:
 
 ```python
-redditor_list = self._make_submission_list(item) \
+redditor_list = _make_submission_list(item) \
     if isinstance(item, praw.models.Submission) \
-        else self._make_comment_list(item)
+        else _make_comment_list(item)
 ```
 
 Let's take a look at another example. Here I am printing a string that uses string formatting to pass in variables:
 
 ```python
-print(Style.BRIGHT + ("\nProcessing %s %s from u/%s's profile...") % (limit, plurality, user))
+print(("\nProcessing %s %s from u/%s's profile... Extending this print line") % (limit, plurality, user))
 ```
 
-Again, this line exceeds the 80 character count. You can split this into two lines at the special character `%`.
+Again, this line exceeds the 80 character count. You can split this into two lines after the special character `%`.
 
 ```python
-print(Style.BRIGHT + ("\nProcessing %s %s from u/%s's profile...") % 
+print(("\nProcessing %s %s from u/%s's profile... Extending this print line") % 
     (limit, plurality, user))
 ```
 
@@ -70,13 +71,13 @@ print(Style.BRIGHT +
 Let's take a look at a third example. Here I am defining a very long list that will greatly exceed 80 characters:
 
 ```python
-self._titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", "Submissions", "Comments", "Hot", "New", "Controversial", "Top", "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", "Gildings (may be forbidden)", "Hidden (may be forbidden)", "Saved (may be forbidden)"]
+titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", "Submissions", "Comments", "Hot", "New", "Controversial", "Top", "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", "Gildings (may be forbidden)", "Hidden (may be forbidden)", "Saved (may be forbidden)"]
 ```
 
 If more than half of the word populates the space before the 80 character mark and exceeds the limit by ~2-4 characters, you can leave it on the same line. But if the word is more than ~10 characters over the limit, put it on a new line.
 
 ```python
-self._titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
+titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
     "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", 
     "Submissions", "Comments", "Hot", "New", "Controversial", "Top", 
     "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", <- Exceeds the limit by 2 chars 👍
@@ -95,14 +96,14 @@ example_list_with_commas = [1, 2, 3, 4, 5]
 This includes method parameters:
 
 ```python
-def example_method(self, first_param, second_param, third_param):
+def example_method(self, a_first_param, b_second_param, c_third_param):
 ```
 
 There should be a space preceeding and following all equal signs or conditionals, comparison operators, etc.:
 
 ```python
-example = "something"
 boolean == True
+example = "something"
 something = one_thing if a_condition != None else another_thing
 ```
 
@@ -121,21 +122,19 @@ a_dictionary = {
 }
 ```
 
-Variables should be grouped by relevance and separated by a new line:
+Variables should be grouped by relevance, sorted in alphabetical order, and separated by a new line:
 
 ```python
-self._comment_titles = ["Date Created", "Score", "Text", "Parent ID", 
-    "Link ID", "Edited?", "Stickied?", "Replying to", "In Subreddit"]
-self._submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio",
-    "ID", "NSFW?", "In Subreddit", "Body"]
+comment_titles = ["Date Created", "Score", "Text", "Parent ID", "Link ID", 
+    "Edited?", "Stickied?", "Replying to", "In Subreddit"]
+submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio", "ID", 
+    "NSFW?", "In Subreddit", "Body"]
 
-self._mutts = [self._controversial, self._gilded, self._hot, self._new, 
-    self._top]
-self._mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
+mutts = [controversial, gilded, hot, new, top]
+mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
 
-self._access = [self._downvoted, self._gildings, self._hidden, self._saved, 
-    self._upvoted]
-self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
+access = [downvoted, gildings, hidden, saved, upvoted]
+access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
 ```
 
 Methods and classes are separated by a new line:
@@ -158,12 +157,12 @@ class FirstClass():
     The first class.
     """
 
-    ### A method here.
-    def a_method_here(self):
+    ### A private method here.
+    def _a_private_method_here(self):
         pass
 
-    ### A second method here.
-    def a_second_method_here(self):
+    ### A second public method here.
+    def a_second_public_method_here(self):
         pass
 
 class SecondClass():
@@ -171,7 +170,7 @@ class SecondClass():
     Second class here.
     """
 
-    ### Another method here.
+    ### Another public method here.
     def another_method_here(self):
         pass
 ```
@@ -197,7 +196,7 @@ Method comments should start with `###` so that it is easily distinguished from 
 
 ```python
     ### This is an example of a method comment.
-    def this_is_an_example_method(self):
+    def this_is_an_example_public_method(self):
 ```
 
 ### Global Variable Comments
@@ -215,6 +214,57 @@ An example taken from my code would be calling the Colorama `init` function at t
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print
 init(autoreset = True)
+```
+
+## Method Parameters
+
+### Static Methods
+
+Static method parameters should be sorted in alphabetical order:
+
+```python
+@staticmethod
+def example_method(args, basic, comments, parser, reddit, subreddit):
+```
+
+### Instance methods
+
+Instance methods will take `self` as the first parameter, followed by all other parameters sorted in alphabetical order:
+
+```python
+def example_with_self(self, args, basic, comments, parser, reddit, subreddit):
+```
+
+### Init methods
+
+`init` methods follow the same style above. Instance variables defined in the `init` method will be grouped by relevance and sorted in alphabetical order.
+
+This is a modified version of the huge `init` method in `Redditor.py`:
+
+```python
+    ### Initialize objects that will be used in class methods.
+    def __init__(self, limit, overview, user):
+        self._overview = overview
+
+        self._controversial = user.controversial(limit = limit)
+        self._downvoted = user.downvoted(limit = limit)
+        self._gilded = user.gilded(limit = limit)
+        self._gildings = user.gildings(limit = limit)
+        self._hidden = user.hidden(limit = limit)
+        self._hot = user.hot(limit = limit)
+        self._new = user.new(limit = limit)
+        self._saved = user.saved(limit = limit)
+
+        self._comment_titles = ["Date Created", "Score", "Text", "Parent ID"]
+        self._submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio"]
+
+        self._s_types = ["Submissions", "Comments", "Mutts", "Access"]
+
+        self._mutts = [self._controversial, self._gilded, self._hot, self._new]
+        self._mutt_names = ["Controversial", "Gilded", "Hot", "New"]
+
+        self._access = [self._downvoted, self._gildings, self._hidden, self._saved]
+        self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved"]
 ```
 
 ## URS Code
@@ -235,7 +285,7 @@ class Write():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._eo = Global.eo
+        ...
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
@@ -261,7 +311,6 @@ Python does not have true "private" methods or variables, but we can indicate th
 The block of code above is also another great representation of how sections of code should be organized.
 
 Within `write()`, `_determine_export()` is called first, followed by `_print_confirm()`. The order in which smaller methods that will be called in a class's "main" method should be sorted by execution order (from top to bottom). These smaller methods will also be placed above the "main" method.
-
 
 ## Unit Testing Code
 
