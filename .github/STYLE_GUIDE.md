@@ -16,7 +16,11 @@ The goal is to write code that is maintainable, readable, and scalable. This sta
 
 ## Tabs
 
-Tabs are set at 4 spaces wide for all scripts.
+![TABS NOT SPACES](https://markjaquith.files.wordpress.com/2018/06/not-hiring.gif)
+
+**Tabs** are set at 4 spaces wide for all scripts.
+
+<sub>Silicon Valley is great show, by the way.</sub>
 
 ## Word Wrap
 
