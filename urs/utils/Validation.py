@@ -5,9 +5,11 @@ import praw
 import requests
 
 from colorama import Fore, init, Style
+from praw import models
 from prawcore import NotFound, PrawcoreException
+from prettytable import PrettyTable
 
-from . import Titles
+from . import Global, Titles
 from .Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -19,12 +21,31 @@ class Validation():
     Functions for validating PRAW credentials and Subreddits, Redditors, and URLs.
     """
 
-    ### Check if PRAW credentials are valid.
+    ### Print user rate limit information. This includes the number of requests
+    ### remaining, a timestamp for when the rate limit counters will be reset, and
+    ### the number of requests that have been made in the current rate limit window
+    @staticmethod
+    def print_rate_limit(reddit):
+        user_limits = models.Auth(reddit = reddit, _data = dict()).limits
+
+        pretty_limits = PrettyTable()
+        pretty_limits.field_names = ["Remaining Requests", "Reset Timestamp", 
+            "Requests Used"]
+        pretty_limits.add_row(
+            [user_limits["remaining"], 
+            Global.convert_time(user_limits["reset_timestamp"]), user_limits["used"]])
+
+        pretty_limits.align = "c"
+        print(pretty_limits)
+
+    ### Check if PRAW credentials are valid, then print rate limit PrettyTable.
     @staticmethod
     @LogError.log_login
     def validate_user(parser, reddit):
         print(Style.BRIGHT + Fore.GREEN + 
             "\nYou have successfully logged in as u/%s.\n" % reddit.user.me())
+        
+        Validation.print_rate_limit(reddit)
 
     ### Check Subreddits.
     @staticmethod
