@@ -1,4 +1,6 @@
-# Table of Contents
+# URS Style Guide
+
+## Table of Contents
 
 * [Introduction](#introduction)
 * [Tabs](#tabs)
@@ -8,15 +10,15 @@
 * [URS Code](#urs-code)
 * [Unit Testing Code](#unit-testing-code)
 
-# Introduction
+## Introduction
 
 The goal is to write code that is maintainable, readable, and scalable. This standard is applied to both URS code and unit tests.
 
-# Tabs
+## Tabs
 
 Tabs are set at 4 spaces wide for all scripts.
 
-# Word Wrap
+## Word Wrap
 
 Word wrap should be 80-83 characters per line. You can modify your editor settings to display a horizontal ruler at 80 characters, which is very useful for following the wrap guideline.
 
@@ -78,7 +80,7 @@ self._titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma",
     "Saved (may be forbidden)"]
 ```
 
-# Whitespace
+## Whitespace
 
 Commas should be followed by a space:
 
@@ -170,11 +172,11 @@ class SecondClass():
         pass
 ```
 
-# Comments
+## Comments
 
 ***Every single class and method requires at least one comment with proper grammar and punctuation***. By doing this, I will easily be able to tell which class most likely contains the method I am looking for. Comments will also follow the ~80 character word wrap rule.
 
-## Class Comments
+### Class Comments
 
 Class comments should use blocks placed underneath the class:
 
@@ -185,7 +187,7 @@ class ThisIsAnExampleClass():
     """
 ```
 
-## Method Comments
+### Method Comments
 
 Method comments should start with `###` so that it is easily distinguished from code. These comments are placed above the method.
 
@@ -194,7 +196,7 @@ Method comments should start with `###` so that it is easily distinguished from 
     def this_is_an_example_method(self):
 ```
 
-## Global Variable Comments
+### Global Variable Comments
 
 Global variables or functions follow the same style as method comments.
 
@@ -211,9 +213,9 @@ An example taken from my code would be calling the Colorama `init` function at t
 init(autoreset = True)
 ```
 
-# URS Code
+## URS Code
 
-## Classes
+### Classes
 
 Every method in URS has to be wrapped in a class. These classes contain methods that are sorted by relevance. 
 
@@ -250,14 +252,14 @@ Python does not have true "private" methods or variables, but we can indicate th
 
 `write()` is called outside of the `Write` class, which is why an underscore is not prepended. `_determine_export()` and `_print_confirm()` are called by `write()` but are not called outside the function, hence why they are prepended with an underscore.
 
-## Modularizing Code
+### Modularizing Code
 
 The block of code above is also another great representation of how sections of code should be organized.
 
 Within `write()`, `_determine_export()` is called first, followed by `_print_confirm()`. The order in which smaller methods that will be called in a class's "main" method should be sorted by execution order (from top to bottom). These smaller methods will also be placed above the "main" method.
 
 
-# Unit Testing Code
+## Unit Testing Code
 
 Every method in URS has to be wrapped in a class for unit testing. This makes it easier to add and group tests if features are added to a method in the future.
 
