@@ -39,7 +39,7 @@ Please keep all changes consistent with the name of this project. This means tha
 
 ## Code of Conduct
 
-Code of Conduct is available in the `.github/` directory.
+Code of Conduct is available in the `.github/` directory. (UPDATE LINK WHEN DONE)
 
 ## Important Resources
 
