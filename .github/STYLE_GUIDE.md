@@ -26,7 +26,7 @@ Indent each following line by a tab to indicate it is still the same line of cod
 
 If you have a long line of code, try to separate it by any special characters or keywords. Showing an example would be the best way to describe this.
 
-Take a look at this `redditor_list` variable that is set by [ternary operator](https://book.pythontips.com/en/latest/ternary_operators.html):
+Take a look at this `redditor_list` variable that is set by a [ternary operator](https://book.pythontips.com/en/latest/ternary_operators.html):
 
 ```python
 redditor_list = self._make_submission_list(item) if isinstance(item, praw.models.Submission) else self._make_comment_list(item)
