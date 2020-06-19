@@ -39,7 +39,7 @@ Please keep all changes consistent with the name of this project. This means tha
 
 ## Code of Conduct
 
-Code of Conduct may be added in the future.
+Code of Conduct is available in the `.github/` directory.
 
 ## Important Resources
 
@@ -53,13 +53,13 @@ Alternatively, feel free to send me an email at [urs_project@protonmail.com](mai
 
 ## Feature Requests
 
-Please submit feature requests in the `issues` tab and apply the `enhancement` label.
+Please submit feature requests in the `issues` tab.
 
 Please provide the feature you would like to see, why you need it, and how it will work. Discuss your ideas transparently so I can better understand why this feature is necessary.
 
 Major changes that you wish to contribute to the project should be discussed first in an GitHub issue that clearly outlines the changes and benefits of the feature.
 
-Small Changes can directly be crafted and submitted to the GitHub Repository as a Pull Request. See the section about Pull Request Submission Guidelines, and for detailed information the core development documentation.
+Small changes can directly be crafted and submitted to the GitHub Repository as a Pull Request. See the section about Pull Request Submission Guidelines, and for detailed information the core development documentation.
 
 ## Reporting Bugs
 
