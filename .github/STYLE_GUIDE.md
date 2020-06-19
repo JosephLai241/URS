@@ -7,6 +7,7 @@
 * [Word Wrap](#word-wrap)
 * [Whitespace](#whitespace)
 * [Comments](#comments)
+* [Imports](#imports)
 * [Method Parameters](#method-parameters)
 * [URS Code](#urs-code)
 * [Unit Testing Code](#unit-testing-code)
@@ -122,7 +123,7 @@ a_dictionary = {
 }
 ```
 
-Variables should be grouped by relevance, sorted in alphabetical order, and separated by a new line:
+All variables should be grouped by relevance, sorted in alphabetical order, and separated by a new line. This applies to global, instance, and method variables.
 
 ```python
 comment_titles = ["Date Created", "Score", "Text", "Parent ID", "Link ID", 
@@ -216,6 +217,10 @@ An example taken from my code would be calling the Colorama `init` function at t
 init(autoreset = True)
 ```
 
+## Imports
+
+***Adding imports section soon***
+
 ## Method Parameters
 
 ### Static Methods
@@ -237,7 +242,7 @@ def example_with_self(self, args, basic, comments, parser, reddit, subreddit):
 
 ### Init methods
 
-`init` methods follow the same style above. Instance variables defined in the `init` method will be grouped by relevance and sorted in alphabetical order.
+`init` methods follow the same style above. Again, instance variables defined in the `init` method will be grouped by relevance and sorted in alphabetical order.
 
 This is a modified version of the huge `init` method in `Redditor.py`:
 
@@ -266,6 +271,8 @@ This is a modified version of the huge `init` method in `Redditor.py`:
         self._access = [self._downvoted, self._gildings, self._hidden, self._saved]
         self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved"]
 ```
+
+`self._mutts` and `self._mutt_names` are not in alphabetical order. This is okay if you need to define sets of variables that are similar. In this case it would be the four lists defined at the very end of this `init` method.
 
 ## URS Code
 
