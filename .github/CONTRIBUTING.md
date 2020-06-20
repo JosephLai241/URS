@@ -28,7 +28,7 @@ Later on, Luke also introduced me to argparse, which is used to create command-l
 
 CLI support made adding exporting to JSON, Redditor scraping, as well as post comments scraping functionality much easier to integrate, so URS 3.0.0 incorporated all of these new functions. 
 
-I was still unsatisfied with the quality of my code, so I decided to do an OOP refactor and restructured URS. While the primary motivation was to make my code more readable, maintainable, and scalably, I also added color to terminal output, logger decorators, sorting scrape files into their own directories, and integrated Travis CI and Codecov. This spawned the release of URS 3.1.0.
+I was still unsatisfied with the quality of my code, so I decided to do an OOP refactor and restructured URS. While the primary motivation was to make my code more readable, maintainable, and scalable, I also added color to terminal output, logger decorators, sorting scrape files into their own directories, and integrated Travis CI and Codecov. This spawned the release of URS 3.1.0.
 
 I plan on adding additional features as URS continues to grow, so stay tuned for updates! 
 
@@ -44,11 +44,9 @@ Please keep all changes consistent with the name of this project. This means tha
 
 ## Contributing Code
 
-The dependencies for this project are listed in the `requirements.txt` file. The versions of argparse and PRAW in `requirements.txt` are what I used when I tested this program.
-
 ### Style Guide
 
-It is important that you read the [Style Guide][Style Guide] before you contribute any code. I have a particular style that I think will ensure your code is easy to read, maintain, and is scalable. Enforcing this style will also allow potential contributors to easily get used to how the code is structured and guarantee they will not be surprised by strange syntax. URS is an open-source project, which means the goal here is to push code that anyone can help improve upon.
+**It is important that you read the [Style Guide][Style Guide] before you contribute any code**. I have a particular style that I think will ensure your code is easy to read, maintain, and is scalable. Enforcing this style will also allow potential contributors to easily get used to how the code is structured and guarantee they will not be surprised by strange syntax. URS is an open-source project, which means the goal here is to push code that anyone can help improve upon.
 
 ### Getting Started
 
