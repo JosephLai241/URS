@@ -299,9 +299,9 @@ Comments scraping is especially easier to read because structured exports look s
 
 You can still export Redditor data and submission comments to CSV, but you will be disappointed with the results.
 
-### See [samples/]() for scrapes ran on June 14, 2020. UPDATE LINK TO SAMPLES/
+### See the [samples][Samples] for scrapes ran on June 14, 2020. UPDATE LINK TO SAMPLES/
 
-### See [In-Depth Walkthrough]() for a more detailed guide with screenshots. UPDATE LINK TO DOCS/
+### See [In-Depth Walkthrough][In-Depth Walkthrough] for a more detailed guide with screenshots. UPDATE LINK TO DOCS/
 
 # Some Linux Tips
 
@@ -353,9 +353,12 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 [URS Project Email]: mailto:urs_project@protonmail.
 
 [SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
+[2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
 [In-Depth Walkthrough]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/In-Depth%20Walkthrough.md
-[2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
+
+[SAMPLES]: <Link to samples directory>
+[Samples]: https://github.com/JosephLai241/URS/tree/master/samples
 
 [COMMUNITY DOCS]: <Links for all community documents>
 [Bug Report]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
