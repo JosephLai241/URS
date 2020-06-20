@@ -189,7 +189,7 @@ class CheckCli():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._short_cat = Global.short_cat
-        self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:]")
+        self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
 
     ### Check Subreddit args
     def _check_subreddit(self, args):

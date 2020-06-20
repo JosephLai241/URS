@@ -399,7 +399,7 @@ class TestCheckCliInitMethod():
 
     def test_check_cli_init_method_special_chars_instance_variable(self):
         assert Cli.CheckCli()._special_chars == \
-            re.compile('[@_!#$%^&*()<>?/\\|}{~:]')
+            re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
 
 class TestCheckCliCheckSubredditMethod():
     """
