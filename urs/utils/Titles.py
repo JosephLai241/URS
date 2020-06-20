@@ -105,7 +105,5 @@ class Titles():
    \ \____/
     \/___/... You have reached your rate limit.
 
-Please try again when your rate limit is reset: %s   
-
-Exiting.
+Please try again when your rate limit is reset: %s
 """ % reset_timestamp)
