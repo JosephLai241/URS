@@ -23,17 +23,20 @@ class Validation():
 
     ### Print user rate limit information. This includes the number of requests
     ### remaining, a timestamp for when the rate limit counters will be reset, and
-    ### the number of requests that have been made in the current rate limit window
+    ### the number of requests that have been made in the current rate limit window.
     @staticmethod
     def print_rate_limit(reddit):
         user_limits = models.Auth(reddit = reddit, _data = dict()).limits
 
+        ### If the user does not have any requests left, print the limit title
+        ### and quit.
+        if int(user_limits["remaining"]) == 0:
+            Titles.Titles.l_title(Global.convert_time(user_limits["reset_timestamp"]))
+            quit()
+
         pretty_limits = PrettyTable()
-        pretty_limits.field_names = ["Remaining Requests", "Reset Timestamp", 
-            "Requests Used"]
-        pretty_limits.add_row(
-            [user_limits["remaining"], 
-            Global.convert_time(user_limits["reset_timestamp"]), user_limits["used"]])
+        pretty_limits.field_names = ["Remaining Requests", "Used Requests"]
+        pretty_limits.add_row([int(user_limits["remaining"]), int(user_limits["used"])])
 
         pretty_limits.align = "c"
         print(pretty_limits)
