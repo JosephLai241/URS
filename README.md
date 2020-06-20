@@ -29,7 +29,6 @@
   + [Submission Comments](#submission-comments)
   + [Exporting](#exporting)
 * [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
-* [In-Depth Walkthrough][In-Depth Walkthrough]
 * [2-Factor Authentication][2-Factor Authentication]
 * [Some Linux Tips](#some-linux-tips)
 * [Contributors](#contributors)
@@ -255,8 +254,6 @@ You can still export Redditor data and submission comments to CSV, but you will 
 
 ### See the [samples][Samples] for scrapes ran on June 14, 2020. UPDATE LINK TO SAMPLES/
 
-### See [In-Depth Walkthrough][In-Depth Walkthrough] for a more detailed guide with screenshots. UPDATE LINK TO DOCS/
-
 # Some Linux Tips
 
 * You can further simplify running the program by making the program executable: `sudo chmod +x Urs.py` 
@@ -307,7 +304,6 @@ You can still export Redditor data and submission comments to CSV, but you will 
 [SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
 [2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
-[In-Depth Walkthrough]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/In-Depth%20Walkthrough.md
 
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples
