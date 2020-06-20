@@ -57,8 +57,35 @@ class LogMain():
 
 class LogError():
     """
-    Decorator for logging PRAW or args errors.
+    Decorator for logging args, PRAW, or rate limit errors.
     """
+
+    ### Wrapper for logging if the help message was printed/if no arguments were
+    ### given.
+    @staticmethod
+    def log_no_args(function):
+        def wrapper(self):
+            try:
+                args, parser = function(self)
+                return args, parser
+            except SystemExit:
+                logging.info("HELP WAS DISPLAYED.\n")
+                quit()
+        
+        return wrapper
+
+    ### Wrapper for logging argument errors.
+    @staticmethod
+    def log_args(function):
+        def wrapper(self, args, parser):
+            try:
+                function(self, args, parser)
+            except ValueError:
+                Titles.Titles.e_title()
+                logging.critical("INVALID ARGUMENTS GIVEN.\n")
+                parser.exit()
+
+        return wrapper
 
     ### Wrapper for logging PRAW errors.
     @staticmethod
@@ -80,17 +107,19 @@ class LogError():
 
         return wrapper
 
-    ### Wrapper for logging args errors.
+    ### Wrapper for logging rate limit errors.
     @staticmethod
-    def log_args(function):
-        def wrapper(self, args, parser):
-            try:
-                function(self, args, parser)
-            except ValueError:
-                Titles.Titles.e_title()
-                logging.critical("INVALID ARGUMENTS GIVEN.\n")
-                parser.exit()
+    def log_rate_limit(function):
+        def wrapper(reddit):
+            user_limits = function(reddit)
 
+            if int(user_limits["remaining"]) == 0:
+                Titles.Titles.l_title(Global.convert_time(user_limits["reset_timestamp"]))
+                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % 
+                    Global.convert_time(user_limits["reset_timestamp"]))
+                quit()
+            
+            return user_limits
         return wrapper
 
 class LogScraper():
@@ -202,8 +231,8 @@ class LogScraper():
                 function(*args)
             except KeyboardInterrupt:
                 print(Fore.RED + Style.BRIGHT + "\nCancelling.\n")
-                logging.warning("")
-                logging.warning("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
+                logging.info("")
+                logging.info("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
                 quit()
             
         return wrapper

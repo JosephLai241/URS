@@ -114,6 +114,7 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
             help = "export to JSON")
 
     ### Get args.
+    @LogError.log_no_args
     def parse_args(self):
         parser = argparse.ArgumentParser(
             description = self._description,
@@ -127,7 +128,7 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
         ### Print help message if no arguments are present.
         if len(sys.argv[1:]) == 0:
             parser.print_help()
-            parser.exit()
+            raise SystemExit
 
         args = parser.parse_args()
         return args, parser
