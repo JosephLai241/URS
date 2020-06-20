@@ -21,24 +21,25 @@ class Validation():
     Functions for validating PRAW credentials and Subreddits, Redditors, and URLs.
     """
 
+    ### Get user rate limit information. Quits the program if the user does not
+    ### have any requests left in the current rate limit window.
+    @staticmethod
+    @LogError.log_rate_limit
+    def get_rate_info(reddit):
+        return models.Auth(_data = dict(), reddit = reddit).limits
+
     ### Print user rate limit information. This includes the number of requests
     ### remaining, a timestamp for when the rate limit counters will be reset, and
     ### the number of requests that have been made in the current rate limit window.
     @staticmethod
     def print_rate_limit(reddit):
-        user_limits = models.Auth(reddit = reddit, _data = dict()).limits
-
-        ### If the user does not have any requests left, print the limit title
-        ### and quit.
-        if int(user_limits["remaining"]) == 0:
-            Titles.Titles.l_title(Global.convert_time(user_limits["reset_timestamp"]))
-            quit()
+        user_limits = Validation.get_rate_info(reddit)
 
         pretty_limits = PrettyTable()
         pretty_limits.field_names = ["Remaining Requests", "Used Requests"]
         pretty_limits.add_row([int(user_limits["remaining"]), int(user_limits["used"])])
-
         pretty_limits.align = "c"
+        
         print(pretty_limits)
 
     ### Check if PRAW credentials are valid, then print rate limit PrettyTable.
