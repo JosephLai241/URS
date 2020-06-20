@@ -128,9 +128,9 @@ Some categories include additional time filters. Here is a table of how each is 
 
 | Category      | Sorted By/Time Filter | 
 |---------------|-----------------------|
-| Controversial | Time filter: all      |
+| Controversial | Time filter: All      |
 | Search        | Sorted by: Relevance  |
-| Top           | Time filter: all      |
+| Top           | Time filter: All      |
 
 These are the submission categories:
 
@@ -163,13 +163,13 @@ Some Redditor attributes are sorted differently. Here is a table of how each is 
 
 | Attribute Name | Sorted By/Time Filter                       |
 |----------------|---------------------------------------------|
-| Comments       | Sorted by: new                              |
-| Controversial  | Time filter: all                            |
-| Gilded         | Sorted by: new                              |
+| Comments       | Sorted by: New                              |
+| Controversial  | Time filter: All                            |
+| Gilded         | Sorted by: New                              |
 | Hot            | Determined by other Redditors' interactions |
-| New            | Sorted by: new                              |
-| Submissions    | Sorted by: new                              |
-| Top            | Time filter: all                            |
+| New            | Sorted by: New                              |
+| Submissions    | Sorted by: New                              |
+| Top            | Time filter: All                            |
 
 Of these Redditor attributes, the following will include additional attributes:
 
