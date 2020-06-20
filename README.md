@@ -30,6 +30,7 @@
   + [Exporting](#exporting)
 * [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
 * [2-Factor Authentication][2-Factor Authentication]
+* [Error Messages and Rate Limit Information][Error Messages and Rate Limit Info]
 * [Some Linux Tips](#some-linux-tips)
 * [Contributors](#contributors)
 * [Releases](#releases)
@@ -303,6 +304,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 
 [SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
 [2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
+[Error Messages and Rate Limit Info]: https://github.com/JosephLai241/URS/blob/beta/docs/Error%20Messages.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
 
 <!-- SAMPLES: Links to the samples directory -->
