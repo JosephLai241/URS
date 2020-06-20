@@ -20,7 +20,7 @@ This message appears if you have entered invalid arguments. You can use the `-h`
        \ \_\ 
         \/_/
 
-This message is displayed if you enter invalid API credentials. Recheck `Credentials.py` to make sure the `API` dictionary's values are correct.
+This message is displayed if you enter invalid API credentials or if you are not connected to the internet. Recheck `Credentials.py` to make sure the `API` dictionary's values are correct.
 
      __        
     /\ \       
