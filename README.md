@@ -5,15 +5,15 @@
       \/___/  \/_/ \/___/ 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
-[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)](https://pypi.org/project/praw/)
-[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=for-the-badge&logo=travis-ci&logoColor=white)](https://travis-ci.org/github/JosephLai241/URS)
-[![Codecov](https://img.shields.io/codecov/c/github/JosephLai241/Universal-Reddit-Scraper?logo=codecov&logoColor=white&style=for-the-badge)](https://codecov.io/gh/JosephLai241/URS)
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)][PRAW]
+[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=for-the-badge&logo=travis-ci&logoColor=white)][Travis CI Build Status]
+[![Codecov](https://img.shields.io/codecov/c/github/JosephLai241/Universal-Reddit-Scraper?logo=codecov&logoColor=white&style=for-the-badge)][Codecov]
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 
-[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)](mailto:urs_project@protonmail.com)
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)](https://saythanks.io/to/jlai24142%40gmail.com)
+[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)][URS Project Email]
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
 
 ## Table of Contents
 
@@ -26,9 +26,9 @@
   + [Redditors](#redditors)
   + [Submission Comments](#submission-comments)
   + [Exporting](#exporting)
-* [How to get Reddit API Credentials for PRAW](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md)
-* [In-Depth Walkthrough](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/In-Depth%20Walkthrough.md)
-* [2-Factor Authentication](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md)
+* [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
+* [In-Depth Walkthrough][In-Depth Walkthrough]
+* [2-Factor Authentication][2-Factor Authentication]
 * [Some Linux Tips](#some-linux-tips)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
@@ -345,4 +345,28 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 | **December 28, 2019** | URS v3.0 (beta) | <ul> <li>Added **JSON** export.</li> <li>Added **Redditor Scraping**.</li> <li>Comments scraping is still under construction.</li> </ul> | 
 | **December 31, 2019** | URS v3.0 (Official) | <ul> <li>**Comments scraping is now working**!</li> <li>**Added additional exception handling** for creating filenames.</li> <li>Minor code reformatting.</li> <li>**Simplified verbose output**.</li> <li>**Added an additional submission attribute** when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
 | **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guidelines](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md)</li> <li>[Pull Request Template](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md)</li> <li>Issue templates:</li> <ul> <li>[Bug Report](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md)</li> <li>[Feature Request](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md)</li> </ul> <li>[Code of Conduct](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md)</li> <li>[License](https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE)</li> </ul> </ul> |
-| **TBD** | URS v3.1.0b1 (beta) | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI**.</li> <ul> <li>***In the process of adding unit tests for Travis and Codecov (`pytest` + `codecov` ).***</li> </ul> <li>***UPDATE COMMUNITY DOCS WHEN DONE REFACTORING.***</li> <li>Numerous changes to Readme. The most significant change was splitting and **storing walkthroughs in `docs/`**.</li> <ul> <li>Might have to restructure `docs/` for ReadTheDocs build. </ul> </ul> | 
+| **TBD** | URS v3.1.0 | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**New in 3.1.0**:</li> <ul> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> </ul> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI** AND **Codecov**.</li> <li>Updated community documents located in the `.github/` directory: `BUG_REPORT`, `CONTRIBUTING`, `FEATURE_REQUEST`, `PULL_REQUEST_TEMPLATE`, and `STYLE_GUIDE`</li> <li>Numerous changes to Readme. The most significant change was **splitting and storing walkthroughs in `docs/`**.</li> </ul> | 
+
+[BADGES]: <Links for the badges at the top of the README>
+[Codecov]: https://codecov.io/gh/JosephLai241/URS
+[PRAW]: https://pypi.org/project/praw/
+[Say Thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
+[Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/URS
+[URS Project Email]: mailto:urs_project@protonmail.
+
+[SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
+[How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
+[In-Depth Walkthrough]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/In-Depth%20Walkthrough.md
+[2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
+
+[COMMUNITY DOCS]: <Links for all community documents>
+[Bug Report]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
+[Code of Conduct]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md
+[Contributing Guide]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md
+[Feature Request]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md
+[License]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE
+[Pull Request Template]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md
+
+[ThereGoesMySanity]: <Links for user ThereGoesMySanity's account and pull request>
+[ThereGoesMySanity]: https://github.com/ThereGoesMySanity
+[ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9
