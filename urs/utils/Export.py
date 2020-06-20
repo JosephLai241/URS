@@ -3,6 +3,7 @@
 #===============================================================================
 import csv
 import json
+import re
 
 from . import Global
 
@@ -13,11 +14,12 @@ class NameFile():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._illegal_chars = Global.illegal_chars
+        self._illegal_chars = re.compile("[@!#$%^&*()<>?/\\\|}{~:+`=]")
 
     ### Fix f_name if illegal filename characters are present.
     def _fix(self, name):
-        fixed = ["_" if char in self._illegal_chars else char for char in name]
+        fixed = ["_" if self._illegal_chars.search(char) != None 
+            else char for char in name]
         return "".join(fixed)
 
     ### Category name switch.

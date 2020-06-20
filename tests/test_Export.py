@@ -30,8 +30,8 @@ class TestFix():
     """
 
     def test_fix(self):
-        name = "/t\\e?s%t*i:n|g<characters>"
-        fixed = "_t_e_s_t_i_n_g_characters_"
+        name = "/t\\e?s%t*i:n|g<c@h!a#r$ac^t&e*(r)s>}{~+`="
+        fixed = "_t_e_s_t_i_n_g_c_h_a_r_ac_t_e__r_s_______"
 
         assert fixed == Export.NameFile()._fix(name)
 
