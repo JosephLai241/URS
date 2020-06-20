@@ -1,4 +1,10 @@
-*NOTE: Lines starting with `###` are just comments explaining the different types of errors you might see when using URS. You will not see these comments in your log file. I am also omitting my Reddit username.
+*NOTE: Lines starting with `###` are just comments explaining the different types of log messages you might see when using URS. You will not see these comments in your log file.
+
+### The error message if you use the help flag or do not enter any args.
+
+[2020-06-20 18:23:15,268] [INFO]: Initializing URS...
+[2020-06-20 18:23:15,268] [INFO]: 
+[2020-06-20 18:23:15,287] [INFO]: HELP WAS DISPLAYED.
 
 ### The error message if you provide invalid PRAW credentials.
 
@@ -11,25 +17,31 @@
 
 [2020-06-14 20:09:12,403] [INFO]: Initializing URS...
 [2020-06-14 20:09:12,403] [INFO]: 
-[2020-06-14 20:09:13,122] [INFO]: Successfully logged in as u/[USERNAME OMITTED]
+[2020-06-14 20:09:13,122] [INFO]: Successfully logged in as u/urs_project
 [2020-06-14 20:09:13,122] [INFO]: 
 [2020-06-14 20:09:13,134] [CRITICAL]: INVALID ARGUMENTS GIVEN.
+
+### The error message if you have reached your rate limit. An example date is given.
+
+[2020-06-20 17:56:50,651] [INFO]: Initializing URS...
+[2020-06-20 17:56:50,651] [INFO]: 
+[2020-06-20 17:56:51,532] [CRITICAL]: RATE LIMIT REACHED. RATE LIMIT WILL RESET AT 06-15-2020 18:00:00.
 
 ### The message if you decide to decline current Subreddit scraping settings.
 
 [2020-06-14 20:09:24,547] [INFO]: Initializing URS...
 [2020-06-14 20:09:24,547] [INFO]: 
-[2020-06-14 20:09:25,425] [INFO]: Successfully logged in as u/[USERNAME OMITTED]
+[2020-06-14 20:09:25,425] [INFO]: Successfully logged in as u/urs_project
 [2020-06-14 20:09:25,425] [INFO]: 
 [2020-06-14 20:09:25,425] [INFO]: Running Subreddit scraper...
-[2020-06-14 20:09:28,034] [WARNING]: 
-[2020-06-14 20:09:28,034] [WARNING]: SUBREDDIT SCRAPING CANCELLED BY USER.
+[2020-06-14 20:09:28,034] [INFO]: 
+[2020-06-14 20:09:28,034] [INFO]: SUBREDDIT SCRAPING CANCELLED BY USER.
 
 ### Normal operation log.
 
 [2020-06-14 20:09:37,578] [INFO]: Initializing URS...
 [2020-06-14 20:09:37,578] [INFO]: 
-[2020-06-14 20:09:38,416] [INFO]: Successfully logged in as u/[USERNAME OMITTED]
+[2020-06-14 20:09:38,416] [INFO]: Successfully logged in as u/urs_project
 [2020-06-14 20:09:38,416] [INFO]: 
 [2020-06-14 20:09:38,416] [INFO]: Running Subreddit scraper...
 [2020-06-14 20:09:42,420] [INFO]: Scraping r/askreddit for Hot 10 results...
@@ -57,7 +69,7 @@
 
 [2020-06-14 20:32:28,649] [INFO]: Initializing URS...
 [2020-06-14 20:32:28,649] [INFO]: 
-[2020-06-14 20:32:29,342] [INFO]: Successfully logged in as u/[USERNAME OMITTED]
+[2020-06-14 20:32:29,342] [INFO]: Successfully logged in as u/urs_project
 [2020-06-14 20:32:29,342] [INFO]: 
 [2020-06-14 20:32:29,343] [INFO]: Running Comments scraper...
 [2020-06-14 20:45:46,910] [INFO]: Processing all comments in raw format from Reddit post https://www.reddit.com/r/AskReddit/comments/h8usbp/which_cartoon_character_had_the_best_character/
