@@ -4,16 +4,15 @@
      \ \____/\ \_\\/\____/
       \/___/  \/_/ \/___/... Universal Reddit Scraper 
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=flat-square&logo=Python&logoColor=white)
-[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=flat-square&logo=reddit&logoColor=white)][PRAW]
-[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=flat-square&logo=travis-ci&logoColor=white)][Travis CI Build Status]
-[![Codecov](https://img.shields.io/codecov/c/github/JosephLai241/Universal-Reddit-Scraper?logo=codecov&logoColor=white&style=flat-square)][Codecov]
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=flat-square)
-![GitHub contributors](https://img.shields.io/github/contributors/JosephLai241/Universal-Reddit-Scraper?style=flat-square)
-![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=flat-square)
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)][PRAW]
+[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=for-the-badge&logo=travis-ci&logoColor=white)][Travis CI Build Status]
+[![Codecov](https://img.shields.io/codecov/c/github/JosephLai241/Universal-Reddit-Scraper?logo=codecov&logoColor=white&style=for-the-badge)][Codecov]
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)][Releases]
+![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 
-[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=flat-square&logo=ProtonMail&logoColor=white)][URS Project Email]
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=flat-square)][Say Thanks!]
+[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)][URS Project Email]
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
 
 <p align="center"> 
 <img src="https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif">
@@ -352,6 +351,7 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 <!-- BADGES: Links for the badges at the top of the README -->
 [Codecov]: https://codecov.io/gh/JosephLai241/URS
 [PRAW]: https://pypi.org/project/praw/
+[Releases]: https://github.com/JosephLai241/URS/releases
 [Say Thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/URS
 [URS Project Email]: mailto:urs_project@protonmail.
