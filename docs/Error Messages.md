@@ -38,7 +38,7 @@ This message is displayed if you enter invalid API credentials or if you are not
 
     Please try again when your rate limit is reset: [DATE]
 
-PRAW has rate limits. This message is displayed if you have reached the rate limit set for your account. The reset date will vary depending on when you ran URS. 
+PRAW has rate limits. This message is displayed if you have reached the rate limit set for your account. The reset date will vary depending on when you ran URS. The date I received during testing is usually 24 hours later.
 
 Rate limit information is printed in the small table underneath the login message every time you run URS.
 
