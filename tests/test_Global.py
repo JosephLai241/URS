@@ -5,7 +5,7 @@ from urs.utils import Global
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
 
-### Includes a total of 10 tests.
+### Includes a total of 9 tests.
 
 class TestGlobalVariables():
     """
@@ -17,10 +17,6 @@ class TestGlobalVariables():
 
     def test_export_options_list(self):
         assert Global.eo == ["csv", "json"]
-
-    def test_illegal_characters_list(self):
-        assert Global.illegal_chars == ["/", "\\", "?", "%", "*", ":", "|", \
-            "<", ">"]
 
     def test_options_list(self):
         assert Global.options == ["y", "n"]

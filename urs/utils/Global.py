@@ -9,9 +9,6 @@ date = dt.datetime.now().strftime("%m-%d-%Y")
 ### Export options
 eo = ["csv", "json"]
 
-### Illegal filename characters
-illegal_chars = ["/", "\\", "?", "%", "*", ":", "|", "<", ">"]
-
 ### Confirm or deny options
 options = ["y", "n"]
 
