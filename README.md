@@ -15,6 +15,10 @@
 [![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)][URS Project Email]
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
 
+<p align="center"> 
+<img src="https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif">
+</p>
+
 ## Table of Contents
 
 * [Introduction](#introduction)
@@ -345,22 +349,25 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 | **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guide][Contributing Guide]</li> <li>[Pull Request Template][Pull Request Template]</li> <li>Issue templates:</li> <ul> <li>[Bug Report][Bug Report]</li> <li>[Feature Request][Feature Request]</li> </ul> <li>[Code of Conduct][Code of Conduct]</li> <li>[License][License]</li> </ul> </ul> |
 | **TBD** | URS v3.1.0 | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**New in 3.1.0**:</li> <ul> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> </ul> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI** AND **Codecov**.</li> <li>Updated community documents located in the `.github/` directory: `BUG_REPORT`, `CONTRIBUTING`, `FEATURE_REQUEST`, `PULL_REQUEST_TEMPLATE`, and `STYLE_GUIDE`</li> <li>Numerous changes to Readme. The most significant change was **splitting and storing walkthroughs in `docs/`**.</li> </ul> | 
 
-[BADGES]: <Links for the badges at the top of the README>
+<!-- BADGES: Links for the badges at the top of the README -->
 [Codecov]: https://codecov.io/gh/JosephLai241/URS
 [PRAW]: https://pypi.org/project/praw/
 [Say Thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/URS
 [URS Project Email]: mailto:urs_project@protonmail.
 
+<!-- DEMO GIFS: Links to demo GIFS -->
+[Main Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif
+
 [SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
 [2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
 [In-Depth Walkthrough]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/In-Depth%20Walkthrough.md
 
-[SAMPLES]: <Link to samples directory>
+<!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples
 
-[COMMUNITY DOCS]: <Links for all community documents>
+<!-- COMMUNITY DOCS: Links to the community docs -->
 [Bug Report]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
 [Code of Conduct]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md
 [Contributing Guide]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md
@@ -368,6 +375,6 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 [License]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE
 [Pull Request Template]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md
 
-[ThereGoesMySanity]: <Links for user ThereGoesMySanity's account and pull request>
+<!-- ThereGoesMySanity: Links for user ThereGoesMySanity's account and pull request -->
 [ThereGoesMySanity]: https://github.com/ThereGoesMySanity
 [ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9
