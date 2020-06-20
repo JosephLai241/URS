@@ -126,6 +126,8 @@ These attributes are included in each scrape.
 
 ![Subreddit Demo GIF][Subreddit Demo]
 
+\* This GIF is uncut.
+
 `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
 You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and URS will get all submissions that are returned from the search.
@@ -156,6 +158,8 @@ If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-
 ## Redditors
 
 ![Redditor Demo GIF][Redditor Demo]
+
+\* This GIF has been cut for demonstration purposes.
 
 `$ ./Urs.py -u USER N_RESULTS --FILE_FORMAT` 
 
@@ -199,6 +203,8 @@ The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FI
 
 ![Structured Comments Demo GIF][Structured Comments Demo]
 ![Raw Comments Demo GIF][Raw Comments Demo]
+
+\* These GIFs have been cut for demonstration purposes.
 
 `$ ./Urs.py -c URL N_RESULTS --FILE_FORMAT` 
 
