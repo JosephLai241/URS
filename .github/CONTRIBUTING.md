@@ -40,7 +40,7 @@ Please keep all changes consistent with the name of this project. This means tha
 
 ## Code of Conduct
 
-[Code of Conduct][0]
+[Code of Conduct][Code of Conduct]
 
 ## Contributing Code
 
@@ -48,7 +48,7 @@ The dependencies for this project are listed in the `requirements.txt` file. The
 
 ### Style Guide
 
-It is important that you read the [Style Guide][1] before you contribute any code. I have a particular style that I think will ensure your code is easy to read, maintain, and is scalable. Enforcing this style will also allow potential contributors to easily get used to how the code is structured and guarantee they will not be surprised by strange syntax. URS is an open-source project, which means the goal here is to push code that anyone can help improve upon.
+It is important that you read the [Style Guide][Style Guide] before you contribute any code. I have a particular style that I think will ensure your code is easy to read, maintain, and is scalable. Enforcing this style will also allow potential contributors to easily get used to how the code is structured and guarantee they will not be surprised by strange syntax. URS is an open-source project, which means the goal here is to push code that anyone can help improve upon.
 
 ### Getting Started
 
@@ -71,11 +71,11 @@ git branch newfeature
 git checkout newfeature
 ```
 
-For more information on the GitHub fork and pull-request processes, [please see this helpful guide][3].
+For more information on the GitHub fork and pull-request processes, [please see this helpful guide][Pull Request Guide].
 
 ### Finding an Issue
 
-The list of outstanding feature requests and bugs can be found on our on our [GitHub issue tracker][4]. Pick an issue that you think you can accomplish and add a comment that you are attempting to do it.
+The list of outstanding feature requests and bugs can be found on our on our [GitHub issue tracker][Issues]. Pick an issue that you think you can accomplish and add a comment that you are attempting to do it.
 
 Bug Reports can be submitted in the `Issues` tab.
 
@@ -87,7 +87,7 @@ Bug Reports can be submitted in the `Issues` tab.
 
 Please submit questions in the `issues` tab and apply the `question` label.
 
-Alternatively, feel free to send me an email at [urs_project@protonmail.com](mailto:urs_project@protonmail.com).
+Alternatively, feel free to send me an email at [urs_project@protonmail.com][URS Project Protonmail].
 
 ## Feature Requests
 
@@ -163,7 +163,7 @@ Note that this will overwrite the old branch on the server, so make sure you are
 
 ## Community
 
-If the `issues` tab does not suffice, you can email me at [urs_project@protonmail.](mailto:urs_project@protonmail.com) if you have additional comments, suggestions, or questions about this project.
+If the `issues` tab does not suffice, you can email me at [urs_project@protonmail.][URS Project Protonmail] if you have additional comments, suggestions, or questions about this project.
 
 - If you know the answer (or a better solution to an existing answer) to a question that was listed in the `Issues` tab, feel free to contribute.
 
@@ -181,8 +181,9 @@ Reddit contains a lot of interesting information on the internet. I am sure the 
 
 ## ***Thank you all for using this program!***
 
-[0]: CODE_OF_CONDUCT.md
-[1]: STYLE_GUIDE.md
-[2]: https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github
-[3]: https://gist.github.com/Chaser324/ce0505fbed06b947d962
-[4]: https://github.com/JosephLai241/Universal-Reddit-Scraper/issues
+[Code of Conduct]: CODE_OF_CONDUCT.md
+[How To Contribute]: https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github
+[Issues]: https://github.com/JosephLai241/Universal-Reddit-Scraper/issues
+[Pull Request Guide]: https://gist.github.com/Chaser324/ce0505fbed06b947d962
+[Style Guide]: STYLE_GUIDE.md
+[URS Project Protonmail]: mailto:urs_project@protonmail.com
