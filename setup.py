@@ -17,7 +17,7 @@ DESCRIPTION = "URS: An advanced Reddit scraping & OSINT command-line tool."
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 
 CLASSIFIERS = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
 
     "Intended Audience :: Information Technology", 
     "Intended Audience :: Other Audience", 
@@ -58,6 +58,8 @@ REQUIRES_PYTHON = ">=3.5"
 
 PROJECT_URLS = {
     "Bug Reports": "https://github.com/JosephLai241/Universal-Reddit-Scraper/issues",
+    "Build Status": "https://travis-ci.org/github/JosephLai241/URS",
+    "Coverage": "https://codecov.io/gh/JosephLai241/URS",
     "Say Thanks!": "https://saythanks.io/to/jlai24142%40gmail.com",
     "Source": "https://github.com/JosephLai241/Universal-Reddit-Scraper/"
 }
