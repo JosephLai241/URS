@@ -163,7 +163,7 @@ If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-
 
 `$ ./Urs.py -u USER N_RESULTS --FILE_FORMAT` 
 
-**Designed for JSON only. Exporting to CSV is not recommended, but it will still work.**
+**Designed for JSON only.**
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
@@ -208,7 +208,7 @@ The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FI
 
 `$ ./Urs.py -c URL N_RESULTS --FILE_FORMAT` 
 
-**Designed for JSON only. Exporting to CSV is not recommended, but it will still work.**
+**Designed for JSON only.**
 
 You can also scrape comments from submissions and specify the number of results returned. 
 
