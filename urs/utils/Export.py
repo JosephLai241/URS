@@ -14,7 +14,7 @@ class NameFile():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._illegal_chars = re.compile("[@!#$%^&*()<>?/\\\|}{~:+`=]")
+        self._illegal_chars = re.compile("[@!#$%^&*()<>?/\\\\f|}{~:+`=]")
 
     ### Fix f_name if illegal filename characters are present.
     def _fix(self, name):
