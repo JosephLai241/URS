@@ -71,17 +71,9 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 
 ## URS v3.1.0 Official Release TODO list
 
-### Overview
-
-* Update docs
-    * Update the following in README: 
-        + Doc links in the ToC
-    * Update screenshots in In-Depth Walkthrough
-
 ### Details
 
-* Github Docs
-    + Replace old screenshots in In-Depth Walkthrough
+* `docs/`
     + ~~Add demo GIF under ASCII art title~~
     + Update doc links in ToC
 
