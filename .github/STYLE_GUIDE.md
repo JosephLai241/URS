@@ -219,7 +219,25 @@ init(autoreset = True)
 
 ## Imports
 
-***Adding imports section soon***
+All imports have to be listed at the top of each script. Each group is sorted in alphabetical order.
+
+Standard library and third-party imports are listed first, then relative imports. These imports should be separated by a new line.
+
+Imports using the `import` form come before imports using the `from` form. These imports should also be separated by a new line.
+
+Relative imports that import an entire module come before importing a module class.
+
+Here is an example of a group of imports from `Redditor.py`.
+
+```python
+import praw
+
+from colorama import Fore, init, Style
+from prawcore import PrawcoreException
+
+from . import Cli, Export, Global, Titles, Validation
+from .Logger import LogExport, LogScraper
+```
 
 ## Method Parameters
 
