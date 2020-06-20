@@ -92,3 +92,20 @@ class Titles():
    \ \_\ 
     \/_/
 """)
+
+    ### Rate limit error title
+    @staticmethod
+    def l_title(reset_timestamp):
+        print(Fore.RED + Style.BRIGHT + r"""
+ __        
+/\ \       
+\ \ \      
+ \ \ \  __ 
+  \ \ \L\ \
+   \ \____/
+    \/___/... You have reached your rate limit.
+
+Please try again when your rate limit is reset: %s   
+
+Exiting.
+""" % reset_timestamp)
