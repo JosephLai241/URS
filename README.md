@@ -14,13 +14,13 @@
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
 
 <p align="center"> 
-<img src="https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif">
+    <img src="https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif">
 </p>
 
 ## Table of Contents
 
 * [Introduction](#introduction)
-* [Information for URS v3.1.0b1 (Beta) Release](#information-for-urs-v310b1-beta-release)
+* [Contributing](#contributing)
 * [URS v3.1.0 Official Release TODO list](#urs-v310-official-release-todo-list)
 * [URS Overview](#urs-overview)
   + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
@@ -32,7 +32,6 @@
 * [In-Depth Walkthrough][In-Depth Walkthrough]
 * [2-Factor Authentication][2-Factor Authentication]
 * [Some Linux Tips](#some-linux-tips)
-* [Contributing](#contributing)
 * [Contributors](#contributors)
 * [Releases](#releases)
 
@@ -50,101 +49,41 @@ You will need your own Reddit account and API credentials for PRAW. I have inclu
 
 **Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use cases and how it has helped you achieve a goal. Please send me an email or leave a note by clicking on the Email or Say Thanks! badge. I look forward to hearing from you!**
 
-## Information for URS v3.1.0b1 (Beta) Release
+# Contributing
 
-**The actual functionality of the program should be good to go**. 
+I am currently looking for contributors who have experience with:
 
-Continue cloning, installing requirements using `pip install -r requirements.txt` to install project dependencies.
+* Unit testing using `pytest`
+* Packaging Python projects and deploying to PyPI
+* Deploying documentation to ReadTheDocs
 
-It is merely missing a couple things that need to be finished before the final release, mainly documents and working packaging scripts.
+If you are interested in contributing, please send me an email at the address listed in the email badge!
 
-I will continue merging unit tests to `tests/` for however long it takes me to learn more about unit testing, continuous integration, and finish writing the tests. 
+___
 
-I think there are some aspects of URS that I will not be able to write unit tests for because it would be impractical, e.g., testing user validation would expose my personal PRAW credentials. I will not be writing a test for that function unless there is a way to test and push the code to Github without including my credentials. 
+I will continue building upon URS 3.0.0 as I learn more about computer science.
 
-Please open a new issue with the `suggestion` label if you have any suggestions for getting around this issue or best unit testing practices. I will be using the `pytest` testing framework.
+You can suggest new features or changes by going to the Issues tab and filling out the Feature Request template. If there are good suggestions and a good reason for adding a feature, I will consider adding it.
 
-See the [Releases](#releases) section for what will be included in the final URS 3.1.0 release.
+You are also more than welcome to create a pull request, adding additional features, improving runtime, or streamlining existing code. If the pull request is approved, I will merge the pull request into the master branch and credit you for contributing to this project.
 
-The TODO list below details what is missing or needs to be finished before the official v3.1.0 release.
+Make sure you follow the contributing guidelines when creating a pull request. See the [Contributing][Contributing Guide] document for more information. 
 
 ## URS v3.1.0 Official Release TODO list
 
 ### Overview
 
-* Finish unit tests
-* Finish integrating Travis CI
-* Update Codecov through Travis CI
 * Update docs
     * Update the following in README: 
-        + Add coverage badge
-        + Add demo GIF at the top of the README
         + Doc links in the ToC
     * Update screenshots in In-Depth Walkthrough
-    * Review and update community docs
-        + Update style guide
-* Set up ReadTheDocs documentation
-* Finish packaging URS
-* Deploy URS to PyPI
 
 ### Details
 
-* Continuous Integration and Coverage
-    + Finish writing unit tests for:
-        * Basic
-        * ~~Cli~~
-        * Comments
-        * DirInit
-        * ~~Export~~
-        * ~~Global~~
-        * Logger
-        * Redditor
-        * Subreddit
-        * Tools
-        * Validation(?)
-        * ~~Credentials~~
-        * Urs
-    + Travis CI
-        * ~~Sign up for Travis CI~~
-        * ~~Add URS repo~~
-        * ~~Add build badge to README~~
-        * ~~Create `.travis.yml` config file~~
-            + Codecov integration
-                * `before_install`
-                    + `python --version`
-                    + `pip install -U pip`
-                    + `pip install -U pytest`
-                    + `pip install codecov`
-                * `install`
-                    + Change script to `pip install .` (install package)
-                * `after_success`
-                    + `codecov` (submit coverage)
-    + Codecov
-        * ~~Sign up for Codecov~~
-        * ~~Add URS repo~~
-        * ~~Add coverage badge to README~~
-        * Update badge link once merged with `master` branch
-* ReadTheDocs
-    + ~~Sign up for ReadTheDocs~~
-    + Learn how to generate docs (Sphinx or manual docs?)
-    + Rewrite README in .rst?
-    + Restructure `docs/` so that RTD can build my documentation
 * Github Docs
     + Replace old screenshots in In-Depth Walkthrough
-    + Add demo GIF under ASCII art title
-    + Update links in ToC
-    + Review and update community docs
-        * Update style guide as well
-* Finish packaging URS
-    + `setup.py`
-        * Change Development Status Classifier in `setup.py` once 3.1.0 is completed
-        * Add `download_url` from the new tag (copy link address of tar.gz link)
-        * Add `install_requires` to define all dependencies 
-    + When everything is finalized, deploy to PyPI
-        * ~~Sign up for PyPI~~
-        * Complete `setup.py` and any other related documents/scripts for packaging
-        * Create new API token
-        * Install and upload URS with `twine`
+    + ~~Add demo GIF under ASCII art title~~
+    + Update doc links in ToC
 
 # URS Overview
 
@@ -185,6 +124,8 @@ These attributes are included in each scrape.
 
 ## Subreddits
 
+![Subreddit Demo GIF][Subreddit Demo]
+
 `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
 You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and URS will get all submissions that are returned from the search.
@@ -213,6 +154,8 @@ The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESUL
 If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
 
 ## Redditors
+
+![Redditor Demo GIF][Redditor Demo]
 
 `$ ./Urs.py -u USER N_RESULTS --FILE_FORMAT` 
 
@@ -253,6 +196,9 @@ Of these Redditor attributes, the following will include additional attributes:
 The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
 
 ## Submission Comments
+
+![Structured Comments Demo GIF][Structured Comments Demo]
+![Raw Comments Demo GIF][Raw Comments Demo]
 
 `$ ./Urs.py -c URL N_RESULTS --FILE_FORMAT` 
 
@@ -320,16 +266,6 @@ You can still export Redditor data and submission comments to CSV, but you will 
     :wq!
     ```
 
-# Contributing
-
-I believe the current features should satisfy users who need to scrape Reddit; however, I will continue adding small features as I learn more about computer science.
-
-You can suggest new features or changes by going to the Issues tab, creating a new issue, and tagging it as an enhancement. If there are good suggestions and a good reason for adding a feature, I will consider adding it. 
-
-You are also more than welcome to create a pull request, adding additional features, improving runtime, or streamlining existing code. If the pull request is approved, I will merge the pull request into the master branch and credit you for contributing to this project.
-
-Make sure you follow the contributing guidelines when creating a pull request. See the [Contributing][Contributing Guide] document for more information. 
-
 # Contributors
 
 | Date           | User                                                      | Contribution                                                                                                               |
@@ -357,6 +293,10 @@ Make sure you follow the contributing guidelines when creating a pull request. S
 
 <!-- DEMO GIFS: Links to demo GIFS -->
 [Main Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif
+[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Subreddit_demo.gif
+[Redditor Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Redditor_demo.gif
+[Structured Comments Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Comments_structured_demo.gif
+[Raw Comments Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Comments_raw_demo.gif
 
 [SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
 [2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
