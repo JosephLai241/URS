@@ -14,7 +14,7 @@
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
 
 <p align="center"> 
-    <img src="https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif">
+    <img src="https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif">
 </p>
 
 ## Table of Contents
@@ -78,6 +78,7 @@ Make sure you follow the contributing guidelines when creating a pull request. S
     + Update doc links in ToC
 
 * Add new section about `Credentials.py`
+* Add release date when finalized
 
 # URS Overview
 
@@ -247,7 +248,7 @@ Comments scraping is especially easier to read because structured exports look s
 
 You can still export Redditor data and submission comments to CSV, but you will be disappointed with the results.
 
-### See the [samples][Samples] for scrapes ran on June 14, 2020. UPDATE LINK TO SAMPLES/
+### See the [samples][Samples] for scrapes ran on June 14, 2020.
 
 # Some Linux Tips
 
@@ -290,16 +291,16 @@ You can still export Redditor data and submission comments to CSV, but you will 
 [URS Project Email]: mailto:urs_project@protonmail.
 
 <!-- DEMO GIFS: Links to demo GIFS -->
-[Main Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/DEMO.gif
-[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Subreddit_demo.gif
-[Redditor Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Redditor_demo.gif
-[Structured Comments Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Comments_structured_demo.gif
-[Raw Comments Demo]: https://github.com/JosephLai241/URS/blob/beta/.github/Screenshots/Demo%20GIFs/Comments_raw_demo.gif
+[Main Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif
+[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/Subreddit_demo.gif
+[Redditor Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/Redditor_demo.gif
+[Structured Comments Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/Comments_structured_demo.gif
+[Raw Comments Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/Comments_raw_demo.gif
 
-[SEPARATE DOCS]: <Links to documents located in the docs/ directory. UPDATE THIS WHEN MERGED WITH MASTER>
-[2-Factor Authentication]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Two-Factor%20Authentication.md
-[Error Messages and Rate Limit Info]: https://github.com/JosephLai241/URS/blob/beta/docs/Error%20Messages.md
-[How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/beta/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
+<!-- SEPARATE DOCS: Links to documents located in the docs/ directory -->
+[2-Factor Authentication]: https://github.com/JosephLai241/URS/blob/master/docs/Two-Factor%20Authentication.md
+[Error Messages and Rate Limit Info]: https://github.com/JosephLai241/URS/blob/master/docs/Error%20Messages.md
+[How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
 
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples
