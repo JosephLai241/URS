@@ -78,30 +78,55 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 ## Dependencies
 
 astroid==
+
 attrs==
+
 certifi==
+
 chardet==
+
 colorama==
+
 idna==
+
 isort==
+
 lazy-object-proxy==
+
 mccabe==
+
 more-itertools==
+
 packaging==
+
 pluggy==
+
 praw==
+
 prawcore==
+
 py==
+
 pylint==
+
 pyparsing==
+
 pytest==
+
 requests==
+
 six==
+
 toml==
+
 update-checker==
+
 urllib3==
+
 wcwidth==
+
 websocket-client==
+
 wrapt==
 
 # Checklist
