@@ -7,7 +7,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
 [![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)][PRAW]
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=for-the-badge&logo=travis-ci&logoColor=white)][Travis CI Build Status]
-[![Codecov](https://img.shields.io/codecov/c/github/JosephLai241/Universal-Reddit-Scraper?logo=codecov&logoColor=white&style=for-the-badge)][Codecov]
+[![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=codecov&logoColor=white&style=for-the-badge)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)][Releases]
 ![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
 [![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)][URS Project Email]
