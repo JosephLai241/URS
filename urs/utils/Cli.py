@@ -201,6 +201,8 @@ class CheckCli():
                 if subs[1].upper() != "S":
                     try:
                         int(subs[2])
+                        if int(subs[2]) == 0:
+                            raise ValueError
                     except ValueError:
                         raise ValueError
 
