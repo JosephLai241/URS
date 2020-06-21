@@ -1,10 +1,9 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
+name: Feature Request
+about: Suggest a new feature for URS.
+title: "Feature Request"
 labels: enhancement
 assignees: JosephLai241
-
 ---
 
 **Is your feature request related to a problem? Please describe.**

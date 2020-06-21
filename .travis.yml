@@ -1,0 +1,29 @@
+### Specifying language
+language: python
+
+### Test Python versions
+python:
+  - 3.6
+  - 3.7
+  - 3.8
+  
+### Scripts to run before installation
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest pytest-cov
+  - pip install -U codecov
+  - pip install -r requirements.txt
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+### Command to install dependencies
+install:
+  - pip install .
+
+### Command to run tests
+script: 
+  - pytest --cov=./
+
+### Push coverage report to Codecov after running tests
+after_success: 
+  - codecov
