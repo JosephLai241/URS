@@ -77,6 +77,8 @@ Make sure you follow the contributing guidelines when creating a pull request. S
     + ~~Add demo GIF under ASCII art title~~
     + Update doc links in ToC
 
+* Add new section about `Credentials.py`
+
 # URS Overview
 
 Scrape speeds may vary depending on the number of results returned for Subreddit or Redditor scraping, or the submission's popularity (total number of comments) for submission comments scraping. It is also impacted by your internet connection speed. 
