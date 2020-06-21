@@ -62,7 +62,7 @@ If you are interested in contributing, please send me an email at the address li
 
 ___
 
-I will continue building upon URS 3.0.0 as I learn more about computer science.
+Version 3.0.0 is most likely the last major iteration of URS, but I will continue to build upon it as I learn more about computer science.
 
 You can suggest new features or changes by going to the Issues tab and filling out the Feature Request template. If there are good suggestions and a good reason for adding a feature, I will consider adding it.
 
