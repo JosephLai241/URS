@@ -1,4 +1,4 @@
-# Guide to Getting PRAW Credentials
+# How to Get PRAW Credentials
 
 ### Create your own Reddit account and then head over to [Reddit's apps page](https://old.reddit.com/prefs/apps). 
 
