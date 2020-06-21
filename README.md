@@ -21,19 +21,20 @@
 
 * [Introduction](#introduction)
 * [Contributing](#contributing)
-* [URS v3.1.0 Official Release TODO list](#urs-v310-official-release-todo-list)
 * [URS Overview](#urs-overview)
-  + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
-  + [Subreddits](#subreddits)
-  + [Redditors](#redditors)
-  + [Submission Comments](#submission-comments)
-  + [Exporting](#exporting)
-* [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
-* [2-Factor Authentication][2-Factor Authentication]
-* [Error Messages and Rate Limit Information][Error Messages and Rate Limit Info]
+    + [Getting Started](#getting-started)
+    + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
+    + [Subreddits](#subreddits)
+    + [Redditors](#redditors)
+    + [Submission Comments](#submission-comments)
+    + [Exporting](#exporting)
 * [Some Linux Tips](#some-linux-tips)
 * [Contributors](#contributors)
 * [Releases](#releases)
+* Supplemental Documents
+    + [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
+    + [Error Messages and Rate Limit Information][Error Messages and Rate Limit Info]
+    + [2-Factor Authentication][2-Factor Authentication]
 
 # Introduction
 
@@ -43,7 +44,7 @@ Written in Python and utilizes the official Reddit API ([ `PRAW` ][PRAW]).
 
 Run `pip install -r requirements.txt` to get all project dependencies. 
 
-You will need your own Reddit account and API credentials for PRAW. I have included a tutorial on how to do this below. 
+You will need your own Reddit account and API credentials for PRAW. See the [Getting Started](#getting-started) section for more information. 
 
 ***NOTE:*** `PRAW` is currently supported on Python 3.5+. This project was tested with Python 3.8.2. 
 
@@ -69,22 +70,15 @@ You are also more than welcome to create a pull request, adding additional featu
 
 Make sure you follow the contributing guidelines when creating a pull request. See the [Contributing][Contributing Guide] document for more information. 
 
-## URS v3.1.0 Official Release TODO list
-
-### Details
-
-* `docs/`
-    + ~~Add demo GIF under ASCII art title~~
-    + Update doc links in ToC
-
-* Add new section about `Credentials.py`
-* Add release date when finalized
-
 # URS Overview
 
 Scrape speeds may vary depending on the number of results returned for Subreddit or Redditor scraping, or the submission's popularity (total number of comments) for submission comments scraping. It is also impacted by your internet connection speed. 
 
 All exported files are saved within the `scrapes/` directory and stored in a sub-directory labeled with the date. These directories are automatically created when you run URS. 
+
+## Getting Started
+
+Refer to [my guide][How to get Reddit API Credentials for PRAW] to get Reddit API credentials, then update the `API` dictionary located in `Credentials.py`
 
 ## A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
@@ -300,7 +294,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 <!-- SEPARATE DOCS: Links to documents located in the docs/ directory -->
 [2-Factor Authentication]: https://github.com/JosephLai241/URS/blob/master/docs/Two-Factor%20Authentication.md
 [Error Messages and Rate Limit Info]: https://github.com/JosephLai241/URS/blob/master/docs/Error%20Messages.md
-[How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/Guide%20to%20Getting%20PRAW%20Credentials.md
+[How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/How%20to%20Get%20PRAW%20Credentials.md
 
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples
