@@ -297,7 +297,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/How%20to%20Get%20PRAW%20Credentials.md
 
 <!-- SAMPLES: Links to the samples directory -->
-[Samples]: https://github.com/JosephLai241/URS/tree/master/samples
+[Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/06-14-2020
 
 <!-- COMMUNITY DOCS: Links to the community docs -->
 [Bug Report]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
