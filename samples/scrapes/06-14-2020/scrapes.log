@@ -1,6 +1,6 @@
 *NOTE: Lines starting with `###` are just comments explaining the different types of log messages you might see when using URS. You will not see these comments in your log file.
 
-### The error message if you use the help flag or do not enter any args.
+### The message if you use the help flag or do not enter any args.
 
 [2020-06-20 18:23:15,268] [INFO]: Initializing URS...
 [2020-06-20 18:23:15,268] [INFO]: 
