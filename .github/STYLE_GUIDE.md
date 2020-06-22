@@ -16,6 +16,8 @@
 
 The goal is to write code that is maintainable, readable, and scalable. This standard is applied to both URS code and unit tests.
 
+***Pro tip***: When in doubt, do it in alphabetical order.
+
 ## Tabs
 
 ![TABS NOT SPACES](https://markjaquith.files.wordpress.com/2018/06/not-hiring.gif)
@@ -227,16 +229,18 @@ Imports using the `import` form come before imports using the `from` form. These
 
 Relative imports that import an entire module come before importing a module class.
 
+Additionally, multiple imports on one line should also be in alphabetical order.
+
 Here is an example of a group of imports from `Redditor.py`.
 
 ```python
 import praw
 
-from colorama import Fore, init, Style
+from colorama import Fore, init, Style <----------------- Alphabetical order
 from prawcore import PrawcoreException
 
-from . import Cli, Export, Global, Titles, Validation
-from .Logger import LogExport, LogScraper
+from . import Cli, Export, Global, Titles, Validation <-- Alphabetical order
+from .Logger import LogExport, LogScraper <-------------- Alphabetical order
 ```
 
 ## Method Parameters
@@ -330,6 +334,27 @@ class Write():
 Python does not have true "private" methods or variables, but we can indicate that they are only supposed to be called within the class by prepending an underscore in front of the method or variable name. 
 
 `write()` is called outside of the `Write` class, which is why an underscore is not prepended. `_determine_export()` and `_print_confirm()` are called by `write()` but are not called outside the function, hence why they are prepended with an underscore.
+
+### The `@staticmethod` Decorator
+
+Use the `@staticmethod` decorator if you are defining methods in a class that does not have an `__init__()` method.
+
+This is the class taken from `DirInit.py`:
+
+```python
+class InitializeDirectory():
+    """
+    ...
+    """
+    
+    Does not include an __init__() method, therefore a @staticmethod decorator is necessary.
+          |
+          |
+          v
+    @staticmethod
+    def make_directory():
+        ...
+```
 
 ### Modularizing Code
 
