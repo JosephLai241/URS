@@ -335,6 +335,12 @@ Python does not have true "private" methods or variables, but we can indicate th
 
 `write()` is called outside of the `Write` class, which is why an underscore is not prepended. `_determine_export()` and `_print_confirm()` are called by `write()` but are not called outside the function, hence why they are prepended with an underscore.
 
+### Modularizing Code
+
+The block of code above is also another great representation of how sections of code should be organized.
+
+Within `write()`, `_determine_export()` is called first, followed by `_print_confirm()`. The order in which smaller methods that will be called in a class's "main" method should be sorted by execution order (from top to bottom). These smaller methods will also be placed above the "main" method.
+
 ### The `@staticmethod` Decorator
 
 Use the `@staticmethod` decorator if you are defining methods in a class that does not have an `__init__()` method.
@@ -356,11 +362,7 @@ class InitializeDirectory():
         ...
 ```
 
-### Modularizing Code
-
-The block of code above is also another great representation of how sections of code should be organized.
-
-Within `write()`, `_determine_export()` is called first, followed by `_print_confirm()`. The order in which smaller methods that will be called in a class's "main" method should be sorted by execution order (from top to bottom). These smaller methods will also be placed above the "main" method.
+`Logger.py` is another good example since none of the classes include an `__init__()` method.
 
 ## Unit Testing Code
 
