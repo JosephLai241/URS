@@ -2,6 +2,7 @@
 #                   All Scrapers and Validation/Args Checking
 #===============================================================================
 from colorama import Fore, init, Style
+
 from . import (Basic, Cli, Comments, Global,
                    Redditor, Subreddit, Titles, Validation)
 
@@ -11,7 +12,7 @@ init(autoreset = True)
 
 class Run():
     """
-    Functions to call Cli and Subreddit, Redditor, Comments, and Basic scrapers.
+    Methods to call Cli and Subreddit, Redditor, Comments, and Basic scrapers.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -40,7 +41,7 @@ class Run():
             ### Run Redditor scraper.
             Redditor.RunRedditor.run(self._args, self._parser, self._reddit)
         if self._args.comments:
-            ### Run comments scraper.
+            ### Run submission comments scraper.
             Comments.RunComments.run(self._args, self._parser, self._reddit)
         elif self._args.basic:
             ### Run basic Subreddit scraper.

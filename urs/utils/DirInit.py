@@ -7,7 +7,7 @@ from . import Global
 
 class InitializeDirectory():
     """
-    On the first run, create the directory scrapes/. Then make a sub-directory 
+    On the first run, create the `scrapes/` directory. Then make a sub-directory 
     corresponding with the date in which the user scraped data from Reddit if it 
     does not exist.
     """

@@ -9,10 +9,10 @@ init(autoreset = True)
 
 class Titles():
     """
-    Functions for printing all titles used in this program.
+    Methods for printing all titles used in this program.
     """
 
-    ### Print Reddit scraper title
+    ### Print URS title.
     @staticmethod
     def title():
         print(Fore.WHITE + Style.BRIGHT + r"""
@@ -23,7 +23,7 @@ class Titles():
   \/___/  \/_/ \/___/ 
 """)
 
-    ### Print Subreddit scraper title
+    ### Print Subreddit scraper title.
     @staticmethod
     def r_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
@@ -34,7 +34,7 @@ class Titles():
   \/_/ 
 """)
 
-    ### Print Redditor scraper title
+    ### Print Redditor scraper title.
     @staticmethod
     def u_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
@@ -45,7 +45,7 @@ class Titles():
   \/___/ 
 """)
 
-    ### Print comments scraper title
+    ### Print comments scraper title.
     @staticmethod
     def c_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
@@ -56,7 +56,7 @@ class Titles():
  \/____/
 """)
 
-    ### Print basic scraper title
+    ### Print basic scraper title.
     @staticmethod
     def b_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
@@ -69,7 +69,7 @@ class Titles():
     \/___/... Only scrapes Subreddits. 
 """)
 
-    ### Print error title
+    ### Print error title.
     @staticmethod
     def e_title():
         print(Fore.RED + Style.BRIGHT + r"""
@@ -80,7 +80,7 @@ class Titles():
  \/____/... Please recheck args or refer to help for usage examples.
 """)
 
-    ### PRAW error title
+    ### Print PRAW error title.
     @staticmethod
     def p_title():
         print(Fore.RED + Style.BRIGHT + r"""
@@ -93,7 +93,7 @@ class Titles():
     \/_/
 """)
 
-    ### Rate limit error title
+    ### Print rate limit error title.
     @staticmethod
     def l_title(reset_timestamp):
         print(Fore.RED + Style.BRIGHT + r"""

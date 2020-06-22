@@ -2,19 +2,20 @@
 #                           Basic Subreddit Scraping
 #===============================================================================
 from colorama import Fore, init, Style
+
 from . import Global, Subreddit, Titles, Validation
 from .Logger import LogExport, LogScraper
 
 ### Automate sending reset sequences to turn off color changes at the end of 
-### every print
+### every print.
 init(autoreset = True)
 
-### Global variables
+### Global variables.
 options = Global.options
 
 class PrintSubs():
     """
-    Print found and invalid Subreddits.
+    Methods for printing found and invalid Subreddits.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -25,29 +26,34 @@ class PrintSubs():
     def _find_subs(self, parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        found, not_found = Validation.Validation.existence(self._s_t[0], sub_list, 
+        subs, not_subs = Validation.Validation.existence(self._s_t[0], sub_list, 
             parser, reddit, self._s_t)
 
-        return found, not_found
+        return subs, not_subs
 
     ### Print valid and invalid Subreddits.
     def print_subreddits(self, parser, reddit, search_for):
         print("\nChecking if Subreddit(s) exist...")
-        found, not_found = self._find_subs(parser, reddit, search_for)
-        if found:
+        subs, not_subs = self._find_subs(parser, reddit, search_for)
+        if subs:
             print("\nThe following Subreddits were found and will be scraped:")
             print("-" * 56)
-            print(*found, sep = "\n")
-        if not_found:
+            print(*subs, sep = "\n")
+        if not_subs:
             print("\nThe following Subreddits were not found and will be skipped:")
             print("-" * 60)
-            print(*not_found, sep = "\n")
+            print(*not_subs, sep = "\n")
 
-        return found
+        if not subs:
+            print(Fore.RED + Style.BRIGHT + "\nNo Subreddits to scrape!")
+            print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
+            quit()
+
+        return subs
 
 class GetInput():
     """
-    Functions for handling user input.
+    Methods for handling user input.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -137,17 +143,17 @@ Select a category to display for r/%s
 
 class ConfirmInput():
     """
-    Functions for handling user confirmation.
+    Methods for handling user confirmation.
     """
 
     ### Confirm Subreddits that were entered.
     @staticmethod
-    def confirm_subreddits(found, parser):
+    def confirm_subreddits(subs, parser):
         while True:
             try:
                 confirm = input("\nConfirm selection? [Y/N] ").strip().lower()
                 if confirm == options[0]:
-                    subs = [sub for sub in found]
+                    subs = [sub for sub in subs]
                     return subs
                 elif confirm not in options:
                     raise ValueError
@@ -178,8 +184,8 @@ class RunBasic():
     ### Create settings for each user input.
     @staticmethod
     def _create_settings(parser, reddit):
-        found = GetInput().get_subreddits(parser, reddit)
-        subs = ConfirmInput.confirm_subreddits(found, parser)
+        subs = GetInput().get_subreddits(parser, reddit)
+        subs = ConfirmInput.confirm_subreddits(subs, parser)
         master = Global.make_list_dict(subs)
         GetInput().get_settings(master, subs)
 

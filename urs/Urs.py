@@ -16,13 +16,12 @@ from utils.Tools import Run
 
 class Main():
     """
-    Putting it all together.
+    Run URS.
     """
 
     @staticmethod
     @LogMain.master_timer
     def main():
-        ### Reddit Login
         reddit = praw.Reddit(
             client_id = API["client_id"],
             client_secret = API["client_secret"],

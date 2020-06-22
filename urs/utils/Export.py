@@ -1,5 +1,5 @@
 #===============================================================================
-#                               Export Functions
+#                                  Exporting
 #===============================================================================
 import csv
 import json
@@ -9,7 +9,7 @@ from . import Global
 
 class NameFile():
     """
-    Functions for naming the exported files.
+    Methods for naming the exported files.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -84,7 +84,7 @@ class NameFile():
 
 class Export():
     """
-    Functions for creating directories and export the file.
+    Methods for creating directories and export the file.
     """
 
     ### Export to CSV.

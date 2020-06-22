@@ -19,7 +19,7 @@ s_t = Global.s_t
 
 class CheckRedditors():
     """
-    Function for printing found and invalid Redditors.
+    Method for printing found and invalid Redditors.
     """
 
     ### Check if Redditors exist and list Redditors who are not found.
@@ -43,7 +43,7 @@ class CheckRedditors():
 
 class ProcessInteractions():
     """
-    Functions for sorting and labeling comment or submission objects correctly. 
+    Methods for sorting and labeling comment or submission objects correctly. 
     Some user attributes will return a ListingGenerator which includes both comments 
     and submissions. These attributes will need to be sorted accordingly:
     - Downvoted (may be forbidden)
@@ -163,7 +163,7 @@ class ProcessInteractions():
 
 class GetInteractions():
     """
-    Functions for getting Redditor information and interactions.
+    Methods for getting Redditor information and interactions.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -215,7 +215,7 @@ class GetInteractions():
 
 class Write():
     """
-    Functions for writing scraped Redditor information to CSV or JSON.
+    Methods for writing scraped Redditor information to CSV or JSON.
     """
 
     ### Initialize objects that will be used in class methods.

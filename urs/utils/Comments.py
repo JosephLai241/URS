@@ -1,5 +1,5 @@
 #===============================================================================
-#                               Comments Scraping
+#                         Submission Comments Scraping
 #===============================================================================
 from colorama import Fore, init, Style
 
@@ -17,7 +17,7 @@ s_t = Global.s_t
 
 class CheckSubmissions():
     """
-    Function for printing found and invalid Reddit posts.
+    Method for printing found and invalid Reddit posts.
     """
 
     ### Check if posts exist and list posts that are not found.
@@ -41,7 +41,7 @@ class CheckSubmissions():
 
 class GetComments():
     """
-    Functions for getting comments from a post.
+    Methods for getting comments from a post.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -49,7 +49,7 @@ class GetComments():
         self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
             "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
-    ### Handle deleted Redditors or edited time if applicable.
+    ### If applicable, handle deleted Redditors or edited time.
     def _fix_attributes(self, comment):
         try:
             author_name = comment.author.name
@@ -77,7 +77,7 @@ class GetComments():
 
 class SortComments():
     """
-    Functions for sorting comments depending on which style of comments was 
+    Methods for sorting comments depending on which style of comments was 
     specified (raw or structured).
     """
 
@@ -105,7 +105,7 @@ class SortComments():
         for all_comments in all_dict.values():
             for top_level_or_reply in all_comments:
                 if isinstance(top_level_or_reply, dict):
-                    ### Indicates this is a reply and not a top-level comment
+                    ### Indicates this is a reply and not a top-level comment.
                     third_level = GetComments().add_comment(comment)
                     if cpid in top_level_or_reply.keys():
                         top_level_or_reply[cpid].append({comment.id: third_level})
@@ -137,7 +137,7 @@ class SortComments():
 
 class GetSort():
     """
-    Functions for getting comments from a Reddit submission.
+    Methods for getting comments from a Reddit submission.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -178,7 +178,7 @@ class GetSort():
 
 class Write():
     """
-    Functions for writing scraped comments to CSV or JSON.
+    Methods for writing scraped comments to CSV or JSON.
     """
 
     ### Export to either CSV or JSON.

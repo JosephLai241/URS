@@ -11,18 +11,18 @@ from .Logger import LogExport, LogScraper
 ### every print.
 init(autoreset = True)
 
-### Global variables
+### Global variables.
 categories = Global.categories
 options = Global.options
 short_cat = Global.short_cat
 
 class CheckSubreddits():
     """
-    Function for checking if Subreddit(s) exist. Print invalid Subreddits if
+    Method for checking if Subreddit(s) exist. Print invalid Subreddits if
     applicable.
     """
 
-    ### Check if Subreddits exist and list invalid Subreddits if applicable
+    ### Check if Subreddits exist and list invalid Subreddits if applicable.
     @staticmethod
     def list_subreddits(parser, reddit, s_t, sub_list):
         print("\nChecking if Subreddit(s) exist...")
@@ -43,7 +43,7 @@ class CheckSubreddits():
 
 class PrintConfirm():
     """
-    Functions for printing Subreddit settings and confirm settings.
+    Methods for printing Subreddit settings and confirm settings.
     """
 
     ### Print each Subreddit setting.
@@ -93,11 +93,11 @@ class GetPostsSwitch():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self, search_for, subreddit):
+        self._controversial = subreddit.controversial(limit = int(search_for))
         self._hot = subreddit.hot(limit = int(search_for))
         self._new = subreddit.new(limit = int(search_for))
-        self._controversial = subreddit.controversial(limit = int(search_for))
-        self._top = subreddit.top(limit = int(search_for))
         self._rising = subreddit.rising(limit = int(search_for))
+        self._top = subreddit.top(limit = int(search_for))
 
         self._switch = {
             0: self._hot,
@@ -113,7 +113,7 @@ class GetPostsSwitch():
 
 class GetPosts():
     """
-    Functions for getting posts from a Subreddit.
+    Methods for getting posts from a Subreddit.
     """
 
     ### Return PRAW ListingGenerator for searching keywords.
@@ -147,7 +147,7 @@ class GetPosts():
 
 class SortPosts():
     """
-    Functions for sorting posts based on the export option.
+    Methods for sorting posts based on the export option.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -205,7 +205,7 @@ class SortPosts():
 
 class GetSortWrite():
     """
-    Functions to get, sort, then write scraped Subreddit posts to CSV or JSON.
+    Methods to get, sort, then write scraped Subreddit posts to CSV or JSON.
     """
 
     ### Initialize objects that will be used in class methods.

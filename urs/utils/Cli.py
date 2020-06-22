@@ -1,21 +1,22 @@
 #===============================================================================
-#                       Command-line Interface Functions
+#                           Command-line Interface
 #===============================================================================
 import argparse
 import re
 import sys
 
 from colorama import Fore, init, Style
+
 from . import Global, Titles, Validation
 from .Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
-### every print
+### every print.
 init(autoreset = True)
 
 class Parser():
     """
-    Functions for parsing CLI arguments.
+    Methods for parsing CLI arguments.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -135,7 +136,7 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
 
 class GetScrapeSettings():
     """
-    Functions for creating data structures to store scrape settings.
+    Methods for creating data structures to store scrape settings.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -184,7 +185,7 @@ class GetScrapeSettings():
 
 class CheckCli():
     """
-    Functions for checking CLI arguments and raising errors if they are invalid.
+    Methods for checking CLI arguments and raising errors if they are invalid.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -192,7 +193,7 @@ class CheckCli():
         self._short_cat = Global.short_cat
         self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
 
-    ### Check Subreddit args
+    ### Check Subreddit args.
     def _check_subreddit(self, args):
         for subs in args.subreddit:
             if subs[1].upper() not in self._short_cat:
@@ -206,7 +207,7 @@ class CheckCli():
                     except ValueError:
                         raise ValueError
 
-    ### Check Redditor args
+    ### Check Redditor args.
     def _check_redditor(self, args):
         for users in args.redditor:
             if users[1].isalpha() or \

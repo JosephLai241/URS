@@ -13,12 +13,12 @@ from . import Global, Titles
 from .Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
-### every print
+### every print.
 init(autoreset = True)
 
 class Validation():
     """
-    Functions for validating PRAW credentials and Subreddits, Redditors, and URLs.
+    Methods for validating PRAW credentials and Subreddits, Redditors, and URLs.
     """
 
     ### Get user rate limit information. Quits the program if the user does not
@@ -71,7 +71,7 @@ class Validation():
             except NotFound:
                 not_found.append(user)
 
-    ### Check posts.
+    ### Check submissions.
     @staticmethod
     def _check_submissions(found, not_found, object_list, reddit):
         for post in object_list:
@@ -81,7 +81,8 @@ class Validation():
             except Exception as e:
                 not_found.append(e)
 
-    ### Check if Subreddit(s), Redditor(s), or post exists and catch PRAW exceptions.
+    ### Check if Subreddit(s), Redditor(s), or submission(s) exist and catch PRAW 
+    ### exceptions.
     @staticmethod
     def existence(l_type, object_list, parser, reddit, s_t):
         found = []
@@ -93,7 +94,7 @@ class Validation():
         ### Check Redditors.
         elif l_type == s_t[1]:
             Validation._check_redditors(found, not_found, object_list, reddit)
-        ### Check post URLs.
+        ### Check submission URLs.
         elif l_type == s_t[2]:
             Validation._check_submissions(found, not_found, object_list, reddit)
 
