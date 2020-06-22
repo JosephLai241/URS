@@ -4,12 +4,12 @@
      \ \____/\ \_\\/\____/
       \/___/  \/_/ \/___/... Universal Reddit Scraper 
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge&logo=Python&logoColor=white)
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?style=for-the-badge&logo=Python&logoColor=white)
 [![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)][PRAW]
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=for-the-badge&logo=travis-ci&logoColor=white)][Travis CI Build Status]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=codecov&logoColor=white&style=for-the-badge)][Codecov]
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)][Releases]
-![License](https://img.shields.io/github/license/JosephLai241/Universal-Reddit-Scraper?style=for-the-badge)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS?style=for-the-badge)][Releases]
+![License](https://img.shields.io/github/license/JosephLai241/URS?style=for-the-badge)
 [![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)][URS Project Email]
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
 
@@ -300,13 +300,13 @@ You can still export Redditor data and submission comments to CSV, but you will 
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/06-14-2020
 
 <!-- COMMUNITY DOCS: Links to the community docs -->
-[Bug Report]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
-[Code of Conduct]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CODE_OF_CONDUCT.md
-[Contributing Guide]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/CONTRIBUTING.md
-[Feature Request]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md
-[License]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/LICENSE
-[Pull Request Template]: https://github.com/JosephLai241/Universal-Reddit-Scraper/blob/master/.github/PULL_REQUEST_TEMPLATE.md
+[Bug Report]: https://github.com/JosephLai241/URS/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
+[Code of Conduct]: https://github.com/JosephLai241/URS/blob/master/.github/CODE_OF_CONDUCT.md
+[Contributing Guide]: https://github.com/JosephLai241/URS/blob/master/.github/CONTRIBUTING.md
+[Feature Request]: https://github.com/JosephLai241/URS/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md
+[License]: https://github.com/JosephLai241/URS/blob/master/LICENSE
+[Pull Request Template]: https://github.com/JosephLai241/URS/blob/master/.github/PULL_REQUEST_TEMPLATE.md
 
 <!-- ThereGoesMySanity: Links for user ThereGoesMySanity's account and pull request -->
 [ThereGoesMySanity]: https://github.com/ThereGoesMySanity
-[ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/Universal-Reddit-Scraper/pull/9
+[ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/URS/pull/9
