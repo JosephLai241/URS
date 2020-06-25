@@ -230,7 +230,7 @@ class LogScraper():
             try:
                 function(*args)
             except KeyboardInterrupt:
-                print(Fore.RED + Style.BRIGHT + "\nCancelling.\n")
+                print(Fore.RED + Style.BRIGHT + "\n\nCancelling.\n")
                 logging.info("")
                 logging.info("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
                 quit()
