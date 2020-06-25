@@ -32,10 +32,18 @@ Contact: urs_project@protonmail.com
 Subreddit categories:
    H,h     selecting Hot category
    N,n     selecting New category
-   C,c     selecting Controversial category
-   T,t     selecting Top category
+   C,c     selecting Controversial category (time filter available)
+   T,t     selecting Top category           (time filter available)
    R,r     selecting Rising category
-   S,s     selecting Search category
+   S,s     selecting Search category        (time filter available)
+
+Subreddit time filters:
+   all (default)
+   day
+   hour
+   month
+   week
+   year
 
 EXAMPLES
 
@@ -78,7 +86,7 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
         urs.add_argument(
             "-r", "--subreddit", 
             action = "append", 
-            nargs = 3, 
+            nargs = "+", 
             metavar = "", 
             help = "specify Subreddit to scrape")
         urs.add_argument(
@@ -142,6 +150,9 @@ class GetScrapeSettings():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._s_t = Global.s_t
+        self._short_cat = Global.short_cat
+
+        self._filterables = [self._short_cat[2], self._short_cat[3], self._short_cat[5]]
 
     ### Switch to determine which kind of list to create.
     def _list_switch(self, args, index):
@@ -160,11 +171,25 @@ class GetScrapeSettings():
 
         return item_list
 
+    ### Set default time filter if a time filter can be applied to the category.
+    ### Return the Subreddit settings.
+    def _set_sub_settings(self, sub):
+        if len(sub) == 3:
+            if sub[1].upper() in self._filterables:
+                settings = [sub[1], "all", sub[2]]
+            else:
+                settings = [sub[1], None, sub[2]]
+        if len(sub) == 4:
+            settings = [sub[1], sub[2], sub[3]]
+
+        return settings
+
     ### Get Subreddit settings.
     def _subreddit_settings(self, args, master):
         for sub_n in master:
             for sub in args.subreddit:
-                settings = [sub[1], sub[2]]
+                settings = self._set_sub_settings(sub)
+                
                 if sub_n == sub[0]:
                     master[sub_n].append(settings)
 
@@ -192,20 +217,35 @@ class CheckCli():
     def __init__(self):
         self._short_cat = Global.short_cat
         self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
+        
+        self._filterables = [self._short_cat[2], self._short_cat[3], self._short_cat[5]]
+        self._time_filters = ["all", "day", "hour", "month", "week", "year"]
+
+    ### Check n_results for Subreddit args.
+    def _check_n_results(self, n_results):
+        try:
+            int(n_results)
+            if int(n_results) == 0:
+                raise ValueError
+        except ValueError:
+            raise ValueError
 
     ### Check Subreddit args.
     def _check_subreddit(self, args):
         for subs in args.subreddit:
-            if subs[1].upper() not in self._short_cat:
+            if subs[1].upper() not in self._short_cat or len(subs) > 4:
                 raise ValueError
             elif subs[1].upper() in self._short_cat:
-                if subs[1].upper() != "S":
-                    try:
-                        int(subs[2])
-                        if int(subs[2]) == 0:
-                            raise ValueError
-                    except ValueError:
+                ### Check args if a time filter is present.
+                if len(subs) == 4:
+                    if subs[1].upper() not in self._filterables \
+                        or subs[2].lower() not in self._time_filters:
                         raise ValueError
+                    self._check_n_results(subs[3])
+                ### Check args if a time filter is not present.
+                else:
+                    if subs[1].upper() != "S":
+                        self._check_n_results(subs[2])
 
     ### Check Redditor args.
     def _check_redditor(self, args):
