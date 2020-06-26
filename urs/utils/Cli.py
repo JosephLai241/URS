@@ -222,13 +222,15 @@ class CheckCli():
         self._time_filters = ["all", "day", "hour", "month", "week", "year"]
 
     ### Check n_results for Subreddit args.
-    def _check_n_results(self, n_results):
-        try:
-            int(n_results)
-            if int(n_results) == 0:
+    def _check_n_results(self, n_results, subs):
+        if subs[1].upper() != "S":
+            try:
+                int(n_results)
+                if int(n_results) == 0:
+                    raise ValueError
+            except ValueError:
+                print("FUCKED UP NRESULTS")
                 raise ValueError
-        except ValueError:
-            raise ValueError
 
     ### Check Subreddit args.
     def _check_subreddit(self, args):
@@ -241,11 +243,10 @@ class CheckCli():
                     if subs[1].upper() not in self._filterables \
                         or subs[2].lower() not in self._time_filters:
                         raise ValueError
-                    self._check_n_results(subs[3])
+                    self._check_n_results(subs[3], subs)
                 ### Check args if a time filter is not present.
                 else:
-                    if subs[1].upper() != "S":
-                        self._check_n_results(subs[2])
+                    self._check_n_results(subs[2], subs)
 
     ### Check Redditor args.
     def _check_redditor(self, args):
