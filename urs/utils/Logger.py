@@ -35,7 +35,7 @@ class LogMain():
     @staticmethod
     def master_timer(function):
         def wrapper(*args):
-            logging.info("Initializing URS...")
+            logging.info("INITIALIZING URS.")
             logging.info("")
 
             start = time.time()
@@ -48,10 +48,8 @@ class LogMain():
                 logging.warning("URS ABORTED BY USER.\n")
                 quit()
 
-            runtime = "URS completed scrapes in %.2f seconds.\n" % \
-                (time.time() - start)
-            
-            logging.info((runtime))
+            logging.info("URS COMPLETED SCRAPES IN %.2f SECONDS.\n" % \
+                (time.time() - start))
 
         return wrapper
 
@@ -95,7 +93,7 @@ class LogError():
 
             try:
                 function(parser, reddit)
-                logging.info("Successfully logged in as u/%s" % reddit.user.me())
+                logging.info("Successfully logged in as u/%s." % reddit.user.me())
                 logging.info("")
             except PrawcoreException as error:
                 Titles.Titles.p_title()
@@ -146,7 +144,8 @@ class LogScraper():
     @staticmethod
     def _subreddit_tuple(each_arg):
         args_list = list(each_arg)
-        args_list[1] = Global.categories[Global.short_cat.index(each_arg[1].upper())] 
+        args_list[1] = Global.categories[Global.short_cat.index(each_arg[1].upper())]
+         
         return tuple(args_list)
 
     ### Get the full Subreddit category name for each Subreddit tuple.
@@ -161,13 +160,25 @@ class LogScraper():
 
         return args
 
+    ### Set message depending if the Search category was selected.
+    @staticmethod
+    def _set_subreddit_log(category, n_res_or_kwds, sub_name):
+        return "Scraping r/%s for %s %s results..." % \
+            (sub_name, n_res_or_kwds, category) \
+                if category != Global.categories[5] else \
+                    "Searching and scraping r/%s for posts containing '%s'..." % \
+                        (sub_name, n_res_or_kwds)
+
     ### Format Subreddit log differently if user searched for keywords.
     @staticmethod
     def _format_subreddit_log(each_arg):
-        return "Scraping r/%s for %s %s results..." % each_arg \
-            if each_arg[1] != Global.categories[5] else \
-                "Searching and scraping r/%s for posts containing '%s'..." % \
-                    (each_arg[0], each_arg[2])
+        if len(each_arg) == 3:
+            return LogScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
+        if len(each_arg) == 4:
+            logging.info("Getting posts from the past %s for %s results." % \
+                (each_arg[2], each_arg[1]))
+
+            return LogScraper._set_subreddit_log(each_arg[1], each_arg[3], each_arg[0])
 
     ### Format Redditor log depending on number of results scraped.
     @staticmethod
@@ -199,6 +210,7 @@ class LogScraper():
             }
 
             logging.info(formats.get(scraper))
+            logging.info("")
 
     ### Wrapper for logging the amount of time it took to execute a scraper.
     @staticmethod
@@ -206,17 +218,17 @@ class LogScraper():
         def decorator(function):
             def wrapper(*args):
                 start = time.time()
-                start_log = "Running %s scraper..." % scraper.capitalize()
-                logging.info((start_log))
+
+                logging.info("RUNNING %s SCRAPER." % scraper.upper())
+                logging.info("")
 
                 function(*args)
 
                 LogScraper._format_scraper_log(
                     LogScraper._get_args_switch(args[0], scraper), scraper)
 
-                runtime = "%s scraper finished in %.2f seconds." %\
-                    (scraper.capitalize(), time.time() - start)
-                logging.info((runtime))
+                logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % \
+                    (scraper.upper(), time.time() - start))
                 logging.info("")
 
             return wrapper
