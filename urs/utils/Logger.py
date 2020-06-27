@@ -98,9 +98,7 @@ class LogError():
                 logging.info("Successfully logged in as u/%s." % reddit.user.me())
                 logging.info("")
             except PrawcoreException as error:
-                Titles.Titles.p_title()
-                print(Style.BRIGHT + Fore.RED + "\nPrawcore exception: %s.\n" % 
-                    error)
+                Titles.Titles.p_title(error)
                 logging.critical("LOGIN FAILED.")
                 logging.critical("PRAWCORE EXCEPTION: %s.\n" % error)
                 parser.exit()
