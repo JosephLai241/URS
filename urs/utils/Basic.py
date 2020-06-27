@@ -26,8 +26,7 @@ class PrintSubs():
     def _find_subs(self, parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        subs, not_subs = Validation.Validation.existence(self._s_t[0], sub_list, 
-            parser, reddit, self._s_t)
+        subs, not_subs = Validation.Validation.existence(self._s_t[0], sub_list, parser, reddit, self._s_t)
 
         return subs, not_subs
 
@@ -35,6 +34,7 @@ class PrintSubs():
     def print_subreddits(self, parser, reddit, search_for):
         print("\nChecking if Subreddit(s) exist...")
         subs, not_subs = self._find_subs(parser, reddit, search_for)
+
         if subs:
             print("\nThe following Subreddits were found and will be scraped:")
             print("-" * 56)
@@ -90,7 +90,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             try:
                 search_for = str(input(
                     Style.BRIGHT + "\nWhat would you like to search for in r/" + 
-                    sub + "? " + Style.RESET_ALL)).strip()
+                        sub + "? " + Style.RESET_ALL)).strip()
                 if not search_for:
                     raise ValueError
                 else:
@@ -105,7 +105,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             try:
                 search_for = input(
                     Style.BRIGHT + "\nHow many results do you want to capture from r/" + 
-                    sub + "? " + Style.RESET_ALL).strip()
+                        sub + "? " + Style.RESET_ALL).strip()
                 if search_for.isalpha() or not search_for:
                     raise ValueError
                 else:
