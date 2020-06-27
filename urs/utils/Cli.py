@@ -23,7 +23,7 @@ class Parser():
     def __init__(self):
         self._usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
         self._description = r"""
-Universal Reddit Scraper 3.1 - Scrape Subreddits, Redditors, or submission comments
+Universal Reddit Scraper 3.1.1 - Scrape Subreddits, Redditors, or submission comments
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
