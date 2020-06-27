@@ -169,13 +169,13 @@ Some Redditor attributes are sorted differently. Here is a table of how each is 
 
 | Attribute Name | Sorted By/Time Filter                       |
 |----------------|---------------------------------------------|
-| Comments       | Sorted by: New                              |
-| Controversial  | Time filter: All                            |
-| Gilded         | Sorted by: New                              |
+| Comments       | Sorted By: New                              |
+| Controversial  | Time Filter: All                            |
+| Gilded         | Sorted By: New                              |
 | Hot            | Determined by other Redditors' interactions |
-| New            | Sorted by: New                              |
-| Submissions    | Sorted by: New                              |
-| Top            | Time filter: All                            |
+| New            | Sorted By: New                              |
+| Submissions    | Sorted By: New                              |
+| Top            | Time Filter: All                            |
 
 Of these Redditor attributes, the following will include additional attributes:
 
