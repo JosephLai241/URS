@@ -24,8 +24,7 @@ class CheckSubmissions():
     @staticmethod
     def list_submissions(reddit, post_list, parser):
         print("\nChecking if post(s) exist...")
-        posts, not_posts = Validation.Validation.existence(s_t[2], post_list, 
-            parser, reddit, s_t)
+        posts, not_posts = Validation.Validation.existence(s_t[2], post_list, parser, reddit, s_t)
         
         if not_posts:
             print(Fore.YELLOW + Style.BRIGHT + 
