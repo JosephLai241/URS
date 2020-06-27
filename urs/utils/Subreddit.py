@@ -28,6 +28,7 @@ class CheckSubreddits():
         print("\nChecking if Subreddit(s) exist...")
         subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, 
             parser, reddit, s_t)
+        
         if not_subs:
             print(Fore.YELLOW + Style.BRIGHT + 
                 "\nThe following Subreddits were not found and will be skipped:")
@@ -94,9 +95,8 @@ class GetPostsSwitch():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self, search_for, subreddit, time_filter):
-        self._controversial = subreddit.controversial(limit = int(search_for), 
-            time_filter = time_filter) if time_filter != None \
-                else subreddit.controversial(limit = int(search_for))
+        self._controversial = subreddit.controversial(limit = int(search_for), time_filter = time_filter) \
+            if time_filter != None else subreddit.controversial(limit = int(search_for))
         self._hot = subreddit.hot(limit = int(search_for))
         self._new = subreddit.new(limit = int(search_for))
         self._rising = subreddit.rising(limit = int(search_for))
@@ -125,6 +125,7 @@ class GetPosts():
     def _collect_search(search_for, sub, subreddit, time_filter):
         print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % 
             (sub, search_for))
+        
         if time_filter != None:
             print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
 
@@ -140,6 +141,7 @@ class GetPosts():
             
         print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
             (search_for, category, sub))
+        
         if time_filter != None:
             print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
 
@@ -152,8 +154,7 @@ class GetPosts():
 
         return GetPosts._collect_search(search_for, sub, subreddit, time_filter) \
             if cat_i == short_cat[5] or cat_i == 5 else \
-                GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, 
-                    time_filter)
+                GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, time_filter)
 
 class SortPosts():
     """
@@ -194,7 +195,8 @@ class SortPosts():
     ### Append data to overview dictionary for JSON export.
     def _json_format(self, count, overview, post_data):
         overview["Post %s" % count] = {
-            title:value for title, value in zip(self._titles, post_data)}
+            title: value for title, value in zip(self._titles, post_data)
+        }
     
     ### Sort collected dictionary based on export option.
     def sort(self, args, collected):
@@ -251,8 +253,7 @@ class GetSortWrite():
             for each_sub in settings:
                 cat_i = each_sub[0].upper() if not args.basic else each_sub[0]
                 
-                overview = self._get_sort(args, cat_i, reddit, str(each_sub[1]), \
-                    sub, each_sub[2])
+                overview = self._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
                 self._write(args, cat_i, overview, each_sub, sub)
 
 class RunSubreddit():
