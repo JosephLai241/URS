@@ -47,8 +47,8 @@ class GetComments():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
-            "Text", "Edited?", "Is Submitter?", "Stickied?"]
+        self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", 
+            "Upvotes", "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
     ### If applicable, handle deleted Redditors or edited time.
     def _fix_attributes(self, comment):
@@ -68,8 +68,8 @@ class GetComments():
 
         author_name, edit_date = self._fix_attributes(comment)
         comment_attributes = [comment.parent_id, comment.id, author_name, 
-            convert_time(comment.created_utc), comment.score, comment.body, edit_date, 
-            comment.is_submitter, comment.stickied]
+            convert_time(comment.created_utc), comment.score, comment.body, 
+            edit_date, comment.is_submitter, comment.stickied]
 
         for title, attribute in zip(self._titles, comment_attributes):
             c_set[title] = attribute
