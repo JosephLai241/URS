@@ -28,7 +28,7 @@ The goal is to write code that is maintainable, readable, and scalable. This sta
 
 ## Word Wrap
 
-Word wrap should be 80-83 characters per line. You can modify your editor settings to display a horizontal ruler at 80 characters, which is very useful for following the wrap guideline.
+Try your best to word wrap around 80-83 characters per line. You can modify your editor settings to display a horizontal ruler at 80 characters, which is very useful for following the wrap guideline.
 
 Use `\` to write a line of code in multiple lines.
 
@@ -69,6 +69,16 @@ If you are printing a string that is longer than 80 characters, do not worry abo
 print(Style.BRIGHT + 
     ("\nThis is a very long line that is going to be a lot longer than 80 characters %s %s %s") % 
         (something, another_thing, something_else))
+```
+
+Or if you are passing in many variables into a string, do not worry about breaking the variables into new lines. Breaking them into a different line may affect readability, which is the opposite of what we're trying to achieve with this style guide.
+
+```python
+print("Passing %s a %s lot %s of %s variables %s in %s this %s string") %
+    (first_thing, second_thing, third_thing, fourth_thing, fifth_thing, six_thing, seventh_thing)
+                                                                                ^
+                                                                                |
+                                                                            Exceeds 80 chars
 ```
 
 Let's take a look at a third example. Here I am defining a very long list that will greatly exceed 80 characters:
