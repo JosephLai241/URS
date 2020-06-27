@@ -55,6 +55,11 @@ Search for "United States of America" in r/worldnews and export to CSV:
 
     $ ./Urs.py -r worldnews s "United States of America" --csv
 
+You can apply a time filter when scraping Subreddit categories Controversial, Top, or Search:
+(Scraping Search results from r/learnprogramming from the past month)
+
+    $ ./Urs.py -r learnprogramming s "python developer" month --json
+
 Scraping 15 results from u/spez's Reddit account:
 
     $ ./Urs.py -u spez 15 --json
@@ -176,9 +181,9 @@ class GetScrapeSettings():
     def _set_sub_settings(self, sub):
         if len(sub) == 3:
             if sub[1].upper() in self._filterables:
-                settings = [sub[1], "all", sub[2]]
+                settings = [sub[1], sub[2], "all"]
             else:
-                settings = [sub[1], None, sub[2]]
+                settings = [sub[1], sub[2], None]
         if len(sub) == 4:
             settings = [sub[1], sub[2], sub[3]]
 
@@ -241,12 +246,9 @@ class CheckCli():
                 ### Check args if a time filter is present.
                 if len(subs) == 4:
                     if subs[1].upper() not in self._filterables \
-                        or subs[2].lower() not in self._time_filters:
+                        or subs[3].lower() not in self._time_filters:
                         raise ValueError
-                    self._check_n_results(subs[3], subs)
-                ### Check args if a time filter is not present.
-                else:
-                    self._check_n_results(subs[2], subs)
+                self._check_n_results(subs[2], subs)
 
     ### Check Redditor args.
     def _check_redditor(self, args):
