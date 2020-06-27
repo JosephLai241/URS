@@ -20,6 +20,7 @@ class NameFile():
     def _fix(self, name):
         fixed = ["_" if self._illegal_chars.search(char) != None 
             else char for char in name]
+        
         return "".join(fixed)
 
     ### Category name switch.
@@ -63,14 +64,16 @@ class NameFile():
         category_n = self._r_get_category(args, cat_i)
         category = self._r_category(cat_i, category_n)
 
+        ending = None if cat_i == Global.short_cat[5] or cat_i == 5 else end
+        time_filter = None if each_sub[2] == None or each_sub[2] == "all" \
+            else each_sub[2]
+
         if each_sub[2] == None or each_sub[2] == "all":
-            return self._get_sub_fname(category, None, 0, each_sub[1], sub, None) \
-                if cat_i == Global.short_cat[5] or cat_i == 5 \
-                    else self._get_sub_fname(category, end, 1, each_sub[1], sub, None)
+            index = 0 if cat_i == Global.short_cat[5] or cat_i == 5 else 1
         else:
-            return self._get_sub_fname(category, None, 2, each_sub[1], sub, each_sub[2]) \
-                if cat_i == Global.short_cat[5] or cat_i == 5 \
-                    else self._get_sub_fname(category, end, 3, each_sub[1], sub, each_sub[2])
+            index = 2 if cat_i == Global.short_cat[5] or cat_i == 5 else 3
+        
+        return self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
 
     ### Determine file name format for Subreddit scraping.
     def r_fname(self, args, cat_i, each_sub, sub):
