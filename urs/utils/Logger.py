@@ -27,8 +27,10 @@ class LogMain():
     LOG_FORMAT = "[%(asctime)s] [%(levelname)s]: %(message)s"
 
     ### Configure logging settings.
-    logging.basicConfig(filename = DIR_PATH + "/scrapes.log", 
-        format = LOG_FORMAT, level = logging.INFO)
+    logging.basicConfig(
+        filename = DIR_PATH + "/scrapes.log", 
+        format = LOG_FORMAT, 
+        level = logging.INFO)
     
     ### Wrapper for logging the amount of time it took to execute main(). Handle
     ### KeyboardInterrupt if user cancels scraping.
@@ -223,8 +225,7 @@ class LogScraper():
 
                 function(*args)
 
-                LogScraper._format_scraper_log(
-                    LogScraper._get_args_switch(args[0], scraper), scraper)
+                LogScraper._format_scraper_log(LogScraper._get_args_switch(args[0], scraper), scraper)
 
                 logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % \
                     (scraper.upper(), time.time() - start))
