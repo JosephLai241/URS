@@ -82,7 +82,7 @@ class Titles():
 
     ### Print PRAW error title.
     @staticmethod
-    def p_title():
+    def p_title(error):
         print(Fore.RED + Style.BRIGHT + r"""
  _____   
 /\ '__`\ 
@@ -91,7 +91,9 @@ class Titles():
   \ \ \/ 
    \ \_\ 
     \/_/
-""")
+
+Prawcore exception: %s
+""" % error)
 
     ### Print rate limit error title.
     @staticmethod
