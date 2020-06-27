@@ -104,12 +104,12 @@ class SortComments():
     def _third_level_comment(all_dict, comment, cpid):
         for all_comments in all_dict.values():
             for top_level_or_reply in all_comments:
+                ### Indicates this is a reply and not a top-level comment.
                 if isinstance(top_level_or_reply, dict):
-                    ### Indicates this is a reply and not a top-level comment.
                     third_level = GetComments().add_comment(comment)
                     if cpid in top_level_or_reply.keys():
                         top_level_or_reply[cpid].append({comment.id: third_level})
-                    
+                
     ### Appending structured comments to all_dict.
     @staticmethod
     def _structured_comments(all_dict, comment, cpid, submission):
