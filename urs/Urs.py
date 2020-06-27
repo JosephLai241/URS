@@ -25,7 +25,9 @@ class Main():
         reddit = praw.Reddit(
             client_id = API["client_id"],
             client_secret = API["client_secret"],
+
             user_agent = API["user_agent"],
+            
             username = API["username"],
             password = API["password"])
 
