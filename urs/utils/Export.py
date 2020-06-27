@@ -78,7 +78,7 @@ class NameFile():
     ### Determine file name format for Subreddit scraping.
     def r_fname(self, args, cat_i, each_sub, sub):
         raw_n = ""
-        end = "result" if isinstance(each_sub[2], int) and int(each_sub[2]) < 2 \
+        end = "result" if isinstance(each_sub[1], int) and int(each_sub[1]) < 2 \
             else "results"
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
