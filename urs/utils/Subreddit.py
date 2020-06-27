@@ -26,8 +26,7 @@ class CheckSubreddits():
     @staticmethod
     def list_subreddits(parser, reddit, s_t, sub_list):
         print("\nChecking if Subreddit(s) exist...")
-        subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, 
-            parser, reddit, s_t)
+        subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
         
         if not_subs:
             print(Fore.YELLOW + Style.BRIGHT + 
@@ -190,7 +189,7 @@ class SortPosts():
     ### Append data to overview dictionary for CSV export.
     def _csv_format(self, overview, post_data):
         for title, data in zip(self._titles, post_data):
-                overview[title].append(data)
+            overview[title].append(data)
 
     ### Append data to overview dictionary for JSON export.
     def _json_format(self, count, overview, post_data):
