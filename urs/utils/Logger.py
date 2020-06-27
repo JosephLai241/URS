@@ -169,16 +169,15 @@ class LogScraper():
                     "Searching and scraping r/%s for posts containing '%s'..." % \
                         (sub_name, n_res_or_kwds)
 
-    ### Format Subreddit log differently if user searched for keywords.
+    ### Format Subreddit log differently if user searched for keywords. Log an
+    ### additional line if the time filter was applied.
     @staticmethod
     def _format_subreddit_log(each_arg):
-        if len(each_arg) == 3:
-            return LogScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
         if len(each_arg) == 4:
             logging.info("Getting posts from the past %s for %s results." % \
-                (each_arg[2], each_arg[1]))
+                (each_arg[3], each_arg[1]))
 
-            return LogScraper._set_subreddit_log(each_arg[1], each_arg[3], each_arg[0])
+        return LogScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
 
     ### Format Redditor log depending on number of results scraped.
     @staticmethod
