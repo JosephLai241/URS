@@ -21,7 +21,7 @@ class Parser():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
+        self._usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
         self._description = r"""
 Universal Reddit Scraper 3.1 - Scrape Subreddits, Redditors, or submission comments
 
