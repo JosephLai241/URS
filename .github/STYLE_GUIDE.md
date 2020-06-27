@@ -71,7 +71,7 @@ print(Style.BRIGHT +
         (something, another_thing, something_else))
 ```
 
-Or if you are passing in many variables into a string, do not worry about breaking the variables into new lines. Breaking them into a different line may affect readability, which is the opposite of what we're trying to achieve with this style guide.
+Or if you are passing in many variables into a string, do not worry about breaking the variables into new lines. Breaking them into a different line may affect readability, which is the opposite of what we're trying to achieve with this style guide. This rule also applies to methods that take in many arguments.
 
 ```python
 print("Passing %s a %s lot %s of %s variables %s in %s this %s string") %
