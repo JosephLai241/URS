@@ -180,10 +180,8 @@ class GetScrapeSettings():
     ### Return the Subreddit settings.
     def _set_sub_settings(self, sub):
         if len(sub) == 3:
-            if sub[1].upper() in self._filterables:
-                settings = [sub[1], sub[2], "all"]
-            else:
-                settings = [sub[1], sub[2], None]
+            settings = [sub[1], sub[2], "all"] if sub[1].upper() in self._filterables \
+                else [sub[1], sub[2], None]
         if len(sub) == 4:
             settings = [sub[1], sub[2], sub[3]]
 
@@ -227,43 +225,42 @@ class CheckCli():
         self._time_filters = ["all", "day", "hour", "month", "week", "year"]
 
     ### Check n_results for Subreddit args.
-    def _check_n_results(self, n_results, subs):
-        if subs[1].upper() != "S":
+    def _check_n_results(self, n_results, sub):
+        if sub[1].upper() != "S":
             try:
                 int(n_results)
                 if int(n_results) == 0:
                     raise ValueError
             except ValueError:
-                print("FUCKED UP NRESULTS")
                 raise ValueError
 
     ### Check Subreddit args.
     def _check_subreddit(self, args):
-        for subs in args.subreddit:
-            if subs[1].upper() not in self._short_cat or len(subs) > 4:
+        for sub in args.subreddit:
+            if sub[1].upper() not in self._short_cat or len(sub) > 4:
                 raise ValueError
-            elif subs[1].upper() in self._short_cat:
+            elif sub[1].upper() in self._short_cat:
                 ### Check args if a time filter is present.
-                if len(subs) == 4:
-                    if subs[1].upper() not in self._filterables \
-                        or subs[3].lower() not in self._time_filters:
+                if len(sub) == 4:
+                    if sub[1].upper() not in self._filterables \
+                        or sub[3].lower() not in self._time_filters:
                         raise ValueError
-                self._check_n_results(subs[2], subs)
+                self._check_n_results(sub[2], sub)
 
     ### Check Redditor args.
     def _check_redditor(self, args):
-        for users in args.redditor:
-            if users[1].isalpha() or \
-                self._special_chars.search(users[1]) != None or \
-                    int(users[1]) == 0:
+        for user in args.redditor:
+            if user[1].isalpha() or \
+                self._special_chars.search(user[1]) != None or \
+                    int(user[1]) == 0:
                 raise ValueError
 
     ### Check args for items that only require two arguments (Redditor or 
     ### comments scrapers).
     def _check_comments(self, args):
-        for comments in args.comments:
-            if comments[1].isalpha() or \
-                self._special_chars.search(comments[1]) != None:
+        for submission in args.comments:
+            if submission[1].isalpha() or \
+                self._special_chars.search(submission[1]) != None:
                 raise ValueError
 
     ### Check args and catching errors.
