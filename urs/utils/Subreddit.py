@@ -53,10 +53,10 @@ class PrintConfirm():
             for each_sub in settings:
                 cat_i = short_cat.index(each_sub[0].upper()) if not args.basic \
                     else each_sub[0]
-                time_filter = each_sub[1].capitalize() if each_sub[1] != None else \
-                    each_sub[1]
+                time_filter = each_sub[2].capitalize() if each_sub[2] != None else \
+                    each_sub[2]
                 
-                pretty_subs.add_row([sub, categories[cat_i], str(time_filter), each_sub[2]])
+                pretty_subs.add_row([sub, categories[cat_i], time_filter, each_sub[1]])
 
     ### Print scraping details for each Subreddit.
     @staticmethod
@@ -251,8 +251,8 @@ class GetSortWrite():
             for each_sub in settings:
                 cat_i = each_sub[0].upper() if not args.basic else each_sub[0]
                 
-                overview = self._get_sort(args, cat_i, reddit, str(each_sub[2]), sub, \
-                    each_sub[1])
+                overview = self._get_sort(args, cat_i, reddit, str(each_sub[1]), \
+                    sub, each_sub[2])
                 self._write(args, cat_i, overview, each_sub, sub)
 
 class RunSubreddit():
