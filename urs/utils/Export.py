@@ -46,9 +46,9 @@ class NameFile():
 
     ### File name switch that stores all possible Subreddit file name formats.
     def _get_sub_fname(self, category, end, index, n_res_or_kwds, subreddit, time_filter):
-        standard = "r-%s-%s-%s-%s" % (subreddit, category, n_res_or_kwds, end)
-        search = "r-%s-%s-'%s'" % (subreddit, category, n_res_or_kwds)
         filter_str = "-past-%s" % time_filter
+        search = "r-%s-%s-'%s'" % (subreddit, category, n_res_or_kwds)
+        standard = "r-%s-%s-%s-%s" % (subreddit, category, n_res_or_kwds, end)
 
         filenames = {
             0: search,
