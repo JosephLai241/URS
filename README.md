@@ -119,7 +119,7 @@ These attributes are included in each scrape.
 
 `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
-You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and URS will get all submissions that are returned from the search.
+You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keywords within a Subreddit.
 
 These are the submission categories:
 
@@ -141,17 +141,17 @@ Time filters may be applied to some categories. Here is a table of the categorie
 | &nbsp;        | Week          |
 | &nbsp;        | Year          |
 
-Specify the time filter after the category: `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER --FILE_FORMAT`
+Specify the time filter after the number of results returned or keywords you want to search for: `$ ./Urs.py -r SUBREDDIT [C|T|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER --FILE_FORMAT`
 
 If no time filter is specified, the default time filter `all` is applied. The Subreddit settings table will display "None" for categories that do not have the additional time filter option.
 
-***NOTE:*** Up to 100 results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep. 
+***NOTE:*** Up to 100 results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep.
 
 The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s).[FILE_FORMAT]"`
 
-If you specified a time filter, the file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s)-past-[TIME_FILTER].[FILE_FORMAT]"`
+If you searched for keywords, file names are formatted like so: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
 
-If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
+If you specified a time filter, `-past-[TIME_FILTER]` will be appended to the file name before the file format like so: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s)-past-[TIME_FILTER].[FILE_FORMAT]"` or `"r-[SUBREDDIT]-Search-'[KEYWORDS]'-past-[TIME_FILTER].[FILE_FORMAT]"`
 
 ## Redditors
 
@@ -284,7 +284,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 | **December 31, 2019** | URS v3.0 (Official) | <ul> <li>**Comments scraping is now working**!</li> <li>**Added additional exception handling** for creating filenames.</li> <li>Minor code reformatting.</li> <li>**Simplified verbose output**.</li> <li>**Added an additional submission attribute** when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
 | **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guide][Contributing Guide]</li> <li>[Pull Request Template][Pull Request Template]</li> <li>Issue templates:</li> <ul> <li>[Bug Report][Bug Report]</li> <li>[Feature Request][Feature Request]</li> </ul> <li>[Code of Conduct][Code of Conduct]</li> <li>[License][License]</li> </ul> </ul> |
 | **June 22, 2020** | URS v3.1.0 | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**New in 3.1.0**:</li> <ul> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> </ul> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI** and **Codecov**.</li> <li>Updated community documents located in the `.github/` directory: `BUG_REPORT`, `CONTRIBUTING`, `FEATURE_REQUEST`, `PULL_REQUEST_TEMPLATE`, and `STYLE_GUIDE`</li> <li>Numerous changes to Readme. The most significant change was **splitting and storing walkthroughs in `docs/`**.</li> </ul> |
-| **June 27, 2020** | URS v3.1.1 | <ul> <li>**Added time filters for Subreddit categories (Controversial, Search, Top).**</li> <li>**Updated README to reflect new changes.**</li> </ul> | 
+| **June 27, 2020** | URS v3.1.1 | <ul> <li>**Added time filters for Subreddit categories (Controversial, Search, Top)**.</li> <li>**Updated README to reflect new changes**.</li> <li>**Updated style guide**. Made **minor formatting changes to scripts** to reflect new rules.</li> <li>Performed **DRY code review**.</li> </ul> | 
 
 <!-- BADGES: Links for the badges at the top of the README -->
 [Codecov]: https://codecov.io/gh/JosephLai241/URS
