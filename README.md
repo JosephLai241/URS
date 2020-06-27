@@ -143,7 +143,7 @@ Time filters may be applied to some categories. Here is a table of the categorie
 
 Specify the time filter after the number of results returned or keywords you want to search for: `$ ./Urs.py -r SUBREDDIT [C|T|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER --FILE_FORMAT`
 
-If no time filter is specified, the default time filter `all` is applied. The Subreddit settings table will display "None" for categories that do not have the additional time filter option.
+If no time filter is specified, the default time filter `all` is applied. The Subreddit settings table will display `None` for categories that do not have the additional time filter option.
 
 ***NOTE:*** Up to 100 results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep.
 
