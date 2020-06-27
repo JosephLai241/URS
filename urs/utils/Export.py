@@ -29,9 +29,7 @@ class NameFile():
             1: Global.categories[Global.short_cat.index(cat_i)] \
                 if cat_i != Global.short_cat[5] and isinstance(cat_i, str) \
                     else None,
-            2: Global.categories[cat_i] \
-                if isinstance(cat_i, int) \
-                    else None
+            2: Global.categories[cat_i] if isinstance(cat_i, int) else None
         }
 
         return switch.get(category_n)
@@ -45,23 +43,42 @@ class NameFile():
 
         return category_n
 
-    ### Determine file name format for CLI scraper.
-    def _get_raw_n(self, args, cat_i, end, search_for, sub):
+    ### File name switch that stores all possible Subreddit file name formats.
+    def _get_sub_fname(self, category, end, index, n_res_or_kwds, subreddit, time_filter):
+        standard = "r-%s-%s-%s-%s" % (subreddit, category, n_res_or_kwds, end)
+        search = "r-%s-%s-'%s'" % (subreddit, category, n_res_or_kwds)
+        filter_str = "-past-%s" % time_filter
+
+        filenames = {
+            0: search,
+            1: standard,
+            2: search + filter_str,
+            3: standard + filter_str
+        }
+
+        return filenames.get(index)
+
+    ### Determine file name format for CLI Subreddit scraper.
+    def _get_raw_n(self, args, cat_i, end, each_sub, sub):
         category_n = self._r_get_category(args, cat_i)
         category = self._r_category(cat_i, category_n)
 
-        return str(("r-%s-%s-'%s'") % (sub, category, search_for)) \
-            if cat_i == Global.short_cat[5] or cat_i == 5 \
-                else str(("r-%s-%s-%s-%s") % 
-                    (sub, category, search_for, end))
+        if each_sub[2] == None or each_sub[2] == "all":
+            return self._get_sub_fname(category, None, 0, each_sub[1], sub, None) \
+                if cat_i == Global.short_cat[5] or cat_i == 5 \
+                    else self._get_sub_fname(category, end, 1, each_sub[1], sub, None)
+        else:
+            return self._get_sub_fname(category, None, 2, each_sub[1], sub, each_sub[2]) \
+                if cat_i == Global.short_cat[5] or cat_i == 5 \
+                    else self._get_sub_fname(category, end, 3, each_sub[1], sub, each_sub[2])
 
     ### Determine file name format for Subreddit scraping.
-    def r_fname(self, args, cat_i, search_for, sub):
+    def r_fname(self, args, cat_i, each_sub, sub):
         raw_n = ""
-        end = "result" if isinstance(search_for, int) and int(search_for) < 2 \
+        end = "result" if isinstance(each_sub[2], int) and int(each_sub[2]) < 2 \
             else "results"
 
-        raw_n = self._get_raw_n(args, cat_i, end, search_for, sub)
+        raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
         f_name = self._fix(raw_n)
 
         return f_name
@@ -70,6 +87,7 @@ class NameFile():
     def u_fname(self, limit, string):
         end = "result" if int(limit) < 2 else "results"
         raw_n = str(("u-%s-%s-%s") % (string, limit, end))
+
         return self._fix(raw_n)
 
     ### Determine file name format for comments scraping.
