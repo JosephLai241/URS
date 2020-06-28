@@ -78,7 +78,7 @@ All exported files are saved within the `scrapes/` directory and stored in a sub
 
 ## Getting Started
 
-Refer to [my guide][How to get Reddit API Credentials for PRAW] to get Reddit API credentials, then update the `API` dictionary located in `Credentials.py`
+It is very quick and easy to get Reddit API credentials. Refer to [my guide][How to get Reddit API Credentials for PRAW] to get your credentials, then update the `API` dictionary located in `Credentials.py`
 
 ## A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
@@ -115,19 +115,11 @@ These attributes are included in each scrape.
 
 ![Subreddit Demo GIF][Subreddit Demo]
 
-\* This GIF is uncut.
+\*This GIF is uncut.
 
 `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS --FILE_FORMAT` 
 
-You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keyword(s) within a Subreddit and URS will get all submissions that are returned from the search.
-
-Some categories include additional time filters. Here is a table of how each is sorted.
-
-| Category      | Sorted By/Time Filter | 
-|---------------|-----------------------|
-| Controversial | Time filter: All      |
-| Search        | Sorted by: Relevance  |
-| Top           | Time filter: All      |
+You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keywords within a Subreddit.
 
 These are the submission categories:
 
@@ -138,17 +130,34 @@ These are the submission categories:
 * Rising
 * Search
 
-***NOTE:*** All results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep. 
+Time filters may be applied to some categories. Here is a table of the categories on which you can apply a time filter as well as the valid time filters.
 
-The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
+| Categories    | Time Filters  | 
+|---------------|---------------|
+| Controversial | All (default) |
+| Search        | Day           |
+| Top           | Hour          |
+| &nbsp;        | Month         | 
+| &nbsp;        | Week          |
+| &nbsp;        | Year          |
 
-If you searched for keywords, file names are formatted as such: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
+Specify the time filter after the number of results returned or keywords you want to search for: `$ ./Urs.py -r SUBREDDIT [C|T|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER --FILE_FORMAT`
+
+If no time filter is specified, the default time filter `all` is applied. The Subreddit settings table will display `None` for categories that do not have the additional time filter option.
+
+***NOTE:*** Up to 100 results are returned if you search for something within a Subreddit. You will not be able to specify how many results to keep.
+
+The file names will follow this format: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s).[FILE_FORMAT]"`
+
+If you searched for keywords, file names are formatted like so: `"r-[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
+
+If you specified a time filter, `-past-[TIME_FILTER]` will be appended to the file name before the file format like so: `"r-[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s)-past-[TIME_FILTER].[FILE_FORMAT]"` or `"r-[SUBREDDIT]-Search-'[KEYWORDS]'-past-[TIME_FILTER].[FILE_FORMAT]"`
 
 ## Redditors
 
 ![Redditor Demo GIF][Redditor Demo]
 
-\* This GIF has been cut for demonstration purposes.
+\*This GIF has been cut for demonstration purposes.
 
 `$ ./Urs.py -u USER N_RESULTS --FILE_FORMAT` 
 
@@ -160,13 +169,13 @@ Some Redditor attributes are sorted differently. Here is a table of how each is 
 
 | Attribute Name | Sorted By/Time Filter                       |
 |----------------|---------------------------------------------|
-| Comments       | Sorted by: New                              |
-| Controversial  | Time filter: All                            |
-| Gilded         | Sorted by: New                              |
+| Comments       | Sorted By: New                              |
+| Controversial  | Time Filter: All                            |
+| Gilded         | Sorted By: New                              |
 | Hot            | Determined by other Redditors' interactions |
-| New            | Sorted by: New                              |
-| Submissions    | Sorted by: New                              |
-| Top            | Time filter: All                            |
+| New            | Sorted By: New                              |
+| Submissions    | Sorted By: New                              |
+| Top            | Time Filter: All                            |
 
 Of these Redditor attributes, the following will include additional attributes:
 
@@ -193,7 +202,7 @@ The file names will follow this format: `"u-[USERNAME]-[N_RESULTS]-result(s).[FI
 ![Structured Comments Demo GIF][Structured Comments Demo]
 ![Raw Comments Demo GIF][Raw Comments Demo]
 
-\* These GIFs have been cut for demonstration purposes.
+\*These GIFs have been cut for demonstration purposes.
 
 `$ ./Urs.py -c URL N_RESULTS --FILE_FORMAT` 
 
@@ -242,7 +251,7 @@ Comments scraping is especially easier to read because structured exports look s
 
 You can still export Redditor data and submission comments to CSV, but you will be disappointed with the results.
 
-### See the [samples][Samples] for scrapes ran on June 14, 2020.
+### See the [samples][Samples] for scrapes ran on June 27, 2020.
 
 # Some Linux Tips
 
@@ -274,7 +283,8 @@ You can still export Redditor data and submission comments to CSV, but you will 
 | **December 28, 2019** | URS v3.0 (beta) | <ul> <li>Added **JSON** export.</li> <li>Added **Redditor Scraping**.</li> <li>Comments scraping is still under construction.</li> </ul> | 
 | **December 31, 2019** | URS v3.0 (Official) | <ul> <li>**Comments scraping is now working**!</li> <li>**Added additional exception handling** for creating filenames.</li> <li>Minor code reformatting.</li> <li>**Simplified verbose output**.</li> <li>**Added an additional submission attribute** when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
 | **January 15, 2020** | URS v3.0 (Final Release) | <ul> <li>Numerous changes to Readme.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guide][Contributing Guide]</li> <li>[Pull Request Template][Pull Request Template]</li> <li>Issue templates:</li> <ul> <li>[Bug Report][Bug Report]</li> <li>[Feature Request][Feature Request]</li> </ul> <li>[Code of Conduct][Code of Conduct]</li> <li>[License][License]</li> </ul> </ul> |
-| **June 22, 2020** | URS v3.1.0 | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**New in 3.1.0**:</li> <ul> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> </ul> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI** and **Codecov**.</li> <li>Updated community documents located in the `.github/` directory: `BUG_REPORT`, `CONTRIBUTING`, `FEATURE_REQUEST`, `PULL_REQUEST_TEMPLATE`, and `STYLE_GUIDE`</li> <li>Numerous changes to Readme. The most significant change was **splitting and storing walkthroughs in `docs/`**.</li> </ul> | 
+| **June 22, 2020** | URS v3.1.0 | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**New in 3.1.0**:</li> <ul> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> </ul> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI** and **Codecov**.</li> <li>Updated community documents located in the `.github/` directory: `BUG_REPORT`, `CONTRIBUTING`, `FEATURE_REQUEST`, `PULL_REQUEST_TEMPLATE`, and `STYLE_GUIDE`</li> <li>Numerous changes to Readme. The most significant change was **splitting and storing walkthroughs in `docs/`**.</li> </ul> |
+| **June 27, 2020** | URS v3.1.1 | <ul> <li>**Added time filters for Subreddit categories (Controversial, Search, Top)**.</li> <li>**Updated README to reflect new changes**.</li> <li>**Updated style guide**. Made **minor formatting changes to scripts** to reflect new rules.</li> <li>Performed **DRY code review**.</li> </ul> | 
 
 <!-- BADGES: Links for the badges at the top of the README -->
 [Codecov]: https://codecov.io/gh/JosephLai241/URS

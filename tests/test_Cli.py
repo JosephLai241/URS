@@ -35,13 +35,13 @@ class TestParserInitMethod():
     """
 
     def test_parser_init_method_usage_instance_variable(self):
-        usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
+        usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
         
         assert Cli.Parser()._usage == usage
         
     def test_parser_init_method_description_instance_variable(self):
         description = r"""
-Universal Reddit Scraper 3.1 - Scrape Subreddits, Redditors, or submission comments
+Universal Reddit Scraper 3.1.1 - Scrape Subreddits, Redditors, or submission comments
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
@@ -53,10 +53,18 @@ Contact: urs_project@protonmail.com
 Subreddit categories:
    H,h     selecting Hot category
    N,n     selecting New category
-   C,c     selecting Controversial category
-   T,t     selecting Top category
+   C,c     selecting Controversial category (time filter available)
+   T,t     selecting Top category           (time filter available)
    R,r     selecting Rising category
-   S,s     selecting Search category
+   S,s     selecting Search category        (time filter available)
+
+Subreddit time filters:
+   all (default)
+   day
+   hour
+   month
+   week
+   year
 
 EXAMPLES
 
@@ -67,6 +75,11 @@ Get the first 10 posts in r/askreddit in the Hot category and export to JSON:
 Search for "United States of America" in r/worldnews and export to CSV:
 
     $ ./Urs.py -r worldnews s "United States of America" --csv
+
+You can apply a time filter when scraping Subreddit categories Controversial, Top, or Search:
+(Scraping Search results from r/learnprogramming from the past month)
+
+    $ ./Urs.py -r learnprogramming s "python developer" month --json
 
 Scraping 15 results from u/spez's Reddit account:
 
@@ -332,7 +345,7 @@ class TestGetScrapeSettingsSubredditSettingsMethod():
         master = {"test_subreddit": []}
         Cli.GetScrapeSettings()._subreddit_settings(args, master)
 
-        assert master == {"test_subreddit": [["h", "10"]]}
+        assert master == {"test_subreddit": [["h", "10", None]]}
 
 class TestGetScrapeSettingsTwoArgsSettingsMethod():
     """
@@ -369,7 +382,7 @@ class TestGetScrapeSettingsGetSettingsMethod():
         s_type = Global.s_t[0]
         Cli.GetScrapeSettings().get_settings(args, master, s_type)
 
-        assert master == {"test_subreddit": [["h", "10"]]}
+        assert master == {"test_subreddit": [["h", "10", None]]}
 
     def test_get_settings_with_redditor_args(self):
         parser = MakeArgs.make_scraper_args()

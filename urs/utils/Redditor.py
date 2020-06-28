@@ -26,8 +26,8 @@ class CheckRedditors():
     @staticmethod
     def list_redditors(parser, reddit, user_list):
         print("\nChecking if Redditor(s) exist...")
-        users, not_users = Validation.Validation.existence(s_t[1], user_list, 
-            parser, reddit, s_t)
+        users, not_users = Validation.Validation.existence(s_t[1], user_list, parser, reddit, s_t)
+        
         if not_users:
             print(Fore.YELLOW + Style.BRIGHT + 
                 "\nThe following Redditors were not found and will be skipped:")

@@ -21,9 +21,9 @@ class Parser():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
+        self._usage = "$ Urs.py [-h] [-r SUBREDDIT [H|N|C|T|R|S] RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] [-u USER RESULTS] [-c URL RESULTS] [-b] [-y] [--csv|--json]"
         self._description = r"""
-Universal Reddit Scraper 3.1 - Scrape Subreddits, Redditors, or submission comments
+Universal Reddit Scraper 3.1.1 - Scrape Subreddits, Redditors, or submission comments
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
@@ -32,10 +32,18 @@ Contact: urs_project@protonmail.com
 Subreddit categories:
    H,h     selecting Hot category
    N,n     selecting New category
-   C,c     selecting Controversial category
-   T,t     selecting Top category
+   C,c     selecting Controversial category (time filter available)
+   T,t     selecting Top category           (time filter available)
    R,r     selecting Rising category
-   S,s     selecting Search category
+   S,s     selecting Search category        (time filter available)
+
+Subreddit time filters:
+   all (default)
+   day
+   hour
+   month
+   week
+   year
 
 EXAMPLES
 
@@ -46,6 +54,11 @@ Get the first 10 posts in r/askreddit in the Hot category and export to JSON:
 Search for "United States of America" in r/worldnews and export to CSV:
 
     $ ./Urs.py -r worldnews s "United States of America" --csv
+
+You can apply a time filter when scraping Subreddit categories Controversial, Top, or Search:
+(Scraping Search results from r/learnprogramming from the past month)
+
+    $ ./Urs.py -r learnprogramming s "python developer" month --json
 
 Scraping 15 results from u/spez's Reddit account:
 
@@ -78,7 +91,7 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
         urs.add_argument(
             "-r", "--subreddit", 
             action = "append", 
-            nargs = 3, 
+            nargs = "+", 
             metavar = "", 
             help = "specify Subreddit to scrape")
         urs.add_argument(
@@ -142,6 +155,9 @@ class GetScrapeSettings():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._s_t = Global.s_t
+        self._short_cat = Global.short_cat
+
+        self._filterables = [self._short_cat[2], self._short_cat[3], self._short_cat[5]]
 
     ### Switch to determine which kind of list to create.
     def _list_switch(self, args, index):
@@ -160,11 +176,23 @@ class GetScrapeSettings():
 
         return item_list
 
+    ### Set default time filter if a time filter can be applied to the category.
+    ### Return the Subreddit settings.
+    def _set_sub_settings(self, sub):
+        if len(sub) == 3:
+            settings = [sub[1], sub[2], "all"] if sub[1].upper() in self._filterables \
+                else [sub[1], sub[2], None]
+        if len(sub) == 4:
+            settings = [sub[1], sub[2], sub[3]]
+
+        return settings
+
     ### Get Subreddit settings.
     def _subreddit_settings(self, args, master):
         for sub_n in master:
             for sub in args.subreddit:
-                settings = [sub[1], sub[2]]
+                settings = self._set_sub_settings(sub)
+                
                 if sub_n == sub[0]:
                     master[sub_n].append(settings)
 
@@ -192,35 +220,47 @@ class CheckCli():
     def __init__(self):
         self._short_cat = Global.short_cat
         self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
+        
+        self._filterables = [self._short_cat[2], self._short_cat[3], self._short_cat[5]]
+        self._time_filters = ["all", "day", "hour", "month", "week", "year"]
+
+    ### Check n_results for Subreddit args.
+    def _check_n_results(self, n_results, sub):
+        if sub[1].upper() != "S":
+            try:
+                int(n_results)
+                if int(n_results) == 0:
+                    raise ValueError
+            except ValueError:
+                raise ValueError
 
     ### Check Subreddit args.
     def _check_subreddit(self, args):
-        for subs in args.subreddit:
-            if subs[1].upper() not in self._short_cat:
+        for sub in args.subreddit:
+            if sub[1].upper() not in self._short_cat or len(sub) > 4:
                 raise ValueError
-            elif subs[1].upper() in self._short_cat:
-                if subs[1].upper() != "S":
-                    try:
-                        int(subs[2])
-                        if int(subs[2]) == 0:
-                            raise ValueError
-                    except ValueError:
+            elif sub[1].upper() in self._short_cat:
+                ### Check args if a time filter is present.
+                if len(sub) == 4:
+                    if sub[1].upper() not in self._filterables \
+                        or sub[3].lower() not in self._time_filters:
                         raise ValueError
+                self._check_n_results(sub[2], sub)
 
     ### Check Redditor args.
     def _check_redditor(self, args):
-        for users in args.redditor:
-            if users[1].isalpha() or \
-                self._special_chars.search(users[1]) != None or \
-                    int(users[1]) == 0:
+        for user in args.redditor:
+            if user[1].isalpha() or \
+                self._special_chars.search(user[1]) != None or \
+                    int(user[1]) == 0:
                 raise ValueError
 
     ### Check args for items that only require two arguments (Redditor or 
     ### comments scrapers).
     def _check_comments(self, args):
-        for comments in args.comments:
-            if comments[1].isalpha() or \
-                self._special_chars.search(comments[1]) != None:
+        for submission in args.comments:
+            if submission[1].isalpha() or \
+                self._special_chars.search(submission[1]) != None:
                 raise ValueError
 
     ### Check args and catching errors.

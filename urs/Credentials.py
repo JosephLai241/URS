@@ -3,9 +3,11 @@
 #===============================================================================
 
 API = {
-    "client_id": "14_CHAR_HERE",        # Personal Use Script (14 char)
-    "client_secret": "27_CHAR_HERE",    # Secret key (27 char)
-    "user_agent": "APP_NAME_HERE",      # App name
-    "username": "REDDIT_USERNAME_HERE", # Reddit username
-    "password": "REDDIT_PASSWORD_HERE"  # Reddit login password
+    "client_id": "14_CHAR_HERE",        # Personal use script (14 characters).
+    "client_secret": "27_CHAR_HERE",    # Secret key (27 characters).
+
+    "user_agent": "APP_NAME_HERE",      # App name.
+
+    "username": "REDDIT_USERNAME_HERE", # Reddit username.
+    "password": "REDDIT_PASSWORD_HERE"  # Reddit password.
 }

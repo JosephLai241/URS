@@ -34,16 +34,16 @@ class Run():
 
     ### Switch for running scrapers.
     def run_urs(self):
+        ### Run Subreddit scraper.
         if self._args.subreddit:
-            ### Run Subreddit scraper.
             Subreddit.RunSubreddit.run(self._args, self._parser, self._reddit, self._s_t)
+        ### Run Redditor scraper.
         if self._args.redditor:
-            ### Run Redditor scraper.
             Redditor.RunRedditor.run(self._args, self._parser, self._reddit)
+        ### Run submission comments scraper.
         if self._args.comments:
-            ### Run submission comments scraper.
             Comments.RunComments.run(self._args, self._parser, self._reddit)
+        ### Run basic Subreddit scraper.
         elif self._args.basic:
-            ### Run basic Subreddit scraper.
             Basic.RunBasic.run(self._args, self._parser, self._reddit)
         

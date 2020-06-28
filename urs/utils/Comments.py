@@ -24,8 +24,8 @@ class CheckSubmissions():
     @staticmethod
     def list_submissions(reddit, post_list, parser):
         print("\nChecking if post(s) exist...")
-        posts, not_posts = Validation.Validation.existence(s_t[2], post_list, 
-            parser, reddit, s_t)
+        posts, not_posts = Validation.Validation.existence(s_t[2], post_list, parser, reddit, s_t)
+        
         if not_posts:
             print(Fore.YELLOW + Style.BRIGHT + 
                 "\nThe following posts were not found and will be skipped:")
@@ -46,8 +46,8 @@ class GetComments():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", "Upvotes", 
-            "Text", "Edited?", "Is Submitter?", "Stickied?"]
+        self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", 
+            "Upvotes", "Text", "Edited?", "Is Submitter?", "Stickied?"]
 
     ### If applicable, handle deleted Redditors or edited time.
     def _fix_attributes(self, comment):
@@ -67,8 +67,8 @@ class GetComments():
 
         author_name, edit_date = self._fix_attributes(comment)
         comment_attributes = [comment.parent_id, comment.id, author_name, 
-            convert_time(comment.created_utc), comment.score, comment.body, edit_date, 
-            comment.is_submitter, comment.stickied]
+            convert_time(comment.created_utc), comment.score, comment.body, 
+            edit_date, comment.is_submitter, comment.stickied]
 
         for title, attribute in zip(self._titles, comment_attributes):
             c_set[title] = attribute
@@ -83,51 +83,49 @@ class SortComments():
 
     ### Append comments in raw export format.
     @staticmethod
-    def _raw_comments(all_dict, comment):
-        add = GetComments().add_comment(comment)
+    def _raw_comments(add, all_dict, comment):
         all_dict[comment.id] = add
 
     ### Append top level comments to all_dict.
     @staticmethod
-    def _top_level_comment(all_dict, comment):
-        add = GetComments().add_comment(comment)
+    def _top_level_comment(add, all_dict, comment):
         all_dict[comment.id] = [add]
 
     ### Append second-level comments to all_dict.
     @staticmethod
-    def _second_level_comment(all_dict, comment, cpid):
-        append = GetComments().add_comment(comment)
-        all_dict[cpid].append({comment.id:append})
+    def _second_level_comment(add, all_dict, comment, cpid):
+        all_dict[cpid].append({comment.id: add})
 
     ### Append third-level comments to all_dict.
     @staticmethod
-    def _third_level_comment(all_dict, comment, cpid):
+    def _third_level_comment(add, all_dict, comment, cpid):
         for all_comments in all_dict.values():
             for top_level_or_reply in all_comments:
+                ### Indicates this is a reply and not a top-level comment.
                 if isinstance(top_level_or_reply, dict):
-                    ### Indicates this is a reply and not a top-level comment.
-                    third_level = GetComments().add_comment(comment)
                     if cpid in top_level_or_reply.keys():
-                        top_level_or_reply[cpid].append({comment.id: third_level})
-                    
+                        top_level_or_reply[cpid].append({comment.id: add})
+                
     ### Appending structured comments to all_dict.
     @staticmethod
-    def _structured_comments(all_dict, comment, cpid, submission):
+    def _structured_comments(add, all_dict, comment, cpid, submission):
         if cpid == submission.id:
-            SortComments._top_level_comment(all_dict, comment)
+            SortComments._top_level_comment(add, all_dict, comment)
         elif cpid in all_dict.keys():
-            SortComments._second_level_comment(all_dict, comment, cpid)
+            SortComments._second_level_comment(add, all_dict, comment, cpid)
         else:
-            SortComments._third_level_comment(all_dict, comment, cpid)
+            SortComments._third_level_comment(add, all_dict, comment, cpid)
 
     ### Append comments to all dictionary differently if raw is True or False.
     @staticmethod
     def _to_all(all_dict, comment, raw, submission):
+        add = GetComments().add_comment(comment)
+
         if raw:
-            SortComments._raw_comments(all_dict, comment)
+            SortComments._raw_comments(add, all_dict, comment)
         else:
             cpid = comment.parent_id.split("_", 1)[1]
-            SortComments._structured_comments(all_dict, comment, cpid, submission)
+            SortComments._structured_comments(add, all_dict, comment, cpid, submission)
 
     ### Sort comments.
     @staticmethod
@@ -146,12 +144,13 @@ class GetSort():
 
         print(Fore.CYAN + Style.BRIGHT + "\nResolving instances of MoreComments...")
         print("\nThis may take a while. Please wait.")
+
         self._submission.comments.replace_more(limit = None)
 
     ### Get comments in raw format.
     def _get_raw(self, all_dict, submission):
         print(Style.BRIGHT + 
-            "\nProcessing all comments in raw format from Reddit post '%s'..." % 
+            "\nProcessing all comments in raw format from submission '%s'..." % 
                 submission.title)
 
         SortComments().sort(all_dict, True, submission)
@@ -160,10 +159,11 @@ class GetSort():
     def _get_structured(self, all_dict, limit, submission):
         plurality = "comment" if int(limit) == 1 else "comments"
         print(Style.BRIGHT + 
-            ("\nProcessing %s %s in structured format from Reddit post '%s'...") % 
+            ("\nProcessing %s %s in structured format from submission '%s'...") % 
                 (limit, plurality, submission.title))
 
         SortComments().sort(all_dict, False, submission)
+        
         return {key: all_dict[key] for key in list(all_dict)[:int(limit)]}
 
     ### Get comments from posts.

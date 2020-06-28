@@ -12,11 +12,15 @@ Delete this line and write your motivation/context here. Section your motivation
 
 Delete this line and write your new dependencies here. Put "None." here if there are no new dependencies.
 
-## Issue fix
+## Issue Fix or Enhancement Request
 
 If it fixes an open issue, link the issue in this pull request like so:
 
-Fixes [#issue_number_here](put-link-to-issue-here).
+Fixes #issue_number_here.
+
+Alternatively, if it fulfills an enhancement request, link the request in this pull request like so:
+
+Fulfilled enhancement request #issue_number_here.
 
 If it does not fix an open issue, delete this block and put "Not Applicable." here.
 

@@ -26,8 +26,8 @@ class CheckSubreddits():
     @staticmethod
     def list_subreddits(parser, reddit, s_t, sub_list):
         print("\nChecking if Subreddit(s) exist...")
-        subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, 
-            parser, reddit, s_t)
+        subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
+        
         if not_subs:
             print(Fore.YELLOW + Style.BRIGHT + 
                 "\nThe following Subreddits were not found and will be skipped:")
@@ -50,19 +50,20 @@ class PrintConfirm():
     @staticmethod
     def _print_each(args, pretty_subs, s_master):
         for sub, settings in s_master.items():
-            for each in settings:
-                cat_i = short_cat.index(each[0].upper()) if not args.basic \
-                    else each[0]
-                specific = each[1]
+            for each_sub in settings:
+                cat_i = short_cat.index(each_sub[0].upper()) if not args.basic \
+                    else each_sub[0]
+                time_filter = each_sub[2].capitalize() if each_sub[2] != None else \
+                    each_sub[2]
                 
-                pretty_subs.add_row([sub, categories[cat_i], specific])
+                pretty_subs.add_row([sub, categories[cat_i], time_filter, each_sub[1]])
 
     ### Print scraping details for each Subreddit.
     @staticmethod
     def print_settings(args, s_master):
         print(Fore.CYAN + Style.BRIGHT + "\nCurrent settings for each Subreddit")
         pretty_subs = PrettyTable()
-        pretty_subs.field_names = ["Subreddit", "Category", 
+        pretty_subs.field_names = ["Subreddit", "Category", "Time Filter",
             "Number of results / Keywords"]
 
         PrintConfirm._print_each(args, pretty_subs, s_master)
@@ -92,12 +93,14 @@ class GetPostsSwitch():
     """
 
     ### Initialize objects that will be used in class methods.
-    def __init__(self, search_for, subreddit):
-        self._controversial = subreddit.controversial(limit = int(search_for))
+    def __init__(self, search_for, subreddit, time_filter):
+        self._controversial = subreddit.controversial(limit = int(search_for), time_filter = time_filter) \
+            if time_filter != None else subreddit.controversial(limit = int(search_for))
         self._hot = subreddit.hot(limit = int(search_for))
         self._new = subreddit.new(limit = int(search_for))
         self._rising = subreddit.rising(limit = int(search_for))
-        self._top = subreddit.top(limit = int(search_for))
+        self._top = subreddit.top(limit = int(search_for), time_filter = time_filter) \
+            if time_filter != None else subreddit.top(limit = int(search_for))
 
         self._switch = {
             0: self._hot,
@@ -118,15 +121,19 @@ class GetPosts():
 
     ### Return PRAW ListingGenerator for searching keywords.
     @staticmethod
-    def _collect_search(search_for, sub, subreddit):
+    def _collect_search(search_for, sub, subreddit, time_filter):
         print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % 
             (sub, search_for))
+        
+        if time_filter != None:
+            print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
 
-        return subreddit.search("%s" % search_for)
+        return subreddit.search("%s" % search_for, time_filter = time_filter) \
+            if time_filter != None else subreddit.search("%s" % search_for)
 
     ### Return PRAW ListingGenerator for all other categories.
     @staticmethod
-    def _collect_others(args, cat_i, search_for, sub, subreddit):
+    def _collect_others(args, cat_i, search_for, sub, subreddit, time_filter):
         category = categories[short_cat.index(cat_i)] if args.subreddit \
             else categories[cat_i]
         index = short_cat.index(cat_i) if args.subreddit else cat_i
@@ -134,16 +141,19 @@ class GetPosts():
         print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
             (search_for, category, sub))
         
-        return GetPostsSwitch(search_for, subreddit).scrape_sub(index)
+        if time_filter != None:
+            print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
+
+        return GetPostsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
 
     ### Get Subreddit posts and return the PRAW ListingGenerator.
     @staticmethod
-    def get(args, reddit, sub, cat_i, search_for):
+    def get(args, reddit, sub, cat_i, search_for, time_filter):
         subreddit = reddit.subreddit(sub)
 
-        return GetPosts._collect_search(search_for, sub, subreddit) \
-            if cat_i == short_cat[5] or cat_i == 5 \
-            else GetPosts._collect_others(args, cat_i, search_for, sub, subreddit)
+        return GetPosts._collect_search(search_for, sub, subreddit, time_filter) \
+            if cat_i == short_cat[5] or cat_i == 5 else \
+                GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, time_filter)
 
 class SortPosts():
     """
@@ -179,12 +189,13 @@ class SortPosts():
     ### Append data to overview dictionary for CSV export.
     def _csv_format(self, overview, post_data):
         for title, data in zip(self._titles, post_data):
-                overview[title].append(data)
+            overview[title].append(data)
 
     ### Append data to overview dictionary for JSON export.
     def _json_format(self, count, overview, post_data):
         overview["Post %s" % count] = {
-            title:value for title, value in zip(self._titles, post_data)}
+            title: value for title, value in zip(self._titles, post_data)
+        }
     
     ### Sort collected dictionary based on export option.
     def sort(self, args, collected):
@@ -213,8 +224,8 @@ class GetSortWrite():
         self._eo = Global.eo
 
     ### Get and sort posts.
-    def _get_sort(self, args, cat_i, reddit, search_for, sub):
-        collected = GetPosts.get(args, reddit, sub, cat_i, search_for)        
+    def _get_sort(self, args, cat_i, reddit, search_for, sub, time_filter):
+        collected = GetPosts.get(args, reddit, sub, cat_i, search_for, time_filter)        
         return SortPosts().sort(args, collected)
 
     ### Export to either CSV or JSON.
@@ -230,20 +241,19 @@ class GetSortWrite():
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
     ### Write posts.
-    def _write(self, args, cat_i, overview, search_for, sub):
-        f_name = Export.NameFile().r_fname(args, cat_i, search_for, sub)
+    def _write(self, args, cat_i, overview, each_sub, sub):
+        f_name = Export.NameFile().r_fname(args, cat_i, each_sub, sub)
         self._determine_export(args, f_name, overview)
         self._print_confirm(args, sub)
 
     ### Get, sort, then write.
     def gsw(self, args, reddit, s_master):
         for sub, settings in s_master.items():
-            for each in settings:
-                cat_i = each[0].upper() if not args.basic else each[0]
-                search_for = each[1]
-
-                overview = self._get_sort(args, cat_i, reddit, search_for, sub)
-                self._write(args, cat_i, overview, search_for, sub)
+            for each_sub in settings:
+                cat_i = each_sub[0].upper() if not args.basic else each_sub[0]
+                
+                overview = self._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
+                self._write(args, cat_i, overview, each_sub, sub)
 
 class RunSubreddit():
     """

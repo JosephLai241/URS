@@ -78,20 +78,20 @@ class TestGetRawNWithSubredditArgs():
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
         cat_i = "S"
         end = "result"
-        search_for = "test"
+        each_sub = ["s", "test", "all"]
         sub = "askreddit"
 
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, search_for, sub) == \
+        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
             "r-askreddit-Search-'test'"
 
     def test_get_raw_n_returns_category_filename_format_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
         cat_i = "H"
         end = "result"
-        search_for = 1
+        each_sub = ["h", "1", None]
         sub = "askreddit"
 
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, search_for, sub) == \
+        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
             "r-askreddit-Hot-1-result"
 
 class TestGetRawNWithBasicArgs():
@@ -104,20 +104,20 @@ class TestGetRawNWithBasicArgs():
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
         cat_i = 5
         end = "result"
-        search_for = "test"
+        each_sub = ["s", "test", "all"]
         sub = "askreddit"
 
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, search_for, sub) == \
+        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
             "r-askreddit-Search-'test'"
 
     def test_get_raw_n_returns_category_filename_format_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
         cat_i = 0
         end = "result"
-        search_for = 1
+        each_sub = ["h", 1, None]
         sub = "askreddit"
 
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, search_for, sub) == \
+        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
             "r-askreddit-Hot-1-result"
 
 class TestRFnameWithSubredditArgs():
@@ -129,28 +129,28 @@ class TestRFnameWithSubredditArgs():
     def test_r_fname_ignores_end_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
         cat_i = "S"
-        search_for = "test"
+        each_sub = ["s", "test", "all"]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, search_for, sub) == \
+        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "r-askreddit-Search-'test'"
 
     def test_r_fname_returns_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
         cat_i = "H"
-        search_for = 5
+        each_sub = ["h", 5, None]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, search_for, sub) == \
+        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "r-askreddit-Hot-5-results"
 
     def test_r_fname_returns_non_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
         cat_i = "H"
-        search_for = 1
+        each_sub = ["h", 1, None]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, search_for, sub) == \
+        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "r-askreddit-Hot-1-result"
     
 class TestRFnameWithBasicArgs():
@@ -162,28 +162,28 @@ class TestRFnameWithBasicArgs():
     def test_r_fname_ignores_end_string_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
         cat_i = 5
-        search_for = "test"
+        each_sub = ["s", "test", "all"]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, search_for, sub) == \
+        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "r-askreddit-Search-'test'"
 
     def test_r_fname_returns_plural_string_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
         cat_i = 0
-        search_for = 5
+        each_sub = ["h", 5, None]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, search_for, sub) == \
+        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "r-askreddit-Hot-5-results"
 
     def test_r_fname_returns_non_plural_string_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
         cat_i = 0
-        search_for = 1
+        each_sub = ["h", 1, None]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, search_for, sub) == \
+        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "r-askreddit-Hot-1-result"
 
 class TestUFname():
