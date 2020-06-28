@@ -1,0 +1,347 @@
+{
+    "dsk9ban": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dsk9ban",
+                "Author": "yawpitch",
+                "Date Created": "01-12-2018 02:44:06",
+                "Upvotes": 11,
+                "Text": "I would first take issue with some of your professor's ideas, if they are correctly reflected in your notes.\n\n> Simplicity: how little the language complicates the problem solving process, how minimal its feature set, and the clarity and consistency of its rules.\n\nBy this definition the simplest human-readable language is Assembly. It has no feature set beyond what the architecture supports, its rules are literally set in silicon, and it can't complicate the problem-solving process, because the ultimate problem *is always* how do we get the correct instruction set into the correct register at the correct time? As a measure it's also not very useful, as it's entirely relative: *simple* to a neophyte of the language, or *simple* to a master of it?\n\n> Orthogonality: refers to the way different constructs can be combined and how these combinations are simple to understand and meaningful in the language. Only works when the language is simple.\n\nInside the context of *any* language, when employed by a putative *master* of that language, *all* legal constructs of that language are simple to understand and meaningful. The idea that orthogonality *only* works or exists when the language is also *simple* as defined above is absurd at first glance. There is no sense in creating a language without constructs, there is no sense in creating constructs without meaning... and, again, simple to understand for the newcomer or simple to understand for the master?\n\n> Expressivity: how flexible the language is in providing concise, different ways of defining algorithms and computations. Often in tension with simplicity and/or orthogonality.\n\nNow we're at least getting to something valuable and potentially quantifiable across languages, as we could take a sample of say 100 algorithms or programs across a 100 different domains and have a master in all languages write a concise implementation in each of them, then compare them. There being (and never likely to be) no such master, though, this is still a pretty hard comparison to make. It does take us a step above ASM, at least, as it's not possible to express the same algorithm with the same concision across architectures... so now you're notes of your prof have at least gotten us up to C.\n\n> Level of abstraction: the degree to which the language allows the definition of powerful data abstractions that approximate the constructs in the problem domain.\n\nI would say this is an entirely incomplete and simplistic definitions of level of abstraction, as a concept. Data constructs are only a small portion of the problem of abstraction, and arguably the vast majority of the time the highest level of data abstraction required would be integers, floats, booleans, strings, and arrays of the preceding. The bigger problem is hardware abstraction; allowing you to think about the problem in your domain instead of the problem of expressing your domain in a long series of 0s and 1s.\n\n> Portability: the degree to which a program can be transported from system to system.\n\nThis one is **really** in tension with simplicity and orthogonality, as defined in your notes. To the point where I'd say any language that is at all portable must by definition be not simple, and hence by definition not orthogonal. Abstraction of hardware allows for (but doesn't imply) portability... but again, how do you quantify this at the language level? C, for instance, is only as portable as it's underlying compilers are compliant with the language standard on each platform... historically Windows and Literally Everyone Else haven't exactly been lockstep on that. Does the concept of portability not inherently make assumptions about tooling that isn't, strictly speaking, the language itself? Also, in this day and age, is portability really a key question? Who cares if it will run on Nokia 2600 if it will run on a server somewhere that the 2600 can connect to? A language very often doesn't itself need to be portable anymore, if it offers a means to serve an API.\n\n> Cost: cost of development, compilation, maintenance, execution, etc.\n\nAhh, finally back to quantifiable, and for the first time to *practically* quantifiable... though these all, again, come down to a question of how adept the hypothetical practitioner is, and also implies the complicating factor of just how much that practitioner is paid per hour for the adeptness.",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ],
+        {
+            "dsk9bw7": [
+                {
+                    "Parent ID": "t1_dsk9ban",
+                    "Comment ID": "dsk9bw7",
+                    "Author": "yawpitch",
+                    "Date Created": "01-12-2018 02:44:41",
+                    "Upvotes": 6,
+                    "Text": "So... to Python.\n\n1. Simplicity: the primary reason for Python's popularity is it's linguistic simplicity... it was designed by a linguist for the purposes of being as easily readable as possible to a person reasonably adept in English (or other languages into which it is translated). It's grammar is relatively simple, there are only 31 *reserved keywords* in Python 2.7 (don't have access to 3.6 on my phone, but I think they added only a few for async), and everything else is an *object* to be acted upon. Though it is a language with a fair number of features, those features are for the most part common to all higher-level languages. For the neophyte I'd say Python would appear to be *very* simple, if not the simplest language... for a master, I'd say that number would drop, as the simple grammar gives way to features in the language that help people with limited knowledge and easy problems but hinder those with advanced knowledge and complex problems.\n\n2. Orthogonality: Python is very good in this regard... arguably perhaps too good. Unlike in other languages, one can combine just about anything with just about anything in Python ... which means that the neophyte will combine things the master knows not to, and will do so often and readily. Python offers all the building blocks required, and via its C foreign function interface offers access to pretty much all the building blocks available ... but more modern languages have abandoned a lot of that orthogonality-friendly thinking in favor of predictability, testability, and maintainability. I'd argue that Python offers too many orthogonal constructs, and that things like multiple inheritance have allowed even masters to find themselves way the hell out in the weeds. In other words a high mark here isn't necessarily a good thing.\n\n3. Expressivity: for most problems, and especially when you allow for the use of high quality 3rd party libraries, Python is extremely expressive. In many languages it can take a minimum of four lines of code just to print \"Hello, world\" to screen... that is not as concise as Python. However without the ecosystem of libraries that expressivity and concision breaks down rapidly as the problem domain gets more complex. If recursion is required, Haskell is vastly more expressive, if low level memory access is required Rust is far superior ... generally speaking though, Python is fairly expressive, and often much more so than the other general languages to which it is most often competing in a given domain. The lower-level the problem, though, the less the form of that expressivity is a virtue.\n\n4. Level of Abstraction: on this one I'd give Python top marks, especially when t comes to data abstraction. Pretty much any data structure can be well- and concisely- defined in Python, and with sufficient use of magic methods interactions with that data type can be made extremely low friction... but this definition in no way touches on whether or not they're performant, just that they're powerful. Powerful, Python can do ... fast, not always so much with the True is.\n\n5. Portability: for the main OS offerings out there, Python the language is extremely portable, while Python the tooling is portable, but not as simple to install in Windows as it should be. It's actually a victim of its own success in this area; Python itself is so portable that you never know what version interpreter it might be running on on any given machine, and it has no mechanism for specifying what version interpreter it needs to be run upon. When you realize that Python2 and Python3 are two discreet languages, both with high portability but a terribly fractured update model for the underlying interpreter, it gets easy to see that the promise of portability isn't quite the same as a reliable process for it. That said, C isn't at all portable in practice (the code is, the makefile isn't), C++ is chock full of workarounds for different OS ... arguably the language is only as portable as it's artifacts are cross-compilable and static, which means that Rust is kind of the closest to being meaningfully portable, though the build toolchain for each OS isn't. Again, though, portability isn't as much of a concern as it used to be, and Python avec Flask is a very good way to provide a function that answers questions portably without having to be installed or installable everywhere.\n\n6. Cost. Ahh, the big one. Python gets very high marks for prototyping ... in terms of time to market or amount of delay before feature release Python is, arguably, as fast as it can reasonably get. Now, that's a prototype... that's not a fully tested, fully -- nevermind well or easily -- maintainable, or well documented product. Python is *very* good at iterating rapidly, but that does not make it very cheap on the long run. It's easy to introduce an entire class of bugs in Python that are effectively impossible in compiled, statically- and strongly- typed languages. It's also so accessible that many programmers out there haven't got the experience to write refactorable or sensible code, but instead just functional code... when the time comes to fix something your organization will spend more doing that then it likely saved writing it poorly the first time. Python to a very high degree rapidly enables terrible programmers to iterate rapidly towards delivering terrible products that *apparently* work, and then when it actually breaks it'll take months to figure out why, because `except: pass` is, for some godforsaken reason, valid Python. Arguably Python is damned near the cheapest to develop with, essentially free to compile, has a maintenance cost that increases as a logarithm of the inverse of the maturity of the developer, and a cost to run that is entirely determined by what sort of hotspots exist and how many of them can be offloaded to things like Numpy. In practice low development costs are often a false economy that get swamped by long term support, and decisions inherent to Python's design make it better at feature churn than feature validation, so I'd give it a lower mark the larger and more stable the solution *needs* to be.",
+                    "Edited?": "01-12-2018 08:08:49",
+                    "Is Submitter?": false,
+                    "Stickied?": false
+                },
+                {
+                    "dskh9u1": [
+                        {
+                            "Parent ID": "t1_dsk9bw7",
+                            "Comment ID": "dskh9u1",
+                            "Author": "[deleted]",
+                            "Date Created": "01-12-2018 07:58:03",
+                            "Upvotes": 1,
+                            "Text": "> It's easy to introduce an entire class of bugs in Python that are effectively impossible in compiled, strictly-typed languages\n\n1. Python is compiled.\n2. What does strictly typed mean?  Python is dynamically and strongly typed, c.f. C(++) which is statically but weakly typed.",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "dska28w": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dska28w",
+                "Author": "kigurai",
+                "Date Created": "01-12-2018 03:12:11",
+                "Upvotes": 5,
+                "Text": "> tl;dr With respect to the above criteria, why are some programmers so... excited about programming in Python?\n\nFor me it wins because of two things:\n\n1. It is easy to express ideas and iterate on them quickly. I guess this stems partly from the nice syntax, but also because a lot of boilerplate stuff is available in libraries.\n1. Social momentum. These days there is almost always a library that does what I need.",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ]
+    ],
+    "dskdoon": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dskdoon",
+                "Author": "xix_xeaon",
+                "Date Created": "01-12-2018 05:47:41",
+                "Upvotes": 3,
+                "Text": "As always when asking the question about how good something is, you first have to ask \"for what\".\n\nFrom your notes it seems your professor doesn't really care about how good a language is for solving an actual problem in real life, except for the last point about cost which seems tacked on.\n\nI'd say that if your professor enjoys programming then it's for the programming itself, not in order to accomplish anything, like some people enjoy solving a rubik's cube. There's nothing wrong with that, but I'd say that generally speaking the point of programming is to accomplish something, and how good the language is is determined by how well you can do that.\n\nThen that means that different languages are good for accomplishing different things. And there are many things to consider. Often we look at the language itself - grammar and built in functionality. But so many other things are important. PHP is an example of a language a lot of people don't like, but it may still be a good language to build a CMS on if you intend to sell it as a product, because essentially all your potential customers will have a hosting service able to run it.\n\nPython is loved by many because it's easy to learn, highly productive and with community libraries (and c extensions) both \na powerful and a high performance language.\n\nWith Python you \"get shit done\", and that's why it's my preferred language. I don't think it's fair to say that statically typed languages are inherently more stable, or that Python is too easy and a bunch of low skill programmers create hard to maintain code with it. You can just as easily say that less code (compared to statically typed) means fewer errors and that Python allows lots of code (which works just fine) to be written that otherwise might never have come to be.",
+                "Edited?": "01-12-2018 05:51:47",
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ],
+        {
+            "dskhifp": [
+                {
+                    "Parent ID": "t1_dskdoon",
+                    "Comment ID": "dskhifp",
+                    "Author": "[deleted]",
+                    "Date Created": "01-12-2018 08:04:58",
+                    "Upvotes": 2,
+                    "Text": "> I don't think it's fair to say that statically typed languages are inherently more stable\n\nI do wish that people would stop using this type (groan :-) of phrase, weakly and strongly typed are far more important.  C is statically but weakly typed and is renowned for a whole pile of potential errors, with the dread off-by-one perhaps being the most famous.",
+                    "Edited?": false,
+                    "Is Submitter?": false,
+                    "Stickied?": false
+                },
+                {
+                    "dskyh8p": [
+                        {
+                            "Parent ID": "t1_dskhifp",
+                            "Comment ID": "dskyh8p",
+                            "Author": "attrigh",
+                            "Date Created": "01-12-2018 13:18:52",
+                            "Upvotes": 1,
+                            "Text": "> weakly and strongly typed are far more important\n\nAre you sure about that? I think one of the benefits of static typing is that it acts as a form of documentation by smearing \"execution information\" all over you code.\n\nI'm also not sure what \"duck typing\" means for \"strong typing\". In python you can't add a string and an integer... but you can pass the wrong object into a method and find out in an obscure way 20 calls later.",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "dskfwzu": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dskfwzu",
+                "Author": "jfishersolutions",
+                "Date Created": "01-12-2018 07:14:44",
+                "Upvotes": 3,
+                "Text": "Python does everything it was designed to do very well. What it lacks is speed of code execution, not a huge deal, but in regards to trading systems which benefit from executing timing it would be nice. Then again, given how abstracted the language is (which again was part of its raison d'etre) it executes well.",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ]
+    ],
+    "dsk82mb": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dsk82mb",
+                "Author": "chaotic_thought",
+                "Date Created": "01-12-2018 02:00:44",
+                "Upvotes": 2,
+                "Text": "Does a 5 for cost mean high cost or low cost? The scoring needs to be clear for it to mean anything. E.g. 1 = very low cost of development ... 5 = very high cost of development, 1 = very simple, pseudocode-like code, 5 = obscure code, far removed from the typical thinking process. Etc.",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ]
+    ],
+    "dsk87sz": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dsk87sz",
+                "Author": "tdammers",
+                "Date Created": "01-12-2018 02:05:38",
+                "Upvotes": 1,
+                "Text": "Python is not a very good programming language by these criteria. Its advantages are not technical ones: it is not a simple language (compared to, say, Scheme, which sits in a similar spot in the design spectrum, Python is considerably less expressive and uses a lot more concepts and syntax constructs), the existing implementations are not fast, it is not a very safe language, there are lots of pitfalls once you're past the initial stages of learning, it does not incorporate much of modern language design insights, etc. etc.\n\nBut Python wins its battle on social grounds.\n\nThe two most important factors to its success are its low threshold for beginners, and the vast library ecosystem.\n\nBeginner threshold is important because it makes the language accessible, and useful for people who are not full time programmers - people like business analysts, sysadmins, data scientists, etc., who cannot afford to spend months learning a programming language just to write a bit of casual automation of their daily work here and there. Python, with its heritage as a toy language for teaching basic programming concepts, fits the bill rather well, and remains useful long enough to outcompete other languages until the point where standard approaches no longer work anyway.\n\nThe library ecosystem is probanly the most whopping advantage though. No matter how awesome a language is, if it doesn't have a library for X, and the other language does, then you win.\n\nPython-the-language is kind of \"meh\"; but Python-the-full-package, ecosystem and all, is pretty damn powerful.",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ],
+        {
+            "dskhcv7": [
+                {
+                    "Parent ID": "t1_dsk87sz",
+                    "Comment ID": "dskhcv7",
+                    "Author": "[deleted]",
+                    "Date Created": "01-12-2018 08:00:29",
+                    "Upvotes": 3,
+                    "Text": "> it is not a very safe language\n\nComplete nonsense.  Give me Python's strong typing against C's weak typing any day of the week.",
+                    "Edited?": false,
+                    "Is Submitter?": false,
+                    "Stickied?": false
+                },
+                {
+                    "dskhya5": [
+                        {
+                            "Parent ID": "t1_dskhcv7",
+                            "Comment ID": "dskhya5",
+                            "Author": "tdammers",
+                            "Date Created": "01-12-2018 08:17:22",
+                            "Upvotes": 0,
+                            "Text": "C is not a bit safer than Python, and I never claimed otherwise. Just that Python isn't a very safe language.",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "dskhk4f": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dskhk4f",
+                "Author": "[deleted]",
+                "Date Created": "01-12-2018 08:06:18",
+                "Upvotes": 1,
+                "Text": "Six criteria at five points each so I'll give it 36 :-)",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ]
+    ],
+    "dskvjiz": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dskvjiz",
+                "Author": "EmberQuill",
+                "Date Created": "01-12-2018 12:31:49",
+                "Upvotes": 1,
+                "Text": "I'm honestly not sure how to rate some of these. Half of them seem irrelevant or only tangentially related to the reasons why I would consider a language \"good\". Perhaps if you mentioned some of the languages your professor actually rates highly, I could explain why he rates Python low.\n\nLevel of abstraction I'd give a 5/5, but again, it's good for what it does but sometimes you don't want that abstraction. C for example I'd give a 1/5 but that doesn't mean it's a bad language either.\n\nPortability's a 5/5. Python can run on pretty much anything so long as someone's bothered to port the interpreter to the platform.\n\nCost? Cost of development? Not sure what exactly that means. Compilation? Python is an interpreted language. Cost of maintenance? Cost in what? Hours of time spent, processor capacity for execution? No idea.\n\nAnyway, here's why I think Python is a good language (these reasons are entirely subjective though):\n\n- Cross-platform. Like I said above, it runs on nearly everything.\n- Flexible, expressive, and easy to learn\n- Large community. If I have a question about something, somebody somewhere has the answer.\n- It's FOSS and although it uses its own specific license, it's GPL-compatible.\n- Various language-specific features. I really like Python's list comprehensions, slices and negative indices, generators, strong+dynamic typing, variable unpacking, etc. I like how easy it is to install modules with pip and the PyPI. I like how I can write code that will run on pretty much anything without having to go through the trouble of porting it. I could go on for a while.",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ]
+    ],
+    "dslcjd7": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dslcjd7",
+                "Author": "Paddy3118",
+                "Date Created": "01-12-2018 17:08:33",
+                "Upvotes": 1,
+                "Text": "Some comparisons too:\n\n1. Simplicity: very high compared to, say, Java where you need to learn OO; or C where you need a deeper understanding of the hardware and pointers. `print(\"hello World\")`\n2. Orthogonality: high. Protocols such as the iterator protocol allow you to write your classes that behave like in-built iterators.\n3. Expressivity: medium++. Close to pseudo-code for a lot of developers if need be. Does not follow the Perl \"more than one way to do it\", but havung one *preferred* way can be a boon. Multi paradigm support.\n4. Level of abstraction. High. What you would not want to do in Python, you can wrap another languages implementation in Python.\n5. Portability: High. Language and libraries written to work on multiple platforms, from embedded systems to supercomputers. You can write programs to execute on multiple platforms without change.\n6. Cost: low. Conciseness leads to one being able to try different approaches in a given time; no compilation; The language and community ethos value maintainability and use this tho shape language development. Execution: It is a scripting language - what is deemed too slow to be written in Python can be written in other languages and wrapped in Python - what you see is Python.\n\nYour professor is entitled to his opinion; I just get my work done using Python. (And TCL and awk and perl and bash and verilog and ...)\n",
+                "Edited?": "01-12-2018 17:11:44",
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ]
+    ],
+    "dsk6ifb": [
+        [
+            {
+                "Parent ID": "t3_7puk6t",
+                "Comment ID": "dsk6ifb",
+                "Author": "Bphunter1972",
+                "Date Created": "01-12-2018 01:12:23",
+                "Upvotes": -2,
+                "Text": "He doesn\u2019t like Python? I think your professor kinda sucks. Maybe that\u2019s why he teaches for a living instead of doing. \n\nPython would score highly in each of these. And more than most \u201csimple\u201d languages (<cough> Perl), it scales up very nicely. That is, you can use Python in a simple manner and solve a problem, or you can attack some of the more complex features it offers and still have an elegant solution. \n\nMaybe you should look into the 6 criteria for choosing a computer science professor?\n",
+                "Edited?": false,
+                "Is Submitter?": false,
+                "Stickied?": false
+            }
+        ],
+        {
+            "dsk6te9": [
+                {
+                    "Parent ID": "t1_dsk6ifb",
+                    "Comment ID": "dsk6te9",
+                    "Author": "[deleted]",
+                    "Date Created": "01-12-2018 01:21:18",
+                    "Upvotes": 3,
+                    "Text": "I mean, he has his reasons, which he gladly elaborated on. I would be surprised if I never met someone who didn't like Python, to be fair. People have their own criterion, beyond the ones in this post, for judging whether a language is \"good\" and Python simply doesn't meet his. ",
+                    "Edited?": false,
+                    "Is Submitter?": false,
+                    "Stickied?": false
+                },
+                {
+                    "dskhoey": [
+                        {
+                            "Parent ID": "t1_dsk6te9",
+                            "Comment ID": "dskhoey",
+                            "Author": "[deleted]",
+                            "Date Created": "01-12-2018 08:09:44",
+                            "Upvotes": 1,
+                            "Text": "There are plenty of people who don't like Python.  Perhaps the biggest bunch are those who don't like the whitespace indentation, preferring all those stupid curly wurly brackets that are often plain wrong anyway.",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                },
+                {
+                    "dsk6z6u": [
+                        {
+                            "Parent ID": "t1_dsk6te9",
+                            "Comment ID": "dsk6z6u",
+                            "Author": "Bphunter1972",
+                            "Date Created": "01-12-2018 01:26:02",
+                            "Upvotes": 0,
+                            "Text": "True. Everyone is entitled to their opinion. But some opinions are more wrong than others. \ud83d\ude00",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "dsk9liu": [
+                {
+                    "Parent ID": "t1_dsk6ifb",
+                    "Comment ID": "dsk9liu",
+                    "Author": "Scypio",
+                    "Date Created": "01-12-2018 02:54:38",
+                    "Upvotes": 3,
+                    "Text": "> Maybe that\u2019s why he teaches for a living instead of doing\n\n:(\n\nI love teaching programming to people. Python is my *lingua franca* for work, hobby and showing programming to non-tech people. ",
+                    "Edited?": false,
+                    "Is Submitter?": false,
+                    "Stickied?": false
+                }
+            ]
+        },
+        {
+            "dsk72tf": [
+                {
+                    "Parent ID": "t1_dsk6ifb",
+                    "Comment ID": "dsk72tf",
+                    "Author": "[deleted]",
+                    "Date Created": "01-12-2018 01:29:01",
+                    "Upvotes": 1,
+                    "Text": "Also, it seems like you're quite a fan of Python but I'm wondering if you think its simple syntax comes at a cost. Do you think it limits problem solving options? I've been wondering what effect it has on the programming process, aside from the standard productivity, readability, etc.",
+                    "Edited?": false,
+                    "Is Submitter?": false,
+                    "Stickied?": false
+                },
+                {
+                    "dsk8xn5": [
+                        {
+                            "Parent ID": "t1_dsk72tf",
+                            "Comment ID": "dsk8xn5",
+                            "Author": "thatguy_314",
+                            "Date Created": "01-12-2018 02:30:32",
+                            "Upvotes": 2,
+                            "Text": "Python has a lot of powerful tools under the hood.  Not many languages have an equivalent to Python's metaclasses for example.  More practically, look at Python's iteration protocol for an example of Python's power.  Beginners don't need to worry about it, the `for` loop tends to work very intuitively.  But even if you want to create custom iterators, Python continues to provide useful abstractions (generators) over its class-based iteration protocol (which is itself elegant IMO).\n\nOne of the biggest things Python has going for it though is the huge number of excellent, well-maintained third-party libraries and tools which span a wide range of problem domains from scientific computing to web development.\n\nIt is true that Python's flexability comes at some cost.  Certainly Python is not known for being a particularly fast language, and there are some maintainance costs as well.  Also, the syntax itself prevents things like multi-line lambdas from ever coming to the language.  Overall though, I think Python is a fantastic language for many problem domains.",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                },
+                {
+                    "dskh4bw": [
+                        {
+                            "Parent ID": "t1_dsk72tf",
+                            "Comment ID": "dskh4bw",
+                            "Author": "pooogles",
+                            "Date Created": "01-12-2018 07:53:28",
+                            "Upvotes": 1,
+                            "Text": ">...but I'm wondering if you think its simple syntax comes at a cost. Do you think it limits problem solving options?\n\nCome over to /r/clojure and we'll show you simple syntax.\n\nAnd no it doesn't affect readability or productivity.  Most people would say it helps both of those.\n",
+                            "Edited?": false,
+                            "Is Submitter?": false,
+                            "Stickied?": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

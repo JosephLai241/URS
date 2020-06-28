@@ -1,0 +1,100 @@
+*NOTE: Lines starting with `###` are just comments explaining the different types of log messages you might see when using URS. You will not see these comments in your log file.
+
+### The message if you use the help flag or do not enter any args.
+
+[2020-06-27 19:42:50,012] [INFO]: INITIALIZING URS.
+[2020-06-27 19:42:50,012] [INFO]: 
+[2020-06-27 19:42:50,034] [INFO]: HELP WAS DISPLAYED.
+
+### A common error message if you provide invalid PRAW credentials.
+
+[2020-06-27 19:43:09,351] [INFO]: INITIALIZING URS.
+[2020-06-27 19:43:09,351] [INFO]: 
+[2020-06-27 19:43:09,803] [CRITICAL]: LOGIN FAILED.
+[2020-06-27 19:43:09,804] [CRITICAL]: PRAWCORE EXCEPTION: invalid_grant error processing request.
+
+### This is another common error message that may appear if you provide invalid PRAW credentials.
+
+[2020-06-27 19:43:10,531] [INFO]: INITIALIZING URS.
+[2020-06-27 19:43:10,531] [INFO]: 
+[2020-06-27 19:43:10,782] [CRITICAL]: LOGIN FAILED.
+[2020-06-27 19:43:10,782] [CRITICAL]: PRAWCORE EXCEPTION: received 401 HTTP response.
+
+### The error message if you provide valid PRAW credentials but enter invalid arguments.
+
+[2020-06-27 19:43:27,018] [INFO]: INITIALIZING URS.
+[2020-06-27 19:43:27,018] [INFO]: 
+[2020-06-27 19:43:27,725] [INFO]: Successfully logged in as u/urs_project.
+[2020-06-27 19:43:27,730] [INFO]: 
+[2020-06-27 19:43:27,755] [CRITICAL]: INVALID ARGUMENTS GIVEN.
+
+### The error message if you have reached your rate limit. An example date is given.
+
+[2020-06-27 19:44:19,595] [INFO]: INITIALIZING URS.
+[2020-06-27 19:44:19,596] [INFO]: 
+[2020-06-27 19:44:20,490] [CRITICAL]: RATE LIMIT REACHED. RATE LIMIT WILL RESET AT 06-27-2020 19:50:00.
+
+### The message if you decide to decline current Subreddit scraping settings.
+
+[2020-06-27 19:45:20,490] [INFO]: Initializing URS...
+[2020-06-27 19:45:20,490] [INFO]: 
+[2020-06-27 19:45:20,731] [INFO]: Successfully logged in as u/urs_project
+[2020-06-27 19:45:20,731] [INFO]: 
+[2020-06-27 19:45:20,731] [INFO]: Running Subreddit scraper...
+[2020-06-27 19:45:21,120] [INFO]: 
+[2020-06-27 19:45:21,120] [INFO]: SUBREDDIT SCRAPING CANCELLED BY USER.
+
+### Normal operation log.
+
+[2020-06-27 20:03:03,424] [INFO]: INITIALIZING URS.
+[2020-06-27 20:03:03,424] [INFO]: 
+[2020-06-27 20:03:04,120] [INFO]: Successfully logged in as u/urs_project.
+[2020-06-27 20:03:04,121] [INFO]: 
+[2020-06-27 20:03:04,123] [INFO]: RUNNING SUBREDDIT SCRAPER.
+[2020-06-27 20:03:04,124] [INFO]: 
+[2020-06-27 20:03:06,776] [INFO]: Scraping r/askreddit for 10 Hot results...
+[2020-06-27 20:03:06,776] [INFO]: 
+[2020-06-27 20:03:06,776] [INFO]: Getting posts from the past year for Controversial results.
+[2020-06-27 20:03:06,776] [INFO]: Scraping r/dankmemes for 15 Controversial results...
+[2020-06-27 20:03:06,776] [INFO]: 
+[2020-06-27 20:03:06,776] [INFO]: Getting posts from the past month for Search results.
+[2020-06-27 20:03:06,776] [INFO]: Searching and scraping r/news for posts containing 'united states of america'...
+[2020-06-27 20:03:06,777] [INFO]: 
+[2020-06-27 20:03:06,777] [INFO]: SUBREDDIT SCRAPER FINISHED IN 2.65 SECONDS.
+[2020-06-27 20:03:06,777] [INFO]: 
+[2020-06-27 20:03:06,777] [INFO]: Exporting to JSON.
+[2020-06-27 20:03:06,777] [INFO]: 
+[2020-06-27 20:03:06,777] [INFO]: RUNNING REDDITOR SCRAPER.
+[2020-06-27 20:03:06,777] [INFO]: 
+[2020-06-27 20:04:34,461] [INFO]: Scraping 5 results for u/spez...
+[2020-06-27 20:04:34,461] [INFO]: 
+[2020-06-27 20:04:34,461] [INFO]: REDDITOR SCRAPER FINISHED IN 87.68 SECONDS.
+[2020-06-27 20:04:34,462] [INFO]: 
+[2020-06-27 20:04:34,462] [INFO]: Exporting to JSON.
+[2020-06-27 20:04:34,462] [INFO]: 
+[2020-06-27 20:04:34,462] [INFO]: RUNNING COMMENTS SCRAPER.
+[2020-06-27 20:04:34,462] [INFO]: 
+[2020-06-27 20:04:35,722] [INFO]: Processing 10 comments in structured format from Reddit post https://www.reddit.com/r/Python/comments/7puk6t/opinion_how_is_python_a_good_language/
+[2020-06-27 20:04:35,722] [INFO]: 
+[2020-06-27 20:04:35,722] [INFO]: COMMENTS SCRAPER FINISHED IN 1.26 SECONDS.
+[2020-06-27 20:04:35,723] [INFO]: 
+[2020-06-27 20:04:35,723] [INFO]: Exporting to JSON.
+[2020-06-27 20:04:35,723] [INFO]: 
+[2020-06-27 20:04:35,724] [INFO]: URS COMPLETED SCRAPES IN 92.30 SECONDS.
+
+### Message for raw comments export (structured export example above).
+
+[2020-06-27 20:05:39,092] [INFO]: INITIALIZING URS.
+[2020-06-27 20:05:39,092] [INFO]: 
+[2020-06-27 20:05:39,871] [INFO]: Successfully logged in as u/urs_project.
+[2020-06-27 20:05:39,872] [INFO]: 
+[2020-06-27 20:05:39,874] [INFO]: RUNNING COMMENTS SCRAPER.
+[2020-06-27 20:05:39,874] [INFO]: 
+[2020-06-27 20:05:41,178] [INFO]: Processing all comments in raw format from Reddit post https://www.reddit.com/r/Python/comments/7puk6t/opinion_how_is_python_a_good_language/
+[2020-06-27 20:05:41,178] [INFO]: 
+[2020-06-27 20:05:41,178] [INFO]: COMMENTS SCRAPER FINISHED IN 1.30 SECONDS.
+[2020-06-27 20:05:41,178] [INFO]: 
+[2020-06-27 20:05:41,179] [INFO]: Exporting to JSON.
+[2020-06-27 20:05:41,179] [INFO]: 
+[2020-06-27 20:05:41,180] [INFO]: URS COMPLETED SCRAPES IN 2.09 SECONDS.
+
