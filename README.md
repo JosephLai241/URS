@@ -251,7 +251,7 @@ Comments scraping is especially easier to read because structured exports look s
 
 You can still export Redditor data and submission comments to CSV, but you will be disappointed with the results.
 
-### See the [samples][Samples] for scrapes ran on June 14, 2020.
+### See the [samples][Samples] for scrapes ran on June 27, 2020.
 
 # Some Linux Tips
 
