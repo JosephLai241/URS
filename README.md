@@ -4,14 +4,15 @@
      \ \____/\ \_\\/\____/
       \/___/  \/_/ \/___/... Universal Reddit Scraper 
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?style=for-the-badge&logo=Python&logoColor=white)
-[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=for-the-badge&logo=reddit&logoColor=white)][PRAW]
-[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=for-the-badge&logo=travis-ci&logoColor=white)][Travis CI Build Status]
-[![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=codecov&logoColor=white&style=for-the-badge)][Codecov]
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS?style=for-the-badge)][Releases]
-![License](https://img.shields.io/github/license/JosephLai241/URS?style=for-the-badge)
-[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=for-the-badge&logo=ProtonMail&logoColor=white)][URS Project Email]
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=for-the-badge)][Say Thanks!]
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?style=flat-square&logo=Python)
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=flat-square&logo=Reddit)][PRAW]
+[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=flat-square&logo=Travis)][Travis CI Build Status]
+[![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov&style=flat-square)][Codecov]
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS?style=flat-square)][Releases]
+![License](https://img.shields.io/github/license/JosephLai241/URS?style=flat-square)
+
+[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=flat-square&logo=ProtonMail)][URS Project Email]
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=flat-square)][Say Thanks!]
 
 <p align="center"> 
     <img src="https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif">
