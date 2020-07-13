@@ -16,7 +16,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,10 +29,10 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
+        pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
-    - name: Export Python path
+    - name: Export PYTHONPATH
       run: |
         echo "::set-env name=PYTHONPATH::$PYTHONPATH:$(pwd)"
       
