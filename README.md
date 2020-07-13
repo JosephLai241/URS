@@ -19,7 +19,7 @@
     <img src="https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif">
 </p>
 
-## Table of Contents
+# Table of Contents
 
 * [Introduction](#introduction)
 * [Contributing](#contributing)
