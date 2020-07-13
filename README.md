@@ -7,6 +7,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?style=flat-square&logo=Python)
 [![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=flat-square&logo=Reddit)][PRAW]
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=flat-square&logo=Travis)][Travis CI Build Status]
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github&style=flat-square)][Github Actions - Pytest]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov&style=flat-square)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS?style=flat-square)][Releases]
 ![License](https://img.shields.io/github/license/JosephLai241/URS?style=flat-square)
@@ -293,6 +294,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 [Releases]: https://github.com/JosephLai241/URS/releases
 [Say Thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/URS
+[Github Actions - Pytest]: https://github.com/JosephLai241/URS/actions?query=workflow%3APytest
 [URS Project Email]: mailto:urs_project@protonmail.
 
 <!-- DEMO GIFS: Links to demo GIFS -->
