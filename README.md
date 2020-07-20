@@ -4,16 +4,16 @@
      \ \____/\ \_\\/\____/
       \/___/  \/_/ \/___/... Universal Reddit Scraper 
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?style=flat-square&logo=Python)
-[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?style=flat-square&logo=Reddit)][PRAW]
-[![Build Status](https://img.shields.io/travis/JosephLai241/URS?style=flat-square&logo=Travis)][Travis CI Build Status]
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github&style=flat-square)][Github Actions - Pytest]
-[![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov&style=flat-square)][Codecov]
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS?style=flat-square)][Releases]
-![License](https://img.shields.io/github/license/JosephLai241/URS?style=flat-square)
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?logo=Python)
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?logo=Reddit)][PRAW]
+[![Build Status](https://img.shields.io/travis/JosephLai241/URS?logo=Travis)][Travis CI Build Status]
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][Github Actions - Pytest]
+[![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
+![License](https://img.shields.io/github/license/JosephLai241/URS)
 
-[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?style=flat-square&logo=ProtonMail)][URS Project Email]
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue?style=flat-square)][Say Thanks!]
+[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?logo=ProtonMail)][URS Project Email]
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue)][Say Thanks!]
 
 <p align="center"> 
     <img src="https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif">
