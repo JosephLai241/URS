@@ -275,6 +275,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 | Date           | User                                                      | Contribution                                                                                                               |
 |----------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | March 11, 2020 | [ThereGoesMySanity][ThereGoesMySanity] | Created a [pull request][ThereGoesMySanity Pull Request] adding 2FA information to Readme |
+| October 6, 2020 | [LukeDSchenk][LukeDSchenk] | Created a [pull request][LukeDSchenk Pull Request] fixing "[Errno 36] File name too long" issue, making it impossible to save comment scrapes with long titles |
 
 # Releases
 
@@ -323,3 +324,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 <!-- ThereGoesMySanity: Links for user ThereGoesMySanity's account and pull request -->
 [ThereGoesMySanity]: https://github.com/ThereGoesMySanity
 [ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/URS/pull/9
+
+<!-- LukeDSchenk: Links for user LukeDSchenk and pull request -->
+[LukeDSchenk]: https://github.com/LukeDSchenk
+[LukeDSchenk Pull Request]: https://github.com/JosephLai241/URS/pull/19
