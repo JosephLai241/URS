@@ -16,11 +16,18 @@ class NameFile():
     def __init__(self):
         self._illegal_chars = re.compile("[@!#$%^&*()<>?/\\\\|}{~:+`=]")
 
+    ### Verify f_name is not too long.
+    def _check_len(self, name):
+        if len(name) > 50:
+            return name[0:48] + '--'
+
+        return name
+
     ### Fix f_name if illegal filename characters are present.
     def _fix(self, name):
-        fixed = ["_" if self._illegal_chars.search(char) != None 
+        fixed = ["_" if self._illegal_chars.search(char) != None
             else char for char in name]
-        
+
         return "".join(fixed)
 
     ### Category name switch.
@@ -72,7 +79,7 @@ class NameFile():
             index = 0 if cat_i == Global.short_cat[5] or cat_i == 5 else 1
         else:
             index = 2 if cat_i == Global.short_cat[5] or cat_i == 5 else 3
-        
+
         return self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
 
     ### Determine file name format for Subreddit scraping.
@@ -82,6 +89,7 @@ class NameFile():
             else "results"
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
+        raw_n = self._check_len(raw_n)
         f_name = self._fix(raw_n)
 
         return f_name
@@ -90,6 +98,7 @@ class NameFile():
     def u_fname(self, limit, string):
         end = "result" if int(limit) < 2 else "results"
         raw_n = str(("u-%s-%s-%s") % (string, limit, end))
+        raw_n = self._check_len(raw_n)
 
         return self._fix(raw_n)
 
@@ -100,7 +109,9 @@ class NameFile():
             raw_n = str(("c-%s-%s-%s") % (string, limit, end))
         else:
             raw_n = str(("c-%s-%s") % (string, "RAW"))
-        
+
+        raw_n = self._check_len(raw_n)
+
         return self._fix(raw_n)
 
 class Export():
@@ -129,7 +140,7 @@ class Export():
 
         return dir_path + "/%s.json" % f_name if f_type == Global.eo[1] else \
             dir_path + "/%s.csv" % f_name
-        
+
     ### Write overview dictionary to CSV or JSON.
     @staticmethod
     def export(f_name, f_type, overview):
