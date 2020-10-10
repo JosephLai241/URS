@@ -51,10 +51,12 @@ class PrintConfirm():
     def _print_each(args, pretty_subs, s_master):
         for sub, settings in s_master.items():
             for each_sub in settings:
-                cat_i = short_cat.index(each_sub[0].upper()) if not args.basic \
+                cat_i = short_cat.index(each_sub[0].upper()) \
+                    if not args.basic \
                     else each_sub[0]
-                time_filter = each_sub[2].capitalize() if each_sub[2] != None else \
-                    each_sub[2]
+                time_filter = each_sub[2].capitalize() \
+                    if each_sub[2] != None \
+                    else each_sub[2]
                 
                 pretty_subs.add_row([sub, categories[cat_i], time_filter, each_sub[1]])
 
@@ -62,12 +64,17 @@ class PrintConfirm():
     @staticmethod
     def print_settings(args, s_master):
         print(Fore.CYAN + Style.BRIGHT + "\nCurrent settings for each Subreddit")
+
         pretty_subs = PrettyTable()
-        pretty_subs.field_names = ["Subreddit", "Category", "Time Filter",
+        pretty_subs.field_names = [
+            "Subreddit", 
+            "Category", 
+            "Time Filter",
             "Number of results / Keywords"]
 
         PrintConfirm._print_each(args, pretty_subs, s_master)
         pretty_subs.align = "l"
+
         print(pretty_subs)
 
     ### Confirm scraping options.
@@ -95,12 +102,14 @@ class GetPostsSwitch():
     ### Initialize objects that will be used in class methods.
     def __init__(self, search_for, subreddit, time_filter):
         self._controversial = subreddit.controversial(limit = int(search_for), time_filter = time_filter) \
-            if time_filter != None else subreddit.controversial(limit = int(search_for))
+            if time_filter != None \
+            else subreddit.controversial(limit = int(search_for))
         self._hot = subreddit.hot(limit = int(search_for))
         self._new = subreddit.new(limit = int(search_for))
         self._rising = subreddit.rising(limit = int(search_for))
         self._top = subreddit.top(limit = int(search_for), time_filter = time_filter) \
-            if time_filter != None else subreddit.top(limit = int(search_for))
+            if time_filter != None \
+            else subreddit.top(limit = int(search_for))
 
         self._switch = {
             0: self._hot,
@@ -129,12 +138,14 @@ class GetPosts():
             print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
 
         return subreddit.search("%s" % search_for, time_filter = time_filter) \
-            if time_filter != None else subreddit.search("%s" % search_for)
+            if time_filter != None \
+            else subreddit.search("%s" % search_for)
 
     ### Return PRAW ListingGenerator for all other categories.
     @staticmethod
     def _collect_others(args, cat_i, search_for, sub, subreddit, time_filter):
-        category = categories[short_cat.index(cat_i)] if args.subreddit \
+        category = categories[short_cat.index(cat_i)] \
+            if args.subreddit \
             else categories[cat_i]
         index = short_cat.index(cat_i) if args.subreddit else cat_i
             
@@ -152,8 +163,8 @@ class GetPosts():
         subreddit = reddit.subreddit(sub)
 
         return GetPosts._collect_search(search_for, sub, subreddit, time_filter) \
-            if cat_i == short_cat[5] or cat_i == 5 else \
-                GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, time_filter)
+            if cat_i == short_cat[5] or cat_i == 5 \
+            else GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, time_filter)
 
 class SortPosts():
     """
@@ -163,9 +174,21 @@ class SortPosts():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._convert_time = Global.convert_time
-        self._titles = ["Title", "Flair", "Date Created", "Upvotes", "Upvote Ratio", 
-            "ID", "Edited?", "Is Locked?", "NSFW?", "Is Spoiler?", "Stickied?", 
-            "URL", "Comment Count", "Text"]
+        self._titles = [
+            "Title", 
+            "Flair", 
+            "Date Created", 
+            "Upvotes", 
+            "Upvote Ratio", 
+            "ID", 
+            "Edited?", 
+            "Is Locked?", 
+            "NSFW?", 
+            "Is Spoiler?", 
+            "Stickied?", 
+            "URL", 
+            "Comment Count", 
+            "Text"]
 
     ### Initialize dictionary depending on export option.
     def _initialize_dict(self, args):
@@ -173,16 +196,28 @@ class SortPosts():
 
     ### Fix "Edited?" date.
     def _fix_edit_date(self, post):
-        return str(post.edited) if str(post.edited).isalpha() \
-                else str(self._convert_time(post.edited))
+        return str(post.edited) \
+            if str(post.edited).isalpha() \
+            else str(self._convert_time(post.edited))
 
     ### Get post data.
     def _get_data(self, post):
         edited = self._fix_edit_date(post)
-        post_data = [post.title, post.link_flair_text, self._convert_time(post.created), 
-            post.score, post.upvote_ratio, post.id, edited, post.locked, 
-            post.over_18, post.spoiler, post.stickied, post.url, 
-            post.num_comments, post.selftext]
+        post_data = [
+            post.title, 
+            post.link_flair_text, 
+            self._convert_time(post.created), 
+            post.score, 
+            post.upvote_ratio, 
+            post.id, 
+            edited, 
+            post.locked, 
+            post.over_18, 
+            post.spoiler, 
+            post.stickied, 
+            post.url, 
+            post.num_comments, 
+            post.selftext]
 
         return post_data
 
@@ -230,12 +265,14 @@ class GetSortWrite():
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
-        Export.Export.export(f_name, self._eo[1], overview) if args.json else \
-            Export.Export.export(f_name, self._eo[0], overview)
+        Export.Export.export(f_name, self._eo[1], overview) \
+            if args.json \
+            else Export.Export.export(f_name, self._eo[0], overview)
 
     ### Set print length depending on string length.
     def _print_confirm(self, args, sub):
-        confirmation = "\nJSON file for r/%s created." % sub if args.json \
+        confirmation = "\nJSON file for r/%s created." % sub \
+            if args.json \
             else "\nCSV file for r/%s created." % sub
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))

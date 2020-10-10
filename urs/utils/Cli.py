@@ -91,21 +91,21 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
         urs.add_argument(
             "-r", "--subreddit", 
             action = "append", 
-            nargs = "+", 
+            help = "specify Subreddit to scrape",
             metavar = "", 
-            help = "specify Subreddit to scrape")
+            nargs = "+") 
         urs.add_argument(
             "-u", "--redditor", 
             action = "append", 
-            nargs = 2, 
+            help = "specify Redditor profile to scrape",
             metavar = "", 
-            help = "specify Redditor profile to scrape")
+            nargs = 2) 
         urs.add_argument(
             "-c", "--comments", 
             action = "append", 
-            nargs = 2, 
+            help = "specify the URL of the submission to scrape comments",
             metavar = "", 
-            help = "specify the URL of the submission to scrape comments")
+            nargs = 2) 
         urs.add_argument(
             "-b", "--basic", 
             action = "store_true", 
@@ -157,7 +157,10 @@ class GetScrapeSettings():
         self._s_t = Global.s_t
         self._short_cat = Global.short_cat
 
-        self._filterables = [self._short_cat[2], self._short_cat[3], self._short_cat[5]]
+        self._filterables = [
+            self._short_cat[2], 
+            self._short_cat[3], 
+            self._short_cat[5]]
 
     ### Switch to determine which kind of list to create.
     def _list_switch(self, args, index):
@@ -180,7 +183,8 @@ class GetScrapeSettings():
     ### Return the Subreddit settings.
     def _set_sub_settings(self, sub):
         if len(sub) == 3:
-            settings = [sub[1], sub[2], "all"] if sub[1].upper() in self._filterables \
+            settings = [sub[1], sub[2], "all"] \
+                if sub[1].upper() in self._filterables \
                 else [sub[1], sub[2], None]
         if len(sub) == 4:
             settings = [sub[1], sub[2], sub[3]]
@@ -221,8 +225,17 @@ class CheckCli():
         self._short_cat = Global.short_cat
         self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
         
-        self._filterables = [self._short_cat[2], self._short_cat[3], self._short_cat[5]]
-        self._time_filters = ["all", "day", "hour", "month", "week", "year"]
+        self._filterables = [
+            self._short_cat[2], 
+            self._short_cat[3], 
+            self._short_cat[5]]
+        self._time_filters = [
+            "all", 
+            "day", 
+            "hour", 
+            "month", 
+            "week", 
+            "year"]
 
     ### Check n_results for Subreddit args.
     def _check_n_results(self, n_results, sub):
@@ -243,24 +256,25 @@ class CheckCli():
                 ### Check args if a time filter is present.
                 if len(sub) == 4:
                     if sub[1].upper() not in self._filterables \
-                        or sub[3].lower() not in self._time_filters:
+                    or sub[3].lower() not in self._time_filters:
                         raise ValueError
+
                 self._check_n_results(sub[2], sub)
 
     ### Check Redditor args.
     def _check_redditor(self, args):
         for user in args.redditor:
-            if user[1].isalpha() or \
-                self._special_chars.search(user[1]) != None or \
-                    int(user[1]) == 0:
+            if user[1].isalpha() \
+            or self._special_chars.search(user[1]) != None \
+            or int(user[1]) == 0:
                 raise ValueError
 
     ### Check args for items that only require two arguments (Redditor or 
     ### comments scrapers).
     def _check_comments(self, args):
         for submission in args.comments:
-            if submission[1].isalpha() or \
-                self._special_chars.search(submission[1]) != None:
+            if submission[1].isalpha() \
+            or self._special_chars.search(submission[1]) != None:
                 raise ValueError
 
     ### Check args and catching errors.

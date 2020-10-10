@@ -43,7 +43,8 @@ class CheckRedditors():
 
 class ProcessInteractions():
     """
-    Methods for sorting and labeling comment or submission objects correctly. 
+    Methods for sorting and labeling comment or submission objects correctly.
+     
     Some user attributes will return a ListingGenerator which includes both comments 
     and submissions. These attributes will need to be sorted accordingly:
     - Downvoted (may be forbidden)
@@ -73,20 +74,57 @@ class ProcessInteractions():
         self._top = user.top(limit = limit)
         self._upvoted = user.upvoted(limit = limit)
 
-        self._comment_titles = ["Date Created", "Score", "Text", "Parent ID", 
-            "Link ID", "Edited?", "Stickied?", "Replying to", "In Subreddit"]
-        self._submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio",
-            "ID", "NSFW?", "In Subreddit", "Body"]
+        self._comment_titles = [
+            "Date Created", 
+            "Score", 
+            "Text", 
+            "Parent ID", 
+            "Link ID", 
+            "Edited?", 
+            "Stickied?", 
+            "Replying to", 
+            "In Subreddit"]
+        self._submission_titles = [
+            "Title", 
+            "Date Created", 
+            "Upvotes", 
+            "Upvote Ratio",
+            "ID", 
+            "NSFW?", 
+            "In Subreddit", 
+            "Body"]
 
-        self._s_types = ["Submissions", "Comments", "Mutts", "Access"]
+        self._s_types = [
+            "Submissions", 
+            "Comments", 
+            "Mutts", 
+            "Access"]
 
-        self._mutts = [self._controversial, self._gilded, self._hot, self._new, 
+        self._mutts = [
+            self._controversial, 
+            self._gilded, 
+            self._hot, 
+            self._new, 
             self._top]
-        self._mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
+        self._mutt_names = [
+            "Controversial", 
+            "Gilded", 
+            "Hot", 
+            "New", 
+            "Top"]
 
-        self._access = [self._downvoted, self._gildings, self._hidden, self._saved, 
+        self._access = [
+            self._downvoted, 
+            self._gildings, 
+            self._hidden, 
+            self._saved, 
             self._upvoted]
-        self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
+        self._access_names = [
+            "Downvoted", 
+            "Gildings", 
+            "Hidden", 
+            "Saved", 
+            "Upvoted"]
 
     ### Make dictionary from zipped lists.
     def _make_zip_dict(self, items, titles):
@@ -94,17 +132,32 @@ class ProcessInteractions():
 
     ### Make submission list.
     def _make_submission_list(self, item):
-        items = [item.title, convert_time(item.created), item.score, item.upvote_ratio, 
-            item.id, item.over_18, item.subreddit.display_name, item.selftext]
+        items = [
+            item.title, 
+            convert_time(item.created), 
+            item.score, 
+            item.upvote_ratio, 
+            item.id, 
+            item.over_18, 
+            item.subreddit.display_name, 
+            item.selftext]
 
         return self._make_zip_dict(items, self._submission_titles)
 
     ### Make comment list.
     def _make_comment_list(self, item):
-        edit_date = item.edited if str(item.edited).isalpha() \
+        edit_date = item.edited \
+            if str(item.edited).isalpha() \
             else convert_time(item.edited)
-        items = [convert_time(item.created_utc), item.score, item.body, item.parent_id, 
-            item.link_id, edit_date, item.stickied, item.submission.selftext, 
+        items = [
+            convert_time(item.created_utc), 
+            item.score, 
+            item.body, 
+            item.parent_id, 
+            item.link_id, 
+            edit_date, 
+            item.stickied, 
+            item.submission.selftext, 
             item.submission.subreddit.display_name]
 
         return self._make_zip_dict(items, self._comment_titles)
@@ -127,7 +180,7 @@ class ProcessInteractions():
         for item in obj:
             redditor_list = self._make_submission_list(item) \
                 if isinstance(item, praw.models.Submission) \
-                    else self._make_comment_list(item)
+                else self._make_comment_list(item)
 
             self._determine_append(cat, redditor_list, s_type) 
 
@@ -156,7 +209,7 @@ class ProcessInteractions():
             except PrawcoreException as error:
                 print(Style.BRIGHT + Fore.RED + 
                     ("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % 
-                        (cat.upper(), error))
+                    (cat.upper(), error))
                 
                 self._overview["%s (may be forbidden)" % 
                     cat.capitalize()].append("FORBIDDEN")
@@ -168,11 +221,28 @@ class GetInteractions():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
-            "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", 
-            "Submissions", "Comments", "Hot", "New", "Controversial", "Top", 
-            "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", 
-            "Gildings (may be forbidden)", "Hidden (may be forbidden)", 
+        self._titles = [
+            "Name", 
+            "Fullname", 
+            "ID", 
+            "Date Created", 
+            "Comment Karma", 
+            "Link Karma", 
+            "Is Employee?", 
+            "Is Friend?", 
+            "Is Mod?", 
+            "Is Gold?", 
+            "Submissions", 
+            "Comments", 
+            "Hot", 
+            "New", 
+            "Controversial", 
+            "Top", 
+            "Upvoted (may be forbidden)", 
+            "Downvoted (may be forbidden)", 
+            "Gilded", 
+            "Gildings (may be forbidden)", 
+            "Hidden (may be forbidden)", 
             "Saved (may be forbidden)"]
 
     ### Make Redditor dictionary to store data.
@@ -190,9 +260,17 @@ class GetInteractions():
     ### Get Redditor account information.
     def _get_user_info(self, overview, user):
         user_info_titles = self._titles[:10]
-        user_info = [user.name, user.fullname, user.id, convert_time(user.created_utc),
-            user.comment_karma, user.link_karma, user.is_employee, user.is_friend,
-            user.is_mod, user.is_gold]
+        user_info = [
+            user.name, 
+            user.fullname, 
+            user.id, 
+            convert_time(user.created_utc),
+            user.comment_karma, 
+            user.link_karma, 
+            user.is_employee, 
+            user.is_friend,
+            user.is_mod, 
+            user.is_gold]
 
         for title, user_item in zip(user_info_titles, user_info):
             overview[title].append(user_item) 
@@ -224,13 +302,16 @@ class Write():
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
-        Export.Export.export(f_name, self._eo[1], overview) if args.json else \
-            Export.Export.export(f_name, self._eo[0], overview)
+        Export.Export.export(f_name, self._eo[1], overview) \
+            if args.json \
+            else Export.Export.export(f_name, self._eo[0], overview)
 
     ### Print confirmation message and set print length depending on string length.
     def _print_confirm(self, args, user):
-        confirmation = "\nJSON file for u/%s created." % user if args.json \
+        confirmation = "\nJSON file for u/%s created." % user \
+            if args.json \
             else "\nCSV file for u/%s created." % user
+        
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 

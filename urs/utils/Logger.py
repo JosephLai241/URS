@@ -129,11 +129,14 @@ class LogScraper():
     @staticmethod
     def _get_args_switch(args, scraper):
         scrapers = {
-            Global.s_t[0]: [arg_set for arg_set in args.subreddit] if args.subreddit \
+            Global.s_t[0]: [arg_set for arg_set in args.subreddit] \
+                if args.subreddit \
                 else None,
-            Global.s_t[1]: [arg_set for arg_set in args.redditor] if args.redditor \
+            Global.s_t[1]: [arg_set for arg_set in args.redditor] \
+                if args.redditor \
                 else None,
-            Global.s_t[2]: [arg_set for arg_set in args.comments] if args.comments \
+            Global.s_t[2]: [arg_set for arg_set in args.comments] \
+                if args.comments \
                 else None
         }
 
@@ -153,7 +156,8 @@ class LogScraper():
     def _format_subreddit_settings(scraper, scraper_args):
         args = []
         for each_arg in scraper_args:
-            settings = LogScraper._subreddit_tuple(each_arg) if scraper == Global.s_t[0] \
+            settings = LogScraper._subreddit_tuple(each_arg) \
+                if scraper == Global.s_t[0] \
                 else tuple(each_arg)
 
             args.append(settings)
@@ -163,11 +167,10 @@ class LogScraper():
     ### Set message depending if the Search category was selected.
     @staticmethod
     def _set_subreddit_log(category, n_res_or_kwds, sub_name):
-        return "Scraping r/%s for %s %s results..." % \
-            (sub_name, n_res_or_kwds, category) \
-                if category != Global.categories[5] else \
-                    "Searching and scraping r/%s for posts containing '%s'..." % \
-                        (sub_name, n_res_or_kwds)
+        return "Scraping r/%s for %s %s results..." % (sub_name, n_res_or_kwds, category) \
+            if category != Global.categories[5] \
+            else "Searching and scraping r/%s for posts containing '%s'..." % \
+                (sub_name, n_res_or_kwds)
 
     ### Format Subreddit log differently if user searched for keywords. Log an
     ### additional line if the time filter was applied.
@@ -190,8 +193,10 @@ class LogScraper():
     def _format_comments_log(each_arg):
         plurality = "comments" if int(each_arg[1]) > 1 else "comment"
         return "Processing %s %s in structured format from Reddit post %s" % \
-            (each_arg[1], plurality, each_arg[0]) if int(each_arg[1]) > 0 else \
-                "Processing all comments in raw format from Reddit post %s" % each_arg[0]
+            (each_arg[1], plurality, each_arg[0]) \
+            if int(each_arg[1]) > 0 \
+            else "Processing all comments in raw format from Reddit post %s" % \
+                each_arg[0]
 
     ### Format string for log file depending on what was scraped, then log the 
     ### string.

@@ -19,7 +19,7 @@ class NameFile():
     ### Verify f_name is not too long.
     def _check_len(self, name):
         if len(name) > 50:
-            return name[0:48] + '--'
+            return name[0:48] + "--"
 
         return name
 
@@ -36,7 +36,7 @@ class NameFile():
             0: Global.categories[5],
             1: Global.categories[Global.short_cat.index(cat_i)] \
                 if cat_i != Global.short_cat[5] and isinstance(cat_i, str) \
-                    else None,
+                else None,
             2: Global.categories[cat_i] if isinstance(cat_i, int) else None
         }
 
@@ -72,7 +72,8 @@ class NameFile():
         category = self._r_category(cat_i, category_n)
 
         ending = None if cat_i == Global.short_cat[5] or cat_i == 5 else end
-        time_filter = None if each_sub[2] == None or each_sub[2] == "all" \
+        time_filter = None \
+            if each_sub[2] == None or each_sub[2] == "all" \
             else each_sub[2]
 
         if each_sub[2] == None or each_sub[2] == "all":
@@ -85,7 +86,8 @@ class NameFile():
     ### Determine file name format for Subreddit scraping.
     def r_fname(self, args, cat_i, each_sub, sub):
         raw_n = ""
-        end = "result" if isinstance(each_sub[1], int) and int(each_sub[1]) < 2 \
+        end = "result" \
+            if isinstance(each_sub[1], int) and int(each_sub[1]) < 2 \
             else "results"
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
@@ -138,13 +140,15 @@ class Export():
     def _get_filename_extension(f_name, f_type):
         dir_path = "../scrapes/%s" % Global.date
 
-        return dir_path + "/%s.json" % f_name if f_type == Global.eo[1] else \
-            dir_path + "/%s.csv" % f_name
+        return dir_path + "/%s.json" % f_name \
+            if f_type == Global.eo[1] \
+            else dir_path + "/%s.csv" % f_name
 
     ### Write overview dictionary to CSV or JSON.
     @staticmethod
     def export(f_name, f_type, overview):
         filename = Export._get_filename_extension(f_name, f_type)
 
-        Export._write_json(filename, overview) if f_type == Global.eo[1] else \
-            Export._write_csv(filename, overview)
+        Export._write_json(filename, overview) \
+            if f_type == Global.eo[1] \
+            else Export._write_csv(filename, overview)

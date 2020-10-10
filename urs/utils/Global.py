@@ -7,16 +7,29 @@ import datetime as dt
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
 ### Export options.
-eo = ["csv", "json"]
+eo = [
+    "csv", 
+    "json"]
 
 ### Confirm or deny options.
-options = ["y", "n"]
+options = [
+    "y", 
+    "n"]
 
 ### Scrape types.
-s_t = ["subreddit", "redditor", "comments"]
+s_t = [
+    "subreddit", 
+    "redditor", 
+    "comments"]
 
 ### Subreddit categories.
-categories = ["Hot", "New", "Controversial", "Top", "Rising", "Search"]
+categories = [
+    "Hot", 
+    "New", 
+    "Controversial", 
+    "Top", 
+    "Rising", 
+    "Search"]
 short_cat = [cat[0] for cat in categories]
 
 ### Convert UNIX time to readable format.

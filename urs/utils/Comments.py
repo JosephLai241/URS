@@ -46,8 +46,16 @@ class GetComments():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._titles = ["Parent ID", "Comment ID", "Author", "Date Created", 
-            "Upvotes", "Text", "Edited?", "Is Submitter?", "Stickied?"]
+        self._titles = [
+            "Parent ID", 
+            "Comment ID", 
+            "Author", 
+            "Date Created", 
+            "Upvotes", 
+            "Text", 
+            "Edited?", 
+            "Is Submitter?", 
+            "Stickied?"]
 
     ### If applicable, handle deleted Redditors or edited time.
     def _fix_attributes(self, comment):
@@ -56,7 +64,8 @@ class GetComments():
         except AttributeError:
             author_name = "[deleted]"
 
-        edit_date = comment.edited if str(comment.edited).isalpha() \
+        edit_date = comment.edited \
+            if str(comment.edited).isalpha() \
             else convert_time(comment.edited)
 
         return author_name, edit_date
@@ -66,9 +75,16 @@ class GetComments():
         c_set = Global.make_none_dict(self._titles)
 
         author_name, edit_date = self._fix_attributes(comment)
-        comment_attributes = [comment.parent_id, comment.id, author_name, 
-            convert_time(comment.created_utc), comment.score, comment.body, 
-            edit_date, comment.is_submitter, comment.stickied]
+        comment_attributes = [
+            comment.parent_id, 
+            comment.id, 
+            author_name, 
+            convert_time(comment.created_utc), 
+            comment.score, 
+            comment.body, 
+            edit_date, 
+            comment.is_submitter, 
+            comment.stickied]
 
         for title, attribute in zip(self._titles, comment_attributes):
             c_set[title] = attribute
@@ -151,7 +167,7 @@ class GetSort():
     def _get_raw(self, all_dict, submission):
         print(Style.BRIGHT + 
             "\nProcessing all comments in raw format from submission '%s'..." % 
-                submission.title)
+            submission.title)
 
         SortComments().sort(all_dict, True, submission)
 
@@ -160,7 +176,7 @@ class GetSort():
         plurality = "comment" if int(limit) == 1 else "comments"
         print(Style.BRIGHT + 
             ("\nProcessing %s %s in structured format from submission '%s'...") % 
-                (limit, plurality, submission.title))
+            (limit, plurality, submission.title))
 
         SortComments().sort(all_dict, False, submission)
         
@@ -184,15 +200,16 @@ class Write():
     ### Export to either CSV or JSON.
     @staticmethod
     def _determine_export(args, f_name, overview):
-        Export.Export.export(f_name, eo[1], overview) if args.json else \
-            Export.Export.export(f_name, eo[0], overview)
+        Export.Export.export(f_name, eo[1], overview) \
+            if args.json \
+            else Export.Export.export(f_name, eo[0], overview)
 
     ### Print confirmation message and set print length depending on string length.
     @staticmethod
     def _print_confirm(args, title):
         confirmation = "\nJSON file for '%s' comments created." % title \
-            if args.json else \
-                "\nCSV file for '%s' comments created." % title
+            if args.json \
+            else "\nCSV file for '%s' comments created." % title
         
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))

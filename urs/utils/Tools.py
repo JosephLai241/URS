@@ -3,8 +3,16 @@
 #===============================================================================
 from colorama import Fore, init, Style
 
-from . import (Basic, Cli, Comments, Global,
-                   Redditor, Subreddit, Titles, Validation)
+from . import (
+    Basic, 
+    Cli, 
+    Comments, 
+    Global, 
+    Redditor, 
+    Subreddit, 
+    Titles, 
+    Validation
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

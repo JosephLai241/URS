@@ -36,8 +36,13 @@ class Validation():
         user_limits = Validation.get_rate_info(reddit)
 
         pretty_limits = PrettyTable()
-        pretty_limits.field_names = ["Remaining Requests", "Used Requests"]
-        pretty_limits.add_row([int(user_limits["remaining"]), int(user_limits["used"])])
+        pretty_limits.field_names = [
+            "Remaining Requests", 
+            "Used Requests"]
+        pretty_limits.add_row([
+            int(user_limits["remaining"]), 
+            int(user_limits["used"])])
+        
         pretty_limits.align = "c"
         
         print(pretty_limits)
