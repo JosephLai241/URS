@@ -274,8 +274,9 @@ You can still export Redditor data and submission comments to CSV, but you will 
 
 | Date           | User                                                      | Contribution                                                                                                               |
 |----------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| March 11, 2020 | [ThereGoesMySanity][ThereGoesMySanity] | Created a [pull request][ThereGoesMySanity Pull Request] adding 2FA information to Readme |
+| March 11, 2020 | [ThereGoesMySanity][ThereGoesMySanity] | Created a [pull request][ThereGoesMySanity Pull Request] adding 2FA information to README |
 | October 6, 2020 | [LukeDSchenk][LukeDSchenk] | Created a [pull request][LukeDSchenk Pull Request] fixing "[Errno 36] File name too long" issue, making it impossible to save comment scrapes with long titles |
+| October 10, 2020 | [IceBerge421][IceBerge421] | Created a [pull request][IceGerge421 Pull Request] fixing a cloning error occuring on Windows machines due to an illegal filename character - `"` |
 
 # Releases
 
@@ -328,3 +329,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 <!-- LukeDSchenk: Links for user LukeDSchenk and pull request -->
 [LukeDSchenk]: https://github.com/LukeDSchenk
 [LukeDSchenk Pull Request]: https://github.com/JosephLai241/URS/pull/19
+
+<!-- IceBerge421: Links for user IceBerge421 and pull request -->
+[IceBerge421]: https://github.com/IceBerge421
+[IceGerge421 Pull Request]: https://github.com/JosephLai241/URS/pull/20
