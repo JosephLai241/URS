@@ -276,7 +276,7 @@ You can still export Redditor data and submission comments to CSV, but you will 
 |----------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | March 11, 2020 | [ThereGoesMySanity][ThereGoesMySanity] | Created a [pull request][ThereGoesMySanity Pull Request] adding 2FA information to README |
 | October 6, 2020 | [LukeDSchenk][LukeDSchenk] | Created a [pull request][LukeDSchenk Pull Request] fixing "[Errno 36] File name too long" issue, making it impossible to save comment scrapes with long titles |
-| October 10, 2020 | [IceBerge421][IceBerge421] | Created a [pull request][IceGerge421 Pull Request] fixing a cloning error occuring on Windows machines due to an illegal filename character - `"` |
+| October 10, 2020 | [IceBerge421][IceBerge421] | Created a [pull request][IceGerge421 Pull Request] fixing a cloning error occuring on Windows machines due to illegal filename characters, `"`, found in two scrape samples |
 
 # Releases
 
