@@ -39,4 +39,4 @@ If applicable, add screenshots or a code block of the ***entire*** traceback to 
 
 **Additional Context**
 
-Add any other context about the problem here.
+Add any other context about the problem here. Put "N/A" if not applicable.
