@@ -92,9 +92,12 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 
 Tip: You can check off items by writing an "x" in the brackets, e.g. `[x]`.
 
-* [ ] My code follows the style guidelines of this project.
+* [ ] My code follows the [style guidelines][Style Guide] of this project.
 * [ ] I have performed a self-review of my own code, including testing to ensure my fix is effective or that my feature works.
 * [ ] My changes generate no new warnings.
 * [ ] I have commented my code, providing a summary of the functionality of each method, particularly in areas that may be hard to understand.
 * [ ] I have made corresponding changes to the documentation.
 * [ ] I have performed a self-review of this Pull Request template, ensuring the Markdown file renders correctly.
+
+<!-- LINKS -->
+[Style Guide]: STYLE_GUIDE.md
