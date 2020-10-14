@@ -47,7 +47,7 @@ This line greatly exceeds the 80 character count. In cases like these, wrap the 
 ```python
 redditor_list = _make_submission_list(item) \
     if isinstance(item, praw.models.Submission) \
-        else _make_comment_list(item)
+    else _make_comment_list(item)
 ```
 
 Let's take a look at another example. Here I am printing a string that uses string formatting to pass in variables:
@@ -68,7 +68,7 @@ If you are printing a string that is longer than 80 characters, do not worry abo
 ```python
 print(Style.BRIGHT + 
     ("\nThis is a very long line that is going to be a lot longer than 80 characters %s %s %s") % 
-        (something, another_thing, something_else))
+    (something, another_thing, something_else))
 ```
 
 Or if you are passing in many variables into a string, do not worry about breaking the variables into new lines. Breaking them into a different line may affect readability, which is the opposite of what we're trying to achieve with this style guide. This rule also applies to methods that take in many arguments.
@@ -81,32 +81,9 @@ print("Passing %s a %s lot %s of %s variables %s in %s this %s string") %
                                                                             Exceeds 80 chars
 ```
 
-Let's take a look at a third example. Here I am defining a very long list that will greatly exceed 80 characters:
-
-```python
-titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", "Submissions", "Comments", "Hot", "New", "Controversial", "Top", "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", "Gildings (may be forbidden)", "Hidden (may be forbidden)", "Saved (may be forbidden)"]
-```
-
-If more than half of the word populates the space before the 80 character mark and exceeds the limit by ~2-4 characters, you can leave it on the same line. But if the word is more than ~10 characters over the limit, put it on a new line.
-
-```python
-titles = ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
-    "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", 
-    "Submissions", "Comments", "Hot", "New", "Controversial", "Top", 
-    "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", <- Exceeds the limit by 2 chars 👍
-    "Gildings (may be forbidden)", "Hidden (may be forbidden)", 
-    "Saved (may be forbidden)"]
-```
-
 ## Whitespace
 
-Commas should be followed by a space:
-
-```python
-example_list_with_commas = [1, 2, 3, 4, 5]
-```
-
-This includes method parameters:
+Commas should be followed by a space. This includes method parameters:
 
 ```python
 def example_method(self, a_first_param, b_second_param, c_third_param):
@@ -120,6 +97,34 @@ example = "something"
 something = one_thing if a_condition != None else another_thing
 ```
 
+Each item in a list should be on its own line:
+
+```python
+titles = [
+    "Name", 
+    "Fullname", 
+    "ID", 
+    "Date Created", 
+    "Comment Karma", 
+    "Link Karma", 
+    "Is Employee?", 
+    "Is Friend?", 
+    "Is Mod?", 
+    "Is Gold?", 
+    "Submissions", 
+    "Comments", 
+    "Hot", 
+    "New", 
+    "Controversial", 
+    "Top", 
+    "Upvoted (may be forbidden)", 
+    "Downvoted (may be forbidden)", 
+    "Gilded", 
+    "Gildings (may be forbidden)", 
+    "Hidden (may be forbidden)", 
+    "Saved (may be forbidden)"]
+```
+
 Long dictionaries can be hard to read on just one line, so you will split each key, value onto its own line. Each value for a key should be preceeded with a space. Lists are not as difficult to read on one line, so values do not need to be split into their own lines:
 
 ```python
@@ -131,23 +136,21 @@ a_dictionary = {
     "of": 5,
     "a": 6,
     "long": 7,
-    "dictionary": ["an", "example", "list", "here"]
+    "dictionary": [
+        "an", 
+        "example", 
+        "list", 
+        "here"]
 }
 ```
 
 All variables should be grouped by relevance, sorted in alphabetical order, and separated by a new line. This applies to global, instance, and method variables.
 
 ```python
-comment_titles = ["Date Created", "Score", "Text", "Parent ID", "Link ID", 
-    "Edited?", "Stickied?", "Replying to", "In Subreddit"]
-submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio", "ID", 
-    "NSFW?", "In Subreddit", "Body"]
-
-mutts = [controversial, gilded, hot, new, top]
-mutt_names = ["Controversial", "Gilded", "Hot", "New", "Top"]
-
-access = [downvoted, gildings, hidden, saved, upvoted]
-access_names = ["Downvoted", "Gildings", "Hidden", "Saved", "Upvoted"]
+comment_titles = [
+    ...]
+submission_titles = [
+    ...]
 ```
 
 Methods and classes are separated by a new line:
@@ -217,7 +220,7 @@ Method comments should start with `###` so that it is easily distinguished from 
 Global variables or functions follow the same style as method comments.
 
 ```python
-### An example of a global comment 
+### An example of a global comment.
 an_example_list = ["subreddit", "redditor", "submissions"]
 ```
 
@@ -225,7 +228,7 @@ An example taken from my code would be calling the Colorama `init` function at t
 
 ```python
 ### Automate sending reset sequences to turn off color changes at the end of 
-### every print
+### every print.
 init(autoreset = True)
 ```
 
@@ -239,18 +242,28 @@ Imports using the `import` form come before imports using the `from` form. These
 
 Relative imports that import an entire module come before importing a module class.
 
-Additionally, multiple imports on one line should also be in alphabetical order.
+Additionally, multiple imports should be on its own line. Lowercase imports are listed before uppercase imports. Each are sorted by alphabetical order. 
 
 Here is an example of a group of imports from `Redditor.py`.
 
 ```python
 import praw
 
-from colorama import Fore, init, Style <----------------- Alphabetical order
+from colorama import (
+    init,  <----------------- Lowercase imports come first
+    Fore, 
+    Style) <----------------- Alphabetical order
 from prawcore import PrawcoreException
 
-from . import Cli, Export, Global, Titles, Validation <-- Alphabetical order
-from .Logger import LogExport, LogScraper <-------------- Alphabetical order
+from . import (
+    Cli, 
+    Export, 
+    Global, 
+    Titles, 
+    Validation) <-- Alphabetical order
+from .Logger import (
+    LogExport, 
+    LogScraper) <-------------- Alphabetical order
 ```
 
 ## Method Parameters
@@ -292,16 +305,44 @@ This is a modified version of the huge `init` method in `Redditor.py`:
         self._new = user.new(limit = limit)
         self._saved = user.saved(limit = limit)
 
-        self._comment_titles = ["Date Created", "Score", "Text", "Parent ID"]
-        self._submission_titles = ["Title", "Date Created", "Upvotes", "Upvote Ratio"]
+        self._comment_titles = [
+            "Date Created", 
+            "Score", 
+            "Text", 
+            "Parent ID"]
+        self._submission_titles = [
+            "Title", 
+            "Date Created", 
+            "Upvotes", 
+            "Upvote Ratio"]
 
-        self._s_types = ["Submissions", "Comments", "Mutts", "Access"]
+        self._s_types = [
+            "Submissions", 
+            "Comments", 
+            "Mutts", 
+            "Access"]
 
-        self._mutts = [self._controversial, self._gilded, self._hot, self._new]
-        self._mutt_names = ["Controversial", "Gilded", "Hot", "New"]
+        self._mutts = [
+            self._controversial, 
+            self._gilded, 
+            self._hot, 
+            self._new]
+        self._mutt_names = [
+            "Controversial", 
+            "Gilded", 
+            "Hot", 
+            "New"]
 
-        self._access = [self._downvoted, self._gildings, self._hidden, self._saved]
-        self._access_names = ["Downvoted", "Gildings", "Hidden", "Saved"]
+        self._access = [
+            self._downvoted, 
+            self._gildings, 
+            self._hidden, 
+            self._saved]
+        self._access_names = [
+            "Downvoted", 
+            "Gildings", 
+            "Hidden", 
+            "Saved"]
 ```
 
 `self._mutts` and `self._mutt_names` are not in alphabetical order. This is okay if you need to define sets of variables that are similar. In this case it would be the four lists defined at the very end of this `init` method.
