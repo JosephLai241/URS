@@ -1,10 +1,20 @@
 #===============================================================================
 #                         Submission Comments Scraping
 #===============================================================================
-from colorama import Fore, init, Style
+from colorama import (
+    init, 
+    Fore, 
+    Style)
 
-from . import Cli, Export, Global, Titles, Validation
-from .Logger import LogExport, LogScraper
+from . import (
+    Cli, 
+    Export, 
+    Global, 
+    Titles, 
+    Validation)
+from .Logger import (
+    LogExport, 
+    LogScraper)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

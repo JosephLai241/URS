@@ -1,7 +1,10 @@
 #===============================================================================
 #                   All Scrapers and Validation/Args Checking
 #===============================================================================
-from colorama import Fore, init, Style
+from colorama import (
+    init, 
+    Fore, 
+    Style)
 
 from . import (
     Basic, 

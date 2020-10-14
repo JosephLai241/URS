@@ -3,11 +3,21 @@
 #===============================================================================
 import praw
 
-from colorama import Fore, init, Style
+from colorama import (
+    init, 
+    Fore, 
+    Style)
 from prawcore import PrawcoreException
 
-from . import Cli, Export, Global, Titles, Validation
-from .Logger import LogExport, LogScraper
+from . import (
+    Cli, 
+    Export, 
+    Global, 
+    Titles, 
+    Validation)
+from .Logger import (
+    LogExport, 
+    LogScraper)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
