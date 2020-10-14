@@ -30,13 +30,15 @@ CLI support made adding exporting to JSON, Redditor scraping, as well as post co
 
 I was still unsatisfied with the quality of my code, so I decided to do an OOP refactor and restructured URS. While the primary motivation was to make my code more readable, maintainable, and scalable, I also added color to terminal output, logger decorators, sorting scrape files into their own directories, and integrated Travis CI and Codecov. This spawned the release of URS 3.1.0.
 
+URS 3.1.1+ will continue building upon the foundation set by URS 3.1.0 by adding features that have been requested by the open source community or features that I believe will enhance the capabilities of URS or improve the user experience.
+
 I plan on adding additional features as URS continues to grow, so stay tuned for updates! 
 
 ### So What's Next?
 
 Although I believe the current features should satisfy most users who need to scrape Reddit, there is still room to grow and you are more than welcome to create a pull request! Just be sure to fill out the pull request template when you do so I have a better idea as to what you are trying to change or add.
 
-Please keep all changes consistent with the name of this project. This means that the code submitted in pull requests will not be hard-coded to scrape specific Subreddits, Redditors, or submissions within Reddit. Remember the name of this repository: this is a *universal* Reddit scraper. Its users should be able to pass Reddit objects that they would like to scrape, rather than specific items that are integrated in the program.
+Please keep all changes consistent with the name of this project. This means that the code submitted in pull requests will not be hard-coded to scrape specific Subreddits, Redditors, or submissions within Reddit. This project will also [exclude capabilities that allow users to interact with Reddit][Outside of Project Scope] outside of merely scraping data from the website. Remember the name of this repository: this is a *universal* Reddit *scraper*.
 
 ## Code of Conduct
 
@@ -185,3 +187,5 @@ Reddit contains a lot of interesting information on the internet. I am sure the 
 [Pull Request Guide]: https://gist.github.com/Chaser324/ce0505fbed06b947d962
 [Style Guide]: STYLE_GUIDE.md
 [URS Project Protonmail]: mailto:urs_project@protonmail.com
+
+[Outside of Project Scope]: https://github.com/JosephLai241/URS/issues/17
