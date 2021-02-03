@@ -2,7 +2,7 @@
 """
 Created on Tue Jun 2 20:14:43 2020
 
-Universal Reddit Scraper 3.1.2.
+Universal Reddit Scraper v3.1.2.
 
 @author: Joseph Lai
 @contact: urs_project@protonmail.com
