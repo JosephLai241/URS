@@ -4,17 +4,20 @@
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 
 from . import (
     Cli, 
     Export, 
     Global, 
     Titles, 
-    Validation)
+    Validation
+)
 from .Logger import (
     LogExport, 
-    LogScraper)
+    LogScraper
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -37,8 +40,7 @@ class CheckSubmissions():
         posts, not_posts = Validation.Validation.existence(s_t[2], post_list, parser, reddit, s_t)
         
         if not_posts:
-            print(Fore.YELLOW + Style.BRIGHT + 
-                "\nThe following posts were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "\nThe following posts were not found and will be skipped:")
             print(Fore.YELLOW + Style.BRIGHT + "-" * 55)
             print(*not_posts, sep = "\n")
 
@@ -65,7 +67,8 @@ class GetComments():
             "Text", 
             "Edited?", 
             "Is Submitter?", 
-            "Stickied?"]
+            "Stickied?"
+        ]
 
     ### If applicable, handle deleted Redditors or edited time.
     def _fix_attributes(self, comment):
@@ -94,7 +97,8 @@ class GetComments():
             comment.body, 
             edit_date, 
             comment.is_submitter, 
-            comment.stickied]
+            comment.stickied
+        ]
 
         for title, attribute in zip(self._titles, comment_attributes):
             c_set[title] = attribute
@@ -175,18 +179,14 @@ class GetSort():
 
     ### Get comments in raw format.
     def _get_raw(self, all_dict, submission):
-        print(Style.BRIGHT + 
-            "\nProcessing all comments in raw format from submission '%s'..." % 
-            submission.title)
+        print(Style.BRIGHT + "\nProcessing all comments in raw format from submission '%s'..." % submission.title)
 
         SortComments().sort(all_dict, True, submission)
 
     ### Get comments in structured format.
     def _get_structured(self, all_dict, limit, submission):
         plurality = "comment" if int(limit) == 1 else "comments"
-        print(Style.BRIGHT + 
-            ("\nProcessing %s %s in structured format from submission '%s'...") % 
-            (limit, plurality, submission.title))
+        print(Style.BRIGHT + "\nProcessing %s %s in structured format from submission '%s'..." % (limit, plurality, submission.title))
 
         SortComments().sort(all_dict, False, submission)
         
@@ -210,16 +210,20 @@ class Write():
     ### Export to either CSV or JSON.
     @staticmethod
     def _determine_export(args, f_name, overview):
-        Export.Export.export(f_name, eo[1], overview) \
+        export_option = eo[1] \
             if args.json \
-            else Export.Export.export(f_name, eo[0], overview)
+            else eo[0]
+
+        Export.Export.export(f_name, export_option, overview, "comments")
 
     ### Print confirmation message and set print length depending on string length.
     @staticmethod
     def _print_confirm(args, title):
-        confirmation = "\nJSON file for '%s' comments created." % title \
+        export_option = "JSON" \
             if args.json \
-            else "\nCSV file for '%s' comments created." % title
+            else "CSV"
+
+        confirmation = "\n%s file for '%s' comments created." % (export_option, title)
         
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
