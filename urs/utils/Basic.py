@@ -4,16 +4,19 @@
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 
 from . import (
     Global, 
     Subreddit, 
     Titles, 
-    Validation)
+    Validation
+)
 from .Logger import (
     LogExport, 
-    LogScraper)
+    LogScraper
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -87,21 +90,19 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
     ### Update Subreddit settings in master dictionary.
     def _update_master(self, cat_i, master, search_for, sub):
-        user_search = search_for if cat_i == 5 else int(search_for)
+        user_search = search_for \
+            if cat_i == 5 \
+            else int(search_for)
         for sub_n, _ in master.items():
             if sub_n == sub:
-                settings = [
-                    cat_i, 
-                    user_search]
+                settings = [cat_i, user_search]
                 master[sub].append(settings)
 
     ### Get search settings.
     def _get_search(self, cat_i, master, sub):
         while True:
             try:
-                search_for = str(input(Style.BRIGHT + 
-                    "\nWhat would you like to search for in r/" + sub + "? " + 
-                    Style.RESET_ALL)).strip()
+                search_for = str(input(Style.BRIGHT + "\nWhat would you like to search for in r/" + sub + "? " + Style.RESET_ALL)).strip()
                 if not search_for:
                     raise ValueError
                 else:
@@ -114,9 +115,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
     def _get_n_results(self, cat_i, master, sub):
         while True:
             try:
-                search_for = input(Style.BRIGHT + 
-                    "\nHow many results do you want to capture from r/" + sub + "? " + 
-                    Style.RESET_ALL).strip()
+                search_for = input(Style.BRIGHT + "\nHow many results do you want to capture from r/" + sub + "? " + Style.RESET_ALL).strip()
                 if search_for.isalpha() or not search_for:
                     raise ValueError
                 else:
