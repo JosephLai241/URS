@@ -8,12 +8,14 @@ import sys
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 
 from . import (
     Global, 
     Titles, 
-    Validation)
+    Validation
+)
 from .Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -99,27 +101,32 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
             action = "append", 
             help = "specify Subreddit to scrape",
             metavar = "", 
-            nargs = "+") 
+            nargs = "+"
+        ) 
         urs.add_argument(
             "-u", "--redditor", 
             action = "append", 
             help = "specify Redditor profile to scrape",
             metavar = "", 
-            nargs = 2) 
+            nargs = 2
+        ) 
         urs.add_argument(
             "-c", "--comments", 
             action = "append", 
             help = "specify the URL of the submission to scrape comments",
             metavar = "", 
-            nargs = 2) 
+            nargs = 2
+        ) 
         urs.add_argument(
             "-b", "--basic", 
             action = "store_true", 
-            help = "initialize non-CLI Subreddit scraper")
+            help = "initialize non-CLI Subreddit scraper"
+        )
         urs.add_argument(
             "-y", 
             action = "store_true", 
-            help = "skip Subreddit options confirmation and scrape immediately")
+            help = "skip Subreddit options confirmation and scrape immediately"
+        )
 
     ### Add export flags.
     def _add_export(self, parser):
@@ -127,11 +134,13 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
         expt.add_argument(
             "--csv", 
             action = "store_true", 
-            help = "export to CSV")
+            help = "export to CSV"
+        )
         expt.add_argument(
             "--json", 
             action = "store_true", 
-            help = "export to JSON")
+            help = "export to JSON"
+        )
 
     ### Get args.
     @LogError.log_no_args
@@ -140,7 +149,8 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
             description = self._description,
             epilog = self._epilog, 
             formatter_class = argparse.RawDescriptionHelpFormatter,
-            usage = self._usage)
+            usage = self._usage
+        )
 
         self._add_flags(parser)
         self._add_export(parser)
@@ -166,7 +176,8 @@ class GetScrapeSettings():
         self._filterables = [
             self._short_cat[2], 
             self._short_cat[3], 
-            self._short_cat[5]]
+            self._short_cat[5]
+        ]
 
     ### Switch to determine which kind of list to create.
     def _list_switch(self, args, index):
@@ -234,14 +245,16 @@ class CheckCli():
         self._filterables = [
             self._short_cat[2], 
             self._short_cat[3], 
-            self._short_cat[5]]
+            self._short_cat[5]
+        ]
         self._time_filters = [
             "all", 
             "day", 
             "hour", 
             "month", 
             "week", 
-            "year"]
+            "year"
+        ]
 
     ### Check n_results for Subreddit args.
     def _check_n_results(self, n_results, sub):
