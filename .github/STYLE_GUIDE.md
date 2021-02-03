@@ -50,40 +50,15 @@ redditor_list = _make_submission_list(item) \
     else _make_comment_list(item)
 ```
 
-Let's take a look at another example. Here I am printing a string that uses string formatting to pass in variables:
+String formatting can take up as much length as needed. Splitting this up will make the code less readable, which is not what we are trying to accomplish here. This line exceeds the 80 character count, but that is fine because there is string formatting:
 
 ```python
-print(("\nProcessing %s %s from u/%s's profile... Extending this print line") % (limit, plurality, user))
-```
-
-Again, this line exceeds the 80 character count. You can split this into two lines after the special character `%`.
-
-```python
-print(("\nProcessing %s %s from u/%s's profile... Extending this print line") % 
-    (limit, plurality, user))
-```
-
-If you are printing a string that is longer than 80 characters, do not worry about splitting the string into sections. Just place the string on its own line and pass in the variables on a new line.
-
-```python
-print(Style.BRIGHT + 
-    ("\nThis is a very long line that is going to be a lot longer than 80 characters %s %s %s") % 
-    (something, another_thing, something_else))
-```
-
-Or if you are passing in many variables into a string, do not worry about breaking the variables into new lines. Breaking them into a different line may affect readability, which is the opposite of what we're trying to achieve with this style guide. This rule also applies to methods that take in many arguments.
-
-```python
-print(("Passing %s a %s lot %s of %s variables %s in %s this %s string") %
-    (first_thing, second_thing, third_thing, fourth_thing, fifth_thing, six_thing, seventh_thing))
-                                                                                ^
-                                                                                |
-                                                                            Exceeds 80 chars
+print("\nProcessing %s %s from u/%s's profile... Extending this print line" % (limit, plurality, user))
 ```
 
 ## Whitespace
 
-Commas should be followed by a space. This includes method parameters:
+All commas should be followed by a space. This includes method parameters:
 
 ```python
 def example_method(self, a_first_param, b_second_param, c_third_param):
@@ -97,7 +72,7 @@ example = "something"
 something = one_thing if a_condition != None else another_thing
 ```
 
-Each item in a list should be on its own line:
+Each item in a list should be on its own line. The closing bracket should be at the same indent as the variable:
 
 ```python
 titles = [
@@ -122,10 +97,11 @@ titles = [
     "Gilded", 
     "Gildings (may be forbidden)", 
     "Hidden (may be forbidden)", 
-    "Saved (may be forbidden)"]
+    "Saved (may be forbidden)"
+]
 ```
 
-Long dictionaries can be hard to read on just one line, so you will split each key, value onto its own line. Each value for a key should be preceeded with a space. Lists are not as difficult to read on one line, so values do not need to be split into their own lines:
+Long dictionaries can be hard to read on just one line, so you will split each key, value onto its own line. Each value for a key should be preceeded with a space. Note the previous rule for lists still applies. The closing bracket is at the same indent as the key:
 
 ```python
 a_dictionary = {
@@ -140,7 +116,8 @@ a_dictionary = {
         "an", 
         "example", 
         "list", 
-        "here"]
+        "here"
+    ]
 }
 ```
 
@@ -148,9 +125,11 @@ All variables should be grouped by relevance, sorted in alphabetical order, and 
 
 ```python
 comment_titles = [
-    ...]
+    ...
+]
 submission_titles = [
-    ...]
+    ...
+]
 ```
 
 Methods and classes are separated by a new line:
@@ -187,7 +166,7 @@ class SecondClass():
     """
 
     ### Another public method here.
-    def another_method_here(self):
+    def another_public_method_here(self):
         pass
 ```
 
@@ -221,7 +200,11 @@ Global variables or functions follow the same style as method comments.
 
 ```python
 ### An example of a global comment.
-an_example_list = ["subreddit", "redditor", "submissions"]
+an_example_list = [
+    "subreddit", 
+    "redditor", 
+    "submissions"
+]
 ```
 
 An example taken from my code would be calling the Colorama `init` function at the top of most scripts:
@@ -252,7 +235,8 @@ import praw
 from colorama import (
     init,  <----------------- Lowercase imports come first
     Fore, 
-    Style) <----------------- Alphabetical order
+    Style <----------------- Alphabetical order
+)
 from prawcore import PrawcoreException
 
 from . import (
@@ -260,10 +244,12 @@ from . import (
     Export, 
     Global, 
     Titles, 
-    Validation) <-- Alphabetical order
+    Validation <-- Alphabetical order
+)
 from .Logger import (
     LogExport, 
-    LogScraper) <-------------- Alphabetical order
+    LogScraper <-------------- Alphabetical order
+)
 ```
 
 ## Method Parameters
@@ -309,40 +295,47 @@ This is a modified version of the huge `init` method in `Redditor.py`:
             "Date Created", 
             "Score", 
             "Text", 
-            "Parent ID"]
+            "Parent ID"
+        ]
         self._submission_titles = [
             "Title", 
             "Date Created", 
             "Upvotes", 
-            "Upvote Ratio"]
+            "Upvote Ratio"
+        ]
 
         self._s_types = [
             "Submissions", 
             "Comments", 
             "Mutts", 
-            "Access"]
+            "Access"
+        ]
 
         self._mutts = [
             self._controversial, 
             self._gilded, 
             self._hot, 
-            self._new]
+            self._new
+        ]
         self._mutt_names = [
             "Controversial", 
             "Gilded", 
             "Hot", 
-            "New"]
+            "New"
+        ]
 
         self._access = [
             self._downvoted, 
             self._gildings, 
             self._hidden, 
-            self._saved]
+            self._saved
+        ]
         self._access_names = [
             "Downvoted", 
             "Gildings", 
             "Hidden", 
-            "Saved"]
+            "Saved"
+        ]
 ```
 
 `self._mutts` and `self._mutt_names` are not in alphabetical order. This is okay if you need to define sets of variables that are similar. In this case it would be the four lists defined at the very end of this `init` method.
@@ -360,7 +353,7 @@ The `Write` class on line 216 in `Redditor.py` wraps all methods relating to exp
 ```python
 class Write():
     """
-    Functions for writing scraped Redditor information to CSV or JSON.
+    Methods for writing scraped Redditor information to CSV or JSON.
     """
 
     ### Initialize objects that will be used in class methods.
@@ -426,7 +419,7 @@ Showing an example would be the best way to describe how unit tests should be na
 ```python
 class GetScrapeSettings():
     """
-    Functions for creating data structures to store scrape settings.
+    Methods for creating data structures to store scrape settings.
     """
     
     ### Switch to determine which kind of list to create.
