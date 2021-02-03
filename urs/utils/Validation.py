@@ -7,16 +7,19 @@ import requests
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 from praw import models
 from prawcore import (
     NotFound, 
-    PrawcoreException)
+    PrawcoreException
+)
 from prettytable import PrettyTable
 
 from . import (
     Global, 
-    Titles)
+    Titles
+)
 from .Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -59,7 +62,7 @@ class Validation():
     @LogError.log_login
     def validate_user(parser, reddit):
         print(Style.BRIGHT + Fore.GREEN + 
-            "\nYou have successfully logged in as u/%s.\n" % reddit.user.me())
+            "\nSuccessfully logged in as u/%s.\n" % reddit.user.me())
         
         Validation.print_rate_limit(reddit)
 
