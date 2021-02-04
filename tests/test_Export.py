@@ -224,7 +224,7 @@ class TestCFname():
         limit = 0
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "c-test-RAW"
+        assert Export.NameFile().c_fname(limit, string) == "test-RAW"
 
 class TestWriteCSVAndWriteJSON():
     """
