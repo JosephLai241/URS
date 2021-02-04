@@ -287,7 +287,7 @@ I will not approve feature or pull requests that deviate from its sole purpose. 
 
 ## Building on Top of URS
 
-Although I won't approve requests that deviate from the project scope, feel free to reach out if you've built something on top of URS or have made modifications to scrape something specific on Reddit. I will add your project to the Derivative Projects section!
+Although I won't approve requests that deviate from the project scope, feel free to reach out if you've built something on top of URS or have made modifications to scrape something specific on Reddit. I will add your project to the [Derivative Projects](#derivative-projects) section!
 
 ## Making Pull or Feature Requests
 
