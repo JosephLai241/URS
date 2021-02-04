@@ -375,7 +375,7 @@ This is a showcase for projects that are built on top of URS!
 
 <!-- DERIVATIVE PROJECTS LINKS: Links to projects that were built on top of URS -->
 [skiwheelr Project Link]: https://github.com/skiwheelr/URS
-[skiwheelr screenshot]: https://LINKGOESHERE.com
+[skiwheelr screenshot]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Derivative%20Projects/Skiwheelr%20Example%20Results.png
 
 <!-- ADDITIONAL LINKS: A space for useful links -->
 [tree]: http://mama.indstate.edu/users/ice/tree
