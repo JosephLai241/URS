@@ -307,9 +307,9 @@ You are also more than welcome to create a pull request - adding additional feat
 
 This is a showcase for projects that are built on top of URS!
 
-| Project Name | Author                 | Description |
-|--------------|------------------------|-------------|
-| &nbsp;       | [skiwheelr][skiwheelr] | &nbsp;      |
+* [skiwheelr/URS][skiwheelr Project Link] 
+    + Contains a bash script built on URS which counts ticker mentions in Subreddits, subsequently cURLs all the relevant links in parallel, and counts the mentions of those.
+    + ![skiwheelr screenshot][skiwheelr screenshot]
 
 # Releases
 
@@ -348,7 +348,7 @@ This is a showcase for projects that are built on top of URS!
 [2-Factor Authentication]: https://github.com/JosephLai241/URS/blob/master/docs/Two-Factor%20Authentication.md
 [Error Messages and Rate Limit Info]: https://github.com/JosephLai241/URS/blob/master/docs/Error%20Messages.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/How%20to%20Get%20PRAW%20Credentials.md
-[Some Linux Tips]: https://www.linkhere.com/
+[Some Linux Tips]: https://github.com/JosephLai241/URS/blob/master/docs/Some%20Linux%20Tips.md
 
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/06-27-2020
@@ -374,8 +374,8 @@ This is a showcase for projects that are built on top of URS!
 [IceGerge421 Pull Request]: https://github.com/JosephLai241/URS/pull/20
 
 <!-- DERIVATIVE PROJECTS LINKS: Links to projects that were built on top of URS -->
-[skiwheelr]: https://github.com/skiwheelr
 [skiwheelr Project Link]: https://github.com/skiwheelr/URS
+[skiwheelr screenshot]: https://LINKGOESHERE.com
 
 <!-- ADDITIONAL LINKS: A space for useful links -->
 [tree]: http://mama.indstate.edu/users/ice/tree
