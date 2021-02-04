@@ -108,9 +108,8 @@ class NameFile():
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
         raw_n = self._check_len(raw_n)
-        f_name = self._fix(raw_n)
 
-        return f_name
+        return self._fix(raw_n)
 
     ### Determine file name format for Redditor scraping.
     def u_fname(self, limit, string):
@@ -125,7 +124,9 @@ class NameFile():
     ### Determine file name format for comments scraping.
     def c_fname(self, limit, string):
         if int(limit) != 0:
-            end = "result" if int(limit) < 2 else "results"
+            end = "result" \
+                if int(limit) < 2 \
+                else "results"
             raw_n = str("%s-%s-%s" % (string, limit, end))
         else:
             raw_n = str("%s-%s" % (string, "RAW"))
@@ -144,9 +145,11 @@ class Export():
     def _get_filename_extension(f_name, f_type, scrape):
         dir_path = "../scrapes/%s/%s" % (Global.date, scrape)
 
-        return dir_path + "/%s.json" % f_name \
+        extension = ".json" \
             if f_type == Global.eo[1] \
-            else dir_path + "/%s.csv" % f_name
+            else ".csv"
+
+        return dir_path + "/%s%s" % (f_name, extension)
 
     ### Export to CSV.
     @staticmethod
