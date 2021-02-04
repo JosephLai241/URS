@@ -23,7 +23,7 @@ class MakeArgs():
 
 class TestPrintSubsInitMethod():
     """
-    Testing PrintSubs class __init__() method found on line 21 in Basic.py.
+    Testing PrintSubs class __init__() method found on line 34 in Basic.py.
     """
 
     def test_print_subs_init_method_s_t_instance_variable(self):
@@ -31,7 +31,7 @@ class TestPrintSubsInitMethod():
 
 class TestPrintSubsFindSubsMethod():
     """
-    Testing PrintSubs class _find_subs() method found on line 25 in Basic.py.
+    Testing PrintSubs class _find_subs() method found on line 38 in Basic.py.
     I am not quite sure how I can test this without exposing my personal PRAW 
     credentials, so I am just passing these tests until I find a way around the
     problem.
@@ -48,7 +48,7 @@ class TestPrintSubsFindSubsMethod():
 
 class TestPrintSubsPrintSubredditsMethod():
     """
-    Testing PrintSubs class print_subreddits() method found on line 34 in Basic.py.
+    Testing PrintSubs class print_subreddits() method found on line 46 in Basic.py.
     I am not quite sure how I can test this without exposing my personal PRAW 
     credentials, so I am just passing these tests until I find a way around the
     problem.
@@ -65,7 +65,7 @@ class TestPrintSubsPrintSubredditsMethod():
 
 class TestGetInputInitMethod():
     """
-    Testing GetInput class __init__() method found on line 54 in Basic.py.
+    Testing GetInput class __init__() method found on line 72 in Basic.py.
     """
 
     def test_get_input_init_method_categories_instance_variable(self):
@@ -73,7 +73,7 @@ class TestGetInputInitMethod():
 
 class TestGetInputGetSubredditsMethod():
     """
-    Testing GetInput class get_subreddits() method found on line 58 in Basic.py.
+    Testing GetInput class get_subreddits() method found on line 76 in Basic.py.
     I need to find a way to simulate user input for this function. Passing this
     test for now.
     """
@@ -86,7 +86,7 @@ class TestGetInputGetSubredditsMethod():
 
 class TestGetInputUpdateMasterMethod():
     """
-    Testing GetInput class _update_master() method found on line 74 in Basic.py.
+    Testing GetInput class _update_master() method found on line 92 in Basic.py.
     """
 
     def test_update_master_not_search_category(self):
@@ -111,7 +111,7 @@ class TestGetInputUpdateMasterMethod():
 
 class TestGetInputGetSearchMethod():
     """
-    Testing GetInput class _get_search() method found on line 82 in Basic.py.
+    Testing GetInput class _get_search() method found on line 102 in Basic.py.
     I need to find a way to simulate user input for this function. Passing this
     test for now. 
     """
@@ -127,7 +127,7 @@ class TestGetInputGetSearchMethod():
 
 class TestGetInputGetNResultsMethod():
     """
-    Testing GetInput class _get_n_results() method found on line 82 in Basic.py.
+    Testing GetInput class _get_n_results() method found on line 115 in Basic.py.
     I need to find a way to simulate user input for this function. Passing this
     test for now. 
     """
@@ -143,7 +143,7 @@ class TestGetInputGetNResultsMethod():
 
 class TestGetInputGetSettingsMethod():
     """
-    Testing GetInput class get_settings() method found on line 112 in Basic.py.
+    Testing GetInput class get_settings() method found on line 128 in Basic.py.
     I need to find a way to simulate user input for this function. Passing this
     test for now.
     """
@@ -162,7 +162,7 @@ class TestGetInputGetSettingsMethod():
 
 class TestConfirmInputConfirmSubredditsMethod():
     """
-    Testing GetInput class confirm_subreddits() method found on line 145 in Basic.py.
+    Testing ConfirmInput class confirm_subreddits() method found on line 161 in Basic.py.
     I need to find a way to simulate user input for this function. Passing this
     test for now.
     """
@@ -178,7 +178,7 @@ class TestConfirmInputConfirmSubredditsMethod():
 
 class TestConfirmInputAnotherMethod():
     """
-    Testing GetInput class another() method found on line 162 in Basic.py.
+    Testing ConfirmInput class another() method found on line 178 in Basic.py.
     I need to find a way to simulate user input for this function. Passing this
     test for now.
     """
@@ -194,7 +194,7 @@ class TestConfirmInputAnotherMethod():
 
 class TestRunBasicCreateSettingsMethod():
     """
-    Testing RunBasic class _create_settings() method found on line 180 in Basic.py.
+    Testing RunBasic class _create_settings() method found on line 196 in Basic.py.
     Waiting to figure out how to test user input before testing this function.
     Passing for now.
     """
@@ -204,7 +204,7 @@ class TestRunBasicCreateSettingsMethod():
 
 class TestRunBasicPrintConfirmMethod():
     """
-    Testing RunBasic class _print_confirm() method found on line 190 in Basic.py.
+    Testing RunBasic class _print_confirm() method found on line 206 in Basic.py.
     Waiting to figure out how to test user input before testing this function.
     Passing for now.
     """

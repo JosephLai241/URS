@@ -7,7 +7,7 @@ from urs.utils import Validation
 
 class TestValidationValidateUserMethod():
     """
-    Testing Validation class validate_user() method found on line 25 in 
+    Testing Validation class validate_user() method found on line 63 in 
     Validation.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -21,7 +21,7 @@ class TestValidationValidateUserMethod():
 
 class TestValidationCheckSubredditsMethod():
     """
-    Testing Validation class _check_subreddits() method found on line 31 in
+    Testing Validation class _check_subreddits() method found on line 71 in
     Validation.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -38,7 +38,7 @@ class TestValidationCheckSubredditsMethod():
 
 class TestValidationCheckRedditorsMethod():
     """
-    Testing Validation class _check_redditors() method found on line 41 in 
+    Testing Validation class _check_redditors() method found on line 81 in 
     Validation.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -55,7 +55,7 @@ class TestValidationCheckRedditorsMethod():
 
 class TestValidationCheckSubmissionsMethod():
     """
-    Testing Validation class _check_submissions() method found on line 51 in
+    Testing Validation class _check_submissions() method found on line 91 in
     Validation.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -72,7 +72,7 @@ class TestValidationCheckSubmissionsMethod():
 
 class TestValidationExistenceMethod():
     """
-    Testing Validation class existence() method found on line 61 in Validation.py.
+    Testing Validation class existence() method found on line 102 in Validation.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """

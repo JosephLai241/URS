@@ -7,7 +7,7 @@ from urs.utils import Global, Redditor
 
 class TestCheckRedditorsListUser():
     """
-    Testing CheckRedditors list_users() method found on line 27 in Redditor.py.
+    Testing CheckRedditors list_redditors() method found on line 40 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -23,7 +23,7 @@ class TestCheckRedditorsListUser():
 
 class TestProcessInteractionsInitMethod():
     """
-    Testing ProcessInteractions __init__() method found on line 60 in Redditor.py.
+    Testing ProcessInteractions __init__() method found on line 73 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -127,7 +127,7 @@ class TestProcessInteractionsInitMethod():
 
 class TestProcessInteractionsMakeZipDictMethod():
     """
-    Testing ProcessInteractions _make_zip_dict() method found on line 92 in 
+    Testing ProcessInteractions _make_zip_dict() method found on line 149 in 
     Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -155,8 +155,8 @@ class TestProcessInteractionsSubmissionAndCommentsListMethods():
     """
     Testing ProcessInteractions class functions for making comments and submission
     lists in Redditor.py:
-    _make_submission_list() on line 96,
-    _make_comment_list() on line 103
+    _make_submission_list() on line 153,
+    _make_comment_list() on line 168
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -170,7 +170,7 @@ class TestProcessInteractionsSubmissionAndCommentsListMethods():
 class TestProcessInteractionsDetermineAppendMethod():
     """
     Testing ProcessInteractions class _determine_append() method found on line
-    113 in Redditor.py.
+    187 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -193,7 +193,7 @@ class TestProcessInteractionsDetermineAppendMethod():
 
 class TestProcessInteractionsExtractMethod():
     """
-    Testing ProcessInteractions class _extract() method found on line 126 in 
+    Testing ProcessInteractions class _extract() method found on line 204 in 
     Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -207,7 +207,7 @@ class TestProcessInteractionsExtractMethod():
 
 class TestProcessInteractionsSortSubmissionsMethod():
     """
-    Testing ProcessInteractions class sort_submissions() method found on line 135
+    Testing ProcessInteractions class sort_submissions() method found on line 213
     in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -218,7 +218,7 @@ class TestProcessInteractionsSortSubmissionsMethod():
 
 class TestProcessInteractionsSortCommentsMethod():
     """
-    Testing ProcessInteractions class sort_comments() method found on line 139 in
+    Testing ProcessInteractions class sort_comments() method found on line 217 in
     Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -229,7 +229,7 @@ class TestProcessInteractionsSortCommentsMethod():
 
 class TestProcessInteractionsSortMuttsMethod():
     """
-    Testing ProcessInteractions class sort_mutts() method found on line 145 in 
+    Testing ProcessInteractions class sort_mutts() method found on line 223 in 
     Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -240,7 +240,7 @@ class TestProcessInteractionsSortMuttsMethod():
 
 class TestProcessInteractionsSortAccessMethod():
     """
-    Testing ProcessInteractions class sort_access() method found on line 152 in 
+    Testing ProcessInteractions class sort_access() method found on line 230 in 
     Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -254,7 +254,7 @@ class TestProcessInteractionsSortAccessMethod():
 
 class TestGetInteractionsInitMethod():
     """
-    Testing GetInteractions class __init__() method found on line 170 in Redditor.py.
+    Testing GetInteractions class __init__() method found on line 245 in Redditor.py.
     """
 
     def test_get_interactions_init_method_titles_instance_variable(self):
@@ -268,7 +268,7 @@ class TestGetInteractionsInitMethod():
 
 class TestGetInteractionsMakeUserProfileMethod():
     """
-    Testing GetInteractions class _make_user_profile() method found on line 179
+    Testing GetInteractions class _make_user_profile() method found on line 272
     in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -309,7 +309,7 @@ class TestGetInteractionsMakeUserProfileMethod():
 
 class TestGetInteractionsGetUserInfoMethod():
     """
-    Testing GetInteractions class _get_user_info() method found on line 191 in 
+    Testing GetInteractions class _get_user_info() method found on line 285 in 
     Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -321,7 +321,7 @@ class TestGetInteractionsGetUserInfoMethod():
 class TestGetInteractionsGetUserInteractionsMethod():
     """
     Testing GetInteractions class _get_user_interactions() method found on line 
-    201 in Redditor.py.
+    304 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -331,7 +331,7 @@ class TestGetInteractionsGetUserInteractionsMethod():
 
 class TestGetInteractionsGetMethod():
     """
-    Testing GetInteractions class get() method found on line 209 in Redditor.py.
+    Testing GetInteractions class get() method found on line 312 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -341,7 +341,7 @@ class TestGetInteractionsGetMethod():
 
 class TestWriteInitMethod():
     """
-    Testing Write class __init__() method found on line 222 in Redditor.py.
+    Testing Write class __init__() method found on line 325 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -351,7 +351,7 @@ class TestWriteInitMethod():
 
 class TestWriteDetermineExportMethod():
     """
-    Testing Write class _determine_export() method found on line 226 in Redditor.py.
+    Testing Write class _determine_export() method found on line 329 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -364,7 +364,7 @@ class TestWriteDetermineExportMethod():
 
 class TestWritePrintConfirmMethod():
     """
-    Testing Write class _print_confirm() method found on line 231 in Redditor.py.
+    Testing Write class _print_confirm() method found on line 337 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -374,7 +374,7 @@ class TestWritePrintConfirmMethod():
 
 class TestWriteWriteMethod():
     """
-    Testing Write class write() method found on line 238 in Redditor.py.
+    Testing Write class write() method found on line 348 in Redditor.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """

@@ -9,7 +9,7 @@ from urs.utils import Global
 
 class TestGlobalVariables():
     """
-    Testing all global variables found on lines 7-23 in Global.py.
+    Testing all global variables found on lines 7-37 in Global.py.
     """
 
     def test_date_variable(self):
@@ -34,7 +34,7 @@ class TestGlobalVariables():
 
 class TestConvertTime():
     """
-    Test convert_time() function on line 26 in Global.py.
+    Test convert_time() function on line 40 in Global.py.
     """
 
     def test_convert_time(self):
@@ -45,8 +45,8 @@ class TestConvertTime():
 
 class TestMakeDictionary():
     """
-    Test make_list_dict() function on line 30 and make_none_dict() function on
-    line 34 in Global.py.
+    Test make_list_dict() function on line 44 and make_none_dict() function on
+    line 48 in Global.py.
     """
 
     def test_make_list_dict(self):
