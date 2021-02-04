@@ -27,7 +27,7 @@ class InitializeDirectory():
     ### if it doesn't exist.
     @staticmethod
     def make_type_directory(scrape):
-        scrape_dir = ("../scrapes/%s/%s") % (Global.date, scrape)
+        scrape_dir = "../scrapes/%s/%s" % (Global.date, scrape)
         if not os.path.isdir(scrape_dir):
             os.mkdir(scrape_dir)
     
