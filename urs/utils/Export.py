@@ -123,6 +123,7 @@ class NameFile():
 
     ### Determine file name format for comments scraping.
     def c_fname(self, limit, string):
+        string = self._check_len(string)
         if int(limit) != 0:
             end = "result" \
                 if int(limit) < 2 \
@@ -130,8 +131,6 @@ class NameFile():
             raw_n = str("%s-%s-%s" % (string, limit, end))
         else:
             raw_n = str("%s-%s" % (string, "RAW"))
-
-        raw_n = self._check_len(raw_n)
 
         return self._fix(raw_n)
 
