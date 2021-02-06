@@ -23,6 +23,8 @@
 
 * [Introduction](#introduction)
 * [URS Overview](#urs-overview)
+    + [Scrape Speeds](#scrape-speeds)
+    + [Export Directory Structure](#export-directory-structure)
     + [Getting Started](#getting-started)
     + [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
     + [Subreddits](#subreddits)
