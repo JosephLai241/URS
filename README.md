@@ -364,7 +364,7 @@ This is a showcase for projects that are built on top of URS!
 [Some Linux Tips]: https://github.com/JosephLai241/URS/blob/master/docs/Some%20Linux%20Tips.md
 
 <!-- SAMPLES: Links to the samples directory -->
-[Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/06-27-2020
+[Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/02-05-2021
 
 <!-- COMMUNITY DOCS: Links to the community docs -->
 [Bug Report]: https://github.com/JosephLai241/URS/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
