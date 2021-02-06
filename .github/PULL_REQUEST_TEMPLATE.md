@@ -86,7 +86,9 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 
 ## Dependencies
 
+```
 **Paste your new `requirements.txt` here. Put "N/A" in this block if this is not applicable.**
+```
 
 # Checklist
 
