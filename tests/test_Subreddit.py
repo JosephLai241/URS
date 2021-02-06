@@ -7,7 +7,7 @@ from urs.utils import Global, Subreddit
 
 class TestCheckSubredditsListSubredditsMethod():
     """
-    Testing CheckSubreddits class list_subreddits() method found on line 26 in 
+    Testing CheckSubreddits class list_subreddits() method found on line 40 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -24,7 +24,7 @@ class TestCheckSubredditsListSubredditsMethod():
 
 class TestPrintConfirmPrintEachMethod():
     """
-    Testing PrintConfirm class _print_each() method found on line 50 in Subreddit.py.
+    Testing PrintConfirm class _print_each() method found on line 64 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -34,7 +34,7 @@ class TestPrintConfirmPrintEachMethod():
 
 class TestPrintConfirmPrintSettingsMethod():
     """
-    Testing PrintConfirm class print_settings() method found on line 61 in 
+    Testing PrintConfirm class print_settings() method found on line 78 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -45,7 +45,7 @@ class TestPrintConfirmPrintSettingsMethod():
 
 class TestPrintConfirmConfirmSettingsMethod():
     """
-    Testing PrintConfirm class confirm_settings() method found on line 71 in 
+    Testing PrintConfirm class confirm_settings() method found on line 95 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -62,7 +62,7 @@ class TestPrintConfirmConfirmSettingsMethod():
 
 class TestGetPostsSwitchInitMethod():
     """
-    Testing GetPostsSwitch class __init__() method found on line 92 in 
+    Testing GetPostsSwitch class __init__() method found on line 116 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -88,7 +88,7 @@ class TestGetPostsSwitchInitMethod():
 
 class TestGetPostsSwitchScrapeSubMethod():
     """
-    Testing GetPostsSwitch class scrape_sub() method found on line 108 in 
+    Testing GetPostsSwitch class scrape_sub() method found on line 136 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -111,7 +111,7 @@ class TestGetPostsSwitchScrapeSubMethod():
 
 class TestGetPostsCollectSearchMethod():
     """
-    Testing GetPosts class _collect_search() method found on line 118 in 
+    Testing GetPosts class _collect_search() method found on line 146 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -122,7 +122,7 @@ class TestGetPostsCollectSearchMethod():
 
 class TestGetPostsCollectOthersMethod():
     """
-    Testing GetPosts class _collect_others() method found on line 126 in Subreddit.py.
+    Testing GetPosts class _collect_others() method found on line 159 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -135,7 +135,7 @@ class TestGetPostsCollectOthersMethod():
 
 class TestGetPostsGetMethod():
     """
-    Testing GetPosts class get() method found on line 138 in Subreddit.py.
+    Testing GetPosts class get() method found on line 175 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -148,7 +148,7 @@ class TestGetPostsGetMethod():
 
 class TestSortPostsInitMethod():
     """
-    Testing SortPosts class __init__() method found on line 151 in Subreddit.py.
+    Testing SortPosts class __init__() method found on line 188 in Subreddit.py.
     """
 
     def test_sort_posts_init_method_convert_time_instance_variable(self):
@@ -162,7 +162,7 @@ class TestSortPostsInitMethod():
 
 class TestSortPostsInitializeDictMethod():
     """
-    Testing SortPosts class _initialize_dict() method found on line 158 in 
+    Testing SortPosts class _initialize_dict() method found on line 207 in 
     Subreddit.py.
     """
 
@@ -185,7 +185,7 @@ class TestSortPostsInitializeDictMethod():
 
 class TestSortPostsFixEditDateMethod():
     """
-    Testing SortPosts class _fix_edit_date() method found on line 162 in 
+    Testing SortPosts class _fix_edit_date() method found on line 211 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -199,7 +199,7 @@ class TestSortPostsFixEditDateMethod():
 
 class TestSortPostsFixGetDataMethod():
     """
-    Testing SortPosts class _get_data() method found on line 167 in Subreddit.py.
+    Testing SortPosts class _get_data() method found on line 217 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -209,7 +209,7 @@ class TestSortPostsFixGetDataMethod():
 
 class TestSortPostsCsvFormatMethod():
     """
-    Testing SortPosts class _csv_format() method found on line 177 in Subreddit.py.
+    Testing SortPosts class _csv_format() method found on line 238 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -219,7 +219,7 @@ class TestSortPostsCsvFormatMethod():
 
 class TestSortPostsJsonFormatMethod():
     """
-    Testing SortPosts class _json_format() method found on line 182 in Subreddit.py.
+    Testing SortPosts class _json_format() method found on line 243 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -229,7 +229,7 @@ class TestSortPostsJsonFormatMethod():
 
 class TestSortPostsSortMethod():
     """
-    Testing SortPosts class sort() method found on line 187 in Subreddit.py.
+    Testing SortPosts class sort() method found on line 249 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -242,7 +242,7 @@ class TestSortPostsSortMethod():
 
 class TestGetSortWriteInitMethod():
     """
-    Testing GetSortWrite class __init__() method found on line 209 in Subreddit.py.
+    Testing GetSortWrite class __init__() method found on line 271 in Subreddit.py.
     """
 
     def test_get_sort_write_init_method_eo_instance_variable(self):
@@ -250,7 +250,7 @@ class TestGetSortWriteInitMethod():
 
 class TestGetSortWriteGetSortMethod():
     """
-    Testing GetSortWrite class _get_sort() method found on line 213 in Subreddit.py.
+    Testing GetSortWrite class _get_sort() method found on line 275 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -260,7 +260,7 @@ class TestGetSortWriteGetSortMethod():
 
 class TestGetSortWriteDetermineExportMethod():
     """
-    Testing GetSortWrite class _determine_export() method found on line 218 in 
+    Testing GetSortWrite class _determine_export() method found on line 280 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -274,7 +274,7 @@ class TestGetSortWriteDetermineExportMethod():
 
 class TestGetSortWritePrintConfirmMethod():
     """
-    Testing GetSortWrite class _print_confirm() method found on line 223 in 
+    Testing GetSortWrite class _print_confirm() method found on line 288 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -288,7 +288,7 @@ class TestGetSortWritePrintConfirmMethod():
 
 class TestGetSortWriteWriteMethod():
     """
-    Testing GetSortWrite class _write() method found on line 230 in Subreddit.py.
+    Testing GetSortWrite class _write() method found on line 299 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -298,7 +298,7 @@ class TestGetSortWriteWriteMethod():
 
 class TestGetSortWriteGswMethod():
     """
-    Testing GetSortWrite class gsw() method found on line 236 in Subreddit.py.
+    Testing GetSortWrite class gsw() method found on line 305 in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -311,7 +311,7 @@ class TestGetSortWriteGswMethod():
 
 class TestRunSubredditCreateSettingsMethod():
     """
-    Testing RunSubreddit class _create_settings() method found on line 252 in 
+    Testing RunSubreddit class _create_settings() method found on line 320 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -322,7 +322,7 @@ class TestRunSubredditCreateSettingsMethod():
 
 class TestRunSubredditConfirmWriteMethod():
     """
-    Testing RunSubreddit class _confirm_write() method found on line 263 in 
+    Testing RunSubreddit class _confirm_write() method found on line 330 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -336,7 +336,7 @@ class TestRunSubredditConfirmWriteMethod():
 
 class TestRunSubredditWriteFileMethod():
     """
-    Testing RunSubreddit class _write_file() method found on line 275 in 
+    Testing RunSubreddit class _write_file() method found on line 343 in 
     Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.

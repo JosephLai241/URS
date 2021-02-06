@@ -4,7 +4,8 @@
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 from prettytable import PrettyTable
 
 from . import (
@@ -12,10 +13,12 @@ from . import (
     Export, 
     Global, 
     Titles, 
-    Validation)
+    Validation
+)
 from .Logger import (
     LogExport, 
-    LogScraper)
+    LogScraper
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -275,15 +278,20 @@ class GetSortWrite():
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
-        Export.Export.export(f_name, self._eo[1], overview) \
+        export_option = self._eo[1] \
             if args.json \
-            else Export.Export.export(f_name, self._eo[0], overview)
+            else self._eo[0]
+
+        Export.Export.export(f_name, export_option, overview, "subreddits")
 
     ### Set print length depending on string length.
     def _print_confirm(self, args, sub):
-        confirmation = "\nJSON file for r/%s created." % sub \
+        export_option = "JSON" \
             if args.json \
-            else "\nCSV file for r/%s created." % sub
+            else "CSV"
+
+        confirmation = "\n%s file for r/%s created." % (export_option, sub)
+
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 

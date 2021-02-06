@@ -10,7 +10,7 @@ Delete this line and write your motivation/context here. Section your motivation
 
 ## New Dependencies
 
-Delete this line and write your new dependencies here. **Put "None." here if there are no new dependencies.**
+Delete this line and write your new dependencies here. **Put "None" here if there are no new dependencies.**
 
 ## Issue Fix or Enhancement Request
 
@@ -86,7 +86,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 
 ## Dependencies
 
-**Paste `requirements.txt` here. Put "N/A" in this block if this is not applicable.**
+**Paste your new `requirements.txt` here. Put "N/A" in this block if this is not applicable.**
 
 # Checklist
 

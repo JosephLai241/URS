@@ -1,5 +1,7 @@
 #!/usr/bin/python
-from setuptools import find_packages, setup
+from setuptools import (
+    find_packages, 
+    setup)
 import io
 import os
 import sys
@@ -8,10 +10,10 @@ with open("README.md", "r") as readme:
     LONG_DESCRIPTION = readme.read()
 
 NAME = "URS"
-VERSION = "3.1.0"
+VERSION = "3.1.2"
 AUTHOR = "Joseph Lai"
 EMAIL = "urs_project@protonmail.com"
-URL = "https://github.com/JosephLai241/Universal-Reddit-Scraper/"
+URL = "https://github.com/JosephLai241/URS"
 
 DESCRIPTION = "URS: An advanced Reddit scraping & OSINT command-line tool."
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
@@ -35,8 +37,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3 :: Only", 
 
     "Topic :: Terminals", 
-    "Topic :: Utilities"
-]
+    "Topic :: Utilities"]
 KEYWORDS = [
     "API", 
     "comments", 
@@ -47,8 +48,7 @@ KEYWORDS = [
     "scraping",
     "submission", 
     "Subreddit",
-    "web"
-]
+    "web"]
 
 LICENSE = "MIT"
 
@@ -57,11 +57,11 @@ PACKAGES = find_packages()
 REQUIRES_PYTHON = ">=3.5"
 
 PROJECT_URLS = {
-    "Bug Reports": "https://github.com/JosephLai241/Universal-Reddit-Scraper/issues",
+    "Bug Reports": "https://github.com/JosephLai241/URS/issues",
     "Build Status": "https://travis-ci.org/github/JosephLai241/URS",
     "Coverage": "https://codecov.io/gh/JosephLai241/URS",
     "Say Thanks!": "https://saythanks.io/to/jlai24142%40gmail.com",
-    "Source": "https://github.com/JosephLai241/Universal-Reddit-Scraper/"
+    "Source": "https://github.com/JosephLai241/URS"
 }
 
 setup(

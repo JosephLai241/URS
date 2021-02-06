@@ -7,7 +7,7 @@ from urs.utils import DirInit
 
 class TestInitializeDirectoryMakeDirectoryMethod():
     """
-    Testing InitializeDirectory class make_directory() method found on line 16 in
+    Testing InitializeDirectory class make_directory() method found on line 17 in
     DirInit.py.
     """
 

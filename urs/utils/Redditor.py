@@ -6,7 +6,8 @@ import praw
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 from prawcore import PrawcoreException
 
 from . import (
@@ -14,10 +15,12 @@ from . import (
     Export, 
     Global, 
     Titles, 
-    Validation)
+    Validation
+)
 from .Logger import (
     LogExport, 
-    LogScraper)
+    LogScraper
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -39,8 +42,7 @@ class CheckRedditors():
         users, not_users = Validation.Validation.existence(s_t[1], user_list, parser, reddit, s_t)
         
         if not_users:
-            print(Fore.YELLOW + Style.BRIGHT + 
-                "\nThe following Redditors were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Redditors were not found and will be skipped:")
             print(Fore.YELLOW + Style.BRIGHT + "-" * 59)
             print(*not_users, sep = "\n")
 
@@ -93,7 +95,8 @@ class ProcessInteractions():
             "Edited?", 
             "Stickied?", 
             "Replying to", 
-            "In Subreddit"]
+            "In Subreddit"
+        ]
         self._submission_titles = [
             "Title", 
             "Date Created", 
@@ -102,39 +105,45 @@ class ProcessInteractions():
             "ID", 
             "NSFW?", 
             "In Subreddit", 
-            "Body"]
+            "Body"
+        ]
 
         self._s_types = [
             "Submissions", 
             "Comments", 
             "Mutts", 
-            "Access"]
+            "Access"
+        ]
 
         self._mutts = [
             self._controversial, 
             self._gilded, 
             self._hot, 
             self._new, 
-            self._top]
+            self._top
+        ]
         self._mutt_names = [
             "Controversial", 
             "Gilded", 
             "Hot", 
             "New", 
-            "Top"]
+            "Top"
+        ]
 
         self._access = [
             self._downvoted, 
             self._gildings, 
             self._hidden, 
             self._saved, 
-            self._upvoted]
+            self._upvoted
+        ]
         self._access_names = [
             "Downvoted", 
             "Gildings", 
             "Hidden", 
             "Saved", 
-            "Upvoted"]
+            "Upvoted"
+        ]
 
     ### Make dictionary from zipped lists.
     def _make_zip_dict(self, items, titles):
@@ -150,7 +159,8 @@ class ProcessInteractions():
             item.id, 
             item.over_18, 
             item.subreddit.display_name, 
-            item.selftext]
+            item.selftext
+        ]
 
         return self._make_zip_dict(items, self._submission_titles)
 
@@ -168,7 +178,8 @@ class ProcessInteractions():
             edit_date, 
             item.stickied, 
             item.submission.selftext, 
-            item.submission.subreddit.display_name]
+            item.submission.subreddit.display_name
+        ]
 
         return self._make_zip_dict(items, self._comment_titles)
 
@@ -177,8 +188,12 @@ class ProcessInteractions():
         switch = {
             0: "Submissions",
             1: "Comments",
-            2: "%s" % cat.capitalize() if cat != None else None,
-            3: "%s (may be forbidden)" % cat.capitalize() if cat != None else None
+            2: "%s" % cat.capitalize() \
+                if cat != None \
+                else None,
+            3: "%s (may be forbidden)" % cat.capitalize() \
+                if cat != None \
+                else None
         }
 
         index = self._s_types.index(s_type)
@@ -217,12 +232,9 @@ class ProcessInteractions():
             try:
                 self._extract(cat, obj, self._s_types[3])
             except PrawcoreException as error:
-                print(Style.BRIGHT + Fore.RED + 
-                    ("\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING.") % 
-                    (cat.upper(), error))
+                print(Style.BRIGHT + Fore.YELLOW + "\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING." % (cat.upper(), error))
                 
-                self._overview["%s (may be forbidden)" % 
-                    cat.capitalize()].append("FORBIDDEN")
+                self._overview["%s (may be forbidden)" % cat.capitalize()].append("FORBIDDEN")
 
 class GetInteractions():
     """
@@ -253,13 +265,15 @@ class GetInteractions():
             "Gilded", 
             "Gildings (may be forbidden)", 
             "Hidden (may be forbidden)", 
-            "Saved (may be forbidden)"]
+            "Saved (may be forbidden)"
+        ]
 
     ### Make Redditor dictionary to store data.
     def _make_user_profile(self, limit, reddit, user):
-        plurality = "results" if int(limit) > 1 else "result"
-        print(Style.BRIGHT + ("\nProcessing %s %s from u/%s's profile...") % 
-            (limit, plurality, user))
+        plurality = "results" \
+            if int(limit) > 1 \
+            else "result"
+        print(Style.BRIGHT + "\nProcessing %s %s from u/%s's profile..." % (limit, plurality, user))
         print("\nThis may take a while. Please wait.")
 
         user = reddit.redditor(user)
@@ -280,7 +294,8 @@ class GetInteractions():
             user.is_employee, 
             user.is_friend,
             user.is_mod, 
-            user.is_gold]
+            user.is_gold
+        ]
 
         for title, user_item in zip(user_info_titles, user_info):
             overview[title].append(user_item) 
@@ -312,16 +327,20 @@ class Write():
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
-        Export.Export.export(f_name, self._eo[1], overview) \
+        export_option = self._eo[1] \
             if args.json \
-            else Export.Export.export(f_name, self._eo[0], overview)
+            else self._eo[0]
+
+        Export.Export.export(f_name, export_option, overview, "redditors")
 
     ### Print confirmation message and set print length depending on string length.
     def _print_confirm(self, args, user):
-        confirmation = "\nJSON file for u/%s created." % user \
+        export_option = "JSON" \
             if args.json \
-            else "\nCSV file for u/%s created." % user
-        
+            else "CSV"
+
+        confirmation = "\n%s file for u/%s created." % (export_option, user)
+
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 

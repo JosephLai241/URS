@@ -31,7 +31,7 @@ class MakeArgs():
 
 class TestParserInitMethod():
     """
-    Testing Parser class __init__() method found on line 17 in Cli.py.
+    Testing Parser class __init__() method found on line 31 in Cli.py.
     """
 
     def test_parser_init_method_usage_instance_variable(self):
@@ -108,7 +108,7 @@ You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include
 
 class TestParserAddFlagsMethod():
     """
-    Testing Parser class _add_flags() method found on line 74 in Cli.py.
+    Testing Parser class _add_flags() method found on line 97 in Cli.py.
     """
 
     def test_add_flags_method_subreddit_flag(self):
@@ -159,7 +159,7 @@ class TestParserAddFlagsMethod():
 
 class TestParserAddExportMethod():
     """
-    Testing Parser class _add_export() method found on line 104 in Cli.py.
+    Testing Parser class _add_export() method found on line 132 in Cli.py.
     """
 
     def test_add_export_method_csv_flag(self):
@@ -180,7 +180,7 @@ class TestParserAddExportMethod():
 
 class TestParserParseArgsMethod():
     """
-    Testing Parser class parse_args() method found on line 116 in Cli.py.
+    Testing Parser class parse_args() method found on line 147 in Cli.py.
     """
 
     def test_parse_args_method_subreddit_and_json_flags(self):
@@ -269,7 +269,7 @@ class TestGetScrapeSettingsInitMethod():
 
 class TestGetScrapeSettingsListSwitchMethod():
     """
-    Testing GetScrapeSettings class _list_switch() method found on line 144 in 
+    Testing GetScrapeSettings class _list_switch() method found on line 183 in 
     Cli.py.
     """
 
@@ -302,7 +302,7 @@ class TestGetScrapeSettingsListSwitchMethod():
 
 class TestGetScrapeSettingsCreateListMethod():
     """
-    Testing GetScrapeSettings class create_list() method found on line 154 in 
+    Testing GetScrapeSettings class create_list() method found on line 193 in 
     Cli.py.
     """
 
@@ -336,7 +336,7 @@ class TestGetScrapeSettingsCreateListMethod():
 class TestGetScrapeSettingsSubredditSettingsMethod():
     """
     Testing GetScrapeSettings class _subreddit_settings() method found on line 
-    161 in Cli.py.
+    212 in Cli.py.
     """
 
     def test_subreddit_settings_one_subreddit(self):
@@ -349,7 +349,7 @@ class TestGetScrapeSettingsSubredditSettingsMethod():
 
 class TestGetScrapeSettingsTwoArgsSettingsMethod():
     """
-    Testing GetScrapeSettings class _two_arg_settings() method found on line 170
+    Testing GetScrapeSettings class _two_arg_settings() method found on line 222
     in Cli.py.
     """
 
@@ -371,7 +371,7 @@ class TestGetScrapeSettingsTwoArgsSettingsMethod():
 
 class TestGetScrapeSettingsGetSettingsMethod():
     """
-    Testing GetScrapeSettings class get_settings() method found on line 175 in 
+    Testing GetScrapeSettings class get_settings() method found on line 227 in 
     Cli.py.
     """
 
@@ -404,7 +404,7 @@ class TestGetScrapeSettingsGetSettingsMethod():
 
 class TestCheckCliInitMethod():
     """
-    Testing CheckCli class __init__() method found on line 189 in Cli.py.
+    Testing CheckCli class __init__() method found on line 241 in Cli.py.
     """
 
     def test_check_cli_init_method_short_cat_instance_variable(self):
@@ -416,7 +416,7 @@ class TestCheckCliInitMethod():
 
 class TestCheckCliCheckSubredditMethod():
     """
-    Testing CheckCli class _check_subreddit() method found on line 193 in Cli.py.
+    Testing CheckCli class _check_subreddit() method found on line 270 in Cli.py.
     """
 
     def test_check_subreddit_with_correct_args(self):
@@ -438,7 +438,7 @@ class TestCheckCliCheckSubredditMethod():
 
 class TestCheckCliCheckRedditorMethod():
     """
-    Testing CheckCli class _check_redditor() method found on line 205 in Cli.py.
+    Testing CheckCli class _check_redditor() method found on line 284 in Cli.py.
     """
 
     def test_check_redditor_with_correct_args(self):
@@ -460,7 +460,7 @@ class TestCheckCliCheckRedditorMethod():
 
 class TestCheckCliCheckCommentsMethod():
     """
-    Testing CheckCli class _check_comments() method found on line 212 in Cli.py.
+    Testing CheckCli class _check_comments() method found on line 293 in Cli.py.
     """
 
     def test_check_comments_with_correct_args(self):
@@ -483,7 +483,7 @@ class TestCheckCliCheckCommentsMethod():
 
 class TestCheckCliCheckArgsMethod():
     """
-    Testing CheckCli class check_args() method found on line 224 in Cli.py.
+    Testing CheckCli class check_args() method found on line 301 in Cli.py.
     """
 
     def test_check_args_with_valid_subreddit_args(self):

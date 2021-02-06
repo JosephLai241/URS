@@ -7,7 +7,7 @@ from urs.utils import Global, Tools
 
 class TestRunInitMethod():
     """
-    Testing Run class __init__() method found on line 18 in Tools.py.
+    Testing Run class __init__() method found on line 31 in Tools.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -25,7 +25,7 @@ class TestRunInitMethod():
 
 class TestRunLoginAndArgsMethod():
     """
-    Testing Run class _login_and_args() method found on line 25 in Tools.py.
+    Testing Run class _login_and_args() method found on line 38 in Tools.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     Do I need this test? It would also be tested in the class above...
@@ -36,7 +36,7 @@ class TestRunLoginAndArgsMethod():
 
 class TestRunRunUrsMethod():
     """
-    Testing Run class run_urs() method found on line 35 in Tools.py.
+    Testing Run class run_urs() method found on line 48 in Tools.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """

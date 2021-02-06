@@ -7,13 +7,15 @@ import time
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 from prawcore import PrawcoreException
 
 from . import (
     DirInit, 
     Global, 
-    Titles)
+    Titles
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -36,7 +38,8 @@ class LogMain():
     logging.basicConfig(
         filename = DIR_PATH + "/scrapes.log", 
         format = LOG_FORMAT, 
-        level = logging.INFO)
+        level = logging.INFO
+    )
     
     ### Wrapper for logging the amount of time it took to execute main(). Handle
     ### KeyboardInterrupt if user cancels scraping.
@@ -56,8 +59,7 @@ class LogMain():
                 logging.warning("URS ABORTED BY USER.\n")
                 quit()
 
-            logging.info("URS COMPLETED SCRAPES IN %.2f SECONDS.\n" % \
-                (time.time() - start))
+            logging.info("URS COMPLETED SCRAPES IN %.2f SECONDS.\n" % (time.time() - start))
 
         return wrapper
 
@@ -119,8 +121,7 @@ class LogError():
 
             if int(user_limits["remaining"]) == 0:
                 Titles.Titles.l_title(Global.convert_time(user_limits["reset_timestamp"]))
-                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % 
-                    Global.convert_time(user_limits["reset_timestamp"]))
+                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % Global.convert_time(user_limits["reset_timestamp"]))
                 quit()
             
             return user_limits
@@ -175,34 +176,32 @@ class LogScraper():
     def _set_subreddit_log(category, n_res_or_kwds, sub_name):
         return "Scraping r/%s for %s %s results..." % (sub_name, n_res_or_kwds, category) \
             if category != Global.categories[5] \
-            else "Searching and scraping r/%s for posts containing '%s'..." % \
-                (sub_name, n_res_or_kwds)
+            else "Searching and scraping r/%s for posts containing '%s'..." % (sub_name, n_res_or_kwds)
 
     ### Format Subreddit log differently if user searched for keywords. Log an
     ### additional line if the time filter was applied.
     @staticmethod
     def _format_subreddit_log(each_arg):
         if len(each_arg) == 4:
-            logging.info("Getting posts from the past %s for %s results." % \
-                (each_arg[3], each_arg[1]))
+            logging.info("Getting posts from the past %s for %s results." % (each_arg[3], each_arg[1]))
 
         return LogScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
 
     ### Format Redditor log depending on number of results scraped.
     @staticmethod
     def _format_redditor_log(each_arg):
-        plurality = "results" if int(each_arg[1]) > 1 else "result"
+        plurality = "results" \
+            if int(each_arg[1]) > 1 \
+            else "result"
         return "Scraping %s %s for u/%s..." % (each_arg[1], plurality, each_arg[0])
 
     ### Format comments log depending on raw or structured export.
     @staticmethod
     def _format_comments_log(each_arg):
         plurality = "comments" if int(each_arg[1]) > 1 else "comment"
-        return "Processing %s %s in structured format from Reddit post %s" % \
-            (each_arg[1], plurality, each_arg[0]) \
+        return "Processing %s %s in structured format from Reddit post %s" % (each_arg[1], plurality, each_arg[0]) \
             if int(each_arg[1]) > 0 \
-            else "Processing all comments in raw format from Reddit post %s" % \
-                each_arg[0]
+            else "Processing all comments in raw format from Reddit post %s" % each_arg[0]
 
     ### Format string for log file depending on what was scraped, then log the 
     ### string.
@@ -212,11 +211,14 @@ class LogScraper():
         for each_arg in args:
             formats = {
                 Global.s_t[0]: LogScraper._format_subreddit_log(each_arg) \
-                    if scraper == Global.s_t[0] else None,
+                    if scraper == Global.s_t[0] \
+                    else None,
                 Global.s_t[1]: LogScraper._format_redditor_log(each_arg) \
-                    if scraper == Global.s_t[1] else None,
+                    if scraper == Global.s_t[1] \
+                    else None,
                 Global.s_t[2]: LogScraper._format_comments_log(each_arg) \
-                    if scraper == Global.s_t[2] else None
+                    if scraper == Global.s_t[2] \
+                    else None
             }
 
             logging.info(formats.get(scraper))
@@ -236,8 +238,7 @@ class LogScraper():
 
                 LogScraper._format_scraper_log(LogScraper._get_args_switch(args[0], scraper), scraper)
 
-                logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % \
-                    (scraper.upper(), time.time() - start))
+                logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % (scraper.upper(), time.time() - start))
                 logging.info("")
 
             return wrapper

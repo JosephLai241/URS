@@ -4,7 +4,8 @@
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

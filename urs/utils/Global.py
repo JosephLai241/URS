@@ -9,18 +9,21 @@ date = dt.datetime.now().strftime("%m-%d-%Y")
 ### Export options.
 eo = [
     "csv", 
-    "json"]
+    "json"
+]
 
 ### Confirm or deny options.
 options = [
     "y", 
-    "n"]
+    "n"
+]
 
 ### Scrape types.
 s_t = [
     "subreddit", 
     "redditor", 
-    "comments"]
+    "comments"
+]
 
 ### Subreddit categories.
 categories = [
@@ -29,7 +32,8 @@ categories = [
     "Controversial", 
     "Top", 
     "Rising", 
-    "Search"]
+    "Search"
+]
 short_cat = [cat[0] for cat in categories]
 
 ### Convert UNIX time to readable format.

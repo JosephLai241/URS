@@ -7,17 +7,27 @@ from . import Global
 
 class InitializeDirectory():
     """
-    On the first run, create the `scrapes/` directory. Then make a sub-directory 
-    corresponding with the date in which the user scraped data from Reddit if it 
-    does not exist.
+    Methods for initializing directories for the exported files.
     """
     
+    ### On the first run, create the `scrapes/` directory. Then make a sub-directory 
+    ### corresponding with the date in which the user scraped data from Reddit if it 
+    ### does not exist.
     @staticmethod
     def make_directory():
-        scrapes_dir = "../scrapes"
-        if not os.path.isdir(scrapes_dir):
-            os.mkdir(scrapes_dir)
+        top_dir = "../scrapes"
+        if not os.path.isdir(top_dir):
+            os.mkdir(top_dir)
         
-        dir_path = "../scrapes/%s" % Global.date
-        if not os.path.isdir(dir_path):
-            os.mkdir(dir_path)
+        date_dir = "../scrapes/%s" % Global.date
+        if not os.path.isdir(date_dir):
+            os.mkdir(date_dir)
+
+    ### Make Subreddit, Redditor, or comments directory within the date directory
+    ### if it doesn't exist.
+    @staticmethod
+    def make_type_directory(scrape):
+        scrape_dir = "../scrapes/%s/%s" % (Global.date, scrape)
+        if not os.path.isdir(scrape_dir):
+            os.mkdir(scrape_dir)
+    

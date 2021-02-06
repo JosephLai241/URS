@@ -7,7 +7,7 @@ from urs.utils import Comments
 
 class TestCheckSubmissionsListPostsMethod():
     """
-    Testing CheckSubmissions class list_posts() method found on line 25 in Comments.py.
+    Testing CheckSubmissions class list_submissions() method found on line 38 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -23,17 +23,25 @@ class TestCheckSubmissionsListPostsMethod():
 
 class TestGetCommentsInitMethod():
     """
-    Testing PrintPosts class __init__() method found on line 48 in Comments.py.
+    Testing GetComments class __init__() method found on line 60 in Comments.py.
     """
 
     def test_get_comments_init_method_titles_instance_variable(self):
-        assert Comments.GetComments()._titles == ["Parent ID", "Comment ID", 
-            "Author", "Date Created", "Upvotes", "Text", "Edited?", 
-            "Is Submitter?", "Stickied?"]
+        assert Comments.GetComments()._titles == [
+            "Parent ID", 
+            "Comment ID", 
+            "Author", 
+            "Date Created", 
+            "Upvotes", 
+            "Text", 
+            "Edited?", 
+            "Is Submitter?", 
+            "Stickied?"
+        ]
 
 class TestGetCommentsFixAttributesMethod():
     """
-    Test GetComments class _fix_attributes() method found on line 53 in Comments.py.
+    Test GetComments class _fix_attributes() method found on line 74 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -52,7 +60,7 @@ class TestGetCommentsFixAttributesMethod():
 
 class TestGetCommentsAddCommentMethod():
     """
-    Testing GetComments class add_comment() method found on line 65 in Comments.py.
+    Testing GetComments class add_comment() method found on line 87 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -62,7 +70,7 @@ class TestGetCommentsAddCommentMethod():
 
 class TestSortCommentsRawCommentsMethod():
     """
-    Testing SortComments class _raw_comments() method found on line 86 in Comments.py.
+    Testing SortComments class _raw_comments() method found on line 116 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -73,9 +81,9 @@ class TestSortCommentsRawCommentsMethod():
 class TestSortCommentsLevelMethods():
     """
     Testing SortComments class functions for structured export in Comments.py:
-    _top_level_comment() on line 92,
-    _second_level_comment() on line 98,
-    _third_level_comment() on line 104.
+    _top_level_comment() on line 121,
+    _second_level_comment() on line 126,
+    _third_level_comment() on line 131.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -91,7 +99,7 @@ class TestSortCommentsLevelMethods():
 
 class TestSortCommentsStructuredCommentsMethod():
     """
-    Testing SortComments class _structured_comments() method on line 115 in 
+    Testing SortComments class _structured_comments() method on line 141 in 
     Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
@@ -108,7 +116,7 @@ class TestSortCommentsStructuredCommentsMethod():
 
 class TestSortCommentsToAllMethod():
     """
-    Testing SortComments class _to_all() method on line 125 in Comments.py.
+    Testing SortComments class _to_all() method on line 151 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -121,7 +129,7 @@ class TestSortCommentsToAllMethod():
 
 class TestSortCommentsSortMethod():
     """
-    Testing SortComments class sort() method on line 134 in Comments.py.
+    Testing SortComments class sort() method on line 162 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -131,7 +139,7 @@ class TestSortCommentsSortMethod():
 
 class TestGetSortInitMethod():
     """
-    Testing GetSort __init__() method found on line 144 in Comments.py.
+    Testing GetSort __init__() method found on line 172 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -141,7 +149,7 @@ class TestGetSortInitMethod():
 
 class TestGetSortGetRawMethod():
     """
-    Testing GetSort _get_raw() method found on line 152 in Comments.py.
+    Testing GetSort _get_raw() method found on line 181 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -151,7 +159,7 @@ class TestGetSortGetRawMethod():
 
 class TestGetSortGetStructuredMethod():
     """
-    Testing GetSort _get_structured() method found on line 160 in Comments.py.
+    Testing GetSort _get_structured() method found on line 187 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -161,7 +169,7 @@ class TestGetSortGetStructuredMethod():
 
 class TestGetSortGetSortMethod():
     """
-    Testing GetSort get_sort() method found on line 170 in Comments.py.
+    Testing GetSort get_sort() method found on line 196 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -174,7 +182,7 @@ class TestGetSortGetSortMethod():
 
 class TestWriteDetermineExportMethod():
     """
-    Test Write _determine_export() method found on line 186 in Comments.py.
+    Test Write _determine_export() method found on line 212 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -187,7 +195,7 @@ class TestWriteDetermineExportMethod():
 
 class TestWritePrintConfirmMethod():
     """
-    Test Write _print_confirm() method found on line 193 in Comments.py.
+    Test Write _print_confirm() method found on line 221 in Comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
@@ -200,7 +208,7 @@ class TestWritePrintConfirmMethod():
 
 class TestWriteWriteMethod():
     """
-    Test Write write() method found on line 202 in comments.py.
+    Test Write write() method found on line 233 in comments.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """

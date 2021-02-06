@@ -26,7 +26,7 @@ class MakeArgs():
 
 class TestFix():
     """
-    Testing _fix() function on line 19 in Export.py.
+    Testing _fix() function on line 30 in Export.py.
     """
 
     def test_fix(self):
@@ -37,7 +37,7 @@ class TestFix():
 
 class TestRCategory():
     """
-    Testing _r_category() function on line 24 in Export.py.
+    Testing _r_category() function on line 40 in Export.py.
     """
 
     def test_r_category_first_switch(self):
@@ -53,7 +53,7 @@ class TestRCategory():
 
 class TestRGetCategory():
     """
-    Testing _r_get_category() function on line 38 in Export.py.
+    Testing _r_get_category() function on line 54 in Export.py.
     """
                 
     def test_r_get_category_subreddit_arg_returns_zero(self):
@@ -70,7 +70,7 @@ class TestRGetCategory():
 
 class TestGetRawNWithSubredditArgs():
     """
-    Testing _get_raw_n() function on line 47 in Export.py.
+    Testing _get_raw_n() function on line 80 in Export.py.
     Testing with Subreddit args.
     """
 
@@ -82,7 +82,7 @@ class TestGetRawNWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "r-askreddit-Search-'test'"
+            "askreddit-Search-'test'"
 
     def test_get_raw_n_returns_category_filename_format_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -92,11 +92,11 @@ class TestGetRawNWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "r-askreddit-Hot-1-result"
+            "askreddit-Hot-1-result"
 
 class TestGetRawNWithBasicArgs():
     """
-    Testing _get_raw_n() function on line 47 in Export.py.
+    Testing _get_raw_n() function on line 80 in Export.py.
     Testing with Basic args.
     """
 
@@ -108,7 +108,7 @@ class TestGetRawNWithBasicArgs():
         sub = "askreddit"
 
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "r-askreddit-Search-'test'"
+            "askreddit-Search-'test'"
 
     def test_get_raw_n_returns_category_filename_format_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
@@ -118,11 +118,11 @@ class TestGetRawNWithBasicArgs():
         sub = "askreddit"
 
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "r-askreddit-Hot-1-result"
+            "askreddit-Hot-1-result"
 
 class TestRFnameWithSubredditArgs():
     """
-    Testing r_fname() function on line 57 in Export.py.
+    Testing r_fname() function on line 103 in Export.py.
     Testing with Subreddit args.
     """
 
@@ -133,7 +133,7 @@ class TestRFnameWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "r-askreddit-Search-'test'"
+            "askreddit-Search-'test'"
 
     def test_r_fname_returns_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -142,7 +142,7 @@ class TestRFnameWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "r-askreddit-Hot-5-results"
+            "askreddit-Hot-5-results"
 
     def test_r_fname_returns_non_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -151,11 +151,11 @@ class TestRFnameWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "r-askreddit-Hot-1-result"
+            "askreddit-Hot-1-result"
     
 class TestRFnameWithBasicArgs():
     """
-    Testing r_fname() function on line 57 in Export.py.
+    Testing r_fname() function on line 103 in Export.py.
     Testing with Basic args.
     """
 
@@ -166,7 +166,7 @@ class TestRFnameWithBasicArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "r-askreddit-Search-'test'"
+            "askreddit-Search-'test'"
 
     def test_r_fname_returns_plural_string_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
@@ -175,7 +175,7 @@ class TestRFnameWithBasicArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "r-askreddit-Hot-5-results"
+            "askreddit-Hot-5-results"
 
     def test_r_fname_returns_non_plural_string_with_basic_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
@@ -184,52 +184,52 @@ class TestRFnameWithBasicArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "r-askreddit-Hot-1-result"
+            "askreddit-Hot-1-result"
 
 class TestUFname():
     """
-    Testing u_fname() function on line 68 in Export.py.
+    Testing u_fname() function on line 116 in Export.py.
     """
 
     def test_u_fname_returns_plural_string(self):
         limit = 2
         string = "test"
 
-        assert Export.NameFile().u_fname(limit, string) == "u-test-2-results"
+        assert Export.NameFile().u_fname(limit, string) == "test-2-results"
 
     def test_u_fname_returns_non_plural_string(self):
         limit = 1
         string = "test"
 
-        assert Export.NameFile().u_fname(limit, string) == "u-test-1-result"
+        assert Export.NameFile().u_fname(limit, string) == "test-1-result"
 
 class TestCFname():
     """
-    Testing c_fname() function on line 74 in Export.py.
+    Testing c_fname() function on line 126 in Export.py.
     """
 
     def test_c_fname_returns_plural_string(self):
         limit = 2
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "c-test-2-results"
+        assert Export.NameFile().c_fname(limit, string) == "test-2-results"
 
     def test_c_fname_returns_non_plural_string(self):
         limit = 1
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "c-test-1-result"
+        assert Export.NameFile().c_fname(limit, string) == "test-1-result"
 
     def test_c_fname_returns_raw_string(self):
         limit = 0
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "c-test-RAW"
+        assert Export.NameFile().c_fname(limit, string) == "test-RAW"
 
 class TestWriteCSVAndWriteJSON():
     """
-    Testing _write_csv() function on line 90 and _write_json() function on line 
-    98 in Export.py.
+    Testing _write_csv() function on line 153 and _write_json() function on line 
+    161 in Export.py.
     """
 
     def test_write_csv(self):
@@ -269,19 +269,41 @@ class TestWriteCSVAndWriteJSON():
 
 class TestGetFilenameExtension():
     """
-    Test _get_filename_extension() function on line 104 in Export.py.
+    Test _get_filename_extension() function on line 144 in Export.py.
     """
 
-    def test_get_filename_extension_returns_csv(self):
+    def test_get_filename_extension_returns_subreddits_csv(self):
         f_name = "test"
         f_type = "csv"
 
-        assert Export.Export._get_filename_extension(f_name, f_type) == \
-            "../scrapes/%s/%s.csv" % (Global.date, f_name)
+        assert Export.Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.csv" % (Global.date, f_name)
 
-    def test_get_filename_extension_returns_json(self):
+    def test_get_filename_extension_returns_redditors_csv(self):
+        f_name = "test"
+        f_type = "csv"
+
+        assert Export.Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.csv" % (Global.date, f_name)
+
+    def test_get_filename_extension_returns_comments_csv(self):
+        f_name = "test"
+        f_type = "csv"
+
+        assert Export.Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.csv" % (Global.date, f_name)
+
+    def test_get_filename_extension_returns_subreddits_json(self):
         f_name = "test"
         f_type = "json"
 
-        assert Export.Export._get_filename_extension(f_name, f_type) == \
-            "../scrapes/%s/%s.json" % (Global.date, f_name)
+        assert Export.Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.json" % (Global.date, f_name)
+
+    def test_get_filename_extension_returns_redditors_json(self):
+        f_name = "test"
+        f_type = "json"
+
+        assert Export.Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.json" % (Global.date, f_name)
+
+    def test_get_filename_extension_returns_comments_json(self):
+        f_name = "test"
+        f_type = "json"
+
+        assert Export.Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.json" % (Global.date, f_name)

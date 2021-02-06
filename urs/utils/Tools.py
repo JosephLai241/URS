@@ -4,7 +4,8 @@
 from colorama import (
     init, 
     Fore, 
-    Style)
+    Style
+)
 
 from . import (
     Basic, 
