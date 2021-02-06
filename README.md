@@ -7,7 +7,6 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?logo=Python)
 [![PRAW Version](https://img.shields.io/badge/PRAW-7.0.0-red?logo=Reddit)][PRAW]
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?logo=Travis)][Travis CI Build Status]
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][Github Actions - Pytest]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
 ![License](https://img.shields.io/github/license/JosephLai241/URS)
@@ -343,7 +342,8 @@ This is a showcase for projects that are built on top of URS!
 [Releases]: https://github.com/JosephLai241/URS/releases
 [Say Thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
 [Travis CI Build Status]: https://travis-ci.com/github/JosephLai241/URS
-[Github Actions - Pytest]: https://github.com/JosephLai241/URS/actions?query=workflow%3APytest
+[Github Actions - Pytest]: https://github.com/JosephLai241/URS/actions?query=workflow%3APytest 
+<!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][Github Actions - Pytest] -->
 [URS Project Email]: mailto:urs_project@protonmail.
 
 <!-- DEMO GIFS: Links to demo GIFS -->
