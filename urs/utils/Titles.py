@@ -73,6 +73,30 @@ class Titles():
     \/___/... Only scrapes Subreddits. 
 """)
 
+    ### Print wordcloud title.
+    @staticmethod
+    def wc_title():
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ __  __  __    ___   
+/\ \/\ \/\ \  /'___\ 
+\ \ \_/ \_/ \/\ \__/ 
+ \ \___x___/'\ \____\
+  \/__//__/   \/____/
+""")
+
+    ### Print chart title.
+    @staticmethod
+    def chart_title():
+        print(Fore.WHITE + Style.BRIGHT + r"""
+      __         
+     /\ \        
+  ___\ \ \___    
+ /'___\ \  _ `\  
+/\ \__/\ \ \ \ \ 
+\ \____\\ \_\ \_\
+ \/____/ \/_/\/_/
+""")
+
 class Errors():
     """
     Methods for printing error titles.
