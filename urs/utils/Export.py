@@ -5,7 +5,7 @@ import csv
 import json
 import re
 
-from . import (
+from utils import (
     DirInit,
     Global
 )

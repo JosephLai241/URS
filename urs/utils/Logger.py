@@ -11,7 +11,7 @@ from colorama import (
 )
 from prawcore import PrawcoreException
 
-from . import (
+from utils import (
     DirInit, 
     Global, 
     Titles
@@ -89,7 +89,7 @@ class LogError():
             try:
                 function(self, args, parser)
             except ValueError:
-                Titles.Titles.e_title()
+                Titles.Errors.e_title()
                 logging.critical("INVALID ARGUMENTS GIVEN.\n")
                 parser.exit()
 
@@ -106,7 +106,7 @@ class LogError():
                 logging.info("Successfully logged in as u/%s." % reddit.user.me())
                 logging.info("")
             except PrawcoreException as error:
-                Titles.Titles.p_title(error)
+                Titles.Errors.p_title(error)
                 logging.critical("LOGIN FAILED.")
                 logging.critical("PRAWCORE EXCEPTION: %s.\n" % error)
                 parser.exit()
@@ -120,7 +120,7 @@ class LogError():
             user_limits = function(reddit)
 
             if int(user_limits["remaining"]) == 0:
-                Titles.Titles.l_title(Global.convert_time(user_limits["reset_timestamp"]))
+                Titles.Errors.l_title(Global.convert_time(user_limits["reset_timestamp"]))
                 logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % Global.convert_time(user_limits["reset_timestamp"]))
                 quit()
             

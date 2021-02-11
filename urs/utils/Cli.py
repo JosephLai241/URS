@@ -11,12 +11,8 @@ from colorama import (
     Style
 )
 
-from . import (
-    Global, 
-    Titles, 
-    Validation
-)
-from .Logger import LogError
+from utils import Global
+from utils.Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

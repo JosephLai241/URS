@@ -13,7 +13,7 @@ init(autoreset = True)
 
 class Titles():
     """
-    Methods for printing all titles used in this program.
+    Methods for printing scraper titles.
     """
 
     ### Print URS title.
@@ -72,6 +72,11 @@ class Titles():
    \ \_,__/
     \/___/... Only scrapes Subreddits. 
 """)
+
+class Errors():
+    """
+    Methods for printing error titles.
+    """
 
     ### Print error title.
     @staticmethod

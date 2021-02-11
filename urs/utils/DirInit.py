@@ -3,7 +3,7 @@
 #===============================================================================
 import os
 
-from . import Global
+from utils import Global
 
 class InitializeDirectory():
     """

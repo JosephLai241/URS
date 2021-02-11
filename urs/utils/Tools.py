@@ -7,13 +7,15 @@ from colorama import (
     Style
 )
 
-from . import (
-    Basic, 
-    Cli, 
+from praw_scrapers import (
+    Basic,
     Comments, 
-    Global, 
     Redditor, 
-    Subreddit, 
+    Subreddit
+)
+from utils import (
+    Cli, 
+    Global, 
     Titles, 
     Validation
 )
