@@ -239,14 +239,28 @@ class SortPosts():
         for title, data in zip(self._titles, post_data):
             overview[title].append(data)
 
-    ### Append data to overview dictionary for JSON export.
-    def _json_format(self, count, overview, post_data):
-        overview["Post %s" % count] = {
-            title: value for title, value in zip(self._titles, post_data)
+    ### Create a skeleton for JSON export. Include scrape details at the top.
+    def _make_json_skeleton(self, cat_i, search_for, sub, time_filter):
+        json_data = {
+            "scrape_details": {
+                "subreddit": sub,
+                "category": categories[short_cat.index(cat_i)].lower(),
+                "n_results_or_keywords": search_for,
+                "time filter": time_filter
+            },
+            "data": []
         }
+
+        return json_data
+
+    ### Append data to the data list in the JSON skeleton.
+    def _add_json_data(self, count, json_data, post_data):
+        json_data["data"].append({
+            title: value for title, value in zip(self._titles, post_data)
+        })
     
     ### Sort collected dictionary based on export option.
-    def sort(self, args, collected):
+    def sort(self, args, cat_i, collected, search_for, sub, time_filter):
         print("\nThis may take a while. Please wait.")
 
         overview = self._initialize_dict(args)
@@ -255,12 +269,16 @@ class SortPosts():
             for post in collected:
                 post_data = self._get_data(post)
                 self._csv_format(overview, post_data)
+
+            return overview
         elif args.json:
+            json_data = self._make_json_skeleton(cat_i, search_for, sub, time_filter)
+
             for count, post in enumerate(collected, start = 1):
                 post_data = self._get_data(post)
-                self._json_format(count, overview, post_data)
+                self._add_json_data(count, json_data, post_data)
 
-        return overview
+            return json_data
 
 class GetSortWrite():
     """
@@ -274,7 +292,7 @@ class GetSortWrite():
     ### Get and sort posts.
     def _get_sort(self, args, cat_i, reddit, search_for, sub, time_filter):
         collected = GetPosts.get(args, reddit, sub, cat_i, search_for, time_filter)        
-        return SortPosts().sort(args, collected)
+        return SortPosts().sort(args, cat_i, collected, search_for, sub, time_filter)
 
     ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
@@ -296,9 +314,9 @@ class GetSortWrite():
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
     ### Write posts.
-    def _write(self, args, cat_i, overview, each_sub, sub):
+    def _write(self, args, cat_i, data, each_sub, sub):
         f_name = Export.NameFile().r_fname(args, cat_i, each_sub, sub)
-        self._determine_export(args, f_name, overview)
+        self._determine_export(args, f_name, data)
         self._print_confirm(args, sub)
 
     ### Get, sort, then write.
@@ -307,8 +325,8 @@ class GetSortWrite():
             for each_sub in settings:
                 cat_i = each_sub[0].upper() if not args.basic else each_sub[0]
                 
-                overview = self._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
-                self._write(args, cat_i, overview, each_sub, sub)
+                data = self._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
+                self._write(args, cat_i, data, each_sub, sub)
 
 class RunSubreddit():
     """
