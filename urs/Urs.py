@@ -1,8 +1,8 @@
 #!/usr/bin/python
 """
-Created on Tue Jun 2 20:14:43 2020
+Created on Wed Feb 10 16:20:04 2021
 
-Universal Reddit Scraper v3.1.2.
+Universal Reddit Scraper v3.1.3
 
 @author: Joseph Lai
 @contact: urs_project@protonmail.com
