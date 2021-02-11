@@ -22,6 +22,7 @@ class Main():
     @staticmethod
     @LogMain.master_timer
     def main():
+        ### Creating a Reddit object with PRAW credentials.
         reddit = praw.Reddit(
             client_id = API["client_id"],
             client_secret = API["client_secret"],
