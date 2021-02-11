@@ -95,7 +95,10 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             else int(search_for)
         for sub_n, _ in master.items():
             if sub_n == sub:
-                settings = [cat_i, user_search]
+                settings = [
+                    cat_i, 
+                    user_search
+                ]
                 master[sub].append(settings)
 
     ### Get search settings.
