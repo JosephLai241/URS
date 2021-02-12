@@ -59,15 +59,15 @@ class GetComments():
     ### Initialize objects that will be used in class methods.
     def __init__(self):
         self._titles = [
-            "Parent ID", 
-            "Comment ID", 
-            "Author", 
-            "Date Created", 
-            "Upvotes", 
-            "Text", 
-            "Edited?", 
-            "Is Submitter?", 
-            "Stickied?"
+            "parent_id", 
+            "comment_id", 
+            "author", 
+            "date_created", 
+            "upvotes", 
+            "text", 
+            "edited", 
+            "is_submitter", 
+            "stickied"
         ]
 
     ### If applicable, handle deleted Redditors or edited time.
@@ -103,7 +103,7 @@ class GetComments():
         for title, attribute in zip(self._titles, comment_attributes):
             c_set[title] = attribute
         
-        return [c_set]
+        return c_set
 
 class SortComments():
     """
@@ -119,23 +119,23 @@ class SortComments():
     ### Append top level comments to all_dict.
     @staticmethod
     def _top_level_comment(add, all_dict, comment):
-        all_dict[comment.id] = [add]
+        add["replies"] = []
+        SortComments._raw_comments(add, all_dict, comment)
 
     ### Append second-level comments to all_dict.
     @staticmethod
     def _second_level_comment(add, all_dict, comment, cpid):
-        all_dict[cpid].append({comment.id: add})
+        add["replies"] = []
+        all_dict[cpid]["replies"].append({comment.id: add})
 
     ### Append third-level comments to all_dict.
     @staticmethod
     def _third_level_comment(add, all_dict, comment, cpid):
         for all_comments in all_dict.values():
-            for top_level_or_reply in all_comments:
-                ### Indicates this is a reply and not a top-level comment.
-                if isinstance(top_level_or_reply, dict):
-                    if cpid in top_level_or_reply.keys():
-                        top_level_or_reply[cpid].append({comment.id: add})
-                
+            for second_level_replies in all_comments["replies"]:
+                if cpid in second_level_replies.keys():
+                    second_level_replies[cpid]["replies"].append({comment.id: add})
+        
     ### Appending structured comments to all_dict.
     @staticmethod
     def _structured_comments(add, all_dict, comment, cpid, submission):
@@ -180,12 +180,13 @@ class GetSort():
     ### Get comments in raw format.
     def _get_raw(self, all_dict, submission):
         print(Style.BRIGHT + "\nProcessing all comments in raw format from submission '%s'..." % submission.title)
-
         SortComments().sort(all_dict, True, submission)
 
     ### Get comments in structured format.
     def _get_structured(self, all_dict, limit, submission):
-        plurality = "comment" if int(limit) == 1 else "comments"
+        plurality = "comment" \
+            if int(limit) == 1 \
+            else "comments"
         print(Style.BRIGHT + "\nProcessing %s %s in structured format from submission '%s'..." % (limit, plurality, submission.title))
 
         SortComments().sort(all_dict, False, submission)
@@ -207,14 +208,30 @@ class Write():
     Methods for writing scraped comments to CSV or JSON.
     """
 
+    ### Create a skeleton for JSON export. Include scrape details at the top.
+    @staticmethod
+    def _make_json_skeleton(limit, post, title):
+        skeleton = {
+            "scrape_settings": {
+                "submission_title": title,
+                "n_results": int(limit) \
+                    if int(limit) > 0 \
+                    else "RAW",
+                "submission_url": post
+            },
+            "data": []
+        }
+
+        return skeleton
+
     ### Export to either CSV or JSON.
     @staticmethod
-    def _determine_export(args, f_name, overview):
+    def _determine_export(args, data, f_name):
         export_option = eo[1] \
             if args.json \
             else eo[0]
 
-        Export.Export.export(f_name, export_option, overview, "comments")
+        Export.Export.export(data, f_name, export_option, "comments")
 
     ### Print confirmation message and set print length depending on string length.
     @staticmethod
@@ -233,10 +250,11 @@ class Write():
     def write(args, c_master, reddit):
         for post, limit in c_master.items():
             title = reddit.submission(url = post).title
-            overview = GetSort(post, reddit).get_sort(limit)
+            data = Write._make_json_skeleton(limit, post, title)
+            data["data"].append(GetSort(post, reddit).get_sort(limit))
             f_name = Export.NameFile().c_fname(limit, title)
 
-            Write._determine_export(args, f_name, overview)
+            Write._determine_export(args, data, f_name)
             Write._print_confirm(args, title)
 
 class RunComments():
