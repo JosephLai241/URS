@@ -87,6 +87,7 @@ class ProcessInteractions():
         self._upvoted = user.upvoted(limit = limit)
 
         self._comment_titles = [
+            "type",
             "date_created", 
             "score", 
             "text", 
@@ -98,6 +99,7 @@ class ProcessInteractions():
             "in_subreddit"
         ]
         self._submission_titles = [
+            "type",
             "title", 
             "date_created", 
             "upvotes", 
@@ -152,6 +154,7 @@ class ProcessInteractions():
     ### Make submission list.
     def _make_submission_list(self, item):
         items = [
+            "submission",
             item.title, 
             convert_time(item.created), 
             item.score, 
@@ -170,6 +173,7 @@ class ProcessInteractions():
             if str(item.edited).isalpha() \
             else convert_time(item.edited)
         items = [
+            "comment",
             convert_time(item.created_utc), 
             item.score, 
             item.body, 
