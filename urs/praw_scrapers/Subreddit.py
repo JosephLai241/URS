@@ -42,8 +42,7 @@ class CheckSubreddits():
         subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
         
         if not_subs:
-            print(Fore.YELLOW + Style.BRIGHT + 
-                "\nThe following Subreddits were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Subreddits were not found and will be skipped:")
             print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
             print(*not_subs, sep = "\n")
 
@@ -71,7 +70,12 @@ class PrintConfirm():
                     if each_sub[2] != None \
                     else each_sub[2]
                 
-                pretty_subs.add_row([sub, categories[cat_i], time_filter, each_sub[1]])
+                pretty_subs.add_row([
+                    sub, 
+                    categories[cat_i], 
+                    time_filter, 
+                    each_sub[1]
+                ])
 
     ### Print scraping details for each Subreddit.
     @staticmethod
@@ -83,7 +87,8 @@ class PrintConfirm():
             "Subreddit", 
             "Category", 
             "Time Filter",
-            "Number of results / Keywords"]
+            "Number of results / Keywords"
+        ]
 
         PrintConfirm._print_each(args, pretty_subs, s_master)
         pretty_subs.align = "l"
@@ -144,8 +149,7 @@ class GetPosts():
     ### Return PRAW ListingGenerator for searching keywords.
     @staticmethod
     def _collect_search(search_for, sub, subreddit, time_filter):
-        print((Style.BRIGHT + "\nSearching posts in r/%s for '%s'...") % 
-            (sub, search_for))
+        print(Style.BRIGHT + "\nSearching posts in r/%s for '%s'..." % (sub, search_for))
         
         if time_filter != None:
             print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
@@ -162,8 +166,7 @@ class GetPosts():
             else categories[cat_i]
         index = short_cat.index(cat_i) if args.subreddit else cat_i
             
-        print(Style.BRIGHT + ("\nProcessing %s %s results from r/%s...") % 
-            (search_for, category, sub))
+        print(Style.BRIGHT + "\nProcessing %s %s results from r/%s..." % (search_for, category, sub))
         
         if time_filter != None:
             print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
@@ -188,20 +191,21 @@ class SortPosts():
     def __init__(self):
         self._convert_time = Global.convert_time
         self._titles = [
-            "Title", 
-            "Flair", 
-            "Date Created", 
-            "Upvotes", 
-            "Upvote Ratio", 
-            "ID", 
-            "Edited?", 
-            "Is Locked?", 
-            "NSFW?", 
-            "Is Spoiler?", 
-            "Stickied?", 
-            "URL", 
-            "Comment Count", 
-            "Text"]
+            "title", 
+            "flair", 
+            "date_created", 
+            "upvotes", 
+            "upvote_ratio", 
+            "id", 
+            "edited", 
+            "is_locked", 
+            "nsfw", 
+            "is_spoiler", 
+            "stickied", 
+            "url", 
+            "comment_count", 
+            "text"
+        ]
 
     ### Initialize dictionary depending on export option.
     def _initialize_dict(self, args):
@@ -230,7 +234,8 @@ class SortPosts():
             post.stickied, 
             post.url, 
             post.num_comments, 
-            post.selftext]
+            post.selftext
+        ]
 
         return post_data
 
@@ -242,11 +247,11 @@ class SortPosts():
     ### Create a skeleton for JSON export. Include scrape details at the top.
     def _make_json_skeleton(self, cat_i, search_for, sub, time_filter):
         json_data = {
-            "scrape_details": {
+            "scrape_settings": {
                 "subreddit": sub,
                 "category": categories[short_cat.index(cat_i)].lower(),
                 "n_results_or_keywords": search_for,
-                "time filter": time_filter
+                "time_filter": time_filter
             },
             "data": []
         }
@@ -295,12 +300,12 @@ class GetSortWrite():
         return SortPosts().sort(args, cat_i, collected, search_for, sub, time_filter)
 
     ### Export to either CSV or JSON.
-    def _determine_export(self, args, f_name, overview):
+    def _determine_export(self, args, data, f_name):
         export_option = self._eo[1] \
             if args.json \
             else self._eo[0]
 
-        Export.Export.export(f_name, export_option, overview, "subreddits")
+        Export.Export.export(data, f_name, export_option, "subreddits")
 
     ### Set print length depending on string length.
     def _print_confirm(self, args, sub):
@@ -316,7 +321,7 @@ class GetSortWrite():
     ### Write posts.
     def _write(self, args, cat_i, data, each_sub, sub):
         f_name = Export.NameFile().r_fname(args, cat_i, each_sub, sub)
-        self._determine_export(args, f_name, data)
+        self._determine_export(args, data, f_name)
         self._print_confirm(args, sub)
 
     ### Get, sort, then write.
