@@ -70,8 +70,8 @@ class ProcessInteractions():
     """
 
     ### Initialize objects that will be used in class methods.
-    def __init__(self, limit, overview, user):
-        self._overview = overview
+    def __init__(self, limit, skeleton, user):
+        self._skeleton = skeleton
 
         self._comments = user.comments.new(limit = limit)
         self._controversial = user.controversial(limit = limit)
@@ -87,32 +87,32 @@ class ProcessInteractions():
         self._upvoted = user.upvoted(limit = limit)
 
         self._comment_titles = [
-            "Date Created", 
-            "Score", 
-            "Text", 
-            "Parent ID", 
-            "Link ID", 
-            "Edited?", 
-            "Stickied?", 
-            "Replying to", 
-            "In Subreddit"
+            "date_created", 
+            "score", 
+            "text", 
+            "parent_id", 
+            "link_id", 
+            "edited", 
+            "stickied", 
+            "replying_to", 
+            "in_subreddit"
         ]
         self._submission_titles = [
-            "Title", 
-            "Date Created", 
-            "Upvotes", 
-            "Upvote Ratio",
-            "ID", 
-            "NSFW?", 
-            "In Subreddit", 
-            "Body"
+            "title", 
+            "date_created", 
+            "upvotes", 
+            "upvote_ratio",
+            "id", 
+            "nsfw", 
+            "in_subreddit", 
+            "body"
         ]
 
         self._s_types = [
-            "Submissions", 
-            "Comments", 
-            "Mutts", 
-            "Access"
+            "submissions", 
+            "comments", 
+            "mutts", 
+            "access"
         ]
 
         self._mutts = [
@@ -123,11 +123,11 @@ class ProcessInteractions():
             self._top
         ]
         self._mutt_names = [
-            "Controversial", 
-            "Gilded", 
-            "Hot", 
-            "New", 
-            "Top"
+            "controversial", 
+            "gilded", 
+            "hot", 
+            "new", 
+            "top"
         ]
 
         self._access = [
@@ -138,11 +138,11 @@ class ProcessInteractions():
             self._upvoted
         ]
         self._access_names = [
-            "Downvoted", 
-            "Gildings", 
-            "Hidden", 
-            "Saved", 
-            "Upvoted"
+            "downvoted", 
+            "gildings", 
+            "hidden", 
+            "saved", 
+            "upvoted"
         ]
 
     ### Make dictionary from zipped lists.
@@ -183,24 +183,20 @@ class ProcessInteractions():
 
         return self._make_zip_dict(items, self._comment_titles)
 
-    ### Determine how to append the list to the overview dictionary.
+    ### Determine how to append the list to the JSON skeleton.
     def _determine_append(self, cat, redditor_list, s_type):
         switch = {
-            0: "Submissions",
-            1: "Comments",
-            2: "%s" % cat.capitalize() \
+            0: "submissions",
+            1: "comments",
+            2: "%s" % cat \
                 if cat != None \
                 else None,
-            3: "%s (may be forbidden)" % cat.capitalize() \
-                if cat != None \
-                else None
         }
 
         index = self._s_types.index(s_type)
-        self._overview[switch.get(index)].append(redditor_list)
+        self._skeleton["data"]["interactions"][switch.get(index)].append(redditor_list)
 
-    ### Extracting submission or comment attributes and appending to overview 
-    ### dictionary.
+    ### Extracting submission or comment attributes and appending to the skeleton.
     def _extract(self, cat, obj, s_type):
         for item in obj:
             redditor_list = self._make_submission_list(item) \
@@ -233,8 +229,7 @@ class ProcessInteractions():
                 self._extract(cat, obj, self._s_types[3])
             except PrawcoreException as error:
                 print(Style.BRIGHT + Fore.YELLOW + "\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING." % (cat.upper(), error))
-                
-                self._overview["%s (may be forbidden)" % cat.capitalize()].append("FORBIDDEN")
+                self._skeleton["data"]["interactions"]["%s" % cat].append("FORBIDDEN")
 
 class GetInteractions():
     """
@@ -243,47 +238,58 @@ class GetInteractions():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._titles = [
-            "Name", 
-            "Fullname", 
-            "ID", 
-            "Date Created", 
-            "Comment Karma", 
-            "Link Karma", 
-            "Is Employee?", 
-            "Is Friend?", 
-            "Is Mod?", 
-            "Is Gold?", 
-            "Submissions", 
-            "Comments", 
-            "Hot", 
-            "New", 
-            "Controversial", 
-            "Top", 
-            "Upvoted (may be forbidden)", 
-            "Downvoted (may be forbidden)", 
-            "Gilded", 
-            "Gildings (may be forbidden)", 
-            "Hidden (may be forbidden)", 
-            "Saved (may be forbidden)"
+        self._info_titles = [
+            "name", 
+            "fullname", 
+            "id", 
+            "date_created", 
+            "comment_karma", 
+            "link_karma", 
+            "is_employee", 
+            "is_friend", 
+            "is_mod", 
+            "is_gold"
+        ]
+        self._interaction_titles = [ 
+            "submissions", 
+            "comments", 
+            "hot", 
+            "new", 
+            "controversial", 
+            "top", 
+            "upvoted", 
+            "downvoted", 
+            "gilded", 
+            "gildings", 
+            "hidden", 
+            "saved"
         ]
 
-    ### Make Redditor dictionary to store data.
-    def _make_user_profile(self, limit, reddit, user):
+    ### Create a skeleton for JSON export. Include scrape details at the top.
+    def _make_json_skeleton(self, limit, reddit, user):
         plurality = "results" \
             if int(limit) > 1 \
             else "result"
         print(Style.BRIGHT + "\nProcessing %s %s from u/%s's profile..." % (limit, plurality, user))
         print("\nThis may take a while. Please wait.")
 
+        skeleton = {
+            "scrape_settings": {
+                "redditor": user,
+                "n_results": limit
+            },
+            "data": {
+                "information": {},
+                "interactions": {}
+            }
+        }
         user = reddit.redditor(user)
-        overview = Global.make_list_dict(self._titles)
 
-        return overview, user
+        return skeleton, user
 
     ### Get Redditor account information.
-    def _get_user_info(self, overview, user):
-        user_info_titles = self._titles[:10]
+    def _get_user_info(self, skeleton, user):
+        user_info_titles = self._info_titles
         user_info = [
             user.name, 
             user.fullname, 
@@ -297,12 +303,19 @@ class GetInteractions():
             user.is_gold
         ]
 
-        for title, user_item in zip(user_info_titles, user_info):
-            overview[title].append(user_item) 
+        for info_title, user_item in zip(user_info_titles, user_info):
+            skeleton["data"]["information"][info_title] = user_item
+
+    ### Make empty lists for each user interaction field.
+    def _make_interactions_lists(self, skeleton):
+         for interaction_title in self._interaction_titles:
+             skeleton["data"]["interactions"][interaction_title] = []
 
     ### Get Redditor interactions on Reddit.
-    def _get_user_interactions(self, limit, overview, user):
-        interactions = ProcessInteractions(int(limit), overview, user)
+    def _get_user_interactions(self, limit, skeleton, user):
+        self._make_interactions_lists(skeleton)
+
+        interactions = ProcessInteractions(int(limit), skeleton, user)
         interactions.sort_submissions()
         interactions.sort_comments()
         interactions.sort_mutts()
@@ -310,11 +323,11 @@ class GetInteractions():
 
     ### Get Redditor information and interactions.
     def get(self, limit, reddit, user):
-        overview, user = self._make_user_profile(limit, reddit, user)
-        self._get_user_info(overview, user)
-        self._get_user_interactions(limit, overview, user)
+        skeleton, user = self._make_json_skeleton(limit, reddit, user)
+        self._get_user_info(skeleton, user)
+        self._get_user_interactions(limit, skeleton, user)
 
-        return overview
+        return skeleton
 
 class Write():
     """
@@ -326,12 +339,12 @@ class Write():
         self._eo = Global.eo
 
     ### Export to either CSV or JSON.
-    def _determine_export(self, args, f_name, overview):
+    def _determine_export(self, args, data, f_name):
         export_option = self._eo[1] \
             if args.json \
             else self._eo[0]
 
-        Export.Export.export(f_name, export_option, overview, "redditors")
+        Export.Export.export(data, f_name, export_option, "redditors")
 
     ### Print confirmation message and set print length depending on string length.
     def _print_confirm(self, args, user):
@@ -347,10 +360,10 @@ class Write():
     ### Get, sort, then write scraped Redditor information to CSV or JSON.
     def write(self, args, reddit, u_master):
         for user, limit in u_master.items():
-            overview = GetInteractions().get(limit, reddit, user)
+            data = GetInteractions().get(limit, reddit, user)
             f_name = Export.NameFile().u_fname(limit, user)
 
-            self._determine_export(args, f_name, overview)
+            self._determine_export(args, data, f_name)
             self._print_confirm(args, user)
 
 class RunRedditor():
