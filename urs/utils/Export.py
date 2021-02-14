@@ -160,7 +160,7 @@ class Export():
 
     ### Export to CSV.
     @staticmethod
-    def _write_csv(data, filename):
+    def write_csv(data, filename):
         with open(filename, "w", encoding = "utf-8") as results:
             writer = csv.writer(results, delimiter = ",")
             writer.writerow(data.keys())
@@ -168,7 +168,7 @@ class Export():
 
     ### Export to JSON.
     @staticmethod
-    def _write_json(data, filename):
+    def write_json(data, filename):
         with open(filename, "w", encoding = "utf-8") as results:
             json.dump(data, results, indent = 4)
     
@@ -178,6 +178,6 @@ class Export():
         InitializeDirectory.make_type_directory(scrape)
         filename = Export._get_filename_extension(f_name, f_type, scrape)
 
-        Export._write_json(data, filename) \
+        Export.write_json(data, filename) \
             if f_type == eo[1] \
-            else Export._write_csv(data, filename)
+            else Export.write_csv(data, filename)
