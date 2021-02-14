@@ -83,6 +83,19 @@ class AnalyticsTitles():
     Methods for printing for analytical tool titles.
     """
 
+    ### Print frequencies title.
+    @staticmethod
+    def f_title():
+        print(Fore.WHITE + Style.BRIGHT + r"""
+   ___  
+ /'___\ 📋
+/\ \__/ 
+\ \ ,__\ 
+ \ \ \_/
+  \ \_\ 
+   \/_/
+""")
+
     ### Print wordcloud title.
     @staticmethod
     def wc_title():
