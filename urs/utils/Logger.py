@@ -11,11 +11,15 @@ from colorama import (
 )
 from prawcore import PrawcoreException
 
-from utils import (
-    DirInit, 
-    Global, 
-    Titles
+from utils.DirInit import InitializeDirectory
+from utils.Global import (
+    categories,
+    convert_time,
+    date,
+    s_t,
+    short_cat
 )
+from utils.Titles import Errors
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -28,10 +32,10 @@ class LogMain():
     """
 
     ### Makes directory in which the log and scraped files will be stored.
-    DirInit.InitializeDirectory.make_directory()
+    InitializeDirectory.make_directory()
 
     ### Set directory path and log format.
-    DIR_PATH = "../scrapes/%s" % Global.date
+    DIR_PATH = "../scrapes/%s" % date
     LOG_FORMAT = "[%(asctime)s] [%(levelname)s]: %(message)s"
 
     ### Configure logging settings.
@@ -59,7 +63,7 @@ class LogMain():
                 logging.warning("URS ABORTED BY USER.\n")
                 quit()
 
-            logging.info("URS COMPLETED SCRAPES IN %.2f SECONDS.\n" % (time.time() - start))
+            logging.info("URS COMPLETED IN %.2f SECONDS.\n" % (time.time() - start))
 
         return wrapper
 
@@ -89,7 +93,7 @@ class LogError():
             try:
                 function(self, args, parser)
             except ValueError:
-                Titles.Errors.e_title()
+                Errors.e_title()
                 logging.critical("INVALID ARGUMENTS GIVEN.\n")
                 parser.exit()
 
@@ -106,7 +110,7 @@ class LogError():
                 logging.info("Successfully logged in as u/%s." % reddit.user.me())
                 logging.info("")
             except PrawcoreException as error:
-                Titles.Errors.p_title(error)
+                Errors.p_title(error)
                 logging.critical("LOGIN FAILED.")
                 logging.critical("PRAWCORE EXCEPTION: %s.\n" % error)
                 parser.exit()
@@ -119,9 +123,14 @@ class LogError():
         def wrapper(reddit):
             user_limits = function(reddit)
 
+            logging.info("RATE LIMIT DISPLAYED")
+            logging.info("Remaining requests: %s" % int(user_limits["remaining"]))
+            logging.info("Used requests: %s" % user_limits["used"])
+            logging.info("")
+
             if int(user_limits["remaining"]) == 0:
-                Titles.Errors.l_title(Global.convert_time(user_limits["reset_timestamp"]))
-                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % Global.convert_time(user_limits["reset_timestamp"]))
+                Errors.l_title(convert_time(user_limits["reset_timestamp"]))
+                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % convert_time(user_limits["reset_timestamp"]))
                 quit()
             
             return user_limits
@@ -136,13 +145,13 @@ class LogScraper():
     @staticmethod
     def _get_args_switch(args, scraper):
         scrapers = {
-            Global.s_t[0]: [arg_set for arg_set in args.subreddit] \
+            s_t[0]: [arg_set for arg_set in args.subreddit] \
                 if args.subreddit \
                 else None,
-            Global.s_t[1]: [arg_set for arg_set in args.redditor] \
+            s_t[1]: [arg_set for arg_set in args.redditor] \
                 if args.redditor \
                 else None,
-            Global.s_t[2]: [arg_set for arg_set in args.comments] \
+            s_t[2]: [arg_set for arg_set in args.comments] \
                 if args.comments \
                 else None
         }
@@ -154,7 +163,7 @@ class LogScraper():
     @staticmethod
     def _subreddit_tuple(each_arg):
         args_list = list(each_arg)
-        args_list[1] = Global.categories[Global.short_cat.index(each_arg[1].upper())]
+        args_list[1] = categories[short_cat.index(each_arg[1].upper())]
          
         return tuple(args_list)
 
@@ -164,7 +173,7 @@ class LogScraper():
         args = []
         for each_arg in scraper_args:
             settings = LogScraper._subreddit_tuple(each_arg) \
-                if scraper == Global.s_t[0] \
+                if scraper == s_t[0] \
                 else tuple(each_arg)
 
             args.append(settings)
@@ -175,7 +184,7 @@ class LogScraper():
     @staticmethod
     def _set_subreddit_log(category, n_res_or_kwds, sub_name):
         return "Scraping r/%s for %s %s results..." % (sub_name, n_res_or_kwds, category) \
-            if category != Global.categories[5] \
+            if category != categories[5] \
             else "Searching and scraping r/%s for posts containing '%s'..." % (sub_name, n_res_or_kwds)
 
     ### Format Subreddit log differently if user searched for keywords. Log an
@@ -210,14 +219,14 @@ class LogScraper():
         args = LogScraper._format_subreddit_settings(scraper, args_list)
         for each_arg in args:
             formats = {
-                Global.s_t[0]: LogScraper._format_subreddit_log(each_arg) \
-                    if scraper == Global.s_t[0] \
+                s_t[0]: LogScraper._format_subreddit_log(each_arg) \
+                    if scraper == s_t[0] \
                     else None,
-                Global.s_t[1]: LogScraper._format_redditor_log(each_arg) \
-                    if scraper == Global.s_t[1] \
+                s_t[1]: LogScraper._format_redditor_log(each_arg) \
+                    if scraper == s_t[1] \
                     else None,
-                Global.s_t[2]: LogScraper._format_comments_log(each_arg) \
-                    if scraper == Global.s_t[2] \
+                s_t[2]: LogScraper._format_comments_log(each_arg) \
+                    if scraper == s_t[2] \
                     else None
             }
 
@@ -272,10 +281,10 @@ class LogExport():
             1: "Exporting to CSV."
         }
 
-        if args.json:
-            return export_options.get(0)
-        elif args.csv:
+        if args.csv:
             return export_options.get(1)
+
+        return export_options.get(0)
 
     ### Wrapper for logging the export option.
     @staticmethod
