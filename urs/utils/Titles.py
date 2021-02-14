@@ -11,9 +11,9 @@ from colorama import (
 ### every print.
 init(autoreset = True)
 
-class Titles():
+class MainTitle():
     """
-    Methods for printing scraper titles.
+    Method for printing the main URS title.
     """
 
     ### Print URS title.
@@ -26,6 +26,11 @@ class Titles():
  \ \____/\ \_\\/\____/
   \/___/  \/_/ \/___/ 
 """)
+
+class PRAWTitles():
+    """
+    Methods for printing PRAW scraper titles.
+    """
 
     ### Print Subreddit scraper title.
     @staticmethod
@@ -73,11 +78,16 @@ class Titles():
     \/___/... Only scrapes Subreddits. 
 """)
 
+class AnalyticsTitles():
+    """
+    Methods for printing for analytical tool titles.
+    """
+
     ### Print wordcloud title.
     @staticmethod
     def wc_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
- __  __  __    ___   
+ __  __  __    ___ 🖌️ 
 /\ \/\ \/\ \  /'___\ 
 \ \ \_/ \_/ \/\ \__/ 
  \ \___x___/'\ \____\
@@ -89,7 +99,7 @@ class Titles():
     def chart_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
       __         
-     /\ \        
+     /\ \  📊      
   ___\ \ \___    
  /'___\ \  _ `\  
 /\ \__/\ \ \ \ \ 
@@ -110,7 +120,7 @@ class Errors():
  /'__`\ 
 /\  __/ 
 \ \____\
- \/____/... Please recheck args or refer to help for usage examples.
+ \/____/... Please recheck args or refer to help or usage examples.
 """)
 
     ### Print PRAW error title.
