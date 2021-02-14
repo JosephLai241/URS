@@ -5,9 +5,12 @@ import csv
 import json
 import re
 
-from utils import (
-    DirInit,
-    Global
+from utils.DirInit import InitializeDirectory
+from utils.Global import (
+    categories,
+    date,
+    eo,
+    short_cat
 )
 
 class NameFile():
@@ -39,11 +42,11 @@ class NameFile():
     ### Category name switch.
     def _r_category(self, cat_i, category_n):
         switch = {
-            0: Global.categories[5],
-            1: Global.categories[Global.short_cat.index(cat_i)] \
-                if cat_i != Global.short_cat[5] and isinstance(cat_i, str) \
+            0: categories[5],
+            1: categories[short_cat.index(cat_i)] \
+                if cat_i != short_cat[5] and isinstance(cat_i, str) \
                 else None,
-            2: Global.categories[cat_i] \
+            2: categories[cat_i] \
                 if isinstance(cat_i, int) \
                 else None
         }
@@ -54,7 +57,7 @@ class NameFile():
     def _r_get_category(self, args, cat_i):
         if args.subreddit:
             category_n = 0 \
-                if cat_i == Global.short_cat[5] \
+                if cat_i == short_cat[5] \
                 else 1
         elif args.basic:
             category_n = 2
@@ -64,8 +67,8 @@ class NameFile():
     ### File name switch that stores all possible Subreddit file name formats.
     def _get_sub_fname(self, category, end, index, n_res_or_kwds, subreddit, time_filter):
         filter_str = "-past-%s" % time_filter
-        search = "%s-%s-'%s'" % (subreddit, category, n_res_or_kwds)
-        standard = "%s-%s-%s-%s" % (subreddit, category, n_res_or_kwds, end)
+        search = "%s-%s-'%s'" % (subreddit, category.lower(), n_res_or_kwds)
+        standard = "%s-%s-%s-%s" % (subreddit, category.lower(), n_res_or_kwds, end)
 
         filenames = {
             0: search,
@@ -82,7 +85,7 @@ class NameFile():
         category = self._r_category(cat_i, category_n)
 
         ending = None \
-            if cat_i == Global.short_cat[5] or cat_i == 5 \
+            if cat_i == short_cat[5] or cat_i == 5 \
             else end
         time_filter = None \
             if each_sub[2] == None or each_sub[2] == "all" \
@@ -90,14 +93,20 @@ class NameFile():
 
         if each_sub[2] == None or each_sub[2] == "all":
             index = 0 \
-                if cat_i == Global.short_cat[5] or cat_i == 5 \
+                if cat_i == short_cat[5] or cat_i == 5 \
                 else 1
         else:
             index = 2 \
-                if cat_i == Global.short_cat[5] or cat_i == 5 \
+                if cat_i == short_cat[5] or cat_i == 5 \
                 else 3
 
-        return self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
+        filename = self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
+        filename = self._check_len(filename)
+
+        if args.rules:
+            return filename + "-rules"
+        
+        return filename
 
     ### Determine file name format for Subreddit scraping.
     def r_fname(self, args, cat_i, each_sub, sub):
@@ -107,7 +116,6 @@ class NameFile():
             else "results"
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
-        raw_n = self._check_len(raw_n)
 
         return self._fix(raw_n)
 
@@ -116,8 +124,8 @@ class NameFile():
         end = "result" \
             if int(limit) < 2 \
             else "results"
+        string = self._fix(string)
         raw_n = str("%s-%s-%s" % (string, limit, end))
-        raw_n = self._check_len(raw_n)
 
         return self._fix(raw_n)
 
@@ -142,11 +150,11 @@ class Export():
     ### Get filename extension.
     @staticmethod
     def _get_filename_extension(f_name, f_type, scrape):
-        dir_path = "../scrapes/%s/%s" % (Global.date, scrape)
+        dir_path = "../scrapes/%s/%s" % (date, scrape)
 
-        extension = ".json" \
-            if f_type == Global.eo[1] \
-            else ".csv"
+        extension = ".csv" \
+            if f_type == eo[0] \
+            else ".json"
 
         return dir_path + "/%s%s" % (f_name, extension)
 
@@ -167,9 +175,9 @@ class Export():
     ### Write data dictionary to CSV or JSON.
     @staticmethod
     def export(data, f_name, f_type, scrape):
-        DirInit.InitializeDirectory.make_type_directory(scrape)
+        InitializeDirectory.make_type_directory(scrape)
         filename = Export._get_filename_extension(f_name, f_type, scrape)
 
         Export._write_json(data, filename) \
-            if f_type == Global.eo[1] \
+            if f_type == eo[1] \
             else Export._write_csv(data, filename)
