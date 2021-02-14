@@ -15,15 +15,14 @@ class GetPath():
 
     ### Name the chart or wordcloud when saving to file.
     @staticmethod
-    def name_file(chart_type, export_option, path):
+    def name_file(export_option, path, tool_type):
         split_path = path.split(".")
 
         split_scrapes_path = split_path[2].split("/")
         date_dir = split_scrapes_path[2]
-        split_scrapes_path[3] = "analytics"
+        split_scrapes_path[3] = "analytics/%s" % tool_type
         split_path[2] = "/".join(split_scrapes_path)
 
-        split_path[-2] = split_path[-2] + "-%s" % chart_type
         split_path[-1] = export_option
 
         return date_dir, ".".join(split_path)
@@ -52,7 +51,7 @@ class PrepSubreddit():
         for submission in data:
             PrepData._count_words("title", submission, plt_dict)
 
-        return plt_dict
+        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
 class PrepRedditor():
     """
@@ -77,7 +76,7 @@ class PrepRedditor():
                 elif isinstance(obj, str):
                     continue
 
-        return plt_dict
+        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
 class PrepComments():
     """
@@ -94,7 +93,7 @@ class PrepComments():
 
         print(data)
         print(plt_dict)
-        return plt_dict
+        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
     
 class PrepData():
     """
