@@ -3,7 +3,7 @@
 #===============================================================================
 import os
 
-from utils import Global
+from utils.Global import date
 
 class InitializeDirectory():
     """
@@ -19,15 +19,22 @@ class InitializeDirectory():
         if not os.path.isdir(top_dir):
             os.mkdir(top_dir)
         
-        date_dir = "../scrapes/%s" % Global.date
+        date_dir = "../scrapes/%s" % date
         if not os.path.isdir(date_dir):
             os.mkdir(date_dir)
 
     ### Make Subreddit, Redditor, or comments directory within the date directory
-    ### if it doesn't exist.
+    ### if it does not exist.
     @staticmethod
     def make_type_directory(scrape):
-        scrape_dir = "../scrapes/%s/%s" % (Global.date, scrape)
+        scrape_dir = "../scrapes/%s/%s" % (date, scrape)
         if not os.path.isdir(scrape_dir):
             os.mkdir(scrape_dir)
+    
+    ### Make analytics directory if it does not exist.
+    @staticmethod
+    def make_analytics_directory(date_dir):
+        analytics_dir = "../scrapes/%s/analytics" % date_dir
+        if not os.path.isdir(analytics_dir):
+            os.mkdir(analytics_dir)
     
