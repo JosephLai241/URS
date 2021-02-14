@@ -8,26 +8,30 @@ from colorama import (
 )
 from prettytable import PrettyTable
 
-from utils import (
-    Cli, 
-    Export, 
-    Global, 
-    Titles, 
-    Validation
+from utils.Cli import GetPRAWScrapeSettings
+from utils.Export import (
+    Export,
+    NameFile
+)
+from utils.Global import (
+    categories,
+    convert_time,
+    eo,
+    make_list_dict,
+    options,
+    s_t,
+    short_cat,
 )
 from utils.Logger import (
     LogExport, 
     LogScraper
 )
+from utils.Titles import PRAWTitles
+from utils.Validation import Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-### Global variables.
-categories = Global.categories
-options = Global.options
-short_cat = Global.short_cat
 
 class CheckSubreddits():
     """
@@ -39,7 +43,7 @@ class CheckSubreddits():
     @staticmethod
     def list_subreddits(parser, reddit, s_t, sub_list):
         print("\nChecking if Subreddit(s) exist...")
-        subs, not_subs = Validation.Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
+        subs, not_subs = Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
         
         if not_subs:
             print(Fore.YELLOW + Style.BRIGHT + "\nThe following Subreddits were not found and will be skipped:")
@@ -111,6 +115,17 @@ class PrintConfirm():
             except ValueError:
                 print("Not an option! Try again.")
 
+class GetRules():
+    """
+    Methods for getting a Subreddit's rules and post requirements.
+    """
+
+    ### Return post requirements and Subreddit rules.
+    @staticmethod
+    def get(subreddit):
+        rules = [rule_list for rule, rule_list in subreddit.rules().items() if rule == "rules"]
+        return subreddit.post_requirements(), rules[0]
+
 class GetPostsSwitch():
     """
     Implementing Pythonic switch case to determine which Subreddit category to
@@ -164,7 +179,9 @@ class GetPosts():
         category = categories[short_cat.index(cat_i)] \
             if args.subreddit \
             else categories[cat_i]
-        index = short_cat.index(cat_i) if args.subreddit else cat_i
+        index = short_cat.index(cat_i) \
+            if args.subreddit \
+            else cat_i
             
         print(Style.BRIGHT + "\nProcessing %s %s results from r/%s..." % (search_for, category, sub))
         
@@ -189,7 +206,6 @@ class SortPosts():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._convert_time = Global.convert_time
         self._titles = [
             "title", 
             "flair", 
@@ -209,13 +225,15 @@ class SortPosts():
 
     ### Initialize dictionary depending on export option.
     def _initialize_dict(self, args):
-        return Global.make_list_dict(self._titles) if args.csv else dict()
+        return make_list_dict(self._titles) \
+            if args.csv \
+            else dict()
 
     ### Fix "Edited?" date.
     def _fix_edit_date(self, post):
         return str(post.edited) \
             if str(post.edited).isalpha() \
-            else str(self._convert_time(post.edited))
+            else str(convert_time(post.edited))
 
     ### Get post data.
     def _get_data(self, post):
@@ -223,7 +241,7 @@ class SortPosts():
         post_data = [
             post.title, 
             post.link_flair_text, 
-            self._convert_time(post.created), 
+            convert_time(post.created), 
             post.score, 
             post.upvote_ratio, 
             post.id, 
@@ -253,64 +271,74 @@ class SortPosts():
                 "n_results_or_keywords": search_for,
                 "time_filter": time_filter
             },
+            "subreddit_rules": {},
             "data": []
         }
 
         return json_data
 
-    ### Append data to the data list in the JSON skeleton.
-    def _add_json_data(self, count, json_data, post_data):
+    ### Add Subreddit rules and post requirements to the JSON skeleton.
+    def _add_json_subreddit_rules(self, json_data, post_requirements, rules):
+        json_data["subreddit_rules"]["rules"] = rules
+        json_data["subreddit_rules"]["post_requirements"] = post_requirements
+
+    ### Append submission data to the data list in the JSON skeleton.
+    def _add_json_submission_data(self, json_data, post_data):
         json_data["data"].append({
             title: value for title, value in zip(self._titles, post_data)
         })
     
     ### Sort collected dictionary based on export option.
-    def sort(self, args, cat_i, collected, search_for, sub, time_filter):
+    def sort(self, args, cat_i, collected, post_requirements, rules, search_for, sub, time_filter):
         print("\nThis may take a while. Please wait.")
 
-        overview = self._initialize_dict(args)
-
         if args.csv:
+            overview = self._initialize_dict(args)
             for post in collected:
                 post_data = self._get_data(post)
                 self._csv_format(overview, post_data)
 
             return overview
-        elif args.json:
-            json_data = self._make_json_skeleton(cat_i, search_for, sub, time_filter)
+            
+        json_data = self._make_json_skeleton(cat_i, search_for, sub, time_filter)
+        
+        if args.rules:
+            print(Fore.CYAN + Style.BRIGHT + "\nIncluding Subreddit rules...")
+            self._add_json_subreddit_rules(json_data, post_requirements, rules)
+        
+        for post in collected:
+            post_data = self._get_data(post)
+            self._add_json_submission_data(json_data, post_data)
 
-            for count, post in enumerate(collected, start = 1):
-                post_data = self._get_data(post)
-                self._add_json_data(count, json_data, post_data)
-
-            return json_data
+        return json_data
 
 class GetSortWrite():
     """
     Methods to get, sort, then write scraped Subreddit posts to CSV or JSON.
     """
 
-    ### Initialize objects that will be used in class methods.
-    def __init__(self):
-        self._eo = Global.eo
-
     ### Get and sort posts.
-    def _get_sort(self, args, cat_i, reddit, search_for, sub, time_filter):
-        collected = GetPosts.get(args, reddit, sub, cat_i, search_for, time_filter)        
-        return SortPosts().sort(args, cat_i, collected, search_for, sub, time_filter)
+    @staticmethod
+    def _get_sort(args, cat_i, reddit, search_for, sub, time_filter):
+        post_requirements, rules = GetRules.get(reddit.subreddit(sub))
+        collected = GetPosts.get(args, reddit, sub, cat_i, search_for, time_filter)
+
+        return SortPosts().sort(args, cat_i, collected, post_requirements, rules, search_for, sub, time_filter)
 
     ### Export to either CSV or JSON.
-    def _determine_export(self, args, data, f_name):
-        export_option = self._eo[1] \
-            if args.json \
-            else self._eo[0]
+    @staticmethod
+    def _determine_export(args, data, f_name):
+        export_option = eo[1] \
+            if not args.csv \
+            else eo[0]
 
-        Export.Export.export(data, f_name, export_option, "subreddits")
+        Export.export(data, f_name, export_option, "subreddits")
 
     ### Set print length depending on string length.
-    def _print_confirm(self, args, sub):
+    @staticmethod
+    def _print_confirm(args, sub):
         export_option = "JSON" \
-            if args.json \
+            if not args.csv \
             else "CSV"
 
         confirmation = "\n%s file for r/%s created." % (export_option, sub)
@@ -319,19 +347,22 @@ class GetSortWrite():
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
     ### Write posts.
-    def _write(self, args, cat_i, data, each_sub, sub):
-        f_name = Export.NameFile().r_fname(args, cat_i, each_sub, sub)
-        self._determine_export(args, data, f_name)
-        self._print_confirm(args, sub)
+    @staticmethod
+    def _write(args, cat_i, data, each_sub, sub):
+        f_name = NameFile().r_fname(args, cat_i, each_sub, sub)
+        GetSortWrite._determine_export(args, data, f_name)
+        GetSortWrite._print_confirm(args, sub)
 
     ### Get, sort, then write.
-    def gsw(self, args, reddit, s_master):
+    @staticmethod
+    def gsw(args, reddit, s_master):
         for sub, settings in s_master.items():
             for each_sub in settings:
-                cat_i = each_sub[0].upper() if not args.basic else each_sub[0]
-                
-                data = self._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
-                self._write(args, cat_i, data, each_sub, sub)
+                cat_i = each_sub[0].upper() \
+                    if not args.basic \
+                    else short_cat[each_sub[0]]
+                data = GetSortWrite._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
+                GetSortWrite._write(args, cat_i, data, each_sub, sub)
 
 class RunSubreddit():
     """
@@ -341,10 +372,10 @@ class RunSubreddit():
     ### Create settings for each user input.
     @staticmethod
     def _create_settings(args, parser, reddit, s_t):
-        sub_list = Cli.GetScrapeSettings().create_list(args, s_t[0])
+        sub_list = GetPRAWScrapeSettings().create_list(args, s_t[0])
         subs = CheckSubreddits.list_subreddits(parser, reddit, s_t, sub_list)
-        s_master = Global.make_list_dict(subs)
-        Cli.GetScrapeSettings().get_settings(args, s_master, s_t[0])
+        s_master = make_list_dict(subs)
+        GetPRAWScrapeSettings().get_settings(args, s_master, s_t[0])
 
         return s_master
 
@@ -356,7 +387,7 @@ class RunSubreddit():
         confirm = PrintConfirm.confirm_settings()
 
         if confirm == options[0]:
-            GetSortWrite().gsw(args, reddit, s_master)
+            GetSortWrite.gsw(args, reddit, s_master)
         else:
             raise KeyboardInterrupt
 
@@ -365,16 +396,17 @@ class RunSubreddit():
     @staticmethod
     def _write_file(args, reddit, s_master):
         if args.y:
-            GetSortWrite().gsw(args, reddit, s_master)
+            GetSortWrite.gsw(args, reddit, s_master)
         else:
             RunSubreddit._confirm_write(args, reddit, s_master)
 
     ### Run Subreddit scraper.
     @staticmethod
     @LogExport.log_export
-    @LogScraper.scraper_timer(Global.s_t[0])
+    @LogScraper.scraper_timer(s_t[0])
     def run(args, parser, reddit, s_t):
-        Titles.Titles.r_title()
+        PRAWTitles.r_title()
 
         s_master = RunSubreddit._create_settings(args, parser, reddit, s_t)
         RunSubreddit._write_file(args, reddit, s_master)
+    
