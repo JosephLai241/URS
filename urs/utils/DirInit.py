@@ -33,8 +33,8 @@ class InitializeDirectory():
     
     ### Make analytics directory if it does not exist.
     @staticmethod
-    def make_analytics_directory(date_dir):
-        analytics_dir = "../scrapes/%s/analytics" % date_dir
+    def make_analytics_directory(date_dir, tool_type):
+        analytics_dir = "../scrapes/%s/analytics/%s" % (date_dir, tool_type)
         if not os.path.isdir(analytics_dir):
             os.mkdir(analytics_dir)
     
