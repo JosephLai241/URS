@@ -7,53 +7,55 @@ from colorama import (
     Style
 )
 
-from praw_scrapers import Subreddit
-from utils import (
-    Global, 
-    Titles, 
-    Validation
+from praw_scrapers.Subreddit import (
+    GetSortWrite,
+    PrintConfirm
+)
+
+from utils.Global import (
+    categories,
+    make_list_dict,
+    options,
+    s_t
 )
 from utils.Logger import (
-    LogExport, 
+    LogExport,
     LogScraper
 )
+from utils.Titles import PRAWTitles
+from utils.Validation import Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-### Global variables.
-options = Global.options
 
 class PrintSubs():
     """
     Methods for printing found and invalid Subreddits.
     """
 
-    ### Initialize objects that will be used in class methods.
-    def __init__(self):
-        self._s_t = Global.s_t
-
     ### Return a list of valid and invalid Subreddits.
-    def _find_subs(self, parser, reddit, search_for):
+    @staticmethod
+    def _find_subs(parser, reddit, search_for):
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        subs, not_subs = Validation.Validation.existence(self._s_t[0], sub_list, parser, reddit, self._s_t)
+        subs, not_subs = Validation.existence(s_t[0], sub_list, parser, reddit, s_t)
 
         return subs, not_subs
 
     ### Print valid and invalid Subreddits.
-    def print_subreddits(self, parser, reddit, search_for):
+    @staticmethod
+    def print_subreddits(parser, reddit, search_for):
         print("\nChecking if Subreddit(s) exist...")
-        subs, not_subs = self._find_subs(parser, reddit, search_for)
+        subs, not_subs = PrintSubs._find_subs(parser, reddit, search_for)
 
         if subs:
-            print("\nThe following Subreddits were found and will be scraped:")
-            print("-" * 56)
+            print(Fore.GREEN + Style.BRIGHT + "\nThe following Subreddits were found and will be scraped:")
+            print(Fore.GREEN + Style.BRIGHT + "-" * 56)
             print(*subs, sep = "\n")
         if not_subs:
-            print("\nThe following Subreddits were not found and will be skipped:")
-            print("-" * 60)
+            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Subreddits were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
             print(*not_subs, sep = "\n")
 
         if not subs:
@@ -68,12 +70,9 @@ class GetInput():
     Methods for handling user input.
     """
 
-    ### Initialize objects that will be used in class methods.
-    def __init__(self):
-        self._categories = Global.categories
-
     ### Enter Subreddit(s) to scrape and check if they exist.
-    def get_subreddits(self, parser, reddit):
+    @staticmethod
+    def get_subreddits(parser, reddit):
         subreddit_prompt = Style.BRIGHT + """
 Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
@@ -84,51 +83,56 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 search_for = str(input(subreddit_prompt))
                 if not search_for:
                     raise ValueError
-                return PrintSubs().print_subreddits(parser, reddit, search_for)
+                return PrintSubs.print_subreddits(parser, reddit, search_for)
             except ValueError:
-                print("No Subreddits were specified! Try again.")
+                print(Fore.RED + Style.BRIGHT + "No Subreddits were specified! Try again.")
 
     ### Update Subreddit settings in master dictionary.
-    def _update_master(self, cat_i, master, search_for, sub):
+    @staticmethod
+    def _update_master(cat_i, master, search_for, sub):
         user_search = search_for \
             if cat_i == 5 \
             else int(search_for)
-        for sub_n, _ in master.items():
-            if sub_n == sub:
+        for sub_name in master.keys():
+            if sub_name == sub:
                 settings = [
                     cat_i, 
-                    user_search
+                    user_search,
+                    "all"
                 ]
                 master[sub].append(settings)
 
     ### Get search settings.
-    def _get_search(self, cat_i, master, sub):
+    @staticmethod
+    def _get_search(cat_i, master, sub):
         while True:
             try:
                 search_for = str(input(Style.BRIGHT + "\nWhat would you like to search for in r/" + sub + "? " + Style.RESET_ALL)).strip()
                 if not search_for:
                     raise ValueError
                 else:
-                    self._update_master(cat_i, master, search_for, sub)
+                    GetInput._update_master(cat_i, master, search_for, sub)
                     break
             except ValueError:
-                print("Not an option! Try again.")
+                print(Fore.RED + Style.BRIGHT + "\nInvalid input! Try again.")
 
     ### Get number of results.
-    def _get_n_results(self, cat_i, master, sub):
+    @staticmethod
+    def _get_n_results(cat_i, master, sub):
         while True:
             try:
                 search_for = input(Style.BRIGHT + "\nHow many results do you want to capture from r/" + sub + "? " + Style.RESET_ALL).strip()
                 if search_for.isalpha() or not search_for:
                     raise ValueError
                 else:
-                    self._update_master(cat_i, master, search_for, sub)
+                    GetInput._update_master(cat_i, master, search_for, sub)
                     break
             except ValueError:
-                print("Not an option! Try again.")
+                print(Fore.RED + Style.BRIGHT + "\nInvalid input! Try again.")
 
     ### Select post category and the number of results returned from each Subreddit.
-    def get_settings(self, master, subs):
+    @staticmethod
+    def get_settings(master, subs):
         for sub in subs:
             while True:
                 try:
@@ -146,13 +150,13 @@ Select a category to display for r/%s
 
                     if cat_i == 5:
                         print("\nSelected search")
-                        self._get_search(cat_i, master, sub)
+                        GetInput._get_search(cat_i, master, sub)
                     else:
-                        print("\nSelected category: %s" % self._categories[cat_i])
-                        self._get_n_results(cat_i, master, sub)
+                        print("\nSelected category: %s" % categories[cat_i])
+                        GetInput._get_n_results(cat_i, master, sub)
                     break
                 except (IndexError, ValueError):
-                    print("Not an option! Try again.")
+                    print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")
 
 class ConfirmInput():
     """
@@ -174,7 +178,7 @@ class ConfirmInput():
                     print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                     parser.exit()
             except ValueError:
-                print("Not an option! Try again.")    
+                print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")    
 
     ### Scrape again?
     @staticmethod
@@ -187,7 +191,7 @@ class ConfirmInput():
                 else:
                     return repeat
             except ValueError:
-                print("Not an option! Try again.")
+                print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")
 
 class RunBasic():
     """
@@ -197,25 +201,25 @@ class RunBasic():
     ### Create settings for each user input.
     @staticmethod
     def _create_settings(parser, reddit):
-        subs = GetInput().get_subreddits(parser, reddit)
+        subs = GetInput.get_subreddits(parser, reddit)
         subs = ConfirmInput.confirm_subreddits(subs, parser)
-        master = Global.make_list_dict(subs)
-        GetInput().get_settings(master, subs)
+        master = make_list_dict(subs)
+        GetInput.get_settings(master, subs)
 
         return master
 
     ### Print Subreddit scraping settings. Then write or quit scraper.
     @staticmethod
     def _print_confirm(args, master):
-        Subreddit.PrintConfirm().print_settings(args, master)
-        return Subreddit.PrintConfirm().confirm_settings()
+        PrintConfirm().print_settings(args, master)
+        return PrintConfirm().confirm_settings()
 
     ### Run basic Subreddit scraper.
     @staticmethod
     @LogExport.log_export
-    @LogScraper.scraper_timer(Global.s_t[0])
+    @LogScraper.scraper_timer(s_t[0])
     def run(args, parser, reddit):
-        Titles.Titles.b_title()
+        PRAWTitles.b_title()
         
         while True:
             while True:                
@@ -228,9 +232,10 @@ class RunBasic():
                     print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                     parser.exit()
             
-            Subreddit.GetSortWrite().gsw(args, reddit, master)
+            GetSortWrite().gsw(args, reddit, master)
             
             repeat = ConfirmInput.another()
             if repeat == options[1]:
                 print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                 break
+                
