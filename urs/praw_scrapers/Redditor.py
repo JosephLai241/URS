@@ -10,25 +10,27 @@ from colorama import (
 )
 from prawcore import PrawcoreException
 
-from utils import (
-    Cli, 
-    Export, 
-    Global, 
-    Titles, 
-    Validation
+from utils.Cli import GetPRAWScrapeSettings
+from utils.Export import (
+    Export,
+    NameFile
+)
+from utils.Global import (
+    convert_time,
+    eo,
+    make_none_dict,
+    s_t
 )
 from utils.Logger import (
     LogExport, 
     LogScraper
 )
+from utils.Titles import PRAWTitles
+from utils.Validation import Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-### Global variables.
-convert_time = Global.convert_time
-s_t = Global.s_t
 
 class CheckRedditors():
     """
@@ -39,7 +41,7 @@ class CheckRedditors():
     @staticmethod
     def list_redditors(parser, reddit, user_list):
         print("\nChecking if Redditor(s) exist...")
-        users, not_users = Validation.Validation.existence(s_t[1], user_list, parser, reddit, s_t)
+        users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
         
         if not_users:
             print(Fore.YELLOW + Style.BRIGHT + "\nThe following Redditors were not found and will be skipped:")
@@ -338,22 +340,20 @@ class Write():
     Methods for writing scraped Redditor information to CSV or JSON.
     """
 
-    ### Initialize objects that will be used in class methods.
-    def __init__(self):
-        self._eo = Global.eo
-
     ### Export to either CSV or JSON.
-    def _determine_export(self, args, data, f_name):
-        export_option = self._eo[1] \
-            if args.json \
-            else self._eo[0]
+    @staticmethod
+    def _determine_export(args, data, f_name):
+        export_option = eo[1] \
+            if not args.csv \
+            else eo[0]
 
-        Export.Export.export(data, f_name, export_option, "redditors")
+        Export.export(data, f_name, export_option, "redditors")
 
     ### Print confirmation message and set print length depending on string length.
-    def _print_confirm(self, args, user):
+    @staticmethod
+    def _print_confirm(args, user):
         export_option = "JSON" \
-            if args.json \
+            if not args.csv \
             else "CSV"
 
         confirmation = "\n%s file for u/%s created." % (export_option, user)
@@ -362,13 +362,14 @@ class Write():
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
     ### Get, sort, then write scraped Redditor information to CSV or JSON.
-    def write(self, args, reddit, u_master):
+    @staticmethod
+    def write(args, reddit, u_master):
         for user, limit in u_master.items():
             data = GetInteractions().get(limit, reddit, user)
-            f_name = Export.NameFile().u_fname(limit, user)
+            f_name = NameFile().u_fname(limit, user)
 
-            self._determine_export(args, data, f_name)
-            self._print_confirm(args, user)
+            Write._determine_export(args, data, f_name)
+            Write._print_confirm(args, user)
 
 class RunRedditor():
     """
@@ -380,11 +381,11 @@ class RunRedditor():
     @LogExport.log_export
     @LogScraper.scraper_timer(s_t[1])
     def run(args, parser, reddit):
-        Titles.Titles().u_title()
+        PRAWTitles.u_title()
 
-        user_list = Cli.GetScrapeSettings().create_list(args, s_t[1])
+        user_list = GetPRAWScrapeSettings().create_list(args, s_t[1])
         users = CheckRedditors().list_redditors(parser, reddit, user_list)
-        u_master = Global.make_none_dict(users)
-        Cli.GetScrapeSettings().get_settings(args, u_master, s_t[1])
+        u_master = make_none_dict(users)
+        GetPRAWScrapeSettings().get_settings(args, u_master, s_t[1])
 
-        Write().write(args, reddit, u_master)
+        Write.write(args, reddit, u_master)
