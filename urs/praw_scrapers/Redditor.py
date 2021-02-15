@@ -23,7 +23,7 @@ from utils.Global import (
 )
 from utils.Logger import (
     LogExport, 
-    LogScraper
+    LogPRAWScraper
 )
 from utils.Titles import PRAWTitles
 from utils.Validation import Validation
@@ -379,7 +379,7 @@ class RunRedditor():
     ### Run Redditor scraper.
     @staticmethod
     @LogExport.log_export
-    @LogScraper.scraper_timer(s_t[1])
+    @LogPRAWScraper.scraper_timer(s_t[1])
     def run(args, parser, reddit):
         PRAWTitles.u_title()
 
