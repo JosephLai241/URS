@@ -47,7 +47,7 @@ class Parser():
 
     [-f FILE]
     [-ch FILE OPTIONAL_EXPORT_FORMAT] 
-    [-wc FILE OPTIONAL_EXPORT_FORMAT OPTIONAL_MASK_IMAGE]
+    [-wc FILE OPTIONAL_EXPORT_FORMAT]
     [--nosave]
 
     [-y]
@@ -101,6 +101,22 @@ chart and wordcloud export options:
 
 [PRAW SCRAPING]
 
+Arguments:
+
+    [-r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] 
+    [--rules]
+    [-u USER N_RESULTS] 
+    [-c URL N_RESULTS] 
+    [-b]
+
+    [-y]
+
+    [--csv]
+
+All scrape results are exported to JSON by default.
+
+You can run all of these scrapers in one call.
+
 SUBREDDITS
 
     Get the first 10 posts in r/askreddit in the Hot category and export to JSON:
@@ -116,11 +132,13 @@ SUBREDDITS
 
         $ ./Urs.py -r learnprogramming s "python developer" month
 
-    You can add the Subreddit's rules in the scrape results by providing the `--rules` flag. This only works when you export to JSON:
+    You can add the Subreddit's rules in the scrape results by providing the `--rules` flag. 
+    This only works when you export to JSON:
 
-        $ ./Urs.py -r wallstreetbets t 25 --rules
+        $ ./Urs.py -r wallstreetbets t 25 year --rules
 
-    You can also still use URS 1.0 (SUBREDDIT SCRAPING ONLY), but you cannot include this flag with any items besides export options:
+    You can also still use URS v1.0.0 (SUBREDDIT SCRAPING ONLY), but you cannot include 
+    this flag with any items besides export options:
 
         $ ./Urs.py -b
 
@@ -134,47 +152,71 @@ REDDITORS
 
 SUBMISSION COMMENTS
 
-    Scraping 25 comments from this r/TIFU post:
-    (Returns a structured JSON file that includes down to third-level replies)
+    Scraping 25 comments from this r/TIFU post.
+    Returns a structured JSON file that includes down to third-level replies:
 
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25
 
-    Scraping all comments from the same r/TIFU post:
-    (Returns an unstructured JSON file of all comments in level order, ie. top-level first, followed by second-level, then third-level, etc.)
+    Scraping all comments from the same r/TIFU post.
+    Returns an unstructured JSON file of all comments in level order, 
+    ie. top-level first, followed by second-level, then third-level, etc.:
 
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0
 
-COMBINING SCRAPERS
-
-    You can scrape multiple items at once:
-
-        $ ./Urs.py -r askreddit h 15 -u spez 25 -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 50
-
 [ANALYTICAL TOOLS]
+
+Arguments:
+
+    [-f FILE]
+    [-ch FILE OPTIONAL_EXPORT_FORMAT] 
+    [-wc FILE OPTIONAL_EXPORT_FORMAT]
+    [--nosave]
+
+Word frequencies are exported to JSON by default.
+
+Charts and wordclouds are exported to PNG by default.
+
+You can run all of these tools in one call.
 
 WORD FREQUENCIES
 
-    Only return a count of words that are present in submission titles, bodies, and/or comments. An example file path is given:
+    Only return a count of words that are present in submission titles, bodies, and/or comments. 
+    An example file path is given:
 
-        $ ./Urs.py -f ../scrapes/02-15-2020/subreddits/askreddit-hot-100-results.json
+        $ ./Urs.py -f ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json
 
-WORDCLOUD
+    You can also export to CSV instead:
 
-    You can also generate a wordcloud based on word frequencies:
-    
-        $ ./Urs.py -wc ../scrapes/02-15-2020/subreddits/askreddit-hot-100-results.json
+        $ ./Urs.py -f ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --csv
 
 CHART
 
     Or you can create a bar chart based on word frequencies:
 
-        $ ./Urs.py -ch ../scrapes/02-15-2020/subreddits/askreddit-hot-100-results.json
+        $ ./Urs.py -ch ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json
+
+WORDCLOUD
+
+    You can also generate a wordcloud based on word frequencies:
+    
+        $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json
+
+OPTIONAL EXPORT FORMAT
+
+    You can export to formats other than PNG by providing the format after the file path.
+    See the help menu for a full list of options:
+
+        $ ./Urs.py -ch ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json pdf
+
+        $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json jpg
+
+DISPLAY INSTEAD OF SAVING
 
     If you do not wish to save the chart or wordcloud to file, provide the `--nosave` flag:
 
-        $ ./Urs.py -wc ../scrapes/02-15-2020/subreddits/askreddit-hot-100-results.json --nosave
+        $ ./Urs.py -ch ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --nosave
 
-        $ ./Urs.py -ch ../scrapes/02-15-2020/subreddits/askreddit-hot-100-results.json --nosave
+        $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --nosave
 
 """
 
@@ -491,34 +533,27 @@ class CheckAnalyticCli():
         for file in args.frequencies:
             self._check_valid_file(file[0])
 
+    ### Check wordcloud or chart args.
+    def _check_image_tools(self, file):
+        if len(file) > 2:
+            raise ValueError
+        
+        self._check_valid_file(file[0])
+        
+        if len(file) == 1:
+            file.append("png")
+        else:
+            self._check_valid_export(file[1])
+
     ### Check wordcloud args.
     def check_wordcloud(self, args):
         for file in args.wordcloud:
-            if len(file) > 3:
-                raise ValueError
-
-            self._check_valid_file(file[0])
-
-            if len(file) == 1:
-                file.append("png")
-            elif len(file) == 3:
-                self._check_valid_file(file[2])
-            
-            file[1] = file[1].lower()
-            self._check_valid_export(file[1])
+            self._check_image_tools(file)
 
     ### Check chart args.
     def check_chart(self, args):
         for file in args.chart:
-            if len(file) > 2:
-                raise ValueError
-            
-            self._check_valid_file(file[0])
-            
-            if len(file) == 1:
-                file.append("png")
-            else:
-                self._check_valid_export(file[1])
+            self._check_image_tools(file)
 
 class CheckCli():
     """
