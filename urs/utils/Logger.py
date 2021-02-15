@@ -13,9 +13,11 @@ from prawcore import PrawcoreException
 
 from utils.DirInit import InitializeDirectory
 from utils.Global import (
+    analytical_tools,
     categories,
     convert_time,
     date,
+    eo,
     s_t,
     short_cat
 )
@@ -117,7 +119,7 @@ class LogError():
 
         return wrapper
 
-    ### Wrapper for logging rate limit errors.
+    ### Wrapper for logging rate limit and errors.
     @staticmethod
     def log_rate_limit(function):
         def wrapper(reddit):
@@ -136,7 +138,7 @@ class LogError():
             return user_limits
         return wrapper
 
-class LogScraper():
+class LogPRAWScraper():
     """
     Decorator for logging scraper runtimes and events.
     """
@@ -172,7 +174,7 @@ class LogScraper():
     def _format_subreddit_settings(scraper, scraper_args):
         args = []
         for each_arg in scraper_args:
-            settings = LogScraper._subreddit_tuple(each_arg) \
+            settings = LogPRAWScraper._subreddit_tuple(each_arg) \
                 if scraper == s_t[0] \
                 else tuple(each_arg)
 
@@ -194,7 +196,7 @@ class LogScraper():
         if len(each_arg) == 4:
             logging.info("Getting posts from the past %s for %s results." % (each_arg[3], each_arg[1]))
 
-        return LogScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
+        return LogPRAWScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
 
     ### Format Redditor log depending on number of results scraped.
     @staticmethod
@@ -216,16 +218,16 @@ class LogScraper():
     ### string.
     @staticmethod
     def _format_scraper_log(args_list, scraper):
-        args = LogScraper._format_subreddit_settings(scraper, args_list)
+        args = LogPRAWScraper._format_subreddit_settings(scraper, args_list)
         for each_arg in args:
             formats = {
-                s_t[0]: LogScraper._format_subreddit_log(each_arg) \
+                s_t[0]: LogPRAWScraper._format_subreddit_log(each_arg) \
                     if scraper == s_t[0] \
                     else None,
-                s_t[1]: LogScraper._format_redditor_log(each_arg) \
+                s_t[1]: LogPRAWScraper._format_redditor_log(each_arg) \
                     if scraper == s_t[1] \
                     else None,
-                s_t[2]: LogScraper._format_comments_log(each_arg) \
+                s_t[2]: LogPRAWScraper._format_comments_log(each_arg) \
                     if scraper == s_t[2] \
                     else None
             }
@@ -245,7 +247,7 @@ class LogScraper():
 
                 function(*args)
 
-                LogScraper._format_scraper_log(LogScraper._get_args_switch(args[0], scraper), scraper)
+                LogPRAWScraper._format_scraper_log(LogPRAWScraper._get_args_switch(args[0], scraper), scraper)
 
                 logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % (scraper.upper(), time.time() - start))
                 logging.info("")
@@ -267,6 +269,111 @@ class LogScraper():
                 quit()
             
         return wrapper
+
+class LogAnalytics():
+    """
+    Decorator for logging analytical tools.
+    """
+
+    ### Get tool type for logging.
+    @staticmethod
+    def _get_args_switch(args, tool):
+        tools = {
+            analytical_tools[0]: [arg_set for arg_set in args.frequencies] \
+                if args.frequencies \
+                else None,
+            analytical_tools[1]: [arg_set for arg_set in args.chart] \
+                if args.chart \
+                else None,
+            analytical_tools[2]: [arg_set for arg_set in args.wordcloud] \
+                if args.wordcloud \
+                else None
+        }
+
+        return tools.get(tool)
+
+    ### Wrapper for logging if the result was saved.
+    @staticmethod
+    def log_save(tool):
+        def decorator(function):
+            def wrapper(*args):
+                filename = function(*args)
+                
+                logging.info("Saved %s to %s." % (tool, filename))
+                logging.info("")
+                
+            return wrapper
+        return decorator
+
+    ### Wrapper for logging if the result was displayed.
+    @staticmethod
+    def log_show(tool):
+        def decorator(function):
+            def wrapper(*args):
+                function(*args)
+                
+                logging.info("Displayed %s." % tool)
+                logging.info("")
+                
+            return wrapper
+        return decorator
+
+    ### Get export type for logging.
+    @staticmethod
+    def _get_export_switch(f_type):
+        export_options = {
+            0: "Exporting to JSON.",
+            1: "Exporting to CSV."
+        }
+
+        if f_type == eo[0]:
+            return export_options.get(1)
+
+        return export_options.get(0)
+
+    ### Log the export format for the frequencies generator.
+    @staticmethod
+    def log_export(function):
+        def wrapper(*args):
+            try:
+                function(*args)
+
+                logging.info(LogAnalytics._get_export_switch(args[2]))
+                logging.info("")
+            except Exception as e:
+                logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
+                logging.critical("%s\n" % e)
+
+        return wrapper
+
+    ### Log the analytical tool that was used.
+    @staticmethod
+    def _log_tool(args, tool):
+        args_list = LogAnalytics._get_args_switch(args, tool)
+
+        for file in args_list:
+            logging.info("Generating %s for file %s..." % (tool, file[0]))
+            logging.info("")
+
+    ### Wrapper for logging the amount of time it took to execute a tool.
+    @staticmethod
+    def generator_timer(tool):
+        def decorator(function):
+            def wrapper(*args):
+                start = time.time()
+
+                logging.info("RUNNING %s GENERATOR." % tool.upper())
+                logging.info("")
+
+                LogAnalytics._log_tool(args[0], tool)
+                
+                function(*args)
+
+                logging.info("%s GENERATOR FINISHED IN %.2f SECONDS." % (tool.upper(), time.time() - start))
+                logging.info("")
+
+            return wrapper
+        return decorator
 
 class LogExport():
     """
