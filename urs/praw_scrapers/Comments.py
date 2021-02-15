@@ -1,32 +1,37 @@
-#===============================================================================
-#                         Submission Comments Scraping
-#===============================================================================
+"""
+Submission comments scraper
+===========================
+Defining methods for the submission comments scraper.
+"""
+
+
 from colorama import (
     init, 
     Fore, 
     Style
 )
 
-from utils import (
-    Cli, 
-    Export, 
-    Global, 
-    Titles, 
-    Validation
+from utils.Cli import GetPRAWScrapeSettings
+from utils.Export import (
+    Export,
+    NameFile
+)
+from utils.Global import (
+    convert_time,
+    eo,
+    make_none_dict,
+    s_t
 )
 from utils.Logger import (
     LogExport, 
-    LogScraper
+    LogPRAWScraper
 )
+from utils.Titles import PRAWTitles
+from utils.Validation import Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-### Global variables.
-convert_time = Global.convert_time
-eo = Global.eo
-s_t = Global.s_t
 
 class CheckSubmissions():
     """
@@ -37,7 +42,7 @@ class CheckSubmissions():
     @staticmethod
     def list_submissions(reddit, post_list, parser):
         print("\nChecking if post(s) exist...")
-        posts, not_posts = Validation.Validation.existence(s_t[2], post_list, parser, reddit, s_t)
+        posts, not_posts = Validation.existence(s_t[2], post_list, parser, reddit, s_t)
         
         if not_posts:
             print(Fore.YELLOW + Style.BRIGHT + "\nThe following posts were not found and will be skipped:")
@@ -85,7 +90,7 @@ class GetComments():
 
     ### Add list of dictionary of comments attributes to use when sorting.
     def add_comment(self, comment):
-        c_set = Global.make_none_dict(self._titles)
+        c_set = make_none_dict(self._titles)
 
         author_name, edit_date = self._fix_attributes(comment)
         comment_attributes = [
@@ -228,16 +233,16 @@ class Write():
     @staticmethod
     def _determine_export(args, data, f_name):
         export_option = eo[1] \
-            if args.json \
+            if not args.csv \
             else eo[0]
 
-        Export.Export.export(data, f_name, export_option, "comments")
+        Export.export(data, f_name, export_option, "comments")
 
     ### Print confirmation message and set print length depending on string length.
     @staticmethod
     def _print_confirm(args, title):
         export_option = "JSON" \
-            if args.json \
+            if not args.csv \
             else "CSV"
 
         confirmation = "\n%s file for '%s' comments created." % (export_option, title)
@@ -252,7 +257,7 @@ class Write():
             title = reddit.submission(url = post).title
             data = Write._make_json_skeleton(limit, post, title)
             data["data"].append(GetSort(post, reddit).get_sort(limit))
-            f_name = Export.NameFile().c_fname(limit, title)
+            f_name = NameFile().c_fname(limit, title)
 
             Write._determine_export(args, data, f_name)
             Write._print_confirm(args, title)
@@ -265,13 +270,13 @@ class RunComments():
     ### Run comments scraper.
     @staticmethod
     @LogExport.log_export
-    @LogScraper.scraper_timer(Global.s_t[2])
+    @LogPRAWScraper.scraper_timer(s_t[2])
     def run(args, parser, reddit):
-        Titles.Titles().c_title()
+        PRAWTitles.c_title()
 
-        post_list = Cli.GetScrapeSettings().create_list(args, s_t[2])
+        post_list = GetPRAWScrapeSettings().create_list(args, s_t[2])
         posts = CheckSubmissions.list_submissions(reddit, post_list, parser)
-        c_master = Global.make_none_dict(posts)
-        Cli.GetScrapeSettings().get_settings(args, c_master, s_t[2])
+        c_master = make_none_dict(posts)
+        GetPRAWScrapeSettings().get_settings(args, c_master, s_t[2])
 
         Write.write(args, c_master, reddit)
