@@ -1,6 +1,10 @@
-#===============================================================================
-#                           Initialize Directories
-#===============================================================================
+"""
+Initialize directories
+======================
+Initialize directories in which scraped or analytical data is stored.
+"""
+
+
 import os
 
 from utils.Global import date
