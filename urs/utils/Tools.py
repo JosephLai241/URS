@@ -1,6 +1,10 @@
-#===============================================================================
-#                   All Scrapers and Validation/Args Checking
-#===============================================================================
+"""
+Tools
+=====
+Running all tools that URS has to offer.
+"""
+
+
 from analytics.Chart import GenerateChart
 from analytics.Frequencies import GenerateFrequencies
 from analytics.Wordcloud import GenerateWordcloud
