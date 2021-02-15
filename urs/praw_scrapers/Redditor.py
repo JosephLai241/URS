@@ -1,6 +1,10 @@
-#===============================================================================
-#                               Redditor Scraping
-#===============================================================================
+"""
+Redditor scraper
+================
+Defining methods for the Redditor scraper.
+"""
+
+
 import praw
 
 from colorama import (
