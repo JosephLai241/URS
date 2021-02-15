@@ -1,6 +1,10 @@
-#===============================================================================
-#                               Global Variables
-#===============================================================================
+"""
+Global variables
+================
+Variables that are used throughout this program.
+"""
+
+
 import datetime as dt
 
 ### Get current date.
