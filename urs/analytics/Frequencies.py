@@ -1,6 +1,11 @@
-#===============================================================================
-#                             Frequencies Generator
-#===============================================================================
+"""
+Frequencies generator
+=====================
+Get frequencies for words that are found in submission titles, bodies, and/or
+comments within scraped data.
+"""
+
+
 from colorama import (
     init, 
     Fore, 
