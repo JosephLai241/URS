@@ -1,6 +1,10 @@
-#===============================================================================
-#                                Log Decorators
-#===============================================================================
+"""
+Log decorators
+==============
+Decorators that log what is happening behind the scenes to `urs.log`.
+"""
+
+
 import logging
 import time
 
@@ -42,7 +46,7 @@ class LogMain():
 
     ### Configure logging settings.
     logging.basicConfig(
-        filename = DIR_PATH + "/scrapes.log", 
+        filename = DIR_PATH + "/urs.log", 
         format = LOG_FORMAT, 
         level = logging.INFO
     )
