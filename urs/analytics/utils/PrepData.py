@@ -1,6 +1,10 @@
-#===============================================================================
-#                             Prepare Scrape Data
-#===============================================================================
+"""
+Preparing data for analytical tools
+===================================
+Helper methods to prepare data for frequencies, wordcloud, or chart generators.
+"""
+
+
 import json
 
 class GetPath():
