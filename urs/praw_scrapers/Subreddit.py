@@ -1,6 +1,10 @@
-#===============================================================================
-#                             Subreddit Scraping
-#===============================================================================
+"""
+Subreddit scraper
+=================
+Defining methods for the Subreddit scraper.
+"""
+
+
 from colorama import (
     init, 
     Fore, 
@@ -271,7 +275,6 @@ class SortPosts():
                 "n_results_or_keywords": search_for,
                 "time_filter": time_filter
             },
-            "subreddit_rules": {},
             "data": []
         }
 
@@ -279,6 +282,7 @@ class SortPosts():
 
     ### Add Subreddit rules and post requirements to the JSON skeleton.
     def _add_json_subreddit_rules(self, json_data, post_requirements, rules):
+        json_data["subreddit_rules"] = {}
         json_data["subreddit_rules"]["rules"] = rules
         json_data["subreddit_rules"]["post_requirements"] = post_requirements
 
