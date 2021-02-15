@@ -1,6 +1,10 @@
-#===============================================================================
-#                                 Validation
-#===============================================================================
+"""
+PRAW validation
+===============
+Validation methods for PRAW credentials and scrapers.
+"""
+
+
 import praw
 import requests
 
