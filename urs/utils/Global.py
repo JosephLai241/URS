@@ -18,11 +18,18 @@ options = [
     "n"
 ]
 
-### Scrape types.
+### PRAW scrape types.
 s_t = [
     "subreddit", 
     "redditor", 
     "comments"
+]
+
+### Analytical tools.
+analytical_tools = [
+    "frequencies",
+    "chart",
+    "wordcloud"
 ]
 
 ### Subreddit categories.
