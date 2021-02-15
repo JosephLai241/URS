@@ -1,6 +1,10 @@
-#===============================================================================
-#                           Command-line Interface
-#===============================================================================
+"""
+Command-line interface
+======================
+Methods defining the command-line interface for this program.
+"""
+
+
 import argparse
 import re
 import sys
@@ -382,7 +386,7 @@ class GetPRAWScrapeSettings():
             self._two_arg_settings(master, args.redditor)
         elif s_type == s_t[2]:
             self._two_arg_settings(master, args.comments)
-    
+
 class CheckPRAWCli():
     """
     Methods for checking CLI arguments for PRAW scrapers and raising errors if
@@ -500,6 +504,7 @@ class CheckAnalyticCli():
             elif len(file) == 3:
                 self._check_valid_file(file[2])
             
+            file[1] = file[1].lower()
             self._check_valid_export(file[1])
 
     ### Check chart args.
