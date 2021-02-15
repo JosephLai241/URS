@@ -15,11 +15,11 @@ class InitializeDirectory():
     ### does not exist.
     @staticmethod
     def make_directory():
-        top_dir = "../scrapes"
+        top_dir = "../scrapes/"
         if not os.path.isdir(top_dir):
             os.mkdir(top_dir)
         
-        date_dir = "../scrapes/%s" % date
+        date_dir = top_dir + date
         if not os.path.isdir(date_dir):
             os.mkdir(date_dir)
 
@@ -34,7 +34,11 @@ class InitializeDirectory():
     ### Make analytics directory if it does not exist.
     @staticmethod
     def make_analytics_directory(date_dir, tool_type):
-        analytics_dir = "../scrapes/%s/analytics/%s" % (date_dir, tool_type)
+        analytics_dir = "../scrapes/%s/analytics/" % date_dir
         if not os.path.isdir(analytics_dir):
             os.mkdir(analytics_dir)
-    
+
+        tool_dir = analytics_dir + tool_type
+        if not os.path.isdir(tool_dir):
+            os.mkdir(tool_dir)
+        
