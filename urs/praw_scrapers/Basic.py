@@ -1,6 +1,10 @@
-#===============================================================================
-#                           Basic Subreddit Scraping
-#===============================================================================
+"""
+Basic Subreddit scraper
+=======================
+Defining the interface for the basic Subreddit scraper.
+"""
+
+
 from colorama import (
     init, 
     Fore, 
