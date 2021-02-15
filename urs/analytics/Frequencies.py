@@ -14,7 +14,11 @@ from analytics.utils.PrepData import (
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Export import Export
-from urs.utils.Global import eo
+from urs.utils.Global import (
+    analytical_tools,
+    eo
+)
+from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -28,23 +32,24 @@ class ExportFrequencies():
 
     ### Write data dictionary to CSV or JSON.
     @staticmethod
+    @LogAnalytics.log_export
     def export(data, filename, f_type):
         Export.write_json(data, filename) \
             if f_type == eo[1] \
             else Export.write_csv(data, filename)
 
-class GenerateFrequencies():
+class SortAndConfirm():
     """
-    Methods for generating word frequencies.
+    Methods for sorting and confirming the data.
     """
 
     ### Get data from scrape file.
-    def _get_data(self, file):
+    def get_data(self, file):
         scrape_type = GetPath.get_scrape_type(file[0])
         return PrepData.prep(file[0], scrape_type)
 
     ### Name the new file and create the analytics directory.
-    def _name_and_create(self, args, file):
+    def name_and_create(self, args, file):
         f_type = eo[0] \
             if args.csv \
             else eo[1]
@@ -55,29 +60,36 @@ class GenerateFrequencies():
         return f_type, filename
 
     ### Create the JSON structure for exporting.
-    def _create_json(self, file, plt_dict):
+    def create_json(self, file, plt_dict):
         return {
             "raw_file": file[0],
             "data": plt_dict
         }
 
     ### Print confirmation message.
-    def _print_confirmation(self, filename):
+    def print_confirmation(self, filename):
         confirmation = "\nFrequencies exported to %s" % filename
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
+class GenerateFrequencies():
+    """
+    Methods for generating word frequencies.
+    """
+
     ### Generate frequencies.
-    def generate(self, args):
+    @staticmethod
+    @LogAnalytics.generator_timer(analytical_tools[0])
+    def generate(args):
         AnalyticsTitles.f_title()
 
         for file in args.frequencies:
-            print("\nGenerating wordcloud...\n")
-            
-            plt_dict = self._get_data(file)
-            f_type, filename = self._name_and_create(args, file)
+            print("\nGenerating frequencies...\n")
 
-            json_data = self._create_json(file, plt_dict)
+            plt_dict = SortAndConfirm().get_data(file)
+            f_type, filename = SortAndConfirm().name_and_create(args, file)
+
+            json_data = SortAndConfirm().create_json(file, plt_dict)
 
             ExportFrequencies.export(json_data, filename, f_type)
-            self._print_confirmation(filename)
+            SortAndConfirm().print_confirmation(filename)
