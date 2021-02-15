@@ -20,7 +20,7 @@ from utils.Global import (
 )
 from utils.Logger import (
     LogExport,
-    LogScraper
+    LogPRAWScraper
 )
 from utils.Titles import PRAWTitles
 from utils.Validation import Validation
@@ -217,7 +217,7 @@ class RunBasic():
     ### Run basic Subreddit scraper.
     @staticmethod
     @LogExport.log_export
-    @LogScraper.scraper_timer(s_t[0])
+    @LogPRAWScraper.scraper_timer(s_t[0])
     def run(args, parser, reddit):
         PRAWTitles.b_title()
         
