@@ -1,6 +1,10 @@
-#===============================================================================
-#                              Wordcloud Generator
-#===============================================================================
+"""
+Wordcloud Generator
+===================
+Generate a wordcloud based on word frequencies extracted from scraped data.
+"""
+
+
 import matplotlib.pyplot as plt
 
 from colorama import (
@@ -34,7 +38,11 @@ class SetUpWordcloud():
 
     ### Initialize wordcloud.
     def initialize_wordcloud(self, file, scrape_type):
-        return WordCloud().generate_from_frequencies(PrepData.prep(file[0], scrape_type))
+        return WordCloud(
+            height = 1200,
+            max_font_size = 400,
+            width = 1600
+        ).generate_from_frequencies(PrepData.prep(file[0], scrape_type))
 
     ### Set wordcloud preferences.
     def modify_wordcloud(self, wc):
