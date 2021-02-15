@@ -24,7 +24,7 @@ from utils.Global import (
 )
 from utils.Logger import (
     LogExport, 
-    LogScraper
+    LogPRAWScraper
 )
 from utils.Titles import PRAWTitles
 from utils.Validation import Validation
@@ -381,7 +381,7 @@ class RunSubreddit():
 
     ### Print the confirm screen if the user did not specify the `-y` flag.
     @staticmethod
-    @LogScraper.log_cancel
+    @LogPRAWScraper.log_cancel
     def _confirm_write(args, reddit, s_master):
         PrintConfirm.print_settings(args, s_master)
         confirm = PrintConfirm.confirm_settings()
@@ -403,7 +403,7 @@ class RunSubreddit():
     ### Run Subreddit scraper.
     @staticmethod
     @LogExport.log_export
-    @LogScraper.scraper_timer(s_t[0])
+    @LogPRAWScraper.scraper_timer(s_t[0])
     def run(args, parser, reddit, s_t):
         PRAWTitles.r_title()
 
