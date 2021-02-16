@@ -64,6 +64,18 @@ class SortAndConfirm():
 
         return f_type, filename
 
+    ### Create CSV structure for exporting.
+    def create_csv(self, plt_dict):
+        overview = {
+            "words": [],
+            "frequencies": []
+        }
+        for word, frequency in plt_dict.items():
+            overview["words"].append(word)
+            overview["frequencies"].append(frequency)
+
+        return overview
+
     ### Create the JSON structure for exporting.
     def create_json(self, file, plt_dict):
         return {
@@ -94,7 +106,9 @@ class GenerateFrequencies():
             plt_dict = SortAndConfirm().get_data(file)
             f_type, filename = SortAndConfirm().name_and_create(args, file)
 
-            json_data = SortAndConfirm().create_json(file, plt_dict)
+            data = SortAndConfirm().create_csv(plt_dict) \
+                if args.csv \
+                else SortAndConfirm().create_json(file, plt_dict)
 
-            ExportFrequencies.export(json_data, filename, f_type)
+            ExportFrequencies.export(data, filename, f_type)
             SortAndConfirm().print_confirmation(filename)
