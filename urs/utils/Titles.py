@@ -111,19 +111,6 @@ class AnalyticsTitles():
   \/__//__/   \/____/
 """)
 
-    ### Print chart title.
-    @staticmethod
-    def chart_title():
-        print(Fore.WHITE + Style.BRIGHT + r"""
-      __         
-     /\ \  📊      
-  ___\ \ \___    
- /'___\ \  _ `\  
-/\ \__/\ \ \ \ \ 
-\ \____\\ \_\ \_\
- \/____/ \/_/\/_/
-""")
-
 class Errors():
     """
     Methods for printing error titles.
