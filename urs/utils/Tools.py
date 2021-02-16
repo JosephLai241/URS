@@ -71,9 +71,6 @@ class Run():
             ### Run frequencies generator.
             if self._args.frequencies:
                 GenerateFrequencies().generate(self._args)
-            ### Run chart generator.
-            if self._args.chart:
-                GenerateChart.generate(self._args)
             ### Run wordcloud generator.
             if self._args.wordcloud:
                 GenerateWordcloud().generate(self._args)
