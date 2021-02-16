@@ -82,16 +82,12 @@ Subreddit time filters:
 
 wordcloud export options:
     eps     Encapsulated Postscript
-    jpg
     jpeg
+    jpg
     pdf
-    pgf     PGF code for LaTeX
     png
     ps      Postscript
-    raw     Raw RGBA bitmap
     rgba    Raw RGBA bitmap
-    svg
-    svgz
     tif
     tiff
 """
@@ -483,16 +479,12 @@ class CheckAnalyticCli():
     def __init__(self):
         self._export_options = [
             "eps",
-            "jpg",
             "jpeg",
+            "jpg",
             "pdf",
-            "pgf",
             "png",
             "ps",
-            "raw",
             "rgba",
-            "svg",
-            "svgz",
             "tif",
             "tiff",
         ]
@@ -502,11 +494,6 @@ class CheckAnalyticCli():
         try:
             _ = open("%s" % file)
         except FileNotFoundError:
-            raise ValueError
-
-    ### Check if export format is valid.
-    def _check_valid_export(self, export_option):
-        if export_option not in self._export_options:
             raise ValueError
 
     ### Check frequencies args.
@@ -525,7 +512,10 @@ class CheckAnalyticCli():
             if len(file) == 1:
                 file.append("png")
             else:
-                self._check_valid_export(file[1])
+                if file[1].lower() not in self._export_options:
+                    raise ValueError
+
+                file[1] = file[1].lower()
 
 class CheckCli():
     """
