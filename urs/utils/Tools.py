@@ -12,6 +12,7 @@ from praw_scrapers.Basic import RunBasic
 from praw_scrapers.Comments import RunComments
 from praw_scrapers.Redditor import RunRedditor
 from praw_scrapers.Subreddit import RunSubreddit
+from praw_scrapers.utils.Validation import Validation
 
 from utils.Cli import (
     CheckCli,
@@ -19,7 +20,6 @@ from utils.Cli import (
 )
 from utils.Global import s_t
 from utils.Titles import MainTitle
-from utils.Validation import Validation
 
 class Run():
     """

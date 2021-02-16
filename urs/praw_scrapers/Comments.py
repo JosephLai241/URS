@@ -11,6 +11,8 @@ from colorama import (
     Style
 )
 
+from praw_scrapers.utils.Validation import Validation
+
 from utils.Cli import GetPRAWScrapeSettings
 from utils.Export import (
     Export,
@@ -27,7 +29,6 @@ from utils.Logger import (
     LogPRAWScraper
 )
 from utils.Titles import PRAWTitles
-from utils.Validation import Validation
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
