@@ -32,7 +32,6 @@ s_t = [
 ### Analytical tools.
 analytical_tools = [
     "frequencies",
-    "chart",
     "wordcloud"
 ]
 

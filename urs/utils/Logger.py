@@ -286,10 +286,7 @@ class LogAnalytics():
             analytical_tools[0]: [arg_set for arg_set in args.frequencies] \
                 if args.frequencies \
                 else None,
-            analytical_tools[1]: [arg_set for arg_set in args.chart] \
-                if args.chart \
-                else None,
-            analytical_tools[2]: [arg_set for arg_set in args.wordcloud] \
+            analytical_tools[1]: [arg_set for arg_set in args.wordcloud] \
                 if args.wordcloud \
                 else None
         }
