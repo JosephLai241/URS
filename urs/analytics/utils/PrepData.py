@@ -6,6 +6,7 @@ Helper methods to prepare data for frequencies, wordcloud, or chart generators.
 
 
 import json
+import re
 
 class GetPath():
     """
@@ -104,11 +105,25 @@ class PrepData():
     Calling all methods for preparing scraped data. 
     """
 
+    ### Removing unnecessary characters from words.
+    @staticmethod
+    def _remove_extras(word):
+        illegal_chars = re.compile("[(){?~+}<>`]")
+        fixed = [
+            "_"
+                if illegal_chars.search(char) != None
+                else char for char in word
+        ]
+
+        return "".join(fixed)
+
     ### Count words that are present in a field, then update the plt_dict dictionary.
     @staticmethod
     def _count_words(field, obj, plt_dict):
         words = obj[field].split(" ")
         for word in words:
+            word = PrepData._remove_extras(word)
+            
             if word not in plt_dict.keys():
                 plt_dict[word] = 1
             else:
