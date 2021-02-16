@@ -70,6 +70,7 @@ class SortAndConfirm():
             "words": [],
             "frequencies": []
         }
+        
         for word, frequency in plt_dict.items():
             overview["words"].append(word)
             overview["frequencies"].append(frequency)
