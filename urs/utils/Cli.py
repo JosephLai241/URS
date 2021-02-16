@@ -122,7 +122,7 @@ SUBREDDITS
 
         $ ./Urs.py -r askreddit h 10
 
-    Search for "United States of America" in r/worldnews and export to CSV:
+    Search for "United States of America" in r/worldnews and export to CSV by including the `--csv` flag:
 
         $ ./Urs.py -r worldnews s "United States of America" --csv
 
@@ -131,7 +131,7 @@ SUBREDDITS
 
         $ ./Urs.py -r learnprogramming s "python developer" month
 
-    You can add the Subreddit's rules in the scrape results by providing the `--rules` flag. 
+    You can add the Subreddit's rules in the scrape results by including the `--rules` flag. 
     This only works when you export to JSON:
 
         $ ./Urs.py -r wallstreetbets t 25 year --rules
@@ -183,7 +183,7 @@ WORD FREQUENCIES
 
         $ ./Urs.py -f ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json
 
-    You can also export to CSV instead:
+    You can also export to CSV instead by including the `--csv` flag:
 
         $ ./Urs.py -f ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --csv
 
@@ -196,13 +196,13 @@ WORDCLOUD
 OPTIONAL EXPORT FORMAT
 
     You can export to formats other than PNG by providing the format after the file path.
-    See the help menu for a full list of options:
+    See the help menu for a full list of options. Exporting the wordcloud to JPG:
 
         $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json jpg
 
 DISPLAY INSTEAD OF SAVING
 
-    If you do not wish to save the wordcloud to file, provide the `--nosave` flag:
+    If you do not wish to save the wordcloud to file, include the `--nosave` flag:
 
         $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --nosave
 
