@@ -66,7 +66,7 @@ class Run():
                 RunBasic.run(self._args, self._parser, self._reddit)
         
         ### Run analytical tools.
-        elif self._args.frequencies or self._args.chart or self._args.wordcloud:
+        elif self._args.frequencies or self._args.wordcloud:
             ### Run frequencies generator.
             if self._args.frequencies:
                 GenerateFrequencies().generate(self._args)
