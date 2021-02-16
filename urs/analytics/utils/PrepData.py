@@ -54,7 +54,7 @@ class PrepSubreddit():
         plt_dict = dict()
 
         for submission in data:
-            PrepData._count_words("title", submission, plt_dict)
+            PrepData.count_words("title", submission, plt_dict)
 
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
@@ -73,10 +73,10 @@ class PrepRedditor():
                 ### Indicates there is valid data in this field.
                 if isinstance(obj, dict):
                     if obj["type"] == "submission":
-                        PrepData._count_words("title", obj, plt_dict)
-                        PrepData._count_words("body", obj, plt_dict)
+                        PrepData.count_words("title", obj, plt_dict)
+                        PrepData.count_words("body", obj, plt_dict)
                     elif obj["type"] == "comment":
-                        PrepData._count_words("text", obj, plt_dict)
+                        PrepData.count_words("text", obj, plt_dict)
                 ### Indicates this field is forbidden.
                 elif isinstance(obj, str):
                     continue
@@ -94,7 +94,7 @@ class PrepComments():
         plt_dict = dict()
 
         for comment in data:
-            PrepData._count_words("text", comment, plt_dict)
+            PrepData.count_words("text", comment, plt_dict)
 
         print(data)
         print(plt_dict)
@@ -119,7 +119,7 @@ class PrepData():
 
     ### Count words that are present in a field, then update the plt_dict dictionary.
     @staticmethod
-    def _count_words(field, obj, plt_dict):
+    def count_words(field, obj, plt_dict):
         words = obj[field].split(" ")
         for word in words:
             word = PrepData._remove_extras(word)
