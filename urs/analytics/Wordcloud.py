@@ -57,7 +57,7 @@ class FinalizeWordcloud():
     """
 
     ### Show wordcloud.
-    @LogAnalytics.log_show(analytical_tools[2])
+    @LogAnalytics.log_show(analytical_tools[1])
     def show_wordcloud(self, plt):
         display_msg = "\nDisplaying wordcloud..."
         print(Style.BRIGHT + Fore.GREEN + display_msg)
@@ -66,7 +66,7 @@ class FinalizeWordcloud():
         plt.show()
 
     ### Save wordcloud.
-    @LogAnalytics.log_save(analytical_tools[2])
+    @LogAnalytics.log_save(analytical_tools[1])
     def save_wordcloud(self, file, wc):
         date_dir, filename = GetPath.name_file(file[1], file[0], "wordclouds")
         InitializeDirectory.make_analytics_directory(date_dir, "wordclouds")
@@ -85,7 +85,7 @@ class GenerateWordcloud():
 
     ### Generate wordcloud.
     @staticmethod
-    @LogAnalytics.generator_timer(analytical_tools[2])
+    @LogAnalytics.generator_timer(analytical_tools[1])
     def generate(args):
         AnalyticsTitles.wc_title()
 
