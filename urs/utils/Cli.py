@@ -46,7 +46,6 @@ class Parser():
     [-b]
 
     [-f FILE]
-    [-ch FILE OPTIONAL_EXPORT_FORMAT] 
     [-wc FILE OPTIONAL_EXPORT_FORMAT]
     [--nosave]
 
@@ -81,7 +80,7 @@ Subreddit time filters:
 
 [ANALYTICAL TOOLS]
 
-chart and wordcloud export options:
+wordcloud export options:
     eps     Encapsulated Postscript
     jpg
     jpeg
@@ -168,15 +167,14 @@ SUBMISSION COMMENTS
 Arguments:
 
     [-f FILE]
-    [-ch FILE OPTIONAL_EXPORT_FORMAT] 
     [-wc FILE OPTIONAL_EXPORT_FORMAT]
     [--nosave]
 
 Word frequencies are exported to JSON by default.
 
-Charts and wordclouds are exported to PNG by default.
+Wordclouds are exported to PNG by default.
 
-You can run all of these tools in one call.
+You can run both of these tools in one call.
 
 WORD FREQUENCIES
 
@@ -189,12 +187,6 @@ WORD FREQUENCIES
 
         $ ./Urs.py -f ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --csv
 
-CHART
-
-    Or you can create a bar chart based on word frequencies:
-
-        $ ./Urs.py -ch ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json
-
 WORDCLOUD
 
     You can also generate a wordcloud based on word frequencies:
@@ -206,15 +198,11 @@ OPTIONAL EXPORT FORMAT
     You can export to formats other than PNG by providing the format after the file path.
     See the help menu for a full list of options:
 
-        $ ./Urs.py -ch ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json pdf
-
         $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json jpg
 
 DISPLAY INSTEAD OF SAVING
 
-    If you do not wish to save the chart or wordcloud to file, provide the `--nosave` flag:
-
-        $ ./Urs.py -ch ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --nosave
+    If you do not wish to save the wordcloud to file, provide the `--nosave` flag:
 
         $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --nosave
 
@@ -283,7 +271,7 @@ DISPLAY INSTEAD OF SAVING
             help = "include Subreddit rules in scrape data"
         )
 
-    ### Add analytical flags - wordcloud, chart, and save flags.
+    ### Add analytical flags - frequencies, wordcloud, and no save flags.
     def _add_analytics(self, parser):
         analyze_flags = parser.add_argument_group("analytical tools")
         analyze_flags.add_argument(
@@ -301,16 +289,9 @@ DISPLAY INSTEAD OF SAVING
             nargs = "+"
         )
         analyze_flags.add_argument(
-            "-ch", "--chart",
-            action = "append",
-            help = "create a chart for a scrape file",
-            metavar = "", 
-            nargs = "+"
-        )
-        analyze_flags.add_argument(
             "--nosave",
             action = "store_true",
-            help = "do not save wordcloud or chart to file"
+            help = "do not save wordcloud to file"
         )
 
     ### Add skip confirmation flags.
@@ -516,7 +497,7 @@ class CheckAnalyticCli():
             "tiff",
         ]
 
-    ### Check valid files for generating charts or wordclouds.
+    ### Check valid files for generating wordclouds.
     def _check_valid_file(self, file):
         try:
             _ = open("%s" % file)
@@ -533,27 +514,18 @@ class CheckAnalyticCli():
         for file in args.frequencies:
             self._check_valid_file(file[0])
 
-    ### Check wordcloud or chart args.
-    def _check_image_tools(self, file):
-        if len(file) > 2:
-            raise ValueError
-        
-        self._check_valid_file(file[0])
-        
-        if len(file) == 1:
-            file.append("png")
-        else:
-            self._check_valid_export(file[1])
-
     ### Check wordcloud args.
     def check_wordcloud(self, args):
         for file in args.wordcloud:
-            self._check_image_tools(file)
-
-    ### Check chart args.
-    def check_chart(self, args):
-        for file in args.chart:
-            self._check_image_tools(file)
+            if len(file) > 2:
+                raise ValueError
+            
+            self._check_valid_file(file[0])
+            
+            if len(file) == 1:
+                file.append("png")
+            else:
+                self._check_valid_export(file[1])
 
 class CheckCli():
     """
@@ -576,5 +548,3 @@ class CheckCli():
             CheckAnalyticCli().check_frequencies(args)
         if args.wordcloud:
             CheckAnalyticCli().check_wordcloud(args)
-        if args.chart:
-            CheckAnalyticCli().check_chart(args)
