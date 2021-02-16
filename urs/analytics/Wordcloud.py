@@ -90,7 +90,8 @@ class GenerateWordcloud():
         AnalyticsTitles.wc_title()
 
         for file in args.wordcloud:
-            print("\nGenerating wordcloud...\n")
+            print("\nGenerating wordcloud...")
+            print("\nThis may take a while. Please wait.\n")
 
             scrape_type = GetPath.get_scrape_type(file[0])
             wc = SetUpWordcloud().initialize_wordcloud(file, scrape_type)
