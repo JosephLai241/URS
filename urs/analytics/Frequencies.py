@@ -30,22 +30,9 @@ from urs.utils.Titles import AnalyticsTitles
 ### every print.
 init(autoreset = True)
 
-class ExportFrequencies():
+class Sort():
     """
-    Methods for exporting the frequencies data.
-    """
-
-    ### Write data dictionary to CSV or JSON.
-    @staticmethod
-    @LogAnalytics.log_export
-    def export(data, filename, f_type):
-        Export.write_json(data, filename) \
-            if f_type == eo[1] \
-            else Export.write_csv(data, filename)
-
-class SortAndConfirm():
-    """
-    Methods for sorting and confirming the data.
+    Methods for sorting the frequencies data.
     """
 
     ### Get data from scrape file.
@@ -54,7 +41,7 @@ class SortAndConfirm():
         return PrepData.prep(file[0], scrape_type)
 
     ### Name the new file and create the analytics directory.
-    def name_and_create(self, args, file):
+    def name_and_create_dir(self, args, file):
         f_type = eo[0] \
             if args.csv \
             else eo[1]
@@ -70,22 +57,40 @@ class SortAndConfirm():
             "words": [],
             "frequencies": []
         }
-        
+
         for word, frequency in plt_dict.items():
             overview["words"].append(word)
             overview["frequencies"].append(frequency)
 
         return overview
 
-    ### Create the JSON structure for exporting.
+    ### Create JSON structure for exporting.
     def create_json(self, file, plt_dict):
         return {
             "raw_file": file[0],
             "data": plt_dict
         }
 
+class ExportFrequencies():
+    """
+    Methods for exporting the frequencies data.
+    """
+
+    ### Write data dictionary to JSON or CSV.
+    @staticmethod
+    @LogAnalytics.log_export
+    def export(data, filename, f_type):
+        Export.write_json(data, filename) \
+            if f_type == eo[1] \
+            else Export.write_csv(data, filename)
+
+class PrintConfirm():
+    """
+    Methods for printing successful export message.
+    """
+
     ### Print confirmation message.
-    def print_confirmation(self, filename):
+    def confirm(self, filename):
         confirmation = "\nFrequencies exported to %s" % filename
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
@@ -102,14 +107,14 @@ class GenerateFrequencies():
         AnalyticsTitles.f_title()
 
         for file in args.frequencies:
-            print("\nGenerating frequencies...\n")
+            print("\nGenerating frequencies...")
 
-            plt_dict = SortAndConfirm().get_data(file)
-            f_type, filename = SortAndConfirm().name_and_create(args, file)
+            plt_dict = Sort().get_data(file)
+            f_type, filename = Sort().name_and_create_dir(args, file)
 
-            data = SortAndConfirm().create_csv(plt_dict) \
+            data = Sort().create_csv(plt_dict) \
                 if args.csv \
-                else SortAndConfirm().create_json(file, plt_dict)
+                else Sort().create_json(file, plt_dict)
 
             ExportFrequencies.export(data, filename, f_type)
-            SortAndConfirm().print_confirmation(filename)
+            PrintConfirm().confirm(filename)
