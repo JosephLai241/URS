@@ -37,7 +37,8 @@ class SetUpWordcloud():
     """
 
     ### Initialize wordcloud.
-    def initialize_wordcloud(self, file, scrape_type):
+    @staticmethod
+    def initialize_wordcloud(file, scrape_type):
         return WordCloud(
             height = 1200,
             max_font_size = 400,
@@ -45,7 +46,8 @@ class SetUpWordcloud():
         ).generate_from_frequencies(PrepData.prep(file[0], scrape_type))
 
     ### Set wordcloud preferences.
-    def modify_wordcloud(self, wc):
+    @staticmethod
+    def modify_wordcloud(wc):
         plt.imshow(wc, interpolation = "bilinear")
         plt.axis("off")
 
@@ -94,8 +96,8 @@ class GenerateWordcloud():
             print("\nThis may take a while. Please wait.\n")
 
             scrape_type = GetPath.get_scrape_type(file[0])
-            wc = SetUpWordcloud().initialize_wordcloud(file, scrape_type)
-            plt = SetUpWordcloud().modify_wordcloud(wc)
+            wc = SetUpWordcloud.initialize_wordcloud(file, scrape_type)
+            plt = SetUpWordcloud.modify_wordcloud(wc)
             
             FinalizeWordcloud().show_wordcloud(plt) \
                 if args.nosave \
