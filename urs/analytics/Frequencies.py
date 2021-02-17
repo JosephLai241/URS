@@ -68,7 +68,7 @@ class Sort():
     def create_json(self, file, plt_dict):
         return {
             "raw_file": file[0],
-            "data": plt_dict
+            "data": [plt_dict]
         }
 
 class ExportFrequencies():
