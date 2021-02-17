@@ -41,7 +41,7 @@ class Extract():
     @staticmethod
     def extract(file):
         with open(str(file), "r", encoding = "utf-8") as raw_data:
-            return json.load(raw_data)["data"]
+            return json.load(raw_data)
 
 class PrepSubreddit():
     """
@@ -88,16 +88,33 @@ class PrepComments():
     Methods for preparing submission comments data.
     """
 
+    ### Prepare RAW submission comments.
+    @staticmethod
+    def _prep_raw(data, plt_dict):
+        for comment_data in data[0].values():
+            PrepData.count_words("text", comment_data, plt_dict)
+
+    ### A recursive method to prepare structured submission comments.
+    @staticmethod
+    def _prep_structured(data, plt_dict):
+        for comment_object in data:
+            for comment_data in comment_object.values():
+                PrepData.count_words("text", comment_data, plt_dict)
+
+                ### Recursive call if the comment contains replies and if there
+                ### are comments within the replies list.
+                if "replies" in comment_data.keys() and comment_data["replies"]:
+                    PrepComments._prep_structured(comment_data["replies"], plt_dict)
+    
     ### Prepare submission comments data.
     @staticmethod
     def prep_comments(data, file):
         plt_dict = dict()
 
-        for comment in data:
-            PrepData.count_words("text", comment, plt_dict)
+        PrepComments._prep_raw(data["data"], plt_dict) \
+            if data["scrape_settings"]["n_results"] == "RAW" \
+            else PrepComments._prep_structured(data["data"], plt_dict)
 
-        print(data)
-        print(plt_dict)
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
     
 class PrepData():
@@ -135,9 +152,9 @@ class PrepData():
         data = Extract.extract(file)
 
         if scrape_type == "subreddits":
-            return PrepSubreddit.prep_subreddit(data, file)
+            return PrepSubreddit.prep_subreddit(data["data"], file)
         elif scrape_type == "redditors":
-            return PrepRedditor.prep_redditor(data, file)
+            return PrepRedditor.prep_redditor(data["data"], file)
         elif scrape_type == "comments":
             return PrepComments.prep_comments(data, file)
     
