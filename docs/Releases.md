@@ -5,6 +5,17 @@
 * Added analytical tools.
     + Word frequencies generator.
     + Wordcloud generator.
+* Numerous changes to the CLI:
+    + Added new flags:
+        * `-e` - Display additional example usage.
+        * `--check` - Runs a quick check for PRAW credentials and also displays the rate limit table.
+        * `--rules` - Include the Subreddit's rules in the scrape data (for JSON only).
+        * `-f` - Word frequencies generator.
+        * `-wc` - Wordcloud generator
+        * `--nosave` - Only display the wordcloud; do not save to file.
+    + Removed `--json` flag.
+        * JSON is now the default export option unless `--csv` is included.
+
 
 ## v3.1.2 - February 05, 2021
 
