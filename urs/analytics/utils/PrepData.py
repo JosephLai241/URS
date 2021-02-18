@@ -54,6 +54,7 @@ class PrepSubreddit():
 
         for submission in data:
             PrepData.count_words("title", submission, plt_dict)
+            PrepData.count_words("text", submission, plt_dict)
 
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
