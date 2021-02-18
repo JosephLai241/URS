@@ -68,17 +68,6 @@
 
 ## v3.0.0 - December 28, 2019 - January 15, 2020
 
-* **Beta Release - December 28, 2019**
-    + Added JSON export option.
-    + Added Redditor scraping.
-    + Comments scraping is still under construction.
-* **Official Release - December 31, 2019**
-    + Comments scraping is now working!
-    + Added additional exception handling for creating filenames.
-    + Minor code reformatting.
-    + Simplified verbose output.
-    + Added an additional submission attribute when scraping Redditors.
-    + Happy New Year!
 * **Final Release - January 15, 2020**
     + Numerous changes to `README`.
     + Fulfilled community standards by adding the following docs:
@@ -89,6 +78,17 @@
         * Issue templates:
             + [Bug Report][Bug Report]
             + [Feature Request][Feature Request]
+* **Official Release - December 31, 2019**
+    + Comments scraping is now working!
+    + Added additional exception handling for creating filenames.
+    + Minor code reformatting.
+    + Simplified verbose output.
+    + Added an additional submission attribute when scraping Redditors.
+    + Happy New Year!
+* **Beta Release - December 28, 2019**
+    + Added JSON export option.
+    + Added Redditor scraping.
+    + Comments scraping is still under construction.
 
 ## v2.0.0 - July 29, 2019
 
