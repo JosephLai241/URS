@@ -24,6 +24,7 @@
     + [Scrape Speeds](#scrape-speeds)
     + [Scraping Reddit via PRAW](#scraping-reddit-via-praw)
         * [Getting Started](#getting-started)
+        * [Rate Limit Information](#rate-limit-information)
         * [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
         * [Subreddits](#subreddits)
         * [Redditors](#redditors)
@@ -110,6 +111,22 @@ Scrape speed is determined by a couple things:
 ### Getting Started
 
 It is very quick and easy to get Reddit API credentials. Refer to [my guide][How to get Reddit API Credentials for PRAW] to get your credentials, then update the `API` dictionary located in `Credentials.py`
+
+### Rate Limit Information
+
+Yes, PRAW has rate limits. These limits are proportional to how much karma you have accumulated - the higher the karma, the higher the rate limit. This has been implemented to mitigate spammers and bots that utilize PRAW.
+
+Rate limit information for your account is displayed in a small table underneath the successful login message each time you run any of the PRAW scrapers. I have also added a `--check` flag if you want to quickly view this information.
+
+URS will display an error message as well as the rate limit reset date if you have used all your available requests.
+
+There are a couple ways to go about solving issues with rate limits:
+
+* Scrape intermittently
+* Use an account with high karma to get your PRAW credentials
+* Scrape less results per run
+
+Available requests are refilled if you use the PRAW scrapers intermittently, which might be a good solution to bypassing rate limit issues. This can be especially helpful if you've automated URS and are not looking at the output on each run.
 
 ---
 
