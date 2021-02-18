@@ -87,7 +87,7 @@ All exported files are saved within the `scrapes` directory and stored in a sub-
 
 The `subreddits`, `redditors`, or `comments` directories are created when you run each scraper.
 
-The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories are created when you run each tool.
+The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories are created when you run each tool. See the [Analytical Tools](#analytical-tools) section for more information.
 
 All of these directories are automatically created when you run URS and its respective scrapers. For example, if you only use the Subreddit scraper, only the `subreddits` directory is created.
 
@@ -202,7 +202,7 @@ Or if you searched for keywords:
 
 Exported files will be saved to the `subreddits` directory.
 
-### ***NOTE:*** Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.
+***NOTE:*** Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.
 
 ---
 
@@ -250,9 +250,9 @@ The file names will follow this format:
 
 Exported files will be saved to the `redditors` directory.
 
-### ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file. 
+***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append a "FORBIDDEN" underneath that section in the exported file. 
 
-### ***NOTE:*** The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
+***NOTE:*** The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
 
 ---
 
@@ -290,13 +290,19 @@ The file names will follow this format:
 
 Exported files will be saved to the `comments` directory.
 
-### ***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
+***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
 
 ## Analytical Tools
 
-This suite of tools can be used *after* scraping data from Reddit.
+This suite of tools can be used *after* scraping data from Reddit. Both of these tools analyze the frequencies of words found in submission titles and bodies, or comments. 
+
+Running either tool will create the `analytics` directory within the date directory. **This directory is located in the same directory in which the scrape data resides**. For example, if you run the frequencies generator on February 16th for scrape data that was captured on February 14th, `analytics` will be created in the February 14th directory. 
+
+The sub-directories `frequencies` or `wordclouds` are created in `analytics` depending on which tool is run.
 
 ***NOTE:*** Do not move the `scrapes/` directory elsewhere if you want to use these tools. URS uses a relative path to save the generated files.
+
+---
 
 ### Target Fields
 
@@ -308,27 +314,31 @@ The data varies depending on the scraper, so these tools target different fields
 | Redditor            | "title", "body", "text" |
 | Submission Comments | "text"                  |
 
-For Subreddit data, data is pulled from the "title" and "text" fields (submission title and body).
+For Subreddit scrapes, data is pulled from the "title" and "text" fields for each submission (submission title and body).
 
-For Redditor data, data is pulled from all three fields because both submission and comment data is returned. "title" and "body" are targeted for submissions, and "text" is targeted for comments.
+For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The "title" and "body" fields are targeted for submissions, and the "text" field is targeted for comments.
 
-For submission comments data, data is only pulled from the "text" field.
+For submission comments scrapes, data is only pulled from the "text" field of each comment.
+
+---
 
 ### Generating Word Frequencies
 
 **Usage:** `$ ./Urs.py -f FILE_PATH` 
 
-You can generate a dictionary of word frequencies created from the words within the "title", "body" and/or "text" fields. 
+You can generate a dictionary of word frequencies created from the words within the target fields. 
 
 Frequencies export to JSON by default, but this tool also works well in CSV format.
 
-Exported files will be saved to the `analytics/frequencies` directory and .
+Exported files will be saved to the `analytics/frequencies` directory.
+
+---
 
 ### Generating Wordclouds
 
 **Usage:** `$ ./Urs.py -wc FILE_PATH` 
 
-Taking word frequencies to the next level, you can generate wordclouds based on the data.
+Taking word frequencies to the next level, you can generate wordclouds based on word frequencies. This tool is independent of the frequencies generator - you do not need to run the frequencies generator before creating a wordcloud. 
 
 Exported files will be saved to the `analytics/wordclouds` directory.
 
