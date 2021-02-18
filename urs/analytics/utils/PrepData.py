@@ -6,7 +6,6 @@ Helper methods to prepare data for frequencies, wordcloud, or chart generators.
 
 
 import json
-import re
 
 class GetPath():
     """
@@ -101,8 +100,8 @@ class PrepComments():
             for comment_data in comment_object.values():
                 PrepData.count_words("text", comment_data, plt_dict)
 
-                ### Recursive call if the comment contains replies and if there
-                ### are comments within the replies list.
+                ### Recursive call if the comment contains the "replies" field and 
+                ### if there are comments within the replies list.
                 if "replies" in comment_data.keys() and comment_data["replies"]:
                     PrepComments._prep_structured(comment_data["replies"], plt_dict)
     
@@ -125,14 +124,14 @@ class PrepData():
     ### Removing unnecessary characters from words.
     @staticmethod
     def _remove_extras(word):
-        illegal_chars = re.compile("[(){?~+}<>`]")
+        illegal_chars = [char for char in "[(),:;.}{<>`]"]
         fixed = [
-            "_"
-                if illegal_chars.search(char) != None
+            " "
+                if char in illegal_chars
                 else char for char in word
         ]
 
-        return "".join(fixed)
+        return "".join(fixed).strip()
 
     ### Count words that are present in a field, then update the plt_dict dictionary.
     @staticmethod
@@ -140,6 +139,8 @@ class PrepData():
         words = obj[field].split(" ")
         for word in words:
             word = PrepData._remove_extras(word)
+            if not word:
+                continue
             
             if word not in plt_dict.keys():
                 plt_dict[word] = 1
