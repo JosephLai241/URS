@@ -315,11 +315,11 @@ Exported files will be saved to the `comments` directory.
 
 This suite of tools can be used *after* scraping data from Reddit. Both of these tools analyze the frequencies of words found in submission titles and bodies, or comments. 
 
-Running either tool will create the `analytics` directory within the date directory. **This directory is located in the same directory in which the scrape data resides**. For example, if you run the frequencies generator on February 16th for scrape data that was captured on February 14th, `analytics` will be created in the February 14th directory. 
+Running either tool will create the `analytics` directory within the date directory. **This directory is located in the same directory in which the scrape data resides**. For example, if you run the frequencies generator on February 16th for scrape data that was captured on February 14th, `analytics` will be created in the February 14th directory. Command history will still be written in the February 16th `urs.log`.
 
 The sub-directories `frequencies` or `wordclouds` are created in `analytics` depending on which tool is run.
 
-***NOTE:*** Do not move the `scrapes/` directory elsewhere if you want to use these tools. URS uses a relative path to save the generated files.
+***NOTE:*** Do not move the `scrapes` directory elsewhere if you want to use these tools. URS uses a relative path to save the generated files.
 
 ---
 
