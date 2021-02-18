@@ -92,7 +92,7 @@ class AnalyticsTitles():
     def f_title():
         print(Fore.WHITE + Style.BRIGHT + r"""
    ___  
- /'___\ 📋
+ /'___\ 📈
 /\ \__/ 
 \ \ ,__\ 
  \ \ \_/
