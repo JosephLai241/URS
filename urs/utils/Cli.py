@@ -45,8 +45,8 @@ class Parser():
     [-c URL N_RESULTS] 
     [-b]
 
-    [-f FILE]
-    [-wc FILE OPTIONAL_EXPORT_FORMAT]
+    [-f FILE_PATH]
+    [-wc FILE_PATH OPTIONAL_EXPORT_FORMAT]
     [--nosave]
 
     [-y]
@@ -54,7 +54,7 @@ class Parser():
     [--csv] 
 """
         self._description = r"""
-Universal Reddit Scraper v3.1.3 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v3.2.0 - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
@@ -162,8 +162,8 @@ SUBMISSION COMMENTS
 
 Arguments:
 
-    [-f FILE]
-    [-wc FILE OPTIONAL_EXPORT_FORMAT]
+    [-f FILE_PATH]
+    [-wc FILE_PATH OPTIONAL_EXPORT_FORMAT]
     [--nosave]
 
 Word frequencies are exported to JSON by default.
