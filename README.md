@@ -24,7 +24,7 @@
     + [Scrape Speeds](#scrape-speeds)
     + [Scraping Reddit via PRAW](#scraping-reddit-via-praw)
         * [Getting Started](#getting-started)
-        * [Rate Limit Information](#rate-limit-information)
+        * [Rate Limits](#rate-limits)
         * [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
         * [Subreddits](#subreddits)
         * [Redditors](#redditors)
@@ -112,7 +112,7 @@ Scrape speed is determined by a couple things:
 
 It is very quick and easy to get Reddit API credentials. Refer to [my guide][How to get Reddit API Credentials for PRAW] to get your credentials, then update the `API` dictionary located in `Credentials.py`
 
-### Rate Limit Information
+### Rate Limits
 
 Yes, PRAW has rate limits. These limits are proportional to how much karma you have accumulated - the higher the karma, the higher the rate limit. This has been implemented to mitigate spammers and bots that utilize PRAW.
 
