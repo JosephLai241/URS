@@ -28,9 +28,10 @@
         * [Subreddits](#subreddits)
         * [Redditors](#redditors)
         * [Submission Comments](#submission-comments)
-    + [Analytical Tools]
-        * [Generating Word Frequencies]
-        * [Generating Wordclouds]
+    + [Analytical Tools](#analytical-tools)
+        * [Target Fields](#target-fields)
+        * [Generating Word Frequencies](#generating-word-frequencies)
+        * [Generating Wordclouds](#generating-wordclouds)
     + [Exporting](#exporting)
 * [Contributing](#contributing)
     + [Before Making Pull or Feature Requests](#before-making-pull-or-feature-requests)
@@ -319,8 +320,6 @@ For submission comments data, data is only pulled from the "text" field.
 
 You can generate a dictionary of word frequencies created from the words within the "title", "body" and/or "text" fields. 
 
-
-
 Frequencies export to JSON by default, but this tool also works well in CSV format.
 
 Exported files will be saved to the `analytics/frequencies` directory and .
@@ -329,7 +328,7 @@ Exported files will be saved to the `analytics/frequencies` directory and .
 
 **Usage:** `$ ./Urs.py -wc FILE_PATH` 
 
-Taking word frequencies to the next level, you can also generate wordclouds based on the data. This is an independent tool and does not require you to generate the wor
+Taking word frequencies to the next level, you can generate wordclouds based on the data.
 
 Exported files will be saved to the `analytics/wordclouds` directory.
 
