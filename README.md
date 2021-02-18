@@ -428,14 +428,6 @@ This is a showcase for projects that are built on top of URS!
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/02-05-2021
 
-<!-- COMMUNITY DOCS: Links to the community docs -->
-[Bug Report]: https://github.com/JosephLai241/URS/blob/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md
-[Code of Conduct]: https://github.com/JosephLai241/URS/blob/master/.github/CODE_OF_CONDUCT.md
-[Contributing Guide]: https://github.com/JosephLai241/URS/blob/master/.github/CONTRIBUTING.md
-[Feature Request]: https://github.com/JosephLai241/URS/blob/master/.github/ISSUE_TEMPLATE/FEATURE_REQUEST.md
-[License]: https://github.com/JosephLai241/URS/blob/master/LICENSE
-[Pull Request Template]: https://github.com/JosephLai241/URS/blob/master/.github/PULL_REQUEST_TEMPLATE.md
-
 <!-- ThereGoesMySanity: Links for user ThereGoesMySanity and pull request -->
 [ThereGoesMySanity]: https://github.com/ThereGoesMySanity
 [ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/URS/pull/9
@@ -453,5 +445,4 @@ This is a showcase for projects that are built on top of URS!
 [skiwheelr screenshot]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Derivative%20Projects/Skiwheelr%20Example%20Results.png
 
 <!-- ADDITIONAL LINKS: A space for useful links -->
-[matplotlib]: https://matplotlib.org/stable/index.html
 [tree]: http://mama.indstate.edu/users/ice/tree
