@@ -39,7 +39,3 @@ This message is displayed if you enter invalid API credentials or if you are not
     Please try again when your rate limit is reset: [DATE]
 
 PRAW has rate limits. This message is displayed if you have reached the rate limit set for your account. The reset date will vary depending on when you ran URS. The date I received during testing is usually 24 hours later.
-
-Rate limit information is printed in the small table underneath the login message every time you run URS.
-
-From my research, it seems like rate limits are proportional to how much karma your account has: the more karma, the higher the rate limit. This has been implemented to mitigate spammers and bots that utilize PRAW.
