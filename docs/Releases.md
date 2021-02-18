@@ -1,13 +1,75 @@
 # Releases
 
-| Release Date | Version | Changelog | 
-|--------------|---------|-----------|
-| **May 25, 2019** | v1.0.0 | <ul> <li>Its inception.</li> </ul> |
-| **July 29, 2019** | v2.0.0 | <ul> <li>Now **includes CLI support**!</li> </ul> |
-| **December 28, 2019** | v3.0.0 (beta) | <ul> <li>Added **JSON** export.</li> <li>Added **Redditor Scraping**.</li> <li>Comments scraping is still under construction.</li> </ul> | 
-| **December 31, 2019** | v3.0.0 (Official) | <ul> <li>**Comments scraping is now working**!</li> <li>**Added additional exception handling** for creating filenames.</li> <li>Minor code reformatting.</li> <li>**Simplified verbose output**.</li> <li>**Added an additional submission attribute** when scraping Redditors.</li> <li>Happy New Year!</li> </ul> |
-| **January 15, 2020** | v3.0.0 (Final Release) | <ul> <li>Numerous changes to `README`.</li> <li>Minor code reformatting.</li> <li>**Fulfilled community standards** by adding the following docs:</li> <ul> <li>[Contributing Guide][Contributing Guide]</li> <li>[Pull Request Template][Pull Request Template]</li> <li>Issue templates:</li> <ul> <li>[Bug Report][Bug Report]</li> <li>[Feature Request][Feature Request]</li> </ul> <li>[Code of Conduct][Code of Conduct]</li> <li>[License][License]</li> </ul> </ul> |
-| **June 22, 2020** | v3.1.0 | <ul> <li>***Major*** code refactor. **Applied OOP concepts** to existing code and rewrote methods in attempt to **improve readability, maintenance, and scalability**.</li> <li>**New in 3.1.0**:</li> <ul> <li>**Scrapes will now be exported to the `scrapes/` directory** within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.</li> <li>Added **log decorators** that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.</li> <li>**Replaced bulky titles with minimalist titles** for a cleaner look.</li> <li>**Added color to terminal output**.</li> </ul> <li>**Improved naming convention** for scripts.</li> <li>Integrating **Travis CI** and **Codecov**.</li> <li>Updated community documents located in the `.github/` directory: `BUG_REPORT`, `CONTRIBUTING`, `FEATURE_REQUEST`, `PULL_REQUEST_TEMPLATE`, and `STYLE_GUIDE`</li> <li>Numerous changes to `README`. The most significant change was **splitting and storing walkthroughs in `docs/`**.</li> </ul> |
-| **June 27, 2020** | v3.1.1 | <ul> <li>**Added time filters for Subreddit categories (Controversial, Search, Top)**.</li> <li>**Updated `README` to reflect new changes**.</li> <li>**Updated style guide**. Made **minor formatting changes to scripts** to reflect new rules.</li> <li>Performed **DRY code review**.</li> </ul> |
-| **February 05, 2021** | v3.1.2 | <ul> <li>**Scrapes will now be exported to sub-folders within the date directory.**</li> <ul> <li>`comments`, `redditors`, and `subreddits` directories are now created for you when you run each scraper. Scrape results will now be stored within these directories.</li> </ul> <li>Minor code reformatting and refactoring.</li> <ul> <li>The forbidden access message that may appear when running the Redditor scraper is now yellow to avoid confusion.</li> </ul><li>Updated `README` and `STYLE_GUIDE`. Made a minor change to PRAW credentials guide.</li> <ul> <li>Added new Derivative Projects section.</li> <li>Uploaded new demo GIFs</li> </ul> </ul> 
-| **February TBD, 2021** | v3.1.3 | <ul> <li>**Added analytical tools**</li> <ul><li>**Word frequencies generator**</li> <li>**Wordcloud generator**</li> </ul> </ul>
+## v3.1.3 - February TBD, 2021
+
+* Added analytical tools.
+    + Word frequencies generator.
+    + Wordcloud generator.
+
+## v3.1.2 - February 05, 2021
+
+* Scrapes will now be exported to sub-folders within the date directory.
+    + `comments`, `redditors`, and `subreddits` directories are now created for you when you run each scraper. Scrape results will now be stored within these directories.
+* Minor code reformatting and refactoring.
+    + The forbidden access message that may appear when running the Redditor scraper is now yellow to avoid confusion.
+* Updated `README` and `STYLE_GUIDE`. Made a minor change to PRAW credentials guide.
+    + Added new Derivative Projects section.
+    + Uploaded new demo GIFs.
+
+## v3.1.1 - June 27, 2020
+
+* Added time filters for Subreddit categories (Controversial, Top, Search).
+* Updated `README` to reflect new changes.
+* Updated style guide.
+    + Made minor formatting changes to scripts to reflect new rules.
+* Performed DRY code review.
+
+
+## v3.1.0 - June 22, 2020
+
+* Major code refactor. Applied OOP concepts to existing code and rewrote methods in attempt to improve readability, maintenance, and scalability.
+* Scrapes will now be exported to the `scrapes/` directory within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.
+* Added log decorators that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.
+* Replaced bulky titles with minimalist titles for a cleaner look.
+* Added color to terminal output.
+* Improved naming convention for scripts.
+* Integrating Travis CI and Codecov.
+* Updated community documents located in the `.github/` directory: 
+    + `BUG_REPORT`
+    + `CONTRIBUTING`
+    + `FEATURE_REQUEST`
+    + `PULL_REQUEST_TEMPLATE`
+    + `STYLE_GUIDE`
+* Numerous changes to `README`. The most significant change was splitting and storing walkthroughs in `docs/`.
+
+## v3.0.0 - December 28, 2019 - January 15, 2020
+
+* **Beta Release - December 28, 2019**
+    + Added JSON export option.
+    + Added Redditor scraping.
+    + Comments scraping is still under construction.
+* **Official Release - December 31, 2019**
+    + Comments scraping is now working!
+    + Added additional exception handling for creating filenames.
+    + Minor code reformatting.
+    + Simplified verbose output.
+    + Added an additional submission attribute when scraping Redditors.
+    + Happy New Year!
+* **Final Release - January 15, 2020**
+    + Numerous changes to `README`.
+    + Fulfilled community standards by adding the following docs:
+        * [Contributing Guide][Contributing Guide]
+        * [Pull Request Template][Pull Request Template]
+        * [Code of Conduct][Code of Conduct]
+        * [License][License]
+        * Issue templates:
+            + [Bug Report][Bug Report]
+            + [Feature Request][Feature Request]
+
+## v2.0.0 - July 29, 2019
+
+* Added CLI support.
+
+## v1.0.0 - May 25, 2019
+
+* Its inception.
