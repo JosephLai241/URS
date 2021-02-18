@@ -154,6 +154,8 @@ These attributes are included in each scrape.
 
 **Usage:** `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS` 
 
+**Supported export formats:** JSON and CSV. To export to CSV, include the `--csv` flag.
+
 You can specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keywords within a Subreddit.
 
 These are the submission categories:
@@ -214,7 +216,7 @@ Exported files will be saved to the `subreddits` directory.
 
 **Usage:** `$ ./Urs.py -u USER N_RESULTS` 
 
-**Designed for JSON only.**
+**Supported export formats:** JSON.
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
@@ -265,7 +267,7 @@ Exported files will be saved to the `redditors` directory.
 
 **Usage:** `$ ./Urs.py -c URL N_RESULTS` 
 
-**Designed for JSON only.**
+**Supported export formats:** JSON.
 
 You can also scrape comments from submissions and specify the number of results returned. 
 
@@ -326,6 +328,8 @@ For submission comments scrapes, data is only pulled from the "text" field of ea
 
 **Usage:** `$ ./Urs.py -f FILE_PATH` 
 
+**Supported export formats:** JSON and CSV. To export to CSV, include the `--csv` flag.
+
 You can generate a dictionary of word frequencies created from the words within the target fields. 
 
 Frequencies export to JSON by default, but this tool also works well in CSV format.
@@ -336,9 +340,15 @@ Exported files will be saved to the `analytics/frequencies` directory.
 
 ### Generating Wordclouds
 
-**Usage:** `$ ./Urs.py -wc FILE_PATH` 
+**Usage:** `$ ./Urs.py -wc FILE_PATH`
+
+**Supported export formats:** .eps, .jpeg, .jpg, .pdf, .png (default), .ps, .rgba, .tif, .tiff.
 
 Taking word frequencies to the next level, you can generate wordclouds based on word frequencies. This tool is independent of the frequencies generator - you do not need to run the frequencies generator before creating a wordcloud. 
+
+PNG is the default format, but you can also export to any of the options listed above by including the format as the second flag argument.
+
+**Usage:** `$ ./Urs.py -wc FILE_PATH OPTIONAL_EXPORT_FORMAT` 
 
 Exported files will be saved to the `analytics/wordclouds` directory.
 
