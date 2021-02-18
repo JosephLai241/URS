@@ -1,21 +1,34 @@
 # Releases
 
-## v3.1.3 - February TBD, 2021
+## v3.2.0 - February TBD, 2021
 
-* Added analytical tools.
+* JSON is now the default export option unless `--csv` is specified.
+    + Improved JSON structure.
+* Added analytical tools:
     + Word frequencies generator.
     + Wordcloud generator.
-* Numerous changes to the CLI:
-    + Added new flags:
-        * `-e` - Display additional example usage.
-        * `--check` - Runs a quick check for PRAW credentials and also displays the rate limit table.
-        * `--rules` - Include the Subreddit's rules in the scrape data (for JSON only).
-        * `-f` - Word frequencies generator.
-        * `-wc` - Wordcloud generator
-        * `--nosave` - Only display the wordcloud; do not save to file.
-    + Removed `--json` flag.
-        * JSON is now the default export option unless `--csv` is included.
-
+* Changes to the log:
+    + `scrapes.log` is now named `urs.log`.
+    + Rate limit information is now included in the log.
+* Numerous changes to source code:
+    + Moved PRAW scrapers into its own package.
+    + Numerous changes to the CLI:
+        * Added new flags:
+            + `-e` - Display additional example usage.
+            + `--check` - Runs a quick check for PRAW credentials and displays the rate limit table after validation.
+            + `--rules` - Include the Subreddit's rules in the scrape data (for JSON only).
+            + `-f` - Word frequencies generator.
+            + `-wc` - Wordcloud generator.
+            + `--nosave` - Only display the wordcloud; do not save to file.
+        * Removed `--json` flag.
+    + Added new art for the word frequencies and wordcloud generators.
+    + Upgraded from relative to absolute imports.
+    + Replaced old header comments with minimalist comment block.
+* Numerous changes to the `README`. Here is a list of the most significant changes/additions:
+    + Created new Contact section and moved contact badges into it.
+    + Added new sections for the analytical tools.
+    + Moved Releases section into its own document.
+    + Updated demo GIFs.
 
 ## v3.1.2 - February 05, 2021
 
