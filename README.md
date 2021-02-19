@@ -53,7 +53,7 @@ Whether you are using URS for enterprise or personal use, I am very interested i
 
 Additionally, please send me an email if you would like to [contribute](#contributing), have questions, or want to share something you have built on top of it. 
 
-Please send me an email or leave a note by clicking on either of these badges. I look forward to hearing from you!
+You can send me an email or leave a note by clicking on either of these badges. I look forward to hearing from you!
 
 [![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?logo=ProtonMail)][URS Project Email]
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue)][Say Thanks!]
