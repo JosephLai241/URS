@@ -66,7 +66,7 @@ LICENSE = "MIT"
 
 PACKAGES = find_packages()
 
-REQUIRES_PYTHON = ">=3.5"
+REQUIRES_PYTHON = ">=3.6"
 
 PROJECT_URLS = {
     "Bug Reports": "https://github.com/JosephLai241/URS/issues",
