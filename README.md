@@ -51,7 +51,7 @@
 
 Whether you are using URS for enterprise or personal use, I am very interested in hearing about your use case and how it has helped you achieve a goal. 
 
-Additionally, please send me an email if you would like to contribute, have questions, or want to share something you have built on top of it. 
+Additionally, please send me an email if you would like to [contribute](#contributing), have questions, or want to share something you have built on top of it. 
 
 Please send me an email or leave a note by clicking on either of these badges. I look forward to hearing from you!
 
