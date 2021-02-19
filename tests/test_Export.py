@@ -21,6 +21,7 @@ class MakeArgs():
         parser = argparse.ArgumentParser()
         parser.add_argument("--subreddit", action = "store_true")
         parser.add_argument("--basic", action = "store_true")
+        parser.add_argument("--rules", action = "store_true")
 
         return parser
 

@@ -81,7 +81,7 @@ class TestGetInputUpdateMasterMethod():
 
         Basic.GetInput()._update_master(cat_i, test_master, search_for, sub)
 
-        assert test_master == {"test_subreddit": [[0, 10]]}
+        assert test_master == {"test_subreddit": [[0, 10, "all"]]}
 
     def test_update_master_search_category(self):
         cat_i = 5
@@ -91,7 +91,7 @@ class TestGetInputUpdateMasterMethod():
 
         Basic.GetInput()._update_master(cat_i, test_master, search_for, sub)
 
-        assert test_master == {"test_subreddit": [[5, "test string"]]}
+        assert test_master == {"test_subreddit": [[5, "test string", "all"]]}
 
 class TestGetInputGetSearchMethod():
     """

@@ -1,4 +1,4 @@
-from urs.utils import Validation
+from urs.praw_scrapers.utils import Validation
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.

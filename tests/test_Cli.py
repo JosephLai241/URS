@@ -26,6 +26,8 @@ class MakeArgs():
         parser.add_argument("--subreddit", nargs = 1)
         parser.add_argument("--redditor", nargs = 1)
         parser.add_argument("--comments", nargs = 1)
+        parser.add_argument("--frequencies", nargs = 1)
+        parser.add_argument("--wordcloud", nargs = 1)
 
         return parser
 
@@ -366,7 +368,8 @@ class TestParserParseArgsMethod():
     Testing Parser class parse_args() method found on line 147 in Cli.py.
     """
 
-    def test_parse_args_method_subreddit_and_json_flags(self):
+    def test_parse_args_method_subreddit(self):
+        sys.argv = [sys.argv[0]]
         input_args = ["--subreddit", "test_subreddit", "h", "10"]
         for arg in input_args:
             sys.argv.append(arg)
@@ -376,7 +379,6 @@ class TestParserParseArgsMethod():
         args, _ = Cli.Parser().parse_args()
         
         assert args.subreddit == [["test_subreddit", "h", "10"]]
-        assert args.csv == False
 
     def test_parse_args_method_subreddit_and_csv_flags(self):
         sys.argv = [sys.argv[0]]
@@ -389,7 +391,7 @@ class TestParserParseArgsMethod():
         assert args.subreddit == [["test_subreddit", "h", "10"]]
         assert args.csv == True
 
-    def test_parse_args_method_redditor_and_json_flags(self):
+    def test_parse_args_method_redditor_flag(self):
         sys.argv = [sys.argv[0]]
         input_args = ["--redditor", "test_redditor", "10"]
         for arg in input_args:
@@ -400,18 +402,7 @@ class TestParserParseArgsMethod():
         assert args.redditor == [["test_redditor", "10"]]
         assert args.csv == False
 
-    def test_parse_args_method_redditor_and_csv_flags(self):
-        sys.argv = [sys.argv[0]]
-        input_args = ["--redditor", "test_redditor", "10", "--csv"]
-        for arg in input_args:
-            sys.argv.append(arg)
-
-        args, _ = Cli.Parser().parse_args()
-        
-        assert args.redditor == [["test_redditor", "10"]]
-        assert args.csv == True
-
-    def test_parse_args_method_comments_and_json_flags(self):
+    def test_parse_args_method_comments_flag(self):
         sys.argv = [sys.argv[0]]
         input_args = ["--comments", "test_url", "10"]
         for arg in input_args:
@@ -421,17 +412,6 @@ class TestParserParseArgsMethod():
         
         assert args.comments == [["test_url", "10"]]
         assert args.csv == False
-
-    def test_parse_args_method_comments_and_csv_flags(self):
-        sys.argv = [sys.argv[0]]
-        input_args = ["--comments", "test_url", "10", "--csv"]
-        for arg in input_args:
-            sys.argv.append(arg)
-
-        args, _ = Cli.Parser().parse_args()
-        
-        assert args.comments == [["test_url", "10"]]
-        assert args.csv == True
 
     def test_parse_args_method_no_args_were_entered(self):
         sys.argv = [sys.argv[0]]
