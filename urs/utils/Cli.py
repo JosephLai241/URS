@@ -486,7 +486,7 @@ class CheckAnalyticCli():
             "ps",
             "rgba",
             "tif",
-            "tiff",
+            "tiff"
         ]
 
     ### Check valid files for generating wordclouds.
