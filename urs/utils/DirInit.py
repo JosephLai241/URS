@@ -7,7 +7,7 @@ Initialize directories in which scraped or analytical data is stored.
 
 import os
 
-from utils.Global import date
+from urs.utils.Global import date
 
 class InitializeDirectory():
     """

@@ -20,7 +20,7 @@ from prawcore import (
 )
 from prettytable import PrettyTable
 
-from utils.Logger import LogError
+from urs.utils.Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

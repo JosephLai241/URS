@@ -9,10 +9,10 @@ Universal Reddit Scraper v3.2.0
 """
 import praw
 
-from Credentials import API
+from urs.Credentials import API
 
-from utils.Logger import LogMain
-from utils.Tools import Run
+from urs.utils.Logger import LogMain
+from urs.utils.Tools import Run
 
 class Main():
     """

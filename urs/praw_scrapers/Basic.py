@@ -11,23 +11,23 @@ from colorama import (
     Style
 )
 
-from praw_scrapers.Subreddit import (
+from urs.praw_scrapers.Subreddit import (
     GetSortWrite,
     PrintConfirm
 )
-from praw_scrapers.utils.Validation import Validation
+from urs.praw_scrapers.utils.Validation import Validation
 
-from utils.Global import (
+from urs.utils.Global import (
     categories,
     make_list_dict,
     options,
     s_t
 )
-from utils.Logger import (
+from urs.utils.Logger import (
     LogExport,
     LogPRAWScraper
 )
-from utils.Titles import PRAWTitles
+from urs.utils.Titles import PRAWTitles
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

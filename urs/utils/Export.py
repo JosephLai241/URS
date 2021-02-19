@@ -8,8 +8,8 @@ Methods for naming and exporting scraped data.
 import csv
 import json
 
-from utils.DirInit import InitializeDirectory
-from utils.Global import (
+from urs.utils.DirInit import InitializeDirectory
+from urs.utils.Global import (
     categories,
     date,
     eo,

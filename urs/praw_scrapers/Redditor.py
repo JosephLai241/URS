@@ -14,24 +14,24 @@ from colorama import (
 )
 from prawcore import PrawcoreException
 
-from praw_scrapers.utils.Validation import Validation
+from urs.praw_scrapers.utils.Validation import Validation
 
-from utils.Cli import GetPRAWScrapeSettings
-from utils.Export import (
+from urs.utils.Cli import GetPRAWScrapeSettings
+from urs.utils.Export import (
     Export,
     NameFile
 )
-from utils.Global import (
+from urs.utils.Global import (
     convert_time,
     eo,
     make_none_dict,
     s_t
 )
-from utils.Logger import (
+from urs.utils.Logger import (
     LogExport, 
     LogPRAWScraper
 )
-from utils.Titles import PRAWTitles
+from urs.utils.Titles import PRAWTitles
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

@@ -17,7 +17,7 @@ from wordcloud import (
     WordCloud
 )
 
-from analytics.utils.PrepData import (
+from urs.analytics.utils.PrepData import (
     GetPath,
     PrepData
 )

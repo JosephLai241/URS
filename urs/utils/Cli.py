@@ -15,11 +15,11 @@ from colorama import (
     Style
 )
 
-from utils.Global import (
+from urs.utils.Global import (
     s_t,
     short_cat
 )
-from utils.Logger import LogError
+from urs.utils.Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.

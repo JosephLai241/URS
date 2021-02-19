@@ -15,8 +15,8 @@ from colorama import (
 )
 from prawcore import PrawcoreException
 
-from utils.DirInit import InitializeDirectory
-from utils.Global import (
+from urs.utils.DirInit import InitializeDirectory
+from urs.utils.Global import (
     analytical_tools,
     categories,
     convert_time,
@@ -25,7 +25,7 @@ from utils.Global import (
     s_t,
     short_cat
 )
-from utils.Titles import Errors
+from urs.utils.Titles import Errors
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
