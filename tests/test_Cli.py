@@ -368,18 +368,6 @@ class TestParserParseArgsMethod():
     Testing Parser class parse_args() method found on line 147 in Cli.py.
     """
 
-    def test_parse_args_method_subreddit(self):
-        sys.argv = [sys.argv[0]]
-        input_args = ["--subreddit", "test_subreddit", "h", "10"]
-        for arg in input_args:
-            sys.argv.append(arg)
-
-        sys.argv = sys.argv[1:]
-
-        args, _ = Cli.Parser().parse_args()
-        
-        assert args.subreddit == [["test_subreddit", "h", "10"]]
-
     def test_parse_args_method_subreddit_and_csv_flags(self):
         sys.argv = [sys.argv[0]]
         input_args = ["--subreddit", "test_subreddit", "h", "10", "--csv"]
