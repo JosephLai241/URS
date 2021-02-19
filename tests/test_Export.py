@@ -241,7 +241,7 @@ class TestWriteCSVAndWriteJSON():
             "a": [5, 6],
             "test": [7, 8]}
 
-        Export.Export.write_csv(filename, overview)
+        Export.Export.write_csv(overview, filename)
 
         with open(filename, "r") as test_csv:
             reader = csv.reader(test_csv)
@@ -260,7 +260,7 @@ class TestWriteCSVAndWriteJSON():
             'test_2': {'this': 2, 'is': 2, 'a': 2, 'test': 2}
         }
 
-        Export.Export.write_json(filename, overview)
+        Export.Export.write_json(overview, filename)
 
         with open(filename, "r") as test_json:
             test_dict = json.load(test_json)
