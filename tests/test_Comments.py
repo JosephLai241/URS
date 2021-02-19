@@ -1,4 +1,4 @@
-from urs.utils import Comments
+from urs.praw_scrapers import Comments
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
@@ -28,15 +28,15 @@ class TestGetCommentsInitMethod():
 
     def test_get_comments_init_method_titles_instance_variable(self):
         assert Comments.GetComments()._titles == [
-            "Parent ID", 
-            "Comment ID", 
-            "Author", 
-            "Date Created", 
-            "Upvotes", 
-            "Text", 
-            "Edited?", 
-            "Is Submitter?", 
-            "Stickied?"
+            "parent_id", 
+            "comment_id", 
+            "author", 
+            "date_created", 
+            "upvotes", 
+            "text", 
+            "edited", 
+            "is_submitter", 
+            "stickied"
         ]
 
 class TestGetCommentsFixAttributesMethod():
