@@ -7,7 +7,6 @@ Methods for naming and exporting scraped data.
 
 import csv
 import json
-import re
 
 from utils.DirInit import InitializeDirectory
 from utils.Global import (
@@ -24,7 +23,7 @@ class NameFile():
 
     ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._illegal_chars = re.compile("[@!#$%^&*()<>?/\\\\|}{~:+`=]")
+        self._illegal_chars = [char for char in '[@!#$%^&*()<>?/"\\|}{~:+`=]']
 
     ### Verify f_name is not too long.
     def _check_len(self, name):
@@ -37,7 +36,7 @@ class NameFile():
     def _fix(self, name):
         fixed = [
             "_" 
-                if self._illegal_chars.search(char) != None
+                if char in self._illegal_chars
                 else char for char in name
         ]
 
