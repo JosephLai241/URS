@@ -3,7 +3,7 @@ import sys
 
 from io import StringIO
 
-from urs.utils import Basic, Global
+from urs.praw_scrapers import Basic
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
@@ -20,14 +20,6 @@ class MakeArgs():
         parser = argparse.ArgumentParser()
         parser.add_argument("--basic", action = "store_true")
         return parser
-
-class TestPrintSubsInitMethod():
-    """
-    Testing PrintSubs class __init__() method found on line 34 in Basic.py.
-    """
-
-    def test_print_subs_init_method_s_t_instance_variable(self):
-        assert Basic.PrintSubs()._s_t == Global.s_t
 
 class TestPrintSubsFindSubsMethod():
     """
@@ -62,14 +54,6 @@ class TestPrintSubsPrintSubredditsMethod():
 
     def test_print_subreddits_printing_both_found_and_not_found_subreddits(self):
         pass
-
-class TestGetInputInitMethod():
-    """
-    Testing GetInput class __init__() method found on line 72 in Basic.py.
-    """
-
-    def test_get_input_init_method_categories_instance_variable(self):
-        assert Basic.GetInput()._categories == Global.categories
 
 class TestGetInputGetSubredditsMethod():
     """
