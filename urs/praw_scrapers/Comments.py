@@ -39,9 +39,30 @@ class CheckSubmissions():
     Method for printing found and invalid Reddit posts.
     """
 
-    ### Check if posts exist and list posts that are not found.
     @staticmethod
-    def list_submissions(reddit, post_list, parser):
+    def list_submissions(parser, post_list, reddit):
+        """
+        Check if submissions exist and list posts that are not found.
+
+        Calls a method from an external module:
+
+            Validation.existence()
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        post_list: list
+            List of submission URLs
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        posts: list
+            List of valid submission URLs
+        """
+
         print("\nChecking if post(s) exist...")
         posts, not_posts = Validation.existence(s_t[2], post_list, parser, reddit, s_t)
         
@@ -62,8 +83,17 @@ class GetComments():
     Methods for getting comments from a post.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
+        """
+        Initialize variables used in later methods:
+
+            self._titles: list of comment attributes
+
+        Returns
+        -------
+        None
+        """
+
         self._titles = [
             "parent_id", 
             "comment_id", 
@@ -76,8 +106,24 @@ class GetComments():
             "stickied"
         ]
 
-    ### If applicable, handle deleted Redditors or edited time.
     def _fix_attributes(self, comment):
+        """
+        If applicable, handle deleted Redditors or edited time.
+
+        Calls a method from an external module:
+
+            Global.convert_time()
+
+        Parameters
+        ----------
+        comment: PRAW object
+
+        Returns
+        -------
+        author_name: str
+        edit_date: str
+        """
+
         try:
             author_name = comment.author.name
         except AttributeError:
@@ -89,9 +135,26 @@ class GetComments():
 
         return author_name, edit_date
 
-    ### Add list of dictionary of comments attributes to use when sorting.
     def add_comment(self, comment):
-        c_set = make_none_dict(self._titles)
+        """
+        Add list of dictionary of comments attributes to use when sorting.
+
+        Calls methods from an external module:
+
+            Global.make_none_dict()
+            Global.convert_time()
+
+        Parameters
+        ----------
+        comment: PRAW object
+
+        Returns
+        -------
+        comment_object: dict
+            Dictionary for comment attribute
+        """
+
+        comment_object = make_none_dict(self._titles)
 
         author_name, edit_date = self._fix_attributes(comment)
         comment_attributes = [
@@ -107,9 +170,9 @@ class GetComments():
         ]
 
         for title, attribute in zip(self._titles, comment_attributes):
-            c_set[title] = attribute
+            comment_object[title] = attribute
         
-        return c_set
+        return comment_object
 
 class SortComments():
     """
@@ -117,34 +180,123 @@ class SortComments():
     specified (raw or structured).
     """
 
-    ### Append comments in raw export format.
     @staticmethod
     def _raw_comments(add, all_dict, comment):
+        """
+        Append comments in raw export format.
+
+        Parameters
+        ----------
+        add: dict
+            Dictionary object containing comment metadata
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        comment: PRAW object
+
+        Returns
+        -------
+        None
+        """
+
         all_dict[comment.id] = add
 
-    ### Append top level comments to all_dict.
     @staticmethod
     def _top_level_comment(add, all_dict, comment):
+        """
+        Append top level comments to all_dict.
+
+        Calls previously defined private method:
+
+            SortComments._raw_comments()
+
+        Parameters
+        ----------
+        add: dict
+            Dictionary object containing comment metadata
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        comment: PRAW object
+
+        Returns
+        -------
+        None
+        """
+
         add["replies"] = []
         SortComments._raw_comments(add, all_dict, comment)
 
-    ### Append second-level comments to all_dict.
     @staticmethod
     def _second_level_comment(add, all_dict, comment, cpid):
+        """
+        Append second-level comments to all_dict.
+
+        Parameters
+        ----------
+        add: dict
+            Dictionary object containing comment metadata
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        comment: PRAW object
+
+        Returns
+        -------
+        None
+        """
+
         add["replies"] = []
         all_dict[cpid]["replies"].append({comment.id: add})
 
-    ### Append third-level comments to all_dict.
     @staticmethod
     def _third_level_comment(add, all_dict, comment, cpid):
+        """
+        Append third-level comments to all_dict.
+
+        Parameters
+        ----------
+        add: dict
+            Dictionary object containing comment metadata
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        comment: PRAW object
+
+        Returns
+        -------
+        None
+        """
+
         for all_comments in all_dict.values():
             for second_level_replies in all_comments["replies"]:
                 if cpid in second_level_replies.keys():
                     second_level_replies[cpid]["replies"].append({comment.id: add})
         
-    ### Appending structured comments to all_dict.
     @staticmethod
     def _structured_comments(add, all_dict, comment, cpid, submission):
+        """
+        Appending structured comments to all_dict. 
+        
+        Calls previously defined private methods:
+
+            SortComments._top_level_comment()
+            SortComments._second_level_comment()
+            SortComments._third_level_comment()
+
+        Parameters
+        ----------
+        add: dict
+            Dictionary object containing comment metadata
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        comment: PRAW object
+        cpid: str
+            String denoting comment parent ID
+        submission: PRAW submission object
+            Reddit submission object
+
+        Returns
+        -------
+        None
+        """
+
         if cpid == submission.id:
             SortComments._top_level_comment(add, all_dict, comment)
         elif cpid in all_dict.keys():
@@ -152,9 +304,32 @@ class SortComments():
         else:
             SortComments._third_level_comment(add, all_dict, comment, cpid)
 
-    ### Append comments to all dictionary differently if raw is True or False.
     @staticmethod
     def _to_all(all_dict, comment, raw, submission):
+        """
+        Append comments to all dictionary differently if raw is True or False. 
+        
+        Calls previously defined public and private methods:
+
+            GetComments().add_comment()
+            SortComments._raw_comments()
+            SortComments._structured_comments()
+
+        Parameters
+        ----------
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        comment: PRAW object
+        raw: bool
+            Boolean denoting appending comments in raw or structured format
+        submission: PRAW submission object
+            Reddit submission object
+
+        Returns
+        -------
+        None
+        """
+
         add = GetComments().add_comment(comment)
 
         if raw:
@@ -163,9 +338,29 @@ class SortComments():
             cpid = comment.parent_id.split("_", 1)[1]
             SortComments._structured_comments(add, all_dict, comment, cpid, submission)
 
-    ### Sort comments.
     @staticmethod
     def sort(all_dict, raw, submission):
+        """
+        Sort all comments. 
+        
+        Calls previously defined private methods:
+
+            SortComments._to_all()
+
+        Parameters
+        ----------
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        raw: bool
+            Boolean denoting appending comments in raw or structured format
+        submission: PRAW submission object
+            Reddit submission object
+
+        Returns
+        -------
+        None
+        """
+
         for comment in submission.comments.list():
             SortComments._to_all(all_dict, comment, raw, submission)
 
@@ -174,8 +369,19 @@ class GetSort():
     Methods for getting comments from a Reddit submission.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self, post, reddit):
+        """
+        Initialize variables used in later methods:
+
+            self._submission: PRAW submission object
+
+        Calls replace_more() method on submission object to get nested comments.
+
+        Returns
+        -------
+        None
+        """
+
         self._submission = reddit.submission(url = post)
 
         print(Fore.CYAN + Style.BRIGHT + "\nResolving instances of MoreComments...")
@@ -183,13 +389,49 @@ class GetSort():
 
         self._submission.comments.replace_more(limit = None)
 
-    ### Get comments in raw format.
     def _get_raw(self, all_dict, submission):
+        """
+        Get comments in raw format. 
+        
+        Calls previously defined public method:
+
+            SortComments().sort()
+
+        Parameters
+        ----------
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        submission: PRAW submission object
+            Reddit submission object
+
+        Returns
+        -------
+        None
+        """
+
         print(Style.BRIGHT + "\nProcessing all comments in raw format from submission '%s'..." % submission.title)
         SortComments().sort(all_dict, True, submission)
 
-    ### Get comments in structured format.
     def _get_structured(self, all_dict, limit, submission):
+        """
+        Get comments in structured format. 
+        
+        Calls previously defined public method:
+
+            SortComments().sort()
+
+        Parameters
+        ----------
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        submission: PRAW submission object
+            Reddit submission object
+
+        Returns
+        -------
+        None
+        """
+
         plurality = "comment" \
             if int(limit) == 1 \
             else "comments"
@@ -199,8 +441,28 @@ class GetSort():
         
         return {key: all_dict[key] for key in list(all_dict)[:int(limit)]}
 
-    ### Get comments from posts.
     def get_sort(self, limit):
+        """
+        Get comments from posts. 
+        
+        Calls previously defined private methods:
+
+            self._get_raw()
+            self._get_structured()
+
+        Parameters
+        ----------
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        submission: PRAW submission object
+            Reddit submission object
+
+        Returns
+        -------
+        all_dict: dict
+            Dictionary containing all comments within a submission
+        """
+
         all_dict = dict()
 
         if int(limit) == 0:
@@ -214,9 +476,26 @@ class Write():
     Methods for writing scraped comments to CSV or JSON.
     """
 
-    ### Create a skeleton for JSON export. Include scrape details at the top.
     @staticmethod
     def _make_json_skeleton(limit, post, title):
+        """
+        Create a skeleton for JSON export. Include scrape details at the top.
+
+        Parameters
+        ----------
+        limit: str
+            Integer of string type denoting n_results or RAW format
+        post: str
+            String denoting submission URL
+        title: str
+            String denoting submission title
+
+        Returns
+        -------
+        skeleton: dict
+            Dictionary containing scrape settings and all scrape data
+        """
+
         skeleton = {
             "scrape_settings": {
                 "submission_title": title,
@@ -230,18 +509,52 @@ class Write():
 
         return skeleton
 
-    ### Export to either CSV or JSON.
     @staticmethod
     def _determine_export(args, data, f_name):
+        """
+        Export to either CSV or JSON.
+
+        Calls a public method from an external module:
+
+            Export.export()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI
+        data: dict
+            Dictionary containing all scraped data
+        f_name: str
+            String denoting the filename
+
+        Returns
+        -------
+        None
+        """
+
         export_option = eo[1] \
             if not args.csv \
             else eo[0]
 
         Export.export(data, f_name, export_option, "comments")
 
-    ### Print confirmation message and set print length depending on string length.
     @staticmethod
     def _print_confirm(args, title):
+        """
+        Print confirmation message and set print length depending on string length.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI
+        title: str
+            String denoting the submission title
+
+        Returns
+        -------
+        None
+        """
+
         export_option = "JSON" \
             if not args.csv \
             else "CSV"
@@ -251,9 +564,37 @@ class Write():
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
-    ### Get, sort, then write scraped comments to CSV or JSON.
     @staticmethod
     def write(args, c_master, reddit):
+        """
+        Get, sort, then write scraped comments to CSV or JSON.
+
+        Calls previously defined public and private methods:
+
+            GetSort().get_sort()
+
+            Write._determine_export()
+            Write._make_json_skeleton()
+            Write._print_confirm()
+
+        Calls a public method from an external module:
+
+            NameFile().c_fname()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI
+        c_master: dict
+            Dictionary containing all scrape settings
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        None
+        """
+
         for post, limit in c_master.items():
             title = reddit.submission(url = post).title
             data = Write._make_json_skeleton(limit, post, title)
@@ -268,15 +609,44 @@ class RunComments():
     Run the comments scraper.
     """
 
-    ### Run comments scraper.
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer(s_t[2])
     def run(args, parser, reddit):
+        """
+        Run comments scraper.
+
+        Calls previously defined public methods:
+
+            CheckSubmissions.list_submissions()
+            Write.write()
+
+        Calls public methods from external modules:
+
+            GetPRAWScrapeSettings().create_list()
+            GetPRAWScrapeSettings().get_settings()
+            Global.make_none_dict()
+
+            PRAWTitles.c_title()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        None
+        """
+
         PRAWTitles.c_title()
 
         post_list = GetPRAWScrapeSettings().create_list(args, s_t[2])
-        posts = CheckSubmissions.list_submissions(reddit, post_list, parser)
+        posts = CheckSubmissions.list_submissions(parser, post_list, reddit)
         c_master = make_none_dict(posts)
         GetPRAWScrapeSettings().get_settings(args, c_master, s_t[2])
 

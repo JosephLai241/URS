@@ -35,13 +35,53 @@ class Sort():
     Methods for sorting the frequencies data.
     """
 
-    ### Get data from scrape file.
     def get_data(self, file):
+        """
+        Get data from scrape file.
+
+        Calls public methods from external modules:
+
+            GetPath.get_scrape_type()
+            PrepData.prep()
+
+        Parameters
+        ----------
+        file: list
+            List containing scrape files and file formats to generate wordcloud with
+
+        Returns
+        -------
+        frequency_data: dict
+            Dictionary containing extracted scrape data
+        """
+
         scrape_type = GetPath.get_scrape_type(file[0])
         return PrepData.prep(file[0], scrape_type)
 
-    ### Name the new file and create the analytics directory.
     def name_and_create_dir(self, args, file):
+        """
+        Name the new file and create the analytics directory.
+
+        Calls public methods from external modules:
+
+            GetPath.name_file()
+            InitializeDirectory.make_analytics_directory(
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+        file: list
+            List containing scrape files and file formats to generate wordcloud with
+
+        Returns
+        -------
+        f_type: str
+            String denoting the file format
+        filename: str
+            String denoting the filename
+        """
+
         f_type = eo[0] \
             if args.csv \
             else eo[1]
@@ -51,8 +91,21 @@ class Sort():
 
         return f_type, filename
 
-    ### Create CSV structure for exporting.
     def create_csv(self, plt_dict):
+        """
+        Create CSV structure for exporting.
+
+        Parameters
+        ----------
+        plt_dict: dict
+            Dictionary containing frequency data
+
+        Returns
+        -------
+        overview: dict
+            Dictionary containing frequency data
+        """
+
         overview = {
             "words": [],
             "frequencies": []
@@ -64,8 +117,23 @@ class Sort():
 
         return overview
 
-    ### Create JSON structure for exporting.
     def create_json(self, file, plt_dict):
+        """
+        Create JSON structure for exporting.
+
+        Parameters
+        ----------
+        file: list
+            List containing scrape files and file formats to generate wordcloud with
+        plt_dict: dict
+            Dictionary containing frequency data
+
+        Returns
+        -------
+        json_data: dict
+            Dictionary containing frequency data
+        """
+
         return {
             "raw_file": file[0],
             "data": [plt_dict]
@@ -76,10 +144,31 @@ class ExportFrequencies():
     Methods for exporting the frequencies data.
     """
 
-    ### Write data dictionary to JSON or CSV.
     @staticmethod
     @LogAnalytics.log_export
-    def export(data, filename, f_type):
+    def export(data, f_type, filename):
+        """
+        Write data dictionary to JSON or CSV.
+
+        Calls public methods found in external modules:
+
+            Export.write_json()
+            Export.write_csv()
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary containing frequency data
+        f_type: str
+            String denoting the file format
+        filename: str
+            String denoting the filename
+
+        Returns
+        -------
+        None
+        """
+
         Export.write_json(data, filename) \
             if f_type == eo[1] \
             else Export.write_csv(data, filename)
@@ -89,8 +178,20 @@ class PrintConfirm():
     Methods for printing successful export message.
     """
 
-    ### Print confirmation message.
     def confirm(self, filename):
+        """
+        Print confirmation message.
+
+        Parameters
+        ----------
+        filename: str
+            String denoting the filename
+
+        Returns
+        -------
+        None
+        """
+
         confirmation = "\nFrequencies exported to %s" % filename
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
@@ -100,10 +201,35 @@ class GenerateFrequencies():
     Methods for generating word frequencies.
     """
 
-    ### Generate frequencies.
     @staticmethod
     @LogAnalytics.generator_timer(analytical_tools[0])
     def generate(args):
+        """
+        Generate frequencies.
+
+        Calls previously defined public methods:
+
+            ExportFrequencies.export()
+            PrintConfirm().confirm()
+            Sort().create_csv()
+            Sort().create_json()
+            Sort().get_data()
+            Sort().name_and_create_dir()
+        
+        Calls public methods from external modules:
+
+            AnalyticsTitles.f_title()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Returns
+        -------
+        None
+        """
+
         AnalyticsTitles.f_title()
 
         for file in args.frequencies:
@@ -116,5 +242,5 @@ class GenerateFrequencies():
                 if args.csv \
                 else Sort().create_json(file, plt_dict)
 
-            ExportFrequencies.export(data, filename, f_type)
+            ExportFrequencies.export(data, f_type, filename)
             PrintConfirm().confirm(filename)

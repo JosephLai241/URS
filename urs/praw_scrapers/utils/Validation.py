@@ -31,18 +31,43 @@ class Validation():
     Methods for validating PRAW credentials and Subreddits, Redditors, and URLs.
     """
 
-    ### Get user rate limit information. Quits the program if the user does not
-    ### have any requests left in the current rate limit window.
     @staticmethod
     @LogError.log_rate_limit
     def get_rate_info(reddit):
+        """
+        Get user rate limit information. Quits the program if the user does not
+        have any requests left in the current rate limit window.
+
+        Parameters
+        ----------
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        praw_limits: praw.models
+            PRAW rate limits
+        """
+
         return models.Auth(_data = dict(), reddit = reddit).limits
 
-    ### Print user rate limit information. This includes the number of requests
-    ### remaining, a timestamp for when the rate limit counters will be reset, and
-    ### the number of requests that have been made in the current rate limit window.
     @staticmethod
     def print_rate_limit(reddit):
+        """
+        Print user rate limit information. This includes the number of requests
+        remaining, a timestamp for when the rate limit counters will be reset, and
+        the number of requests that have been made in the current rate limit window.
+
+        Parameters
+        ----------
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        None
+        """
+
         user_limits = Validation.get_rate_info(reddit)
 
         pretty_limits = PrettyTable()
@@ -57,18 +82,55 @@ class Validation():
         
         print(pretty_limits)
 
-    ### Check if PRAW credentials are valid, then print rate limit PrettyTable.
     @staticmethod
     @LogError.log_login
     def validate_user(parser, reddit):
+        """
+        Check if PRAW credentials are valid, then print rate limit PrettyTable.
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        None
+        """
+
         print(Style.BRIGHT + Fore.GREEN + 
             "\nSuccessfully logged in as u/%s.\n" % reddit.user.me())
         
         Validation.print_rate_limit(reddit)
 
-    ### Check Subreddits.
     @staticmethod
     def _check_subreddits(found, not_found, object_list, reddit):
+        """
+        Check if Subreddits are valid.
+
+        Parameters
+        ----------
+        found: list
+            Empty list to store valid Subreddits
+        not_found: list
+            Empty list to store invalid Subreddits
+        object_list: list
+            List of Subreddits to check
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Exceptions
+        ----------
+        NotFound:
+            Raised if invalid Subreddits were provided
+
+        Returns
+        -------
+        None
+        """
+
         for sub in object_list:
             try:
                 reddit.subreddits.search_by_name(sub, exact = True)
@@ -76,9 +138,32 @@ class Validation():
             except NotFound:
                 not_found.append(sub)
 
-    ### Check Redditors.
     @staticmethod
     def _check_redditors(found, not_found, object_list, reddit):
+        """
+        Check if Redditors are valid.
+
+        Parameters
+        ----------
+        found: list
+            Empty list to store valid Redditors
+        not_found: list
+            Empty list to store invalid Redditors
+        object_list: list
+            List of Redditors to check
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Exceptions
+        ----------
+        NotFound:
+            Raised if invalid Redditors were provided
+
+        Returns
+        -------
+        None
+        """
+
         for user in object_list:
             try:
                 reddit.redditor(user).id
@@ -86,9 +171,32 @@ class Validation():
             except NotFound:
                 not_found.append(user)
 
-    ### Check submissions.
     @staticmethod
     def _check_submissions(found, not_found, object_list, reddit):
+        """
+        Check if submission URLs are valid.
+
+        Parameters
+        ----------
+        found: list
+            Empty list to store valid submission URLs
+        not_found: list
+            Empty list to store invalid submission URLs
+        object_list: list
+            List of submission URLs to check
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Exceptions
+        ----------
+        NotFound:
+            Raised if invalid submission URLs were provided
+
+        Returns
+        -------
+        None
+        """
+
         for post in object_list:
             try:
                 reddit.submission(url = post).title
@@ -96,10 +204,40 @@ class Validation():
             except Exception as e:
                 not_found.append(e)
 
-    ### Check if Subreddit(s), Redditor(s), or submission(s) exist and catch PRAW 
-    ### exceptions.
     @staticmethod
     def existence(l_type, object_list, parser, reddit, s_t):
+        """
+        Check if Subreddit(s), Redditor(s), or submission(s) exist and catch PRAW 
+        exceptions.
+
+        Parameters
+        ----------
+        l_type: str
+            String denoting the scraper type
+        object_list: list
+            List of Reddit objects to check
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+        s_t: list
+            List of scraper types
+
+        Exceptions
+        ----------
+        NotFound:
+            Raised if invalid Subreddits or Redditors were provided
+        Exception:
+            Raised if invalid submission URLs were provided
+
+        Returns
+        -------
+        found: list
+            List of valid Reddit objects
+        not_found: list
+            List of invalid Reddit objects
+        """
+
         found = []
         not_found = []
 

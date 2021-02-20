@@ -20,9 +20,12 @@ class MainTitle():
     Method for printing the main URS title.
     """
 
-    ### Print URS title.
     @staticmethod
     def title():
+        """
+        Print URS title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
  __  __  _ __   ____  
 /\ \/\ \/\`'__\/',__\ 
@@ -36,9 +39,12 @@ class PRAWTitles():
     Methods for printing PRAW scraper titles.
     """
 
-    ### Print Subreddit scraper title.
     @staticmethod
     def r_title():
+        """
+        Print Subreddit scraper title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
  _ __  
 /\`'__\
@@ -47,9 +53,12 @@ class PRAWTitles():
   \/_/ 
 """)
 
-    ### Print Redditor scraper title.
     @staticmethod
     def u_title():
+        """
+        Print Redditor scraper title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
  __  __  
 /\ \/\ \ 
@@ -58,9 +67,12 @@ class PRAWTitles():
   \/___/ 
 """)
 
-    ### Print comments scraper title.
     @staticmethod
     def c_title():
+        """
+        Print comments scraper title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
   ___   
  /'___\ 
@@ -69,9 +81,12 @@ class PRAWTitles():
  \/____/
 """)
 
-    ### Print basic scraper title.
     @staticmethod
     def b_title():
+        """
+        Print basic scraper title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
  __        
 /\ \       
@@ -87,9 +102,12 @@ class AnalyticsTitles():
     Methods for printing for analytical tool titles.
     """
 
-    ### Print frequencies title.
     @staticmethod
     def f_title():
+        """
+        Print frequencies title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
    ___  
  /'___\ 📈
@@ -100,9 +118,12 @@ class AnalyticsTitles():
    \/_/
 """)
 
-    ### Print wordcloud title.
     @staticmethod
     def wc_title():
+        """
+        Print wordcloud title.
+        """
+
         print(Fore.WHITE + Style.BRIGHT + r"""
  __  __  __    ___ 🖌️ 
 /\ \/\ \/\ \  /'___\ 
@@ -116,9 +137,12 @@ class Errors():
     Methods for printing error titles.
     """
 
-    ### Print error title.
     @staticmethod
     def e_title():
+        """
+        Print error title.
+        """
+
         print(Fore.RED + Style.BRIGHT + r"""
    __   
  /'__`\ 
@@ -127,9 +151,21 @@ class Errors():
  \/____/... Please recheck args or refer to help or usage examples.
 """)
 
-    ### Print PRAW error title.
     @staticmethod
     def p_title(error):
+        """
+        Print PRAW error title.
+
+        Parameters
+        ----------
+        error: PrawException
+            PrawException raised when API validation fails
+
+        Returns
+        -------
+        None
+        """
+
         print(Fore.RED + Style.BRIGHT + r"""
  _____   
 /\ '__`\ 
@@ -142,9 +178,21 @@ class Errors():
 Prawcore exception: %s
 """ % error)
 
-    ### Print rate limit error title.
     @staticmethod
     def l_title(reset_timestamp):
+        """
+        Print rate limit error title.
+
+        Parameters
+        ----------
+        reset_timestamp: str
+            Reset timestamp provided by PRAW
+
+        Returns
+        -------
+        None
+        """
+
         print(Fore.RED + Style.BRIGHT + r"""
  __        
 /\ \       

@@ -12,14 +12,46 @@ class GetPath():
     Methods for determining file paths.
     """
 
-    ### Get the name of the scrape-specific directory in which the data is stored.
     @staticmethod
     def get_scrape_type(file):
+        """
+        Get the name of the scrape-specific directory in which the data is stored.
+
+        Parameters
+        ----------
+        file: str
+            String denoting the filepath
+
+        Returns
+        -------
+        scrape_dir: str
+            String denoting the scrape-specific directory
+        """
+
         return file.split("/")[3]
 
-    ### Name the chart or wordcloud when saving to file.
     @staticmethod
     def name_file(export_option, path, tool_type):
+        """
+        Name the chart or wordcloud when saving to file.
+
+        Parameters
+        ----------
+        export_option: str
+            String denoting the file format when exporting files
+        path: str
+            String denoting the full filepath
+        tool_type: str
+            String denoting the type of analytical tool
+
+        Returns
+        -------
+        date_dir: str
+            String denoting the date directory
+        new_path: str
+            String denoting the new filepath to save file
+        """
+
         split_path = path.split(".")
 
         split_scrapes_path = split_path[2].split("/")
@@ -36,9 +68,22 @@ class Extract():
     Methods for extracting the data from scrape files.
     """
 
-    ### Extract data from the file.
     @staticmethod
     def extract(file):
+        """
+        Extract data from the file.
+
+        Parameters
+        ----------
+        file: str
+            String denoting the filepath
+
+        Returns
+        -------
+        data: dict
+            Dictionary containing extracted scrape data
+        """
+
         with open(str(file), "r", encoding = "utf-8") as raw_data:
             return json.load(raw_data)
 
@@ -47,9 +92,22 @@ class CleanData():
     Methods for cleaning words found in "title", "body" or "text" fields.
     """
 
-    ### Removing unnecessary characters from words.
     @staticmethod
     def _remove_extras(word):
+        """
+        Removing unnecessary characters from words.
+
+        Parameters
+        ----------
+        word: str
+            String denoting the word to clean
+
+        Returns
+        -------
+        cleaned_word: str
+            String denoting the cleaned word
+        """
+
         illegal_chars = [char for char in "[(),:;.}{<>`]"]
         fixed = [
             " "
@@ -59,9 +117,29 @@ class CleanData():
 
         return "".join(fixed).strip()
 
-    ### Count words that are present in a field, then update the plt_dict dictionary.
     @staticmethod
     def count_words(field, obj, plt_dict):
+        """
+        Count words that are present in a field, then update the plt_dict dictionary.
+
+        Calls previously defined private method:
+
+            CleanData._remove_extras()
+
+        Parameters
+        ----------
+        field: str
+            String denoting the dictionary key to extract data from
+        obj: dict
+            Dictionary containing scrape data
+        plt_dict: dict
+            Dictionary containing frequency data
+
+        Returns
+        -------
+        None
+        """
+
         words = obj[field].split(" ")
         for word in words:
             word = CleanData._remove_extras(word)
@@ -78,9 +156,28 @@ class PrepSubreddit():
     Methods for preparing Subreddit data.
     """
 
-    ### Prepare Subreddit data.
     @staticmethod
     def prep_subreddit(data, file):
+        """
+        Prepare Subreddit data.
+
+        Calls previously defined public method:
+
+            CleanData.count_words()
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary containing extracted scrape data
+        file: str
+            String denoting the filepath
+
+        Returns
+        -------
+        frequencies: dict
+            Dictionary containing finalized word frequencies
+        """
+
         plt_dict = dict()
 
         for submission in data:
@@ -94,9 +191,28 @@ class PrepRedditor():
     Methods for preparing Redditor data.
     """
 
-    ### Prepare Redditor data.
     @staticmethod
     def prep_redditor(data, file):
+        """
+        Prepare Redditor data.
+
+        Calls previously defined public method:
+
+            CleanData.count_words()
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary containing extracted scrape data
+        file: str
+            String denoting the filepath
+
+        Returns
+        -------
+        frequencies: dict
+            Dictionary containing finalized word frequencies
+        """
+
         plt_dict = dict()
 
         for interactions in data["interactions"].values():
@@ -119,15 +235,51 @@ class PrepComments():
     Methods for preparing submission comments data.
     """
 
-    ### Prepare RAW submission comments.
     @staticmethod
     def _prep_raw(data, plt_dict):
+        """
+        Prepare raw submission comments.
+
+        Calls previously defined public method:
+
+            CleanData.count_words()
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary containing extracted scrape data
+        plt_dict: dict
+            Dictionary containing frequency data
+
+        Returns
+        -------
+        None
+        """
+
         for comment_data in data[0].values():
             CleanData.count_words("text", comment_data, plt_dict)
 
-    ### A recursive method to prepare structured submission comments.
     @staticmethod
     def _prep_structured(data, plt_dict):
+        """
+        A tail recursive method to prepare structured submission comments.
+
+        Calls previously defined public method:
+
+            CleanData.count_words()
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary containing extracted scrape data
+        plt_dict: dict
+            Dictionary containing frequency data
+
+        Returns
+        -------
+        None
+        """
+
         for comment_object in data:
             for comment_data in comment_object.values():
                 CleanData.count_words("text", comment_data, plt_dict)
@@ -137,9 +289,29 @@ class PrepComments():
                 if "replies" in comment_data.keys() and comment_data["replies"]:
                     PrepComments._prep_structured(comment_data["replies"], plt_dict)
     
-    ### Prepare submission comments data.
     @staticmethod
     def prep_comments(data, file):
+        """
+        Prepare submission comments data.
+
+        Calls previously defined private methods:
+
+            PrepComments._prep_raw()
+            PrepComments._prep_structured()
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary containing extracted scrape data
+        file: str
+            String denoting the filepath
+
+        Returns
+        -------
+        frequencies: dict
+            Dictionary containing finalized word frequencies
+        """
+
         plt_dict = dict()
 
         PrepComments._prep_raw(data["data"], plt_dict) \
@@ -153,9 +325,30 @@ class PrepData():
     Calling all methods for preparing scraped data. 
     """
 
-    ### Combine all prep methods into one public method.
     @staticmethod
     def prep(file, scrape_type):
+        """
+        Combine all prep methods into one public method.
+
+        Calls previously defined public methods:
+
+            PrepSubreddit.prep_subreddit()
+            PrepSubreddit.prep_redditor()
+            PrepSubreddit.prep_comments()
+
+        Parameters
+        ----------
+        file: str
+            String denoting the filepath
+        scrape_type: str
+            String denoting the scrape type 
+
+        Returns
+        -------
+        frequency_data: dict
+            Dictionary containing extracted scrape data
+        """
+
         data = Extract.extract(file)
 
         if scrape_type == "subreddits":

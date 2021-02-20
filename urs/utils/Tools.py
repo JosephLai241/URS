@@ -23,16 +23,41 @@ from urs.utils.Titles import MainTitle
 
 class Run():
     """
-    Methods to call Cli and Subreddit, Redditor, Comments, and Basic scrapers.
+    Methods to call CLI and all tools.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self, reddit):
+        """
+        Initialize variables used in instance methods:
+
+            self._reddit: Reddit instance
+            self._args: argparse Namespace object
+            self._parser: argparse ArgumentParser object
+
+        Returns
+        -------
+        None
+        """
+
         self._reddit = reddit
         self._args, self._parser = self._introduce_then_args()
         
-    ### Print title, then run checks for CLI args and PRAW credentials.
     def _introduce_then_args(self):
+        """
+        Print title, then run checks for CLI args and PRAW credentials.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        args: Namespace
+            argparse Namespace object
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        """
+
         MainTitle.title()
 
         args, parser = Parser().parse_args()
@@ -40,37 +65,41 @@ class Run():
 
         return args, parser
 
-    ### Switch for running scrapers.
     def run_urs(self):
-        ### Run rate limit check.
+        """
+        Switch for running all URS tools.
+        """
+
         if self._args.check:
+            """
+            Run rate limit check.
+            """
+
             Validation.validate_user(self._parser, self._reddit)
 
-        ### Run PRAW scrapers.
         elif self._args.subreddit or self._args.redditor or self._args.comments or self._args.basic:
-            ### Validate PRAW credentials, get user rate limit information, and
-            ### finally check for valid Subreddits, Redditors, or submission URLs.
+            """
+            Run PRAW scrapers.
+            """
+            
             Validation.validate_user(self._parser, self._reddit)
 
-            ### Run Subreddit scraper.
             if self._args.subreddit:
                 RunSubreddit.run(self._args, self._parser, self._reddit, s_t)
-            ### Run Redditor scraper.
             if self._args.redditor:
                 RunRedditor.run(self._args, self._parser, self._reddit)
-            ### Run submission comments scraper.
             if self._args.comments:
                 RunComments.run(self._args, self._parser, self._reddit)
-            ### Run basic Subreddit scraper.
             elif self._args.basic:
                 RunBasic.run(self._args, self._parser, self._reddit)
         
-        ### Run analytical tools.
         elif self._args.frequencies or self._args.wordcloud:
-            ### Run frequencies generator.
+            """
+            Run analytical tools.
+            """
+
             if self._args.frequencies:
                 GenerateFrequencies().generate(self._args)
-            ### Run wordcloud generator.
             if self._args.wordcloud:
                 GenerateWordcloud().generate(self._args)
         

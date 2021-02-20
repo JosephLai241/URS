@@ -42,9 +42,30 @@ class CheckRedditors():
     Method for printing found and invalid Redditors.
     """
 
-    ### Check if Redditors exist and list Redditors who are not found.
     @staticmethod
     def list_redditors(parser, reddit, user_list):
+        """
+        Check if Redditors exist and list Redditors who are not found.
+
+        Calls a public method from an external module:
+
+            Validation.existence()
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+        user_list: list
+            List of Redditors
+
+        Returns
+        -------
+        users: list
+            List of valid Redditors URLs
+        """
+
         print("\nChecking if Redditor(s) exist...")
         users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
         
@@ -76,8 +97,49 @@ class ProcessInteractions():
     - Upvoted (may be forbidden)
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self, limit, skeleton, user):
+        """
+        Initialize variables used in later methods:
+
+            self._skeleton: dictionary that contains all Redditor metadata and interactions
+
+            self._comments: user's comment objects
+            self._controversial: user's controversial objects
+            self._downvoted: user's downvoted objects
+            self._gilded: user's gilded objects
+            self._gildings: user's gildings objects
+            self._hidden: user's hidden objects
+            self._hot: user's hot objects
+            self._new: user's new objects
+            self._saved: user's saved objects
+            self._submissions: user's submission objects
+            self._top: user's top objects
+            self._upvoted: user's upvoted objects
+            
+            self._comment_titles: list of comment attribute fields
+            self._submission_titles: list of submission attribute fields
+
+            self._scrape_types: list of sorted scrape types for Redditor data
+
+            self._mutts: list of user objects that may return either submission or comment objects
+            self._mutt_names: list of titles for each user object in self._mutts
+
+            self._access: list of user objects that may return a 403 HTTP Forbidden exception
+            self._access_names: list of titles for each user object in self._access
+
+        Parameters
+        ----------
+        limit: int
+            Integer denoting n_results to return
+        skeleton: dict
+            Dictionary containing all Redditor data
+        user: PRAW object
+
+        Returns
+        -------
+        None
+        """
+
         self._skeleton = skeleton
 
         self._comments = user.comments.new(limit = limit)
@@ -117,7 +179,7 @@ class ProcessInteractions():
             "body"
         ]
 
-        self._s_types = [
+        self._scrape_types = [
             "submissions", 
             "comments", 
             "mutts", 
@@ -154,12 +216,45 @@ class ProcessInteractions():
             "upvoted"
         ]
 
-    ### Make dictionary from zipped lists.
     def _make_zip_dict(self, items, titles):
+        """
+        Make a dictionary from zipped lists. This private method is used to create
+        individual submission or comment objects to store in lists.
+
+        Parameters
+        ----------
+        items: list
+            List of strings to set the dictionary keys
+        titles: list
+            List of PRAW objects to set the dictionary values
+
+        Returns
+        -------
+        redditor_data: dict
+            Dictionary for a Redditor object (submission or comment)
+        """
+
         return dict((title, item) for title, item in zip(titles, items))
 
-    ### Make submission list.
-    def _make_submission_list(self, item):
+    def _make_submission_item(self, item):
+        """
+        Make submission item. 
+        
+        Calls previously defined private method:
+
+            self._make_zip_dict()
+
+        Parameters
+        ----------
+        item: PRAW object
+            PRAW submission item
+
+        Returns
+        -------
+        redditor_item: dict
+            Dictionary for a Redditor's submission
+        """
+
         items = [
             "submission",
             item.title, 
@@ -174,8 +269,25 @@ class ProcessInteractions():
 
         return self._make_zip_dict(items, self._submission_titles)
 
-    ### Make comment list.
-    def _make_comment_list(self, item):
+    def _make_comment_item(self, item):
+        """
+        Make comment item. 
+        
+        Calls previously defined private method:
+
+            self._make_zip_dict()
+
+        Parameters
+        ----------
+        item: PRAW object
+            PRAW comment item
+
+        Returns
+        -------
+        redditor_item: dict
+            Dictionary for a Redditor's comment
+        """
+
         edit_date = item.edited \
             if str(item.edited).isalpha() \
             else convert_time(item.edited)
@@ -194,8 +306,28 @@ class ProcessInteractions():
 
         return self._make_zip_dict(items, self._comment_titles)
 
-    ### Determine how to append the list to the JSON skeleton.
-    def _determine_append(self, cat, redditor_list, s_type):
+    def _determine_append(self, cat, redditor_item, scrape_type):
+        """
+        Determine how to append the list to the JSON skeleton. 
+        
+        Calls previously defined private method:
+
+            self._scrape_types()
+
+        Parameters
+        ----------
+        cat: str
+            String denoting Redditor category
+        redditor_item: dict
+            Dictionary for a Redditor's submission or comment
+        scrape_type: str
+            String denoting the scrape type within self._scrape_types
+
+        Returns
+        -------
+        None
+        """
+
         switch = {
             0: "submissions",
             1: "comments",
@@ -204,40 +336,90 @@ class ProcessInteractions():
                 else None,
         }
 
-        index = self._s_types.index(s_type)
-        self._skeleton["data"]["interactions"][switch.get(index)].append(redditor_list)
+        index = self._scrape_types.index(scrape_type)
+        self._skeleton["data"]["interactions"][switch.get(index)].append(redditor_item)
 
-    ### Extracting submission or comment attributes and appending to the skeleton.
-    def _extract(self, cat, obj, s_type):
+    def _extract(self, cat, obj, scrape_type):
+        """
+        Extracting submission or comment attributes and appending to the skeleton.
+        
+        Calls previously defined private methods:
+
+            self._make_submission_item()
+            self._make_comment_item()
+            self._determine_append()
+
+        Parameters
+        ----------
+        cat: str
+            String denoting Redditor category
+        obj: PRAW object
+            PRAW Redditor object that may contain Redditor submissions or comments 
+        scrape_type: str
+            String denoting the scrape type within self._scrape_types
+
+        Returns
+        -------
+        None
+        """
+
         for item in obj:
-            redditor_list = self._make_submission_list(item) \
+            redditor_item = self._make_submission_item(item) \
                 if isinstance(item, praw.models.Submission) \
-                else self._make_comment_list(item)
+                else self._make_comment_item(item)
 
-            self._determine_append(cat, redditor_list, s_type) 
+            self._determine_append(cat, redditor_item, scrape_type) 
 
-    ### Sort Redditor submissions.
     def sort_submissions(self):
-        self._extract(None, self._submissions, self._s_types[0])
+        """
+        Sort Redditor submissions. 
+        
+        Calls previously defined private method:
 
-    ### Sort Redditor comments.
+            self._extract()
+        """
+
+        self._extract(None, self._submissions, self._scrape_types[0])
+
     def sort_comments(self):
-        self._extract(None, self._comments, self._s_types[1])
+        """
+        Sort Redditor comments. 
+        
+        Calls previously defined private method:
 
-    ### Sort Controversial, Gilded, Hot, New and Top Redditor posts. The ListingGenerator
-    ### returns a mix of submissions and comments, so handling each differently is
-    ### necessary.
+            self._extract()
+        """
+
+        self._extract(None, self._comments, self._scrape_types[1])
+
     def sort_mutts(self):
-        for cat, obj in zip(self._mutt_names, self._mutts):
-            self._extract(cat, obj, self._s_types[2])
+        """
+        Sort Controversial, Gilded, Hot, New and Top Redditor posts. The ListingGenerator
+        returns a mix of submissions and comments, so handling each differently is
+        necessary. 
+        
+        Calls previously defined private method:
 
-    ### Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
-    ### lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
-    ### handling is necessary.
+            self._extract()
+        """
+
+        for cat, obj in zip(self._mutt_names, self._mutts):
+            self._extract(cat, obj, self._scrape_types[2])
+
     def sort_access(self):
+        """
+        Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
+        lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
+        handling is necessary. 
+        
+        Calls previously defined private method:
+
+            self._extract()
+        """
+
         for cat, obj in zip(self._access_names, self._access):
             try:
-                self._extract(cat, obj, self._s_types[3])
+                self._extract(cat, obj, self._scrape_types[3])
             except PrawcoreException as error:
                 print(Style.BRIGHT + Fore.YELLOW + "\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING." % (cat.upper(), error))
                 self._skeleton["data"]["interactions"]["%s" % cat].append("FORBIDDEN")
@@ -247,8 +429,18 @@ class GetInteractions():
     Methods for getting Redditor information and interactions.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
+        """
+        Initialize variables used in later methods:
+
+            self._info_titles: list of titles for Redditor information
+            self._interaction_titles: list of titles for each type of Redditor interaction
+
+        Returns
+        -------
+        None
+        """
+
         self._info_titles = [
             "name", 
             "fullname", 
@@ -276,8 +468,24 @@ class GetInteractions():
             "saved"
         ]
 
-    ### Create a skeleton for JSON export. Include scrape details at the top.
     def _make_json_skeleton(self, limit, reddit, user):
+        """
+        Create a skeleton for JSON export. Include scrape details at the top.
+
+        Parameters
+        ----------
+        limit: str
+            String denoting n_results returned
+        reddit: PRAW Reddit object
+        user: PRAW Redditor object
+
+        Returns
+        -------
+        skeleton: dict
+            Dictionary containing all Redditor data
+        user: PRAW Redditor object
+        """
+
         plurality = "results" \
             if int(limit) > 1 \
             else "result"
@@ -298,8 +506,29 @@ class GetInteractions():
 
         return skeleton, user
 
-    ### Get Redditor account information.
     def _get_user_info(self, skeleton, user):
+        """
+        Get Redditor account information.
+
+        Calls a previously defined private method:
+
+            self._info_titles()
+
+        Calls a public method from an external module:
+
+            Global.convert_time()
+
+        Parameters
+        ----------
+        skeleton: dict
+            Dictionary containing all Redditor data
+        user: PRAW Redditor object
+
+        Returns
+        -------
+        None
+        """
+
         user_info_titles = self._info_titles
         user_info = [
             user.name, 
@@ -317,13 +546,51 @@ class GetInteractions():
         for info_title, user_item in zip(user_info_titles, user_info):
             skeleton["data"]["information"][info_title] = user_item
 
-    ### Make empty lists for each user interaction field.
     def _make_interactions_lists(self, skeleton):
-         for interaction_title in self._interaction_titles:
-             skeleton["data"]["interactions"][interaction_title] = []
+        """
+        Make empty lists for each user interaction field.
 
-    ### Get Redditor interactions on Reddit.
+        Parameters
+        ----------
+        skeleton: dict
+            Dictionary containing all Redditor data
+
+        Returns
+        -------
+        None
+        """
+
+        for interaction_title in self._interaction_titles:
+            skeleton["data"]["interactions"][interaction_title] = []
+
     def _get_user_interactions(self, limit, skeleton, user):
+        """
+        Get Redditor interactions on Reddit.
+
+        Calls previously defined private and public methods:
+
+            self._make_interactions_lists()
+
+            ProcessInteractions()
+            ProcessInteractions().sort_submissions()
+            ProcessInteractions().sort_comments()
+            ProcessInteractions().sort_mutts()
+            ProcessInteractions().sort_access()
+
+
+        Parameters
+        ----------
+        limit: str
+            String denoting n_results returned
+        skeleton: dict
+            Dictionary containing all Redditor data
+        user: PRAW Redditor object
+
+        Returns
+        -------
+        None
+        """
+
         self._make_interactions_lists(skeleton)
 
         interactions = ProcessInteractions(int(limit), skeleton, user)
@@ -332,8 +599,29 @@ class GetInteractions():
         interactions.sort_mutts()
         interactions.sort_access()
 
-    ### Get Redditor information and interactions.
     def get(self, limit, reddit, user):
+        """
+        Get Redditor information and interactions.
+
+        Calls previously defined private methods:
+
+            self._make_json_skeleton()
+            self._get_user_info()
+            self._get_user_interactions()
+
+        Parameters
+        ----------
+        limit: str
+            String denoting n_results returned
+        reddit: PRAW Reddit object
+        user: PRAW Redditor object
+
+        Returns
+        -------
+        skeleton: dict
+            Dictionary containing all Redditor data
+        """
+
         skeleton, user = self._make_json_skeleton(limit, reddit, user)
         self._get_user_info(skeleton, user)
         self._get_user_interactions(limit, skeleton, user)
@@ -345,18 +633,52 @@ class Write():
     Methods for writing scraped Redditor information to CSV or JSON.
     """
 
-    ### Export to either CSV or JSON.
     @staticmethod
     def _determine_export(args, data, f_name):
+        """
+        Export to either CSV or JSON.
+
+        Calls a public method from an external module:
+
+            Export.export()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI 
+        data: dict
+            Dictionary containing Redditor information to write to file
+        f_name: str
+            String denoting the filename
+
+        Returns
+        -------
+        None
+        """
+
         export_option = eo[1] \
             if not args.csv \
             else eo[0]
 
         Export.export(data, f_name, export_option, "redditors")
 
-    ### Print confirmation message and set print length depending on string length.
     @staticmethod
     def _print_confirm(args, user):
+        """
+        Print confirmation message and set print length depending on string length.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI 
+        usr: str
+            String denoting the Redditor's username
+
+        Returns
+        -------
+        None
+        """
+
         export_option = "JSON" \
             if not args.csv \
             else "CSV"
@@ -366,9 +688,35 @@ class Write():
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
-    ### Get, sort, then write scraped Redditor information to CSV or JSON.
     @staticmethod
     def write(args, reddit, u_master):
+        """
+        Get, sort, then write scraped Redditor information to CSV or JSON.
+
+        Calls previously defined public methods:
+
+            GetInteractions().get()
+            Write._determine_export()
+            Write._print_confirm()
+
+        Calls a public method from an external module:
+
+            NameFile().u_fname(limit, user)
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI 
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+        u_master: dict
+            Dictionary containing all scrape settings
+
+        Returns
+        -------
+        None
+        """
+
         for user, limit in u_master.items():
             data = GetInteractions().get(limit, reddit, user)
             f_name = NameFile().u_fname(limit, user)
@@ -381,11 +729,38 @@ class RunRedditor():
     Run the Redditor scraper.
     """
 
-    ### Run Redditor scraper.
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer(s_t[1])
     def run(args, parser, reddit):
+        """
+        Get, sort, then write scraped Redditor information to CSV or JSON.
+
+        Calls previously defined public methods:
+
+            CheckRedditors().list_redditors()
+            Write.write()
+
+        Calls public methods from external modules: 
+
+            GetPRAWScrapeSettings().create_list()
+            Global.make_none_dict()
+            GetPRAWScrapeSettings().get_settings()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI 
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        None
+        """
+
         PRAWTitles.u_title()
 
         user_list = GetPRAWScrapeSettings().create_list(args, s_t[1])

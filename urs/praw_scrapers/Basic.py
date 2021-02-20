@@ -38,18 +38,64 @@ class PrintSubs():
     Methods for printing found and invalid Subreddits.
     """
 
-    ### Return a list of valid and invalid Subreddits.
     @staticmethod
     def _find_subs(parser, reddit, search_for):
+        """
+        Return a list of valid and invalid Subreddits.
+
+        Calls a method from an external module:
+
+            Validation.existence()
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+        search_for: str
+            String denoting Subreddits to scrape for
+
+        Returns
+        -------
+        subs: list
+            List of valid Subreddits
+        not_subs: list
+            List of invalid Subreddits
+        """
+
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
         subs, not_subs = Validation.existence(s_t[0], sub_list, parser, reddit, s_t)
 
         return subs, not_subs
 
-    ### Print valid and invalid Subreddits.
     @staticmethod
     def print_subreddits(parser, reddit, search_for):
+        """
+        Print valid and invalid Subreddits.
+
+        Calls previously defined private method:
+
+            PrintSubs._find_subs()
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+        search_for: str
+            String denoting Subreddits to scrape for
+
+        Returns
+        -------
+        subs: list
+            List of valid Subreddits
+        not_subs: list
+            List of invalid Subreddits
+        """
+
         print("\nChecking if Subreddit(s) exist...")
         subs, not_subs = PrintSubs._find_subs(parser, reddit, search_for)
 
@@ -74,9 +120,28 @@ class GetInput():
     Methods for handling user input.
     """
 
-    ### Enter Subreddit(s) to scrape and check if they exist.
     @staticmethod
     def get_subreddits(parser, reddit):
+        """
+        Enter Subreddit(s) to scrape and check if they exist.
+
+        Calls previously defined public method:
+
+            PrintSubs.print_subreddits()
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        subs: list
+            List of valid Subreddits
+        """
+
         subreddit_prompt = Style.BRIGHT + """
 Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
@@ -91,9 +156,27 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             except ValueError:
                 print(Fore.RED + Style.BRIGHT + "No Subreddits were specified! Try again.")
 
-    ### Update Subreddit settings in master dictionary.
     @staticmethod
     def _update_master(cat_i, master, search_for, sub):
+        """
+        Update Subreddit settings in master dictionary.
+
+        Parameters
+        ----------
+        cat_i: int
+            Integer denoting the category index
+        master: dict
+            Dictionary denoting all scrape settings
+        search_for: str
+            String denoting n_results to return or keywords to search for 
+        sub: str
+            Subreddit name
+
+        Returns
+        -------
+        None
+        """
+
         user_search = search_for \
             if cat_i == 5 \
             else int(search_for)
@@ -106,9 +189,29 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 ]
                 master[sub].append(settings)
 
-    ### Get search settings.
     @staticmethod
     def _get_search(cat_i, master, sub):
+        """
+        Get search settings.
+
+        Calls previously defined private method:
+
+            GetInput._update_master()
+
+        Parameters
+        ----------
+        cat_i: int
+            Integer denoting the category index
+        master: dict
+            Dictionary denoting all scrape settings
+        sub: str
+            Subreddit name
+
+        Returns
+        -------
+        None
+        """
+
         while True:
             try:
                 search_for = str(input(Style.BRIGHT + "\nWhat would you like to search for in r/" + sub + "? " + Style.RESET_ALL)).strip()
@@ -120,9 +223,29 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             except ValueError:
                 print(Fore.RED + Style.BRIGHT + "\nInvalid input! Try again.")
 
-    ### Get number of results.
     @staticmethod
     def _get_n_results(cat_i, master, sub):
+        """
+        Get number of results.
+
+        Calls previously defined private method:
+
+            GetInput._update_master()
+
+        Parameters
+        ----------
+        cat_i: int
+            Integer denoting the category index
+        master: dict
+            Dictionary denoting all scrape settings
+        sub: str
+            Subreddit name
+
+        Returns
+        -------
+        None
+        """
+
         while True:
             try:
                 search_for = input(Style.BRIGHT + "\nHow many results do you want to capture from r/" + sub + "? " + Style.RESET_ALL).strip()
@@ -134,9 +257,28 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
             except ValueError:
                 print(Fore.RED + Style.BRIGHT + "\nInvalid input! Try again.")
 
-    ### Select post category and the number of results returned from each Subreddit.
     @staticmethod
     def get_settings(master, subs):
+        """
+        Select post category and the number of results returned from each Subreddit.
+
+        Calls previously defined private methods:
+
+            GetInput._get_search()
+            GetInput._get_n_results()
+
+        Parameters
+        ----------
+        master: dict
+            Dictionary denoting all scrape settings
+        subs: list
+            List of Subreddits
+
+        Returns
+        -------
+        None
+        """
+
         for sub in subs:
             while True:
                 try:
@@ -167,14 +309,28 @@ class ConfirmInput():
     Methods for handling user confirmation.
     """
 
-    ### Confirm Subreddits that were entered.
     @staticmethod
     def confirm_subreddits(subs, parser):
+        """
+        Confirm Subreddits that were entered.
+
+        Parameters
+        ----------
+        subs: list
+            List of Subreddits
+        parser: ArgumentParser
+            argparse ArgumentParser object
+
+        Returns
+        -------
+        subs: list
+            List of Subreddits
+        """
+
         while True:
             try:
                 confirm = input("\nConfirm selection? [Y/N] ").strip().lower()
                 if confirm == options[0]:
-                    subs = [sub for sub in subs]
                     return subs
                 elif confirm not in options:
                     raise ValueError
@@ -184,9 +340,21 @@ class ConfirmInput():
             except ValueError:
                 print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")    
 
-    ### Scrape again?
     @staticmethod
     def another():
+        """
+        Scrape again?
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        repeat: str
+            String denoting whether to rerun the basic Subreddit scraper
+        """
+
         while True:
             try:
                 repeat = input("\nScrape again? [Y/N] ").strip().lower()
@@ -202,9 +370,34 @@ class RunBasic():
     Run the basic Subreddit scraper.
     """
 
-    ### Create settings for each user input.
     @staticmethod
     def _create_settings(parser, reddit):
+        """
+        Create settings for each user input.
+
+        Calls previously defined public methods:
+
+            GetInput.get_settings()
+            GetInput.get_subreddits()
+            ConfirmInput.confirm_subreddits()
+        
+        Calls a public method from an external module:
+
+            Global.make_list_dict()
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        master: dict
+            Dictionary denoting all Subreddit scrape settings
+        """
+
         subs = GetInput.get_subreddits(parser, reddit)
         subs = ConfirmInput.confirm_subreddits(subs, parser)
         master = make_list_dict(subs)
@@ -212,17 +405,64 @@ class RunBasic():
 
         return master
 
-    ### Print Subreddit scraping settings. Then write or quit scraper.
     @staticmethod
     def _print_confirm(args, master):
+        """
+        Print Subreddit scraping settings. Then write or quit scraper.
+
+        Calls previously defined public methods:
+
+            PrintConfirm().confirm_settings()
+            PrintConfirm().print_settings()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI
+        master: dict
+            Dictionary denoting all Subreddit scrape settings
+
+        Returns
+        -------
+        master: dict
+            Dictionary denoting all Subreddit scrape settings
+        """
+
         PrintConfirm().print_settings(args, master)
         return PrintConfirm().confirm_settings()
 
-    ### Run basic Subreddit scraper.
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer(s_t[0])
     def run(args, parser, reddit):
+        """
+        Run basic Subreddit scraper.
+
+        Calls previously defined public and private methods:
+
+            ConfirmInput.another()
+            RunBasic._create_settings()
+            RunBasic._print_confirm()
+
+        Calls public methods from external modules:
+
+            GetSortWrite().gsw()
+            PRAWTitles.b_title()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+            
+        Returns
+        -------
+        None
+        """
+
         PRAWTitles.b_title()
         
         while True:

@@ -30,8 +30,20 @@ class Parser():
     Methods for parsing CLI arguments.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
+        """
+        Initialize variables used in the CLI:
+
+            self._usage: list all available flags
+            self._description: tool name and blurb, full name, author, and contact
+            self._epilog: list additional options for tools
+            self._examples: example usage
+
+        Returns
+        -------
+        None
+        """
+
         self._usage = r"""$ Urs.py
      
     [-h]
@@ -204,8 +216,22 @@ DISPLAY INSTEAD OF SAVING
 
 """
 
-    ### Add flag to print examples.
     def _add_examples_flag(self, parser):
+        """
+        Add a flag to print example usage:
+
+            -e: display usage (available options) and examples
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
         example_flag = parser.add_argument_group("display examples")
         example_flag.add_argument(
             "-e", "--examples", 
@@ -213,13 +239,34 @@ DISPLAY INSTEAD OF SAVING
             help = "display example use cases"
         )
 
-    ### Print usage, then examples.
     def _display_examples(self):
+        """
+        Print usage, followed by examples.
+
+        Returns
+        -------
+        None
+        """
+
         print(self._usage)
         print(self._examples)
 
-    ### Add flag to check rate limit information.
     def _add_rate_limit_check_flag(self, parser):
+        """
+        Add a flag to check rate limit information:
+
+            --check: display rate limit information
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+        
         rate_flag = parser.add_argument_group("check rate limit")
         rate_flag.add_argument(
             "--check",
@@ -227,9 +274,25 @@ DISPLAY INSTEAD OF SAVING
             help = "display rate limit information for your Reddit account"
         )
 
-    ### Add PRAW scraper flags - Subreddit, Redditor, comments, basic scraper, 
-    ### and skip confirmation flags.
     def _add_praw_scraper_flags(self, parser):
+        """
+        Add PRAW scraper flags:
+
+            -r: Subreddit scraper
+            -u: Redditor scraper
+            -c: Submission comments scraper
+            -b: Basic Subreddit scraper
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
         praw_flags = parser.add_argument_group("PRAW scraping")
         praw_flags.add_argument(
             "-r", "--subreddit", 
@@ -258,8 +321,22 @@ DISPLAY INSTEAD OF SAVING
             help = "initialize non-CLI Subreddit scraper"
         )
     
-    ### Add extra options for PRAW Subreddit scraping.
     def _add_praw_subreddit_options(self, parser):
+        """
+        Add extra options for PRAW Subreddit scraping:
+
+            --rules: include Subreddit rules and post requirements in scrape data.
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
         subreddit_flags = parser.add_argument_group("additional PRAW Subreddit scraping arguments")
         subreddit_flags.add_argument(
             "--rules",
@@ -267,8 +344,24 @@ DISPLAY INSTEAD OF SAVING
             help = "include Subreddit rules in scrape data"
         )
 
-    ### Add analytical flags - frequencies, wordcloud, and no save flags.
     def _add_analytics(self, parser):
+        """
+        Add flags for analytical tools:
+
+            -f: word frequencies generator
+            -w: wordcloud generator
+            --nosave: do not save wordcloud to file
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
         analyze_flags = parser.add_argument_group("analytical tools")
         analyze_flags.add_argument(
             "-f", "--frequencies",
@@ -290,8 +383,22 @@ DISPLAY INSTEAD OF SAVING
             help = "do not save wordcloud to file"
         )
 
-    ### Add skip confirmation flags.
     def _add_skip(self, parser):
+        """
+        Add skip confirmation flags:
+
+            -y: skip options confirmation and scrape immediately
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
         skip_flags = parser.add_argument_group("skip confirmation")
         skip_flags.add_argument(
             "-y", 
@@ -299,8 +406,22 @@ DISPLAY INSTEAD OF SAVING
             help = "skip options confirmation and scrape immediately"
         )
 
-    ### Add export flags.
     def _add_export(self, parser):
+        """
+        Add export option flags:
+
+            --csv: export scrape data to CSV instead (default is JSON)
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
         export_flags = parser.add_argument_group("export arguments")
         export_flags.add_argument(
             "--csv", 
@@ -308,9 +429,33 @@ DISPLAY INSTEAD OF SAVING
             help = "export scrape data to CSV instead (default is JSON)"
         )
 
-    ### Get args.
     @LogError.log_no_args
     def parse_args(self):
+        """
+        Parse arguments and combines previously defined private methods:
+
+            self._add_examples_flag()
+            self._add_rate_limit_check_flag()
+            self._add_praw_scraper_flags()
+            self._add_praw_subreddit_options()
+            self._add_analytics()
+            self._add_skip()
+            self._add_export()
+
+        Exceptions
+        ----------
+        SystemExit: 
+            Raised when no arguments were entered or if the examples flag was provided
+
+        Returns
+        -------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the
+            previous private methods
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        """
+
         parser = argparse.ArgumentParser(
             description = self._description,
             epilog = self._epilog, 
@@ -345,16 +490,46 @@ class GetPRAWScrapeSettings():
     Methods for creating data structures to store PRAW scrape settings.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
+        """
+        Initialize variables used when getting PRAW scrape settings:
+
+            self._filterables: a list of categories for which time filters may be applied
+
+        Returns
+        -------
+        None
+        """
+
         self._filterables = [
             short_cat[2], 
             short_cat[3], 
             short_cat[5]
         ]
 
-    ### Switch to determine which kind of list to create.
     def _list_switch(self, args, index):
+        """
+        Pythonic switch to determine which kind of args list to create:
+
+            args.subreddit
+            args.redditor
+            args.comments
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing Subreddit, Redditor, or submission comments
+            arguments
+        index: int
+            Integer that corresponds with a dictionary key
+
+        Returns
+        -------
+        args: Namespace
+            Namespace object containing Subreddit, Redditor, or submission comments
+            arguments
+        """
+
         switch = {
             0: args.subreddit,
             1: args.redditor,
@@ -363,16 +538,51 @@ class GetPRAWScrapeSettings():
 
         return switch.get(index)
 
-    ### Create either Subreddit, Redditor, or submissions list.
     def create_list(self, args, l_type):
+        """
+        Create either Subreddits, Redditors, or submissions list.
+
+        Calls previously defined private method:
+
+            self._list_switch()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing Subreddit, Redditor, or submission comments
+            arguments
+        l_type: str
+            String that denotes the scraper type (Subreddit, Redditor, or
+            submission comments)
+
+        Returns
+        -------
+        item_list: list
+            List of split arguments containing the scraper flag and Reddit objects
+            to scrape for
+        """
+
         index = s_t.index(l_type)
         item_list = [item[0] for item in self._list_switch(args, index)]
 
         return item_list
 
-    ### Set default time filter if a time filter can be applied to the category.
-    ### Return the Subreddit settings.
     def _set_sub_settings(self, sub):
+        """
+        Set the default time filter if it can be applied to the Subreddit category.
+
+        Parameters
+        ----------
+        sub: list
+            A list containing the Subreddit name, category, and time filter (if
+            applicable)
+
+        Returns
+        -------
+        settings: list
+            A list of corrected Subreddit scraping settings
+        """
+
         if len(sub) == 3:
             settings = [sub[1], sub[2], "all"] \
                 if sub[1].upper() in self._filterables \
@@ -382,8 +592,27 @@ class GetPRAWScrapeSettings():
 
         return settings
 
-    ### Get Subreddit settings.
     def _subreddit_settings(self, args, master):
+        """
+        Get Subreddit settings from the argparse Namespace and append them to the
+        master scrape settings dictionary.
+
+        Calls previously defined private method:
+
+            self._set_sub_settings()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+        master: dict
+            Dictionary containing all scrape settings
+
+        Returns
+        -------
+        None
+        """
+
         for sub_n in master:
             for sub in args.subreddit:
                 settings = self._set_sub_settings(sub)
@@ -391,14 +620,53 @@ class GetPRAWScrapeSettings():
                 if sub_n == sub[0]:
                     master[sub_n].append(settings)
 
-    ### Get settings for scraping items that only require two arguments 
-    ### (Redditor or comments scrapers).
     def _two_arg_settings(self, master, object):
+        """
+        Get settings for scraping items that only require two arguments and append
+        them to the master scrape settings dictionary:
+
+            Redditor scraper
+            Submission comments scraper
+
+        Parameters
+        ----------
+        master: dict
+            Dictionary containing all scrape settings
+        object: Namespace
+            argparse Namespace object containing either Redditor or submission
+            comments arguments
+
+        Returns
+        -------
+        None
+        """
+        
         for obj in object:
             master[obj[0]] = obj[1]
 
-    ### Get CLI scraping settings for Subreddits, Redditors, and post comments.
     def get_settings(self, args, master, s_type):
+        """
+        Get scrape settings for Subreddits, Redditors and submission comments by
+        combining all previously defined private methods:
+
+            self._subreddit_settings()
+            self._two_arg_settings()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+        master: dict
+            Dictionary containing all scrape settings
+        s_type: str
+            String that denotes the scraper type (Subreddit, Redditor, or
+            submission comments)
+
+        Returns
+        -------
+        None
+        """
+
         if s_type == s_t[0]:
             self._subreddit_settings(args, master)
         elif s_type == s_t[1]:
@@ -412,9 +680,20 @@ class CheckPRAWCli():
     they are invalid.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
-        self._special_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
+        """
+        Initialize variables used when getting PRAW scrape settings:
+
+            self._illegal_chars: a RegEx Pattern denoting forbidden characters
+            self._filterables: a list of categories for which time filters may be applied
+            self._time_filters: a list of valid time filters
+
+        Returns
+        -------
+        None
+        """
+
+        self._illegal_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
         
         self._filterables = [
             short_cat[2], 
@@ -430,8 +709,27 @@ class CheckPRAWCli():
             "year"
         ]
 
-    ### Check n_results for Subreddit args.
     def _check_n_results(self, n_results, sub):
+        """
+        Check n_results within Subreddit args.
+
+        Parameters
+        ----------
+        n_results: str
+            String denoting the number of results to return
+        sub: list
+            List of Subreddit scraping settings
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if n_results is invalid
+
+        Returns
+        -------
+        None
+        """
+        
         if sub[1].upper() != "S":
             try:
                 int(n_results)
@@ -440,8 +738,29 @@ class CheckPRAWCli():
             except ValueError:
                 raise ValueError
 
-    ### Check Subreddit args.
     def check_subreddit(self, args):
+        """
+        Check all Subreddit args. 
+        
+        Calls previously defined private method:
+
+            self._check_n_results()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if category, n_results, or time filter is invalid
+
+        Returns
+        -------
+        None
+        """
+
         for sub in args.subreddit:
             if sub[1].upper() not in short_cat or len(sub) > 4:
                 raise ValueError
@@ -454,19 +773,53 @@ class CheckPRAWCli():
 
                 self._check_n_results(sub[2], sub)
 
-    ### Check Redditor args.
     def check_redditor(self, args):
+        """
+        Check all Redditor args.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if n_results is invalid
+
+        Returns
+        -------
+        None
+        """
+
         for user in args.redditor:
             if user[1].isalpha() \
-            or self._special_chars.search(user[1]) != None \
+            or self._illegal_chars.search(user[1]) != None \
             or int(user[1]) == 0:
                 raise ValueError
 
-    ### Check submission comments args.
     def check_comments(self, args):
+        """
+        Check all submission comments args.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if n_results is invalid
+
+        Returns
+        -------
+        None
+        """
+
         for submission in args.comments:
             if submission[1].isalpha() \
-            or self._special_chars.search(submission[1]) != None:
+            or self._illegal_chars.search(submission[1]) != None:
                 raise ValueError
 
 class CheckAnalyticCli():
@@ -475,8 +828,17 @@ class CheckAnalyticCli():
     if they are invalid.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
+        """
+        Initialize variables used when getting PRAW scrape settings:
+
+            self._export_options: a list of valid export options for wordclouds
+
+        Returns
+        -------
+        None
+        """
+
         self._export_options = [
             "eps",
             "jpeg",
@@ -489,20 +851,80 @@ class CheckAnalyticCli():
             "tiff"
         ]
 
-    ### Check valid files for generating wordclouds.
     def _check_valid_file(self, file):
+        """
+        Check valid files for generating wordclouds.
+
+        Parameters
+        ----------
+        file: file system path
+            A file path
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if an invalid file is provided
+
+        Returns
+        -------
+        None
+        """
+
         try:
             _ = open("%s" % file)
         except FileNotFoundError:
             raise ValueError
 
-    ### Check frequencies args.
     def check_frequencies(self, args):
+        """
+        Check all frequencies args. 
+        
+        Calls previously defined private method:
+
+            self._check_valid_file()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if an invalid file is provided
+
+        Returns
+        -------
+        None
+        """
+
         for file in args.frequencies:
             self._check_valid_file(file[0])
 
-    ### Check wordcloud args.
     def check_wordcloud(self, args):
+        """
+        Check all wordcloud args. 
+        
+        Calls previously defined private method:
+
+            self._check_valid_file()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if too many args, an invalid file, or invalid export option
+            is provided
+
+        Returns
+        -------
+        None
+        """
+
         for file in args.wordcloud:
             if len(file) > 2:
                 raise ValueError
@@ -522,9 +944,39 @@ class CheckCli():
     Methods for checking CLI arguments and raising errors if they are invalid.
     """
 
-    ### Check args and catching errors.
     @LogError.log_args
     def check_args(self, args, parser):
+        """
+        Check all arguments. Calls previously defined methods:
+
+            CheckPRAWCli():
+                check_subreddit()
+                check_redditor()
+                check_comments()
+
+            CheckAnalyticCli():
+                check_frequencies()
+                check_wordcloud()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the
+            previous private methods
+        parser: ArgumentParser
+            argparse ArgumentParser object
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised for any errors that were previously defined
+
+        Returns
+        -------
+        None
+
+        """
+
         ### Check PRAW CLI arguments.
         if args.subreddit:
             CheckPRAWCli().check_subreddit(args)

@@ -51,10 +51,29 @@ class LogMain():
         level = logging.INFO
     )
     
-    ### Wrapper for logging the amount of time it took to execute main(). Handle
-    ### KeyboardInterrupt if user cancels scraping.
     @staticmethod
     def master_timer(function):
+        """
+        Wrapper for logging the amount of time it took to execute main(). Handle
+        KeyboardInterrupt if user cancels URS.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Exceptions
+        ----------
+        KeyboardInterrupt:
+            Raised if user cancels URS
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(*args):
             logging.info("INITIALIZING URS.")
             logging.info("")
@@ -78,10 +97,29 @@ class LogError():
     Decorator for logging args, PRAW, or rate limit errors.
     """
 
-    ### Wrapper for logging if the help message was printed/if no arguments were
-    ### given.
     @staticmethod
     def log_no_args(function):
+        """
+        Wrapper for logging if the help message was printed/if no arguments were
+        given.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Exceptions
+        ----------
+        SystemExit:
+            Raised if no, invalid, or example args were entered 
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(self):
             try:
                 args, parser = function(self)
@@ -92,9 +130,28 @@ class LogError():
         
         return wrapper
 
-    ### Wrapper for logging argument errors.
     @staticmethod
     def log_args(function):
+        """
+        Wrapper for logging argument errors.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if invalid args were entered 
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(self, args, parser):
             try:
                 function(self, args, parser)
@@ -105,9 +162,28 @@ class LogError():
 
         return wrapper
 
-    ### Wrapper for logging PRAW errors.
     @staticmethod
     def log_login(function):
+        """
+        Wrapper for logging PRAW errors.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Exceptions
+        ----------
+        PrawcoreException:
+            Raised if invalid PRAW API credentials are given
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(parser, reddit):
             print("\nLogging in...")
 
@@ -123,9 +199,23 @@ class LogError():
 
         return wrapper
 
-    ### Wrapper for logging rate limit and errors.
     @staticmethod
     def log_rate_limit(function):
+        """
+        Wrapper for logging rate limit and errors.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(reddit):
             user_limits = function(reddit)
 
@@ -147,9 +237,24 @@ class LogPRAWScraper():
     Decorator for logging scraper runtimes and events.
     """
 
-    ### Get scraper type for logging.
     @staticmethod
     def _get_args_switch(args, scraper):
+        """
+        Get scraper type for logging.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+        scraper: str
+            Scraper type which denotes a key in the dictionary
+
+        Returns
+        -------
+        scraper_args: list
+            List of arguments returned from args
+        """
+
         scrapers = {
             s_t[0]: [arg_set for arg_set in args.subreddit] \
                 if args.subreddit \
@@ -164,18 +269,46 @@ class LogPRAWScraper():
 
         return scrapers.get(scraper)
 
-    ### Replace the second tuple item with the full category name if Subreddit
-    ### scraper is selected.
     @staticmethod
     def _subreddit_tuple(each_arg):
+        """
+        Replace the second tuple item with the full category name if Subreddit
+        scraper is selected.
+
+        Parameters
+        ----------
+        each_arg: list
+            List of Subreddit args
+        
+        Returns
+        -------
+        args: tuple
+            Tuple of Subreddit args after correction
+        """
+
         args_list = list(each_arg)
         args_list[1] = categories[short_cat.index(each_arg[1].upper())]
          
         return tuple(args_list)
 
-    ### Get the full Subreddit category name for each Subreddit tuple.
     @staticmethod
     def _format_subreddit_settings(scraper, scraper_args):
+        """
+        Get the full Subreddit category name for each Subreddit tuple.
+
+        Parameters
+        ----------
+        scraper: str
+            String which denotes the scraper type
+        scraper_args: list
+            List of scraper args
+
+        Returns
+        -------
+        args: list
+            List of args
+        """
+
         args = []
         for each_arg in scraper_args:
             settings = LogPRAWScraper._subreddit_tuple(each_arg) \
@@ -186,42 +319,121 @@ class LogPRAWScraper():
 
         return args
 
-    ### Set message depending if the Search category was selected.
     @staticmethod
     def _set_subreddit_log(category, n_res_or_kwds, sub_name):
+        """
+        Set message depending if the Search category was selected.
+
+        Parameters
+        ----------
+        category: str
+            String denoting the Subreddit category
+        n_res_or_kwds: str
+            String denoting n_results to return or keywords to search for
+        sub_name: str
+            String denoting the Subreddit name
+
+        Returns
+        -------
+        log_string: str
+            String denoting scrape details
+        """
+
         return "Scraping r/%s for %s %s results..." % (sub_name, n_res_or_kwds, category) \
             if category != categories[5] \
             else "Searching and scraping r/%s for posts containing '%s'..." % (sub_name, n_res_or_kwds)
 
-    ### Format Subreddit log differently if user searched for keywords. Log an
-    ### additional line if the time filter was applied.
     @staticmethod
     def _format_subreddit_log(each_arg):
+        """
+        Format Subreddit log differently if user searched for keywords. Log an
+        additional line if the time filter was applied. Calls previously defined
+        private methods:
+            
+            LogPRAWScraper._set_subreddit_log()
+
+        Parameters
+        ----------
+        each_arg: list
+            List of arguments passed
+
+        Returns
+        -------
+        log_string: str
+            String denoting scrape details
+        """
+
         if len(each_arg) == 4:
             logging.info("Getting posts from the past %s for %s results." % (each_arg[3], each_arg[1]))
 
         return LogPRAWScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
 
-    ### Format Redditor log depending on number of results scraped.
     @staticmethod
     def _format_redditor_log(each_arg):
+        """
+        Format Redditor log depending on number of results scraped.
+
+        Parameters
+        ----------
+        each_arg: list
+            List of arguments passed
+
+        Returns
+        -------
+        log_string: str
+            String denoting scrape details
+        """
+
         plurality = "results" \
             if int(each_arg[1]) > 1 \
             else "result"
         return "Scraping %s %s for u/%s..." % (each_arg[1], plurality, each_arg[0])
 
-    ### Format comments log depending on raw or structured export.
     @staticmethod
     def _format_comments_log(each_arg):
+        """
+        Format comments log depending on raw or structured export.
+
+        Parameters
+        ----------
+        each_arg: list
+            List of arguments passed
+
+        Returns
+        -------
+        log_string: str
+            String denoting scrape details
+        """
+
         plurality = "comments" if int(each_arg[1]) > 1 else "comment"
         return "Processing %s %s in structured format from Reddit post %s" % (each_arg[1], plurality, each_arg[0]) \
             if int(each_arg[1]) > 0 \
             else "Processing all comments in raw format from Reddit post %s" % each_arg[0]
 
-    ### Format string for log file depending on what was scraped, then log the 
-    ### string.
     @staticmethod
     def _format_scraper_log(args_list, scraper):
+        """
+        Format comments log depending on raw or structured export. Calls previously
+        defined private methods:
+
+            LogPRAWScraper._format_subreddit_settings()
+            LogPRAWScraper._format_subreddit_log()
+            LogPRAWScraper._format_redditor_log()
+            LogPRAWScraper._format_comments_log()
+
+
+        Parameters
+        ----------
+        args_list: list
+            List of scraper args
+        scraper: str
+            Scraper type which denotes a key in the dictionary
+
+        Returns
+        -------
+        None
+        """
+
         args = LogPRAWScraper._format_subreddit_settings(scraper, args_list)
         for each_arg in args:
             formats = {
@@ -239,9 +451,23 @@ class LogPRAWScraper():
             logging.info(formats.get(scraper))
             logging.info("")
 
-    ### Wrapper for logging the amount of time it took to execute a scraper.
     @staticmethod
     def scraper_timer(scraper):
+        """
+        Wrapper for logging the amount of time it took to execute a scraper.
+
+        Parameters
+        ----------
+        scraper: str
+            String denoting the scraper that is run
+
+        Returns
+        -------
+        decorator: function()
+            Return the decorator function that runs the method passed into this
+            method
+        """
+
         def decorator(function):
             def wrapper(*args):
                 start = time.time()
@@ -259,10 +485,24 @@ class LogPRAWScraper():
             return wrapper
         return decorator
 
-    ### Wrapper for logging if the user cancelled Subreddit scraping at the
-    ### confirmation page.
     @staticmethod
     def log_cancel(function):
+        """
+        Wrapper for logging if the user cancelled Subreddit scraping at the
+        confirmation page.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(*args):
             try:
                 function(*args)
@@ -279,9 +519,24 @@ class LogAnalytics():
     Decorator for logging analytical tools.
     """
 
-    ### Get tool type for logging.
     @staticmethod
     def _get_args_switch(args, tool):
+        """
+        Get tool type for logging.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+        tool: str
+            Tool type which denotes a key in the dictionary
+
+        Returns
+        -------
+        scraper_args: list
+            List of arguments returned from args
+        """
+
         tools = {
             analytical_tools[0]: [arg_set for arg_set in args.frequencies] \
                 if args.frequencies \
@@ -293,9 +548,23 @@ class LogAnalytics():
 
         return tools.get(tool)
 
-    ### Wrapper for logging if the result was saved.
     @staticmethod
     def log_save(tool):
+        """
+        Wrapper for logging if the result was saved.
+
+        Parameters
+        ----------
+        tool: str
+            String denoting the tool that is run
+
+        Returns
+        -------
+        decorator: function()
+            Return the decorator function that runs the method passed into this
+            method
+        """
+
         def decorator(function):
             def wrapper(*args):
                 filename = function(*args)
@@ -306,9 +575,23 @@ class LogAnalytics():
             return wrapper
         return decorator
 
-    ### Wrapper for logging if the result was displayed.
     @staticmethod
     def log_show(tool):
+        """
+        Wrapper for logging if the result was displayed.
+
+        Parameters
+        ----------
+        tool: str
+            String denoting the tool that is run
+
+        Returns
+        -------
+        decorator: function()
+            Return the decorator method that runs the method passed into this
+            method
+        """
+
         def decorator(function):
             def wrapper(*args):
                 function(*args)
@@ -319,9 +602,22 @@ class LogAnalytics():
             return wrapper
         return decorator
 
-    ### Get export type for logging.
     @staticmethod
     def _get_export_switch(f_type):
+        """
+        Get export type for logging.
+
+        Parameters
+        ----------
+        f_type: str
+            String denoting the file type
+
+        Returns
+        -------
+        export_message: str
+            String denoting export option
+        """
+
         export_options = {
             0: "Exporting to JSON.",
             1: "Exporting to CSV."
@@ -332,9 +628,23 @@ class LogAnalytics():
 
         return export_options.get(0)
 
-    ### Log the export format for the frequencies generator.
     @staticmethod
     def log_export(function):
+        """
+        Log the export format for the frequencies generator.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(*args):
             try:
                 function(*args)
@@ -347,18 +657,46 @@ class LogAnalytics():
 
         return wrapper
 
-    ### Log the analytical tool that was used.
     @staticmethod
     def _log_tool(args, tool):
+        """
+        Log the analytical tool that was used.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+        tool: str
+            String denoting the analytical tool
+
+        Returns
+        -------
+        None
+        """
+
         args_list = LogAnalytics._get_args_switch(args, tool)
 
         for file in args_list:
             logging.info("Generating %s for file %s..." % (tool, file[0]))
             logging.info("")
 
-    ### Wrapper for logging the amount of time it took to execute a tool.
     @staticmethod
     def generator_timer(tool):
+        """
+        Wrapper for logging the amount of time it took to execute a tool.
+
+        Parameters
+        ----------
+        tool: str
+            String denoting the tool that is run
+
+        Returns
+        -------
+        decorator: function()
+            Return the decorator method that runs the method passed into this
+            method
+        """
+
         def decorator(function):
             def wrapper(*args):
                 start = time.time()
@@ -381,9 +719,22 @@ class LogExport():
     Decorator for logging exporting files.
     """
 
-    ### Get export type for logging.
     @staticmethod
     def _get_export_switch(args):
+        """
+        Get export type for logging.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Returns
+        -------
+        export_message: str
+            String denoting export option
+        """
+
         export_options = {
             0: "Exporting to JSON.",
             1: "Exporting to CSV."
@@ -394,9 +745,23 @@ class LogExport():
 
         return export_options.get(0)
 
-    ### Wrapper for logging the export option.
     @staticmethod
     def log_export(function):
+        """
+        Wrapper for logging the export option.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
         def wrapper(*args):
             try:
                 function(*args)
