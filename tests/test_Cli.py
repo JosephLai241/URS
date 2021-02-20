@@ -550,8 +550,8 @@ class TestCheckPRAWCliInitMethod():
     Testing CheckPRAWCli class __init__() method found on line 241 in Cli.py.
     """
 
-    def test_check_praw_cli_init_method_special_chars_instance_variable(self):
-        assert Cli.CheckPRAWCli()._special_chars == \
+    def test_check_praw_cli_init_method_illegal_chars_instance_variable(self):
+        assert Cli.CheckPRAWCli()._illegal_chars == \
             re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
 
     def test_check_praw_cli_init_method_filterables_instance_variable(self):
