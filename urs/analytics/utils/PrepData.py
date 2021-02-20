@@ -27,8 +27,8 @@ class GetPath():
         scrape_dir: str
             String denoting the scrape-specific directory
         """
-
-        return file.split("/")[3]
+        
+        return file.split("/")[file.split("/").index("scrapes") + 2]
 
     @staticmethod
     def name_file(export_option, path, tool_type):
@@ -52,16 +52,15 @@ class GetPath():
             String denoting the new filepath to save file
         """
 
-        split_path = path.split(".")
+        split_path = path.split("/")
+        date_dir = split_path[split_path.index("scrapes") + 1]
+        split_path[split_path.index("scrapes") + 2] = "analytics/%s" % tool_type
 
-        split_scrapes_path = split_path[2].split("/")
-        date_dir = split_scrapes_path[2]
-        split_scrapes_path[3] = "analytics/%s" % tool_type
-        split_path[2] = "/".join(split_scrapes_path)
-
-        split_path[-1] = export_option
-
-        return date_dir, ".".join(split_path)
+        split_file = split_path[-1].split(".")
+        split_file[-1] = export_option
+        split_path[-1] = ".".join(split_file)
+        
+        return date_dir, "/".join(split_path)
 
 class Extract():
     """
