@@ -736,6 +736,7 @@ class CheckPRAWCli():
                 if int(n_results) == 0:
                     raise ValueError
             except ValueError:
+                print(Fore.RED + Style.BRIGHT + "\nINVALID SUBREDDIT N_RESULTS.")
                 raise ValueError
 
     def check_subreddit(self, args):
@@ -763,12 +764,18 @@ class CheckPRAWCli():
 
         for sub in args.subreddit:
             if sub[1].upper() not in short_cat or len(sub) > 4:
+                if sub[1].upper() not in short_cat:
+                    print(Fore.RED + Style.BRIGHT + "\nINVALID CATEGORY.")
                 raise ValueError
             elif sub[1].upper() in short_cat:
                 ### Check args if a time filter is present.
                 if len(sub) == 4:
                     if sub[1].upper() not in self._filterables \
                     or sub[3].lower() not in self._time_filters:
+                        if sub[1].upper() not in self._filterables:
+                            print(Fore.RED + Style.BRIGHT + "\nTIME FILTER IS NOT AVAILABLE FOR THIS CATEGORY.")
+                        elif sub[3].lower() not in self._time_filters:
+                            print(Fore.RED + Style.BRIGHT + "\nINVALID TIME FILTER.")
                         raise ValueError
 
                 self._check_n_results(sub[2], sub)
@@ -796,6 +803,7 @@ class CheckPRAWCli():
             if user[1].isalpha() \
             or self._illegal_chars.search(user[1]) != None \
             or int(user[1]) == 0:
+                print(Fore.RED + Style.BRIGHT + "\nINVALID REDDITOR N_RESULTS.")
                 raise ValueError
 
     def check_comments(self, args):
@@ -820,6 +828,7 @@ class CheckPRAWCli():
         for submission in args.comments:
             if submission[1].isalpha() \
             or self._illegal_chars.search(submission[1]) != None:
+                print(Fore.RED + Style.BRIGHT + "\nINVALID SUBMISSION N_RESULTS.")
                 raise ValueError
 
 class CheckAnalyticCli():
@@ -873,6 +882,7 @@ class CheckAnalyticCli():
         try:
             _ = open("%s" % file)
         except FileNotFoundError:
+            print(Fore.RED + Style.BRIGHT + "\nINVALID FILE.")
             raise ValueError
 
     def check_frequencies(self, args):
@@ -935,6 +945,7 @@ class CheckAnalyticCli():
                 file.append("png")
             else:
                 if file[1].lower() not in self._export_options:
+                    print(Fore.RED + Style.BRIGHT + "\nINVALID EXPORT OPTION.")
                     raise ValueError
 
                 file[1] = file[1].lower()
