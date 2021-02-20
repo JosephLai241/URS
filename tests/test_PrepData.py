@@ -9,7 +9,7 @@ class TestGetPathGetScrapeTypeMethod():
     """
 
     def test_get_scrape_type_method(self):
-        test_path = "../scrape/some_date/test/some_other_dir/some_file"
+        test_path = "../scrapes/some_date/test/some_other_dir/some_file"
 
         assert PrepData.GetPath.get_scrape_type(test_path) == "test"
 
