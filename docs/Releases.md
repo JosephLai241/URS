@@ -21,9 +21,14 @@
             + `-wc` - Wordcloud generator.
             + `--nosave` - Only display the wordcloud; do not save to file.
         * Removed `--json` flag.
+        * Added additional verbose feedback if invalid arguments are given.
     + Added new art for the word frequencies and wordcloud generators.
     + Upgraded from relative to absolute imports.
     + Replaced old header comments with minimalist comment block.
+* Numerous changes to tests:
+    + Updated absolute imports to match new directory structure.
+    + Added additional tests for analytical tools.
+    + Updated a few tests to match new changes made in the source code.
 * Numerous changes to the `README`. Here is a list of the most significant changes/additions:
     + Created new Contact section and moved contact badges into it.
     + Added new sections for the analytical tools.
