@@ -22,7 +22,16 @@
             + `--nosave` - Only display the wordcloud; do not save to file.
         * Removed `--json` flag.
         * Added additional verbose feedback if invalid arguments are given.
-    + Added new art for the word frequencies and wordcloud generators.
+    + Added new log decorators
+        * Added new decorator to log individual argument errors.
+        * Added new decorator to log when no Reddit objects are left to scrape after failing validation check.
+        * Added new decorator to log when an invalid file is passed into the analytical tools.
+        * Added new decorator to log when the `scrapes` directory is missing, which would cause the new `make_analytics_directory()` method in `DirInit.py` to fail. This decorator is also defined in the same file to avoid a circular import error.
+    + Numerous changes to ASCII art
+        * Added new art for the word frequencies and wordcloud generators.
+        * Added new error art displayed when Reddit object validation is completed and there are no objects left to scrape for.
+        * Added new error art displayed when an invalid file is passed into the analytical tools.
+        * Modified the args error art to display specific feedback when invalid arguments are passed.
     + Upgraded from relative to absolute imports.
     + Replaced old header comments with minimalist comment block.
 * Numerous changes to tests:
