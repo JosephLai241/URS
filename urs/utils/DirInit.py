@@ -5,9 +5,50 @@ Initialize directories in which scraped or analytical data is stored.
 """
 
 
+import logging
 import os
 
 from urs.utils.Global import date
+from urs.utils.Titles import Errors
+
+class LogMissingDir():
+    """
+    Decorator for logging missing `scrapes` directory. This decorator has been
+    defined in this file to avoid a circular import error.
+    """
+
+    @staticmethod
+    def log(function):
+        """
+        Log missing directory when running analytical tools.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Exceptions
+        ----------
+        FileNotFoundError:
+            Raised if the file is not located within the correct sub-directory
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
+        def wrapper(*args):
+            try:
+                function(*args)
+            except FileNotFoundError:
+                Errors.i_title("Invalid `scrapes` directory structure.")
+                logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
+                logging.critical("Invalid `scrapes` directory structure.\n")
+                quit()
+
+        return wrapper
 
 class InitializeDirectory():
     """
@@ -55,6 +96,7 @@ class InitializeDirectory():
             os.mkdir(scrape_dir)
     
     @staticmethod
+    @LogMissingDir.log
     def make_analytics_directory(date_dir, tool_type):
         """
         Make analytics directory if it does not exist.
