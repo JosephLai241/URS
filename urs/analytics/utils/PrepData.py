@@ -7,12 +7,15 @@ Helper methods to prepare data for frequencies, wordcloud, or chart generators.
 
 import json
 
+from urs.utils.Logger import LogAnalyticsErrors
+
 class GetPath():
     """
     Methods for determining file paths.
     """
 
     @staticmethod
+    @LogAnalyticsErrors.log_invalid_top_dir
     def get_scrape_type(file):
         """
         Get the name of the scrape-specific directory in which the data is stored.
