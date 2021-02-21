@@ -592,7 +592,7 @@ class TestCheckPRAWCliCheckSubredditMethod():
         try:
             Cli.CheckPRAWCli().check_subreddit(args)
             assert False
-        except ValueError:
+        except SystemExit:
             assert True
 
 class TestCheckPRAWCliCheckRedditorMethod():
@@ -614,7 +614,7 @@ class TestCheckPRAWCliCheckRedditorMethod():
         try:
             Cli.CheckPRAWCli().check_redditor(args)
             assert False
-        except ValueError:
+        except SystemExit:
             assert True
 
 class TestCheckPRAWCliCheckCommentsMethod():
@@ -637,7 +637,7 @@ class TestCheckPRAWCliCheckCommentsMethod():
             Cli.CheckPRAWCli().check_comments(args)
             print(args.comments)
             assert False
-        except ValueError:
+        except SystemExit:
             assert True
 
 class TestCheckAnalyticCliInitMethod():
