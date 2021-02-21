@@ -217,7 +217,7 @@ class LogError():
         def wrapper(reddit):
             user_limits = function(reddit)
 
-            logging.info("RATE LIMIT DISPLAYED")
+            logging.info("RATE LIMIT DISPLAYED.")
             logging.info("Remaining requests: %s" % int(user_limits["remaining"]))
             logging.info("Used requests: %s" % user_limits["used"])
             logging.info("")
