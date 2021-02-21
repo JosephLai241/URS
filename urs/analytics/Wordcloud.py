@@ -139,7 +139,7 @@ class FinalizeWordcloud():
         InitializeDirectory.make_analytics_directory(date_dir, "wordclouds")
         wc.to_file(filename)     
 
-        confirmation = "\nWordcloud exported to %s" % filename
+        confirmation = "\nWordcloud exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):])
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
@@ -181,10 +181,11 @@ class GenerateWordcloud():
         AnalyticsTitles.wc_title()
 
         for file in args.wordcloud:
+            scrape_type = GetPath.get_scrape_type(file[0])
+
             print("\nGenerating wordcloud...")
             print("\nThis may take a while. Please wait.\n")
-
-            scrape_type = GetPath.get_scrape_type(file[0])
+            
             wc = SetUpWordcloud.initialize_wordcloud(file, scrape_type)
             plt = SetUpWordcloud.modify_wordcloud(wc)
             
