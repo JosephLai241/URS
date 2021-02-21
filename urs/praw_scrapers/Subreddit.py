@@ -5,6 +5,8 @@ Defining methods for the Subreddit scraper.
 """
 
 
+import logging
+
 from colorama import (
     init, 
     Fore, 
@@ -662,6 +664,9 @@ class SortPosts():
         
         if args.rules:
             print(Fore.CYAN + Style.BRIGHT + "\nIncluding Subreddit rules...")
+            logging.info("Including Subreddit rules...")
+            logging.info("")
+            
             self._add_json_subreddit_rules(json_data, post_requirements, rules)
         
         for post in collected:
