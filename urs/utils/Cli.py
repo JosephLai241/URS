@@ -709,6 +709,7 @@ class CheckPRAWCli():
             "year"
         ]
 
+    @LogError.log_args("SUBREDDIT N_RESULTS")
     def _check_n_results(self, n_results, sub):
         """
         Check n_results within Subreddit args.
@@ -736,9 +737,9 @@ class CheckPRAWCli():
                 if int(n_results) == 0:
                     raise ValueError
             except ValueError:
-                print(Fore.RED + Style.BRIGHT + "\nINVALID SUBREDDIT N_RESULTS.")
                 raise ValueError
-
+    
+    @LogError.log_args("SUBREDDIT ARGS")
     def check_subreddit(self, args):
         """
         Check all Subreddit args. 
@@ -780,6 +781,7 @@ class CheckPRAWCli():
 
                 self._check_n_results(sub[2], sub)
 
+    @LogError.log_args("REDDITOR ARGS")
     def check_redditor(self, args):
         """
         Check all Redditor args.
@@ -800,12 +802,12 @@ class CheckPRAWCli():
         """
 
         for user in args.redditor:
-            if user[1].isalpha() \
+            if any(char.isalpha() for char in user[1]) \
             or self._illegal_chars.search(user[1]) != None \
             or int(user[1]) == 0:
-                print(Fore.RED + Style.BRIGHT + "\nINVALID REDDITOR N_RESULTS.")
                 raise ValueError
 
+    @LogError.log_args("SUBMISSION ARGS")
     def check_comments(self, args):
         """
         Check all submission comments args.
@@ -826,9 +828,8 @@ class CheckPRAWCli():
         """
 
         for submission in args.comments:
-            if submission[1].isalpha() \
+            if any(char.isalpha() for char in submission[1]) \
             or self._illegal_chars.search(submission[1]) != None:
-                print(Fore.RED + Style.BRIGHT + "\nINVALID SUBMISSION N_RESULTS.")
                 raise ValueError
 
 class CheckAnalyticCli():
@@ -882,9 +883,9 @@ class CheckAnalyticCli():
         try:
             _ = open("%s" % file)
         except FileNotFoundError:
-            print(Fore.RED + Style.BRIGHT + "\nINVALID FILE.")
             raise ValueError
 
+    @LogError.log_args("SCRAPE FILE FOR FREQUENCIES")
     def check_frequencies(self, args):
         """
         Check all frequencies args. 
@@ -911,6 +912,7 @@ class CheckAnalyticCli():
         for file in args.frequencies:
             self._check_valid_file(file[0])
 
+    @LogError.log_args("SCRAPE FILE FOR WORDCLOUD")
     def check_wordcloud(self, args):
         """
         Check all wordcloud args. 
@@ -955,7 +957,6 @@ class CheckCli():
     Methods for checking CLI arguments and raising errors if they are invalid.
     """
 
-    @LogError.log_args
     def check_args(self, args, parser):
         """
         Check all arguments. Calls previously defined methods:
