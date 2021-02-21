@@ -138,9 +138,18 @@ class Errors():
     """
 
     @staticmethod
-    def e_title():
+    def e_title(invalid_message):
         """
         Print error title.
+
+        Parameters
+        ----------
+        invalid_message: str
+            String denoting the specific error in arguments
+
+        Returns
+        -------
+        None
         """
 
         print(Fore.RED + Style.BRIGHT + r"""
@@ -148,8 +157,53 @@ class Errors():
  /'__`\ 
 /\  __/ 
 \ \____\
- \/____/... Please recheck args or refer to help or usage examples.
-""")
+ \/____/... %s
+ 
+Please recheck args or refer to help or usage examples.
+""" % invalid_message)
+
+    @staticmethod
+    def n_title(reddit_object):
+        """
+        Print exiting title when there are no Reddit objects left to scrape.
+
+        Parameters
+        ----------
+        reddit_object: str
+            String denoting the Reddit object type
+
+        Returns
+        -------
+        None
+        """
+
+        print(Fore.RED + Style.BRIGHT + r"""
+  ___    
+/' _ `\  
+/\ \/\ \ 
+\ \_\ \_\
+ \/_/\/_/... No %s to scrape! Exiting.     
+""" % reddit_object)
+
+    @staticmethod
+    def i_title(error):
+        """
+        Print invalid file title.
+
+        Parameters
+        ----------
+        error: str
+            String denoting the specific error associated with invalid files
+        """
+
+        print(Fore.RED + Style.BRIGHT + r"""
+ __    
+/\_\   
+\/\ \  
+ \ \ \ 
+  \ \_\
+   \/_/... %s     
+""" % error)
 
     @staticmethod
     def p_title(error):
