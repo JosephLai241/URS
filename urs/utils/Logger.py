@@ -94,7 +94,7 @@ class LogMain():
 
 class LogError():
     """
-    Decorator for logging args, PRAW, or rate limit errors.
+    Decorator for logging args, PRAW, rate limit, or no objects to scrape errors.
     """
 
     @staticmethod
@@ -131,19 +131,14 @@ class LogError():
         return wrapper
 
     @staticmethod
-    def log_args(function):
+    def log_args(error):
         """
-        Wrapper for logging argument errors.
+        Wrapper for logging individual (specific) arg errors.
 
         Parameters
         ----------
-        function: function()
-            Run method within the wrapper
-
-        Exceptions
-        ----------
-        ValueError:
-            Raised if invalid args were entered 
+        error: str
+            String denoting the specific error that was raised when processing args
 
         Returns
         -------
@@ -152,15 +147,18 @@ class LogError():
             decorator
         """
 
-        def wrapper(self, args, parser):
-            try:
-                function(self, args, parser)
-            except ValueError:
-                Errors.e_title()
-                logging.critical("INVALID ARGUMENTS GIVEN.\n")
-                parser.exit()
-
-        return wrapper
+        def decorator(function):
+            def wrapper(*args):
+                try:
+                    function(*args)
+                except ValueError:
+                    Errors.e_title("INVALID %s." % error)
+                    logging.critical("INVALID %s." % error)
+                    logging.critical("ABORTING URS.\n")
+                    quit()
+                
+            return wrapper
+        return decorator
 
     @staticmethod
     def log_login(function):
@@ -231,6 +229,37 @@ class LogError():
             
             return user_limits
         return wrapper
+
+    @staticmethod
+    def log_none_left(reddit_object):
+        """
+        Wrapper for logging if nothing was left to scrape after validation, 
+        subsequently terminating URS.
+
+        Parameters
+        ----------
+        reddit_object: str
+            String denoting the Reddit object to pass into the exit message
+
+        Returns
+        -------
+        decorator: function()
+            Return the decorator function that runs the method passed into this
+            method
+        """
+
+        def decorator(function):
+            def wrapper(*args):
+                try:
+                    return function(*args)
+                except ValueError:
+                    Errors.n_title(reddit_object)
+                    logging.critical("No %s left to scrape." % reddit_object)
+                    logging.critical("Exiting.\n")
+                    quit()
+                
+            return wrapper
+        return decorator
 
 class LogPRAWScraper():
     """
@@ -512,6 +541,44 @@ class LogPRAWScraper():
                 logging.info("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
                 quit()
             
+        return wrapper
+
+class LogAnalyticsErrors():
+    """
+    Decorator for logging errors while exporting analytical data.
+    """
+
+    @staticmethod
+    def log_invalid_top_dir(function):
+        """
+        Log invalid top directory when running analytical tools.
+
+        Parameters
+        ----------
+        function: function()
+            Run method within the wrapper
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if the file is not located within the scrapes directory
+
+        Returns
+        -------
+        wrapper: function()
+            Return the wrapper method that runs the method passed into the
+            decorator
+        """
+
+        def wrapper(*args):
+            try:
+                return function(*args)
+            except ValueError:
+                Errors.i_title("Scrape data is not located within the `scrapes` directory.")
+                logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
+                logging.critical("Scrape data is not located within the `scrapes` directory.\n")
+                quit()
+
         return wrapper
 
 class LogAnalytics():
