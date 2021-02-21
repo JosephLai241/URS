@@ -34,6 +34,7 @@
         * Modified the args error art to display specific feedback when invalid arguments are passed.
     + Upgraded from relative to absolute imports.
     + Replaced old header comments with minimalist comment block.
+    + Upgraded method comments to Numpy/Scipy docstring format.
 * Numerous changes to tests:
     + Updated absolute imports to match new directory structure.
     + Added additional tests for analytical tools.
