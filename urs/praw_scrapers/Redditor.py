@@ -28,6 +28,7 @@ from urs.utils.Global import (
     s_t
 )
 from urs.utils.Logger import (
+    LogError,
     LogExport, 
     LogPRAWScraper
 )
@@ -43,6 +44,7 @@ class CheckRedditors():
     """
 
     @staticmethod
+    @LogError.log_none_left("Redditors")
     def list_redditors(parser, reddit, user_list):
         """
         Check if Redditors exist and list Redditors who are not found.
@@ -75,9 +77,7 @@ class CheckRedditors():
             print(*not_users, sep = "\n")
 
         if not users:
-            print(Fore.RED + Style.BRIGHT + "\nNo Redditors to scrape!")
-            print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
-            quit()
+            raise ValueError
 
         return users
 

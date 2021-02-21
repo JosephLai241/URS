@@ -24,6 +24,7 @@ from urs.utils.Global import (
     s_t
 )
 from urs.utils.Logger import (
+    LogError,
     LogExport,
     LogPRAWScraper
 )
@@ -71,6 +72,7 @@ class PrintSubs():
         return subs, not_subs
 
     @staticmethod
+    @LogError.log_none_left("Subreddits")
     def print_subreddits(parser, reddit, search_for):
         """
         Print valid and invalid Subreddits.
@@ -109,9 +111,7 @@ class PrintSubs():
             print(*not_subs, sep = "\n")
 
         if not subs:
-            print(Fore.RED + Style.BRIGHT + "\nNo Subreddits to scrape!")
-            print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
-            quit()
+            raise ValueError
 
         return subs
 

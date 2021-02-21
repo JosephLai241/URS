@@ -25,6 +25,7 @@ from urs.utils.Global import (
     s_t
 )
 from urs.utils.Logger import (
+    LogError,
     LogExport, 
     LogPRAWScraper
 )
@@ -40,6 +41,7 @@ class CheckSubmissions():
     """
 
     @staticmethod
+    @LogError.log_none_left("submissions")
     def list_submissions(parser, post_list, reddit):
         """
         Check if submissions exist and list posts that are not found.
@@ -72,9 +74,7 @@ class CheckSubmissions():
             print(*not_posts, sep = "\n")
 
         if not posts:
-            print(Fore.RED + Style.BRIGHT + "\nNo submissions to scrape!")
-            print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
-            quit()
+            raise ValueError
 
         return posts
 
