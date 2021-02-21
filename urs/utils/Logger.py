@@ -153,7 +153,7 @@ class LogError():
                     function(*args)
                 except ValueError:
                     Errors.e_title("INVALID %s." % error)
-                    logging.critical("INVALID %s." % error)
+                    logging.critical("RECEIVED INVALID %s." % error)
                     logging.critical("ABORTING URS.\n")
                     quit()
                 
