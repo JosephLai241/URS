@@ -192,7 +192,7 @@ class PrintConfirm():
         None
         """
 
-        confirmation = "\nFrequencies exported to %s" % filename
+        confirmation = "\nFrequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):])
         print(Style.BRIGHT + Fore.GREEN + confirmation)
         print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
@@ -233,11 +233,10 @@ class GenerateFrequencies():
         AnalyticsTitles.f_title()
 
         for file in args.frequencies:
-            print("\nGenerating frequencies...")
-
-            plt_dict = Sort().get_data(file)
             f_type, filename = Sort().name_and_create_dir(args, file)
 
+            print("\nGenerating frequencies...")
+            plt_dict = Sort().get_data(file)
             data = Sort().create_csv(plt_dict) \
                 if args.csv \
                 else Sort().create_json(file, plt_dict)
