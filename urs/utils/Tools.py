@@ -5,6 +5,8 @@ Running all tools that URS has to offer.
 """
 
 
+import logging
+
 from urs.analytics.Frequencies import GenerateFrequencies
 from urs.analytics.Wordcloud import GenerateWordcloud
 
@@ -74,6 +76,9 @@ class Run():
             """
             Run rate limit check.
             """
+
+            logging.info("RUNNING API CREDENTIALS CHECK.")
+            logging.info("")
 
             Validation.validate_user(self._parser, self._reddit)
 
