@@ -389,7 +389,7 @@ I recommend only exporting to CSV when using:
 + The Subreddit scraper
 + The word frequencies generator
 
-The default file format for these tools is still JSON, but they are also suitable for CSV format and are optimized to do so if you want to use this format instead.
+These tools are also suitable for CSV format and are optimized to do so if you want to use that format instead.
 
 JSON is the more practical option for Redditor and submission comments scraping, which is why I have designed these scrapers to work best in this format. It is much easier to read the scrape results since Redditor scraping returns attributes that include additional submission or comment attributes. 
 
