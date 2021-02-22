@@ -136,7 +136,7 @@ class Sort():
 
         return {
             "raw_file": file[0],
-            "data": [plt_dict]
+            "data": plt_dict
         }
 
 class ExportFrequencies():
