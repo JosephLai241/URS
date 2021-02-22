@@ -446,15 +446,15 @@ This is a showcase for projects that are built on top of URS!
 [URS Project Email]: mailto:urs_project@protonmail.
 
 <!-- DEMO GIFS: Links to demo GIFS -->
-[Main Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif
+[Main Demo]: https://someimgurlink.com
 
-[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/subreddits_demo.gif
-[Redditor Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/redditors_demo.gif
-[Structured Comments Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/comments_structured_demo.gif
-[Raw Comments Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/comments_raw_demo.gif
+[Subreddit Demo]: https://someimgurlink.com
+[Redditor Demo]: https://someimgurlink.com
+[Structured Comments Demo]: https://someimgurlink.com
+[Raw Comments Demo]: https://someimgurlink.com
 
-[Frequencies Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/frequencies_demo.gif
-[Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/wordcloud_demo.gif
+[Frequencies Demo]: https://someimgurlink.com
+[Wordcloud Demo]: https://someimgurlink.com
 
 <!-- GITHUB LINKS: Links around the URS repo on GitHub -->
 [Issues]: https://github.com/JosephLai241/URS/issues
