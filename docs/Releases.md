@@ -43,6 +43,7 @@
     + Created new Contact section and moved contact badges into it.
     + Added new sections for the analytical tools.
     + Moved Releases section into its own document.
+    + Deleted all media from Github repo - now hosting everything on Imgur instead to avoid unnecessary cloned data.
     + Updated demo GIFs.
 
 ## v3.1.2 - February 05, 2021
