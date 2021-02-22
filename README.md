@@ -68,7 +68,7 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
     + Scrape Redditors
     + Scrape submission comments
 * Analytical tools for scraped data
-    + Get frequencies for words that are present in submission titles, bodies, and/or comments
+    + Get frequencies for words that are found in submission titles, bodies, and/or comments
     + Generate a wordcloud from scrape results
     
 Run `pip install -r requirements.txt` to get all project dependencies. 
