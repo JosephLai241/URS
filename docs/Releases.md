@@ -2,113 +2,182 @@
 
 ## v3.2.0 - February TBD, 2021
 
-* JSON is now the default export option unless `--csv` is specified.
-    + Improved JSON structure.
-* Added analytical tools:
-    + Word frequencies generator.
-    + Wordcloud generator.
-* Changes to the log:
-    + `scrapes.log` is now named `urs.log`.
-    + Rate limit information is now included in the log.
-* Numerous changes to source code:
-    + Moved PRAW scrapers into its own package.
-    + Numerous changes to the CLI:
-        * Added new flags:
+### Added
+
+* User Interface
+    + Analytical tools
+        * Word frequencies generator.
+        * Wordcloud generator.
+* Source code
+    + CLI
+        * Flags
             + `-e` - Display additional example usage.
             + `--check` - Runs a quick check for PRAW credentials and displays the rate limit table after validation.
-            + `--rules` - Include the Subreddit's rules in the scrape data (for JSON only).
+            + `--rules` - Include the Subreddit's rules in the scrape data (for JSON only). This data is included in the `subreddit_rules` field.
             + `-f` - Word frequencies generator.
             + `-wc` - Wordcloud generator.
             + `--nosave` - Only display the wordcloud; do not save to file.
-        * Removed `--json` flag.
         * Added additional verbose feedback if invalid arguments are given.
-    + Added new log decorators
+    + Log decorators
         * Added new decorator to log individual argument errors.
         * Added new decorator to log when no Reddit objects are left to scrape after failing validation check.
         * Added new decorator to log when an invalid file is passed into the analytical tools.
         * Added new decorator to log when the `scrapes` directory is missing, which would cause the new `make_analytics_directory()` method in `DirInit.py` to fail. This decorator is also defined in the same file to avoid a circular import error.
-    + Numerous changes to ASCII art
+    + ASCII art
         * Added new art for the word frequencies and wordcloud generators.
         * Added new error art displayed when Reddit object validation is completed and there are no objects left to scrape for.
         * Added new error art displayed when an invalid file is passed into the analytical tools.
+* `README` 
+    + Added new Contact section and moved contact badges into it.
+    + Added new sections for the analytical tools.
+* Tests
+    + Added additional tests for analytical tools.
+
+### Changed
+
+* User interface
+    + JSON is now the default export option. `--csv` flag is required to export to CSV.
+    + Improved JSON structure.
+        * PRAW scraping export structure:
+            + Scrape details are now included at the top of each exported file in the `scrape_details` field.
+            + Scrape data is now stored in the `data` field.
+                * Subreddit scraping - `data` is a list containing submission objects.
+                * Redditor scraping - `data` is an object containing additional nested dictionaries: `information` denoting Redditor metadata, and `interactions` denoting Redditor interactions (submissions and/or comments).
+                * Submission comments scraping - `data` is an object containing additional nested dictionaries.
+                    + Raw comments contains dictionaries of `comment_id: SUBMISSION_METADATA`.
+                    + Structured comments follows the structure seen in raw comments, but includes an extra `replies` field in the submission metadata and holds a list of additional nested dictionaries of `comment_id: SUBMISSION_METADATA`. This pattern repeats down to third level replies.
+        * Word frequencies export structure:
+            + The original scrape data filepath is included in the `raw_file` field.
+            + `data` is a dictionary containing `word: frequency`.
+* Source code
+    + Log:
+        * `scrapes.log` is now named `urs.log`.
+        * Rate limit information is now included in the log.
+    + Moved PRAW scrapers into its own package.
+    + ASCII art:
         * Modified the args error art to display specific feedback when invalid arguments are passed.
     + Upgraded from relative to absolute imports.
-    + Replaced old header comments with minimalist comment block.
+    + Replaced old header comments with docstring comment block.
     + Upgraded method comments to Numpy/Scipy docstring format.
-* Numerous changes to tests:
-    + Updated absolute imports to match new directory structure.
-    + Added additional tests for analytical tools.
-    + Updated a few tests to match new changes made in the source code.
-* Numerous changes to the `README`. Here is a list of the most significant changes/additions:
-    + Created new Contact section and moved contact badges into it.
-    + Added new sections for the analytical tools.
+* `README`
     + Moved Releases section into its own document.
     + Deleted all media from Github repo - now hosting everything on Imgur instead to avoid unnecessary cloned data.
     + Updated demo GIFs.
+* Tests
+    + Updated absolute imports to match new directory structure.
+    + Updated a few tests to match new changes made in the source code.
+
+### Deprecated
+
+* User interface
+    + Removed the `--json` flag since it is now the default export option.
 
 ## v3.1.2 - February 05, 2021
 
-* Scrapes will now be exported to sub-folders within the date directory.
-    + `comments`, `redditors`, and `subreddits` directories are now created for you when you run each scraper. Scrape results will now be stored within these directories.
-* Minor code reformatting and refactoring.
-    + The forbidden access message that may appear when running the Redditor scraper is now yellow to avoid confusion.
-* Updated `README` and `STYLE_GUIDE`. Made a minor change to PRAW credentials guide.
+### Added
+
+* User interface
+    + Scrapes will now be exported to sub-folders within the date directory.
+        * `comments`, `redditors`, and `subreddits` directories are now created for you when you run each scraper. Scrape results will now be stored within these directories.
+* `README`
     + Added new Derivative Projects section.
+
+### Changed
+
+* Source code
+    + Minor code reformatting and refactoring.
+    + The forbidden access message that may appear when running the Redditor scraper is now yellow to avoid confusion.
+* Updated `README` and `STYLE_GUIDE`. 
     + Uploaded new demo GIFs.
+* Made a minor change to PRAW credentials guide.
 
 ## v3.1.1 - June 27, 2020
 
-* Added time filters for Subreddit categories (Controversial, Top, Search).
-* Updated `README` to reflect new changes.
-* Updated style guide.
-    + Made minor formatting changes to scripts to reflect new rules.
-* Performed DRY code review.
+### Added
 
+* User interface
+    + Added time filters for Subreddit categories (Controversial, Top, Search).
+
+### Changed
+
+* Source code
+    + Changed how arguments are processed in the CLI.
+    + Performed DRY code review.
+* `README`
+    + Updated `README` to reflect new changes.
+* Community documents
+    + Updated `STYLE_GUIDE`.
+        * Made minor formatting changes to scripts to reflect new rules.
 
 ## v3.1.0 - June 22, 2020
 
-* Major code refactor. Applied OOP concepts to existing code and rewrote methods in attempt to improve readability, maintenance, and scalability.
-* Scrapes will now be exported to the `scrapes/` directory within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.
-* Added log decorators that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.
-* Replaced bulky titles with minimalist titles for a cleaner look.
-* Added color to terminal output.
-* Improved naming convention for scripts.
-* Integrating Travis CI and Codecov.
-* Updated community documents located in the `.github/` directory: 
-    + `BUG_REPORT`
-    + `CONTRIBUTING`
-    + `FEATURE_REQUEST`
-    + `PULL_REQUEST_TEMPLATE`
-    + `STYLE_GUIDE`
-* Numerous changes to `README`. The most significant change was splitting and storing walkthroughs in `docs/`.
+### Added
+
+* User interface
+    + Scrapes will now be exported to the `scrapes/` directory within a subdirectory corresponding to the date of the scrape. These directories are automatically created for you when you run URS.
+
+* Source code
+    + Major code refactor. Applied OOP concepts to existing code and rewrote methods in attempt to improve readability, maintenance, and scalability.
+    + Added log decorators that record what is happening during each scrape, which scrapes were ran, and any errors that might arise during runtime in the log file `scrapes.log`. The log is stored in the same subdirectory corresponding to the date of the scrape.
+    + Added color to terminal output.
+    + Integrating Travis CI and Codecov.
+
+### Changed
+
+* Source code
+    + Replaced bulky titles with minimalist titles for a cleaner look.
+    + Improved naming convention for scripts.
+* Community documents
+    + Updated the following documents:
+        * `BUG_REPORT`
+        * `CONTRIBUTING`
+        * `FEATURE_REQUEST`
+        * `PULL_REQUEST_TEMPLATE`
+        * `STYLE_GUIDE`
+* `README`
+    + Numerous changes, the most significant change was splitting and storing walkthroughs in `docs/`.
 
 ## v3.0.0 - December 28, 2019 - January 15, 2020
 
 * **Final Release - January 15, 2020**
-    + Numerous changes to `README`.
-    + Fulfilled community standards by adding the following docs:
-        * [Contributing Guide][Contributing Guide]
-        * [Pull Request Template][Pull Request Template]
-        * [Code of Conduct][Code of Conduct]
-        * [License][License]
-        * Issue templates:
-            + [Bug Report][Bug Report]
-            + [Feature Request][Feature Request]
+    + **Added**
+        + Community documents
+            + Fulfilled community standards by adding the following docs:
+                * [Contributing Guide][Contributing Guide]
+                * [Pull Request Template][Pull Request Template]
+                * [Code of Conduct][Code of Conduct]
+                * [License][License]
+                * Issue templates:
+                    + [Bug Report][Bug Report]
+                    + [Feature Request][Feature Request]
+    + **Changed**
+        * `README`
+            + Numerous changes.
 * **Official Release - December 31, 2019**
-    + Comments scraping is now working!
-    + Added additional exception handling for creating filenames.
-    + Minor code reformatting.
-    + Simplified verbose output.
-    + Added an additional submission attribute when scraping Redditors.
+    + **Added**
+        * User interface
+            + Comments scraping is now working!
+            + Added additional exception handling for creating filenames.
+            + Added an additional submission attribute when scraping Redditors.
+    + **Changed**
+        * User interface
+            + Simplified verbose output.
+        * Source code
+            + Minor code reformatting.
     + Happy New Year!
 * **Beta Release - December 28, 2019**
-    + Added JSON export option.
-    + Added Redditor scraping.
+    + **Added**
+        * User interface
+            + Added JSON export option.
+            + Added Redditor scraping.
     + Comments scraping is still under construction.
 
 ## v2.0.0 - July 29, 2019
 
-* Added CLI support.
+### Added
+
+* User interface
+    + Added CLI support.
 
 ## v1.0.0 - May 25, 2019
 
