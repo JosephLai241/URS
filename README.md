@@ -12,7 +12,7 @@
 ![License](https://img.shields.io/github/license/JosephLai241/URS)
 
 <p align="center"> 
-    <img src="https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Demo%20GIFs/DEMO.gif">
+    <img src="https://github.com/JosephLai241/URS/blob/master/.github/screenshots/Demo%20GIFs/DEMO.gif">
 </p>
 
 # Table of Contents
@@ -484,7 +484,7 @@ This is a showcase for projects that are built on top of URS!
 
 <!-- DERIVATIVE PROJECTS LINKS: Links to projects that were built on top of URS -->
 [skiwheelr Project Link]: https://github.com/skiwheelr/URS
-[skiwheelr screenshot]: https://github.com/JosephLai241/URS/blob/master/.github/Screenshots/Derivative%20Projects/Skiwheelr%20Example%20Results.png
+[skiwheelr screenshot]: https://github.com/JosephLai241/URS/blob/master/.github/screenshots/derivative_projects/skiwheelr_example_results.png
 
 <!-- ADDITIONAL LINKS: A space for useful links -->
 [tree]: http://mama.indstate.edu/users/ice/tree
