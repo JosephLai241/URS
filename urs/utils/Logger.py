@@ -577,13 +577,13 @@ class LogAnalyticsErrors():
                 return function(*args)
             except ValueError:
                 Errors.i_title("Scrape data is not located within the `scrapes` directory.")
-                logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
+                logging.critical("AN ERROR HAS OCCURRED WHILE PROCESSING SCRAPE DATA.")
                 logging.critical("Scrape data is not located within the `scrapes` directory.")
                 logging.critical("ABORTING URS.\n")
                 quit()
             except TypeError:
                 Errors.i_title("Invalid file format. Try again with a valid JSON file.")
-                logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
+                logging.critical("AN ERROR HAS OCCURRED WHILE PROCESSING SCRAPE DATA.")
                 logging.critical("Invalid file format.")
                 logging.critical("ABORTING URS.\n")
                 quit()
@@ -728,7 +728,8 @@ class LogAnalytics():
                 logging.info(LogAnalytics._get_export_switch(args[1]))
                 logging.info("")
             except Exception as e:
-                logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
+                Errors.ex_title(e)
+                logging.critical("AN ERROR HAS OCCURRED WHILE EXPORTING SCRAPED DATA.")
                 logging.critical("%s" % e)
                 logging.critical("ABORTING URS.\n")
                 quit()
@@ -847,7 +848,8 @@ class LogExport():
                 logging.info(LogExport._get_export_switch(args[0]))
                 logging.info("")
             except Exception as e:
-                logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
+                Errors.ex_title(e)
+                logging.critical("AN ERROR HAS OCCURRED WHILE EXPORTING SCRAPED DATA.")
                 logging.critical("%s" % e)
                 logging.critical("ABORTING URS.\n")
                 quit()
