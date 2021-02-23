@@ -14,7 +14,7 @@
 <p align="center"> 
     <img 
         alt="Full Demo"
-        src="https://github.com/JosephLai241/URS/blob/master/.github/screenshots/Demo%20GIFs/DEMO.gif">
+        src="https://i.imgur.com/lEDB7wP.png">
 </p>
 
 # Table of Contents
