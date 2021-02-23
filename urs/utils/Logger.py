@@ -192,7 +192,8 @@ class LogError():
             except PrawcoreException as error:
                 Errors.p_title(error)
                 logging.critical("LOGIN FAILED.")
-                logging.critical("PRAWCORE EXCEPTION: %s.\n" % error)
+                logging.critical("PRAWCORE EXCEPTION: %s." % error)
+                logging.critical("ABORTING URS.\n")
                 parser.exit()
 
         return wrapper
@@ -224,7 +225,8 @@ class LogError():
 
             if int(user_limits["remaining"]) == 0:
                 Errors.l_title(convert_time(user_limits["reset_timestamp"]))
-                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s.\n" % convert_time(user_limits["reset_timestamp"]))
+                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s." % convert_time(user_limits["reset_timestamp"]))
+                logging.critical("ABORTING URS.\n")
                 quit()
             
             return user_limits
@@ -254,8 +256,8 @@ class LogError():
                     return function(*args)
                 except ValueError:
                     Errors.n_title(reddit_object)
-                    logging.critical("No %s left to scrape." % reddit_object)
-                    logging.critical("Exiting.\n")
+                    logging.critical("NO %s LEFT TO SCRAPE." % reddit_object)
+                    logging.critical("ABORTING URS.\n")
                     quit()
                 
             return wrapper
@@ -576,7 +578,14 @@ class LogAnalyticsErrors():
             except ValueError:
                 Errors.i_title("Scrape data is not located within the `scrapes` directory.")
                 logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
-                logging.critical("Scrape data is not located within the `scrapes` directory.\n")
+                logging.critical("Scrape data is not located within the `scrapes` directory.")
+                logging.critical("ABORTING URS.\n")
+                quit()
+            except TypeError:
+                Errors.i_title("Invalid file format. Try again with a valid JSON file.")
+                logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
+                logging.critical("Invalid file format.")
+                logging.critical("ABORTING URS.\n")
                 quit()
 
         return wrapper
@@ -720,7 +729,9 @@ class LogAnalytics():
                 logging.info("")
             except Exception as e:
                 logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
-                logging.critical("%s\n" % e)
+                logging.critical("%s" % e)
+                logging.critical("ABORTING URS.\n")
+                quit()
 
         return wrapper
 
@@ -837,6 +848,8 @@ class LogExport():
                 logging.info("")
             except Exception as e:
                 logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
-                logging.critical("%s\n" % e)
+                logging.critical("%s" % e)
+                logging.critical("ABORTING URS.\n")
+                quit()
 
         return wrapper
