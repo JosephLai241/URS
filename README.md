@@ -46,7 +46,7 @@
 * [Derivative Projects](#derivative-projects)
 * Supplemental Documents
     + [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
-    + [Error Messages and Rate Limit Information][Error Messages and Rate Limit Info]
+    + [Error Messages][Error Messages]
     + [2-Factor Authentication][2-Factor Authentication]
     + [Releases/Changelog][Releases]
     + [Some Linux Tips][Some Linux Tips]
@@ -501,7 +501,7 @@ This is a showcase for projects that are built on top of URS!
 
 <!-- SEPARATE DOCS: Links to documents located in the docs/ directory -->
 [2-Factor Authentication]: https://github.com/JosephLai241/URS/blob/master/docs/Two-Factor%20Authentication.md
-[Error Messages and Rate Limit Info]: https://github.com/JosephLai241/URS/blob/master/docs/Error%20Messages.md
+[Error Messages]: https://github.com/JosephLai241/URS/blob/master/docs/Error%20Messages.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/How%20to%20Get%20PRAW%20Credentials.md
 [Releases]: https://github.com/JosephLai241/URS/blob/master/docs/Releases.md
 [Some Linux Tips]: https://github.com/JosephLai241/URS/blob/master/docs/Some%20Linux%20Tips.md
