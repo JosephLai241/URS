@@ -1,7 +1,7 @@
 """
 Preparing data for analytical tools
 ===================================
-Helper methods to prepare data for frequencies, wordcloud, or chart generators.
+Helper methods to prepare data for frequencies and wordcloud generators.
 """
 
 
@@ -25,11 +25,21 @@ class GetPath():
         file: str
             String denoting the filepath
 
+        Exceptions
+        ----------
+        TypeError:
+            Raised if the file is not JSON or if the file resides in the `analytics`
+            directory 
+
         Returns
         -------
         scrape_dir: str
             String denoting the scrape-specific directory
         """
+
+        if file.split("/")[-1].split(".")[-1] != "json" \
+        or file.split("/")[file.split("/").index("scrapes") + 2] == "analytics":
+            raise TypeError
         
         return file.split("/")[file.split("/").index("scrapes") + 2]
 
