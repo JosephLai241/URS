@@ -30,6 +30,9 @@
 * `README` 
     + Added new Contact section and moved contact badges into it.
     + Added new sections for the analytical tools.
+    + Updated demo GIFs
+        * Moved all GIFs to a separate branch to avoid unnecessary clones.
+        * Hosting static images on Imgur.
 * Tests
     + Added additional tests for analytical tools.
 
@@ -61,8 +64,7 @@
     + Upgraded method comments to Numpy/Scipy docstring format.
 * `README`
     + Moved Releases section into its own document.
-    + Deleted all media from Github repo - now hosting everything on Imgur instead to avoid unnecessary cloned data.
-    + Updated demo GIFs.
+    + Deleted all media from Github repo.
 * Tests
     + Updated absolute imports to match new directory structure.
     + Updated a few tests to match new changes made in the source code.
