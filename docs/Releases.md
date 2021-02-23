@@ -46,7 +46,7 @@
             + Scrape data is now stored in the `data` field.
                 * Subreddit scraping - `data` is a list containing submission objects.
                 * Redditor scraping - `data` is an object containing additional nested dictionaries: `information` denoting Redditor metadata, and `interactions` denoting Redditor interactions (submissions and/or comments).
-                * Submission comments scraping - `data` is an object containing additional nested dictionaries.
+                * Submission comments scraping - `data` is an list containing additional nested dictionaries.
                     + Raw comments contains dictionaries of `comment_id: SUBMISSION_METADATA`.
                     + Structured comments follows the structure seen in raw comments, but includes an extra `replies` field in the submission metadata and holds a list of additional nested dictionaries of `comment_id: SUBMISSION_METADATA`. This pattern repeats down to third level replies.
         * Word frequencies export structure:
