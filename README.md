@@ -421,7 +421,7 @@ Comments scraping is especially easier to read in JSON format because structured
 
 You can still export Redditor data and submission comments to CSV, but you will be disappointed with the results.
 
-### See the [samples][Samples] for scrapes ran on February TBD, 2021.
+### See the [samples][Samples] for scrapes ran on February 22, 2021.
 
 # Contributing
 
