@@ -46,6 +46,7 @@ class LogMissingDir():
                 Errors.i_title("Invalid `scrapes` directory structure.")
                 logging.critical("AN ERROR HAS OCCURED WHILE PROCESSING SCRAPE DATA.")
                 logging.critical("Invalid `scrapes` directory structure.\n")
+                logging.critical("ABORTING URS.\n")
                 quit()
 
         return wrapper
