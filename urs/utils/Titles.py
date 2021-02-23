@@ -182,7 +182,7 @@ Please recheck args or refer to help or usage examples.
 /' _ `\  
 /\ \/\ \ 
 \ \_\ \_\
- \/_/\/_/... No %s to scrape! Exiting.     
+ \/_/\/_/... No %s to scrape! Aborting URS.     
 """ % reddit_object)
 
     @staticmethod
@@ -258,3 +258,30 @@ Prawcore exception: %s
 
 Please try again when your rate limit is reset: %s
 """ % reset_timestamp)
+
+    @staticmethod
+    def ex_title(error):
+        """
+        Print the export error title.
+
+        Parameters
+        ----------
+        error: str
+            Exception raised while exporting scrape data
+
+        Returns
+        -------
+        None
+        """
+
+        print(Fore.RED + Style.BRIGHT + r"""
+ __     
+/\ \    
+\ \ \   
+ \ \ \  
+  \ \_\ 
+   \/\_\
+    \/_/... An error has occurred while exporting scraped data.
+    
+%s
+""" % error)
