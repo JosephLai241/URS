@@ -372,6 +372,8 @@ For submission comments scrapes, data is only pulled from the "text" field of ea
 
 ![Frequencies Demo][Frequencies Demo]
 
+\*This GIF is uncut.
+
 **Usage:** `$ ./Urs.py -f FILE_PATH` 
 
 **Supported export formats:** JSON and CSV. To export to CSV, include the `--csv` flag.
@@ -387,6 +389,8 @@ Exported files will be saved to the `analytics/frequencies` directory.
 ### Generating Wordclouds
 
 ![Wordcloud Demo][Wordcloud Demo]
+
+\*This GIF is uncut.
 
 **Usage:** `$ ./Urs.py -wc FILE_PATH`
 
