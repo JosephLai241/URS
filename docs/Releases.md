@@ -64,7 +64,7 @@
     + Upgraded method comments to Numpy/Scipy docstring format.
 * `README`
     + Moved Releases section into its own document.
-    + Deleted all media from Github repo.
+    + Deleted all media from master branch.
 * Tests
     + Updated absolute imports to match new directory structure.
     + Updated a few tests to match new changes made in the source code.
