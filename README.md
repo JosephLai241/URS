@@ -166,7 +166,9 @@ These attributes are included in each scrape.
 
 ### Subreddits
 
-![Subreddit Demo GIF][Subreddit Demo]
+<img
+    alt="Subreddit Demo GIF"
+    src="https://i.imgur.com/ikAxcwe.gif">
 
 \*This GIF is uncut.
 
@@ -230,7 +232,9 @@ Exported files will be saved to the `subreddits` directory.
 
 ### Redditors
 
-![Redditor Demo GIF][Redditor Demo]
+<img
+    alt="Redditor Demo GIF"
+    src="https://i.imgur.com/QTZuztr.gif">
 
 \*This GIF has been cut for demonstration purposes.
 
@@ -280,8 +284,12 @@ Exported files will be saved to the `redditors` directory.
 
 ### Submission Comments
 
-![Structured Comments Demo GIF][Structured Comments Demo]
-![Raw Comments Demo GIF][Raw Comments Demo]
+<img
+    alt="Structured Comments Demo GIF"
+    src="https://i.imgur.com/CJJSfJI.gif">
+<img
+    alt="Raw Comments Demo GIF"
+    src="https://i.imgur.com/sPSYDjZ.gif">
 
 \*These GIFs have been cut for demonstration purposes.
 
@@ -350,7 +358,9 @@ For submission comments scrapes, data is only pulled from the "text" field of ea
 
 ### Generating Word Frequencies
 
-![Frequencies Demo GIF][Frequencies Demo]
+<img
+    alt="Frequencies Demo GIF"
+    src="https://i.imgur.com/mlQAInp.gif">
 
 **Usage:** `$ ./Urs.py -f FILE_PATH` 
 
@@ -366,7 +376,9 @@ Exported files will be saved to the `analytics/frequencies` directory.
 
 ### Generating Wordclouds
 
-![Wordcloud Demo GIF][Wordcloud Demo]
+<img
+    alt="Wordcloud Demo GIF"
+    src="https://i.imgur.com/VyDxVV9.gif">
 
 **Usage:** `$ ./Urs.py -wc FILE_PATH`
 
