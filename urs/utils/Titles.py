@@ -262,7 +262,7 @@ Please try again when your rate limit is reset: %s
     @staticmethod
     def ex_title(error):
         """
-        Print the export error title.
+        Print export error title.
 
         Parameters
         ----------
