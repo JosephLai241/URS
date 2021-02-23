@@ -448,13 +448,13 @@ This is a showcase for projects that are built on top of URS!
 <!-- DEMO GIFS: Links to demo GIFS -->
 [Main Demo]: https://someimgurlink.com
 
-[Subreddit Demo]: https://someimgurlink.com
-[Redditor Demo]: https://someimgurlink.com
-[Structured Comments Demo]: https://someimgurlink.com
-[Raw Comments Demo]: https://someimgurlink.com
+[Subreddit Demo]: https://i.imgur.com/ikAxcwe.gif
+[Redditor Demo]: https://i.imgur.com/QTZuztr.gif
+[Structured Comments Demo]: https://i.imgur.com/CJJSfJI.gif
+[Raw Comments Demo]: https://i.imgur.com/sPSYDjZ.gif
 
-[Frequencies Demo]: https://someimgurlink.com
-[Wordcloud Demo]: https://someimgurlink.com
+[Frequencies Demo]: https://i.imgur.com/mlQAInp.gif
+[Wordcloud Demo]: https://i.imgur.com/VyDxVV9.gif
 
 <!-- GITHUB LINKS: Links around the URS repo on GitHub -->
 [Issues]: https://github.com/JosephLai241/URS/issues
