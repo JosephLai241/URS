@@ -234,9 +234,9 @@ class GenerateFrequencies():
 
         for file in args.frequencies:
             f_type, filename = Sort().name_and_create_dir(args, file)
+            plt_dict = Sort().get_data(file)
 
             print("\nGenerating frequencies...")
-            plt_dict = Sort().get_data(file)
             data = Sort().create_csv(plt_dict) \
                 if args.csv \
                 else Sort().create_json(file, plt_dict)
