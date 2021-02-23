@@ -70,9 +70,12 @@
     + Updated absolute imports to match new directory structure.
     + Updated a few tests to match new changes made in the source code.
 * Community documents
-    + Updated `STYLE_GUIDE`.
+    + Updated `PULL_REQUEST_TEMPLATE`:
+        * Updated section for listing changes that have been made to match new Releases syntax.
+        * Wrapped New Dependencies in a code block.
+    + Updated `STYLE_GUIDE`:
         * Created new rules for method comments.
-    + Added `Releases`.
+    + Added `Releases`:
         * Moved Releases section from main `README` to a separate document.
 
 ### Deprecated
