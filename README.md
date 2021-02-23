@@ -186,9 +186,7 @@ These attributes are included in each scrape.
 
 ### Subreddits
 
-<img
-    alt="Subreddit Demo GIF"
-    src="https://i.imgur.com/ikAxcwe.gif">
+![Subreddit Demo GIF][Subreddit Demo]
 
 \*This GIF is uncut.
 
@@ -252,9 +250,7 @@ Exported files will be saved to the `subreddits` directory.
 
 ### Redditors
 
-<img
-    alt="Redditor Demo GIF"
-    src="https://i.imgur.com/QTZuztr.gif">
+![Redditor Demo GIF][Redditor Demo]
 
 \*This GIF has been cut for demonstration purposes.
 
@@ -304,12 +300,8 @@ Exported files will be saved to the `redditors` directory.
 
 ### Submission Comments
 
-<img
-    alt="Structured Comments Demo GIF"
-    src="https://i.imgur.com/CJJSfJI.gif">
-<img
-    alt="Raw Comments Demo GIF"
-    src="https://i.imgur.com/sPSYDjZ.gif">
+![Structured Comments Demo GIF][Structured Comments Demo]
+![Raw Comments Demo GIF][Raw Comments Demo]
 
 \*These GIFs have been cut for demonstration purposes.
 
@@ -378,9 +370,7 @@ For submission comments scrapes, data is only pulled from the "text" field of ea
 
 ### Generating Word Frequencies
 
-<img
-    alt="Frequencies Demo GIF"
-    src="https://i.imgur.com/mlQAInp.gif">
+![Frequencies Demo][Frequencies Demo]
 
 **Usage:** `$ ./Urs.py -f FILE_PATH` 
 
@@ -396,9 +386,7 @@ Exported files will be saved to the `analytics/frequencies` directory.
 
 ### Generating Wordclouds
 
-<img
-    alt="Wordcloud Demo GIF"
-    src="https://i.imgur.com/VyDxVV9.gif">
+![Wordcloud Demo][Wordcloud Demo]
 
 **Usage:** `$ ./Urs.py -wc FILE_PATH`
 
@@ -478,15 +466,13 @@ This is a showcase for projects that are built on top of URS!
 [URS Project Email]: mailto:urs_project@protonmail.
 
 <!-- DEMO GIFS: Links to demo GIFS -->
-[Main Demo]: https://someimgurlink.com
+[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Subreddit_demo.gif
+[Redditor Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Redditor_demo.gif
+[Structured Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/structured_comments_demo.gif
+[Raw Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/raw_comments_demo.gif
 
-[Subreddit Demo]: https://i.imgur.com/ikAxcwe.gif
-[Redditor Demo]: https://i.imgur.com/QTZuztr.gif
-[Structured Comments Demo]: https://i.imgur.com/CJJSfJI.gif
-[Raw Comments Demo]: https://i.imgur.com/sPSYDjZ.gif
-
-[Frequencies Demo]: https://i.imgur.com/mlQAInp.gif
-[Wordcloud Demo]: https://i.imgur.com/VyDxVV9.gif
+[Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/frequencies_generator_demo.gif
+[Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/wordcloud_generator_demo.gif
 
 <!-- GITHUB LINKS: Links around the URS repo on GitHub -->
 [Issues]: https://github.com/JosephLai241/URS/issues
