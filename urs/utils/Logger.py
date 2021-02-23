@@ -716,7 +716,7 @@ class LogAnalytics():
             try:
                 function(*args)
 
-                logging.info(LogAnalytics._get_export_switch(args[2]))
+                logging.info(LogAnalytics._get_export_switch(args[1]))
                 logging.info("")
             except Exception as e:
                 logging.critical("AN ERROR HAS OCCURED WHILE EXPORTING SCRAPED DATA.")
