@@ -50,12 +50,10 @@ class TestSortCreateJsonMethod():
 
         assert Frequencies.Sort().create_json(file, plt_dict) == {
             "raw_file": "test",
-            "data": [
-                {
-                    "test": 1,
-                    "testing": 2
-                }
-            ]
+            "data": {
+                "test": 1,
+                "testing": 2
+            }
         }
 
 class TestExportFrequenciesExportMethod():
