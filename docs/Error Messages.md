@@ -26,7 +26,9 @@ You can use the `-h` flag to see the help message or the `-e` flag to display ex
      \ \ \  
       \ \_\ 
        \/\_\
-        \/_/... [ERROR MESSAGE]
+        \/_/... An error has occurred while exporting scraped data.
+        
+    [ERROR MESSAGE]
 
 This message is displayed if an error occured while exporting the data. This applies to the scraper tools or word frequencies tool. The specific error will follow `...`.
 
