@@ -34,6 +34,7 @@
         * [Submission Comments](#submission-comments)
     + [Analytical Tools](#analytical-tools)
         * [Target Fields](#target-fields)
+        * [File Names](#file-names)
         * [Generating Word Frequencies](#generating-word-frequencies)
         * [Generating Wordclouds](#generating-wordclouds)
     + [Exporting](#exporting)
@@ -242,7 +243,7 @@ Or if you searched for keywords:
 
 You can also include the Subreddit's rules and post requirements in your scrape data by including the `--rules` flag. **This only works when exporting to JSON.**
 
-If rules are included in your file, `-rules` will be appended to the end of the filename.
+If rules are included in your file, `-rules` will be appended to the end of the file name.
 
 ### Bypassing the Final Settings Check
 
@@ -294,7 +295,7 @@ Of these Redditor attributes, the following will include additional attributes:
 
 The file names will follow this format: 
 
-`"[USERNAME]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
+`"[USERNAME]-[N_RESULTS]-result(s).json"` 
 
 Exported files will be saved to the `redditors` directory.
 
@@ -334,7 +335,7 @@ Of all scrapers included in this program, this usually takes the longest to exec
 
 The file names will follow this format: 
 
-`"[POST_TITLE]-[N_RESULTS]-result(s).[FILE_FORMAT]"` 
+`"[POST_TITLE]-[N_RESULTS]-result(s).json"` 
 
 Exported files will be saved to the `comments` directory.
 
@@ -371,6 +372,12 @@ For Subreddit scrapes, data is pulled from the "title" and "text" fields for eac
 For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The "title" and "body" fields are targeted for submissions, and the "text" field is targeted for comments.
 
 For submission comments scrapes, data is only pulled from the "text" field of each comment.
+
+---
+
+### File Names
+
+File names are identical to the original scrape data so that it is easier to distinguish which analytical file corresponds to which scrape.
 
 ---
 
@@ -459,7 +466,7 @@ You are also more than welcome to create a pull request - adding additional feat
 |----------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | March 11, 2020 | [ThereGoesMySanity][ThereGoesMySanity] | Created a [pull request][ThereGoesMySanity Pull Request] adding 2FA information to README |
 | October 6, 2020 | [LukeDSchenk][LukeDSchenk] | Created a [pull request][LukeDSchenk Pull Request] fixing "[Errno 36] File name too long" issue, making it impossible to save comment scrapes with long titles |
-| October 10, 2020 | [IceBerge421][IceBerge421] | Created a [pull request][IceGerge421 Pull Request] fixing a cloning error occuring on Windows machines due to illegal filename characters, `"`, found in two scrape samples |
+| October 10, 2020 | [IceBerge421][IceBerge421] | Created a [pull request][IceGerge421 Pull Request] fixing a cloning error occuring on Windows machines due to illegal file name characters, `"`, found in two scrape samples |
 
 # Derivative Projects
 
