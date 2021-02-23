@@ -69,6 +69,11 @@
 * Tests
     + Updated absolute imports to match new directory structure.
     + Updated a few tests to match new changes made in the source code.
+* Community documents
+    + Updated `STYLE_GUIDE`.
+        * Created new rules for method comments.
+    + Added `Releases`.
+        * Moved Releases section from main `README` to a separate document.
 
 ### Deprecated
 
