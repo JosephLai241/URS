@@ -246,7 +246,7 @@ If rules are included in your file, `-rules` will be appended to the end of the 
 
 ### Bypassing the Final Settings Check
 
-After submitting the arguments, URS will display a table of Subreddit scraping settings as a final check before executing. You can include the `-y` flag to bypass this and immediately scrape.
+After submitting the arguments and Reddit validation, URS will display a table of Subreddit scraping settings as a final check before executing. You can include the `-y` flag to bypass this and immediately scrape.
 
 Exported files will be saved to the `subreddits` directory.
 
