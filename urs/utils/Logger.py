@@ -256,7 +256,7 @@ class LogError():
                     return function(*args)
                 except ValueError:
                     Errors.n_title(reddit_object)
-                    logging.critical("NO %s LEFT TO SCRAPE." % reddit_object)
+                    logging.critical("NO %s LEFT TO SCRAPE." % reddit_object.upper())
                     logging.critical("ABORTING URS.\n")
                     quit()
                 
