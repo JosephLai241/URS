@@ -25,6 +25,7 @@
         * Added new decorator to log when the `scrapes` directory is missing, which would cause the new `make_analytics_directory()` method in `DirInit.py` to fail. This decorator is also defined in the same file to avoid a circular import error.
     + ASCII art
         * Added new art for the word frequencies and wordcloud generators.
+        * Added new error art displayed when a problem arises during exporting data.
         * Added new error art displayed when Reddit object validation is completed and there are no objects left to scrape for.
         * Added new error art displayed when an invalid file is passed into the analytical tools.
 * `README` 
