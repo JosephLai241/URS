@@ -83,9 +83,8 @@ class NameFile():
 
         Parameters
         ----------
-        cat_i: str or int
-            Either a single character or integer denoting the full category's index
-            or abbreviated category
+        cat_i: str
+            String denoting the abbreviated category
         category_n: int
             Integer denoting a dictionary key
 
@@ -98,20 +97,18 @@ class NameFile():
         switch = {
             0: categories[5],
             1: categories[short_cat.index(cat_i)] \
-                if cat_i != short_cat[5] and isinstance(cat_i, str) \
+                if cat_i != short_cat[5] \
                 else None
         }
 
         return switch.get(category_n)
 
-    def _r_get_category(self, args, cat_i):
+    def _r_get_category(self, cat_i):
         """
         Choose the Subreddit category index.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
         cat_i: int
             Integer denoting the full category's index
 
@@ -121,11 +118,9 @@ class NameFile():
             Integer denoting the selected category's index
         """
 
-        category_n = 0 \
+        return 0 \
             if cat_i == short_cat[5] \
             else 1
-
-        return category_n
 
     def _get_sub_fname(self, category, end, index, n_res_or_kwds, subreddit, time_filter):
         """
@@ -193,7 +188,7 @@ class NameFile():
             Raw filename for Subreddits
         """
 
-        category_n = self._r_get_category(args, cat_i)
+        category_n = self._r_get_category(cat_i)
         category = self._r_category(cat_i, category_n)
 
         ending = None \
