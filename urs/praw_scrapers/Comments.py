@@ -5,6 +5,8 @@ Defining methods for the submission comments scraper.
 """
 
 
+import logging
+
 from colorama import (
     init, 
     Fore, 
@@ -65,18 +67,26 @@ class CheckSubmissions():
             List of valid submission URLs
         """
 
-        print("\nChecking if post(s) exist...")
+        print("\nChecking if submission(s) exist...")
+        logging.info("Validating Subreddits...")
+        logging.info("")
         posts, not_posts = Validation.existence(s_t[2], post_list, parser, reddit, s_t)
         
         if not_posts:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following posts were not found and will be skipped:")
+            print(Fore.YELLOW + Style.BRIGHT + "\nThe following submissions were not found and will be skipped:")
             print(Fore.YELLOW + Style.BRIGHT + "-" * 55)
             print(*not_posts, sep = "\n")
 
-        if not posts:
-            raise ValueError
+            logging.warning("Failed to validate the following submissions:")
+            logging.warning("%s" % (not_posts))
+            logging.warning("Skipping.")
+            logging.info("")
 
-        return posts
+        if not posts:
+            logging.critical("ALL SUBMISSIONS FAILED VALIDATION.")
+            raise ValueError
+        
+        return not_posts, posts
 
 class GetComments():
     """
@@ -646,8 +656,10 @@ class RunComments():
         PRAWTitles.c_title()
 
         post_list = GetPRAWScrapeSettings().create_list(args, s_t[2])
-        posts = CheckSubmissions.list_submissions(parser, post_list, reddit)
+        not_posts, posts = CheckSubmissions.list_submissions(parser, post_list, reddit)
         c_master = make_none_dict(posts)
-        GetPRAWScrapeSettings().get_settings(args, c_master, s_t[2])
+        GetPRAWScrapeSettings().get_settings(args, not_posts, c_master, s_t[2])
 
         Write.write(args, c_master, reddit)
+
+        return c_master
