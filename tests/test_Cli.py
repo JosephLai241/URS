@@ -486,7 +486,8 @@ class TestGetPRAWScrapeSettingsSubredditSettingsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         master = {"test_subreddit": []}
-        Cli.GetPRAWScrapeSettings()._subreddit_settings(args, master)
+        invalids = []
+        Cli.GetPRAWScrapeSettings()._subreddit_settings(args.subreddit, invalids, master)
 
         assert master == {"test_subreddit": [["h", "10", None]]}
 
@@ -500,7 +501,8 @@ class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
         master = {"test_redditor": None}
-        Cli.GetPRAWScrapeSettings()._two_arg_settings(master, args.redditor)
+        invalids = []
+        Cli.GetPRAWScrapeSettings()._two_arg_settings(args.redditor, invalids, master)
 
         assert master == {"test_redditor": "10"}
 
@@ -508,7 +510,8 @@ class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--comments", ["test_url", "2"]])
         master = {"test_url": None}
-        Cli.GetPRAWScrapeSettings()._two_arg_settings(master, args.comments)
+        invalids = []
+        Cli.GetPRAWScrapeSettings()._two_arg_settings(args.comments, invalids, master)
 
         assert master == {"test_url": "2"}
 
@@ -523,7 +526,8 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         master = {"test_subreddit": []}
         s_type = Global.s_t[0]
-        Cli.GetPRAWScrapeSettings().get_settings(args, master, s_type)
+        invalids = []
+        Cli.GetPRAWScrapeSettings().get_settings(args, invalids, master, s_type)
 
         assert master == {"test_subreddit": [["h", "10", None]]}
 
@@ -532,7 +536,8 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
         args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
         master = {"test_redditor": None}
         s_type = Global.s_t[1]
-        Cli.GetPRAWScrapeSettings().get_settings(args, master, s_type)
+        invalids = []
+        Cli.GetPRAWScrapeSettings().get_settings(args, invalids, master, s_type)
 
         assert master == {"test_redditor": "10"}
 
@@ -541,7 +546,8 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
         args = parser.parse_args(["--comments", ["test_url", "2"]])
         master = {"test_url": None}
         s_type = Global.s_t[2]
-        Cli.GetPRAWScrapeSettings().get_settings(args, master, s_type)
+        invalids = []
+        Cli.GetPRAWScrapeSettings().get_settings(args, invalids, master, s_type)
 
         assert master == {"test_url": "2"}
 
