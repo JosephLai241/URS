@@ -75,6 +75,8 @@ class CheckSubreddits():
         """
 
         print("\nChecking if Subreddit(s) exist...")
+        logging.info("Validating Subreddits...")
+        logging.info("")
         subs, not_subs = Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
         
         if not_subs:
@@ -82,10 +84,16 @@ class CheckSubreddits():
             print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
             print(*not_subs, sep = "\n")
 
-        if not subs:
-            raise ValueError
+            logging.warning("Failed to validate the following Subreddits:")
+            logging.warning("%s" % (not_subs))
+            logging.warning("Skipping.")
+            logging.info("")
 
-        return subs
+        if not subs:
+            logging.critical("ALL SUBREDDITS FAILED VALIDATION.")
+            raise ValueError
+        
+        return not_subs, subs
 
 class PrintConfirm():
     """
@@ -113,9 +121,7 @@ class PrintConfirm():
 
         for sub, settings in s_master.items():
             for each_sub in settings:
-                cat_i = short_cat.index(each_sub[0].upper()) \
-                    if not args.basic \
-                    else each_sub[0]
+                cat_i = short_cat.index(each_sub[0].upper())
                 time_filter = each_sub[2].capitalize() \
                     if each_sub[2] != None \
                     else each_sub[2]
@@ -348,12 +354,8 @@ class GetPosts():
         category_submissions: PRAW ListingGenerator
         """
 
-        category = categories[short_cat.index(cat_i)] \
-            if args.subreddit \
-            else categories[cat_i]
-        index = short_cat.index(cat_i) \
-            if args.subreddit \
-            else cat_i
+        category = categories[short_cat.index(cat_i)]
+        index = short_cat.index(cat_i)
             
         print(Style.BRIGHT + "\nProcessing %s %s results from r/%s..." % (search_for, category, sub))
         
@@ -394,7 +396,7 @@ class GetPosts():
         subreddit = reddit.subreddit(sub)
 
         return GetPosts._collect_search(search_for, sub, subreddit, time_filter) \
-            if cat_i == short_cat[5] or cat_i == 5 \
+            if cat_i == short_cat[5] \
             else GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, time_filter)
 
 class SortPosts():
@@ -829,9 +831,7 @@ class GetSortWrite():
 
         for sub, settings in s_master.items():
             for each_sub in settings:
-                cat_i = each_sub[0].upper() \
-                    if not args.basic \
-                    else short_cat[each_sub[0]]
+                cat_i = each_sub[0].upper()
                 data = GetSortWrite._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
                 GetSortWrite._write(args, cat_i, data, each_sub, sub)
 
@@ -873,9 +873,9 @@ class RunSubreddit():
         """
 
         sub_list = GetPRAWScrapeSettings().create_list(args, s_t[0])
-        subs = CheckSubreddits.list_subreddits(parser, reddit, s_t, sub_list)
+        not_subs, subs = CheckSubreddits.list_subreddits(parser, reddit, s_t, sub_list)
         s_master = make_list_dict(subs)
-        GetPRAWScrapeSettings().get_settings(args, s_master, s_t[0])
+        GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, s_t[0])
 
         return s_master
 
@@ -907,7 +907,6 @@ class RunSubreddit():
 
         PrintConfirm.print_settings(args, s_master)
         confirm = PrintConfirm.confirm_settings()
-
         if confirm == options[0]:
             GetSortWrite.gsw(args, reddit, s_master)
         else:
@@ -972,11 +971,14 @@ class RunSubreddit():
 
         Returns
         -------
-        None
+        s_master: dict
+            Dictionary containing valid Subreddits and their respective scrape
+            settings
         """
 
         PRAWTitles.r_title()
 
         s_master = RunSubreddit._create_settings(args, parser, reddit, s_t)
         RunSubreddit._write_file(args, reddit, s_master)
-    
+        
+        return s_master
