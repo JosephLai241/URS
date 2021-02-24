@@ -592,10 +592,11 @@ class GetPRAWScrapeSettings():
 
         return settings
 
-    def _subreddit_settings(self, args, master):
+    def _subreddit_settings(self, args, invalids, master):
         """
         Get Subreddit settings from the argparse Namespace and append them to the
-        master scrape settings dictionary.
+        master scrape settings dictionary. Only appends settings for Subreddits
+        that have been validated.
 
         Calls previously defined private method:
 
@@ -604,7 +605,9 @@ class GetPRAWScrapeSettings():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments used in the CLI
+            Namespace object containing Subreddit arguments
+        invalids: list
+            List containing invalid Subreddits
         master: dict
             Dictionary containing all scrape settings
 
@@ -614,13 +617,14 @@ class GetPRAWScrapeSettings():
         """
 
         for sub_n in master:
-            for sub in args.subreddit:
-                settings = self._set_sub_settings(sub)
-                
-                if sub_n == sub[0]:
-                    master[sub_n].append(settings)
+            for sub in args:
+                if sub[0] not in invalids:
+                    settings = self._set_sub_settings(sub)
+                    
+                    if sub_n == sub[0]:
+                        master[sub_n].append(settings)
 
-    def _two_arg_settings(self, master, object):
+    def _two_arg_settings(self, args, invalids, master):
         """
         Get settings for scraping items that only require two arguments and append
         them to the master scrape settings dictionary:
@@ -628,23 +632,29 @@ class GetPRAWScrapeSettings():
             Redditor scraper
             Submission comments scraper
 
+        Only appends settings for Redditors or submission URLs that have been 
+        validated.
+
         Parameters
         ----------
-        master: dict
-            Dictionary containing all scrape settings
-        object: Namespace
+        args: Namespace
             argparse Namespace object containing either Redditor or submission
             comments arguments
+        invalids: list
+            List containing invalid Reddit objects (Redditors or submission URLs)
+        master: dict
+            Dictionary containing all scrape settings
 
         Returns
         -------
         None
         """
         
-        for obj in object:
-            master[obj[0]] = obj[1]
+        for arg in args:
+            if arg[0] not in invalids:
+                master[arg[0]] = arg[1]
 
-    def get_settings(self, args, master, s_type):
+    def get_settings(self, args, invalids, master, s_type):
         """
         Get scrape settings for Subreddits, Redditors and submission comments by
         combining all previously defined private methods:
@@ -656,6 +666,9 @@ class GetPRAWScrapeSettings():
         ----------
         args: Namespace
             Namespace object containing all arguments used in the CLI
+        invalids: list
+            List containing invalid Reddit objects (Subreddits, Redditors, or
+            submission URLs)
         master: dict
             Dictionary containing all scrape settings
         s_type: str
@@ -668,11 +681,11 @@ class GetPRAWScrapeSettings():
         """
 
         if s_type == s_t[0]:
-            self._subreddit_settings(args, master)
+            self._subreddit_settings(args.subreddit, invalids, master)
         elif s_type == s_t[1]:
-            self._two_arg_settings(master, args.redditor)
+            self._two_arg_settings(args.redditor, invalids, master)
         elif s_type == s_t[2]:
-            self._two_arg_settings(master, args.comments)
+            self._two_arg_settings(args.comments, invalids, master)
 
 class CheckPRAWCli():
     """
