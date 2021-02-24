@@ -1,61 +1,110 @@
-#===============================================================================
-#                   All Scrapers and Validation/Args Checking
-#===============================================================================
-from colorama import (
-    init, 
-    Fore, 
-    Style
-)
+"""
+Tools
+=====
+Running all tools that URS has to offer.
+"""
 
-from . import (
-    Basic, 
-    Cli, 
-    Comments, 
-    Global, 
-    Redditor, 
-    Subreddit, 
-    Titles, 
-    Validation
-)
 
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
+import logging
+
+from urs.analytics.Frequencies import GenerateFrequencies
+from urs.analytics.Wordcloud import GenerateWordcloud
+
+from urs.praw_scrapers.Basic import RunBasic
+from urs.praw_scrapers.Comments import RunComments
+from urs.praw_scrapers.Redditor import RunRedditor
+from urs.praw_scrapers.Subreddit import RunSubreddit
+from urs.praw_scrapers.utils.Validation import Validation
+
+from urs.utils.Cli import (
+    CheckCli,
+    Parser
+)
+from urs.utils.Global import s_t
+from urs.utils.Titles import MainTitle
 
 class Run():
     """
-    Methods to call Cli and Subreddit, Redditor, Comments, and Basic scrapers.
+    Methods to call CLI and all tools.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self, reddit):
+        """
+        Initialize variables used in instance methods:
+
+            self._reddit: Reddit instance
+            self._args: argparse Namespace object
+            self._parser: argparse ArgumentParser object
+
+        Returns
+        -------
+        None
+        """
+
         self._reddit = reddit
-        self._args, self._parser = self._login_and_args()
+        self._args, self._parser = self._introduce_then_args()
+        
+    def _introduce_then_args(self):
+        """
+        Print title, then run checks for CLI args and PRAW credentials.
 
-        self._s_t = Global.s_t
+        Parameters
+        ----------
+        None
 
-    ### Print title, then run checks for CLI args and PRAW credentials.
-    def _login_and_args(self):
-        Titles.Titles.title()
+        Returns
+        -------
+        args: Namespace
+            argparse Namespace object
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        """
 
-        args, parser = Cli.Parser().parse_args()
-        Validation.Validation.validate_user(parser, self._reddit)
-        Cli.CheckCli().check_args(args, parser)
+        MainTitle.title()
+
+        args, parser = Parser().parse_args()
+        CheckCli().check_args(args, parser)
 
         return args, parser
 
-    ### Switch for running scrapers.
     def run_urs(self):
-        ### Run Subreddit scraper.
-        if self._args.subreddit:
-            Subreddit.RunSubreddit.run(self._args, self._parser, self._reddit, self._s_t)
-        ### Run Redditor scraper.
-        if self._args.redditor:
-            Redditor.RunRedditor.run(self._args, self._parser, self._reddit)
-        ### Run submission comments scraper.
-        if self._args.comments:
-            Comments.RunComments.run(self._args, self._parser, self._reddit)
-        ### Run basic Subreddit scraper.
-        elif self._args.basic:
-            Basic.RunBasic.run(self._args, self._parser, self._reddit)
+        """
+        Switch for running all URS tools.
+        """
+
+        if self._args.check:
+            """
+            Run rate limit check.
+            """
+
+            logging.info("RUNNING API CREDENTIALS CHECK.")
+            logging.info("")
+
+            Validation.validate_user(self._parser, self._reddit)
+
+        elif self._args.subreddit or self._args.redditor or self._args.comments or self._args.basic:
+            """
+            Run PRAW scrapers.
+            """
+            
+            Validation.validate_user(self._parser, self._reddit)
+
+            if self._args.subreddit:
+                RunSubreddit.run(self._args, self._parser, self._reddit, s_t)
+            if self._args.redditor:
+                RunRedditor.run(self._args, self._parser, self._reddit)
+            if self._args.comments:
+                RunComments.run(self._args, self._parser, self._reddit)
+            elif self._args.basic:
+                RunBasic.run(self._args, self._parser, self._reddit)
+        
+        elif self._args.frequencies or self._args.wordcloud:
+            """
+            Run analytical tools.
+            """
+
+            if self._args.frequencies:
+                GenerateFrequencies().generate(self._args)
+            if self._args.wordcloud:
+                GenerateWordcloud().generate(self._args)
         

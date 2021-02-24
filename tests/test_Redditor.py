@@ -1,4 +1,5 @@
-from urs.utils import Global, Redditor
+from urs.praw_scrapers import Redditor
+from urs.utils import Global
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
@@ -257,14 +258,37 @@ class TestGetInteractionsInitMethod():
     Testing GetInteractions class __init__() method found on line 245 in Redditor.py.
     """
 
-    def test_get_interactions_init_method_titles_instance_variable(self):
-        assert Redditor.GetInteractions()._titles == \
-            ["Name", "Fullname", "ID", "Date Created", "Comment Karma", 
-            "Link Karma", "Is Employee?", "Is Friend?", "Is Mod?", "Is Gold?", 
-            "Submissions", "Comments", "Hot", "New", "Controversial", "Top", 
-            "Upvoted (may be forbidden)", "Downvoted (may be forbidden)", "Gilded", 
-            "Gildings (may be forbidden)", "Hidden (may be forbidden)", 
-            "Saved (may be forbidden)"]
+    def test_get_interactions_init_method_info_titles_instance_variable(self):
+        assert Redditor.GetInteractions()._info_titles == \
+            [
+                "name", 
+                "fullname", 
+                "id", 
+                "date_created", 
+                "comment_karma", 
+                "link_karma", 
+                "is_employee", 
+                "is_friend", 
+                "is_mod", 
+                "is_gold"
+            ]
+
+    def test_get_interactions_init_method_interaction_titles_instance_variable(self):
+        assert Redditor.GetInteractions()._interaction_titles == \
+            [
+                "submissions", 
+                "comments", 
+                "hot", 
+                "new", 
+                "controversial", 
+                "top", 
+                "upvoted", 
+                "downvoted", 
+                "gilded", 
+                "gildings", 
+                "hidden", 
+                "saved"
+            ]
 
 class TestGetInteractionsMakeUserProfileMethod():
     """
@@ -338,16 +362,6 @@ class TestGetInteractionsGetMethod():
 
     def test_get(self):
         pass
-
-class TestWriteInitMethod():
-    """
-    Testing Write class __init__() method found on line 325 in Redditor.py.
-    Have to find a way to test functions that access Reddit without exposing my 
-    personal credentials. Passing for now.
-    """
-
-    def test_write_init_method_eo_instance_variable(self):
-        assert Redditor.Write()._eo == Global.eo
 
 class TestWriteDetermineExportMethod():
     """

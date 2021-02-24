@@ -10,7 +10,9 @@ Delete this line and write your motivation/context here. Section your motivation
 
 ## New Dependencies
 
-Delete this line and write your new dependencies here. **Put "None" here if there are no new dependencies.**
+```
+Delete this line and paste your new dependencies here. **Put "None" here if there are no new dependencies.**
+```
 
 ## Issue Fix or Enhancement Request
 
@@ -49,10 +51,70 @@ Paste entire traceback here. Make sure the traceback is formatted correctly.
 
 # List All Changes That Have Been Made
 
-* Change 1.
-* Change 2.
-    + If applicable, add additional information underneath a change.
-* Change 3.
+**Please delete sections and/or fields that are not relevant.**
+
+### Added
+
+* User interface
+    + Summary of change
+        * Describing the change
+* Source code
+    + Summary of change
+        * Describing the change
+* `README`
+    + Summary of change
+        * Describing the change
+* Tests
+    + Summary of change
+        * Describing the change
+* Repository documents
+    + Summary of change
+        * Describing the change
+* Community documents
+    + Summary of change
+        * Describing the change
+
+### Changed
+
+* User interface
+    + Summary of change
+        * Describing the change
+* Source code
+    + Summary of change
+        * Describing the change
+* `README`
+    + Summary of change
+        * Describing the change
+* Tests
+    + Summary of change
+        * Describing the change
+* Repository documents
+    + Summary of change
+        * Describing the change
+* Community documents
+    + Summary of change
+        * Describing the change
+
+### Deprecated
+
+* User interface
+    + Summary of change
+        * Describing the change
+* Source code
+    + Summary of change
+        * Describing the change
+* `README`
+    + Summary of change
+        * Describing the change
+* Tests
+    + Summary of change
+        * Describing the change
+* Repository documents
+    + Summary of change
+        * Describing the change
+* Community documents
+    + Summary of change
+        * Describing the change
 
 # How Has This Been Tested?
 

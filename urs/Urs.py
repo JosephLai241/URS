@@ -1,18 +1,18 @@
 #!/usr/bin/python
 """
-Created on Tue Jun 2 20:14:43 2020
+Created on Wed Feb 10 16:20:04 2021
 
-Universal Reddit Scraper v3.1.2.
+Universal Reddit Scraper v3.2.0
 
 @author: Joseph Lai
 @contact: urs_project@protonmail.com
 """
 import praw
 
-from Credentials import API
+from urs.Credentials import API
 
-from utils.Logger import LogMain
-from utils.Tools import Run
+from urs.utils.Logger import LogMain
+from urs.utils.Tools import Run
 
 class Main():
     """
@@ -22,6 +22,7 @@ class Main():
     @staticmethod
     @LogMain.master_timer
     def main():
+        ### Creating a Reddit object with PRAW credentials.
         reddit = praw.Reddit(
             client_id = API["client_id"],
             client_secret = API["client_secret"],

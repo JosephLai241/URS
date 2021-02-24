@@ -1,6 +1,10 @@
-#===============================================================================
-#                               Global Variables
-#===============================================================================
+"""
+Global variables
+================
+Variables that are used throughout this program.
+"""
+
+
 import datetime as dt
 
 ### Get current date.
@@ -18,11 +22,17 @@ options = [
     "n"
 ]
 
-### Scrape types.
+### PRAW scrape types.
 s_t = [
     "subreddit", 
     "redditor", 
     "comments"
+]
+
+### Analytical tools.
+analytical_tools = [
+    "frequencies",
+    "wordcloud"
 ]
 
 ### Subreddit categories.
@@ -36,14 +46,55 @@ categories = [
 ]
 short_cat = [cat[0] for cat in categories]
 
-### Convert UNIX time to readable format.
 def convert_time(object):
+    """
+    Convert UNIX time to readable format.
+
+    Parameters
+    ----------
+    object: UNIX timestamp
+        UNIX timestamp returned from PRAW
+
+    Returns
+    -------
+    converted_date: datetime object
+        UNIX timestamp in readable format
+    """
+
     return dt.datetime.fromtimestamp(object).strftime("%m-%d-%Y %H:%M:%S")
 
-### Initialize a dictionary of keys with empty lists as values.
 def make_list_dict(item):
+    """
+    Initialize a dictionary of keys with empty lists as values.
+
+    Parameters
+    ----------
+    item: list
+        List of titles used to initialize a dictionary
+
+    Returns
+    -------
+    list_dict: dict
+        Dictionary initialized with objects in `item` list as keys and empty arrays
+        as its values
+    """
+
     return dict((obj, []) for obj in item)
 
-### Initialize a dictionary of keys with None as values.
 def make_none_dict(item):
+    """
+    Initialize a dictionary of keys with None as values.
+
+    Parameters
+    ----------
+    item: list
+        List of titles used to initialize a dictionary
+
+    Returns
+    -------
+    list_dict: dict
+        Dictionary initialized with objects in `item` list as keys and `None` as
+        its values
+    """
+
     return dict((obj, None) for obj in item)

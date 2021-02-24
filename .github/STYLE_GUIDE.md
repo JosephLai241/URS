@@ -135,12 +135,18 @@ submission_titles = [
 Methods and classes are separated by a new line:
 
 ```python
-### First method here.
 def first_method_here():
+    """
+    First method here.
+    """
+    
     pass
 
-### Second method here.
 def second_method_here():
+    """
+    Second method here.
+    """
+    
     pass
 ```
 
@@ -152,12 +158,18 @@ class FirstClass():
     The first class.
     """
 
-    ### A private method here.
     def _a_private_method_here(self):
+        """
+        A private method here.
+        """
+    
         pass
 
-    ### A second public method here.
     def a_second_public_method_here(self):
+        """
+        A second public method here.
+        """
+
         pass
 
 class SecondClass():
@@ -165,14 +177,17 @@ class SecondClass():
     Second class here.
     """
 
-    ### Another public method here.
     def another_public_method_here(self):
+        """
+        Another public method here.
+        """
+
         pass
 ```
 
 ## Comments
 
-***Every single class and method requires at least one comment with proper grammar and punctuation***. By doing this, I will easily be able to tell which class most likely contains the method I am looking for. Comments will also follow the ~80 character word wrap rule.
+***Every single class and method requires at least one comment with proper grammar and punctuation***. By doing this, I will easily be able to tell which class most likely contains the method I am looking for. Comments should also follow the ~80 character word wrap rule.
 
 ### Class Comments
 
@@ -187,16 +202,93 @@ class ThisIsAnExampleClass():
 
 ### Method Comments
 
-Method comments should start with `###` so that it is easily distinguished from code. These comments are placed above the method.
+Method comments should more or less follow the Numpy/Scipy docstring syntax and written below the method.
 
 ```python
-    ### This is an example of a method comment.
     def this_is_an_example_public_method(self):
+        """
+        This is an example of a method comment here.
+        """
+
+        ... code starts here
 ```
+
+There should be a newline following the closing triple quotes.
+
+Additional information should be added if the method:
+
+* Takes in parameters
+* Raises exceptions
+* Returns something
+
+This is the method comment taken from `GetPath.get_scrape_type()` found in `PrepData.py`:
+
+```python
+    def get_scrape_type(file):
+        """
+        Get the name of the scrape-specific directory in which the data is stored.
+
+        Parameters
+        ----------
+        file: str
+            String denoting the filepath
+
+        Exceptions
+        ----------
+        TypeError:
+            Raised if the file is not JSON or if the file resides in the `analytics` directory 
+
+        Returns
+        -------
+        scrape_dir: str
+            String denoting the scrape-specific directory
+        """
+
+        ... code starts here
+```
+
+Include the variable name and type for parameters or return values. You only have to include the exception name for exceptions. Enter a new line, tab in, then write a short description as to what the item is or why the exception would be raised.
+
+If the method calls previously defined private or public methods, or methods from external modules, be sure to list them at the top of the method comment.
+
+This is an example taken from `RunRedditor.run()` found in `Redditor.py`:
+
+```python
+    def run(args, parser, reddit):
+        """
+        Get, sort, then write scraped Redditor information to CSV or JSON.
+
+        Calls previously defined public methods:
+
+            CheckRedditors().list_redditors()
+            Write.write()
+
+        Calls public methods from external modules: 
+
+            GetPRAWScrapeSettings().create_list()
+            Global.make_none_dict()
+            GetPRAWScrapeSettings().get_settings()
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments that were defined in the CLI 
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+
+        Returns
+        -------
+        None
+        """
+```
+
+Notice how I have included the `Returns` section in the comment even though it returns nothing. Include `Returns` any time the method takes parameters. You do not need to include the additional sections if the method does not take parameters, raise exceptions, or return values. Simply write a short description as to what it does.
 
 ### Global Variable Comments
 
-Global variables or functions follow the same style as method comments.
+Global variables and functions should use `###` before the comment and placed above the variable.
 
 ```python
 ### An example of a global comment.
@@ -207,7 +299,7 @@ an_example_list = [
 ]
 ```
 
-An example taken from my code would be calling the Colorama `init` function at the top of most scripts:
+An example taken from my code would be calling the Colorama `init` function at the top of many scripts:
 
 ```python
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -278,7 +370,6 @@ def example_with_self(self, args, basic, comments, parser, reddit, subreddit):
 This is a modified version of the huge `init` method in `Redditor.py`:
 
 ```python
-    ### Initialize objects that will be used in class methods.
     def __init__(self, limit, overview, user):
         self._overview = overview
 
@@ -356,19 +447,15 @@ class Write():
     Methods for writing scraped Redditor information to CSV or JSON.
     """
 
-    ### Initialize objects that will be used in class methods.
     def __init__(self):
         ...
 
-    ### Export to either CSV or JSON.
     def _determine_export(self, args, f_name, overview):
         ...
 
-    ### Print confirmation message and set print length depending on string length.
     def _print_confirm(self, args, user):
         ...
 
-    ### Get, sort, then write scraped Redditor information to CSV or JSON.
     def write(self, args, reddit, u_master):
         ...
         calls _determine_export()
@@ -422,7 +509,6 @@ class GetScrapeSettings():
     Methods for creating data structures to store scrape settings.
     """
     
-    ### Switch to determine which kind of list to create.
     def _list_switch(self, args, index):
         ...
 ```

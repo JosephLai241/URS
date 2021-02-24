@@ -21,6 +21,7 @@ class MakeArgs():
         parser = argparse.ArgumentParser()
         parser.add_argument("--subreddit", action = "store_true")
         parser.add_argument("--basic", action = "store_true")
+        parser.add_argument("--rules", action = "store_true")
 
         return parser
 
@@ -41,15 +42,11 @@ class TestRCategory():
     """
 
     def test_r_category_first_switch(self):
-        assert Export.NameFile()._r_category(None, 0) == Global.categories[5]
+        assert Export.NameFile()._r_category("H", 0) == Global.categories[5]
 
     def test_r_category_second_switch(self):
         for index, category in enumerate(Global.short_cat[:5]):
             assert Export.NameFile()._r_category(category, 1) == Global.categories[index]
-
-    def test_r_category_third_switch(self):
-        for i in range(0, len(Global.categories)):
-            assert Export.NameFile()._r_category(i, 2) == Global.categories[i]
 
 class TestRGetCategory():
     """
@@ -57,21 +54,14 @@ class TestRGetCategory():
     """
                 
     def test_r_get_category_subreddit_arg_returns_zero(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
-        assert Export.NameFile()._r_get_category(args, "S") == 0
+        assert Export.NameFile()._r_get_category("S") == 0
 
     def test_r_get_category_subreddit_arg_returns_one(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
-        assert Export.NameFile()._r_get_category(args, "C") == 1
+        assert Export.NameFile()._r_get_category("C") == 1
 
-    def test_r_get_category_basic_arg_returns_two(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
-        assert Export.NameFile()._r_get_category(args, None) == 2
-
-class TestGetRawNWithSubredditArgs():
+class TestGetRawN():
     """
     Testing _get_raw_n() function on line 80 in Export.py.
-    Testing with Subreddit args.
     """
 
     def test_get_raw_n_returns_search_filename_format_with_subreddit_args(self):
@@ -82,7 +72,7 @@ class TestGetRawNWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "askreddit-Search-'test'"
+            "askreddit-search-'test'"
 
     def test_get_raw_n_returns_category_filename_format_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -92,38 +82,11 @@ class TestGetRawNWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "askreddit-Hot-1-result"
+            "askreddit-hot-1-result"
 
-class TestGetRawNWithBasicArgs():
-    """
-    Testing _get_raw_n() function on line 80 in Export.py.
-    Testing with Basic args.
-    """
-
-    def test_get_raw_n_returns_search_filename_format_with_basic_args(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
-        cat_i = 5
-        end = "result"
-        each_sub = ["s", "test", "all"]
-        sub = "askreddit"
-
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "askreddit-Search-'test'"
-
-    def test_get_raw_n_returns_category_filename_format_with_basic_args(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
-        cat_i = 0
-        end = "result"
-        each_sub = ["h", 1, None]
-        sub = "askreddit"
-
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "askreddit-Hot-1-result"
-
-class TestRFnameWithSubredditArgs():
+class TestRFname():
     """
     Testing r_fname() function on line 103 in Export.py.
-    Testing with Subreddit args.
     """
 
     def test_r_fname_ignores_end_string_with_subreddit_args(self):
@@ -133,7 +96,7 @@ class TestRFnameWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-Search-'test'"
+            "askreddit-search-'test'"
 
     def test_r_fname_returns_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -142,7 +105,7 @@ class TestRFnameWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-Hot-5-results"
+            "askreddit-hot-5-results"
 
     def test_r_fname_returns_non_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -151,40 +114,7 @@ class TestRFnameWithSubredditArgs():
         sub = "askreddit"
 
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-Hot-1-result"
-    
-class TestRFnameWithBasicArgs():
-    """
-    Testing r_fname() function on line 103 in Export.py.
-    Testing with Basic args.
-    """
-
-    def test_r_fname_ignores_end_string_with_basic_args(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
-        cat_i = 5
-        each_sub = ["s", "test", "all"]
-        sub = "askreddit"
-
-        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-Search-'test'"
-
-    def test_r_fname_returns_plural_string_with_basic_args(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
-        cat_i = 0
-        each_sub = ["h", 5, None]
-        sub = "askreddit"
-
-        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-Hot-5-results"
-
-    def test_r_fname_returns_non_plural_string_with_basic_args(self):
-        args = MakeArgs.parser_for_testing_export().parse_args(["--basic"])
-        cat_i = 0
-        each_sub = ["h", 1, None]
-        sub = "askreddit"
-
-        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-Hot-1-result"
+            "askreddit-hot-1-result"
 
 class TestUFname():
     """
@@ -228,7 +158,7 @@ class TestCFname():
 
 class TestWriteCSVAndWriteJSON():
     """
-    Testing _write_csv() function on line 153 and _write_json() function on line 
+    Testing write_csv() function on line 153 and write_json() function on line 
     161 in Export.py.
     """
 
@@ -240,7 +170,7 @@ class TestWriteCSVAndWriteJSON():
             "a": [5, 6],
             "test": [7, 8]}
 
-        Export.Export._write_csv(filename, overview)
+        Export.Export.write_csv(overview, filename)
 
         with open(filename, "r") as test_csv:
             reader = csv.reader(test_csv)
@@ -259,7 +189,7 @@ class TestWriteCSVAndWriteJSON():
             'test_2': {'this': 2, 'is': 2, 'a': 2, 'test': 2}
         }
 
-        Export.Export._write_json(filename, overview)
+        Export.Export.write_json(overview, filename)
 
         with open(filename, "r") as test_json:
             test_dict = json.load(test_json)

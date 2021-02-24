@@ -22,3 +22,27 @@ class TestInitializeDirectoryMakeDirectoryMethod():
 
     def test_make_directory_date_directory_already_exists(self):
         pass
+
+class TestInitializeDirectoryMakeTypeDirectoryMethod():
+    """
+    Testing InitializeDirectory class make_type_directory() method found on line
+    33 in DirInit.py.
+    """
+
+    def test_make_directory_type_directory_does_not_exist(self):
+        pass
+
+    def test_make_directory_type_directory_already_exists(self):
+        pass
+
+class TestInitializeDirectoryMakeAnalyticsDirectoryMethod():
+    """
+    Testing InitializeDirectory class make_analytics_directory() method found on
+    line 40 in DirInit.py.
+    """
+
+    def test_make_directory_analytics_directory_does_not_exist(self):
+        pass
+
+    def test_make_directory_analytics_directory_already_exists(self):
+        pass

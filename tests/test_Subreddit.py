@@ -1,4 +1,5 @@
-from urs.utils import Global, Subreddit
+from urs.praw_scrapers import Subreddit
+from urs.utils import Global
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.
@@ -58,6 +59,14 @@ class TestPrintConfirmConfirmSettingsMethod():
         pass
 
     def test_confirm_settings_invaid_option(self):
+        pass
+
+class TestGetRulesGetMethod():
+    """
+    Testing GetRules class get() method found on line 130 in Subreddit.py.
+    """
+
+    def test_get(self):
         pass
 
 class TestGetPostsSwitchInitMethod():
@@ -151,14 +160,24 @@ class TestSortPostsInitMethod():
     Testing SortPosts class __init__() method found on line 188 in Subreddit.py.
     """
 
-    def test_sort_posts_init_method_convert_time_instance_variable(self):
-        assert Subreddit.SortPosts()._convert_time == Global.convert_time
-
     def test_sort_posts_init_method_titles_instance_variable(self):
         assert Subreddit.SortPosts()._titles == \
-            ["Title", "Flair", "Date Created", "Upvotes", "Upvote Ratio", 
-                "ID", "Edited?", "Is Locked?", "NSFW?", "Is Spoiler?", "Stickied?", 
-                "URL", "Comment Count", "Text"]
+            [
+                "title", 
+                "flair", 
+                "date_created", 
+                "upvotes", 
+                "upvote_ratio", 
+                "id", 
+                "edited", 
+                "is_locked", 
+                "nsfw", 
+                "is_spoiler", 
+                "stickied", 
+                "url", 
+                "comment_count", 
+                "text"
+            ]
 
 class TestSortPostsInitializeDictMethod():
     """
@@ -217,14 +236,44 @@ class TestSortPostsCsvFormatMethod():
     def test_csv_format(self):
         pass
 
-class TestSortPostsJsonFormatMethod():
+class TestSortPostsMakeJsonSkeletonMethod():
     """
-    Testing SortPosts class _json_format() method found on line 243 in Subreddit.py.
+    Testing SortPosts class _make_json_skeleton() method found on line 271 in 
+    Subreddit.py.
+    """
+
+    def test_make_json_skeleton(self):
+        test_skeleton = Subreddit.SortPosts()._make_json_skeleton("S", "test", "askreddit", "all")
+        assert test_skeleton == {
+            "scrape_settings": {
+                "subreddit": "askreddit",
+                "category": "search",
+                "n_results_or_keywords": "test",
+                "time_filter": "all"
+            },
+            "data": []
+        }
+
+class TestSortPostsAddJsonSubredditRulesMethod():
+    """
+    Testing SortPosts class _add_json_subreddit_rules() method found on line 285
+    in Subreddit.py.
     Have to find a way to test functions that access Reddit without exposing my 
     personal credentials. Passing for now.
     """
 
-    def test_json_format(self):
+    def _add_json_subreddit_rules(self):
+        pass
+
+class TestSortPostsAddJsonSubmissionDataMethod():
+    """
+    Testing SortPosts class _add_json_submission_data() method found on line 291
+    in Subreddit.py.
+    Have to find a way to test functions that access Reddit without exposing my 
+    personal credentials. Passing for now.
+    """
+
+    def test_add_json_submission_data(self):
         pass
 
 class TestSortPostsSortMethod():
@@ -237,16 +286,8 @@ class TestSortPostsSortMethod():
     def test_sort_with_csv_args(self):
         pass
 
-    def test_sort_with_json_args(self):
+    def test_sort_without_csv_args(self):
         pass
-
-class TestGetSortWriteInitMethod():
-    """
-    Testing GetSortWrite class __init__() method found on line 271 in Subreddit.py.
-    """
-
-    def test_get_sort_write_init_method_eo_instance_variable(self):
-        assert Subreddit.GetSortWrite()._eo == Global.eo
 
 class TestGetSortWriteGetSortMethod():
     """
@@ -269,7 +310,7 @@ class TestGetSortWriteDetermineExportMethod():
     def test_determine_export_with_csv_args(self):
         pass
 
-    def test_determine_export_with_json_args(self):
+    def test_determine_export_without_csv_args(self):
         pass
 
 class TestGetSortWritePrintConfirmMethod():
@@ -283,7 +324,7 @@ class TestGetSortWritePrintConfirmMethod():
     def test_print_confirm_with_csv_args(self):
         pass
 
-    def test_print_confirm_with_json_args(self):
+    def test_print_confirm_without_csv_args(self):
         pass
 
 class TestGetSortWriteWriteMethod():
