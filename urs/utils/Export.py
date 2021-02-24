@@ -99,9 +99,6 @@ class NameFile():
             0: categories[5],
             1: categories[short_cat.index(cat_i)] \
                 if cat_i != short_cat[5] and isinstance(cat_i, str) \
-                else None,
-            2: categories[cat_i] \
-                if isinstance(cat_i, int) \
                 else None
         }
 
@@ -124,12 +121,9 @@ class NameFile():
             Integer denoting the selected category's index
         """
 
-        if args.subreddit:
-            category_n = 0 \
-                if cat_i == short_cat[5] \
-                else 1
-        elif args.basic:
-            category_n = 2
+        category_n = 0 \
+            if cat_i == short_cat[5] \
+            else 1
 
         return category_n
 
@@ -203,7 +197,7 @@ class NameFile():
         category = self._r_category(cat_i, category_n)
 
         ending = None \
-            if cat_i == short_cat[5] or cat_i == 5 \
+            if cat_i == short_cat[5] \
             else end
         time_filter = None \
             if each_sub[2] == None or each_sub[2] == "all" \
@@ -211,11 +205,11 @@ class NameFile():
 
         if each_sub[2] == None or each_sub[2] == "all":
             index = 0 \
-                if cat_i == short_cat[5] or cat_i == 5 \
+                if cat_i == short_cat[5] \
                 else 1
         else:
             index = 2 \
-                if cat_i == short_cat[5] or cat_i == 5 \
+                if cat_i == short_cat[5] \
                 else 3
 
         filename = self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
