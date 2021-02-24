@@ -93,7 +93,7 @@
 * Source code
     + PRAW scraper settings
         * **Bug:** Invalid Reddit objects (Subreddits, Redditors, or submissions) and their respective scrape settings would be added to the scrape settings dictionary even after failing validation.
-        * **Behavior:** URS would try to scrape invalid Reddit objects, then throw an error mid-scrape because it is unable to pull data from PRAW. 
+        * **Behavior:** URS would try to scrape invalid Reddit objects, then throw an error mid-scrape because it is unable to pull data via PRAW. 
         + **Fix:** Returning the invalid objects list from each scraper into `GetPRAWScrapeSettings.get_settings()` to circumvent this issue.
     + Basic Subreddit scraper
         * **Bug:** The time filter `all` would be applied to categories that do not support time filter use, resulting in errors while scraping.
