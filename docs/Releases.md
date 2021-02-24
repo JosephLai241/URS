@@ -68,6 +68,8 @@
     + Moved PRAW scrapers into its own package.
     + Scrape settings for the basic Subreddit scraper is now cleaned within `Basic.py`, further streamlining conditionals in `Subreddit.py` and `Export.py`.
     + Returning final scrape settings dictionary from all scrapers after execution for logging purposes, further streamlining the `LogPRAWScraper` class in `Logger.py`.
+    + Passing the submission URL instead of the exception into the `not_found` list for submission comments scraping.
+        * This is a part of a bug fix that is listed in the Fixed section.
     + ASCII art:
         * Modified the args error art to display specific feedback when invalid arguments are passed.
     + Upgraded from relative to absolute imports.
