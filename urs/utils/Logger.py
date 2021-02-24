@@ -269,218 +269,98 @@ class LogPRAWScraper():
     """
 
     @staticmethod
-    def _get_args_switch(args, scraper):
+    def _format_subreddit_log(settings_dict):
         """
-        Get scraper type for logging.
+        Format Subreddit log message.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
-        scraper: str
-            Scraper type which denotes a key in the dictionary
-
-        Returns
-        -------
-        scraper_args: list
-            List of arguments returned from args
-        """
-
-        scrapers = {
-            s_t[0]: [arg_set for arg_set in args.subreddit] \
-                if args.subreddit \
-                else None,
-            s_t[1]: [arg_set for arg_set in args.redditor] \
-                if args.redditor \
-                else None,
-            s_t[2]: [arg_set for arg_set in args.comments] \
-                if args.comments \
-                else None
-        }
-
-        return scrapers.get(scraper)
-
-    @staticmethod
-    def _subreddit_tuple(each_arg):
-        """
-        Replace the second tuple item with the full category name if Subreddit
-        scraper is selected.
-
-        Parameters
-        ----------
-        each_arg: list
-            List of Subreddit args
-        
-        Returns
-        -------
-        args: tuple
-            Tuple of Subreddit args after correction
-        """
-
-        args_list = list(each_arg)
-        args_list[1] = categories[short_cat.index(each_arg[1].upper())]
-         
-        return tuple(args_list)
-
-    @staticmethod
-    def _format_subreddit_settings(scraper, scraper_args):
-        """
-        Get the full Subreddit category name for each Subreddit tuple.
-
-        Parameters
-        ----------
-        scraper: str
-            String which denotes the scraper type
-        scraper_args: list
-            List of scraper args
-
-        Returns
-        -------
-        args: list
-            List of args
-        """
-
-        args = []
-        for each_arg in scraper_args:
-            settings = LogPRAWScraper._subreddit_tuple(each_arg) \
-                if scraper == s_t[0] \
-                else tuple(each_arg)
-
-            args.append(settings)
-
-        return args
-
-    @staticmethod
-    def _set_subreddit_log(category, n_res_or_kwds, sub_name):
-        """
-        Set message depending if the Search category was selected.
-
-        Parameters
-        ----------
-        category: str
-            String denoting the Subreddit category
-        n_res_or_kwds: str
-            String denoting n_results to return or keywords to search for
-        sub_name: str
-            String denoting the Subreddit name
-
-        Returns
-        -------
-        log_string: str
-            String denoting scrape details
-        """
-
-        return "Scraping r/%s for %s %s results..." % (sub_name, n_res_or_kwds, category) \
-            if category != categories[5] \
-            else "Searching and scraping r/%s for posts containing '%s'..." % (sub_name, n_res_or_kwds)
-
-    @staticmethod
-    def _format_subreddit_log(each_arg):
-        """
-        Format Subreddit log differently if user searched for keywords. Log an
-        additional line if the time filter was applied. Calls previously defined
-        private methods:
-            
-            LogPRAWScraper._set_subreddit_log()
-
-        Parameters
-        ----------
-        each_arg: list
-            List of arguments passed
-
-        Returns
-        -------
-        log_string: str
-            String denoting scrape details
-        """
-
-        if len(each_arg) == 4:
-            logging.info("Getting posts from the past %s for %s results." % (each_arg[3], each_arg[1]))
-
-        return LogPRAWScraper._set_subreddit_log(each_arg[1], each_arg[2], each_arg[0])
-
-    @staticmethod
-    def _format_redditor_log(each_arg):
-        """
-        Format Redditor log depending on number of results scraped.
-
-        Parameters
-        ----------
-        each_arg: list
-            List of arguments passed
-
-        Returns
-        -------
-        log_string: str
-            String denoting scrape details
-        """
-
-        plurality = "results" \
-            if int(each_arg[1]) > 1 \
-            else "result"
-        return "Scraping %s %s for u/%s..." % (each_arg[1], plurality, each_arg[0])
-
-    @staticmethod
-    def _format_comments_log(each_arg):
-        """
-        Format comments log depending on raw or structured export.
-
-        Parameters
-        ----------
-        each_arg: list
-            List of arguments passed
-
-        Returns
-        -------
-        log_string: str
-            String denoting scrape details
-        """
-
-        plurality = "comments" if int(each_arg[1]) > 1 else "comment"
-        return "Processing %s %s in structured format from Reddit post %s" % (each_arg[1], plurality, each_arg[0]) \
-            if int(each_arg[1]) > 0 \
-            else "Processing all comments in raw format from Reddit post %s" % each_arg[0]
-
-    @staticmethod
-    def _format_scraper_log(args_list, scraper):
-        """
-        Format comments log depending on raw or structured export. Calls previously
-        defined private methods:
-
-            LogPRAWScraper._format_subreddit_settings()
-            LogPRAWScraper._format_subreddit_log()
-            LogPRAWScraper._format_redditor_log()
-            LogPRAWScraper._format_comments_log()
-
-
-        Parameters
-        ----------
-        args_list: list
-            List of scraper args
-        scraper: str
-            Scraper type which denotes a key in the dictionary
+        settings_dict: dict
+            Dictionary containing Subreddit scraping settings
 
         Returns
         -------
         None
         """
 
-        args = LogPRAWScraper._format_subreddit_settings(scraper, args_list)
-        for each_arg in args:
-            formats = {
-                s_t[0]: LogPRAWScraper._format_subreddit_log(each_arg) \
-                    if scraper == s_t[0] \
-                    else None,
-                s_t[1]: LogPRAWScraper._format_redditor_log(each_arg) \
-                    if scraper == s_t[1] \
-                    else None,
-                s_t[2]: LogPRAWScraper._format_comments_log(each_arg) \
-                    if scraper == s_t[2] \
-                    else None
-            }
+        time_filters = [ 
+            "day", 
+            "hour", 
+            "month", 
+            "week", 
+            "year"
+        ]
 
-            logging.info(formats.get(scraper))
+        for subreddit_name, settings in settings_dict.items():
+            for each_setting in settings:
+                if each_setting[2] in time_filters:
+                    logging.info("Getting posts from the past %s for %s results." % (each_setting[2], categories[short_cat.index(each_setting[0].upper())]))
+                if each_setting[0].lower() != "s":
+                    logging.info("Scraping r/%s for %s %s results..." % (subreddit_name, each_setting[1], categories[short_cat.index(each_setting[0].upper())]))
+                elif each_setting[0].lower() == "s":
+                    logging.info("Searching and scraping r/%s for posts containing '%s'..." % (subreddit_name, each_setting[1]))
+
+                logging.info("")
+
+    @staticmethod
+    def _format_two_arg_log(scraper_type, settings_dict):
+        """
+        Format Redditor or submission comments log message. Both only take two
+        arguments, which is why only one method is needed to format the messages.
+
+        Parameters
+        ----------
+        scraper_type: str
+            String denoting the scraper type (Redditors or submission comments)
+        settings_dict: dict
+            Dictionary containing Redditor scraping settings
+
+        Returns
+        -------
+        None
+        """
+
+        for reddit_object, n_results in settings_dict.items():
+            plurality = "results" \
+                if int(n_results) > 1 \
+                else "result"
+            
+            if scraper_type == "redditor":
+                logging.info("Scraping %s %s for u/%s..." % (n_results, plurality, reddit_object))
+            elif scraper_type == "comments":
+                logging.info("Processing all comments in raw format from Reddit post %s..." % reddit_object) \
+                    if int(n_results) == 0 \
+                    else logging.info("Processing %s %s in structured format from Reddit post %s..." % (n_results, plurality, reddit_object))            
+
             logging.info("")
+
+    @staticmethod
+    def _format_scraper_log(scraper, settings_dict):
+        """
+        Format log depending on raw or structured export. Calls previously
+        defined private methods:
+
+            LogPRAWScraper._format_subreddit_log()
+            LogPRAWScraper._format_two_arg_log()
+
+        Parameters
+        ----------
+        scraper: str
+            String denoting the scraper that was run
+        settings_dict: dict
+            Dictionary containing scrape settings
+
+        Returns
+        -------
+        None
+        """
+
+        if scraper == s_t[0]:
+            LogPRAWScraper._format_subreddit_log(settings_dict)
+        elif scraper == s_t[1]:
+            LogPRAWScraper._format_two_arg_log("redditor", settings_dict)
+        elif scraper == s_t[2]:
+            LogPRAWScraper._format_two_arg_log("comments", settings_dict)
 
     @staticmethod
     def scraper_timer(scraper):
@@ -506,9 +386,9 @@ class LogPRAWScraper():
                 logging.info("RUNNING %s SCRAPER." % scraper.upper())
                 logging.info("")
 
-                function(*args)
+                settings_dict = function(*args)
 
-                LogPRAWScraper._format_scraper_log(LogPRAWScraper._get_args_switch(args[0], scraper), scraper)
+                LogPRAWScraper._format_scraper_log(scraper, settings_dict)
 
                 logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % (scraper.upper(), time.time() - start))
                 logging.info("")
