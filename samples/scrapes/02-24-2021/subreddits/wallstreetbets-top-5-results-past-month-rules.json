@@ -1,0 +1,227 @@
+{
+    "scrape_settings": {
+        "subreddit": "wallstreetbets",
+        "category": "top",
+        "n_results_or_keywords": "5",
+        "time_filter": "month"
+    },
+    "data": [
+        {
+            "title": "Times Square right now",
+            "flair": "YOLO",
+            "date_created": "01-30-2021 21:00:38",
+            "upvotes": 384871,
+            "upvote_ratio": 0.96,
+            "id": "l8rf4k",
+            "edited": "False",
+            "is_locked": false,
+            "nsfw": false,
+            "is_spoiler": false,
+            "stickied": false,
+            "url": "https://v.redd.it/x64z70f7eie61",
+            "comment_count": 12096,
+            "text": ""
+        },
+        {
+            "title": "UPVOTE so everyone sees we got SUPPORT",
+            "flair": "News",
+            "date_created": "01-28-2021 16:40:34",
+            "upvotes": 305801,
+            "upvote_ratio": 0.96,
+            "id": "l6wu59",
+            "edited": "False",
+            "is_locked": false,
+            "nsfw": false,
+            "is_spoiler": false,
+            "stickied": false,
+            "url": "https://i.redd.it/sgoqy8nyt2e61.png",
+            "comment_count": 12842,
+            "text": ""
+        },
+        {
+            "title": "GME YOLO update \u2014 Jan 28 2021",
+            "flair": "YOLO",
+            "date_created": "01-29-2021 00:06:23",
+            "upvotes": 272356,
+            "upvote_ratio": 0.96,
+            "id": "l78uct",
+            "edited": "False",
+            "is_locked": false,
+            "nsfw": false,
+            "is_spoiler": false,
+            "stickied": false,
+            "url": "https://i.redd.it/opzucppb15e61.png",
+            "comment_count": 23953,
+            "text": ""
+        },
+        {
+            "title": "GME YOLO month-end update \u2014 Jan 2021",
+            "flair": "YOLO",
+            "date_created": "01-30-2021 00:04:45",
+            "upvotes": 245521,
+            "upvote_ratio": 0.96,
+            "id": "l846a1",
+            "edited": "False",
+            "is_locked": false,
+            "nsfw": false,
+            "is_spoiler": false,
+            "stickied": false,
+            "url": "https://i.redd.it/r557em3t5ce61.png",
+            "comment_count": 20798,
+            "text": ""
+        },
+        {
+            "title": "CLASS ACTION AGAINST ROBINHOOD. Allowing people to only sell is the definition of market manipulation. A class action must be started, Robinhood has made plenty of money off selling info about our trades to the hedge funds to be able to pay out a little for causing people to loose money now",
+            "flair": "Discussion",
+            "date_created": "01-28-2021 16:49:11",
+            "upvotes": 219274,
+            "upvote_ratio": 0.96,
+            "id": "l6x130",
+            "edited": "01-28-2021 12:44:45",
+            "is_locked": false,
+            "nsfw": false,
+            "is_spoiler": false,
+            "stickied": false,
+            "url": "https://www.reddit.com/r/wallstreetbets/comments/l6x130/class_action_against_robinhood_allowing_people_to/",
+            "comment_count": 18473,
+            "text": "LEAVE ROBINHOOD. They dont deserve to make money off us after the millions they caused in losses. It might take a couple of days, but send Robinhood to the ground and GME to the moon."
+        }
+    ],
+    "subreddit_rules": {
+        "rules": [
+            {
+                "kind": "all",
+                "description": "Please make sure all comments and submissions adhere to the [content guidelines](https://www.reddit.com/r/wallstreetbets/wiki/contentguide).\n\nA guide to using the correct post flair can be found [here](https://www.reddit.com/r/wallstreetbets/wiki/linkflair).",
+                "short_name": "Content Guidelines",
+                "violation_reason": "Violated Content Guidelines",
+                "created_utc": 1535517076.0,
+                "priority": 0,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>Please make sure all comments and submissions adhere to the <a href=\"https://www.reddit.com/r/wallstreetbets/wiki/contentguide\">content guidelines</a>.</p>\n\n<p>A guide to using the correct post flair can be found <a href=\"https://www.reddit.com/r/wallstreetbets/wiki/linkflair\">here</a>.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "link",
+                "description": "If your submission isn't all that useful, funny, long, or unique, and is primarily text.. well, it should've been a comment in the daily thread and not a submission.\n\nNote: Discussion threads can steer clear of this by bringing some information to the table, being more than a ticker and a question mark, etc.",
+                "short_name": "Submission should've been a Comment in the Daily Thread",
+                "violation_reason": "Should've been a Comment in the Daily Thread",
+                "created_utc": 1606883234.0,
+                "priority": 1,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>If your submission isn&#39;t all that useful, funny, long, or unique, and is primarily text.. well, it should&#39;ve been a comment in the daily thread and not a submission.</p>\n\n<p>Note: Discussion threads can steer clear of this by bringing some information to the table, being more than a ticker and a question mark, etc.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "all",
+                "description": "Any post that contains false or misleading information and is made for the purpose of manipulating the market for a security is prohibited. Any activity of this sort is against the securities laws and will not be tolerated on this forum.",
+                "short_name": "No Market Manipulation",
+                "violation_reason": "No Market Manipulation",
+                "created_utc": 1582772854.0,
+                "priority": 2,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>Any post that contains false or misleading information and is made for the purpose of manipulating the market for a security is prohibited. Any activity of this sort is against the securities laws and will not be tolerated on this forum.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "all",
+                "description": "No non-reporting penny, microcap (Less than $1BN Market Cap), OTC stocks, low volume options, cryptocurrencies, SPACs, or any other worthless securities that are susceptible to scams or pump & dump schemes.",
+                "short_name": "No Pump & Dump, Crypto Discussions, Schemes or Scams",
+                "violation_reason": "Pump & Dump, Scheme, Scam or Crypto",
+                "created_utc": 1564568061.0,
+                "priority": 3,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>No non-reporting penny, microcap (Less than $1BN Market Cap), OTC stocks, low volume options, cryptocurrencies, SPACs, or any other worthless securities that are susceptible to scams or pump &amp; dump schemes.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "all",
+                "description": "This isn't /r/politics, /r/the_donald, /r/political_humor, etc. If you choose to start arguments about libtards or Nazis instead of making fun of their bad SPY long then you're in the wrong place and we'll show you the door.\n\nNobody cares about your political opinions. If it's not about taking advantage of the political to make money then leave that baggage at home. WSB is not the stage for your lazy political regurgitation nor will it be used as a propaganda mouthpiece by anybody.",
+                "short_name": "Political Bullshit",
+                "violation_reason": "Political Bullshit",
+                "created_utc": 1546582502.0,
+                "priority": 4,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>This isn&#39;t <a href=\"/r/politics\">/r/politics</a>, <a href=\"/r/the_donald\">/r/the_donald</a>, <a href=\"/r/political_humor\">/r/political_humor</a>, etc. If you choose to start arguments about libtards or Nazis instead of making fun of their bad SPY long then you&#39;re in the wrong place and we&#39;ll show you the door.</p>\n\n<p>Nobody cares about your political opinions. If it&#39;s not about taking advantage of the political to make money then leave that baggage at home. WSB is not the stage for your lazy political regurgitation nor will it be used as a propaganda mouthpiece by anybody.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "all",
+                "description": "No affiliate/referral links, trading services, market education shilling, Patreons, mailing lists, or anything even vaguely similar. This includes any kind of fundraising, regardless of whether it's for a good cause.\n\n[Read the content guide for more information](https://www.reddit.com/r/wallstreetbets/wiki/contentguide).",
+                "short_name": "No Advertisement, Self-Promotion, Fundraising, or Begging",
+                "violation_reason": "Advertisement or self-promotion",
+                "created_utc": 1518841271.0,
+                "priority": 5,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>No affiliate/referral links, trading services, market education shilling, Patreons, mailing lists, or anything even vaguely similar. This includes any kind of fundraising, regardless of whether it&#39;s for a good cause.</p>\n\n<p><a href=\"https://www.reddit.com/r/wallstreetbets/wiki/contentguide\">Read the content guide for more information</a>.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "all",
+                "description": "Don't make shit up, and be responsible giving and taking advice. This includes talking about things you don't know about. You should listen, not talk. Nobody wants an ill-informed opinion.\n\nPaper trades don't count as real trades and are forbidden. Nobody gives a shit about your preschool's trading competition.",
+                "short_name": "No Bullshitting",
+                "violation_reason": "Fake, Fabricated, Phony, Con, Fraudulent.",
+                "created_utc": 1491614174.0,
+                "priority": 6,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>Don&#39;t make shit up, and be responsible giving and taking advice. This includes talking about things you don&#39;t know about. You should listen, not talk. Nobody wants an ill-informed opinion.</p>\n\n<p>Paper trades don&#39;t count as real trades and are forbidden. Nobody gives a shit about your preschool&#39;s trading competition.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "link",
+                "description": "Screenshots of your positions must show equity or losses of more than $2,500 or $10,000 USD for options or stocks respectively. We don't just want a % change chart. If your title has to include \"position in comments\" then it's a bad screenshot.",
+                "short_name": "Bad Positions Screenshot",
+                "violation_reason": "Bad Positions Screenshot",
+                "created_utc": 1535460112.0,
+                "priority": 7,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>Screenshots of your positions must show equity or losses of more than $2,500 or $10,000 USD for options or stocks respectively. We don&#39;t just want a % change chart. If your title has to include &quot;position in comments&quot; then it&#39;s a bad screenshot.</p>\n</div><!-- SC_ON -->"
+            },
+            {
+                "kind": "all",
+                "description": "No SPACs allowed. They are too easily pumped to allow on a subreddit of our size.",
+                "short_name": "No SPACs",
+                "violation_reason": "This is a SPAC.",
+                "created_utc": 1610616959.0,
+                "priority": 8,
+                "description_html": "<!-- SC_OFF --><div class=\"md\"><p>No SPACs allowed. They are too easily pumped to allow on a subreddit of our size.</p>\n</div><!-- SC_ON -->"
+            }
+        ],
+        "post_requirements": {
+            "title_regexes": [],
+            "body_blacklisted_strings": [
+                "$eth",
+                "btc",
+                "$doge",
+                "doge",
+                "crypto",
+                "bitcoin",
+                "ethereum",
+                "dogecoin",
+                "dogcoin",
+                "eth",
+                "$btc"
+            ],
+            "title_blacklisted_strings": [
+                "$eth",
+                "btc",
+                "dump",
+                "doge",
+                "crypto",
+                "$doge",
+                "bitcoin",
+                "pump",
+                "ethereum",
+                "dogecoin",
+                "dogcoin",
+                "eth",
+                "$btc"
+            ],
+            "body_text_max_length": null,
+            "title_required_strings": [],
+            "guidelines_text": "Submissions that should have been a comment in the Daily Thread will receive an automatic 1-2 day ban. Don't make introductory submissions, ask dumb questions, advertise things, etc. \n\nNOTE: If you delete your image-based post because AutoMod caught it you WILL NOT BE ABLE TO REPOST IT. DO NOT DELETE IT. Contact a mod and ask for an approval.",
+            "gallery_min_items": null,
+            "domain_blacklist": [
+                "discord.gg"
+            ],
+            "domain_whitelist": [],
+            "title_text_max_length": null,
+            "body_restriction_policy": "none",
+            "link_restriction_policy": "blacklist",
+            "guidelines_display_policy": null,
+            "body_required_strings": [],
+            "title_text_min_length": null,
+            "gallery_captions_requirement": "none",
+            "is_flair_required": true,
+            "gallery_max_items": null,
+            "gallery_urls_requirement": "none",
+            "body_regexes": [],
+            "link_repost_age": 90,
+            "body_text_min_length": null
+        }
+    }
+}
