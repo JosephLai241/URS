@@ -30,7 +30,7 @@ You can use the `-h` flag to see the help message or the `-e` flag to display ex
         
     [ERROR MESSAGE]
 
-This message is displayed if an error occured while exporting the data. This applies to the scraper tools or word frequencies tool. The specific error will follow `...`.
+This message is displayed if an error occured while exporting the data. This applies to the scraper tools or word frequencies tool. The specific error will be printed under the art.
 
 # PRAW Errors
 
@@ -46,7 +46,7 @@ This message is displayed if an error occured while exporting the data. This app
 
     Prawcore exception: [EXCEPTION]
 
-This message is displayed if you enter invalid API credentials or if you are not connected to the internet. The exception is printed in the next line under the art.
+This message is displayed if you enter invalid API credentials or if you are not connected to the internet. The exception is printed under the art.
 
 Recheck `Credentials.py` to make sure the `API` dictionary's values are correct.
 
