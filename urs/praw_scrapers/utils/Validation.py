@@ -201,8 +201,8 @@ class Validation():
             try:
                 reddit.submission(url = post).title
                 found.append(post)
-            except Exception as e:
-                not_found.append(e)
+            except Exception:
+                not_found.append(post)
 
     @staticmethod
     def existence(l_type, object_list, parser, reddit, s_t):
