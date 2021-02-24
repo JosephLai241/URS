@@ -22,14 +22,16 @@
         * Added new decorator to log individual argument errors.
         * Added new decorator to log when no Reddit objects are left to scrape after failing validation check.
         * Added new decorator to log when an invalid file is passed into the analytical tools.
-        * Added new decorator to log when the `scrapes` directory is missing, which would cause the new `make_analytics_directory()` method in `DirInit.py` to fail. This decorator is also defined in the same file to avoid a circular import error.
+        * Added new decorator to log when the `scrapes` directory is missing, which would cause the new `make_analytics_directory()` method in `DirInit.py` to fail. 
+            + This decorator is also defined in the same file to avoid a circular import error.
     + ASCII art
         * Added new art for the word frequencies and wordcloud generators.
-        * Added new error art displayed when a problem arises during exporting data.
-        * Added new error art displayed when Reddit object validation is completed and there are no objects left to scrape for.
+        * Added new error art displayed when a problem arises while exporting data.
+        * Added new error art displayed when Reddit object validation is completed and there are no objects left to scrape.
         * Added new error art displayed when an invalid file is passed into the analytical tools.
 * `README` 
     + Added new Contact section and moved contact badges into it.
+        + Apparently it was not obvious enough in previous versions since users did not send emails to the address specifically created for URS-related inquiries.
     + Added new sections for the analytical tools.
     + Updated demo GIFs
         * Moved all GIFs to a separate branch to avoid unnecessary clones.
@@ -40,24 +42,32 @@
 ### Changed
 
 * User interface
-    + JSON is now the default export option. `--csv` flag is required to export to CSV.
+    + JSON is now the default export option. `--csv` flag is required to export to CSV instead.
     + Improved JSON structure.
         * PRAW scraping export structure:
             + Scrape details are now included at the top of each exported file in the `scrape_details` field.
+                * Subreddit scrapes - Includes `subreddit`, `category`, `n_results_or_keywords`, and `time_filter`.
+                * Redditor scrapes - Includes `redditor` and `n_results`.
+                * Submission comments scrapes - Includes `submission_title`, `n_results`, and `submission_url`.
             + Scrape data is now stored in the `data` field.
-                * Subreddit scraping - `data` is a list containing submission objects.
-                * Redditor scraping - `data` is an object containing additional nested dictionaries: `information` denoting Redditor metadata, and `interactions` denoting Redditor interactions (submissions and/or comments).
-                * Submission comments scraping - `data` is an list containing additional nested dictionaries.
+                * Subreddit scrapes - `data` is a list containing submission objects.
+                * Redditor scrapes - `data` is an object containing additional nested dictionaries: 
+                    + `information` - a dictionary denoting Redditor metadata, 
+                    + `interactions` - a dictionary denoting Redditor interactions (submissions and/or comments). Each interaction follows the Subreddit scrapes structure.
+                * Submission comments scrapes - `data` is an list containing additional nested dictionaries.
                     + Raw comments contains dictionaries of `comment_id: SUBMISSION_METADATA`.
-                    + Structured comments follows the structure seen in raw comments, but includes an extra `replies` field in the submission metadata and holds a list of additional nested dictionaries of `comment_id: SUBMISSION_METADATA`. This pattern repeats down to third level replies.
+                    + Structured comments follows the structure seen in raw comments, but includes an extra `replies` field in the submission metadata, holding a list of additional nested dictionaries of `comment_id: SUBMISSION_METADATA`. This pattern repeats down to third level replies.
         * Word frequencies export structure:
             + The original scrape data filepath is included in the `raw_file` field.
             + `data` is a dictionary containing `word: frequency`.
-* Source code
     + Log:
         * `scrapes.log` is now named `urs.log`.
+        * Validation of Reddit objects is now included - invalid Reddit objects will be logged as a warning.
         * Rate limit information is now included in the log.
+* Source code
     + Moved PRAW scrapers into its own package.
+    + Scrape settings for the basic Subreddit scraper is now cleaned within `Basic.py`, further streamlining conditionals in `Subreddit.py` and `Export.py`.
+    + Returning final scrape settings dictionary from all scrapers after execution for logging purposes, further streamlining the `LogPRAWScraper` class in `Logger.py`.
     + ASCII art:
         * Modified the args error art to display specific feedback when invalid arguments are passed.
     + Upgraded from relative to absolute imports.
@@ -77,6 +87,18 @@
         * Created new rules for method comments.
     + Added `Releases`:
         * Moved Releases section from main `README` to a separate document.
+
+### Fixed
+
+* Source code
+    + PRAW scraper settings
+        * **Bug:** Invalid Reddit objects (Subreddits, Redditors, or submissions) and their respective scrape settings would be added to the scrape settings dictionary even after failing validation.
+        * **Behavior:** URS would try to scrape invalid Reddit objects, then throw an error mid-scrape because it is unable to pull data from PRAW. 
+        + **Fix:** Returning the invalid objects list from each scraper into `GetPRAWScrapeSettings.get_settings()` to circumvent this issue.
+    + Basic Subreddit scraper
+        * **Bug:** The time filter `all` would be applied to categories that do not support time filter use, resulting in errors while scraping.
+        * **Behavior:** URS would throw an error when trying to export the file, resulting in a failed run.
+        * **Fix:** Added a conditional to check if the category allows for a time filter, and applies either the `all` time filter or `None` accordingly.
 
 ### Deprecated
 
