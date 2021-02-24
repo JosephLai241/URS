@@ -68,7 +68,7 @@ class CheckSubmissions():
         """
 
         print("\nChecking if submission(s) exist...")
-        logging.info("Validating Subreddits...")
+        logging.info("Validating submissions...")
         logging.info("")
         posts, not_posts = Validation.existence(s_t[2], post_list, parser, reddit, s_t)
         
