@@ -5,6 +5,7 @@ Defining methods for the Redditor scraper.
 """
 
 
+import logging
 import praw
 
 from colorama import (
@@ -69,6 +70,8 @@ class CheckRedditors():
         """
 
         print("\nChecking if Redditor(s) exist...")
+        logging.info("Validating Redditors...")
+        logging.info("")
         users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
         
         if not_users:
@@ -76,10 +79,16 @@ class CheckRedditors():
             print(Fore.YELLOW + Style.BRIGHT + "-" * 59)
             print(*not_users, sep = "\n")
 
-        if not users:
-            raise ValueError
+            logging.warning("Failed to validate the following Redditors:")
+            logging.warning("%s" % (not_users))
+            logging.warning("Skipping.")
+            logging.info("")
 
-        return users
+        if not users:
+            logging.critical("ALL REDDITORS FAILED VALIDATION.")
+            raise ValueError
+        
+        return not_users, users
 
 class ProcessInteractions():
     """
@@ -758,14 +767,18 @@ class RunRedditor():
 
         Returns
         -------
-        None
+        u_master: dict
+            Dictionary containing valid Redditors and their respective scrape
+            settings
         """
 
         PRAWTitles.u_title()
 
         user_list = GetPRAWScrapeSettings().create_list(args, s_t[1])
-        users = CheckRedditors().list_redditors(parser, reddit, user_list)
+        not_users, users = CheckRedditors().list_redditors(parser, reddit, user_list)
         u_master = make_none_dict(users)
-        GetPRAWScrapeSettings().get_settings(args, u_master, s_t[1])
+        GetPRAWScrapeSettings().get_settings(args, not_users, u_master, s_t[1])
 
         Write.write(args, reddit, u_master)
+
+        return u_master
