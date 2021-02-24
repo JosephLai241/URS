@@ -21,7 +21,8 @@ from urs.utils.Global import (
     categories,
     make_list_dict,
     options,
-    s_t
+    s_t,
+    short_cat
 )
 from urs.utils.Logger import (
     LogError,
@@ -177,15 +178,16 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
         None
         """
 
-        user_search = search_for \
-            if cat_i == 5 \
-            else int(search_for)
         for sub_name in master.keys():
             if sub_name == sub:
+                time_filter = "all" \
+                    if cat_i in [2, 3, 5] \
+                    else None
+                
                 settings = [
-                    cat_i, 
-                    user_search,
-                    "all"
+                    short_cat[cat_i].lower(), 
+                    search_for,
+                    time_filter
                 ]
                 master[sub].append(settings)
 
@@ -338,31 +340,6 @@ class ConfirmInput():
                     print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                     parser.exit()
             except ValueError:
-                print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")    
-
-    @staticmethod
-    def another():
-        """
-        Scrape again?
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        repeat: str
-            String denoting whether to rerun the basic Subreddit scraper
-        """
-
-        while True:
-            try:
-                repeat = input("\nScrape again? [Y/N] ").strip().lower()
-                if repeat not in options:
-                    raise ValueError
-                else:
-                    return repeat
-            except ValueError:
                 print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")
 
 class RunBasic():
@@ -464,22 +441,18 @@ class RunBasic():
         """
 
         PRAWTitles.b_title()
-        
-        while True:
-            while True:                
-                master = RunBasic._create_settings(parser, reddit)
+                    
+        while True:                
+            master = RunBasic._create_settings(parser, reddit)
 
-                confirm = RunBasic._print_confirm(args, master)
-                if confirm == options[0]:
-                    break
-                else:
-                    print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
-                    parser.exit()
-            
-            GetSortWrite().gsw(args, reddit, master)
-            
-            repeat = ConfirmInput.another()
-            if repeat == options[1]:
-                print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
+            confirm = RunBasic._print_confirm(args, master)
+            if confirm == options[0]:
                 break
-                
+            else:
+                print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
+                parser.exit()
+        
+        GetSortWrite().gsw(args, reddit, master)
+
+        return master
+        
