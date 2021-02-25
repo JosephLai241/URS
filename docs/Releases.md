@@ -17,6 +17,7 @@
             + `-f` - Word frequencies generator.
             + `-wc` - Wordcloud generator.
             + `--nosave` - Only display the wordcloud; do not save to file.
+        * Added metavar for args help message.
         * Added additional verbose feedback if invalid arguments are given.
     + Log decorators
         * Added new decorator to log individual argument errors.
@@ -66,6 +67,8 @@
         * Rate limit information is now included in the log.
 * Source code
     + Moved PRAW scrapers into its own package.
+    + Subreddit scraper's "edited" field is now either a boolean (if the post was not edited) or a string (if it was).
+        * Previous iterations did not distinguish the different types and would solely return a string.
     + Scrape settings for the basic Subreddit scraper is now cleaned within `Basic.py`, further streamlining conditionals in `Subreddit.py` and `Export.py`.
     + Returning final scrape settings dictionary from all scrapers after execution for logging purposes, further streamlining the `LogPRAWScraper` class in `Logger.py`.
     + Passing the submission URL instead of the exception into the `not_found` list for submission comments scraping.
