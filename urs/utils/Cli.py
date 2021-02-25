@@ -75,12 +75,12 @@ Contact: urs_project@protonmail.com
 [PRAW SUBREDDIT SCRAPING]
 
 Subreddit categories:
-    H,h     selecting Hot category
-    N,n     selecting New category
-    C,c     selecting Controversial category (time filter available)
-    T,t     selecting Top category           (time filter available)
-    R,r     selecting Rising category
-    S,s     selecting Search category        (time filter available)
+    h     selecting Hot category
+    n     selecting New category
+    c     selecting Controversial category (time filter available)
+    t     selecting Top category           (time filter available)
+    r     selecting Rising category
+    s     selecting Search category        (time filter available)
 
 Subreddit time filters:
     all (default)
