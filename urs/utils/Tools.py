@@ -36,6 +36,14 @@ class Run():
             self._args: argparse Namespace object
             self._parser: argparse ArgumentParser object
 
+        Calls a private method:
+
+            self._introduce_then_args()
+
+        Parameters
+        ----------
+        reddit: PRAW Reddit object
+
         Returns
         -------
         None
@@ -47,6 +55,13 @@ class Run():
     def _introduce_then_args(self):
         """
         Print title, then run checks for CLI args and PRAW credentials.
+
+        Calls previously defined public methods:
+
+            MainTitle.title()
+
+            Parser().parse_args()
+            CheckCli().check_args()
 
         Parameters
         ----------
@@ -70,6 +85,24 @@ class Run():
     def run_urs(self):
         """
         Switch for running all URS tools.
+
+        Calls previously defined public methods:
+
+            PRAW validation:
+
+                Validation.validate_user()
+
+            PRAW scrapers:
+
+                RunSubreddit.run()
+                RunRedditor.run()
+                RunComments.run()
+                RunBasic.run()
+            
+            Analytical tools:
+
+                GenerateFrequencies.generate()
+                GenerateWordcloud.generate()
         """
 
         if self._args.check:
@@ -104,7 +137,7 @@ class Run():
             """
 
             if self._args.frequencies:
-                GenerateFrequencies().generate(self._args)
+                GenerateFrequencies.generate(self._args)
             if self._args.wordcloud:
-                GenerateWordcloud().generate(self._args)
+                GenerateWordcloud.generate(self._args)
         
