@@ -1,6 +1,6 @@
 # Releases
 
-## v3.2.0 - February TBD, 2021
+## v3.2.0 - February 25, 2021
 
 ### Added
 
