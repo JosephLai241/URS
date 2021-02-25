@@ -44,14 +44,14 @@ class TestParserInitMethod():
 
     [--check]
 
-    [-r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] 
+    [-r <subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
-    [-u USER N_RESULTS] 
-    [-c URL N_RESULTS] 
+    [-u <redditor> <n_results>] 
+    [-c <submission_url> <n_results>] 
     [-b]
 
-    [-f FILE_PATH]
-    [-wc FILE_PATH OPTIONAL_EXPORT_FORMAT]
+    [-f <file_path>]
+    [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 
     [-y]
@@ -75,12 +75,12 @@ Contact: urs_project@protonmail.com
 [PRAW SUBREDDIT SCRAPING]
 
 Subreddit categories:
-    H,h     selecting Hot category
-    N,n     selecting New category
-    C,c     selecting Controversial category (time filter available)
-    T,t     selecting Top category           (time filter available)
-    R,r     selecting Rising category
-    S,s     selecting Search category        (time filter available)
+    h     selecting Hot category
+    n     selecting New category
+    c     selecting Controversial category (time filter available)
+    t     selecting Top category           (time filter available)
+    r     selecting Rising category
+    s     selecting Search category        (time filter available)
 
 Subreddit time filters:
     all (default)
@@ -113,10 +113,10 @@ wordcloud export options:
 
 Arguments:
 
-    [-r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] 
+    [-r <subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
-    [-u USER N_RESULTS] 
-    [-c URL N_RESULTS] 
+    [-u <redditor> <n_results>] 
+    [-c <submission_url> <n_results>] 
     [-b]
 
     [-y]
@@ -141,6 +141,10 @@ SUBREDDITS
     (Scraping Search results from r/learnprogramming from the past month)
 
         $ ./Urs.py -r learnprogramming s "python developer" month
+
+    You can skip the settings confirmation table and immediately scrape by including the `-y` flag:
+
+        $ ./Urs.py -r cscareerquestions s "job" year -y
 
     You can add the Subreddit's rules in the scrape results by including the `--rules` flag. 
     This only works when you export to JSON:
@@ -177,8 +181,8 @@ SUBMISSION COMMENTS
 
 Arguments:
 
-    [-f FILE_PATH]
-    [-wc FILE_PATH OPTIONAL_EXPORT_FORMAT]
+    [-f <file_path>]
+    [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 
 Word frequencies are exported to JSON by default.
