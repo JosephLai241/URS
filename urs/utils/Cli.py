@@ -380,7 +380,7 @@ DISPLAY INSTEAD OF SAVING
         analyze_flags.add_argument(
             "--nosave",
             action = "store_true",
-            help = "do not save wordcloud to file"
+            help = "display wordcloud, do not save to file"
         )
 
     def _add_skip(self, parser):
