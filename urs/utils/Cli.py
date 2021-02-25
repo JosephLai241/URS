@@ -51,14 +51,14 @@ class Parser():
 
     [--check]
 
-    [-r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] 
+    [-r <subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
-    [-u USER N_RESULTS] 
-    [-c URL N_RESULTS] 
+    [-u <redditor> <n_results>] 
+    [-c <submission_url> <n_results>] 
     [-b]
 
-    [-f FILE_PATH]
-    [-wc FILE_PATH OPTIONAL_EXPORT_FORMAT]
+    [-f <file_path>]
+    [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 
     [-y]
@@ -110,10 +110,10 @@ wordcloud export options:
 
 Arguments:
 
-    [-r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER] 
+    [-r <subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
-    [-u USER N_RESULTS] 
-    [-c URL N_RESULTS] 
+    [-u <redditor> <n_results>] 
+    [-c <submission_url> <n_results>] 
     [-b]
 
     [-y]
@@ -138,6 +138,10 @@ SUBREDDITS
     (Scraping Search results from r/learnprogramming from the past month)
 
         $ ./Urs.py -r learnprogramming s "python developer" month
+
+    You can skip the settings confirmation table and immediately scrape by including the `-y` flag:
+
+        $ ./Urs.py -r cscareerquestions s "job" year -y
 
     You can add the Subreddit's rules in the scrape results by including the `--rules` flag. 
     This only works when you export to JSON:
@@ -174,8 +178,8 @@ SUBMISSION COMMENTS
 
 Arguments:
 
-    [-f FILE_PATH]
-    [-wc FILE_PATH OPTIONAL_EXPORT_FORMAT]
+    [-f <file_path>]
+    [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 
 Word frequencies are exported to JSON by default.
@@ -298,21 +302,21 @@ DISPLAY INSTEAD OF SAVING
             "-r", "--subreddit", 
             action = "append", 
             help = "specify Subreddit to scrape",
-            metavar = "", 
+            metavar = ("<subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords>", "<optional_time_filter>"), 
             nargs = "+"
         ) 
         praw_flags.add_argument(
             "-u", "--redditor", 
             action = "append", 
-            help = "specify Redditor profile to scrape",
-            metavar = "", 
+            help = "specify Redditor to scrape",
+            metavar = ("<redditor>", "<n_results>"), 
             nargs = 2
         ) 
         praw_flags.add_argument(
             "-c", "--comments", 
             action = "append", 
             help = "specify the URL of the submission to scrape comments",
-            metavar = "", 
+            metavar = ("<submission_url>", "<n_results>"), 
             nargs = 2
         ) 
         praw_flags.add_argument(
@@ -367,14 +371,14 @@ DISPLAY INSTEAD OF SAVING
             "-f", "--frequencies",
             action = "append",
             help = "get word frequencies present in submission titles, bodies, and/or comments",
-            metavar = "", 
+            metavar = "<file_path>", 
             nargs = 1
         )
         analyze_flags.add_argument(
             "-wc", "--wordcloud",
             action = "append",
             help = "create a wordcloud for a scrape file",
-            metavar = "", 
+            metavar = ("<file_path>", "<optional_export_format>"), 
             nargs = "+"
         )
         analyze_flags.add_argument(
