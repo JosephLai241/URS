@@ -48,7 +48,7 @@
     + [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
     + [Error Messages][Error Messages]
     + [2-Factor Authentication][2-Factor Authentication]
-    + [Releases/Changelog][Releases]
+    + [Releases/Changelog][Releases/Changelog]
     + [Some Linux Tips][Some Linux Tips]
 
 # Contact
@@ -504,7 +504,7 @@ This is a showcase for projects that are built on top of URS!
 [2-Factor Authentication]: https://github.com/JosephLai241/URS/blob/master/docs/Two-Factor%20Authentication.md
 [Error Messages]: https://github.com/JosephLai241/URS/blob/master/docs/Error%20Messages.md
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/How%20to%20Get%20PRAW%20Credentials.md
-[Releases]: https://github.com/JosephLai241/URS/blob/master/docs/Releases.md
+[Releases/Changelog]: https://github.com/JosephLai241/URS/blob/master/docs/Releases.md
 [Some Linux Tips]: https://github.com/JosephLai241/URS/blob/master/docs/Some%20Linux%20Tips.md
 
 <!-- SAMPLES: Links to the samples directory -->
