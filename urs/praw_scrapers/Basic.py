@@ -437,7 +437,8 @@ class RunBasic():
             
         Returns
         -------
-        None
+        master: dict
+            Dictionary containing all Subreddit scrape settings
         """
 
         PRAWTitles.b_title()

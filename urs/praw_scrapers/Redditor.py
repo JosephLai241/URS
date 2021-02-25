@@ -768,8 +768,7 @@ class RunRedditor():
         Returns
         -------
         u_master: dict
-            Dictionary containing valid Redditors and their respective scrape
-            settings
+            Dictionary containing all Redditor scrape settings
         """
 
         PRAWTitles.u_title()

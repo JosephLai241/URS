@@ -650,7 +650,8 @@ class RunComments():
 
         Returns
         -------
-        None
+        c_master: dict
+            Dictionary containing all submission comments scrape settings
         """
 
         PRAWTitles.c_title()

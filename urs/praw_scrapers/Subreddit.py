@@ -972,8 +972,7 @@ class RunSubreddit():
         Returns
         -------
         s_master: dict
-            Dictionary containing valid Subreddits and their respective scrape
-            settings
+            Dictionary containing all Subreddit scrape settings
         """
 
         PRAWTitles.r_title()
