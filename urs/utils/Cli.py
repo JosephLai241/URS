@@ -403,7 +403,7 @@ DISPLAY INSTEAD OF SAVING
         skip_flags.add_argument(
             "-y", 
             action = "store_true", 
-            help = "skip options confirmation and scrape immediately"
+            help = "skip settings confirmation and scrape immediately"
         )
 
     def _add_export(self, parser):
