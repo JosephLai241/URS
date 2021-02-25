@@ -470,12 +470,13 @@ class SortPosts():
 
         Returns
         -------
-        fixed_date: str
-            String denoting either an edited date or boolean indicating the post
-            was not edited
+        fixed_date: boolean or str
+            Boolean or string:
+                Boolean indicating the post was not edited
+                String denoting an edited date 
         """
 
-        return str(post.edited) \
+        return post.edited \
             if str(post.edited).isalpha() \
             else str(convert_time(post.edited))
 
@@ -937,10 +938,9 @@ class RunSubreddit():
         None
         """
 
-        if args.y:
-            GetSortWrite.gsw(args, reddit, s_master)
-        else:
-            RunSubreddit._confirm_write(args, reddit, s_master)
+        GetSortWrite.gsw(args, reddit, s_master) \
+            if args.y \
+            else RunSubreddit._confirm_write(args, reddit, s_master)
 
     @staticmethod
     @LogExport.log_export
