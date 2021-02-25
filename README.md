@@ -66,7 +66,7 @@ You can send me an email or leave a note by clicking on either of these badges. 
 
 This is a comprehensive Reddit scraping tool that integrates multiple features:
 
-* Scrape Reddit via [`PRAW`][PRAW] (the official Reddit API)
+* Scrape Reddit via [`PRAW`][PRAW] (the official Python Reddit API Wrapper)
     + Scrape Subreddits
     + Scrape Redditors
     + Scrape submission comments
