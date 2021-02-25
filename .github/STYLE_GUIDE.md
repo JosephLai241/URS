@@ -309,19 +309,29 @@ init(autoreset = True)
 
 ## Imports
 
-All imports have to be listed at the top of each script. Each group is sorted in alphabetical order.
+**Do not use relative imports.**
 
-Standard library and third-party imports are listed first, then relative imports. These imports should be separated by a new line.
+All imports have to be listed at the top of each script two newlines below the header docstring block. This is an example from `Tools.py`.
+
+Imports should be grouped together based on relevance. Each group is sorted in alphabetical order.
+
+Standard library and third-party imports are listed first, then URS package imports. These imports should be separated by a new line.
 
 Imports using the `import` form come before imports using the `from` form. These imports should also be separated by a new line.
-
-Relative imports that import an entire module come before importing a module class.
 
 Additionally, multiple imports should be on its own line. Lowercase imports are listed before uppercase imports. Each are sorted by alphabetical order. 
 
 Here is an example of a group of imports from `Redditor.py`.
 
 ```python
+"""
+Redditor scraper
+================
+Defining methods for the Redditor scraper.
+"""
+
+
+import logging <------ Two newlines under the docstring block.
 import praw
 
 from colorama import (
@@ -330,18 +340,26 @@ from colorama import (
     Style <----------------- Alphabetical order
 )
 from prawcore import PrawcoreException
-
-from . import (
-    Cli, 
-    Export, 
-    Global, 
-    Titles, 
-    Validation <-- Alphabetical order
+                    <----------------- Newline separating relevance
+from urs.praw_scrapers.utils.Validation import Validation
+                    <----------------- Newline separating relevance
+from urs.utils.Cli import GetPRAWScrapeSettings
+from urs.utils.Export import (
+    Export,
+    NameFile <----------------- Alphabetical order
 )
-from .Logger import (
+from urs.utils.Global import (
+    convert_time,
+    eo,
+    make_none_dict,
+    s_t <----------------- Alphabetical order
+)
+from urs.utils.Logger import (
+    LogError,
     LogExport, 
-    LogScraper <-------------- Alphabetical order
+    LogPRAWScraper <----------------- Alphabetical order
 )
+from urs.utils.Titles import PRAWTitles
 ```
 
 ## Method Parameters
@@ -383,49 +401,64 @@ This is a modified version of the huge `init` method in `Redditor.py`:
         self._saved = user.saved(limit = limit)
 
         self._comment_titles = [
-            "Date Created", 
-            "Score", 
-            "Text", 
-            "Parent ID"
+            "type",
+            "date_created", 
+            "score", 
+            "text", 
+            "parent_id", 
+            "link_id", 
+            "edited", 
+            "stickied", 
+            "replying_to", 
+            "in_subreddit"
         ]
         self._submission_titles = [
-            "Title", 
-            "Date Created", 
-            "Upvotes", 
-            "Upvote Ratio"
+            "type",
+            "title", 
+            "date_created", 
+            "upvotes", 
+            "upvote_ratio",
+            "id", 
+            "nsfw", 
+            "in_subreddit", 
+            "body"
         ]
 
-        self._s_types = [
-            "Submissions", 
-            "Comments", 
-            "Mutts", 
-            "Access"
+        self._scrape_types = [
+            "submissions", 
+            "comments", 
+            "mutts", 
+            "access"
         ]
 
         self._mutts = [
             self._controversial, 
             self._gilded, 
             self._hot, 
-            self._new
+            self._new, 
+            self._top
         ]
         self._mutt_names = [
-            "Controversial", 
-            "Gilded", 
-            "Hot", 
-            "New"
+            "controversial", 
+            "gilded", 
+            "hot", 
+            "new", 
+            "top"
         ]
 
         self._access = [
             self._downvoted, 
             self._gildings, 
             self._hidden, 
-            self._saved
+            self._saved, 
+            self._upvoted
         ]
         self._access_names = [
-            "Downvoted", 
-            "Gildings", 
-            "Hidden", 
-            "Saved"
+            "downvoted", 
+            "gildings", 
+            "hidden", 
+            "saved", 
+            "upvoted"
         ]
 ```
 
