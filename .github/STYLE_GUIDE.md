@@ -286,6 +286,54 @@ This is an example taken from `RunRedditor.run()` found in `Redditor.py`:
 
 Notice how I have included the `Returns` section in the comment even though it returns nothing. Include `Returns` any time the method takes parameters. You do not need to include the additional sections if the method does not take parameters, raise exceptions, or return values. Simply write a short description as to what it does.
 
+### Describing a Piece of Code
+
+Comments describing what is happening in a piece of code should use `###` before the comment and placed above the code you are describing. This is a modified version of `PrepComments._prep_structured()` found in `PrepData.py`:
+
+```python
+def _prep_structured(data, plt_dict):
+    """
+    Method comment here...
+    """
+
+    for comment_object in data:
+        for comment_data in comment_object.values():
+            CleanData.count_words("text", comment_data, plt_dict)
+
+            ### Recursive call if the comment contains the "replies" field and 
+            ### if there are comments within the replies list.
+            if "replies" in comment_data.keys() and comment_data["replies"]:
+                PrepComments._prep_structured(comment_data["replies"], plt_dict)
+```
+
+Here I am describing the tail recursive call and the conditionals for when it would be called. Split the comment into a new line if it exceeds the ~80 character ruler in your IDE.
+
+If you are describing why multiple conditionals are triggered, place the comment above the conditional. This is a modified version of `PrepRedditor.prep_redditor()`, also found in `PrepData.py`.
+
+```python
+def prep_redditor(data, file):
+    """
+    Method comment here...
+    """
+
+    plt_dict = dict()
+
+    for interactions in data["interactions"].values():
+        for obj in interactions:
+            ### Indicates there is valid data in this field.
+            if isinstance(obj, dict):
+                if obj["type"] == "submission":
+                    CleanData.count_words("title", obj, plt_dict)
+                    CleanData.count_words("body", obj, plt_dict)
+                elif obj["type"] == "comment":
+                    CleanData.count_words("text", obj, plt_dict)
+            ### Indicates this field is forbidden.
+            elif isinstance(obj, str):
+                continue
+```
+
+New maintainers would most likely be confused as to why I am type-checking the objects within the interactions list, which is why I have included the comments above the conditionals. 
+
 ### Global Variable Comments
 
 Global variables and functions should use `###` before the comment and placed above the variable.
