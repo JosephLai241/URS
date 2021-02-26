@@ -14,8 +14,8 @@
 
 <p align="center"> 
     <img 
-        alt="Full Demo"
-        src="https://i.imgur.com/a4du8dh.png">
+        alt="Help Screenshot"
+        src="https://i.imgur.com/KP1A0mZ.png">
 </p>
 
 # Table of Contents
