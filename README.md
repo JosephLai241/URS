@@ -229,7 +229,7 @@ Time filters may be applied to some categories. Here is a table of the categorie
 
 Specify the time filter after the number of results returned or keywords you want to search for.
 
-**Usage:** `$ ./Urs.py -r SUBREDDIT (C|T|S) N_RESULTS_OR_KEYWORDS [OPTIONAL_TIME_FILTER]`
+**Usage:** `$ ./Urs.py -r SUBREDDIT (C|T|S) N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER`
 
 If no time filter is specified, the default time filter `all` is applied. The Subreddit settings table will display `None` for categories that do not offer the additional time filter option.
 
@@ -418,7 +418,7 @@ Taking word frequencies to the next level, you can generate wordclouds based on 
 
 PNG is the default format, but you can also export to any of the options listed above by including the format as the second flag argument.
 
-**Usage:** `$ ./Urs.py -wc FILE_PATH [OPTIONAL_EXPORT_FORMAT]` 
+**Usage:** `$ ./Urs.py -wc FILE_PATH OPTIONAL_EXPORT_FORMAT` 
 
 Exported files will be saved to the `analytics/wordclouds` directory.
 
