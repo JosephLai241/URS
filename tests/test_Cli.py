@@ -44,7 +44,7 @@ class TestParserInitMethod():
 
     [--check]
 
-    [-r <subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords> [<optional_time_filter>]] 
+    [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>] 
@@ -113,7 +113,7 @@ wordcloud export options:
 
 Arguments:
 
-    [-r <subreddit> <[h|n|c|t|r|s]> <n_results_or_keywords> [<optional_time_filter>]] 
+    [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>] 
