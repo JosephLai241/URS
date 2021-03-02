@@ -9,7 +9,7 @@
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?logo=Travis)][Travis CI Build Status]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
-![Lines of code](https://img.shields.io/tokei/lines/github/JosephLai241/URS?label=lines%20of%20code)
+![Total lines](https://img.shields.io/tokei/lines/github/JosephLai241/URS)
 ![License](https://img.shields.io/github/license/JosephLai241/URS)
 
 <p align="center"> 
