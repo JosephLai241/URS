@@ -5,10 +5,12 @@ chardet==3.0.4
 colorama==0.4.3
 coverage==5.1
 cycler==0.10.0
+halo==0.0.31
 idna==2.9
 isort==4.3.21
 kiwisolver==1.2.0
 lazy-object-proxy==1.4.3
+log-symbols==0.0.14
 matplotlib==3.3.4
 mccabe==0.6.1
 more-itertools==8.3.0
@@ -27,6 +29,8 @@ pytest-cov==2.10.0
 python-dateutil==2.8.1
 requests==2.23.0
 six==1.14.0
+spinners==0.0.24
+termcolor==1.1.0
 toml==0.10.0
 update-checker==0.18.0
 urllib3==1.25.9
