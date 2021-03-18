@@ -13,6 +13,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 from praw import models
 from prawcore import (
     NotFound, 
@@ -99,9 +100,10 @@ class Validation():
         -------
         None
         """
-
-        print(Style.BRIGHT + Fore.GREEN + 
-            "\nSuccessfully logged in as u/%s.\n" % reddit.user.me())
+        login_spinner = Halo(color = "white", text = "Logging in.")
+        login_spinner.start()
+        login_spinner.succeed(Style.BRIGHT + Fore.GREEN + "Successfully logged in as u/%s." % reddit.user.me())
+        print()
         
         Validation.print_rate_limit(reddit)
 
