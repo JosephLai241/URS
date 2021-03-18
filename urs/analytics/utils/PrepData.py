@@ -7,6 +7,9 @@ Helper methods to prepare data for frequencies and wordcloud generators.
 
 import json
 
+from halo import Halo
+
+from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalyticsErrors
 
 class GetPath():
@@ -190,12 +193,20 @@ class PrepSubreddit():
             Dictionary containing finalized word frequencies
         """
 
+        status = Status(
+            "Finished Subreddit analysis.",
+            "Analyzing Subreddit scrape.",
+            "white"
+        )
+
         plt_dict = dict()
 
+        status.start()
         for submission in data:
             CleanData.count_words("title", submission, plt_dict)
             CleanData.count_words("text", submission, plt_dict)
 
+        status.succeed()
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
 class PrepRedditor():
@@ -225,8 +236,15 @@ class PrepRedditor():
             Dictionary containing finalized word frequencies
         """
 
+        status = Status(
+            "Finished Redditor analysis.",
+            "Analyzing Redditor scrape.",
+            "white"
+        )
+
         plt_dict = dict()
 
+        status.start()
         for interactions in data["interactions"].values():
             for obj in interactions:
                 ### Indicates there is valid data in this field.
@@ -240,6 +258,7 @@ class PrepRedditor():
                 elif isinstance(obj, str):
                     continue
 
+        status.succeed()
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
 class PrepComments():
@@ -258,8 +277,8 @@ class PrepComments():
 
         Parameters
         ----------
-        data: dict
-            Dictionary containing extracted scrape data
+        data: list
+            List containing extracted scrape data
         plt_dict: dict
             Dictionary containing frequency data
 
@@ -268,22 +287,28 @@ class PrepComments():
         None
         """
 
-        for comment_data in data[0].values():
-            CleanData.count_words("text", comment_data, plt_dict)
+        status = Status(
+            "Finished raw submission comments analysis.",
+            "Analyzing raw submission comments scrape.",
+            "white"
+        )
+
+        status.start()
+        for comment in data:
+            CleanData.count_words("text", comment, plt_dict)
+        
+        status.succeed()
 
     @staticmethod
     def _prep_structured(data, plt_dict):
         """
-        A tail recursive method to prepare structured submission comments.
-
-        Calls previously defined public method:
-
-            CleanData.count_words()
+        An iterative implementation of depth-first search to prepare structured
+        comments.
 
         Parameters
         ----------
-        data: dict
-            Dictionary containing extracted scrape data
+        data: list
+            List containing extracted scrape data
         plt_dict: dict
             Dictionary containing frequency data
 
@@ -292,15 +317,34 @@ class PrepComments():
         None
         """
 
-        for comment_object in data:
-            for comment_data in comment_object.values():
-                CleanData.count_words("text", comment_data, plt_dict)
+        status = Status(
+            "Finished structured submission comments analysis.",
+            "Analyzing structured submission comments scrape.",
+            "white"
+        )
 
-                ### Recursive call if the comment contains the "replies" field and 
-                ### if there are comments within the replies list.
-                if "replies" in comment_data.keys() and comment_data["replies"]:
-                    PrepComments._prep_structured(comment_data["replies"], plt_dict)
-    
+        status.start()
+        for comment in data:
+            CleanData.count_words("text", comment, plt_dict)
+
+            stack = []
+            stack.append(comment)
+            
+            visited = []
+            visited.append(comment)
+
+            while stack:
+                current_comment = stack.pop(0)
+                
+                for reply in current_comment["replies"]:
+                    CleanData.count_words("text", reply, plt_dict)
+
+                    if reply not in visited:
+                        stack.insert(0, reply)
+                        visited.append(reply)
+
+        status.succeed()
+
     @staticmethod
     def prep_comments(data, file):
         """
@@ -327,7 +371,7 @@ class PrepComments():
         plt_dict = dict()
 
         PrepComments._prep_raw(data["data"], plt_dict) \
-            if data["scrape_settings"]["n_results"] == "RAW" \
+            if data["scrape_settings"]["style"] == "raw" \
             else PrepComments._prep_structured(data["data"], plt_dict)
 
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
