@@ -8,6 +8,8 @@ Methods for naming and exporting scraped data.
 import csv
 import json
 
+from json import JSONEncoder
+
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import (
     categories,
@@ -277,7 +279,7 @@ class NameFile():
 
         return self._fix(raw_n)
 
-    def c_fname(self, limit, string):
+    def c_fname(self, args, limit, string):
         """
         Determine filename format for submission comments scraping. Calls previously
         defined private methods:
@@ -287,6 +289,8 @@ class NameFile():
 
         Parameters
         ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
         limit: str
             Integer in string format denoting the number of results to return
         string: str
@@ -300,15 +304,31 @@ class NameFile():
         """
 
         string = self._check_len(string)
+        style = "raw" \
+            if args.raw \
+            else "structured"
+        
         if int(limit) != 0:
-            end = "result" \
+            plurality = "result" \
                 if int(limit) < 2 \
                 else "results"
-            raw_n = str("%s-%s-%s" % (string, limit, end))
+            raw_n = str("%s-%s-%s-%s" % (string, limit, plurality, style))
         else:
-            raw_n = str("%s-%s" % (string, "RAW"))
+            raw_n = str("%s-%s-%s" % (string, "all", style))
 
         return self._fix(raw_n)
+
+class EncodeNode(JSONEncoder):
+    """
+    Methods to serialize CommentNodes for JSON export. 
+    """
+
+    def default(self, object):
+        """
+        Override the default JSONEncoder `default()` method. 
+        """
+
+        return object.__dict__
 
 class Export():
     """
@@ -363,6 +383,30 @@ class Export():
             writer = csv.writer(results, delimiter = ",")
             writer.writerow(data.keys())
             writer.writerows(zip(*data.values()))
+
+    @staticmethod
+    def write_structured_comments(data, f_name):
+        """
+        Write structured comments to JSON by using the custom JSONEncoder class
+        with the `cls` parameter within `json.dumps()`.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary of scrape data
+        f_name: str
+            String denoting the filename
+
+        Returns
+        -------
+        None 
+        """
+
+        InitializeDirectory.make_type_directory("comments")
+        filename = Export._get_filename_extension(f_name, "json", "comments")
+
+        with open(filename, "w", encoding = "utf-8") as results:
+            json.dump(data, results, indent = 4, cls = EncodeNode)
 
     @staticmethod
     def write_json(data, filename):
