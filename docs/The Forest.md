@@ -6,7 +6,7 @@
 
 I am a self-taught software developer who just recently graduated from college and am currently looking for my first full-time job. I do not have a computer science degree, so I have had to teach myself a ton of concepts that I would have learned if I got the degree. A class I wish I was able to take in college is data structures and algorithms because that seems to be all the buzz when it comes to the technical interview, which I unfortunately struggle with greatly due to my lack of experience and practice.
 
-Recently I have been teaching myself DSA. Implementing simple examples of each topic within DSA was not so bad (I am currently working on a study guide/reference repository containing these implementations in both Python and Rust that I will make public soon), but practicing Leetcode problems was and still is a difficult process for me. I will continue to power through the struggle because my livelihood and future career depends on it, though. 
+Recently (March 2021) I have been teaching myself DSA. Implementing simple examples of each topic within DSA was not so bad (I am currently working on a study guide/reference repository containing these implementations in both Python and Rust that I will make public soon), but practicing Leetcode problems was and still is a difficult process for me. I will continue to power through the struggle because my livelihood and future career depends on it, though. 
 
 While it has not been a smooth journey, I have come to realize how useful DSA is and am implementing what I have learned in a real-world use case. I do not think I would have been able to figure out a solution to the structured comments scraper's prior shortcomings if I had not studied this area within computer science. I recently implemented my first [trie][trie] and was fascinated by how abstract data structures worked. I immediately realized I needed to use a tree data structure for the structured comments scraper in order to take it to the next level, which is the purpose of [this pull request][Pull Request].
 
@@ -14,7 +14,7 @@ While it has not been a smooth journey, I have come to realize how useful DSA is
 
 The `Forest` is named after PRAW's [`CommentForest`][CommentForest]. The `CommentForest` does not return comments in structured format, so I wrote my own implementation of it.
 
-The trie was a huge inspiration to the `Forest`. I will quickly explain my implementation of the trie node.
+The trie was a huge inspiration for the `Forest`. I will quickly explain my implementation of the trie node.
 
 ```python
 class TrieNode():
@@ -61,7 +61,7 @@ class Forest():
         self.root = CommentNode({ "id": "abc123" })
 ```
 
-The only key in the dictionary passed into `CommentNode` is `id`, therefore the root `CommentNode` will only contain the attributes `self.id` and `self.replies`. A mock submission ID I typed is shown. 
+The only key in the dictionary passed into `CommentNode` is `id`, therefore the root `CommentNode` will only contain the attributes `self.id` and `self.replies`. A mock submission ID I typed is shown. The actual source code will pull the submission's ID based on the URL that was passed into the `-c` flag and set the `id` value accordingly.
 
 Before I get to the insertion methods, I will explain how comments and their replies are linked.
 
@@ -73,12 +73,12 @@ Here is a mock top comment corresponding to the mock submisssion ID. Note the `p
 
 ```
 {
-    'parent_id': 't3_abc123', 
-    'comment_id': 'qwerty1', 
+    'parent_id': 't3_abc123',   <--- matches the submission ID
+    'comment_id': 'qwerty1',
     'author': 'someone', 
     'date_created': '06-06-2006 06:06:06', 
     'upvotes': 666, 
-    'text': 'some text here', 
+    'text': 'a top level comment here', 
     'edited': False, 
     'is_submitter': False, 
     'stickied': False
@@ -89,9 +89,9 @@ Here is a mock second-level reply to the mock top comment. Note the `parent_id` 
 
 ```
 {
-    'parent_id': 't1_qwerty1', 
+    'parent_id': 't1_qwerty1',  <--- matches the top level comment ID
     'comment_id': 'hjkl234', 
-    'author': 'someone', 
+    'author': 'someone_else', 
     'date_created': '06-06-2006 18:06:06', 
     'upvotes': 6, 
     'text': 'a reply here', 
@@ -131,13 +131,12 @@ I then defined the methods for `CommentNode` insertion.
     def seed(self, new_comment):
         parent_id = new_comment.parent_id.split("_", 1)[1]
                 
-        if parent_id == getattr(self.root, "id"):
-            self.root.replies.append(new_comment)
-        else:
-            self._dfs_insert(self.root, new_comment)
+        self.root.replies.append(new_comment) \
+            if parent_id == getattr(self.root, "id") \
+            else self._dfs_insert(self.root, new_comment)
 ```
 
-I implemented the [depth-first search][Depth-First Search] algorithm to find a comment's parent node and insert it into the parent node's `replies` array. I defined a separate `visited` set to keep track of visited `CommentNode`s to avoid an infinite loop of inserting `CommentNode`s that were already visited. I wrote a recursive version of depth-first search, but then opted for an iterative version because it would not scale well for submissions that included large amounts of comments, ie. stack overflow.
+I implemented the [depth-first search][Depth-First Search] algorithm to find a comment's parent node and insert it into the parent node's `replies` array. I defined a separate `visited` set to keep track of visited `CommentNode`s to avoid an infinite loop of inserting `CommentNode`s that were already visited into the `stack`. At first I wrote a recursive version of depth-first search, but then opted for an iterative version because it would not scale well for submissions that included large amounts of comments, ie. stack overflow.
 
 Within the `seed` method, I first check if the `CommentNode` is a top level comment by comparing its parent ID to the submission ID. Depth-first search is triggered if the `CommentNode` is not a top level comment.
 
@@ -149,23 +148,17 @@ Since Python's built-in JSON module can only handle primitive types that have a 
 from json import JSONEncoder
 
 class EncodeNode(JSONEncoder):
-    """
-    Methods to serialize CommentNodes for JSON export. 
-    """
-
     def default(self, object):
-        """
-        Override the default JSONEncoder `default()` method. 
-        """
-
         return object.__dict__
 ```
 
-The `default()` method overrides `JSONEncoder`'s `default()` method and serializes the `CommentNode`. By doing this, I convert the `CommentNode` into a dictionary, which is a primitive type that has a direct JSON equivalent. Each node will be converted into dictionary format when inserted into the `replies` array by writing:
+The `default()` method overrides `JSONEncoder`'s `default()` method and serializes the `CommentNode`. By doing this, I convert the `CommentNode` into a dictionary, which is a primitive type that has a direct JSON equivalent. I do this by writing:
 
 ```python
 EncodeNode().encode(CommentNode)
 ```
+
+This ensures the node is correctly encoded before I call the `seed()` method to insert the `CommentNode` into the `replies` array.
 
 I can then use this custom `JSONEncoder` subclass while exporting by specifying it within `json.dump()` with the `cls` kwarg:
 
@@ -174,7 +167,7 @@ with open(filename, "w", encoding = "utf-8") as results:
     json.dump(data, results, indent = 4, cls = EncodeNode)
 ```
 
-That's all!
+This was how the structured comments export was implemented. I hope this was somewhat interesting and/or informative. Thanks for reading!
 
 <!-- LINKS -->
 [Pull Request]: https://something.com
