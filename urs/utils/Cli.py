@@ -54,7 +54,8 @@ class Parser():
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
-    [-c <submission_url> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
     [-b]
 
     [-f <file_path>]
@@ -113,7 +114,8 @@ Arguments:
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
-    [-c <submission_url> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
     [-b]
 
     [-y]
@@ -329,7 +331,7 @@ DISPLAY INSTEAD OF SAVING
         """
         Add extra options for PRAW Subreddit scraping:
 
-            --rules: include Subreddit rules and post requirements in scrape data.
+            --rules: include Subreddit rules and post requirements in scrape data
 
         Parameters
         ----------
@@ -346,6 +348,29 @@ DISPLAY INSTEAD OF SAVING
             "--rules",
             action = "store_true",
             help = "include Subreddit rules in scrape data"
+        )
+
+    def _add_praw_comments_options(self, parser):
+        """
+        Add extra options for PRAW submission comments scraping:
+
+            --raw: return comments in raw format instead (default is structured)
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        comments_flags = parser.add_argument_group("additional PRAW submission scraping arguments")
+        comments_flags.add_argument(
+            "--raw",
+            action = "store_true",
+            help = "return comments in raw format instead (default is structured)"
         )
 
     def _add_analytics(self, parser):
@@ -442,6 +467,7 @@ DISPLAY INSTEAD OF SAVING
             self._add_rate_limit_check_flag()
             self._add_praw_scraper_flags()
             self._add_praw_subreddit_options()
+            self._add_praw_comments_options()
             self._add_analytics()
             self._add_skip()
             self._add_export()
@@ -471,6 +497,7 @@ DISPLAY INSTEAD OF SAVING
         self._add_rate_limit_check_flag(parser)
         self._add_praw_scraper_flags(parser)
         self._add_praw_subreddit_options(parser)
+        self._add_praw_comments_options(parser)
         self._add_analytics(parser)
         self._add_skip(parser)
         self._add_export(parser)
