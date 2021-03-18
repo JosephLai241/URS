@@ -69,7 +69,7 @@ Before I get to the insertion methods, I will explain how comments and their rep
 
 PRAW returns all submission comments by level order. This means all top levels are returned first, followed by all second-level replies, then third, so on and so forth.
 
-Here is a mock top comment corresponding to the mock submisssion ID. Note the `parent_id` contains the mock submission ID:
+I will create some mock comment objects to demonstrate. Here is a top level comment corresponding to the mock submisssion ID. Note the `parent_id` contains the submission ID:
 
 ```
 {
@@ -85,7 +85,7 @@ Here is a mock top comment corresponding to the mock submisssion ID. Note the `p
 }
 ```
 
-Here is a mock second-level reply to the mock top comment. Note the `parent_id` contains the mock top comment's comment ID:
+Here is a second-level reply to the top comment. Note the `parent_id` contains the top comment's comment ID:
 
 ```
 {
@@ -152,7 +152,7 @@ class EncodeNode(JSONEncoder):
         return object.__dict__
 ```
 
-The `default()` method overrides `JSONEncoder`'s `default()` method and serializes the `CommentNode`. By doing this, I convert the `CommentNode` into a dictionary, which is a primitive type that has a direct JSON equivalent. I do this by writing:
+The `default()` method overrides `JSONEncoder`'s `default()` method and serializes the `CommentNode`. By doing this, I convert the `CommentNode` into a dictionary, which is a primitive type that has a direct JSON equivalent:
 
 ```python
 EncodeNode().encode(CommentNode)
@@ -167,7 +167,7 @@ with open(filename, "w", encoding = "utf-8") as results:
     json.dump(data, results, indent = 4, cls = EncodeNode)
 ```
 
-This was how the structured comments export was implemented. I hope this was somewhat interesting and/or informative. Thanks for reading!
+This was how the structured comments export was implemented. Refer to the actual source code located in `urs/praw_scrapers/Comments.py` to see more. I hope this was somewhat interesting and/or informative. Thanks for reading!
 
 <!-- LINKS -->
 [Pull Request]: https://something.com
