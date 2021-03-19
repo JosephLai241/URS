@@ -13,6 +13,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 from prawcore import PrawcoreException
 
 from urs.praw_scrapers.utils.Validation import Validation
@@ -69,10 +70,14 @@ class CheckRedditors():
             List of valid Redditors URLs
         """
 
-        print("\nChecking if Redditor(s) exist...")
+        check_redditor_spinner = Halo(color = "white", text = "Validating Redditor(s).")
+
+        check_redditor_spinner.start()
         logging.info("Validating Redditors...")
         logging.info("")
         users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
+        check_redditor_spinner.succeed("Finished Redditor validation.")
+        print()
         
         if not_users:
             print(Fore.YELLOW + Style.BRIGHT + "\nThe following Redditors were not found and will be skipped:")
@@ -387,8 +392,11 @@ class ProcessInteractions():
 
             self._extract()
         """
-
+        
+        submissions_spinner = Halo(color = "white", text = "Extracting submissions.")
+        submissions_spinner.start()
         self._extract(None, self._submissions, self._scrape_types[0])
+        submissions_spinner.succeed()
 
     def sort_comments(self):
         """
@@ -399,11 +407,14 @@ class ProcessInteractions():
             self._extract()
         """
 
+        comments_spinner = Halo(color = "white", text = "Extracting comments.")
+        comments_spinner.start()
         self._extract(None, self._comments, self._scrape_types[1])
+        comments_spinner.succeed()
 
     def sort_mutts(self):
         """
-        Sort Controversial, Gilded, Hot, New and Top Redditor posts. The ListingGenerator
+        Sort Controversial, Gilded, Hot, New, and Top Redditor posts. The ListingGenerator
         returns a mix of submissions and comments, so handling each differently is
         necessary. 
         
@@ -412,12 +423,16 @@ class ProcessInteractions():
             self._extract()
         """
 
+        mutts_spinner = Halo(color = "white", text = "Extracting Controversial, Gilded, Hot, New, and Top interactions.")
+        mutts_spinner.start()
         for cat, obj in zip(self._mutt_names, self._mutts):
             self._extract(cat, obj, self._scrape_types[2])
-
+        
+        mutts_spinner.succeed()
+        
     def sort_access(self):
         """
-        Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
+        Sort Upvoted, Downvoted, Gildings, Hidden, and Saved Redditor posts. These
         lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
         handling is necessary. 
         
@@ -426,12 +441,16 @@ class ProcessInteractions():
             self._extract()
         """
 
+        access_spinner = Halo(color = "white", text = "Extracting Upvoted, Downvoted, Gildings, Hidden, and Saved interactions.")
+        access_spinner.start()
         for cat, obj in zip(self._access_names, self._access):
             try:
                 self._extract(cat, obj, self._scrape_types[3])
             except PrawcoreException as error:
-                print(Style.BRIGHT + Fore.YELLOW + "\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING." % (cat.upper(), error))
+                access_spinner.warn("Access to %s interactions forbidden: %s. SKIPPING." % (cat.capitalize(), error))
                 self._skeleton["data"]["interactions"]["%s" % cat].append("FORBIDDEN")
+        
+        access_spinner.succeed()
 
 class GetInteractions():
     """
@@ -498,9 +517,10 @@ class GetInteractions():
         plurality = "results" \
             if int(limit) > 1 \
             else "result"
-        print(Style.BRIGHT + "\nProcessing %s %s from u/%s's profile..." % (limit, plurality, user))
-        print("\nThis may take a while. Please wait.")
 
+        process_spinner = Halo()
+        process_spinner.info("Processing %s %s from u/%s's profile." % (limit, plurality, user))
+        
         skeleton = {
             "scrape_settings": {
                 "redditor": user,
@@ -692,10 +712,10 @@ class Write():
             if not args.csv \
             else "CSV"
 
-        confirmation = "\n%s file for u/%s created." % (export_option, user)
-
-        print(Style.BRIGHT + Fore.GREEN + confirmation)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
+        confirmation = Halo()
+        print()
+        confirmation.succeed(Style.BRIGHT + Fore.GREEN + "%s file for u/%s created." % (export_option, user))
+        print()
 
     @staticmethod
     def write(args, reddit, u_master):
