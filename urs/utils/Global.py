@@ -7,6 +7,8 @@ Variables that are used throughout this program.
 
 import datetime as dt
 
+from halo import Halo
+
 ### Get current date.
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
@@ -98,3 +100,52 @@ def make_none_dict(item):
     """
 
     return dict((obj, None) for obj in item)
+
+class Status():
+    """
+    Methods for defining status spinners.
+    """
+
+    def __init__(self, after_message, before_message, color):
+        """
+        Initialize variables used in later methods:
+
+            self._after_message: success message
+            self._before_message: status message
+            self._color: the color of the spinner
+
+            self._spinner: Halo instance
+
+        Parameters
+        ----------
+        after_message: str
+            String denoting the success message
+        before_message: str
+            String denoting the status message
+        color: str
+            String denoting the spinner's color
+
+        Returns
+        -------
+        None
+        """
+
+        self._after_message = after_message
+        self._before_message = before_message
+        self._color = color
+
+        self.spinner = Halo(color = self._color, text = self._before_message)
+
+    def start(self):
+        """
+        Start the spinner.
+        """
+
+        self.spinner.start()
+
+    def succeed(self):
+        """
+        Display the success spinner message.
+        """
+
+        self.spinner.succeed(self._after_message)
