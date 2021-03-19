@@ -368,7 +368,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        comments_flags = parser.add_argument_group("additional PRAW submission scraping arguments")
+        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments")
         comments_flags.add_argument(
             "--raw",
             action = "store_true",
