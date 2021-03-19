@@ -30,7 +30,7 @@ Anyways, the trie implementation is very similar to how the `Forest` works.
 
 ## How the Forest Works
 
-I will strip docstring comments from the source code to keep it short.
+I will strip docstring comments from the source code to keep it relatively short.
 
 ### The `CommentNode`
 
@@ -152,13 +152,13 @@ class EncodeNode(JSONEncoder):
         return object.__dict__
 ```
 
-The `default()` method overrides `JSONEncoder`'s `default()` method and serializes the `CommentNode`. By doing this, I convert the `CommentNode` into a dictionary, which is a primitive type that has a direct JSON equivalent:
+The `default()` method overrides `JSONEncoder`'s `default()` method and serializes the `CommentNode` by converting it into a dictionary, which is a primitive type that has a direct JSON equivalent:
 
 ```python
 EncodeNode().encode(CommentNode)
 ```
 
-This ensures the node is correctly encoded before I call the `seed()` method to insert the `CommentNode` into the `replies` array.
+This ensures the node is correctly encoded before I call the `seed()` method to insert a new `CommentNode` into the `replies` arrays of its respective parent `CommentNode`.
 
 I can then use this custom `JSONEncoder` subclass while exporting by specifying it within `json.dump()` with the `cls` kwarg:
 
@@ -167,7 +167,7 @@ with open(filename, "w", encoding = "utf-8") as results:
     json.dump(data, results, indent = 4, cls = EncodeNode)
 ```
 
-This was how the structured comments export was implemented. Refer to the actual source code located in `urs/praw_scrapers/Comments.py` to see more. I hope this was somewhat interesting and/or informative. Thanks for reading!
+This was how the structured comments export was implemented. Refer to the source code located in `urs/praw_scrapers/Comments.py` to see more. I hope this was somewhat interesting and/or informative. Thanks for reading!
 
 <!-- LINKS -->
 [Pull Request]: https://something.com
