@@ -398,7 +398,7 @@ class ProcessInteractions():
 
             self._extract()
         """
-        
+
         self._extract(None, self._submissions, self._scrape_types[0])
 
     @Halo(color = "white", text = "Extracting comments.")
@@ -515,8 +515,7 @@ class GetInteractions():
             if int(limit) > 1 \
             else "result"
 
-        process_spinner = Halo()
-        process_spinner.info("Processing %s %s from u/%s's profile." % (limit, plurality, user))
+        Halo().info("Processing %s %s from u/%s's profile." % (limit, plurality, user))
         
         skeleton = {
             "scrape_settings": {
@@ -710,9 +709,8 @@ class Write():
             if not args.csv \
             else "CSV"
 
-        confirmation = Halo()
         print()
-        confirmation.succeed(Style.BRIGHT + Fore.GREEN + "%s file for u/%s created." % (export_option, user))
+        Halo().succeed(Style.BRIGHT + Fore.GREEN + "%s file for u/%s created." % (export_option, user))
         print()
 
     @staticmethod
