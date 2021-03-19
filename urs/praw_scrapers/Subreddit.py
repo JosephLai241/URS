@@ -30,6 +30,7 @@ from urs.utils.Global import (
     options,
     s_t,
     short_cat,
+    Status
 )
 from urs.utils.Logger import (
     LogError,
@@ -75,13 +76,17 @@ class CheckSubreddits():
             List of valid Subreddits
         """
 
-        check_subreddit_spinner = Halo(color = "white", text = "Validating Subreddit(s).")
+        check_status = Status(
+            "Finished Subreddit validation.",
+            "Validating Subreddit(s).",
+            "white"
+        )
 
-        check_subreddit_spinner.start()
+        check_status.start()
         logging.info("Validating Subreddits...")
         logging.info("")
         subs, not_subs = Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
-        check_subreddit_spinner.succeed("Finished Subreddit validation.")
+        check_status.succeed()
         print()
 
         if not_subs:
@@ -155,7 +160,7 @@ class PrintConfirm():
         None
         """
 
-        print(Fore.CYAN + Style.BRIGHT + "Current settings for each Subreddit")
+        Halo().info(Fore.CYAN + Style.BRIGHT + "Current settings for each Subreddit")
 
         pretty_subs = PrettyTable()
         pretty_subs.field_names = [
@@ -325,13 +330,10 @@ class GetPosts():
         search_submissions: PRAW ListingGenerator
         """
 
-        search_status_spinner = Halo()
-        time_filter_spinner = Halo()
-
-        search_status_spinner.info("Searching posts in r/%s for '%s'." % (sub, search_for))
+        Halo().info("Searching posts in r/%s for '%s'." % (sub, search_for))
         
         if time_filter != None:
-            time_filter_spinner.info("Time filter: %s" % time_filter.capitalize())
+            Halo().info("Time filter: %s" % time_filter.capitalize())
 
         return subreddit.search("%s" % search_for, time_filter = time_filter) \
             if time_filter != None \
@@ -365,16 +367,13 @@ class GetPosts():
         category_submissions: PRAW ListingGenerator
         """
 
-        category_spinner = Halo()
-        time_filter_spinner = Halo()
-
         category = categories[short_cat.index(cat_i)]
         index = short_cat.index(cat_i)
         
-        category_spinner.info("Processing %s %s results from r/%s." % (search_for, category, sub))
+        Halo().info("Processing %s %s results from r/%s." % (search_for, category, sub))
         
         if time_filter != None:
-            time_filter_spinner.info("Time filter: %s" % time_filter.capitalize())
+            Halo().info("Time filter: %s" % time_filter.capitalize())
 
         return GetPostsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
 
@@ -667,8 +666,13 @@ class SortPosts():
             Dictionary containing scraped Subreddit submission data
         """
 
-        format_spinner = Halo(color = "green", text = "Formatting data.")
-        format_spinner.start()
+        format_status = Status(
+            "Finished formatting data.",
+            "Formatting data.",
+            "white"
+        )
+
+        format_status.start()
 
         if args.csv:
             overview = self._initialize_dict(args)
@@ -676,13 +680,13 @@ class SortPosts():
                 post_data = self._get_data(post)
                 self._csv_format(overview, post_data)
 
-            format_spinner.succeed("Finished formatting data.")
+            format_status.succeed()
             return overview
             
         json_data = self._make_json_skeleton(cat_i, search_for, sub, time_filter)
         
         if args.rules:
-            format_spinner.text = "Including Subreddit rules."
+            Halo().info("Including Subreddit rules.")
             logging.info("Including Subreddit rules.")
             logging.info("")
             
@@ -692,7 +696,7 @@ class SortPosts():
             post_data = self._get_data(post)
             self._add_json_submission_data(json_data, post_data)
 
-        format_spinner.succeed("Finished formatting data.")
+        format_status.succeed()
         return json_data
 
 class GetSortWrite():
@@ -782,9 +786,8 @@ class GetSortWrite():
             if not args.csv \
             else "CSV"
 
-        confirmation_spinner = Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "%s file for r/%s created." % (export_option, sub))
         print()
-        confirmation_spinner.succeed()
+        Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "%s file for r/%s created." % (export_option, sub)).succeed()
         print()
 
     @staticmethod
