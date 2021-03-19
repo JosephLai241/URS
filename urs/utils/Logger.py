@@ -156,7 +156,7 @@ class LogError():
                     logging.critical("RECEIVED INVALID %s." % error)
                     logging.critical("ABORTING URS.\n")
                     quit()
-                
+
             return wrapper
         return decorator
 
@@ -183,8 +183,6 @@ class LogError():
         """
 
         def wrapper(parser, reddit):
-            print("\nLogging in...")
-
             try:
                 function(parser, reddit)
                 logging.info("Successfully logged in as u/%s." % reddit.user.me())
