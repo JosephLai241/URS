@@ -401,7 +401,7 @@ Exported files will be saved to the `analytics/frequencies` directory.
 
 **Usage:** `$ ./Urs.py -wc FILE_PATH`
 
-**Supported export formats:** .eps, .jpeg, .jpg, .pdf, .png (default), .ps, .rgba, .tif, .tiff.
+**Supported export formats:** eps, jpeg, jpg, pdf, png (default), ps, rgba, tif, tiff.
 
 Taking word frequencies to the next level, you can generate wordclouds based on word frequencies. This tool is independent of the frequencies generator - you do not need to run the frequencies generator before creating a wordcloud. 
 
