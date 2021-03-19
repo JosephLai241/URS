@@ -10,6 +10,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 
 from urs.praw_scrapers.Subreddit import (
     GetSortWrite,
@@ -99,8 +100,11 @@ class PrintSubs():
             List of invalid Subreddits
         """
 
-        print("\nChecking if Subreddit(s) exist...")
+        check_subs_spinner = Halo(color = "white", text = "Validating Subreddit(s).")
+        print()
+        check_subs_spinner.start()
         subs, not_subs = PrintSubs._find_subs(parser, reddit, search_for)
+        check_subs_spinner.succeed("Finished Subreddit validation.")
 
         if subs:
             print(Fore.GREEN + Style.BRIGHT + "\nThe following Subreddits were found and will be scraped:")
