@@ -27,7 +27,8 @@ from urs.utils.Global import (
     convert_time,
     eo,
     make_none_dict,
-    s_t
+    s_t,
+    Status
 )
 from urs.utils.Logger import (
     LogError,
@@ -70,13 +71,17 @@ class CheckRedditors():
             List of valid Redditors URLs
         """
 
-        check_redditor_spinner = Halo(color = "white", text = "Validating Redditor(s).")
+        check_status = Status(
+            "Finished Redditor validation.",
+            "Validating Redditor(s).",
+            "white"
+        )
 
-        check_redditor_spinner.start()
+        check_status.start()
         logging.info("Validating Redditors...")
         logging.info("")
         users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
-        check_redditor_spinner.succeed("Finished Redditor validation.")
+        check_status.succeed()
         print()
         
         if not_users:
@@ -384,6 +389,7 @@ class ProcessInteractions():
 
             self._determine_append(cat, redditor_item, scrape_type) 
 
+    @Halo(color = "white", text = "Extracting submissions.")
     def sort_submissions(self):
         """
         Sort Redditor submissions. 
@@ -393,11 +399,9 @@ class ProcessInteractions():
             self._extract()
         """
         
-        submissions_spinner = Halo(color = "white", text = "Extracting submissions.")
-        submissions_spinner.start()
         self._extract(None, self._submissions, self._scrape_types[0])
-        submissions_spinner.succeed()
 
+    @Halo(color = "white", text = "Extracting comments.")
     def sort_comments(self):
         """
         Sort Redditor comments. 
@@ -407,11 +411,9 @@ class ProcessInteractions():
             self._extract()
         """
 
-        comments_spinner = Halo(color = "white", text = "Extracting comments.")
-        comments_spinner.start()
         self._extract(None, self._comments, self._scrape_types[1])
-        comments_spinner.succeed()
 
+    @Halo(color = "white", text = "Extracting Controversial, Gilded, Hot, New, and Top interactions.")
     def sort_mutts(self):
         """
         Sort Controversial, Gilded, Hot, New, and Top Redditor posts. The ListingGenerator
@@ -423,13 +425,9 @@ class ProcessInteractions():
             self._extract()
         """
 
-        mutts_spinner = Halo(color = "white", text = "Extracting Controversial, Gilded, Hot, New, and Top interactions.")
-        mutts_spinner.start()
         for cat, obj in zip(self._mutt_names, self._mutts):
             self._extract(cat, obj, self._scrape_types[2])
-        
-        mutts_spinner.succeed()
-        
+            
     def sort_access(self):
         """
         Sort Upvoted, Downvoted, Gildings, Hidden, and Saved Redditor posts. These
@@ -441,17 +439,16 @@ class ProcessInteractions():
             self._extract()
         """
 
-        access_spinner = Halo(color = "white", text = "Extracting Upvoted, Downvoted, Gildings, Hidden, and Saved interactions.")
-        access_spinner.start()
+        access_halo = Halo(color = "white", text = "Extracting Upvoted, Downvoted, Gildings, Hidden, and Saved interactions.")
+
+        access_halo.start()
         for cat, obj in zip(self._access_names, self._access):
             try:
                 self._extract(cat, obj, self._scrape_types[3])
             except PrawcoreException as error:
-                access_spinner.warn("Access to %s interactions forbidden: %s. SKIPPING." % (cat.capitalize(), error))
+                access_halo.warn(Fore.YELLOW + "Access to %s interactions forbidden: %s. SKIPPING." % (cat.capitalize(), error))
                 self._skeleton["data"]["interactions"]["%s" % cat].append("FORBIDDEN")
         
-        access_spinner.succeed()
-
 class GetInteractions():
     """
     Methods for getting Redditor information and interactions.
@@ -535,6 +532,7 @@ class GetInteractions():
 
         return skeleton, user
 
+    @Halo(color = "white", text = "Extracting Redditor information.")
     def _get_user_info(self, skeleton, user):
         """
         Get Redditor account information.
