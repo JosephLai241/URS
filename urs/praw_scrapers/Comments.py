@@ -25,7 +25,8 @@ from urs.utils.Export import (
 from urs.utils.Global import (
     convert_time,
     make_none_dict,
-    s_t
+    s_t,
+    Status
 )
 from urs.utils.Logger import (
     LogError,
@@ -68,13 +69,17 @@ class CheckSubmissions():
             List of valid submission URLs
         """
 
-        check_submissions_spinner = Halo(color = "white", text = "Validating submission(s).")
-        
-        check_submissions_spinner.start()
+        check_status = Status(
+            "Finished submission validation.",
+            "Validating submission(s).",
+            "white"
+        )
+
+        check_status.start()
         logging.info("Validating submissions...")
         logging.info("")
         posts, not_posts = Validation.existence(s_t[2], post_list, parser, reddit, s_t)
-        check_submissions_spinner.succeed("Finished submission validation.")
+        check_status.succeed()
         print()
 
         if not_posts:
@@ -358,15 +363,20 @@ class SortComments():
         
         forest = Forest(submission, url)
 
-        forest_spinner = Halo(color = "cyan", text = Fore.CYAN + Style.BRIGHT + "Seeding Forest.")
-        forest_spinner.start()
+        seed_status = Status(
+            "Forest has fully matured.",
+            Fore.CYAN + Style.BRIGHT + "Seeding Forest.",
+            "cyan"
+        )
+
+        seed_status.start()
         for comment in submission.comments.list():
             comment_node = CommentNode(GetComments().create_comment(comment))
             EncodeNode().encode(comment_node)
 
             forest.seed(comment_node)
 
-        forest_spinner.succeed("Forest has fully matured.")
+        seed_status.succeed()
         return forest.root.replies
 
 class GetSort():
@@ -400,11 +410,15 @@ class GetSort():
         self._submission = reddit.submission(url = url)
         self._url = url
 
-        more_comments_spinner = Halo(color = "cyan", text = Fore.CYAN + Style.BRIGHT + "Resolving instances of MoreComments. This may take a while. Please wait.")
+        more_comments_status = Status(
+            "Finished resolving instances of MoreComments.",
+            Fore.CYAN + Style.BRIGHT + "Resolving instances of MoreComments. This may take a while. Please wait.",
+            "cyan"
+        )
 
-        more_comments_spinner.start()
+        more_comments_status.start()
         self._submission.comments.replace_more(limit = None)
-        more_comments_spinner.succeed("Finished resolving instances of MoreComments.")
+        more_comments_status.succeed()
 
     def get_sort(self, args, limit):
         """
@@ -433,11 +447,11 @@ class GetSort():
             SortComments().sort_raw(all_comments, self._submission)
         else:
             all_comments = SortComments().sort_structured(self._submission, self._url)
-            
-        if int(limit) != 0:
-            return all_comments[:int(limit)]
 
-        return all_comments
+        return all_comments[:int(limit)] \
+            if int(limit) != 0 \
+            else all_comments
+        
 
 class Write():
     """
@@ -504,33 +518,14 @@ class Write():
         -------
         None
         """
+
+        if args.raw:
+            Halo().info("Exporting comments in raw format.")
+            Export.export(data, f_name, "json", "comments")
+        else:
+            Halo().info("Exporting comments in structured format.")
+            Export.write_structured_comments(data, f_name)
         
-        Export.export(data, f_name, "json", "comments") \
-            if args.raw \
-            else Export.write_structured_comments(data, f_name)
-
-    @staticmethod
-    def _print_confirm(args, title):
-        """
-        Print confirmation message and set print length depending on string length.
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        title: str
-            String denoting the submission title
-
-        Returns
-        -------
-        None
-        """
-
-        confirmation_spinner = Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "JSON file for '%s' comments created." % title)
-        print()
-        confirmation_spinner.succeed()
-        print()
-
     @staticmethod
     def write(args, c_master, reddit):
         """
@@ -569,7 +564,10 @@ class Write():
             
             f_name = NameFile().c_fname(args, limit, title)
             Write._determine_export(args, data, f_name)
-            Write._print_confirm(args, title)
+
+            print()
+            Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "JSON file for '%s' comments created." % title).succeed()
+            print()
 
 class RunComments():
     """
