@@ -70,3 +70,19 @@ class TestMakeDictionary():
         }
 
         assert Global.make_none_dict(item) == correct_none_dict
+
+class TestStatus():
+    """
+    Test Status class found on line 104 in Global.py.
+    """
+
+    def test_status_init_method(self):
+        test_status = Global.Status(
+            "test after message",
+            "test before message",
+            "test color"
+        )
+
+        assert test_status._after_message == "test after message"
+        assert test_status._before_message == "test before message"
+        assert test_status._color == "test color"
