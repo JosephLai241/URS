@@ -384,7 +384,7 @@ class GetSort():
     Methods for getting comments from a Reddit submission.
     """
 
-    def __init__(self, args, reddit, url):
+    def __init__(self, args, submission, url):
         """
         Initialize variables used in later methods:
 
@@ -396,8 +396,7 @@ class GetSort():
         ----------
         args: Namespace
             Namespace object containing all arguments that were defined in the CLI
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
+        submission: PRAW submission object
         url: str
             String denoting the submission's url
 
@@ -407,7 +406,6 @@ class GetSort():
         """
 
         self._args = args
-        self._submission = reddit.submission(url = url)
         self._url = url
 
         more_comments_status = Status(
@@ -417,6 +415,7 @@ class GetSort():
         )
 
         more_comments_status.start()
+        self._submission = submission
         self._submission.comments.replace_more(limit = None)
         more_comments_status.succeed()
 
@@ -459,7 +458,7 @@ class Write():
     """
 
     @staticmethod
-    def _make_json_skeleton(args, limit, title, url):
+    def _make_json_skeleton(args, limit, submission, url):
         """
         Create a skeleton for JSON export. Include scrape details at the top.
 
@@ -469,10 +468,10 @@ class Write():
             Namespace object containing all arguments that were defined in the CLI
         limit: str
             Integer of string type denoting n_results or RAW format
-        title: str
-            String denoting submission title
+        submission: PRAW submission object
         url: str
             String denoting submission URL
+
 
         Returns
         -------
@@ -480,18 +479,41 @@ class Write():
             Dictionary containing scrape settings and all scrape data
         """
 
+        Halo().info("Extracting submission metadata.")
+
         skeleton = {
             "scrape_settings": {
-                "submission_title": title,
                 "n_results": int(limit) \
                     if int(limit) > 0 \
                     else "all",
                 "style": "structured" \
                     if not args.raw \
                     else "raw",
-                "submission_url": url
+                "url": url
             },
-            "data": None
+            "data": {
+                "submission_metadata": {
+                    "author": "u/" + submission.author.name,
+                    "created_utc": convert_time(submission.created_utc),
+                    "distinguished": submission.distinguished,
+                    "edited": submission.edited,
+                    "is_original_content": submission.is_original_content,
+                    "is_self": submission.is_self,
+                    "link_flair_text": submission.link_flair_text,
+                    "locked": submission.locked,
+                    "num_comments": submission.num_comments,
+                    "nsfw": submission.over_18,
+                    "permalink": submission.permalink,
+                    "score": submission.score,
+                    "selftext": submission.selftext,
+                    "spoiler": submission.spoiler,
+                    "stickied": submission.stickied,
+                    "subreddit": submission.subreddit.display_name,
+                    "title": submission.title,
+                    "upvote_ratio": submission.upvote_ratio
+                },
+                "comments": None
+            }
         }
 
         return skeleton
@@ -520,10 +542,14 @@ class Write():
         """
 
         if args.raw:
-            Halo().info("Exporting comments in raw format.")
+            export_status = "Exporting comments in raw format."
+            Halo().info(export_status)
+            logging.info(export_status)
             Export.export(data, f_name, "json", "comments")
         else:
-            Halo().info("Exporting comments in structured format.")
+            export_status = "Exporting comments in structured format."
+            Halo().info(export_status)
+            logging.info(export_status)
             Export.write_structured_comments(data, f_name)
         
     @staticmethod
@@ -558,15 +584,15 @@ class Write():
         """
 
         for url, limit in c_master.items():
-            title = reddit.submission(url = url).title
-            data = Write._make_json_skeleton(args, limit, title, url)
-            data["data"] = GetSort(args, reddit, url).get_sort(args, limit)
+            submission = reddit.submission(url = url)
+            data = Write._make_json_skeleton(args, limit, submission, url)
+            data["data"]["comments"] = GetSort(args, submission, url).get_sort(args, limit)
             
-            f_name = NameFile().c_fname(args, limit, title)
+            f_name = NameFile().c_fname(args, limit, submission.title)
             Write._determine_export(args, data, f_name)
 
             print()
-            Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "JSON file for '%s' comments created." % title).succeed()
+            Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "JSON file for '%s' comments created." % submission.title).succeed()
             print()
 
 class RunComments():
