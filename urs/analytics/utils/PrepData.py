@@ -370,9 +370,9 @@ class PrepComments():
 
         plt_dict = dict()
 
-        PrepComments._prep_raw(data["data"], plt_dict) \
+        PrepComments._prep_raw(data["data"]["comments"], plt_dict) \
             if data["scrape_settings"]["style"] == "raw" \
-            else PrepComments._prep_structured(data["data"], plt_dict)
+            else PrepComments._prep_structured(data["data"]["comments"], plt_dict)
 
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
 
