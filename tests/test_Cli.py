@@ -64,7 +64,7 @@ class TestParserInitMethod():
         
     def test_parser_init_method_description_instance_variable(self):
         description = r"""
-Universal Reddit Scraper v3.2.0 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v3.2.1 - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
