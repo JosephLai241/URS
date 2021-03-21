@@ -23,6 +23,8 @@ class MakeArgs():
         parser.add_argument("--basic", action = "store_true")
         parser.add_argument("--rules", action = "store_true")
 
+        parser.add_argument("--raw", action = "store_true")
+
         return parser
 
 class TestFix():
@@ -138,23 +140,47 @@ class TestCFname():
     Testing c_fname() function on line 126 in Export.py.
     """
 
-    def test_c_fname_returns_plural_string(self):
+    def test_c_fname_returns_plural_string_with_raw_format(self):
+        args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
         limit = 2
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "test-2-results"
+        assert Export.NameFile().c_fname(args, limit, string) == "test-2-results-raw"
 
-    def test_c_fname_returns_non_plural_string(self):
+    def test_c_fname_returns_plural_string_with_structured_format(self):
+        args = MakeArgs.parser_for_testing_export().parse_args()
+        limit = 2
+        string = "test"
+
+        assert Export.NameFile().c_fname(args, limit, string) == "test-2-results-structured"
+
+    def test_c_fname_returns_non_plural_string_with_raw_format(self):
+        args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
         limit = 1
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "test-1-result"
+        assert Export.NameFile().c_fname(args, limit, string) == "test-1-result-raw"
 
-    def test_c_fname_returns_raw_string(self):
+    def test_c_fname_returns_non_plural_string_with_structured_format(self):
+        args = MakeArgs.parser_for_testing_export().parse_args()
+        limit = 1
+        string = "test"
+
+        assert Export.NameFile().c_fname(args, limit, string) == "test-1-result-structured"
+
+    def test_c_fname_returns_all_comments_with_raw_format(self):
+        args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
         limit = 0
         string = "test"
 
-        assert Export.NameFile().c_fname(limit, string) == "test-RAW"
+        assert Export.NameFile().c_fname(args, limit, string) == "test-all-raw"
+    
+    def test_c_fname_returns_all_comments_with_structured_format(self):
+        args = MakeArgs.parser_for_testing_export().parse_args()
+        limit = 0
+        string = "test"
+
+        assert Export.NameFile().c_fname(args, limit, string) == "test-all-structured"
 
 class TestWriteCSVAndWriteJSON():
     """
