@@ -67,7 +67,7 @@ class Parser():
     [--csv] 
 """
         self._description = r"""
-Universal Reddit Scraper v3.2.0 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v3.2.1 - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
