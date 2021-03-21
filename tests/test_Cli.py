@@ -47,7 +47,8 @@ class TestParserInitMethod():
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
-    [-c <submission_url> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
     [-b]
 
     [-f <file_path>]
@@ -116,7 +117,8 @@ Arguments:
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
-    [-c <submission_url> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
     [-b]
 
     [-y]
@@ -166,16 +168,18 @@ REDDITORS
 
 SUBMISSION COMMENTS
 
-    Scraping 25 comments from this r/TIFU post.
-    Returns a structured JSON file that includes down to third-level replies:
+    Scraping 25 comments from this r/TIFU post. Returns a structured JSON file:
 
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25
 
-    Scraping all comments from the same r/TIFU post.
-    Returns an unstructured JSON file of all comments in level order, 
-    ie. top-level first, followed by second-level, then third-level, etc.:
-
+    Scraping all comments from the same r/TIFU post. Returns a structured JSON file:
+    
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0
+
+    Scrape all comments from the same r/TIFU post and return them in raw format by including the `--raw` flag.
+    Ie. top-level first, followed by second-level, then third-level, etc.:
+
+        $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --raw
 
 [ANALYTICAL TOOLS]
 
