@@ -55,6 +55,15 @@ class InitializeDirectory():
     """
     Methods for initializing directories for the exported files.
     """
+
+    @staticmethod
+    def _create(destination):
+        """
+        Create the directory if it does not exist.
+        """
+
+        if not os.path.isdir(destination):
+            os.mkdir(destination)
     
     @staticmethod
     def make_directory():
@@ -69,12 +78,10 @@ class InitializeDirectory():
         """
 
         top_dir = "../scrapes/"
-        if not os.path.isdir(top_dir):
-            os.mkdir(top_dir)
+        InitializeDirectory._create(top_dir)
         
         date_dir = top_dir + date
-        if not os.path.isdir(date_dir):
-            os.mkdir(date_dir)
+        InitializeDirectory._create(date_dir)
 
     @staticmethod
     def make_type_directory(scrape):
@@ -93,8 +100,7 @@ class InitializeDirectory():
         """
 
         scrape_dir = "../scrapes/%s/%s" % (date, scrape)
-        if not os.path.isdir(scrape_dir):
-            os.mkdir(scrape_dir)
+        InitializeDirectory._create(scrape_dir)
     
     @staticmethod
     @LogMissingDir.log
@@ -115,10 +121,8 @@ class InitializeDirectory():
         """
 
         analytics_dir = "../scrapes/%s/analytics/" % date_dir
-        if not os.path.isdir(analytics_dir):
-            os.mkdir(analytics_dir)
+        InitializeDirectory._create(analytics_dir)
 
         tool_dir = analytics_dir + tool_type
-        if not os.path.isdir(tool_dir):
-            os.mkdir(tool_dir)
+        InitializeDirectory._create(tool_dir)
         
