@@ -11,6 +11,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 
 from urs.analytics.utils.PrepData import (
     GetPath,
@@ -21,7 +22,8 @@ from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Export import Export
 from urs.utils.Global import (
     analytical_tools,
-    eo
+    eo,
+    Status
 )
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
@@ -173,29 +175,6 @@ class ExportFrequencies():
             if f_type == eo[1] \
             else Export.write_csv(data, filename)
 
-class PrintConfirm():
-    """
-    Methods for printing successful export message.
-    """
-
-    def confirm(self, filename):
-        """
-        Print confirmation message.
-
-        Parameters
-        ----------
-        filename: str
-            String denoting the filename
-
-        Returns
-        -------
-        None
-        """
-
-        confirmation = "\nFrequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):])
-        print(Style.BRIGHT + Fore.GREEN + confirmation)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
-
 class GenerateFrequencies():
     """
     Methods for generating word frequencies.
@@ -236,10 +215,27 @@ class GenerateFrequencies():
             f_type, filename = Sort().name_and_create_dir(args, file)
             plt_dict = Sort().get_data(file)
 
-            print("\nGenerating frequencies...")
+            generator_status = Status(
+                "Generated frequencies.",
+                "Generating frequencies.",
+                "white"
+            )
+
+            generator_status.start()
             data = Sort().create_csv(plt_dict) \
                 if args.csv \
                 else Sort().create_json(file, plt_dict)
+            generator_status.succeed()
+            print()
 
+            export_status = Status(
+                Style.BRIGHT + Fore.GREEN + "Frequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
+                "Exporting frequencies.",
+                "white"
+            )
+            
+            export_status.start()
             ExportFrequencies.export(data, f_type, filename)
-            PrintConfirm().confirm(filename)
+            export_status.succeed()
+            print()
+            
