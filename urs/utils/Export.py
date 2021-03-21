@@ -304,17 +304,18 @@ class NameFile():
         """
 
         string = self._check_len(string)
-        style = "raw" \
-            if args.raw \
-            else "structured"
         
         if int(limit) != 0:
             plurality = "result" \
                 if int(limit) < 2 \
                 else "results"
-            raw_n = str("%s-%s-%s-%s" % (string, limit, plurality, style))
+            raw_n = str("%s-%s-%s-%s" % (string, limit, plurality, "raw")) \
+                if args.raw \
+                else str("%s-%s-%s" % (string, limit, plurality))
         else:
-            raw_n = str("%s-%s-%s" % (string, "all", style))
+            raw_n = str("%s-%s-%s" % (string, "all", "raw")) \
+                if args.raw \
+                else str("%s-%s" % (string, "all"))
 
         return self._fix(raw_n)
 
