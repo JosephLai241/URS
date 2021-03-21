@@ -326,9 +326,9 @@ class LogPRAWScraper():
             if scraper_type == "redditor":
                 logging.info("Scraping %s %s for u/%s..." % (n_results, plurality, reddit_object))
             elif scraper_type == "comments":
-                logging.info("Processing all comments in raw format from Reddit post %s..." % reddit_object) \
+                logging.info("Processing all comments from Reddit post %s..." % reddit_object) \
                     if int(n_results) == 0 \
-                    else logging.info("Processing %s %s in structured format from Reddit post %s..." % (n_results, plurality, reddit_object))            
+                    else logging.info("Processing %s %s from Reddit post %s..." % (n_results, plurality, reddit_object))            
 
             logging.info("")
 
