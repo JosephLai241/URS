@@ -428,9 +428,9 @@ These tools are also suitable for CSV format and are optimized to do so if you w
 
 JSON is the more practical option for Redditor and submission comments scraping, which is why I have designed these scrapers to work best in this format. It is much easier to read the scrape results since Redditor scraping returns attributes that include additional submission or comment attributes. 
 
-Comments scraping is especially easier to read in JSON format because structured exports look similar to threads on Reddit. You can process all the information pertaining to a comment much quicker compared to CSV. 
+Comments scraping is especially easier to read in JSON format because structured exports look almost identical to threads on Reddit. You can process all the information pertaining to a comment much quicker compared to CSV. 
 
-You can still export Redditor data and submission comments to CSV, but you will be disappointed with the results.
+The `--csv` flag is ignored if it is present while using the Redditor or submission comments scraper.
 
 ### See the [samples][Samples] for scrapes ran on February 24, 2021.
 
