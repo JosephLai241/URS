@@ -152,7 +152,7 @@ class TestCFname():
         limit = 2
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-2-results-structured"
+        assert Export.NameFile().c_fname(args, limit, string) == "test-2-results"
 
     def test_c_fname_returns_non_plural_string_with_raw_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
@@ -166,7 +166,7 @@ class TestCFname():
         limit = 1
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-1-result-structured"
+        assert Export.NameFile().c_fname(args, limit, string) == "test-1-result"
 
     def test_c_fname_returns_all_comments_with_raw_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
@@ -180,7 +180,7 @@ class TestCFname():
         limit = 0
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-all-structured"
+        assert Export.NameFile().c_fname(args, limit, string) == "test-all"
 
 class TestWriteCSVAndWriteJSON():
     """
