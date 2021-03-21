@@ -617,9 +617,10 @@ class GetPRAWScrapeSettings():
         """
 
         if len(sub) == 3:
-            settings = [sub[1], sub[2], "all"] \
+            time_filter = "all" \
                 if sub[1].upper() in self._filterables \
-                else [sub[1], sub[2], None]
+                else None
+            settings = [sub[1], sub[2], time_filter]
         if len(sub) == 4:
             settings = [sub[1], sub[2], sub[3]]
 
