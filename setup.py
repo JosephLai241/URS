@@ -18,7 +18,7 @@ with open("README.md", "r") as readme:
     LONG_DESCRIPTION = readme.read()
 
 NAME = "URS"
-VERSION = "3.2.0"
+VERSION = "3.2.1"
 AUTHOR = "Joseph Lai"
 EMAIL = "urs_project@protonmail.com"
 URL = "https://github.com/JosephLai241/URS"
