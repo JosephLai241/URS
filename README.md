@@ -306,11 +306,15 @@ Comments are sorted by "Best", which is the default sorting option when you visi
 
 PRAW returns submission comments in level order, which means scrape speeds are proportional to the submission's popularity.
 
+The file names will generally follow this format: 
+
+`"[POST_TITLE]-[N_RESULTS]-result(s).json"` 
+
 ### Number of Comments Returned
 
-You can scrape all comments from a submission by passing in `0` for `N_RESULTS`. Otherwise, specify the number of results you want returned.
+You can scrape all comments from a submission by passing in `0` for `N_RESULTS`. Subsequently, `[N_RESULTS]-result(s)` in the file name will be replaced with `all`. 
 
-If you passed in a specific number of results, the structured export will return up to that number of top level comments and include all of its replies.
+Otherwise, specify the number of results you want returned. If you passed in a specific number of results, the structured export will return up to `N_RESULTS` top level comments and include all of its replies.
 
 ### Structured Comments
 
@@ -322,11 +326,7 @@ If you want to learn more about how it works, refer to [this additional document
 
 Raw scrapes do not resemble comment threads, but returns all comments on a submission in level order: all top-level comments are listed first, followed by all second-level comments, then third, etc.
 
-You can export to raw format by including the `--raw` flag.
-
-The file names will follow this format: 
-
-`"[POST_TITLE]-[N_RESULTS]-result(s).json"` 
+You can export to raw format by including the `--raw` flag. `-raw` will also be appended to the end of the file name.
 
 Exported files will be saved to the `comments` directory.
 
