@@ -94,7 +94,7 @@ class LogMain():
 
 class LogError():
     """
-    Decorator for logging args, PRAW, rate limit, or no objects to scrape errors.
+    Decorator for logging args, PRAW, or rate limit errors.
     """
 
     @staticmethod
@@ -229,37 +229,6 @@ class LogError():
             
             return user_limits
         return wrapper
-
-    @staticmethod
-    def log_none_left(reddit_object):
-        """
-        Wrapper for logging if nothing was left to scrape after validation, 
-        subsequently terminating URS.
-
-        Parameters
-        ----------
-        reddit_object: str
-            String denoting the Reddit object to pass into the exit message
-
-        Returns
-        -------
-        decorator: function()
-            Return the decorator function that runs the method passed into this
-            method
-        """
-
-        def decorator(function):
-            def wrapper(*args):
-                try:
-                    return function(*args)
-                except ValueError:
-                    Errors.n_title(reddit_object)
-                    logging.critical("NO %s LEFT TO SCRAPE." % reddit_object.upper())
-                    logging.critical("ABORTING URS.\n")
-                    quit()
-                
-            return wrapper
-        return decorator
 
 class LogPRAWScraper():
     """

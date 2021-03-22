@@ -5,6 +5,8 @@ Defining the interface for the basic Subreddit scraper.
 """
 
 
+import logging
+
 from colorama import (
     init, 
     Fore, 
@@ -30,7 +32,10 @@ from urs.utils.Logger import (
     LogExport,
     LogPRAWScraper
 )
-from urs.utils.Titles import PRAWTitles
+from urs.utils.Titles import (
+    Errors,
+    PRAWTitles
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -69,12 +74,11 @@ class PrintSubs():
 
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        subs, not_subs = Validation.existence(s_t[0], sub_list, parser, reddit, s_t)
+        subs, not_subs = Validation.check_existence(sub_list, parser, reddit, s_t[0])
 
         return subs, not_subs
 
     @staticmethod
-    @LogError.log_none_left("Subreddits")
     def print_subreddits(parser, reddit, search_for):
         """
         Print valid and invalid Subreddits.
@@ -115,8 +119,18 @@ class PrintSubs():
             print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
             print(*not_subs, sep = "\n")
 
+            logging.warning("Failed to validate the following Subreddits:")
+            logging.warning("%s" % not_subs)
+            logging.warning("Skipping.")
+            logging.info("")
+
         if not subs:
-            raise ValueError
+            logging.critical("ALL SUBREDDITS FAILED VALIDATION.")
+            Errors.n_title("Subreddits")
+            logging.critical("NO SUBREDDITS LEFT TO SCRAPE.")
+            logging.critical("ABORTING URS.\n")
+            
+            quit()
 
         return subs
 

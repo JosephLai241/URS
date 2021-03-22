@@ -41,65 +41,6 @@ from urs.utils.Titles import PRAWTitles
 ### every print.
 init(autoreset = True)
 
-class CheckRedditors():
-    """
-    Method for printing found and invalid Redditors.
-    """
-
-    @staticmethod
-    @LogError.log_none_left("Redditors")
-    def list_redditors(parser, reddit, user_list):
-        """
-        Check if Redditors exist and list Redditors who are not found.
-
-        Calls a public method from an external module:
-
-            Validation.existence()
-
-        Parameters
-        ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        user_list: list
-            List of Redditors
-
-        Returns
-        -------
-        users: list
-            List of valid Redditors URLs
-        """
-
-        check_status = Status(
-            "Finished Redditor validation.",
-            "Validating Redditor(s).",
-            "white"
-        )
-
-        check_status.start()
-        logging.info("Validating Redditors...")
-        logging.info("")
-        users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
-        check_status.succeed()
-        print()
-        
-        if not_users:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Redditors were not found and will be skipped:")
-            print(Fore.YELLOW + Style.BRIGHT + "-" * 59)
-            print(*not_users, sep = "\n")
-
-            logging.warning("Failed to validate the following Redditors:")
-            logging.warning("%s" % (not_users))
-            logging.warning("Skipping.")
-            logging.info("")
-
-        if not users:
-            logging.critical("ALL REDDITORS FAILED VALIDATION.")
-            raise ValueError
-        
-        return not_users, users
-
 class ProcessInteractions():
     """
     Methods for sorting and labeling comment or submission objects correctly.
@@ -761,14 +702,14 @@ class RunRedditor():
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
-        Calls previously defined public methods:
+        Calls a previously defined public method:
 
-            CheckRedditors().list_redditors()
             Write.write()
 
         Calls public methods from external modules: 
 
             GetPRAWScrapeSettings().create_list()
+            Validation.validate()
             Global.make_none_dict()
             GetPRAWScrapeSettings().get_settings()
 
@@ -790,7 +731,7 @@ class RunRedditor():
         PRAWTitles.u_title()
 
         user_list = GetPRAWScrapeSettings().create_list(args, s_t[1])
-        not_users, users = CheckRedditors().list_redditors(parser, reddit, user_list)
+        not_users, users = Validation.validate(user_list, parser, reddit, s_t[1])
         u_master = make_none_dict(users)
         GetPRAWScrapeSettings().get_settings(args, not_users, u_master, s_t[1])
 

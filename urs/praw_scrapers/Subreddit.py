@@ -43,68 +43,6 @@ from urs.utils.Titles import PRAWTitles
 ### every print.
 init(autoreset = True)
 
-class CheckSubreddits():
-    """
-    Method for checking if Subreddit(s) exist. Print invalid Subreddits if
-    applicable.
-    """
-
-    @staticmethod
-    @LogError.log_none_left("Subreddits")
-    def list_subreddits(parser, reddit, s_t, sub_list):
-        """
-        Check if Subreddits exist and list invalid Subreddits if applicable.
-
-        Calls a method from an external module:
-
-            Validation.existence()
-
-        Parameters
-        ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
-        sub_list: list
-            List of Redditors
-
-        Returns
-        -------
-        subs: list
-            List of valid Subreddits
-        """
-
-        check_status = Status(
-            "Finished Subreddit validation.",
-            "Validating Subreddit(s).",
-            "white"
-        )
-
-        check_status.start()
-        logging.info("Validating Subreddits...")
-        logging.info("")
-        subs, not_subs = Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
-        check_status.succeed()
-        print()
-
-        if not_subs:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Subreddits were not found and will be skipped:")
-            print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
-            print(*not_subs, sep = "\n")
-
-            logging.warning("Failed to validate the following Subreddits:")
-            logging.warning("%s" % (not_subs))
-            logging.warning("Skipping.")
-            logging.info("")
-
-        if not subs:
-            logging.critical("ALL SUBREDDITS FAILED VALIDATION.")
-            raise ValueError
-        
-        return not_subs, subs
-
 class PrintConfirm():
     """
     Methods for printing Subreddit settings and confirm settings.
@@ -866,13 +804,10 @@ class RunSubreddit():
         """
         Create settings for each user input. 
         
-        Calls previously defined private methods:
-
-            CheckSubreddits.list_subreddits()
-
         Calls methods from an external modules:
 
             GetPRAWScrapeSettings().create_list()
+            Validation.validate()
             GetPRAWScrapeSettings().get_settings()
             Global.make_list_dict()
 
@@ -894,7 +829,7 @@ class RunSubreddit():
         """
 
         sub_list = GetPRAWScrapeSettings().create_list(args, s_t[0])
-        not_subs, subs = CheckSubreddits.list_subreddits(parser, reddit, s_t, sub_list)
+        not_subs, subs = Validation.validate(sub_list, parser, reddit, s_t[0])
         s_master = make_list_dict(subs)
         GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, s_t[0])
 

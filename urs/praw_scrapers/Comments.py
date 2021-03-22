@@ -39,65 +39,6 @@ from urs.utils.Titles import PRAWTitles
 ### every print.
 init(autoreset = True)
 
-class CheckSubmissions():
-    """
-    Method for printing found and invalid Reddit posts.
-    """
-
-    @staticmethod
-    @LogError.log_none_left("submissions")
-    def list_submissions(parser, post_list, reddit):
-        """
-        Check if submissions exist and list posts that are not found.
-
-        Calls a method from an external module:
-
-            Validation.existence()
-
-        Parameters
-        ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        post_list: list
-            List of submission URLs
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        posts: list
-            List of valid submission URLs
-        """
-
-        check_status = Status(
-            "Finished submission validation.",
-            "Validating submission(s).",
-            "white"
-        )
-
-        check_status.start()
-        logging.info("Validating submissions...")
-        logging.info("")
-        posts, not_posts = Validation.existence(s_t[2], post_list, parser, reddit, s_t)
-        check_status.succeed()
-        print()
-
-        if not_posts:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following submissions were not found and will be skipped:")
-            print(Fore.YELLOW + Style.BRIGHT + "-" * 55)
-            print(*not_posts, sep = "\n")
-
-            logging.warning("Failed to validate the following submissions:")
-            logging.warning("%s" % (not_posts))
-            logging.warning("Skipping.")
-            logging.info("")
-
-        if not posts:
-            logging.critical("ALL SUBMISSIONS FAILED VALIDATION.")
-            raise ValueError
-        
-        return not_posts, posts
-
 class GetComments():
     """
     Methods for getting comments from a post.
@@ -479,8 +420,13 @@ class Write():
             Dictionary containing scrape settings and all scrape data
         """
 
-        Halo().info("Extracting submission metadata.")
+        metadata_status = Status(
+            "Extracted submission metadata.",
+            "Extracting submission metadata.",
+            "white"
+        )
 
+        metadata_status.start()
         skeleton = {
             "scrape_settings": {
                 "n_results": int(limit) \
@@ -515,6 +461,7 @@ class Write():
                 "comments": None
             }
         }
+        metadata_status.succeed()
 
         return skeleton
 
@@ -542,12 +489,12 @@ class Write():
         """
 
         if args.raw:
-            export_status = "Exporting comments in raw format."
+            export_status = "Exporting %s comments in raw format." % data["scrape_settings"]["n_results"]
             Halo().info(export_status)
             logging.info(export_status)
             Export.export(data, f_name, "json", "comments")
         else:
-            export_status = "Exporting comments in structured format."
+            export_status = "Exporting %s comments in structured format." % data["scrape_settings"]["n_results"]
             Halo().info(export_status)
             logging.info(export_status)
             Export.write_structured_comments(data, f_name)
@@ -607,14 +554,14 @@ class RunComments():
         """
         Run comments scraper.
 
-        Calls previously defined public methods:
+        Calls a previously defined public method:
 
-            CheckSubmissions.list_submissions()
             Write.write()
 
         Calls public methods from external modules:
 
             GetPRAWScrapeSettings().create_list()
+            Validation.validate()
             GetPRAWScrapeSettings().get_settings()
             Global.make_none_dict()
 
@@ -638,7 +585,7 @@ class RunComments():
         PRAWTitles.c_title()
 
         post_list = GetPRAWScrapeSettings().create_list(args, s_t[2])
-        not_posts, posts = CheckSubmissions.list_submissions(parser, post_list, reddit)
+        not_posts, posts = Validation.validate(post_list, parser, reddit, s_t[2])
         c_master = make_none_dict(posts)
         GetPRAWScrapeSettings().get_settings(args, not_posts, c_master, s_t[2])
 
