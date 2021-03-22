@@ -179,7 +179,7 @@ Please recheck args or refer to help or usage examples.
 
         print(Fore.RED + Style.BRIGHT + r"""
   ___    
-/' _ `\  
+ /' _`\  
 /\ \/\ \ 
 \ \_\ \_\
  \/_/\/_/... No %s to scrape! Aborting URS.     
