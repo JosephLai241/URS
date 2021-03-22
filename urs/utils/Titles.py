@@ -109,7 +109,7 @@ class AnalyticsTitles():
         """
 
         print(Fore.WHITE + Style.BRIGHT + r"""
-   ___  
+  ___  
  /'___\ 📈
 /\ \__/ 
 \ \ ,__\ 
