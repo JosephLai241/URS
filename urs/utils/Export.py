@@ -14,7 +14,6 @@ from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import (
     categories,
     date,
-    eo,
     short_cat
 )
 
@@ -358,7 +357,7 @@ class Export():
         dir_path = "../scrapes/%s/%s" % (date, scrape)
 
         extension = ".csv" \
-            if f_type == eo[0] \
+            if f_type == "csv" \
             else ".json"
 
         return dir_path + "/%s%s" % (f_name, extension)
@@ -461,5 +460,5 @@ class Export():
         filename = Export._get_filename_extension(f_name, f_type, scrape)
 
         Export.write_json(data, filename) \
-            if f_type == eo[1] \
+            if f_type == "json" \
             else Export.write_csv(data, filename)
