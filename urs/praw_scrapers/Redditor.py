@@ -207,7 +207,7 @@ class Objectify():
 
         if multireddit.subreddits:
             for subreddit in multireddit.subreddits:
-                subreddit = Objectify().make_subreddit(subreddit)
+                subreddit = self.make_subreddit(subreddit)
                 multireddit_object["subreddits"].append(subreddit) 
 
         return multireddit_object
