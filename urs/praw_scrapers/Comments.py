@@ -25,7 +25,6 @@ from urs.utils.Export import (
 from urs.utils.Global import (
     convert_time,
     make_none_dict,
-    s_t,
     Status
 )
 from urs.utils.Logger import (
@@ -549,7 +548,7 @@ class RunComments():
 
     @staticmethod
     @LogExport.log_export
-    @LogPRAWScraper.scraper_timer(s_t[2])
+    @LogPRAWScraper.scraper_timer("comments")
     def run(args, parser, reddit):
         """
         Run comments scraper.
@@ -584,10 +583,10 @@ class RunComments():
 
         PRAWTitles.c_title()
 
-        post_list = GetPRAWScrapeSettings().create_list(args, s_t[2])
-        not_posts, posts = Validation.validate(post_list, parser, reddit, s_t[2])
+        post_list = GetPRAWScrapeSettings().create_list(args, "comments")
+        not_posts, posts = Validation.validate(post_list, parser, reddit, "comments")
         c_master = make_none_dict(posts)
-        GetPRAWScrapeSettings().get_settings(args, not_posts, c_master, s_t[2])
+        GetPRAWScrapeSettings().get_settings(args, not_posts, c_master, "comments")
 
         Write.write(args, c_master, reddit)
 

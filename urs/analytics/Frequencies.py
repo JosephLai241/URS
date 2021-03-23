@@ -20,11 +20,7 @@ from urs.analytics.utils.PrepData import (
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Export import Export
-from urs.utils.Global import (
-    analytical_tools,
-    eo,
-    Status
-)
+from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
 
@@ -84,9 +80,9 @@ class Sort():
             String denoting the filename
         """
 
-        f_type = eo[0] \
+        f_type = "csv" \
             if args.csv \
-            else eo[1]
+            else "json"
 
         date_dir, filename = GetPath.name_file(f_type, file[0], "frequencies")
         InitializeDirectory.make_analytics_directory(date_dir, "frequencies")
@@ -172,7 +168,7 @@ class ExportFrequencies():
         """
 
         Export.write_json(data, filename) \
-            if f_type == eo[1] \
+            if f_type == "json" \
             else Export.write_csv(data, filename)
 
 class GenerateFrequencies():
@@ -181,7 +177,7 @@ class GenerateFrequencies():
     """
 
     @staticmethod
-    @LogAnalytics.generator_timer(analytical_tools[0])
+    @LogAnalytics.generator_timer("frequencies")
     def generate(args):
         """
         Generate frequencies.

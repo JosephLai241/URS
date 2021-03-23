@@ -12,31 +12,6 @@ from halo import Halo
 ### Get current date.
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
-### Export options.
-eo = [
-    "csv", 
-    "json"
-]
-
-### Confirm or deny options.
-options = [
-    "y", 
-    "n"
-]
-
-### PRAW scrape types.
-s_t = [
-    "subreddit", 
-    "redditor", 
-    "comments"
-]
-
-### Analytical tools.
-analytical_tools = [
-    "frequencies",
-    "wordcloud"
-]
-
 ### Subreddit categories.
 categories = [
     "Hot", 

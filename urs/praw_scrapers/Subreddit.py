@@ -25,10 +25,7 @@ from urs.utils.Export import (
 from urs.utils.Global import (
     categories,
     convert_time,
-    eo,
     make_list_dict,
-    options,
-    s_t,
     short_cat,
     Status
 )
@@ -132,6 +129,11 @@ class PrintConfirm():
         confirm: str
             String denoting whether to confirm settings and continue Subreddit scraping
         """
+
+        options = [
+            "y", 
+            "n"
+        ]
 
         while True:
             try:
@@ -697,9 +699,9 @@ class GetSortWrite():
         None
         """
 
-        export_option = eo[1] \
+        export_option = "json" \
             if not args.csv \
-            else eo[0]
+            else "csv"
 
         Export.export(data, f_name, export_option, "subreddits")
 
@@ -800,7 +802,7 @@ class RunSubreddit():
     """
 
     @staticmethod
-    def _create_settings(args, parser, reddit, s_t):
+    def _create_settings(args, parser, reddit):
         """
         Create settings for each user input. 
         
@@ -819,8 +821,6 @@ class RunSubreddit():
             argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
 
         Returns
         -------
@@ -828,10 +828,10 @@ class RunSubreddit():
             Dictionary containing all scrape settings
         """
 
-        sub_list = GetPRAWScrapeSettings().create_list(args, s_t[0])
-        not_subs, subs = Validation.validate(sub_list, parser, reddit, s_t[0])
+        sub_list = GetPRAWScrapeSettings().create_list(args, "subreddit")
+        not_subs, subs = Validation.validate(sub_list, parser, reddit, "subreddit")
         s_master = make_list_dict(subs)
-        GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, s_t[0])
+        GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, "subreddit")
 
         return s_master
 
@@ -863,7 +863,7 @@ class RunSubreddit():
 
         PrintConfirm.print_settings(args, s_master)
         confirm = PrintConfirm.confirm_settings()
-        if confirm == options[0]:
+        if confirm == "y":
             print()
             GetSortWrite.gsw(args, reddit, s_master)
         else:
@@ -900,8 +900,8 @@ class RunSubreddit():
 
     @staticmethod
     @LogExport.log_export
-    @LogPRAWScraper.scraper_timer(s_t[0])
-    def run(args, parser, reddit, s_t):
+    @LogPRAWScraper.scraper_timer("subreddit")
+    def run(args, parser, reddit):
         """
         Run Subreddit scraper. 
         
@@ -922,8 +922,6 @@ class RunSubreddit():
             argparse ArgumentParser object 
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
 
         Returns
         -------
@@ -933,7 +931,7 @@ class RunSubreddit():
 
         PRAWTitles.r_title()
 
-        s_master = RunSubreddit._create_settings(args, parser, reddit, s_t)
+        s_master = RunSubreddit._create_settings(args, parser, reddit)
         RunSubreddit._write_file(args, reddit, s_master)
         
         return s_master

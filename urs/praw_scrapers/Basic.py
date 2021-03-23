@@ -23,8 +23,6 @@ from urs.praw_scrapers.utils.Validation import Validation
 from urs.utils.Global import (
     categories,
     make_list_dict,
-    options,
-    s_t,
     short_cat
 )
 from urs.utils.Logger import (
@@ -74,7 +72,7 @@ class PrintSubs():
 
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        subs, not_subs = Validation.check_existence(sub_list, parser, reddit, s_t[0])
+        subs, not_subs = Validation.check_existence(sub_list, parser, reddit, "subreddit")
 
         return subs, not_subs
 
@@ -347,6 +345,11 @@ class ConfirmInput():
             List of Subreddits
         """
 
+        options = [
+            "y", 
+            "n"
+        ]
+
         while True:
             try:
                 confirm = input("\nConfirm selection? [Y/N] ").strip().lower()
@@ -428,7 +431,7 @@ class RunBasic():
 
     @staticmethod
     @LogExport.log_export
-    @LogPRAWScraper.scraper_timer(s_t[0])
+    @LogPRAWScraper.scraper_timer("subreddit")
     def run(args, parser, reddit):
         """
         Run basic Subreddit scraper.
@@ -465,7 +468,7 @@ class RunBasic():
             master = RunBasic._create_settings(parser, reddit)
 
             confirm = RunBasic._print_confirm(args, master)
-            if confirm == options[0]:
+            if confirm == "y":
                 break
             else:
                 print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
