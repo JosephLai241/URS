@@ -1,7 +1,7 @@
 """
 Global variables
 ================
-Variables that are used throughout this program.
+Variables, functions, and classes that are used throughout this program.
 """
 
 
