@@ -15,10 +15,7 @@ from colorama import (
     Style
 )
 
-from urs.utils.Global import (
-    s_t,
-    short_cat
-)
+from urs.utils.Global import short_cat
 from urs.utils.Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -595,7 +592,13 @@ class GetPRAWScrapeSettings():
             to scrape for
         """
 
-        index = s_t.index(l_type)
+        scraper_types = [
+            "subreddit",
+            "redditor",
+            "comments"
+        ]
+
+        index = scraper_types.index(l_type)
         item_list = [item[0] for item in self._list_switch(args, index)]
 
         return item_list
@@ -714,11 +717,11 @@ class GetPRAWScrapeSettings():
         None
         """
 
-        if s_type == s_t[0]:
+        if s_type == "subreddit":
             self._subreddit_settings(args.subreddit, invalids, master)
-        elif s_type == s_t[1]:
+        elif s_type == "redditor":
             self._two_arg_settings(args.redditor, invalids, master)
-        elif s_type == s_t[2]:
+        elif s_type == "comments":
             self._two_arg_settings(args.comments, invalids, master)
 
 class CheckPRAWCli():
