@@ -17,12 +17,9 @@ from prawcore import PrawcoreException
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import (
-    analytical_tools,
     categories,
     convert_time,
     date,
-    eo,
-    s_t,
     short_cat
 )
 from urs.utils.Titles import Errors
@@ -322,11 +319,11 @@ class LogPRAWScraper():
         None
         """
 
-        if scraper == s_t[0]:
+        if scraper == "subreddit":
             LogPRAWScraper._format_subreddit_log(settings_dict)
-        elif scraper == s_t[1]:
+        elif scraper == "redditor":
             LogPRAWScraper._format_two_arg_log("redditor", settings_dict)
-        elif scraper == s_t[2]:
+        elif scraper == "comments":
             LogPRAWScraper._format_two_arg_log("comments", settings_dict)
 
     @staticmethod
@@ -461,10 +458,10 @@ class LogAnalytics():
         """
 
         tools = {
-            analytical_tools[0]: [arg_set for arg_set in args.frequencies] \
+            "frequencies": [arg_set for arg_set in args.frequencies] \
                 if args.frequencies \
                 else None,
-            analytical_tools[1]: [arg_set for arg_set in args.wordcloud] \
+            "wordcloud": [arg_set for arg_set in args.wordcloud] \
                 if args.wordcloud \
                 else None
         }
@@ -546,7 +543,7 @@ class LogAnalytics():
             1: "Exporting to CSV."
         }
 
-        if f_type == eo[0]:
+        if f_type == "csv":
             return export_options.get(1)
 
         return export_options.get(0)
