@@ -15,15 +15,6 @@ class TestGlobalVariables():
     def test_date_variable(self):
         assert Global.date == dt.datetime.now().strftime("%m-%d-%Y")
 
-    def test_export_options_list(self):
-        assert Global.eo == ["csv", "json"]
-
-    def test_options_list(self):
-        assert Global.options == ["y", "n"]
-
-    def test_scrape_types_list(self):
-        assert Global.s_t == ["subreddit", "redditor", "comments"]
-
     def test_subreddit_categories_list(self):
         assert Global.categories == ["Hot", "New", "Controversial", "Top", \
             "Rising", "Search"]

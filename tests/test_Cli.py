@@ -533,7 +533,7 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         master = {"test_subreddit": []}
-        s_type = Global.s_t[0]
+        s_type = "subreddit"
         invalids = []
         Cli.GetPRAWScrapeSettings().get_settings(args, invalids, master, s_type)
 
@@ -543,7 +543,7 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
         master = {"test_redditor": None}
-        s_type = Global.s_t[1]
+        s_type = "redditor"
         invalids = []
         Cli.GetPRAWScrapeSettings().get_settings(args, invalids, master, s_type)
 
@@ -553,7 +553,7 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--comments", ["test_url", "2"]])
         master = {"test_url": None}
-        s_type = Global.s_t[2]
+        s_type = "comments"
         invalids = []
         Cli.GetPRAWScrapeSettings().get_settings(args, invalids, master, s_type)
 
