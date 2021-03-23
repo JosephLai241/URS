@@ -22,10 +22,7 @@ from prawcore import (
 )
 from prettytable import PrettyTable
 
-from urs.utils.Global import (
-    s_t,
-    Status
-)
+from urs.utils.Global import Status
 from urs.utils.Logger import LogError
 from urs.utils.Titles import Errors
 
@@ -246,14 +243,11 @@ class Validation():
         invalid = []
         valid = []
 
-        ### Check Subreddits.
-        if scraper_type == s_t[0]:
+        if scraper_type == "subreddit":
             Validation._check_subreddits(invalid, object_list, reddit, valid)
-        ### Check Redditors.
-        elif scraper_type == s_t[1]:
+        elif scraper_type == "redditor":
             Validation._check_redditors(invalid, object_list, reddit, valid)
-        ### Check submission URLs.
-        elif scraper_type == s_t[2]:
+        elif scraper_type == "comments":
             Validation._check_submissions(invalid, object_list, reddit, valid)
 
         return invalid, valid
