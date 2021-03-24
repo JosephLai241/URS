@@ -5,7 +5,7 @@
       \/___/  \/_/ \/___/... Universal Reddit Scraper 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?logo=Python)
-[![PRAW Version](https://img.shields.io/badge/PRAW-7.1.4-red?logo=Reddit)][PRAW]
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.2.0-red?logo=Reddit)][PRAW]
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?logo=Travis)][Travis CI Build Status]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
@@ -251,31 +251,56 @@ Exported files will be saved to the `subreddits` directory.
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
-Some Redditor attributes are sorted differently. Here is a table of how each is sorted.
+***NOTE:*** Information does not come for free - this scraper consumes many requests to include all the metadata that is described below.
 
-| Attribute Name | Sorted By/Time Filter                       |
-|----------------|---------------------------------------------|
-| Comments       | Sorted By: New                              |
-| Controversial  | Time Filter: All                            |
-| Gilded         | Sorted By: New                              |
-| Hot            | Determined by other Redditors' interactions |
-| New            | Sorted By: New                              |
-| Submissions    | Sorted By: New                              |
-| Top            | Time Filter: All                            |
+Here is a table of all attributes, how they are sorted, and what type of Reddit objects are included in each.
 
-Of these Redditor attributes, the following will include additional attributes:
+| Attribute Name | Sorted By/Time Filter                       | Reddit Objects           |
+|----------------|---------------------------------------------|--------------------------|
+| Comments       | Sorted By: New                              | Comments                 |
+| Controversial  | Time Filter: All                            | Comments and submissions |
+| Downvoted      | Sorted By: New                              | Comments and submissions |
+| Gilded         | Sorted By: New                              | Comments and submissions |
+| Gildings       | Sorted By: New                              | Comments and submissions |
+| Hidden         | Sorted By: New                              | Comments and submissions |
+| Hot            | Determined by other Redditors' interactions | Comments and submissions |
+| Moderated      | N/A                                         | Subreddits               |
+| Multireddits   | N/A                                         | Multireddits             |
+| New            | Sorted By: New                              | Comments and submissions |
+| Saved          | Sorted By: New                              | Comments and submissions |
+| Submissions    | Sorted By: New                              | Submissions              |
+| Top            | Time Filter: All                            | Comments and submissions |
+| Upvoted        | Sorted By: New                              | Comments and submissions |
 
-| Submissions, Hot, New, Controversial, Top, Upvoted, Downvoted, Gilded, Gildings, Hidden, and Saved | Comments                                     |
-|----------------------------------------------------------------------------------------------------|----------------------------------------------|
-| Title                                                                                              | Date Created                                 |
-| Date Created                                                                                       | Score                                        |
-| Upvotes                                                                                            | Text                                         |
-| Upvote Ratio                                                                                       | Parent ID                                    |
-| ID                                                                                                 | Link ID                                      |
-| NSFW?                                                                                              | Edited?                                      |
-| Text                                                                                               | Stickied?                                    |
-| &nbsp;                                                                                             | Replying to (title of submission or comment) |
-| &nbsp;                                                                                             | In Subreddit (Subreddit name)                |
+These attributes contain comments or submissions. Subreddit attributes are also included within both. 
+
+This is a table of all attributes that are included for each Reddit object:
+
+| Subreddits            | Comments      | Submissions         | Multireddits     |
+|-----------------------|---------------|---------------------|------------------|
+| can_assign_link_flair | body          | author              | can_edit         |
+| can_assign_user_flair | body_html     | created_utc         | copied_from      |
+| created_utc           | created_utc   | distinguished       | created_utc      |
+| description           | distinguished | edited              | description_html |
+| description_html      | edited        | id                  | description_md   |
+| display_name          | id            | is_original_content | display_name     |
+| id                    | is_submitter  | is_self             | name             |
+| name                  | link_id       | link_flair_text     | nsfw             |
+| nsfw                  | parent_id     | locked              | subreddits       |
+| public_description    | score         | name                | visibility       |
+| spoilers_enabled      | stickied      | num_comments        | &nbsp;           |
+| subscribers           | *submission   | nsfw                | &nbsp;           |
+| user_is_banned        | subreddit_id  | permalink           | &nbsp;           |
+| user_is_moderator     | &nbsp;        | score               | &nbsp;           |
+| user_is_subscriber    | &nbsp;        | selftext            | &nbsp;           |
+| &nbsp;                | &nbsp;        | spoiler             | &nbsp;           |
+| &nbsp;                | &nbsp;        | stickied            | &nbsp;           |
+| &nbsp;                | &nbsp;        | *subreddit          | &nbsp;           |
+| &nbsp;                | &nbsp;        | title               | &nbsp;           |
+| &nbsp;                | &nbsp;        | upvote_ratio        | &nbsp;           |
+| &nbsp;                | &nbsp;        | url                 | &nbsp;           |
+
+\* Contains additional metadata.
 
 The file names will follow this format: 
 
