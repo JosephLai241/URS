@@ -472,6 +472,35 @@ class GetInteractions():
         return redditor, skeleton
 
     @staticmethod
+    @Halo(color = "white", text = "Extracting Redditor trophies.")
+    def _get_trophies(redditor):
+        """
+        Get Redditor's trophies.
+
+        Parameters
+        ----------
+        redditor: PRAW Redditor object
+
+        Returns
+        -------
+        trophies: list
+            List containing Redditor trophies
+        """
+
+        if redditor.trophies():
+            return [
+                {
+                    "award_id": trophy.award_id,
+                    "description": trophy.description,
+                    "icon_40": trophy.icon_40,
+                    "icon_70": trophy.icon_70,
+                    "name": trophy.name,
+                    "url": trophy.url
+                }
+                for trophy in redditor.trophies()
+            ]
+
+    @staticmethod
     @Halo(color = "white", text = "Extracting Redditor information.")
     def _get_user_info(redditor, skeleton):
         """
@@ -511,7 +540,8 @@ class GetInteractions():
                 "is_gold": redditor.is_gold,
                 "link_karma": redditor.link_karma,
                 "name": redditor.name,
-                "subreddit": redditor.subreddit
+                "subreddit": redditor.subreddit,
+                "trophies": GetInteractions._get_trophies(redditor)
             }
 
     @staticmethod
