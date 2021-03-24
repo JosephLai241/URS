@@ -80,7 +80,7 @@ Run `pip install -r requirements.txt` to get all project dependencies.
 
 You will need your own Reddit account and API credentials for PRAW. See the [Getting Started](#getting-started) section for more information. 
 
-***NOTE:*** `PRAW` is currently supported on Python 3.6+.
+***NOTE:* Requires Python 3.7+**
 
 # URS Overview
 
