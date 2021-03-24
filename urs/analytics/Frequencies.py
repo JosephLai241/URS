@@ -211,18 +211,11 @@ class GenerateFrequencies():
             f_type, filename = Sort().name_and_create_dir(args, file)
             plt_dict = Sort().get_data(file)
 
-            generator_status = Status(
-                "Generated frequencies.",
-                "Generating frequencies.",
-                "white"
-            )
-
-            generator_status.start()
+            Halo().info("Generating frequencies.")
+            print()
             data = Sort().create_csv(plt_dict) \
                 if args.csv \
                 else Sort().create_json(file, plt_dict)
-            generator_status.succeed()
-            print()
 
             export_status = Status(
                 Style.BRIGHT + Fore.GREEN + "Frequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
