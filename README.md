@@ -138,30 +138,36 @@ Available requests are refilled if you use the PRAW scrapers intermittently, whi
 
 These attributes are included in each scrape. 
 
-| Subreddits    | Redditors                      | Submission Comments |
-|---------------|--------------------------------|---------------------|
-| Title         | Name                           | Parent ID           |
-| Flair         | Fullname                       | Comment ID          |
-| Date Created  | ID                             | Author              |
-| Upvotes       | Date Created                   | Date Created        |
-| Upvote Ratio  | Comment Karma                  | Upvotes             |
-| ID            | Link Karma                     | Text                |
-| Is Locked?    | Is Employee?                   | Edited?             |
-| NSFW?         | Is Friend?                     | Is Submitter?       |
-| Is Spoiler?   | Is Mod?                        | Stickied?           |
-| Stickied?     | Is Gold?                       |                     |
-| URL           | \*Submissions                  |                     |
-| Comment Count | \*Comments                     |                     |
-| Text          | \*Hot                          |                     |
-| &nbsp;        | \*New                          |                     |
-| &nbsp;        | \*Controversial                |                     |
-| &nbsp;        | \*Top                          |                     |
-| &nbsp;        | \*Upvoted (may be forbidden)   |                     |
-| &nbsp;        | \*Downvoted (may be forbidden) |                     |
-| &nbsp;        | \*Gilded                       |                     |
-| &nbsp;        | \*Gildings (may be forbidden)  |                     |
-| &nbsp;        | \*Hidden (may be forbidden)    |                     |
-| &nbsp;        | \*Saved (may be forbidden)     |                     |
+| Subreddits (submissions) | Redditors                        | Submission Comments |
+|--------------------------|----------------------------------|---------------------|
+| `author`                 | `comment_karma`                  | `author`            |
+| `created_utc`            | `created_utc`                    | `body`              |
+| `distinguished`          | `fullname`                       | `body_html`         |
+| `edited`                 | `has_verified_email`             | `created_utc`       |
+| `id`                     | `icon_img`                       | `distinguished`     |
+| `is_original_content`    | `id`                             | `edited`            |
+| `is_self`                | `is_employee`                    | `id`                |
+| `link_flair_text`        | `is_friend`                      | `is_submitter`      |
+| `locked`                 | `is_mod`                         | `link_id`           |
+| `name`                   | `is_gold`                        | `parent_id`         |
+| `num_comments`           | `link_karma`                     | `score`             |
+| `nsfw`                   | `name`                           | `stickied`          |
+| `permalink`              | `subreddit`                      |                     |
+| `score`                  | \*`trophies`                     |                     |
+| `selftext`               | \*`comments`                     |                     |
+| `spoiler`                | \*`controversial`                |                     |
+| `stickied`               | \*`downvoted` (may be forbidden) |                     |
+| `title`                  | \*`gilded`                       |                     |
+| `upvote_ratio`           | \*`gildings` (may be forbidden)  |                     |
+| `url`                    | \*`hidden` (may be forbidden)    |                     |
+|                          | \*`hot`                          |                     |
+|                          | \*`moderated`                    |                     |
+|                          | \*`multireddits`                 |                     |
+|                          | \*`new`                          |                     |
+|                          | \*`saved` (may be forbidden)     |                     |
+|                          | \*`submissions`                  |                     |
+|                          | \*`top`                          |                     |
+|                          | \*`upvoted` (may be forbidden)   |                     |
 
 \*Includes additional attributes; see [Redditors](#redditors) section for more information. 
 
@@ -205,9 +211,9 @@ Time filters may be applied to some categories. Here is a table of the categorie
 | Controversial | All (default) |
 | Top           | Day           |
 | Search        | Hour          |
-| &nbsp;        | Month         | 
-| &nbsp;        | Week          |
-| &nbsp;        | Year          |
+|               | Month         | 
+|               | Week          |
+|               | Year          |
 
 Specify the time filter after the number of results returned or keywords you want to search for.
 
@@ -251,9 +257,28 @@ Exported files will be saved to the `subreddits` directory.
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
-***NOTE:*** Information does not come for free - this scraper consumes many requests to include all the metadata that is described below.
+***NOTE:*** Information does not come for free - this scraper consumes many requests to include all the metadata described below.
 
-Here is a table of all attributes, how they are sorted, and what type of Reddit objects are included in each.
+Here is a list of Redditor information that is included in scrapes.
+
+| Information          |
+|----------------------|
+| `comment_karma`      |
+| `created_utc`        |
+| `fullname`           |
+| `has_verified_email` |
+| `icon_img`           |
+| `id`                 |
+| `is_employee`        |
+| `is_friend`          |
+| `is_mod`             |
+| `is_gold`            |
+| `link_karma`         |
+| `name`               |
+| `subreddit`          |
+| `trophies`           |
+
+Here is a table of all Redditor interaction attributes that are also included, how they are sorted, and what type of Reddit objects are included in each.
 
 | Attribute Name | Sorted By/Time Filter                       | Reddit Objects           |
 |----------------|---------------------------------------------|--------------------------|
@@ -276,29 +301,29 @@ These attributes contain comments or submissions. Subreddit attributes are also 
 
 This is a table of all attributes that are included for each Reddit object:
 
-| Subreddits            | Comments      | Submissions         | Multireddits     |
-|-----------------------|---------------|---------------------|------------------|
-| can_assign_link_flair | body          | author              | can_edit         |
-| can_assign_user_flair | body_html     | created_utc         | copied_from      |
-| created_utc           | created_utc   | distinguished       | created_utc      |
-| description           | distinguished | edited              | description_html |
-| description_html      | edited        | id                  | description_md   |
-| display_name          | id            | is_original_content | display_name     |
-| id                    | is_submitter  | is_self             | name             |
-| name                  | link_id       | link_flair_text     | nsfw             |
-| nsfw                  | parent_id     | locked              | subreddits       |
-| public_description    | score         | name                | visibility       |
-| spoilers_enabled      | stickied      | num_comments        | &nbsp;           |
-| subscribers           | *submission   | nsfw                | &nbsp;           |
-| user_is_banned        | subreddit_id  | permalink           | &nbsp;           |
-| user_is_moderator     | &nbsp;        | score               | &nbsp;           |
-| user_is_subscriber    | &nbsp;        | selftext            | &nbsp;           |
-| &nbsp;                | &nbsp;        | spoiler             | &nbsp;           |
-| &nbsp;                | &nbsp;        | stickied            | &nbsp;           |
-| &nbsp;                | &nbsp;        | *subreddit          | &nbsp;           |
-| &nbsp;                | &nbsp;        | title               | &nbsp;           |
-| &nbsp;                | &nbsp;        | upvote_ratio        | &nbsp;           |
-| &nbsp;                | &nbsp;        | url                 | &nbsp;           |
+| Subreddits              | Comments        | Submissions           | Multireddits       | Trophies      |
+|-------------------------|-----------------|-----------------------|--------------------|---------------|
+| `can_assign_link_flair` | `body`          | `author`              | `can_edit`         | `award_id`    |
+| `can_assign_user_flair` | `body_html`     | `created_utc`         | `copied_from`      | `description` |
+| `created_utc`           | `created_utc`   | `distinguished`       | `created_utc`      | `icon_40`     |
+| `description`           | `distinguished` | `edited`              | `description_html` | `icon_70`     |
+| `description_html`      | `edited`        | `id`                  | `description_md`   | `name`        |
+| `display_name`          | `id`            | `is_original_content` | `display_name`     | `url`         |
+| `id`                    | `is_submitter`  | `is_self`             | `name`             |               |
+| `name`                  | `link_id`       | `link_flair_text`     | `nsfw`             |               |
+| `nsfw`                  | `parent_id`     | `locked`              | `subreddits`       |               |
+| `public_description`    | `score`         | `name`                | `visibility`       |               |
+| `spoilers_enabled`      | `stickied`      | `num_comments`        |                    |               |
+| `subscribers`           | *`submission`   | `nsfw`                |                    |               |
+| `user_is_banned`        | `subreddit_id`  | `permalink`           |                    |               |
+| `user_is_moderator`     |                 | `score`               |                    |               |
+| `user_is_subscriber`    |                 | `selftext`            |                    |               |
+|                         |                 | `spoiler`             |                    |               |
+|                         |                 | `stickied`            |                    |               |
+|                         |                 | *`subreddit`          |                    |               |
+|                         |                 | `title`               |                    |               |
+|                         |                 | `upvote_ratio`        |                    |               |
+|                         |                 | `url`                 |                    |               |
 
 \* Contains additional metadata.
 
