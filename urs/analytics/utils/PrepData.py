@@ -203,8 +203,8 @@ class PrepSubreddit():
 
         status.start()
         for submission in data:
+            CleanData.count_words("selftext", submission, plt_dict)
             CleanData.count_words("title", submission, plt_dict)
-            CleanData.count_words("text", submission, plt_dict)
 
         status.succeed()
         return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
@@ -250,10 +250,10 @@ class PrepRedditor():
                 ### Indicates there is valid data in this field.
                 if isinstance(obj, dict):
                     if obj["type"] == "submission":
+                        CleanData.count_words("selftext", obj, plt_dict)
                         CleanData.count_words("title", obj, plt_dict)
-                        CleanData.count_words("body", obj, plt_dict)
                     elif obj["type"] == "comment":
-                        CleanData.count_words("text", obj, plt_dict)
+                        CleanData.count_words("body", obj, plt_dict)
                 ### Indicates this field is forbidden.
                 elif isinstance(obj, str):
                     continue
