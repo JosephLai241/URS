@@ -257,8 +257,6 @@ Exported files will be saved to the `subreddits` directory.
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
-***NOTE:*** Information does not come for free - this scraper consumes many requests to include all the metadata described below.
-
 Here is a list of Redditor information that is included in scrapes.
 
 | Information          |
@@ -405,17 +403,17 @@ The sub-directories `frequencies` or `wordclouds` are created in `analytics` dep
 
 The data varies depending on the scraper, so these tools target different fields for each type of scrape data:
 
-| Scrape Data         | Targets                 |
-|---------------------|-------------------------|
-| Subreddit           | "title", "text"         |
-| Redditor            | "title", "body", "text" |
-| Submission Comments | "text"                  |
+| Scrape Data         | Targets                     |
+|---------------------|-----------------------------|
+| Subreddit           | `selftext`, `title`         |
+| Redditor            | `selftext`, `title`, `body` |
+| Submission Comments | `text`                      |
 
-For Subreddit scrapes, data is pulled from the "title" and "text" fields for each submission (submission title and body).
+For Subreddit scrapes, data is pulled from the `selftext` and `title` fields for each submission (submission title and body).
 
-For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The "title" and "body" fields are targeted for submissions, and the "text" field is targeted for comments.
+For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The `title` and `body` fields are targeted for submissions, and the `selftext` field is targeted for comments.
 
-For submission comments scrapes, data is only pulled from the "text" field of each comment.
+For submission comments scrapes, data is only pulled from the `text` field of each comment.
 
 ---
 
