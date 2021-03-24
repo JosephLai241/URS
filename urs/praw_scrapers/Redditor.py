@@ -110,7 +110,7 @@ class Objectify():
             "created_utc": convert_time(submission.created_utc),
             "distinguished": submission.distinguished,
             "edited": submission.edited \
-                if submission.edited != False \
+                if submission.edited == False \
                 else convert_time(submission.edited),
             "id": submission.id,
             "is_original_content": submission.is_original_content,
@@ -160,7 +160,7 @@ class Objectify():
             "created_utc": convert_time(comment.created_utc),
             "distinguished": comment.distinguished,
             "edited": comment.edited \
-                if comment.edited != False \
+                if comment.edited == False \
                 else convert_time(comment.edited),
             "id": comment.id,
             "is_submitter": comment.is_submitter,
