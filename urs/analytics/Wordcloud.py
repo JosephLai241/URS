@@ -108,6 +108,7 @@ class FinalizeWordcloud():
         """
 
         Halo().info(Style.BRIGHT + Fore.GREEN + "Displaying wordcloud.")
+        print()
 
         plt.show()
 
@@ -145,7 +146,8 @@ class FinalizeWordcloud():
         export_status.start()
         InitializeDirectory.make_analytics_directory(date_dir, "wordclouds")
         wc.to_file(filename)
-        export_status.succeed()     
+        export_status.succeed()
+        print()
         
         return filename
 
@@ -186,17 +188,12 @@ class GenerateWordcloud():
 
         for file in args.wordcloud:
             scrape_type = GetPath.get_scrape_type(file[0])
-
-            generate_status = Status(
-                "Generated wordcloud.",
-                "Generating wordcloud.",
-                "white"
-            )
             
             wc = SetUpWordcloud.initialize_wordcloud(file, scrape_type)
-            generate_status.start()
+            
+            Halo().info("Generating wordcloud.")
+            print()
             plt = SetUpWordcloud.modify_wordcloud(wc)
-            generate_status.succeed()
             
             FinalizeWordcloud().show_wordcloud(plt) \
                 if args.nosave \
