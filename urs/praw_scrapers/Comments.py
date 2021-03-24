@@ -38,75 +38,23 @@ from urs.utils.Titles import PRAWTitles
 ### every print.
 init(autoreset = True)
 
-class GetComments():
+class CreateComment():
     """
-    Methods for getting comments from a post.
+    Methods for creating a comment object.
     """
 
-    def __init__(self):
+    @staticmethod
+    def create(comment):
         """
-        Initialize variables used in later methods:
+        Create the comment object.
 
-            self._titles: list of comment attributes
-
-        Returns
-        -------
-        None
-        """
-
-        self._titles = [
-            "parent_id", 
-            "comment_id", 
-            "author", 
-            "date_created", 
-            "upvotes", 
-            "text", 
-            "edited", 
-            "is_submitter", 
-            "stickied"
-        ]
-
-    def _fix_attributes(self, comment):
-        """
-        If applicable, handle deleted Redditors or edited time.
-
-        Calls a method from an external module:
+        Calls a public method from an external module:
 
             Global.convert_time()
 
         Parameters
         ----------
-        comment: PRAW object
-
-        Returns
-        -------
-        author_name: str
-        edit_date: str
-        """
-
-        try:
-            author_name = comment.author.name
-        except AttributeError:
-            author_name = "[deleted]"
-
-        edit_date = comment.edited \
-            if str(comment.edited).isalpha() \
-            else convert_time(comment.edited)
-
-        return author_name, edit_date
-
-    def create_comment(self, comment):
-        """
-        Create a comment object containing comment metadata used when sorting.
-
-        Calls methods from an external module:
-
-            Global.make_none_dict()
-            Global.convert_time()
-
-        Parameters
-        ----------
-        comment: PRAW object
+        comment: PRAW comment object
 
         Returns
         -------
@@ -114,25 +62,24 @@ class GetComments():
             Dictionary containing comment metadata
         """
 
-        comment_object = make_none_dict(self._titles)
-
-        author_name, edit_date = self._fix_attributes(comment)
-        comment_attributes = [
-            comment.parent_id, 
-            comment.id, 
-            author_name, 
-            convert_time(comment.created_utc), 
-            comment.score, 
-            comment.body, 
-            edit_date, 
-            comment.is_submitter, 
-            comment.stickied
-        ]
-
-        for title, attribute in zip(self._titles, comment_attributes):
-            comment_object[title] = attribute
-        
-        return comment_object
+        return {
+            "author": "u/" + comment.author.name \
+                if hasattr(comment.author, "name") \
+                else "[deleted]",
+            "body": comment.body,
+            "body_html": comment.body_html,
+            "created_utc": convert_time(comment.created_utc),
+            "distinguished": comment.distinguished,
+            "edited": comment.edited \
+                if comment.edited == False \
+                else convert_time(comment.edited),
+            "id": comment.id,
+            "is_submitter": comment.is_submitter,
+            "link_id": comment.link_id,
+            "parent_id": comment.parent_id,
+            "score": comment.score,
+            "stickied": comment.stickied
+        }
 
 class CommentNode():
     """
@@ -212,7 +159,7 @@ class Forest():
             current_comment = stack.pop(0)
             
             for reply in current_comment.replies:
-                if new_comment.parent_id.split("_", 1)[1] == reply.comment_id:
+                if new_comment.parent_id.split("_", 1)[1] == reply.id:
                     reply.replies.append(new_comment)
                     found = True
                 else:
@@ -256,7 +203,7 @@ class SortComments():
         
         Calls previously defined public method:
 
-            GetComments().create_comment()
+            CreateComment.create()
 
         Parameters
         ----------
@@ -271,7 +218,7 @@ class SortComments():
         """
 
         for comment in submission.comments.list():
-            all_comments.append(GetComments().create_comment(comment))
+            all_comments.append(CreateComment.create(comment))
 
     @staticmethod
     def sort_structured(submission, url):
@@ -283,7 +230,7 @@ class SortComments():
             CommentNode()
             Forest()
             Forest().seed()
-            GetComments().create_comment()
+            CreateComment.create()
 
         Calls a public method from an external module:
 
@@ -311,7 +258,7 @@ class SortComments():
 
         seed_status.start()
         for comment in submission.comments.list():
-            comment_node = CommentNode(GetComments().create_comment(comment))
+            comment_node = CommentNode(CreateComment.create(comment))
             EncodeNode().encode(comment_node)
 
             forest.seed(comment_node)
@@ -438,10 +385,14 @@ class Write():
             },
             "data": {
                 "submission_metadata": {
-                    "author": "u/" + submission.author.name,
+                    "author": "u/" + submission.author.name \
+                        if hasattr(submission.author, "name") \
+                        else "[deleted]",
                     "created_utc": convert_time(submission.created_utc),
                     "distinguished": submission.distinguished,
-                    "edited": submission.edited,
+                    "edited": submission.edited \
+                        if submission.edited == False \
+                        else convert_time(submission.edited),
                     "is_original_content": submission.is_original_content,
                     "is_self": submission.is_self,
                     "link_flair_text": submission.link_flair_text,
