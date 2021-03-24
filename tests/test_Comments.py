@@ -21,24 +21,6 @@ class TestCheckSubmissionsListPostsMethod():
     def test_list_submissions_no_subreddits_left_to_process(self):
         pass
 
-class TestGetCommentsInitMethod():
-    """
-    Testing GetComments class __init__() method found on line 60 in Comments.py.
-    """
-
-    def test_get_comments_init_method_titles_instance_variable(self):
-        assert Comments.GetComments()._titles == [
-            "parent_id", 
-            "comment_id", 
-            "author", 
-            "date_created", 
-            "upvotes", 
-            "text", 
-            "edited", 
-            "is_submitter", 
-            "stickied"
-        ]
-
 class TestGetCommentsFixAttributesMethod():
     """
     Test GetComments class _fix_attributes() method found on line 74 in Comments.py.
