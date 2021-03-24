@@ -372,7 +372,9 @@ class FormatSubmissions():
                 else "[deleted]",
             "created_utc": convert_time(submission.created_utc),
             "distinguished": submission.distinguished,
-            "edited": submission.edited,
+            "edited": submission.edited \
+                if submission.edited == False \
+                else convert_time(submission.edited),
             "id": submission.id,
             "is_original_content": submission.is_original_content,
             "is_self": submission.is_self,
