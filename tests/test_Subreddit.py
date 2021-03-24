@@ -155,30 +155,6 @@ class TestGetPostsGetMethod():
     def test_get_other_categories(self):
         pass
 
-class TestSortPostsInitMethod():
-    """
-    Testing SortPosts class __init__() method found on line 188 in Subreddit.py.
-    """
-
-    def test_sort_posts_init_method_titles_instance_variable(self):
-        assert Subreddit.SortPosts()._titles == \
-            [
-                "title", 
-                "flair", 
-                "date_created", 
-                "upvotes", 
-                "upvote_ratio", 
-                "id", 
-                "edited", 
-                "is_locked", 
-                "nsfw", 
-                "is_spoiler", 
-                "stickied", 
-                "url", 
-                "comment_count", 
-                "text"
-            ]
-
 class TestSortPostsInitializeDictMethod():
     """
     Testing SortPosts class _initialize_dict() method found on line 207 in 
@@ -235,25 +211,7 @@ class TestSortPostsCsvFormatMethod():
 
     def test_csv_format(self):
         pass
-
-class TestSortPostsMakeJsonSkeletonMethod():
-    """
-    Testing SortPosts class _make_json_skeleton() method found on line 271 in 
-    Subreddit.py.
-    """
-
-    def test_make_json_skeleton(self):
-        test_skeleton = Subreddit.SortPosts()._make_json_skeleton("S", "test", "askreddit", "all")
-        assert test_skeleton == {
-            "scrape_settings": {
-                "subreddit": "askreddit",
-                "category": "search",
-                "n_results_or_keywords": "test",
-                "time_filter": "all"
-            },
-            "data": []
-        }
-
+    
 class TestSortPostsAddJsonSubredditRulesMethod():
     """
     Testing SortPosts class _add_json_subreddit_rules() method found on line 285
