@@ -483,20 +483,14 @@ Wordclouds are saved to file by default. If you do not want to keep a file, incl
 
 As stated before, URS supports exporting to either JSON or CSV. **JSON is the default format** - you will have to include the `--csv` flag to export to CSV.
 
-I recommend only exporting to CSV when using:
+You can only export to CSV when using:
 
 + The Subreddit scraper
 + The word frequencies generator
 
 These tools are also suitable for CSV format and are optimized to do so if you want to use that format instead.
 
-JSON is the more practical option for Redditor and submission comments scraping, which is why I have designed these scrapers to work best in this format. It is much easier to read the scrape results since Redditor scraping returns attributes that include additional submission or comment attributes. 
-
-Comments scraping is especially easier to read in JSON format because structured exports look almost identical to threads on Reddit. You can process all the information pertaining to a comment much quicker compared to CSV. 
-
-The `--csv` flag is ignored if it is present while using the Redditor or submission comments scraper.
-
-### See the [samples][Samples] for scrapes ran on March 24, 2021.
+The `--csv` flag is ignored if it is present while using the Redditor, submission comments scraper, or wordcloud generator.
 
 # Contributing
 
