@@ -295,7 +295,7 @@ class PrepComments():
 
         status.start()
         for comment in data:
-            CleanData.count_words("text", comment, plt_dict)
+            CleanData.count_words("body", comment, plt_dict)
         
         status.succeed()
 
@@ -325,7 +325,7 @@ class PrepComments():
 
         status.start()
         for comment in data:
-            CleanData.count_words("text", comment, plt_dict)
+            CleanData.count_words("body", comment, plt_dict)
 
             stack = []
             stack.append(comment)
@@ -337,7 +337,7 @@ class PrepComments():
                 current_comment = stack.pop(0)
                 
                 for reply in current_comment["replies"]:
-                    CleanData.count_words("text", reply, plt_dict)
+                    CleanData.count_words("body", reply, plt_dict)
 
                     if reply not in visited:
                         stack.insert(0, reply)
