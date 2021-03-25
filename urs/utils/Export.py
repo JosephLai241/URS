@@ -8,11 +8,12 @@ Methods for naming and exporting scraped data.
 import csv
 import json
 
+from json import JSONEncoder
+
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import (
     categories,
     date,
-    eo,
     short_cat
 )
 
@@ -277,7 +278,7 @@ class NameFile():
 
         return self._fix(raw_n)
 
-    def c_fname(self, limit, string):
+    def c_fname(self, args, limit, string):
         """
         Determine filename format for submission comments scraping. Calls previously
         defined private methods:
@@ -287,6 +288,8 @@ class NameFile():
 
         Parameters
         ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
         limit: str
             Integer in string format denoting the number of results to return
         string: str
@@ -300,15 +303,32 @@ class NameFile():
         """
 
         string = self._check_len(string)
+        
         if int(limit) != 0:
-            end = "result" \
+            plurality = "result" \
                 if int(limit) < 2 \
                 else "results"
-            raw_n = str("%s-%s-%s" % (string, limit, end))
+            raw_n = str("%s-%s-%s-%s" % (string, limit, plurality, "raw")) \
+                if args.raw \
+                else str("%s-%s-%s" % (string, limit, plurality))
         else:
-            raw_n = str("%s-%s" % (string, "RAW"))
+            raw_n = str("%s-%s-%s" % (string, "all", "raw")) \
+                if args.raw \
+                else str("%s-%s" % (string, "all"))
 
         return self._fix(raw_n)
+
+class EncodeNode(JSONEncoder):
+    """
+    Methods to serialize CommentNodes for JSON export. 
+    """
+
+    def default(self, object):
+        """
+        Override the default JSONEncoder `default()` method. 
+        """
+
+        return object.__dict__
 
 class Export():
     """
@@ -337,7 +357,7 @@ class Export():
         dir_path = "../scrapes/%s/%s" % (date, scrape)
 
         extension = ".csv" \
-            if f_type == eo[0] \
+            if f_type == "csv" \
             else ".json"
 
         return dir_path + "/%s%s" % (f_name, extension)
@@ -363,6 +383,30 @@ class Export():
             writer = csv.writer(results, delimiter = ",")
             writer.writerow(data.keys())
             writer.writerows(zip(*data.values()))
+
+    @staticmethod
+    def write_structured_comments(data, f_name):
+        """
+        Write structured comments to JSON by using the custom JSONEncoder class
+        with the `cls` parameter within `json.dumps()`.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary of scrape data
+        f_name: str
+            String denoting the filename
+
+        Returns
+        -------
+        None 
+        """
+
+        InitializeDirectory.make_type_directory("comments")
+        filename = Export._get_filename_extension(f_name, "json", "comments")
+
+        with open(filename, "w", encoding = "utf-8") as results:
+            json.dump(data, results, indent = 4, cls = EncodeNode)
 
     @staticmethod
     def write_json(data, filename):
@@ -416,5 +460,5 @@ class Export():
         filename = Export._get_filename_extension(f_name, f_type, scrape)
 
         Export.write_json(data, filename) \
-            if f_type == eo[1] \
+            if f_type == "json" \
             else Export.write_csv(data, filename)

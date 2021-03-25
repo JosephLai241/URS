@@ -11,6 +11,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 
 from urs.analytics.utils.PrepData import (
     GetPath,
@@ -19,10 +20,7 @@ from urs.analytics.utils.PrepData import (
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Export import Export
-from urs.utils.Global import (
-    analytical_tools,
-    eo
-)
+from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
 
@@ -82,9 +80,9 @@ class Sort():
             String denoting the filename
         """
 
-        f_type = eo[0] \
+        f_type = "csv" \
             if args.csv \
-            else eo[1]
+            else "json"
 
         date_dir, filename = GetPath.name_file(f_type, file[0], "frequencies")
         InitializeDirectory.make_analytics_directory(date_dir, "frequencies")
@@ -170,31 +168,8 @@ class ExportFrequencies():
         """
 
         Export.write_json(data, filename) \
-            if f_type == eo[1] \
+            if f_type == "json" \
             else Export.write_csv(data, filename)
-
-class PrintConfirm():
-    """
-    Methods for printing successful export message.
-    """
-
-    def confirm(self, filename):
-        """
-        Print confirmation message.
-
-        Parameters
-        ----------
-        filename: str
-            String denoting the filename
-
-        Returns
-        -------
-        None
-        """
-
-        confirmation = "\nFrequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):])
-        print(Style.BRIGHT + Fore.GREEN + confirmation)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
 
 class GenerateFrequencies():
     """
@@ -202,7 +177,7 @@ class GenerateFrequencies():
     """
 
     @staticmethod
-    @LogAnalytics.generator_timer(analytical_tools[0])
+    @LogAnalytics.generator_timer("frequencies")
     def generate(args):
         """
         Generate frequencies.
@@ -236,10 +211,20 @@ class GenerateFrequencies():
             f_type, filename = Sort().name_and_create_dir(args, file)
             plt_dict = Sort().get_data(file)
 
-            print("\nGenerating frequencies...")
+            Halo().info("Generating frequencies.")
+            print()
             data = Sort().create_csv(plt_dict) \
                 if args.csv \
                 else Sort().create_json(file, plt_dict)
 
+            export_status = Status(
+                Style.BRIGHT + Fore.GREEN + "Frequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
+                "Exporting frequencies.",
+                "white"
+            )
+            
+            export_status.start()
             ExportFrequencies.export(data, f_type, filename)
-            PrintConfirm().confirm(filename)
+            export_status.succeed()
+            print()
+            

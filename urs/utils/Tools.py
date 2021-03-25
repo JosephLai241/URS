@@ -20,7 +20,6 @@ from urs.utils.Cli import (
     CheckCli,
     Parser
 )
-from urs.utils.Global import s_t
 from urs.utils.Titles import MainTitle
 
 class Run():
@@ -123,7 +122,7 @@ class Run():
             Validation.validate_user(self._parser, self._reddit)
 
             if self._args.subreddit:
-                RunSubreddit.run(self._args, self._parser, self._reddit, s_t)
+                RunSubreddit.run(self._args, self._parser, self._reddit)
             if self._args.redditor:
                 RunRedditor.run(self._args, self._parser, self._reddit)
             if self._args.comments:

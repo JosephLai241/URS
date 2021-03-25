@@ -17,12 +17,9 @@ from prawcore import PrawcoreException
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import (
-    analytical_tools,
     categories,
     convert_time,
     date,
-    eo,
-    s_t,
     short_cat
 )
 from urs.utils.Titles import Errors
@@ -94,7 +91,7 @@ class LogMain():
 
 class LogError():
     """
-    Decorator for logging args, PRAW, rate limit, or no objects to scrape errors.
+    Decorator for logging args, PRAW, or rate limit errors.
     """
 
     @staticmethod
@@ -156,7 +153,7 @@ class LogError():
                     logging.critical("RECEIVED INVALID %s." % error)
                     logging.critical("ABORTING URS.\n")
                     quit()
-                
+
             return wrapper
         return decorator
 
@@ -183,8 +180,6 @@ class LogError():
         """
 
         def wrapper(parser, reddit):
-            print("\nLogging in...")
-
             try:
                 function(parser, reddit)
                 logging.info("Successfully logged in as u/%s." % reddit.user.me())
@@ -231,37 +226,6 @@ class LogError():
             
             return user_limits
         return wrapper
-
-    @staticmethod
-    def log_none_left(reddit_object):
-        """
-        Wrapper for logging if nothing was left to scrape after validation, 
-        subsequently terminating URS.
-
-        Parameters
-        ----------
-        reddit_object: str
-            String denoting the Reddit object to pass into the exit message
-
-        Returns
-        -------
-        decorator: function()
-            Return the decorator function that runs the method passed into this
-            method
-        """
-
-        def decorator(function):
-            def wrapper(*args):
-                try:
-                    return function(*args)
-                except ValueError:
-                    Errors.n_title(reddit_object)
-                    logging.critical("NO %s LEFT TO SCRAPE." % reddit_object.upper())
-                    logging.critical("ABORTING URS.\n")
-                    quit()
-                
-            return wrapper
-        return decorator
 
 class LogPRAWScraper():
     """
@@ -328,9 +292,9 @@ class LogPRAWScraper():
             if scraper_type == "redditor":
                 logging.info("Scraping %s %s for u/%s..." % (n_results, plurality, reddit_object))
             elif scraper_type == "comments":
-                logging.info("Processing all comments in raw format from Reddit post %s..." % reddit_object) \
+                logging.info("Processing all comments from Reddit post %s..." % reddit_object) \
                     if int(n_results) == 0 \
-                    else logging.info("Processing %s %s in structured format from Reddit post %s..." % (n_results, plurality, reddit_object))            
+                    else logging.info("Processing %s %s from Reddit post %s..." % (n_results, plurality, reddit_object))            
 
             logging.info("")
 
@@ -355,11 +319,11 @@ class LogPRAWScraper():
         None
         """
 
-        if scraper == s_t[0]:
+        if scraper == "subreddit":
             LogPRAWScraper._format_subreddit_log(settings_dict)
-        elif scraper == s_t[1]:
+        elif scraper == "redditor":
             LogPRAWScraper._format_two_arg_log("redditor", settings_dict)
-        elif scraper == s_t[2]:
+        elif scraper == "comments":
             LogPRAWScraper._format_two_arg_log("comments", settings_dict)
 
     @staticmethod
@@ -494,10 +458,10 @@ class LogAnalytics():
         """
 
         tools = {
-            analytical_tools[0]: [arg_set for arg_set in args.frequencies] \
+            "frequencies": [arg_set for arg_set in args.frequencies] \
                 if args.frequencies \
                 else None,
-            analytical_tools[1]: [arg_set for arg_set in args.wordcloud] \
+            "wordcloud": [arg_set for arg_set in args.wordcloud] \
                 if args.wordcloud \
                 else None
         }
@@ -579,7 +543,7 @@ class LogAnalytics():
             1: "Exporting to CSV."
         }
 
-        if f_type == eo[0]:
+        if f_type == "csv":
             return export_options.get(1)
 
         return export_options.get(0)

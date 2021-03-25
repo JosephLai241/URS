@@ -5,11 +5,14 @@ Defining the interface for the basic Subreddit scraper.
 """
 
 
+import logging
+
 from colorama import (
     init, 
     Fore, 
     Style
 )
+from halo import Halo
 
 from urs.praw_scrapers.Subreddit import (
     GetSortWrite,
@@ -20,8 +23,6 @@ from urs.praw_scrapers.utils.Validation import Validation
 from urs.utils.Global import (
     categories,
     make_list_dict,
-    options,
-    s_t,
     short_cat
 )
 from urs.utils.Logger import (
@@ -29,7 +30,10 @@ from urs.utils.Logger import (
     LogExport,
     LogPRAWScraper
 )
-from urs.utils.Titles import PRAWTitles
+from urs.utils.Titles import (
+    Errors,
+    PRAWTitles
+)
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -68,12 +72,11 @@ class PrintSubs():
 
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        subs, not_subs = Validation.existence(s_t[0], sub_list, parser, reddit, s_t)
+        subs, not_subs = Validation.check_existence(sub_list, parser, reddit, "subreddit")
 
         return subs, not_subs
 
     @staticmethod
-    @LogError.log_none_left("Subreddits")
     def print_subreddits(parser, reddit, search_for):
         """
         Print valid and invalid Subreddits.
@@ -99,8 +102,11 @@ class PrintSubs():
             List of invalid Subreddits
         """
 
-        print("\nChecking if Subreddit(s) exist...")
+        check_subs_spinner = Halo(color = "white", text = "Validating Subreddit(s).")
+        print()
+        check_subs_spinner.start()
         subs, not_subs = PrintSubs._find_subs(parser, reddit, search_for)
+        check_subs_spinner.succeed("Finished Subreddit validation.")
 
         if subs:
             print(Fore.GREEN + Style.BRIGHT + "\nThe following Subreddits were found and will be scraped:")
@@ -111,8 +117,18 @@ class PrintSubs():
             print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
             print(*not_subs, sep = "\n")
 
+            logging.warning("Failed to validate the following Subreddits:")
+            logging.warning("%s" % not_subs)
+            logging.warning("Skipping.")
+            logging.info("")
+
         if not subs:
-            raise ValueError
+            logging.critical("ALL SUBREDDITS FAILED VALIDATION.")
+            Errors.n_title("Subreddits")
+            logging.critical("NO SUBREDDITS LEFT TO SCRAPE.")
+            logging.critical("ABORTING URS.\n")
+            
+            quit()
 
         return subs
 
@@ -329,6 +345,11 @@ class ConfirmInput():
             List of Subreddits
         """
 
+        options = [
+            "y", 
+            "n"
+        ]
+
         while True:
             try:
                 confirm = input("\nConfirm selection? [Y/N] ").strip().lower()
@@ -410,7 +431,7 @@ class RunBasic():
 
     @staticmethod
     @LogExport.log_export
-    @LogPRAWScraper.scraper_timer(s_t[0])
+    @LogPRAWScraper.scraper_timer("subreddit")
     def run(args, parser, reddit):
         """
         Run basic Subreddit scraper.
@@ -447,7 +468,7 @@ class RunBasic():
             master = RunBasic._create_settings(parser, reddit)
 
             confirm = RunBasic._print_confirm(args, master)
-            if confirm == options[0]:
+            if confirm == "y":
                 break
             else:
                 print(Fore.RED + Style.BRIGHT + "\nExiting.\n")

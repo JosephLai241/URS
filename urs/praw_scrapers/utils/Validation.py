@@ -5,6 +5,7 @@ Validation methods for PRAW credentials and scrapers.
 """
 
 
+import logging
 import praw
 import requests
 
@@ -13,6 +14,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 from praw import models
 from prawcore import (
     NotFound, 
@@ -20,7 +22,9 @@ from prawcore import (
 )
 from prettytable import PrettyTable
 
+from urs.utils.Global import Status
 from urs.utils.Logger import LogError
+from urs.utils.Titles import Errors
 
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
@@ -99,27 +103,28 @@ class Validation():
         -------
         None
         """
-
-        print(Style.BRIGHT + Fore.GREEN + 
-            "\nSuccessfully logged in as u/%s.\n" % reddit.user.me())
+        login_spinner = Halo(color = "white", text = "Logging in.")
+        login_spinner.start()
+        login_spinner.succeed(Style.BRIGHT + Fore.GREEN + "Successfully logged in as u/%s." % reddit.user.me())
+        print()
         
         Validation.print_rate_limit(reddit)
 
     @staticmethod
-    def _check_subreddits(found, not_found, object_list, reddit):
+    def _check_subreddits(invalid, object_list, reddit, valid):
         """
         Check if Subreddits are valid.
 
         Parameters
         ----------
-        found: list
-            Empty list to store valid Subreddits
-        not_found: list
+        invalid: list
             Empty list to store invalid Subreddits
         object_list: list
             List of Subreddits to check
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
+        valid: list
+            Empty list to store valid Subreddits
 
         Exceptions
         ----------
@@ -134,25 +139,25 @@ class Validation():
         for sub in object_list:
             try:
                 reddit.subreddits.search_by_name(sub, exact = True)
-                found.append(sub)
+                valid.append(sub)
             except NotFound:
-                not_found.append(sub)
+                invalid.append(sub)
 
     @staticmethod
-    def _check_redditors(found, not_found, object_list, reddit):
+    def _check_redditors(invalid, object_list, reddit, valid):
         """
         Check if Redditors are valid.
 
         Parameters
         ----------
-        found: list
-            Empty list to store valid Redditors
-        not_found: list
+        invalid: list
             Empty list to store invalid Redditors
         object_list: list
             List of Redditors to check
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
+        valid: list
+            Empty list to store valid Redditors
 
         Exceptions
         ----------
@@ -167,25 +172,25 @@ class Validation():
         for user in object_list:
             try:
                 reddit.redditor(user).id
-                found.append(user)
+                valid.append(user)
             except NotFound:
-                not_found.append(user)
+                invalid.append(user)
 
     @staticmethod
-    def _check_submissions(found, not_found, object_list, reddit):
+    def _check_submissions(invalid, object_list, reddit, valid):
         """
         Check if submission URLs are valid.
 
         Parameters
         ----------
-        found: list
-            Empty list to store valid submission URLs
-        not_found: list
+        invalid: list
             Empty list to store invalid submission URLs
         object_list: list
             List of submission URLs to check
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
+        valid: list
+            Empty list to store valid submission URLs
 
         Exceptions
         ----------
@@ -200,28 +205,25 @@ class Validation():
         for post in object_list:
             try:
                 reddit.submission(url = post).title
-                found.append(post)
+                valid.append(post)
             except Exception:
-                not_found.append(post)
+                invalid.append(post)
 
     @staticmethod
-    def existence(l_type, object_list, parser, reddit, s_t):
+    def check_existence(object_list, parser, reddit, scraper_type):
         """
-        Check if Subreddit(s), Redditor(s), or submission(s) exist and catch PRAW 
-        exceptions.
+        Check whether Reddit objects are valid.
 
         Parameters
         ----------
-        l_type: str
-            String denoting the scraper type
         object_list: list
             List of Reddit objects to check
         parser: ArgumentParser
             argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
+        scraper_type: str
+            String denoting the scraper type
 
         Exceptions
         ----------
@@ -232,23 +234,91 @@ class Validation():
 
         Returns
         -------
-        found: list
+        valid: list
             List of valid Reddit objects
-        not_found: list
+        invalid: list
             List of invalid Reddit objects
         """
 
-        found = []
-        not_found = []
+        invalid = []
+        valid = []
 
-        ### Check Subreddits.
-        if l_type == s_t[0]:
-            Validation._check_subreddits(found, not_found, object_list, reddit)
-        ### Check Redditors.
-        elif l_type == s_t[1]:
-            Validation._check_redditors(found, not_found, object_list, reddit)
-        ### Check submission URLs.
-        elif l_type == s_t[2]:
-            Validation._check_submissions(found, not_found, object_list, reddit)
+        if scraper_type == "subreddit":
+            Validation._check_subreddits(invalid, object_list, reddit, valid)
+        elif scraper_type == "redditor":
+            Validation._check_redditors(invalid, object_list, reddit, valid)
+        elif scraper_type == "comments":
+            Validation._check_submissions(invalid, object_list, reddit, valid)
 
-        return found, not_found
+        return invalid, valid
+
+    @staticmethod
+    def validate(object_list, parser, reddit, scraper_type):
+        """
+        Check if Subreddit(s), Redditor(s), or submission(s) exist and catch PRAW 
+        exceptions. Log invalid Reddit objects to `urs.log` if applicable.
+
+        Calls previously defined public method:
+
+            Validation.check_existence()
+
+        Parameters
+        ----------
+        object_list: list
+            List of Reddit objects to check
+        parser: ArgumentParser
+            argparse ArgumentParser object
+        reddit: Reddit object
+            Reddit instance created by PRAW API credentials
+        scraper_type: str
+            String denoting the scraper type
+
+        Returns
+        -------
+        invalid: list
+            List of invalid Reddit objects
+        valid: list
+            List of valid Reddit objects
+        """
+
+        object_type = "submission" \
+            if scraper_type == "comments" \
+            else scraper_type.capitalize()
+
+        check_status = Status(
+            "Finished %s validation." % object_type,
+            "Validating %s(s)" % object_type,
+            "white"
+        )
+
+        check_status.start()
+
+        logging.info("Validating %s(s)..." % object_type)
+        logging.info("")
+
+        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        
+        check_status.succeed()
+        print()
+
+        if invalid:
+            warning_message = "The following %ss were not found and will be skipped:" % object_type
+
+            print(Fore.YELLOW + Style.BRIGHT + warning_message)
+            print(Fore.YELLOW + Style.BRIGHT + "-" * len(warning_message))
+            print(*invalid, sep = "\n")
+
+            logging.warning("Failed to validate the following %ss:" % object_type)
+            logging.warning("%s" % (invalid))
+            logging.warning("Skipping.")
+            logging.info("")
+
+        if not valid:
+            logging.critical("ALL %sS FAILED VALIDATION." % object_type.upper())
+            Errors.n_title(object_type + "s")
+            logging.critical("NO %sS LEFT TO SCRAPE." % object_type.upper())
+            logging.critical("ABORTING URS.\n")
+            
+            quit()
+
+        return invalid, valid

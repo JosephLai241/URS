@@ -253,43 +253,6 @@ class TestProcessInteractionsSortAccessMethod():
     def test_sort_access_forbidden(self):
         pass
 
-class TestGetInteractionsInitMethod():
-    """
-    Testing GetInteractions class __init__() method found on line 245 in Redditor.py.
-    """
-
-    def test_get_interactions_init_method_info_titles_instance_variable(self):
-        assert Redditor.GetInteractions()._info_titles == \
-            [
-                "name", 
-                "fullname", 
-                "id", 
-                "date_created", 
-                "comment_karma", 
-                "link_karma", 
-                "is_employee", 
-                "is_friend", 
-                "is_mod", 
-                "is_gold"
-            ]
-
-    def test_get_interactions_init_method_interaction_titles_instance_variable(self):
-        assert Redditor.GetInteractions()._interaction_titles == \
-            [
-                "submissions", 
-                "comments", 
-                "hot", 
-                "new", 
-                "controversial", 
-                "top", 
-                "upvoted", 
-                "downvoted", 
-                "gilded", 
-                "gildings", 
-                "hidden", 
-                "saved"
-            ]
-
 class TestGetInteractionsMakeUserProfileMethod():
     """
     Testing GetInteractions class _make_user_profile() method found on line 272

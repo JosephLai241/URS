@@ -13,6 +13,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 from prawcore import PrawcoreException
 
 from urs.praw_scrapers.utils.Validation import Validation
@@ -24,9 +25,8 @@ from urs.utils.Export import (
 )
 from urs.utils.Global import (
     convert_time,
-    eo,
     make_none_dict,
-    s_t
+    Status
 )
 from urs.utils.Logger import (
     LogError,
@@ -39,63 +39,187 @@ from urs.utils.Titles import PRAWTitles
 ### every print.
 init(autoreset = True)
 
-class CheckRedditors():
+class Objectify():
     """
-    Method for printing found and invalid Redditors.
+    Methods for creating Reddit objects based on metadata.
     """
 
-    @staticmethod
-    @LogError.log_none_left("Redditors")
-    def list_redditors(parser, reddit, user_list):
+    def make_subreddit(self, subreddit):
         """
-        Check if Redditors exist and list Redditors who are not found.
+        Make a Subreddit object.
 
         Calls a public method from an external module:
 
-            Validation.existence()
+            Global.convert_time()
 
         Parameters
         ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        user_list: list
-            List of Redditors
+        subreddit: PRAW Subreddit object
 
         Returns
         -------
-        users: list
-            List of valid Redditors URLs
+        subreddit_object: dict
+            Dictionary containing Subreddit metadata
         """
 
-        print("\nChecking if Redditor(s) exist...")
-        logging.info("Validating Redditors...")
-        logging.info("")
-        users, not_users = Validation.existence(s_t[1], user_list, parser, reddit, s_t)
-        
-        if not_users:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Redditors were not found and will be skipped:")
-            print(Fore.YELLOW + Style.BRIGHT + "-" * 59)
-            print(*not_users, sep = "\n")
+        return {
+            "can_assign_link_flair": subreddit.can_assign_link_flair,
+            "can_assign_user_flair": subreddit.can_assign_user_flair,
+            "created_utc": convert_time(subreddit.created_utc),
+            "description": subreddit.description,
+            "description_html": subreddit.description_html,
+            "display_name": subreddit.display_name,
+            "id": subreddit.id,
+            "name": subreddit.name,
+            "nsfw": subreddit.over18,
+            "public_description": subreddit.public_description,
+            "spoilers_enabled": subreddit.spoilers_enabled,
+            "subscribers": subreddit.subscribers,
+            "user_is_banned": subreddit.user_is_banned,
+            "user_is_moderator": subreddit.user_is_moderator,
+            "user_is_subscriber": subreddit.user_is_subscriber
+        }
 
-            logging.warning("Failed to validate the following Redditors:")
-            logging.warning("%s" % (not_users))
-            logging.warning("Skipping.")
-            logging.info("")
+    def make_submission(self, submission):
+        """
+        Make a submission object.
 
-        if not users:
-            logging.critical("ALL REDDITORS FAILED VALIDATION.")
-            raise ValueError
+        Calls a previously defined public method:
+
+            self.make_subreddit()
+
+        Calls a public method from an external module:
+
+            Global.convert_time()
+
+        Parameters
+        ----------
+        submission: PRAW submission object
+
+        Returns
+        -------
+        submission_object: dict
+            Dictionary containing submission metadata
+        """
+
+        return {
+            "type": "submission",
+            "author": "u/" + submission.author.name \
+                if hasattr(submission.author, "name") \
+                else "[deleted]",
+            "created_utc": convert_time(submission.created_utc),
+            "distinguished": submission.distinguished,
+            "edited": submission.edited \
+                if submission.edited == False \
+                else convert_time(submission.edited),
+            "id": submission.id,
+            "is_original_content": submission.is_original_content,
+            "is_self": submission.is_self,
+            "link_flair_text": submission.link_flair_text,
+            "locked": submission.locked,
+            "name": submission.name,
+            "num_comments": submission.num_comments,
+            "nsfw": submission.over_18,
+            "permalink": submission.permalink,
+            "score": submission.score,
+            "selftext": submission.selftext,
+            "spoiler": submission.spoiler,
+            "stickied": submission.stickied,
+            "subreddit": self.make_subreddit(submission.subreddit),
+            "title": submission.title,
+            "upvote_ratio": submission.upvote_ratio,
+            "url": submission.url
+        }
+
+    def make_comment(self, comment):
+        """
+        Make a comment item. 
         
-        return not_users, users
+        Calls previously defined public method:
+
+            self.make_submission()
+
+        Calls a public method from an external module:
+
+            Global.convert_time()
+
+        Parameters
+        ----------
+        comment: PRAW comment object
+
+        Returns
+        -------
+        redditor_item: dict
+            Dictionary containing comment metadata
+        """
+
+        return {
+            "type": "comment",
+            "body": comment.body,
+            "body_html": comment.body_html,
+            "created_utc": convert_time(comment.created_utc),
+            "distinguished": comment.distinguished,
+            "edited": comment.edited \
+                if comment.edited == False \
+                else convert_time(comment.edited),
+            "id": comment.id,
+            "is_submitter": comment.is_submitter,
+            "link_id": comment.link_id,
+            "parent_id": comment.parent_id,
+            "score": comment.score,
+            "stickied": comment.stickied,
+            "submission": self.make_submission(comment.submission),
+            "subreddit_id": comment.subreddit_id
+        }
+
+    def make_multireddit(self, multireddit):
+        """
+        Make a multireddit item.
+
+        Calls a previously defined public method:
+
+            self.make_subreddit()
+
+        Calls a public method from an external module:
+
+            Global.convert_time()
+
+        Parameters
+        ----------
+        multireddit: PRAW multireddit object
+
+        Returns
+        -------
+        multireddit_object: dict
+            Dictionary containing multireddit metadata
+        """
+
+        multireddit_object = {
+            "can_edit": multireddit.can_edit,
+            "copied_from": multireddit.copied_from,
+            "created_utc": convert_time(multireddit.created_utc),
+            "description_html": multireddit.description_html,
+            "description_md": multireddit.description_md,
+            "display_name": multireddit.display_name,
+            "name": multireddit.name,
+            "nsfw": multireddit.over_18,
+            "subreddits": [],
+            "visibility": multireddit.visibility
+        }
+
+        if multireddit.subreddits:
+            for subreddit in multireddit.subreddits:
+                subreddit = self.make_subreddit(subreddit)
+                multireddit_object["subreddits"].append(subreddit) 
+
+        return multireddit_object
 
 class ProcessInteractions():
     """
     Methods for sorting and labeling comment or submission objects correctly.
      
-    Some user attributes will return a ListingGenerator which includes both comments 
-    and submissions. These attributes will need to be sorted accordingly:
+    Some Redditor attributes will return a ListingGenerator which includes both 
+    comments and submissions. These attributes will need to be sorted accordingly:
     - Downvoted (may be forbidden)
     - Gilded
     - Gildings (may be forbidden)
@@ -106,43 +230,34 @@ class ProcessInteractions():
     - Upvoted (may be forbidden)
     """
 
-    def __init__(self, limit, skeleton, user):
+    def __init__(self, limit, redditor, skeleton):
         """
         Initialize variables used in later methods:
 
             self._skeleton: dictionary that contains all Redditor metadata and interactions
 
-            self._comments: user's comment objects
-            self._controversial: user's controversial objects
-            self._downvoted: user's downvoted objects
-            self._gilded: user's gilded objects
-            self._gildings: user's gildings objects
-            self._hidden: user's hidden objects
-            self._hot: user's hot objects
-            self._new: user's new objects
-            self._saved: user's saved objects
-            self._submissions: user's submission objects
-            self._top: user's top objects
-            self._upvoted: user's upvoted objects
+            self._comments: Redditor's comment objects
+            self._controversial: Redditor's controversial objects
+            self._downvoted: Redditor's downvoted objects
+            self._gilded: Redditor's gilded objects
+            self._gildings: Redditor's gildings objects
+            self._hidden: Redditor's hidden objects
+            self._hot: Redditor's hot objects
+            self._moderated: Redditor's moderated objects
+            self._multireddits: Redditor's multireddits
+            self._new: Redditor's new objects
+            self._saved: Redditor's saved objects
+            self._submissions: Redditor's submission objects
+            self._top: Redditor's top objects
+            self._upvoted: Redditor's upvoted objects
             
-            self._comment_titles: list of comment attribute fields
-            self._submission_titles: list of submission attribute fields
-
-            self._scrape_types: list of sorted scrape types for Redditor data
-
-            self._mutts: list of user objects that may return either submission or comment objects
-            self._mutt_names: list of titles for each user object in self._mutts
-
-            self._access: list of user objects that may return a 403 HTTP Forbidden exception
-            self._access_names: list of titles for each user object in self._access
-
         Parameters
         ----------
         limit: int
             Integer denoting n_results to return
+        redditor: PRAW object
         skeleton: dict
             Dictionary containing all Redditor data
-        user: PRAW object
 
         Returns
         -------
@@ -151,221 +266,36 @@ class ProcessInteractions():
 
         self._skeleton = skeleton
 
-        self._comments = user.comments.new(limit = limit)
-        self._controversial = user.controversial(limit = limit)
-        self._downvoted = user.downvoted(limit = limit)
-        self._gilded = user.gilded(limit = limit)
-        self._gildings = user.gildings(limit = limit)
-        self._hidden = user.hidden(limit = limit)
-        self._hot = user.hot(limit = limit)
-        self._new = user.new(limit = limit)
-        self._saved = user.saved(limit = limit)
-        self._submissions = user.submissions.new(limit = limit)
-        self._top = user.top(limit = limit)
-        self._upvoted = user.upvoted(limit = limit)
+        self._comments = redditor.comments.new(limit = limit)
+        self._controversial = redditor.controversial(limit = limit)
+        self._downvoted = redditor.downvoted(limit = limit)
+        self._gilded = redditor.gilded(limit = limit)
+        self._gildings = redditor.gildings(limit = limit)
+        self._hidden = redditor.hidden(limit = limit)
+        self._hot = redditor.hot(limit = limit)
+        self._moderated = redditor.moderated()
+        self._multireddits = redditor.multireddits()
+        self._new = redditor.new(limit = limit)
+        self._saved = redditor.saved(limit = limit)
+        self._submissions = redditor.submissions.new(limit = limit)
+        self._top = redditor.top(limit = limit)
+        self._upvoted = redditor.upvoted(limit = limit)
 
-        self._comment_titles = [
-            "type",
-            "date_created", 
-            "score", 
-            "text", 
-            "parent_id", 
-            "link_id", 
-            "edited", 
-            "stickied", 
-            "replying_to", 
-            "in_subreddit"
-        ]
-        self._submission_titles = [
-            "type",
-            "title", 
-            "date_created", 
-            "upvotes", 
-            "upvote_ratio",
-            "id", 
-            "nsfw", 
-            "in_subreddit", 
-            "body"
-        ]
-
-        self._scrape_types = [
-            "submissions", 
-            "comments", 
-            "mutts", 
-            "access"
-        ]
-
-        self._mutts = [
-            self._controversial, 
-            self._gilded, 
-            self._hot, 
-            self._new, 
-            self._top
-        ]
-        self._mutt_names = [
-            "controversial", 
-            "gilded", 
-            "hot", 
-            "new", 
-            "top"
-        ]
-
-        self._access = [
-            self._downvoted, 
-            self._gildings, 
-            self._hidden, 
-            self._saved, 
-            self._upvoted
-        ]
-        self._access_names = [
-            "downvoted", 
-            "gildings", 
-            "hidden", 
-            "saved", 
-            "upvoted"
-        ]
-
-    def _make_zip_dict(self, items, titles):
-        """
-        Make a dictionary from zipped lists. This private method is used to create
-        individual submission or comment objects to store in lists.
-
-        Parameters
-        ----------
-        items: list
-            List of strings to set the dictionary keys
-        titles: list
-            List of PRAW objects to set the dictionary values
-
-        Returns
-        -------
-        redditor_data: dict
-            Dictionary for a Redditor object (submission or comment)
-        """
-
-        return dict((title, item) for title, item in zip(titles, items))
-
-    def _make_submission_item(self, item):
-        """
-        Make submission item. 
-        
-        Calls previously defined private method:
-
-            self._make_zip_dict()
-
-        Parameters
-        ----------
-        item: PRAW object
-            PRAW submission item
-
-        Returns
-        -------
-        redditor_item: dict
-            Dictionary for a Redditor's submission
-        """
-
-        items = [
-            "submission",
-            item.title, 
-            convert_time(item.created), 
-            item.score, 
-            item.upvote_ratio, 
-            item.id, 
-            item.over_18, 
-            item.subreddit.display_name, 
-            item.selftext
-        ]
-
-        return self._make_zip_dict(items, self._submission_titles)
-
-    def _make_comment_item(self, item):
-        """
-        Make comment item. 
-        
-        Calls previously defined private method:
-
-            self._make_zip_dict()
-
-        Parameters
-        ----------
-        item: PRAW object
-            PRAW comment item
-
-        Returns
-        -------
-        redditor_item: dict
-            Dictionary for a Redditor's comment
-        """
-
-        edit_date = item.edited \
-            if str(item.edited).isalpha() \
-            else convert_time(item.edited)
-        items = [
-            "comment",
-            convert_time(item.created_utc), 
-            item.score, 
-            item.body, 
-            item.parent_id, 
-            item.link_id, 
-            edit_date, 
-            item.stickied, 
-            item.submission.selftext, 
-            item.submission.subreddit.display_name
-        ]
-
-        return self._make_zip_dict(items, self._comment_titles)
-
-    def _determine_append(self, cat, redditor_item, scrape_type):
-        """
-        Determine how to append the list to the JSON skeleton. 
-        
-        Calls previously defined private method:
-
-            self._scrape_types()
-
-        Parameters
-        ----------
-        cat: str
-            String denoting Redditor category
-        redditor_item: dict
-            Dictionary for a Redditor's submission or comment
-        scrape_type: str
-            String denoting the scrape type within self._scrape_types
-
-        Returns
-        -------
-        None
-        """
-
-        switch = {
-            0: "submissions",
-            1: "comments",
-            2: "%s" % cat \
-                if cat != None \
-                else None,
-        }
-
-        index = self._scrape_types.index(scrape_type)
-        self._skeleton["data"]["interactions"][switch.get(index)].append(redditor_item)
-
-    def _extract(self, cat, obj, scrape_type):
+    def _extract(self, obj, scrape_type):
         """
         Extracting submission or comment attributes and appending to the skeleton.
-        
-        Calls previously defined private methods:
 
-            self._make_submission_item()
-            self._make_comment_item()
-            self._determine_append()
+        Calls previously defined public methodss:
+
+            Objectify().make_submission()
+            Objectify().make_comment()
 
         Parameters
         ----------
-        cat: str
-            String denoting Redditor category
         obj: PRAW object
             PRAW Redditor object that may contain Redditor submissions or comments 
         scrape_type: str
-            String denoting the scrape type within self._scrape_types
+            String denoting the field within the skeleton
 
         Returns
         -------
@@ -373,37 +303,40 @@ class ProcessInteractions():
         """
 
         for item in obj:
-            redditor_item = self._make_submission_item(item) \
+            redditor_item = Objectify().make_submission(item) \
                 if isinstance(item, praw.models.Submission) \
-                else self._make_comment_item(item)
+                else Objectify().make_comment(item)
 
-            self._determine_append(cat, redditor_item, scrape_type) 
+            self._skeleton["data"]["interactions"][scrape_type].append(redditor_item)
 
-    def sort_submissions(self):
+    @Halo(color = "white", text = "Extracting submissions.")
+    def get_submissions(self):
         """
-        Sort Redditor submissions. 
+        Get Redditor submissions. 
         
         Calls previously defined private method:
 
             self._extract()
         """
 
-        self._extract(None, self._submissions, self._scrape_types[0])
+        self._extract(self._submissions, "submissions")
 
-    def sort_comments(self):
+    @Halo(color = "white", text = "Extracting comments.")
+    def get_comments(self):
         """
-        Sort Redditor comments. 
+        Get Redditor comments. 
         
         Calls previously defined private method:
 
             self._extract()
         """
 
-        self._extract(None, self._comments, self._scrape_types[1])
+        self._extract(self._comments, "comments")
 
-    def sort_mutts(self):
+    @Halo(color = "white", text = "Extracting Controversial, Gilded, Hot, New, and Top interactions.")
+    def get_mutts(self):
         """
-        Sort Controversial, Gilded, Hot, New and Top Redditor posts. The ListingGenerator
+        Get Controversial, Gilded, Hot, New, and Top Redditor posts. The ListingGenerator
         returns a mix of submissions and comments, so handling each differently is
         necessary. 
         
@@ -412,12 +345,27 @@ class ProcessInteractions():
             self._extract()
         """
 
-        for cat, obj in zip(self._mutt_names, self._mutts):
-            self._extract(cat, obj, self._scrape_types[2])
+        mutt_interactions = [
+            self._controversial, 
+            self._gilded, 
+            self._hot, 
+            self._new, 
+            self._top
+        ]
+        mutt_names = [
+            "controversial", 
+            "gilded", 
+            "hot", 
+            "new", 
+            "top"
+        ]
 
-    def sort_access(self):
+        for category, interaction in zip(mutt_names, mutt_interactions):
+            self._extract(interaction, category)
+            
+    def get_access(self):
         """
-        Sort upvoted, downvoted, gildings, hidden, and saved Redditor posts. These
+        Get Upvoted, Downvoted, Gildings, Hidden, and Saved Redditor posts. These
         lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
         handling is necessary. 
         
@@ -426,58 +374,68 @@ class ProcessInteractions():
             self._extract()
         """
 
-        for cat, obj in zip(self._access_names, self._access):
-            try:
-                self._extract(cat, obj, self._scrape_types[3])
-            except PrawcoreException as error:
-                print(Style.BRIGHT + Fore.YELLOW + "\nACCESS TO %s OBJECTS FORBIDDEN: %s. SKIPPING." % (cat.upper(), error))
-                self._skeleton["data"]["interactions"]["%s" % cat].append("FORBIDDEN")
+        access_interactions = [
+            self._downvoted, 
+            self._gildings, 
+            self._hidden, 
+            self._saved, 
+            self._upvoted
+        ]
+        access_names = [
+            "downvoted", 
+            "gildings", 
+            "hidden", 
+            "saved", 
+            "upvoted"
+        ]
 
+        access_halo = Halo(color = "white", text = "Extracting Upvoted, Downvoted, Gildings, Hidden, and Saved interactions.")
+
+        access_halo.start()
+        for category, interaction in zip(access_names, access_interactions):
+            try:
+                self._extract(interaction, category)
+            except PrawcoreException as error:
+                access_halo.warn(Fore.YELLOW + "Access to %s interactions forbidden: %s. SKIPPING." % (category.capitalize(), error))
+                self._skeleton["data"]["interactions"]["%s" % category].append("FORBIDDEN")
+
+    @Halo(color = "white", text = "Extracting moderated Subreddits.")
+    def get_moderated(self):
+        """
+        Get Redditor's moderated Subreddits.
+
+        Calls previously defined public methodss:
+
+            Objectify().make_subreddit()
+        """
+
+        if self._moderated:
+            for subreddit in self._moderated:
+                subreddit = Objectify().make_subreddit(subreddit)
+                self._skeleton["data"]["interactions"]["moderated"].append(subreddit)
+
+    @Halo(color = "white", text = "Extracting multireddits.")
+    def get_multireddits(self):
+        """
+        Get Redditor's multireddits.
+        
+        Calls previously defined public methodss:
+
+            Objectify().make_multireddit()
+        """
+
+        if self._multireddits:
+            for multireddit in self._multireddits:
+                multireddit = Objectify().make_multireddit(multireddit)
+                self._skeleton["data"]["interactions"]["multireddits"].append(multireddit)
+        
 class GetInteractions():
     """
     Methods for getting Redditor information and interactions.
     """
 
-    def __init__(self):
-        """
-        Initialize variables used in later methods:
-
-            self._info_titles: list of titles for Redditor information
-            self._interaction_titles: list of titles for each type of Redditor interaction
-
-        Returns
-        -------
-        None
-        """
-
-        self._info_titles = [
-            "name", 
-            "fullname", 
-            "id", 
-            "date_created", 
-            "comment_karma", 
-            "link_karma", 
-            "is_employee", 
-            "is_friend", 
-            "is_mod", 
-            "is_gold"
-        ]
-        self._interaction_titles = [ 
-            "submissions", 
-            "comments", 
-            "hot", 
-            "new", 
-            "controversial", 
-            "top", 
-            "upvoted", 
-            "downvoted", 
-            "gilded", 
-            "gildings", 
-            "hidden", 
-            "saved"
-        ]
-
-    def _make_json_skeleton(self, limit, reddit, user):
+    @staticmethod
+    def _make_json_skeleton(limit, reddit, redditor):
         """
         Create a skeleton for JSON export. Include scrape details at the top.
 
@@ -486,42 +444,69 @@ class GetInteractions():
         limit: str
             String denoting n_results returned
         reddit: PRAW Reddit object
-        user: PRAW Redditor object
+        redditor: PRAW Redditor object
 
         Returns
         -------
         skeleton: dict
             Dictionary containing all Redditor data
-        user: PRAW Redditor object
+        redditor: PRAW Redditor object
         """
 
         plurality = "results" \
             if int(limit) > 1 \
             else "result"
-        print(Style.BRIGHT + "\nProcessing %s %s from u/%s's profile..." % (limit, plurality, user))
-        print("\nThis may take a while. Please wait.")
 
+        Halo().info("Processing %s %s from u/%s's profile." % (limit, plurality, redditor))
+        
         skeleton = {
             "scrape_settings": {
-                "redditor": user,
+                "redditor": redditor,
                 "n_results": limit
             },
             "data": {
-                "information": {},
+                "information": None,
                 "interactions": {}
             }
         }
-        user = reddit.redditor(user)
+        redditor = reddit.redditor(redditor)
 
-        return skeleton, user
+        return redditor, skeleton
 
-    def _get_user_info(self, skeleton, user):
+    @staticmethod
+    @Halo(color = "white", text = "Extracting Redditor trophies.")
+    def _get_trophies(redditor):
+        """
+        Get Redditor's trophies.
+
+        Parameters
+        ----------
+        redditor: PRAW Redditor object
+
+        Returns
+        -------
+        trophies: list
+            List containing Redditor trophies
+        """
+
+        if redditor.trophies():
+            return [
+                {
+                    "award_id": trophy.award_id,
+                    "description": trophy.description,
+                    "icon_40": trophy.icon_40,
+                    "icon_70": trophy.icon_70,
+                    "name": trophy.name,
+                    "url": trophy.url
+                }
+                for trophy in redditor.trophies()
+            ]
+
+    @staticmethod
+    @Halo(color = "white", text = "Extracting Redditor information.")
+    def _get_user_info(redditor, skeleton):
         """
         Get Redditor account information.
-
-        Calls a previously defined private method:
-
-            self._info_titles()
 
         Calls a public method from an external module:
 
@@ -529,35 +514,42 @@ class GetInteractions():
 
         Parameters
         ----------
+        redditor: PRAW Redditor object
         skeleton: dict
             Dictionary containing all Redditor data
-        user: PRAW Redditor object
 
         Returns
         -------
         None
         """
 
-        user_info_titles = self._info_titles
-        user_info = [
-            user.name, 
-            user.fullname, 
-            user.id, 
-            convert_time(user.created_utc),
-            user.comment_karma, 
-            user.link_karma, 
-            user.is_employee, 
-            user.is_friend,
-            user.is_mod, 
-            user.is_gold
-        ]
+        try:
+            skeleton["data"]["information"] = {
+                "is_suspended": redditor.is_suspended,
+                "name": redditor.name
+            }
+        except AttributeError:
+            skeleton["data"]["information"] = {
+                "comment_karma": redditor.comment_karma,
+                "created_utc": convert_time(redditor.created_utc),
+                "fullname": redditor.fullname,
+                "has_verified_email": redditor.has_verified_email,
+                "icon_img": redditor.icon_img,
+                "id": redditor.id,
+                "is_employee": redditor.is_employee,
+                "is_friend": redditor.is_friend,
+                "is_mod": redditor.is_mod,
+                "is_gold": redditor.is_gold,
+                "link_karma": redditor.link_karma,
+                "name": redditor.name,
+                "subreddit": redditor.subreddit,
+                "trophies": GetInteractions._get_trophies(redditor)
+            }
 
-        for info_title, user_item in zip(user_info_titles, user_info):
-            skeleton["data"]["information"][info_title] = user_item
-
-    def _make_interactions_lists(self, skeleton):
+    @staticmethod
+    def _make_interactions_lists(skeleton):
         """
-        Make empty lists for each user interaction field.
+        Make empty lists for each Redditor interaction field.
 
         Parameters
         ----------
@@ -569,61 +561,84 @@ class GetInteractions():
         None
         """
 
-        for interaction_title in self._interaction_titles:
+        interaction_titles = [ 
+            "comments", 
+            "controversial", 
+            "downvoted", 
+            "gilded", 
+            "gildings", 
+            "hidden", 
+            "hot", 
+            "moderated",
+            "multireddits",
+            "new", 
+            "saved",
+            "submissions", 
+            "top", 
+            "upvoted", 
+        ]
+
+        for interaction_title in interaction_titles:
             skeleton["data"]["interactions"][interaction_title] = []
 
-    def _get_user_interactions(self, limit, skeleton, user):
+    @staticmethod
+    def _get_user_interactions(limit, redditor, skeleton):
         """
         Get Redditor interactions on Reddit.
 
         Calls previously defined private and public methods:
 
-            self._make_interactions_lists()
+            GetInteractions._make_interactions_lists()
 
             ProcessInteractions()
-            ProcessInteractions().sort_submissions()
-            ProcessInteractions().sort_comments()
-            ProcessInteractions().sort_mutts()
-            ProcessInteractions().sort_access()
+            ProcessInteractions().get_submissions()
+            ProcessInteractions().get_comments()
+            ProcessInteractions().get_mutts()
+            ProcessInteractions().get_moderated()
+            ProcessInteractions().get_multireddits()
+            ProcessInteractions().get_access()
 
 
         Parameters
         ----------
         limit: str
             String denoting n_results returned
+        redditor: PRAW Redditor object
         skeleton: dict
             Dictionary containing all Redditor data
-        user: PRAW Redditor object
 
         Returns
         -------
         None
         """
 
-        self._make_interactions_lists(skeleton)
+        GetInteractions._make_interactions_lists(skeleton)
 
-        interactions = ProcessInteractions(int(limit), skeleton, user)
-        interactions.sort_submissions()
-        interactions.sort_comments()
-        interactions.sort_mutts()
-        interactions.sort_access()
+        interactions = ProcessInteractions(int(limit), redditor, skeleton)
+        interactions.get_submissions()
+        interactions.get_comments()
+        interactions.get_mutts()
+        interactions.get_moderated()
+        interactions.get_multireddits()
+        interactions.get_access()
 
-    def get(self, limit, reddit, user):
+    @staticmethod
+    def get(limit, reddit, redditor):
         """
         Get Redditor information and interactions.
 
         Calls previously defined private methods:
 
-            self._make_json_skeleton()
-            self._get_user_info()
-            self._get_user_interactions()
+            GetInteractions._make_json_skeleton()
+            GetInteractions._get_user_info()
+            GetInteractions._get_user_interactions()
 
         Parameters
         ----------
         limit: str
             String denoting n_results returned
         reddit: PRAW Reddit object
-        user: PRAW Redditor object
+        redditor: PRAW Redditor object
 
         Returns
         -------
@@ -631,9 +646,9 @@ class GetInteractions():
             Dictionary containing all Redditor data
         """
 
-        skeleton, user = self._make_json_skeleton(limit, reddit, user)
-        self._get_user_info(skeleton, user)
-        self._get_user_interactions(limit, skeleton, user)
+        redditor, skeleton = GetInteractions._make_json_skeleton(limit, reddit, redditor)
+        GetInteractions._get_user_info(redditor, skeleton)
+        GetInteractions._get_user_interactions(limit, redditor, skeleton)
 
         return skeleton
 
@@ -643,74 +658,17 @@ class Write():
     """
 
     @staticmethod
-    def _determine_export(args, data, f_name):
-        """
-        Export to either CSV or JSON.
-
-        Calls a public method from an external module:
-
-            Export.export()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        data: dict
-            Dictionary containing Redditor information to write to file
-        f_name: str
-            String denoting the filename
-
-        Returns
-        -------
-        None
-        """
-
-        export_option = eo[1] \
-            if not args.csv \
-            else eo[0]
-
-        Export.export(data, f_name, export_option, "redditors")
-
-    @staticmethod
-    def _print_confirm(args, user):
-        """
-        Print confirmation message and set print length depending on string length.
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        usr: str
-            String denoting the Redditor's username
-
-        Returns
-        -------
-        None
-        """
-
-        export_option = "JSON" \
-            if not args.csv \
-            else "CSV"
-
-        confirmation = "\n%s file for u/%s created." % (export_option, user)
-
-        print(Style.BRIGHT + Fore.GREEN + confirmation)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
-
-    @staticmethod
     def write(args, reddit, u_master):
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
-        Calls previously defined public methods:
+        Calls a previously defined public method:
 
-            GetInteractions().get()
-            Write._determine_export()
-            Write._print_confirm()
+            GetInteractions.get()
 
         Calls a public method from an external module:
 
-            NameFile().u_fname(limit, user)
+            NameFile().u_fname()
 
         Parameters
         ----------
@@ -726,12 +684,15 @@ class Write():
         None
         """
 
-        for user, limit in u_master.items():
-            data = GetInteractions().get(limit, reddit, user)
-            f_name = NameFile().u_fname(limit, user)
+        for redditor, limit in u_master.items():
+            data = GetInteractions.get(limit, reddit, redditor)
+            f_name = NameFile().u_fname(limit, redditor)
 
-            Write._determine_export(args, data, f_name)
-            Write._print_confirm(args, user)
+            Export.export(data, f_name, "json", "redditors")
+            
+            print()
+            Halo().succeed(Style.BRIGHT + Fore.GREEN + "JSON file for u/%s created." % redditor)
+            print()
 
 class RunRedditor():
     """
@@ -740,19 +701,19 @@ class RunRedditor():
 
     @staticmethod
     @LogExport.log_export
-    @LogPRAWScraper.scraper_timer(s_t[1])
+    @LogPRAWScraper.scraper_timer("redditor")
     def run(args, parser, reddit):
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
-        Calls previously defined public methods:
+        Calls a previously defined public method:
 
-            CheckRedditors().list_redditors()
             Write.write()
 
         Calls public methods from external modules: 
 
             GetPRAWScrapeSettings().create_list()
+            Validation.validate()
             Global.make_none_dict()
             GetPRAWScrapeSettings().get_settings()
 
@@ -773,10 +734,10 @@ class RunRedditor():
 
         PRAWTitles.u_title()
 
-        user_list = GetPRAWScrapeSettings().create_list(args, s_t[1])
-        not_users, users = CheckRedditors().list_redditors(parser, reddit, user_list)
+        user_list = GetPRAWScrapeSettings().create_list(args, "redditor")
+        not_users, users = Validation.validate(user_list, parser, reddit, "redditor")
         u_master = make_none_dict(users)
-        GetPRAWScrapeSettings().get_settings(args, not_users, u_master, s_t[1])
+        GetPRAWScrapeSettings().get_settings(args, not_users, u_master, "redditor")
 
         Write.write(args, reddit, u_master)
 

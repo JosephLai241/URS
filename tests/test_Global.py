@@ -15,15 +15,6 @@ class TestGlobalVariables():
     def test_date_variable(self):
         assert Global.date == dt.datetime.now().strftime("%m-%d-%Y")
 
-    def test_export_options_list(self):
-        assert Global.eo == ["csv", "json"]
-
-    def test_options_list(self):
-        assert Global.options == ["y", "n"]
-
-    def test_scrape_types_list(self):
-        assert Global.s_t == ["subreddit", "redditor", "comments"]
-
     def test_subreddit_categories_list(self):
         assert Global.categories == ["Hot", "New", "Controversial", "Top", \
             "Rising", "Search"]
@@ -70,3 +61,19 @@ class TestMakeDictionary():
         }
 
         assert Global.make_none_dict(item) == correct_none_dict
+
+class TestStatus():
+    """
+    Test Status class found on line 104 in Global.py.
+    """
+
+    def test_status_init_method(self):
+        test_status = Global.Status(
+            "test after message",
+            "test before message",
+            "test color"
+        )
+
+        assert test_status._after_message == "test after message"
+        assert test_status._before_message == "test before message"
+        assert test_status._color == "test color"

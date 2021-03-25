@@ -12,6 +12,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 from prettytable import PrettyTable
 
 from urs.praw_scrapers.utils.Validation import Validation
@@ -24,11 +25,9 @@ from urs.utils.Export import (
 from urs.utils.Global import (
     categories,
     convert_time,
-    eo,
     make_list_dict,
-    options,
-    s_t,
     short_cat,
+    Status
 )
 from urs.utils.Logger import (
     LogError,
@@ -40,60 +39,6 @@ from urs.utils.Titles import PRAWTitles
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-class CheckSubreddits():
-    """
-    Method for checking if Subreddit(s) exist. Print invalid Subreddits if
-    applicable.
-    """
-
-    @staticmethod
-    @LogError.log_none_left("Subreddits")
-    def list_subreddits(parser, reddit, s_t, sub_list):
-        """
-        Check if Subreddits exist and list invalid Subreddits if applicable.
-
-        Calls a method from an external module:
-
-            Validation.existence()
-
-        Parameters
-        ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
-        sub_list: list
-            List of Redditors
-
-        Returns
-        -------
-        subs: list
-            List of valid Subreddits
-        """
-
-        print("\nChecking if Subreddit(s) exist...")
-        logging.info("Validating Subreddits...")
-        logging.info("")
-        subs, not_subs = Validation().existence(s_t[0], sub_list, parser, reddit, s_t)
-        
-        if not_subs:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Subreddits were not found and will be skipped:")
-            print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
-            print(*not_subs, sep = "\n")
-
-            logging.warning("Failed to validate the following Subreddits:")
-            logging.warning("%s" % (not_subs))
-            logging.warning("Skipping.")
-            logging.info("")
-
-        if not subs:
-            logging.critical("ALL SUBREDDITS FAILED VALIDATION.")
-            raise ValueError
-        
-        return not_subs, subs
 
 class PrintConfirm():
     """
@@ -150,7 +95,7 @@ class PrintConfirm():
         None
         """
 
-        print(Fore.CYAN + Style.BRIGHT + "\nCurrent settings for each Subreddit")
+        Halo().info(Fore.CYAN + Style.BRIGHT + "Current settings for each Subreddit")
 
         pretty_subs = PrettyTable()
         pretty_subs.field_names = [
@@ -185,6 +130,11 @@ class PrintConfirm():
             String denoting whether to confirm settings and continue Subreddit scraping
         """
 
+        options = [
+            "y", 
+            "n"
+        ]
+
         while True:
             try:
                 confirm = input("\nConfirm options? [Y/N] ").strip().lower()
@@ -198,13 +148,13 @@ class PrintConfirm():
             except ValueError:
                 print("Not an option! Try again.")
 
-class GetRules():
+class GetExtras():
     """
     Methods for getting a Subreddit's rules and post requirements.
     """
 
     @staticmethod
-    def get(subreddit):
+    def get_rules(subreddit):
         """
         Return post requirements and Subreddit rules.
 
@@ -221,9 +171,12 @@ class GetRules():
         """
 
         rules = [rule_list for rule, rule_list in subreddit.rules().items() if rule == "rules"]
+        for rule in rules[0]:
+            rule["created_utc"] = convert_time(rule["created_utc"])
+        
         return subreddit.post_requirements(), rules[0]
 
-class GetPostsSwitch():
+class GetSubmissionsSwitch():
     """
     Implementing Pythonic switch case to determine which Subreddit category to
     get results from.
@@ -292,9 +245,9 @@ class GetPostsSwitch():
 
         return self._switch.get(index)
 
-class GetPosts():
+class GetSubmissions():
     """
-    Methods for getting posts from a Subreddit.
+    Methods for getting submissions from a Subreddit.
     """
 
     @staticmethod
@@ -317,28 +270,26 @@ class GetPosts():
         search_submissions: PRAW ListingGenerator
         """
 
-        print(Style.BRIGHT + "\nSearching posts in r/%s for '%s'..." % (sub, search_for))
+        Halo().info("Searching submissions in r/%s for '%s'." % (sub, search_for))
         
         if time_filter != None:
-            print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
+            Halo().info("Time filter: %s" % time_filter.capitalize())
 
         return subreddit.search("%s" % search_for, time_filter = time_filter) \
             if time_filter != None \
             else subreddit.search("%s" % search_for)
 
     @staticmethod
-    def _collect_others(args, cat_i, search_for, sub, subreddit, time_filter):
+    def _collect_others(cat_i, search_for, sub, subreddit, time_filter):
         """
         Return PRAW ListingGenerator for all other categories (excluding Search).
         
         Calls previously defined private method:
 
-            GetPostsSwitch().scrape_sub()
+            GetSubmissionsSwitch().scrape_sub()
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         cat_i: int
             Integer denoting the index within the categories or short_cat lists
         search_for: str
@@ -356,35 +307,33 @@ class GetPosts():
 
         category = categories[short_cat.index(cat_i)]
         index = short_cat.index(cat_i)
-            
-        print(Style.BRIGHT + "\nProcessing %s %s results from r/%s..." % (search_for, category, sub))
+        
+        Halo().info("Processing %s %s results from r/%s." % (search_for, category, sub))
         
         if time_filter != None:
-            print(Style.BRIGHT + "Time filter: %s" % time_filter.capitalize())
+            Halo().info("Time filter: %s" % time_filter.capitalize())
 
-        return GetPostsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
+        return GetSubmissionsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
 
     @staticmethod
-    def get(args, cat_i, reddit, search_for, sub, time_filter):
+    def get(cat_i, search_for, sub, subreddit, time_filter):
         """
-        Get Subreddit posts and return the PRAW ListingGenerator. 
+        Get Subreddit submissions and return the PRAW ListingGenerator. 
         
         Calls previously defined private methods:
 
-            GetPosts._collect_search()
-            GetPosts._collect_others()
+            GetSubmissions._collect_search()
+            GetSubmissions._collect_others()
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         cat_i: int
             Integer denoting the index within the categories or short_cat lists
-        reddit: PRAW Reddit instance
         search_for: str
             String denoting keywords to search for
         sub: str
             String denoting Subreddit name
+        subreddit: PRAW Subreddit object
         time_filter: str
             String denoting time filter to apply
 
@@ -393,155 +342,158 @@ class GetPosts():
         submissions: PRAW ListingGenerator
         """
 
-        subreddit = reddit.subreddit(sub)
-
-        return GetPosts._collect_search(search_for, sub, subreddit, time_filter) \
+        return GetSubmissions._collect_search(search_for, sub, subreddit, time_filter) \
             if cat_i == short_cat[5] \
-            else GetPosts._collect_others(args, cat_i, search_for, sub, subreddit, time_filter)
+            else GetSubmissions._collect_others(cat_i, search_for, sub, subreddit, time_filter)
 
-class SortPosts():
+class FormatSubmissions():
     """
-    Methods for sorting posts based on the export option.
+    Methods for formatting PRAW submissions.
     """
 
-    def __init__(self):
+    @staticmethod
+    def _make_submission(submission):
         """
-        Initialize variables used in later methods:
-
-            self._titles: list of titles for Subreddit metadata
-        
-        Returns
-        -------
-        None
-        """
-
-        self._titles = [
-            "title", 
-            "flair", 
-            "date_created", 
-            "upvotes", 
-            "upvote_ratio", 
-            "id", 
-            "edited", 
-            "is_locked", 
-            "nsfw", 
-            "is_spoiler", 
-            "stickied", 
-            "url", 
-            "comment_count", 
-            "text"
-        ]
-
-    def _initialize_dict(self, args):
-        """
-        Initialize a dictionary depending on export option. Creates a dictionary
-        with empty lists as values if exporting to CSV. 
-        
-        Calls a public method from an external module:
-
-            Global.make_list_dict() 
+        Format submission metadata.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+        submission: PRAW submission object
 
         Returns
         -------
-        empty_dict: dict
-            Dictionary to store Subreddit data
+        submission_dict: dict
+            Dictionary containing submission metadata
         """
 
-        return make_list_dict(self._titles) \
-            if args.csv \
-            else dict()
+        return {
+            "author": "u/" + submission.author.name \
+                if hasattr(submission.author, "name") \
+                else "[deleted]",
+            "created_utc": convert_time(submission.created_utc),
+            "distinguished": submission.distinguished,
+            "edited": submission.edited \
+                if submission.edited == False \
+                else convert_time(submission.edited),
+            "id": submission.id,
+            "is_original_content": submission.is_original_content,
+            "is_self": submission.is_self,
+            "link_flair_text": submission.link_flair_text,
+            "locked": submission.locked,
+            "name": submission.name,
+            "num_comments": submission.num_comments,
+            "nsfw": submission.over_18,
+            "permalink": submission.permalink,
+            "score": submission.score,
+            "selftext": submission.selftext,
+            "spoiler": submission.spoiler,
+            "stickied": submission.stickied,
+            "title": submission.title,
+            "upvote_ratio": submission.upvote_ratio,
+            "url": submission.url
+        }
 
-    def _fix_edit_date(self, post):
+    @staticmethod
+    def format_submissions(submissions):
         """
-        Fix "Edited?" date.
-        
-        Calls a public method from an external module:
+        Format submissions to dictionary structure.
 
-            Global.convert_time() 
-
-        Parameters
-        ----------
-        post: PRAW submission object 
-
-        Returns
-        -------
-        fixed_date: boolean or str
-            Boolean or string:
-                Boolean indicating the post was not edited
-                String denoting an edited date 
-        """
-
-        return post.edited \
-            if str(post.edited).isalpha() \
-            else str(convert_time(post.edited))
-
-    def _get_data(self, post):
-        """
-        Get post data. 
-        
         Calls previously defined private method:
 
-            self._fix_edit_date()
-        
-        Calls a public method from an external module:
-
-            Global.convert_time() 
+            FormatSubmissionsJSON._make_submission()
 
         Parameters
         ----------
-        post: PRAW submission object 
+        submissions: PRAW ListingGenerator
 
         Returns
         -------
-        post_data: list
-            List containing post metadata
+        submissions_list: list
+            List containing formatted submissions
         """
 
-        edited = self._fix_edit_date(post)
-        post_data = [
-            post.title, 
-            post.link_flair_text, 
-            convert_time(post.created), 
-            post.score, 
-            post.upvote_ratio, 
-            post.id, 
-            edited, 
-            post.locked, 
-            post.over_18, 
-            post.spoiler, 
-            post.stickied, 
-            post.url, 
-            post.num_comments, 
-            post.selftext
+        return [
+            FormatSubmissions._make_submission(submission) 
+            for submission in submissions
         ]
 
-        return post_data
+class FormatCSV():
+    """
+    Methods for formatting PRAW submission objects in CSV format.
+    """
 
-    def _csv_format(self, overview, post_data):
+    @staticmethod
+    def format_csv(submissions):
         """
-        Append data to overview dictionary for CSV export.
+        Format submission metadata for CSV export.
 
         Parameters
         ----------
+        submissions: list
+            List containing submission objects
+
+        Returns
+        -------
         overview: dict
-            Dictionary containing Subreddit submission data
-        post_data: list
-            List containing post metadata
+            Dictionary containing submission data
+        """
+
+        format_status = Status(
+            "Finished formatting data for CSV export.",
+            "Formatting data for CSV export.",
+            "white"
+        )
+
+        overview = dict()
+
+        format_status.start()
+        for submission in submissions:
+            for field, metadata in submission.items():
+                if field not in overview.keys():
+                    overview[field] = []
+                
+                overview[field].append(metadata)
+        
+        format_status.succeed()
+        return overview
+
+class FormatJSON():
+    """
+    Methods for formatting PRAW submission objects in JSON format. 
+    """
+
+    @staticmethod
+    def _add_subreddit_rules(skeleton, subreddit):
+        """
+        Add Subreddit rules and post requirements to the JSON skeleton.
+
+        Calls previously defined public method:
+
+            GetExtras.get_rules()
+
+        Parameters
+        ----------
+        skeleton: dict
+            Dictionary containing all Subreddit scrape data
+        subreddit: PRAW Subreddit object
 
         Returns
         -------
         None
         """
 
-        for title, data in zip(self._titles, post_data):
-            overview[title].append(data)
+        Halo().info("Including Subreddit rules.")
+        logging.info("Including Subreddit rules.")
+        logging.info("")
 
-    def _make_json_skeleton(self, cat_i, search_for, sub, time_filter):
+        post_requirements, rules = GetExtras.get_rules(subreddit)
+
+        skeleton["subreddit_rules"] = {}
+        skeleton["subreddit_rules"]["rules"] = rules
+        skeleton["subreddit_rules"]["post_requirements"] = post_requirements
+
+    @staticmethod
+    def make_json_skeleton(cat_i, search_for, sub, time_filter):
         """
         Create a skeleton for JSON export. Include scrape details at the top.
 
@@ -558,141 +510,69 @@ class SortPosts():
 
         Returns
         -------
-        json_data: dict
+        skeleton: dict
             Dictionary containing Subreddit data
         """
 
-        json_data = {
+        skeleton = {
             "scrape_settings": {
                 "subreddit": sub,
                 "category": categories[short_cat.index(cat_i)].lower(),
                 "n_results_or_keywords": search_for,
                 "time_filter": time_filter
             },
-            "data": []
+            "data": None
         }
 
-        return json_data
+        return skeleton
 
-    def _add_json_subreddit_rules(self, json_data, post_requirements, rules):
+    @staticmethod
+    def format_json(args, skeleton, submissions, subreddit):
         """
-        Add Subreddit rules and post requirements to the JSON skeleton.
-
-        Parameters
-        ----------
-        json_data: dict
-            Dictionary containing Subreddit data
-        post_requirements: dict
-            Dictionary containing the Subreddit's post requirements
-        rules: list
-            List of rule objects
-
-        Returns
-        -------
-        None
-        """
-
-        json_data["subreddit_rules"] = {}
-        json_data["subreddit_rules"]["rules"] = rules
-        json_data["subreddit_rules"]["post_requirements"] = post_requirements
-
-    def _add_json_submission_data(self, json_data, post_data):
-        """
-        Add Subreddit rules and post requirements to the JSON skeleton.
-
-        Parameters
-        ----------
-        json_data: dict
-            Dictionary containing Subreddit data
-        post_data: list
-            List containing submission data
-
-        Returns
-        -------
-        None
-        """
-
-        json_data["data"].append({
-            title: value for title, value in zip(self._titles, post_data)
-        })
-    
-    def sort(self, args, cat_i, collected, post_requirements, rules, search_for, sub, time_filter):
-        """
-        Sort collected dictionary based on export option. 
-        
-        Calls previously defined private methods:
-
-            self._initialize_dict()
-            self._get_data()
-            self._csv_format()
-            self._make_json_skeleton()
-            self._add_json_subreddit_rules()
-            self._add_json_submission_data()
+        Format submission metadata for JSON export.
 
         Parameters
         ----------
         args: Namespace
             Namespace object containing all arguments that were defined in the CLI 
-        cat_i: str
-            String denoting n_results returned or keywords searched for
-        collected: PRAW submission object
-        post_requirements: dict
-            Dictionary containing the Subreddit's post requirements 
-        rules: list
-            List of rule objects
-        search_for: str
-            String denoting n_results returned or keywords searched for
+        reddit: PRAW Reddit object
+        skeleton: dict
+            Dictionary containing all Subreddit scrape data
         sub: str
             String denoting the Subreddit name
-        time_filter: str
-            String denoting the time filter applied to the scrape
-
-        Returns
-        -------
-        data: dict
-            Dictionary containing scraped Subreddit submission data
+        submissions: list
+            List containing submission objects
         """
 
-        print("\nThis may take a while. Please wait.")
+        format_status = Status(
+            "Finished formatting data for JSON export.",
+            "Formatting data for JSON export.",
+            "white"
+        )
 
-        if args.csv:
-            overview = self._initialize_dict(args)
-            for post in collected:
-                post_data = self._get_data(post)
-                self._csv_format(overview, post_data)
-
-            return overview
-            
-        json_data = self._make_json_skeleton(cat_i, search_for, sub, time_filter)
+        format_status.start()
+        skeleton["data"] = submissions
         
         if args.rules:
-            print(Fore.CYAN + Style.BRIGHT + "\nIncluding Subreddit rules...")
-            logging.info("Including Subreddit rules...")
-            logging.info("")
-            
-            self._add_json_subreddit_rules(json_data, post_requirements, rules)
+            FormatJSON._add_subreddit_rules(skeleton, subreddit)
         
-        for post in collected:
-            post_data = self._get_data(post)
-            self._add_json_submission_data(json_data, post_data)
-
-        return json_data
+        format_status.succeed()
 
 class GetSortWrite():
     """
-    Methods to get, sort, then write scraped Subreddit posts to CSV or JSON.
+    Methods to get, sort, then write scraped Subreddit submissions to CSV or JSON.
     """
 
     @staticmethod
-    def _get_sort(args, cat_i, reddit, search_for, sub, time_filter):
+    def _get_sort(args, cat_i, search_for, sub, subreddit, time_filter):
         """
-        Get and sort posts. 
+        Get and sort submissions. 
         
         Calls previously defined public methods:
 
-            GetRules.get()
-            GetPosts.get()
-            SortPosts().sort()
+            GetExtras.get_rules()
+            GetSubmissions.get()
+            SortSubmissions().sort()
 
         Parameters
         ----------
@@ -700,11 +580,11 @@ class GetSortWrite():
             Namespace object containing all arguments that were defined in the CLI 
         cat_i: str
             String denoting n_results returned or keywords searched for
-        reddit: PRAW Reddit object
         search_for: str
             String denoting n_results returned or keywords searched for
         sub: str
             String denoting the Subreddit name
+        subreddit: PRAW Subreddit object
         time_filter: str
             String denoting the time filter applied to the scrape
 
@@ -714,75 +594,26 @@ class GetSortWrite():
             Dictionary containing scraped Subreddit submission data 
         """
 
-        post_requirements, rules = GetRules.get(reddit.subreddit(sub))
-        collected = GetPosts.get(args, cat_i, reddit, search_for, sub, time_filter)
+        submissions = GetSubmissions.get(cat_i, search_for, sub, subreddit, time_filter)
+        submissions = FormatSubmissions.format_submissions(submissions)
 
-        return SortPosts().sort(args, cat_i, collected, post_requirements, rules, search_for, sub, time_filter)
+        if args.csv:
+            return FormatCSV.format_csv(submissions)
 
-    @staticmethod
-    def _determine_export(args, data, f_name):
-        """
-        Export to either CSV or JSON.
+        skeleton = FormatJSON.make_json_skeleton(cat_i, search_for, sub, time_filter)
+        FormatJSON.format_json(args, skeleton, submissions, subreddit)
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        data: dict
-            Dictionary containing scraped Subreddit submission data 
-        f_name: str
-            String denoting the filename
-
-        Returns
-        -------
-        None
-        """
-
-        export_option = eo[1] \
-            if not args.csv \
-            else eo[0]
-
-        Export.export(data, f_name, export_option, "subreddits")
-
-    @staticmethod
-    def _print_confirm(args, sub):
-        """
-        Set print length depending on string length.
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        sub: str
-            String denoting the Subreddit name
-
-        Returns
-        -------
-        None
-        """
-
-        export_option = "JSON" \
-            if not args.csv \
-            else "CSV"
-
-        confirmation = "\n%s file for r/%s created." % (export_option, sub)
-
-        print(Style.BRIGHT + Fore.GREEN + confirmation)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
+        return skeleton
 
     @staticmethod
     def _write(args, cat_i, data, each_sub, sub):
         """
-        Write posts. 
+        Write submissions to file. 
         
-        Calls previously defined private methods:
-
-            GetSortWrite._determine_export()
-            GetSortWrite._print_confirm()
-
-        Calls a method from an external module:
+        Calls methods from external modules:
 
             NameFile().r_fname()
+            Export.export()
 
         Parameters
         ----------
@@ -803,13 +634,21 @@ class GetSortWrite():
         """
 
         f_name = NameFile().r_fname(args, cat_i, each_sub, sub)
-        GetSortWrite._determine_export(args, data, f_name)
-        GetSortWrite._print_confirm(args, sub)
+        
+        export_option = "json" \
+            if not args.csv \
+            else "csv"
+
+        Export.export(data, f_name, export_option, "subreddits")
+
+        print()
+        Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "%s file for r/%s created." % (export_option.upper(), sub)).succeed()
+        print()
 
     @staticmethod
     def gsw(args, reddit, s_master):
         """
-        Get, sort, then write posts to file.
+        Get, sort, then write submissions to file.
 
         Calls previously defined private methods:
 
@@ -833,7 +672,9 @@ class GetSortWrite():
         for sub, settings in s_master.items():
             for each_sub in settings:
                 cat_i = each_sub[0].upper()
-                data = GetSortWrite._get_sort(args, cat_i, reddit, str(each_sub[1]), sub, each_sub[2])
+                subreddit = reddit.subreddit(sub)
+
+                data = GetSortWrite._get_sort(args, cat_i, str(each_sub[1]), sub, subreddit, each_sub[2])
                 GetSortWrite._write(args, cat_i, data, each_sub, sub)
 
 class RunSubreddit():
@@ -842,17 +683,14 @@ class RunSubreddit():
     """
 
     @staticmethod
-    def _create_settings(args, parser, reddit, s_t):
+    def _create_settings(args, parser, reddit):
         """
         Create settings for each user input. 
         
-        Calls previously defined private methods:
-
-            CheckSubreddits.list_subreddits()
-
         Calls methods from an external modules:
 
             GetPRAWScrapeSettings().create_list()
+            Validation.validate()
             GetPRAWScrapeSettings().get_settings()
             Global.make_list_dict()
 
@@ -864,8 +702,6 @@ class RunSubreddit():
             argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
 
         Returns
         -------
@@ -873,10 +709,10 @@ class RunSubreddit():
             Dictionary containing all scrape settings
         """
 
-        sub_list = GetPRAWScrapeSettings().create_list(args, s_t[0])
-        not_subs, subs = CheckSubreddits.list_subreddits(parser, reddit, s_t, sub_list)
+        sub_list = GetPRAWScrapeSettings().create_list(args, "subreddit")
+        not_subs, subs = Validation.validate(sub_list, parser, reddit, "subreddit")
         s_master = make_list_dict(subs)
-        GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, s_t[0])
+        GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, "subreddit")
 
         return s_master
 
@@ -908,7 +744,8 @@ class RunSubreddit():
 
         PrintConfirm.print_settings(args, s_master)
         confirm = PrintConfirm.confirm_settings()
-        if confirm == options[0]:
+        if confirm == "y":
+            print()
             GetSortWrite.gsw(args, reddit, s_master)
         else:
             raise KeyboardInterrupt
@@ -944,8 +781,8 @@ class RunSubreddit():
 
     @staticmethod
     @LogExport.log_export
-    @LogPRAWScraper.scraper_timer(s_t[0])
-    def run(args, parser, reddit, s_t):
+    @LogPRAWScraper.scraper_timer("subreddit")
+    def run(args, parser, reddit):
         """
         Run Subreddit scraper. 
         
@@ -966,8 +803,6 @@ class RunSubreddit():
             argparse ArgumentParser object 
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
-        s_t: list
-            List of scraper types
 
         Returns
         -------
@@ -977,7 +812,7 @@ class RunSubreddit():
 
         PRAWTitles.r_title()
 
-        s_master = RunSubreddit._create_settings(args, parser, reddit, s_t)
+        s_master = RunSubreddit._create_settings(args, parser, reddit)
         RunSubreddit._write_file(args, reddit, s_master)
         
         return s_master

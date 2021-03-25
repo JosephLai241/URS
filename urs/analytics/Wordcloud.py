@@ -12,6 +12,7 @@ from colorama import (
     Fore, 
     Style
 )
+from halo import Halo
 from wordcloud import (
     ImageColorGenerator,
     WordCloud
@@ -23,7 +24,7 @@ from urs.analytics.utils.PrepData import (
 )
 
 from urs.utils.DirInit import InitializeDirectory
-from urs.utils.Global import analytical_tools
+from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
 
@@ -91,7 +92,7 @@ class FinalizeWordcloud():
     Methods for either saving or displaying the wordcloud.
     """
 
-    @LogAnalytics.log_show(analytical_tools[1])
+    @LogAnalytics.log_show("wordcloud")
     def show_wordcloud(self, plt):
         """
         Display wordcloud.
@@ -106,13 +107,12 @@ class FinalizeWordcloud():
         None
         """
 
-        display_msg = "\nDisplaying wordcloud..."
-        print(Style.BRIGHT + Fore.GREEN + display_msg)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(display_msg) - 1))
+        Halo().info(Style.BRIGHT + Fore.GREEN + "Displaying wordcloud.")
+        print()
 
         plt.show()
 
-    @LogAnalytics.log_save(analytical_tools[1])
+    @LogAnalytics.log_save("wordcloud")
     def save_wordcloud(self, file, wc):
         """
         Save wordcloud to file.
@@ -136,13 +136,19 @@ class FinalizeWordcloud():
         """
 
         date_dir, filename = GetPath.name_file(file[1], file[0], "wordclouds")
+        
+        export_status = Status(
+            Style.BRIGHT + Fore.GREEN + "Wordcloud exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
+            "Exporting wordcloud.",
+            "white"
+        )
+
+        export_status.start()
         InitializeDirectory.make_analytics_directory(date_dir, "wordclouds")
-        wc.to_file(filename)     
-
-        confirmation = "\nWordcloud exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):])
-        print(Style.BRIGHT + Fore.GREEN + confirmation)
-        print(Style.BRIGHT + Fore.GREEN + "-" * (len(confirmation) - 1))
-
+        wc.to_file(filename)
+        export_status.succeed()
+        print()
+        
         return filename
 
 class GenerateWordcloud():
@@ -151,7 +157,7 @@ class GenerateWordcloud():
     """
 
     @staticmethod
-    @LogAnalytics.generator_timer(analytical_tools[1])
+    @LogAnalytics.generator_timer("wordcloud")
     def generate(args):
         """
         Generate wordcloud.
@@ -182,11 +188,11 @@ class GenerateWordcloud():
 
         for file in args.wordcloud:
             scrape_type = GetPath.get_scrape_type(file[0])
-
-            print("\nGenerating wordcloud...")
-            print("\nThis may take a while. Please wait.\n")
             
             wc = SetUpWordcloud.initialize_wordcloud(file, scrape_type)
+            
+            Halo().info("Generating wordcloud.")
+            print()
             plt = SetUpWordcloud.modify_wordcloud(wc)
             
             FinalizeWordcloud().show_wordcloud(plt) \

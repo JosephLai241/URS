@@ -15,10 +15,7 @@ from colorama import (
     Style
 )
 
-from urs.utils.Global import (
-    s_t,
-    short_cat
-)
+from urs.utils.Global import short_cat
 from urs.utils.Logger import LogError
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -54,7 +51,8 @@ class Parser():
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
-    [-c <submission_url> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
     [-b]
 
     [-f <file_path>]
@@ -66,7 +64,7 @@ class Parser():
     [--csv] 
 """
         self._description = r"""
-Universal Reddit Scraper v3.2.0 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v3.2.1 - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
@@ -113,7 +111,8 @@ Arguments:
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
     [--rules]
     [-u <redditor> <n_results>] 
-    [-c <submission_url> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
     [-b]
 
     [-y]
@@ -163,16 +162,20 @@ REDDITORS
 
 SUBMISSION COMMENTS
 
-    Scraping 25 comments from this r/TIFU post.
-    Returns a structured JSON file that includes down to third-level replies:
+    Scraping 25 comments from this r/TIFU post. Returns a structured JSON file:
 
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25
 
-    Scraping all comments from the same r/TIFU post.
-    Returns an unstructured JSON file of all comments in level order, 
-    ie. top-level first, followed by second-level, then third-level, etc.:
-
+    Scraping all comments from the same r/TIFU post. Returns a structured JSON file:
+    
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0
+
+    You can also return comments in raw format by including the `--raw` flag.
+    Ie. top-level first, followed by second-level, then third-level, etc.:
+
+        $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --raw
+        
+        $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --raw
 
 [ANALYTICAL TOOLS]
 
@@ -329,7 +332,7 @@ DISPLAY INSTEAD OF SAVING
         """
         Add extra options for PRAW Subreddit scraping:
 
-            --rules: include Subreddit rules and post requirements in scrape data.
+            --rules: include Subreddit rules and post requirements in scrape data
 
         Parameters
         ----------
@@ -346,6 +349,29 @@ DISPLAY INSTEAD OF SAVING
             "--rules",
             action = "store_true",
             help = "include Subreddit rules in scrape data"
+        )
+
+    def _add_praw_comments_options(self, parser):
+        """
+        Add extra options for PRAW submission comments scraping:
+
+            --raw: return comments in raw format instead (default is structured)
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments")
+        comments_flags.add_argument(
+            "--raw",
+            action = "store_true",
+            help = "return comments in raw format instead (default is structured)"
         )
 
     def _add_analytics(self, parser):
@@ -442,6 +468,7 @@ DISPLAY INSTEAD OF SAVING
             self._add_rate_limit_check_flag()
             self._add_praw_scraper_flags()
             self._add_praw_subreddit_options()
+            self._add_praw_comments_options()
             self._add_analytics()
             self._add_skip()
             self._add_export()
@@ -471,6 +498,7 @@ DISPLAY INSTEAD OF SAVING
         self._add_rate_limit_check_flag(parser)
         self._add_praw_scraper_flags(parser)
         self._add_praw_subreddit_options(parser)
+        self._add_praw_comments_options(parser)
         self._add_analytics(parser)
         self._add_skip(parser)
         self._add_export(parser)
@@ -566,7 +594,13 @@ class GetPRAWScrapeSettings():
             to scrape for
         """
 
-        index = s_t.index(l_type)
+        scraper_types = [
+            "subreddit",
+            "redditor",
+            "comments"
+        ]
+
+        index = scraper_types.index(l_type)
         item_list = [item[0] for item in self._list_switch(args, index)]
 
         return item_list
@@ -588,9 +622,10 @@ class GetPRAWScrapeSettings():
         """
 
         if len(sub) == 3:
-            settings = [sub[1], sub[2], "all"] \
+            time_filter = "all" \
                 if sub[1].upper() in self._filterables \
-                else [sub[1], sub[2], None]
+                else None
+            settings = [sub[1], sub[2], time_filter]
         if len(sub) == 4:
             settings = [sub[1], sub[2], sub[3]]
 
@@ -684,11 +719,11 @@ class GetPRAWScrapeSettings():
         None
         """
 
-        if s_type == s_t[0]:
+        if s_type == "subreddit":
             self._subreddit_settings(args.subreddit, invalids, master)
-        elif s_type == s_t[1]:
+        elif s_type == "redditor":
             self._two_arg_settings(args.redditor, invalids, master)
-        elif s_type == s_t[2]:
+        elif s_type == "comments":
             self._two_arg_settings(args.comments, invalids, master)
 
 class CheckPRAWCli():
