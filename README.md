@@ -114,7 +114,7 @@ Scrape speed is determined by a couple things:
 
 ### Getting Started
 
-It is very quick and easy to get Reddit API credentials. Refer to [my guide][How to get Reddit API Credentials for PRAW] to get your credentials, then update the `API` dictionary located in `Credentials.py`
+It is very quick and easy to get Reddit API credentials. Refer to [my guide to get your credentials][How to get Reddit API Credentials for PRAW], then update the `API` dictionary located in `Credentials.py`
 
 ### Rate Limits
 
@@ -407,13 +407,13 @@ The data varies depending on the scraper, so these tools target different fields
 |---------------------|-----------------------------|
 | Subreddit           | `selftext`, `title`         |
 | Redditor            | `selftext`, `title`, `body` |
-| Submission Comments | `text`                      |
+| Submission Comments | `body`                      |
 
 For Subreddit scrapes, data is pulled from the `selftext` and `title` fields for each submission (submission title and body).
 
 For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The `title` and `body` fields are targeted for submissions, and the `selftext` field is targeted for comments.
 
-For submission comments scrapes, data is only pulled from the `text` field of each comment.
+For submission comments scrapes, data is only pulled from the `body` field of each comment.
 
 ---
 
