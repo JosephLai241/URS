@@ -133,7 +133,7 @@ class Forest():
 
         self.root = CommentNode({ "id": submission.id_from_url(url) })
     
-    def _dfs_insert(self, existing_comment, new_comment):
+    def _dfs_insert(self, new_comment):
         """
         An iterative implementation of depth-first search to insert a new comment 
         into a comment tree.
@@ -149,10 +149,10 @@ class Forest():
         """
 
         stack = []
-        stack.append(existing_comment)
+        stack.append(self.root)
         
         visited = set()
-        visited.add(existing_comment)
+        visited.add(self.root)
 
         found = False
         while not found:
@@ -188,7 +188,7 @@ class Forest():
 
         self.root.replies.append(new_comment) \
             if parent_id == getattr(self.root, "id") \
-            else self._dfs_insert(self.root, new_comment)
+            else self._dfs_insert(new_comment)
 
 class SortComments():
     """
