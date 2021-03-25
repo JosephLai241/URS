@@ -72,9 +72,9 @@ class PrintSubs():
 
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        subs, not_subs = Validation.check_existence(sub_list, parser, reddit, "subreddit")
+        not_subs, subs = Validation.check_existence(sub_list, parser, reddit, "subreddit")
 
-        return subs, not_subs
+        return not_subs, subs
 
     @staticmethod
     def print_subreddits(parser, reddit, search_for):
@@ -105,7 +105,7 @@ class PrintSubs():
         check_subs_spinner = Halo(color = "white", text = "Validating Subreddit(s).")
         print()
         check_subs_spinner.start()
-        subs, not_subs = PrintSubs._find_subs(parser, reddit, search_for)
+        not_subs, subs = PrintSubs._find_subs(parser, reddit, search_for)
         check_subs_spinner.succeed("Finished Subreddit validation.")
 
         if subs:
