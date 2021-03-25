@@ -22,9 +22,10 @@ command-line tool written in Python.
 """
 
 
+import os
 import praw
 
-from urs.Credentials import API
+from dotenv import load_dotenv
 
 from urs.utils.Logger import LogMain
 from urs.utils.Tools import Run
@@ -37,13 +38,14 @@ class Main():
     @staticmethod
     @LogMain.master_timer
     def main():
-        ### Creating a Reddit object with PRAW credentials.
+        load_dotenv()
+
         reddit = praw.Reddit(
-            client_id = API["client_id"],
-            client_secret = API["client_secret"],
-            user_agent = API["user_agent"],
-            username = API["username"],
-            password = API["password"]
+            client_id = os.getenv("CLIENT_ID"),
+            client_secret = os.getenv("CLIENT_SECRET"),
+            user_agent = os.getenv("USER_AGENT"),
+            username = os.getenv("USERNAME"),
+            password = os.getenv("PASSWORD")
         )
 
         Run(reddit).run_urs()
