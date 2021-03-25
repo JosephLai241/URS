@@ -9,7 +9,7 @@
 [![Build Status](https://img.shields.io/travis/JosephLai241/URS?logo=Travis)][Travis CI Build Status]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
-![Lines of code](https://img.shields.io/tokei/lines/github/JosephLai241/URS?label=lines%20of%20code)
+![Total lines](https://img.shields.io/tokei/lines/github/JosephLai241/URS)
 ![License](https://img.shields.io/github/license/JosephLai241/URS)
 
 <p align="center"> 
@@ -195,7 +195,7 @@ These attributes are included in each scrape.
 
 \*This GIF is uncut.
 
-**Usage:** `$ ./Urs.py -r SUBREDDIT [H|N|C|T|R|S] N_RESULTS_OR_KEYWORDS` 
+**Usage:** `$ ./Urs.py -r SUBREDDIT (H|N|C|T|R|S) N_RESULTS_OR_KEYWORDS` 
 
 **Supported export formats:** JSON and CSV. To export to CSV, include the `--csv` flag.
 
@@ -233,7 +233,7 @@ Time filters may be applied to some categories. Here is a table of the categorie
 
 Specify the time filter after the number of results returned or keywords you want to search for.
 
-**Usage:** `$ ./Urs.py -r SUBREDDIT [C|T|S] N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER`
+**Usage:** `$ ./Urs.py -r SUBREDDIT (C|T|S) N_RESULTS_OR_KEYWORDS OPTIONAL_TIME_FILTER`
 
 If no time filter is specified, the default time filter `all` is applied. The Subreddit settings table will display `None` for categories that do not offer the additional time filter option.
 
@@ -267,7 +267,7 @@ Exported files will be saved to the `subreddits` directory.
 
 \*This GIF has been cut for demonstration purposes.
 
-**Usage:** `$ ./Urs.py -u USER N_RESULTS` 
+**Usage:** `$ ./Urs.py -u REDDITOR N_RESULTS` 
 
 **Supported export formats:** JSON.
 
@@ -360,7 +360,7 @@ Exported files will be saved to the `redditors` directory.
 
 \*These GIFs have been cut for demonstration purposes.
 
-**Usage:** `$ ./Urs.py -c URL N_RESULTS` 
+**Usage:** `$ ./Urs.py -c SUBMISSION_URL N_RESULTS` 
 
 **Supported export formats:** JSON.
 
