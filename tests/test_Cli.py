@@ -176,9 +176,11 @@ SUBMISSION COMMENTS
     
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0
 
-    Scrape all comments from the same r/TIFU post and return them in raw format by including the `--raw` flag.
+    You can also return comments in raw format by including the `--raw` flag.
     Ie. top-level first, followed by second-level, then third-level, etc.:
 
+        $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --raw
+        
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --raw
 
 [ANALYTICAL TOOLS]
