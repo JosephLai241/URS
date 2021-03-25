@@ -71,33 +71,37 @@ PRAW returns all submission comments by level order. This means all top levels a
 
 I will create some mock comment objects to demonstrate. Here is a top level comment corresponding to the mock submisssion ID. Note the `parent_id` contains the submission ID:
 
-```
+```json
 {
-    'parent_id': 't3_abc123',   <--- matches the submission ID
-    'comment_id': 'qwerty1',
-    'author': 'someone', 
-    'date_created': '06-06-2006 06:06:06', 
-    'upvotes': 666, 
-    'text': 'a top level comment here', 
-    'edited': False, 
-    'is_submitter': False, 
-    'stickied': False
+    "author": "u/asdfasdfasdfasdf",
+    "body": "A top level comment here.",
+    "created_utc": "06-06-2006 06:06:06",
+    "distinguished": null,
+    "edited": false,
+    "id": "qwerty1",
+    "is_submitter": false,
+    "link_id": "t3_asdfgh",
+    "parent_id": "t3_abc123",   <--- matches the submission ID
+    "score": 666,
+    "stickied": false
 }
 ```
 
 Here is a second-level reply to the top comment. Note the `parent_id` contains the top comment's comment ID:
 
-```
+```json
 {
-    'parent_id': 't1_qwerty1',  <--- matches the top level comment ID
-    'comment_id': 'hjkl234', 
-    'author': 'someone_else', 
-    'date_created': '06-06-2006 18:06:06', 
-    'upvotes': 6, 
-    'text': 'a reply here', 
-    'edited': False, 
-    'is_submitter': True, 
-    'stickied': False
+    "author": "u/hjklhjklhjklhjkl",
+    "body": "A reply here.",
+    "created_utc": "06-06-2006 18:06:06",
+    "distinguished": null,
+    "edited": false,
+    "id": "hjkl234",
+    "is_submitter": true,
+    "link_id": "t3_1a2b3c",
+    "parent_id": "t1_qwerty1",   <--- matches the top level comment ID
+    "score": 6,
+    "stickied": false
 }
 ```
 
@@ -108,19 +112,19 @@ This pattern continues all the way down to the last level of comments. It is now
 I then defined the methods for `CommentNode` insertion.
 
 ```python
-    def _dfs_insert(self, existing_comment, new_comment):
+    def _dfs_insert(self, new_comment):
         stack = []
-        stack.append(existing_comment)
+        stack.append(self.root)
         
         visited = set()
-        visited.add(existing_comment)
+        visited.add(self.root)
 
         found = False
         while not found:
             current_comment = stack.pop(0)
             
             for reply in current_comment.replies:
-                if new_comment.parent_id.split("_", 1)[1] == reply.comment_id:
+                if new_comment.parent_id.split("_", 1)[1] == reply.id:
                     reply.replies.append(new_comment)
                     found = True
                 else:
@@ -130,10 +134,10 @@ I then defined the methods for `CommentNode` insertion.
 
     def seed(self, new_comment):
         parent_id = new_comment.parent_id.split("_", 1)[1]
-                
+
         self.root.replies.append(new_comment) \
             if parent_id == getattr(self.root, "id") \
-            else self._dfs_insert(self.root, new_comment)
+            else self._dfs_insert(new_comment)
 ```
 
 I implemented the [depth-first search][Depth-First Search] algorithm to find a comment's parent node and insert it into the parent node's `replies` array. I defined a separate `visited` set to keep track of visited `CommentNode`s to avoid an infinite loop of inserting `CommentNode`s that were already visited into the `stack`. At first I wrote a recursive version of depth-first search, but then opted for an iterative version because it would not scale well for submissions that included large amounts of comments, ie. stack overflow.
