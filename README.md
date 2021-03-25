@@ -563,7 +563,7 @@ This is a showcase for projects that are built on top of URS!
 [How to get Reddit API Credentials for PRAW]: https://github.com/JosephLai241/URS/blob/master/docs/How%20to%20Get%20PRAW%20Credentials.md
 [Releases/Changelog]: https://github.com/JosephLai241/URS/blob/master/docs/Releases.md
 [Some Linux Tips]: https://github.com/JosephLai241/URS/blob/master/docs/Some%20Linux%20Tips.md
-[The Forest]: https://github.com/JosephLai241/URS/blob/master/docs/The%Forest.md
+[The Forest]: https://github.com/JosephLai241/URS/blob/master/docs/The%20Forest.md
 
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/03-24-2021
