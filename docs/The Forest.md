@@ -61,7 +61,7 @@ class Forest():
         self.root = CommentNode({ "id": "abc123" })
 ```
 
-The only key in the dictionary passed into `CommentNode` is `id`, therefore the root `CommentNode` will only contain the attributes `self.id` and `self.replies`. A mock submission ID I typed is shown. The actual source code will pull the submission's ID based on the URL that was passed into the `-c` flag and set the `id` value accordingly.
+The only key in the dictionary passed into `CommentNode` is `id`, therefore the root `CommentNode` will only contain the attributes `self.id` and `self.replies`. A mock submission ID is shown. The actual source code will pull the submission's ID based on the URL that was passed into the `-c` flag and set the `id` value accordingly.
 
 Before I get to the insertion methods, I will explain how comments and their replies are linked.
 
@@ -69,7 +69,7 @@ Before I get to the insertion methods, I will explain how comments and their rep
 
 PRAW returns all submission comments by level order. This means all top levels are returned first, followed by all second-level replies, then third, so on and so forth.
 
-I will create some mock comment objects to demonstrate. Here is a top level comment corresponding to the mock submisssion ID. Note the `parent_id` contains the submission ID:
+I will create some mock comment objects to demonstrate. Here is a top level comment corresponding to the mock submisssion ID. Note the `parent_id` contains the submission's `id`, which is stored in `self.root.id`:
 
 ```json
 {
@@ -81,13 +81,13 @@ I will create some mock comment objects to demonstrate. Here is a top level comm
     "id": "qwerty1",
     "is_submitter": false,
     "link_id": "t3_asdfgh",
-    "parent_id": "t3_abc123",   <--- matches the submission ID
+    "parent_id": "t3_abc123",
     "score": 666,
     "stickied": false
 }
 ```
 
-Here is a second-level reply to the top comment. Note the `parent_id` contains the top comment's comment ID:
+Here is a second-level reply to the top comment. Note the `parent_id` contains the top comment's `id`:
 
 ```json
 {
@@ -99,7 +99,7 @@ Here is a second-level reply to the top comment. Note the `parent_id` contains t
     "id": "hjkl234",
     "is_submitter": true,
     "link_id": "t3_1a2b3c",
-    "parent_id": "t1_qwerty1",   <--- matches the top level comment ID
+    "parent_id": "t1_qwerty1",
     "score": 6,
     "stickied": false
 }
