@@ -508,6 +508,10 @@ class GetInteractions():
         """
         Get Redditor account information.
 
+        Calls a previously defined public method:
+
+            GetInteractions._get_trophies()
+
         Calls a public method from an external module:
 
             Global.convert_time()
