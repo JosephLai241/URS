@@ -36,24 +36,24 @@ Indent each following line by a tab to indicate it is still the same line of cod
 
 If you have a long line of code, try to separate it by any special characters or keywords. Showing an example would be the best way to describe this.
 
-Take a look at this `redditor_list` variable that is set by a [ternary operator](https://book.pythontips.com/en/latest/ternary_operators.html):
+Take a look at this `redditor_item` variable that is set by a [ternary operator](https://book.pythontips.com/en/latest/ternary_operators.html):
 
 ```python
-redditor_list = _make_submission_list(item) if isinstance(item, praw.models.Submission) else _make_comment_list(item)
+redditor_item = Objectify().make_submission(item) if isinstance(item, praw.models.Submission) else Objectify().make_comment(item)
 ```
 
 This line greatly exceeds the 80 character count. In cases like these, wrap the line like so:
 
 ```python
-redditor_list = _make_submission_list(item) \
+redditor_item = Objectify().make_submission(item) \
     if isinstance(item, praw.models.Submission) \
-    else _make_comment_list(item)
+    else Objectify().make_comment(item)
 ```
 
 String formatting can take up as much length as needed. Splitting this up will make the code less readable, which is not what we are trying to accomplish here. This line exceeds the 80 character count, but that is fine because there is string formatting:
 
 ```python
-print("\nProcessing %s %s from u/%s's profile... Extending this print line" % (limit, plurality, user))
+logging.info("Searching and scraping r/%s for posts containing '%s'..." % (subreddit_name, each_setting[1]))
 ```
 
 ## Whitespace
@@ -75,29 +75,21 @@ something = one_thing if a_condition != None else another_thing
 Each item in a list should be on its own line. The closing bracket should be at the same indent as the variable:
 
 ```python
-titles = [
-    "Name", 
-    "Fullname", 
-    "ID", 
-    "Date Created", 
-    "Comment Karma", 
-    "Link Karma", 
-    "Is Employee?", 
-    "Is Friend?", 
-    "Is Mod?", 
-    "Is Gold?", 
-    "Submissions", 
-    "Comments", 
-    "Hot", 
-    "New", 
-    "Controversial", 
-    "Top", 
-    "Upvoted (may be forbidden)", 
-    "Downvoted (may be forbidden)", 
-    "Gilded", 
-    "Gildings (may be forbidden)", 
-    "Hidden (may be forbidden)", 
-    "Saved (may be forbidden)"
+interaction_titles = [ 
+    "comments", 
+    "controversial", 
+    "downvoted", 
+    "gilded", 
+    "gildings", 
+    "hidden", 
+    "hot", 
+    "moderated",
+    "multireddits",
+    "new", 
+    "saved",
+    "submissions", 
+    "top", 
+    "upvoted", 
 ]
 ```
 
@@ -124,10 +116,10 @@ a_dictionary = {
 All variables should be grouped by relevance, sorted in alphabetical order, and separated by a new line. This applies to global, instance, and method variables.
 
 ```python
-comment_titles = [
+first_list = [
     ...
 ]
-submission_titles = [
+second_list = [
     ...
 ]
 ```
@@ -254,59 +246,42 @@ If the method calls previously defined private or public methods, or methods fro
 This is an example taken from `RunRedditor.run()` found in `Redditor.py`:
 
 ```python
-    def run(args, parser, reddit):
-        """
-        Get, sort, then write scraped Redditor information to CSV or JSON.
+def run(args, parser, reddit):
+    """
+    Get, sort, then write scraped Redditor information to CSV or JSON.
 
-        Calls previously defined public methods:
+    Calls a previously defined public method:
 
-            CheckRedditors().list_redditors()
-            Write.write()
+        Write.write()
 
-        Calls public methods from external modules: 
+    Calls public methods from external modules: 
 
-            GetPRAWScrapeSettings().create_list()
-            Global.make_none_dict()
-            GetPRAWScrapeSettings().get_settings()
+        GetPRAWScrapeSettings().create_list()
+        Validation.validate()
+        Global.make_none_dict()
+        GetPRAWScrapeSettings().get_settings()
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
+    Parameters
+    ----------
+    args: Namespace
+        Namespace object containing all arguments that were defined in the CLI 
+    parser: ArgumentParser
+        argparse ArgumentParser object
+    reddit: Reddit object
+        Reddit instance created by PRAW API credentials
 
-        Returns
-        -------
-        None
-        """
+    Returns
+    -------
+    u_master: dict
+        Dictionary containing all Redditor scrape settings
+    """
 ```
 
 Notice how I have included the `Returns` section in the comment even though it returns nothing. Include `Returns` any time the method takes parameters. You do not need to include the additional sections if the method does not take parameters, raise exceptions, or return values. Simply write a short description as to what it does.
 
 ### Describing a Piece of Code
 
-Comments describing what is happening in a piece of code should use `###` before the comment and placed above the code you are describing. This is a modified version of `PrepComments._prep_structured()` found in `PrepData.py`:
-
-```python
-def _prep_structured(data, plt_dict):
-    """
-    Method comment here...
-    """
-
-    for comment_object in data:
-        for comment_data in comment_object.values():
-            CleanData.count_words("text", comment_data, plt_dict)
-
-            ### Recursive call if the comment contains the "replies" field and 
-            ### if there are comments within the replies list.
-            if "replies" in comment_data.keys() and comment_data["replies"]:
-                PrepComments._prep_structured(comment_data["replies"], plt_dict)
-```
-
-Here I am describing the tail recursive call and the conditionals for when it would be called. Split the comment into a new line if it exceeds the ~80 character ruler in your IDE.
+Comments describing what is happening in a piece of code should use `###` before the comment and placed above the code you are describing. Split the comment into a new line if it exceeds the ~80 character ruler in your IDE.
 
 If you are describing why multiple conditionals are triggered, place the comment above the conditional. This is a modified version of `PrepRedditor.prep_redditor()`, also found in `PrepData.py`.
 
@@ -323,10 +298,10 @@ def prep_redditor(data, file):
             ### Indicates there is valid data in this field.
             if isinstance(obj, dict):
                 if obj["type"] == "submission":
+                    CleanData.count_words("selftext", obj, plt_dict)
                     CleanData.count_words("title", obj, plt_dict)
-                    CleanData.count_words("body", obj, plt_dict)
                 elif obj["type"] == "comment":
-                    CleanData.count_words("text", obj, plt_dict)
+                    CleanData.count_words("body", obj, plt_dict)
             ### Indicates this field is forbidden.
             elif isinstance(obj, str):
                 continue
@@ -387,6 +362,7 @@ from colorama import (
     Fore, 
     Style <----------------- Alphabetical order
 )
+from halo import Halo
 from prawcore import PrawcoreException
                     <----------------- Newline separating relevance
 from urs.praw_scrapers.utils.Validation import Validation
@@ -398,9 +374,8 @@ from urs.utils.Export import (
 )
 from urs.utils.Global import (
     convert_time,
-    eo,
     make_none_dict,
-    s_t <----------------- Alphabetical order
+    Status <----------------- Alphabetical order, uppercase also comes last
 )
 from urs.utils.Logger import (
     LogError,
@@ -436,81 +411,24 @@ def example_with_self(self, args, basic, comments, parser, reddit, subreddit):
 This is a modified version of the huge `init` method in `Redditor.py`:
 
 ```python
-    def __init__(self, limit, overview, user):
-        self._overview = overview
+    def __init__(self, limit, redditor, skeleton):
+        self._skeleton = skeleton
 
-        self._controversial = user.controversial(limit = limit)
-        self._downvoted = user.downvoted(limit = limit)
-        self._gilded = user.gilded(limit = limit)
-        self._gildings = user.gildings(limit = limit)
-        self._hidden = user.hidden(limit = limit)
-        self._hot = user.hot(limit = limit)
-        self._new = user.new(limit = limit)
-        self._saved = user.saved(limit = limit)
-
-        self._comment_titles = [
-            "type",
-            "date_created", 
-            "score", 
-            "text", 
-            "parent_id", 
-            "link_id", 
-            "edited", 
-            "stickied", 
-            "replying_to", 
-            "in_subreddit"
-        ]
-        self._submission_titles = [
-            "type",
-            "title", 
-            "date_created", 
-            "upvotes", 
-            "upvote_ratio",
-            "id", 
-            "nsfw", 
-            "in_subreddit", 
-            "body"
-        ]
-
-        self._scrape_types = [
-            "submissions", 
-            "comments", 
-            "mutts", 
-            "access"
-        ]
-
-        self._mutts = [
-            self._controversial, 
-            self._gilded, 
-            self._hot, 
-            self._new, 
-            self._top
-        ]
-        self._mutt_names = [
-            "controversial", 
-            "gilded", 
-            "hot", 
-            "new", 
-            "top"
-        ]
-
-        self._access = [
-            self._downvoted, 
-            self._gildings, 
-            self._hidden, 
-            self._saved, 
-            self._upvoted
-        ]
-        self._access_names = [
-            "downvoted", 
-            "gildings", 
-            "hidden", 
-            "saved", 
-            "upvoted"
-        ]
+        self._comments = redditor.comments.new(limit = limit)
+        self._controversial = redditor.controversial(limit = limit)
+        self._downvoted = redditor.downvoted(limit = limit)
+        self._gilded = redditor.gilded(limit = limit)
+        self._gildings = redditor.gildings(limit = limit)
+        self._hidden = redditor.hidden(limit = limit)
+        self._hot = redditor.hot(limit = limit)
+        self._moderated = redditor.moderated()
+        self._multireddits = redditor.multireddits()
+        self._new = redditor.new(limit = limit)
+        self._saved = redditor.saved(limit = limit)
+        self._submissions = redditor.submissions.new(limit = limit)
+        self._top = redditor.top(limit = limit)
+        self._upvoted = redditor.upvoted(limit = limit)
 ```
-
-`self._mutts` and `self._mutt_names` are not in alphabetical order. This is okay if you need to define sets of variables that are similar. In this case it would be the four lists defined at the very end of this `init` method.
 
 ## URS Code
 
@@ -520,38 +438,36 @@ Every method in URS has to be wrapped in a class. These classes contain methods 
 
 Showing an example would be the best way to describe how the code is structured:
 
-The `Write` class on line 216 in `Redditor.py` wraps all methods relating to exporting scraped Redditor data to a CSV or JSON file.
-
 ```python
-class Write():
+class Something():
     """
-    Methods for writing scraped Redditor information to CSV or JSON.
+    Class comment here...
     """
 
     def __init__(self):
         ...
 
-    def _determine_export(self, args, f_name, overview):
+    def _first_call(self, something):
         ...
 
-    def _print_confirm(self, args, user):
+    def _second_call(self, another_thing):
         ...
 
-    def write(self, args, reddit, u_master):
+    def final_call(self, a_third_thing):
         ...
-        calls _determine_export()
-        then calls _print_confirm()
+        calls self._first_call()
+        then calls self._second_call()
 ```
 
 Python does not have true "private" methods or variables, but we can indicate that they are only supposed to be called within the class by prepending an underscore in front of the method or variable name. 
 
-`write()` is called outside of the `Write` class, which is why an underscore is not prepended. `_determine_export()` and `_print_confirm()` are called by `write()` but are not called outside the function, hence why they are prepended with an underscore.
+`final_call()` is called outside of the `Something` class, which is why an underscore is not prepended. `_first_call()` and `_second_call()` are called by `final_call()` but are not called outside the function, hence why they are prepended with an underscore.
 
 ### Modularizing Code
 
 The block of code above is also another great representation of how sections of code should be organized.
 
-Within `write()`, `_determine_export()` is called first, followed by `_print_confirm()`. The order in which smaller methods that will be called in a class's "main" method should be sorted by execution order (from top to bottom). These smaller methods will also be placed above the "main" method.
+Within `final_call()`, `_first_call()` is called first, followed by `_second_call()`. The order in which smaller methods that will be called in a class's "main" method should be sorted by execution order (from top to bottom). These smaller methods will also be placed above the "main" method.
 
 ### The `@staticmethod` Decorator
 
@@ -582,7 +498,7 @@ Every method in URS has to be wrapped in a class for unit testing. This makes it
 
 Showing an example would be the best way to describe how unit tests should be named and structured:
 
-`_list_switch()` is a method found on line 144 in `Cli.py` within the `GetScrapeSettings` class:
+`_list_switch()` is a method found in `Cli.py` within the `GetScrapeSettings` class:
 
 ```python
 class GetScrapeSettings():
