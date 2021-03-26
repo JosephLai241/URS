@@ -158,42 +158,6 @@ class LogError():
         return decorator
 
     @staticmethod
-    def log_login(function):
-        """
-        Wrapper for logging PRAW errors.
-
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
-
-        Exceptions
-        ----------
-        PrawcoreException:
-            Raised if invalid PRAW API credentials are given
-
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
-        """
-
-        def wrapper(parser, reddit):
-            try:
-                function(parser, reddit)
-                logging.info("Successfully logged in as u/%s." % reddit.user.me())
-                logging.info("")
-            except PrawcoreException as error:
-                Errors.p_title(error)
-                logging.critical("LOGIN FAILED.")
-                logging.critical("PRAWCORE EXCEPTION: %s." % error)
-                logging.critical("ABORTING URS.\n")
-                parser.exit()
-
-        return wrapper
-
-    @staticmethod
     def log_rate_limit(function):
         """
         Wrapper for logging rate limit and errors.

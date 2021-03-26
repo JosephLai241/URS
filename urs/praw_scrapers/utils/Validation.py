@@ -87,7 +87,6 @@ class Validation():
         print(pretty_limits)
 
     @staticmethod
-    @LogError.log_login
     def validate_user(parser, reddit):
         """
         Check if PRAW credentials are valid, then print rate limit PrettyTable.
@@ -103,12 +102,28 @@ class Validation():
         -------
         None
         """
+
         login_spinner = Halo(color = "white", text = "Logging in.")
         login_spinner.start()
-        login_spinner.succeed(Style.BRIGHT + Fore.GREEN + "Successfully logged in as u/%s." % reddit.user.me())
-        print()
-        
-        Validation.print_rate_limit(reddit)
+
+        try:
+            redditor = reddit.user.me()
+
+            login_spinner.succeed(Style.BRIGHT + Fore.GREEN + "Successfully logged in as u/%s." % redditor)
+            print()
+
+            Validation.print_rate_limit(reddit)
+
+            logging.info("Successfully logged in as u/%s." % redditor)
+            logging.info("")
+        except PrawcoreException as error:
+            login_spinner.fail(Style.BRIGHT + Fore.RED + "Failed to log in.")
+
+            Errors.p_title(error)
+            logging.critical("LOGIN FAILED.")
+            logging.critical("PRAWCORE EXCEPTION: %s." % error)
+            logging.critical("ABORTING URS.\n")
+            parser.exit()
 
     @staticmethod
     def _check_subreddits(invalid, object_list, reddit, valid):

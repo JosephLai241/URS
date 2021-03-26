@@ -18,7 +18,7 @@
 
 ![All Info][All Info]
 
-### You will also have to provide your app name as well as your Reddit account username and password in the block of credentials found in `Credentials.py`.
+### You will also have to provide your app name as well as your Reddit account username and password in the block of credentials found in `.env`.
 
 <!-- SCREENSHOT LINKS -->
 [Create an app]: https://i.imgur.com/Bf0pKGJ.png
