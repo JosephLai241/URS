@@ -12,11 +12,30 @@
 ![Total lines](https://img.shields.io/tokei/lines/github/JosephLai241/URS)
 ![License](https://img.shields.io/github/license/JosephLai241/URS)
 
-<p align="center"> 
-    <img 
-        alt="Help Screenshot"
-        src="https://i.imgur.com/KP1A0mZ.png">
-</p>
+
+```
+usage: $ Urs.py
+     
+    [-h]
+    [-e]
+
+    [--check]
+
+    [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
+    [--rules]
+    [-u <redditor> <n_results>] 
+    [-c <submission_url> <n_results>]
+    [--raw] 
+    [-b]
+
+    [-f <file_path>]
+    [-wc <file_path> [<optional_export_format>]]
+    [--nosave]
+
+    [-y]
+
+    [--csv]
+```
 
 # Table of Contents
 
