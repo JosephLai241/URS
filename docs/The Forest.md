@@ -174,7 +174,7 @@ with open(filename, "w", encoding = "utf-8") as results:
 This was how the structured comments export was implemented. Refer to the source code located in `urs/praw_scrapers/Comments.py` to see more. I hope this was somewhat interesting and/or informative. Thanks for reading!
 
 <!-- LINKS -->
-[Pull Request]: https://something.com
+[Pull Request]: https://github.com/JosephLai241/URS/pull/24
 
 [CommentForest]: https://praw.readthedocs.io/en/latest/code_overview/other/commentforest.html
 [trie]: https://www.interviewcake.com/concept/java/trie
