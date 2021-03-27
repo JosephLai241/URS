@@ -578,7 +578,7 @@ This is a showcase for projects that are built on top of URS!
 [The Forest]: https://github.com/JosephLai241/URS/blob/master/docs/The%20Forest.md
 
 <!-- SAMPLES: Links to the samples directory -->
-[Samples]: https://github.com/JosephLai241/URS/tree/master/samples/scrapes/03-24-2021
+[Samples]: https://github.com/JosephLai241/URS/tree/samples
 
 <!-- ThereGoesMySanity: Links for user ThereGoesMySanity and pull request -->
 [ThereGoesMySanity]: https://github.com/ThereGoesMySanity
