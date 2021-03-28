@@ -474,7 +474,6 @@ class GetInteractions():
         return redditor, skeleton
 
     @staticmethod
-    @Halo(color = "white", text = "Extracting Redditor trophies.")
     def _get_trophies(redditor):
         """
         Get Redditor's trophies.
