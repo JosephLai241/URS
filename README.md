@@ -375,7 +375,7 @@ Exported files will be saved to the `redditors` directory.
 
 ![Submission Comments Demo GIF][Submission Comments Demo]
 
-\*These GIFs have been cut for demonstration purposes.
+\*This GIF has been cut for demonstration purposes.
 
 **Usage:** `$ ./Urs.py -c SUBMISSION_URL N_RESULTS` 
 
