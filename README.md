@@ -373,8 +373,7 @@ Exported files will be saved to the `redditors` directory.
 
 ### Submission Comments
 
-![Structured Comments Demo GIF][Structured Comments Demo]
-![Raw Comments Demo GIF][Raw Comments Demo]
+![Submission Comments Demo GIF][Submission Comments Demo]
 
 \*These GIFs have been cut for demonstration purposes.
 
@@ -559,8 +558,7 @@ This is a showcase for projects that are built on top of URS!
 <!-- DEMO GIFS: Links to demo GIFS -->
 [Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Subreddit_demo.gif
 [Redditor Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Redditor_demo.gif
-[Structured Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/structured_comments_demo.gif
-[Raw Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/raw_comments_demo.gif
+[Submission Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/submission_comments_demo.gif
 
 [Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/frequencies_generator_demo.gif
 [Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/wordcloud_generator_demo.gif
