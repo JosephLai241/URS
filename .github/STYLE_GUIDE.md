@@ -515,7 +515,7 @@ The unit test for this function is located in the `tests/` directory in the file
 ```python
 class TestGetScrapeSettingsListSwitchMethod():
     """
-    Testing GetScrapeSettings class _list_switch() method found in Cli.py.
+    Testing GetScrapeSettings class _list_switch() method.
     """
     
     def test_list_switch_method_first_switch(self):
@@ -538,7 +538,7 @@ class Test[CamelCaseClassName][CamelCaseMethodName]Method():
 Include a block comment under the unit test class using the following convention:
 
 ```
-Testing [ClassName] class [method_name()] method found in [ScriptName.py].
+Testing [ClassName] class [method_name()] method.
 ```
 
 The unit test method will use the following naming convention:
