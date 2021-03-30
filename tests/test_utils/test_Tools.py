@@ -1,4 +1,12 @@
-from urs.utils import Global, Tools
+"""
+Testing `Tools.py`.
+"""
+
+
+from urs.utils import (
+    Global, 
+    Tools
+)
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.

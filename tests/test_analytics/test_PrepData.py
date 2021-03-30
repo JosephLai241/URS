@@ -1,7 +1,9 @@
-from urs.analytics.utils import PrepData
+"""
+Testing `PrepData.py`.
+"""
 
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
+
+from urs.analytics.utils import PrepData
 
 class TestGetPathGetScrapeTypeMethod():
     """

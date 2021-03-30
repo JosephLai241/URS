@@ -1,7 +1,9 @@
-from urs.analytics import Wordcloud
+"""
+Testing `Wordcloud.py`.
+"""
 
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
+
+from urs.analytics import Wordcloud
 
 class TestSetUpWordcloudInitializeWordcloudMethod():
     """

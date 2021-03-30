@@ -1,11 +1,11 @@
+"""
+Testing `Global.py`.
+"""
+
+
 import datetime as dt
 
 from urs.utils import Global
-
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
-
-### Includes a total of 9 tests.
 
 class TestGlobalVariables():
     """
