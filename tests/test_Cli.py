@@ -1,18 +1,21 @@
+"""
+Testing `Cli.py`.
+"""
+
+
 import argparse
 import pytest
 import re
 import sys
 
-from urs.utils import Cli, Global
-
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
-
-### Includes a total of 44 tests.
+from urs.utils import (
+    Cli, 
+    Global
+)
 
 class MakeArgs():
     """
-    Making dummy args to test Cli.py functions.
+    Making dummy args to test Cli.py methods.
     """
 
     @staticmethod
@@ -33,7 +36,7 @@ class MakeArgs():
 
 class TestParserInitMethod():
     """
-    Testing Parser class __init__() method found on line 31 in Cli.py.
+    Testing Parser class __init__() method.
     """
 
     def test_parser_init_method_usage_instance_variable(self):
@@ -233,7 +236,7 @@ DISPLAY INSTEAD OF SAVING
 
 class TestParserAddExamplesFlagMethod():
     """
-    Testing Parser class _add_examples_flag() method found on line 208 in Cli.py.
+    Testing Parser class _add_examples_flag() method.
     """
 
     def test_add_examples_flag_method_examples_flag(self):
@@ -246,8 +249,7 @@ class TestParserAddExamplesFlagMethod():
 
 class TestParserAddRateLimitCheckFlagMethod():
     """
-    Testing Parser class _add_rate_limit_check_flag() method found on line 208 
-    in Cli.py.
+    Testing Parser class _add_rate_limit_check_flag() method.
     """
 
     def test_add_examples_flag_method_examples_flag(self):
@@ -260,7 +262,7 @@ class TestParserAddRateLimitCheckFlagMethod():
 
 class TestParserAddPrawScraperFlagsMethod():
     """
-    Testing Parser class _add_praw_scraper_flags() method found on line 232 in Cli.py.
+    Testing Parser class _add_praw_scraper_flags() method.
     """
 
     def test_add_praw_scraper_flags_method_subreddit_flag(self):
@@ -303,10 +305,10 @@ class TestParserAddPrawScraperFlagsMethod():
 
 class TestParserAddPrawSubredditOptionsFlagMethod():
     """
-    Testing Parser class _add_praw_subreddit_options() method found on line 294 in Cli.py.
+    Testing Parser class _add_praw_subreddit_options() method.
     """
 
-    def test_add_skip_method_skip_confirmation_flag(self):
+    def test_add_praw_subreddit_options_flag(self):
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_praw_subreddit_options(parser)
 
@@ -314,9 +316,22 @@ class TestParserAddPrawSubredditOptionsFlagMethod():
 
         assert args.rules == True
 
+class TestParserAddPrawCommentsOptionsFlagMethod():
+    """
+    Testing Parser class _add_praw_comments_options() method.
+    """
+
+    def test_add_praw_comments_options_flag(self):
+        parser = MakeArgs.parser_for_testing_cli()
+        Cli.Parser()._add_praw_comments_options(parser)
+
+        args = parser.parse_args(["--raw"])
+
+        assert args.raw == True
+
 class TestParserAddAnalyticsFlagMethod():
     """
-    Testing Parser class _add_analytics() method found on line 271 in Cli.py.
+    Testing Parser class _add_analytics() method.
     """
 
     def test_add_analytics_method_frequencies_flag(self):
@@ -349,7 +364,7 @@ class TestParserAddAnalyticsFlagMethod():
 
 class TestParserAddSkipFlagMethod():
     """
-    Testing Parser class _add_skip() method found on line 294 in Cli.py.
+    Testing Parser class _add_skip() method.
     """
 
     def test_add_skip_method_skip_confirmation_flag(self):
@@ -362,7 +377,7 @@ class TestParserAddSkipFlagMethod():
 
 class TestParserAddExportMethod():
     """
-    Testing Parser class _add_export() method found on line 132 in Cli.py.
+    Testing Parser class _add_export() method.
     """
 
     def test_add_export_method_csv_flag(self):
@@ -375,7 +390,7 @@ class TestParserAddExportMethod():
 
 class TestParserParseArgsMethod():
     """
-    Testing Parser class parse_args() method found on line 147 in Cli.py.
+    Testing Parser class parse_args() method.
     """
 
     def test_parse_args_method_subreddit_and_csv_flags(self):
@@ -420,10 +435,20 @@ class TestParserParseArgsMethod():
         except SystemExit:
             assert True
 
+    def test_parse_args_method_examples_flag_was_included(self):
+        sys.argv = [sys.argv[0]]
+        sys.argv.append("-e")
+
+        try:
+            _, _ = Cli.Parser().parse_args()
+        except SystemExit:
+            assert True
+
+        sys.argv = [sys.argv[0]]
+
 class TestGetPRAWScrapeSettingsListSwitchMethod():
     """
-    Testing GetPRAWScrapeSettings class _list_switch() method found on line 183 in 
-    Cli.py.
+    Testing GetPRAWScrapeSettings class _list_switch() method.
     """
 
     def test_list_switch_method_first_switch(self):
@@ -432,8 +457,7 @@ class TestGetPRAWScrapeSettingsListSwitchMethod():
         args = parser.parse_args(["--subreddit", "test_subreddit"])
         index = 0
 
-        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == \
-            ["test_subreddit"]
+        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == ["test_subreddit"]
     
     def test_list_switch_method_second_switch(self):
         parser = MakeArgs.make_scraper_args()
@@ -441,8 +465,7 @@ class TestGetPRAWScrapeSettingsListSwitchMethod():
         args = parser.parse_args(["--redditor", "test_redditor"])
         index = 1
 
-        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == \
-            ["test_redditor"]
+        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == ["test_redditor"]
 
     def test_list_switch_method_third_switch(self):
         parser = MakeArgs.make_scraper_args()
@@ -450,13 +473,11 @@ class TestGetPRAWScrapeSettingsListSwitchMethod():
         args = parser.parse_args(["--comments", "test_url"])
         index = 2
 
-        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == \
-            ["test_url"]
+        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == ["test_url"]
 
 class TestGetPRAWScrapeSettingsCreateListMethod():
     """
-    Testing GetPRAWScrapeSettings class create_list() method found on line 193 in 
-    Cli.py.
+    Testing GetPRAWScrapeSettings class create_list() method.
     """
 
     def test_create_list_from_subreddit_args(self):
@@ -465,8 +486,7 @@ class TestGetPRAWScrapeSettingsCreateListMethod():
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         l_type = "subreddit"
 
-        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == \
-            ["test_subreddit"]
+        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == ["test_subreddit"]
 
     def test_create_list_from_redditor_args(self):
         parser = MakeArgs.make_scraper_args()
@@ -474,8 +494,7 @@ class TestGetPRAWScrapeSettingsCreateListMethod():
         args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
         l_type = "redditor"
 
-        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == \
-            ["test_redditor"]
+        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == ["test_redditor"]
 
     def test_create_list_from_comments_args(self):
         parser = MakeArgs.make_scraper_args()
@@ -483,13 +502,37 @@ class TestGetPRAWScrapeSettingsCreateListMethod():
         args = parser.parse_args(["--comments", ["test_url", "10"]])
         l_type = "comments"
 
-        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == \
-            ["test_url"]
+        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == ["test_url"]
+
+class TestGetPRAWScrapeSettingsSetSubSettings():
+    """
+    Testing GetPRAWScrapeSettings class _set_sub_settings() method.
+    """
+
+    def test_set_sub_settings_len_is_three_with_filterable_category(self):
+        sub = ["test_one", "C", "20"]
+
+        settings = Cli.GetPRAWScrapeSettings()._set_sub_settings(sub)
+
+        assert ["C", "20", "all"] == settings
+
+    def test_set_sub_settings_len_is_three_with_non_filterable_category(self):
+        sub = ["test_one", "H", "20"]
+
+        settings = Cli.GetPRAWScrapeSettings()._set_sub_settings(sub)
+
+        assert ["H", "20", None] == settings
+
+    def test_set_sub_settings_len_is_four(self):
+        sub = ["test_one", "S", "20", "day"]
+
+        settings = Cli.GetPRAWScrapeSettings()._set_sub_settings(sub)
+
+        assert ["S", "20", "day"] == settings
 
 class TestGetPRAWScrapeSettingsSubredditSettingsMethod():
     """
-    Testing GetPRAWScrapeSettings class _subreddit_settings() method found on line 
-    212 in Cli.py.
+    Testing GetPRAWScrapeSettings class _subreddit_settings() method.
     """
 
     def test_subreddit_settings_one_subreddit(self):
@@ -503,8 +546,7 @@ class TestGetPRAWScrapeSettingsSubredditSettingsMethod():
 
 class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod():
     """
-    Testing GetPRAWScrapeSettings class _two_arg_settings() method found on line 222
-    in Cli.py.
+    Testing GetPRAWScrapeSettings class _two_arg_settings() method.
     """
 
     def test_two_arg_settings_one_arg_redditor(self):
@@ -527,8 +569,7 @@ class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod():
 
 class TestGetPRAWScrapeSettingsGetSettingsMethod():
     """
-    Testing GetPRAWScrapeSettings class get_settings() method found on line 227 in 
-    Cli.py.
+    Testing GetPRAWScrapeSettings class get_settings() method.
     """
 
     def test_get_settings_with_subreddit_args(self):
@@ -563,24 +604,21 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
 
 class TestCheckPRAWCliInitMethod():
     """
-    Testing CheckPRAWCli class __init__() method found on line 241 in Cli.py.
+    Testing CheckPRAWCli class __init__() method.
     """
 
     def test_check_praw_cli_init_method_illegal_chars_instance_variable(self):
-        assert Cli.CheckPRAWCli()._illegal_chars == \
-            re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
+        assert Cli.CheckPRAWCli()._illegal_chars == re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
 
     def test_check_praw_cli_init_method_filterables_instance_variable(self):
-        assert Cli.CheckPRAWCli()._filterables == \
-            [
+        assert Cli.CheckPRAWCli()._filterables == [
                 Global.short_cat[2], 
                 Global.short_cat[3], 
                 Global.short_cat[5]
             ]
 
     def test_check_praw_cli_init_method_time_filters_instance_variable(self):
-        assert Cli.CheckPRAWCli()._time_filters == \
-            [
+        assert Cli.CheckPRAWCli()._time_filters == [
                 "all", 
                 "day", 
                 "hour", 
@@ -589,9 +627,44 @@ class TestCheckPRAWCliInitMethod():
                 "year"
             ]
 
+class TestCheckPRAWCliCheckNResultsMethod():
+    """
+    Testing CheckPRAWCli class _check_n_results() method.
+    """
+
+    def test_check_n_results_invalid_int(self):
+        n_results = "a"
+        sub = ["test", "H", "100"]
+
+        try:
+            Cli.CheckPRAWCli()._check_n_results(n_results, sub)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_check_n_results_invalid_n_results(self):
+        n_results = "0"
+        sub = ["test", "H", "asdf"]
+
+        try:
+            Cli.CheckPRAWCli()._check_n_results(n_results, sub)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_check_n_results_valid_n_results(self):
+        n_results = "10"
+        sub = ["test", "H", "10"]
+
+        try:
+            Cli.CheckPRAWCli()._check_n_results(n_results, sub)
+            assert True
+        except SystemExit:
+            assert False
+
 class TestCheckPRAWCliCheckSubredditMethod():
     """
-    Testing CheckPRAWCli class check_subreddit() method found on line 270 in Cli.py.
+    Testing CheckPRAWCli class check_subreddit() method.
     """
 
     def test_check_subreddit_with_correct_args(self):
@@ -613,7 +686,7 @@ class TestCheckPRAWCliCheckSubredditMethod():
 
 class TestCheckPRAWCliCheckRedditorMethod():
     """
-    Testing CheckPRAWCli class check_redditor() method found on line 284 in Cli.py.
+    Testing CheckPRAWCli class check_redditor() method.
     """
 
     def test_check_redditor_with_correct_args(self):
@@ -635,7 +708,7 @@ class TestCheckPRAWCliCheckRedditorMethod():
 
 class TestCheckPRAWCliCheckCommentsMethod():
     """
-    Testing CheckPRAWCli class check_comments() method found on line 293 in Cli.py.
+    Testing CheckPRAWCli class check_comments() method.
     """
 
     def test_check_comments_with_correct_args(self):
@@ -651,19 +724,17 @@ class TestCheckPRAWCliCheckCommentsMethod():
         
         try:
             Cli.CheckPRAWCli().check_comments(args)
-            print(args.comments)
             assert False
         except SystemExit:
             assert True
 
 class TestCheckAnalyticCliInitMethod():
     """
-    Testing CheckAnalyticCli class __init__() method found on line 479 in Cli.py.
+    Testing CheckAnalyticCli class __init__() method.
     """
 
     def test_check_analytic_cli_init_method_export_options_instance_variable(self):
-        assert Cli.CheckAnalyticCli()._export_options == \
-            [
+        assert Cli.CheckAnalyticCli()._export_options == [
                 "eps",
                 "jpeg",
                 "jpg",
@@ -677,8 +748,7 @@ class TestCheckAnalyticCliInitMethod():
 
 class TestCheckAnalyticCliCheckFrequenciesMethod():
     """
-    Testing CheckAnalyticCli class check_frequencies() method found on line 500
-    in Cli.py.
+    Testing CheckAnalyticCli class check_frequencies() method.
     """
 
     def test_check_frequencies_with_valid_file(self):
@@ -689,9 +759,18 @@ class TestCheckAnalyticCliCheckFrequenciesMethod():
 
 class TestCheckAnalyticCliCheckWordcloudMethod():
     """
-    Testing CheckAnalyticCli class check_wordcloud() method found on line 505
-    in Cli.py.
+    Testing CheckAnalyticCli class check_wordcloud() method.
     """
+
+    def test_check_wordcloud_len_is_greater_than_two(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--wordcloud", ["test_file", "png", "asdf"]])
+        
+        try:
+            Cli.CheckAnalyticCli().check_wordcloud(args)
+            assert False
+        except SystemExit:
+            assert True
 
     def test_check_wordcloud_with_valid_file(self):
         pass
@@ -701,7 +780,7 @@ class TestCheckAnalyticCliCheckWordcloudMethod():
 
 class TestCheckCliCheckArgsMethod():
     """
-    Testing CheckCli class check_args() method found on line 301 in Cli.py.
+    Testing CheckCli class check_args() method.
     """
 
     def test_check_args_with_valid_subreddit_args(self):
