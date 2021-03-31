@@ -270,7 +270,8 @@ class GetInteractions():
         limit: str
             String denoting n_results returned
         reddit: PRAW Reddit object
-        redditor: PRAW Redditor object
+        redditor: str
+            String denoting the Redditor name
 
         Returns
         -------
