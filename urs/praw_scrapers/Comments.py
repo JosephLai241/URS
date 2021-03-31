@@ -14,6 +14,7 @@ from colorama import (
 )
 from halo import Halo
 
+from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Cli import GetPRAWScrapeSettings
@@ -37,49 +38,6 @@ from urs.utils.Titles import PRAWTitles
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-class CreateComment():
-    """
-    Methods for creating a comment object.
-    """
-
-    @staticmethod
-    def create(comment):
-        """
-        Create the comment object.
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        comment: PRAW comment object
-
-        Returns
-        -------
-        comment_object: dict
-            Dictionary containing comment metadata
-        """
-
-        return {
-            "author": "u/" + comment.author.name \
-                if hasattr(comment.author, "name") \
-                else "[deleted]",
-            "body": comment.body,
-            "body_html": comment.body_html,
-            "created_utc": convert_time(comment.created_utc),
-            "distinguished": comment.distinguished,
-            "edited": comment.edited \
-                if comment.edited == False \
-                else convert_time(comment.edited),
-            "id": comment.id,
-            "is_submitter": comment.is_submitter,
-            "link_id": comment.link_id,
-            "parent_id": comment.parent_id,
-            "score": comment.score,
-            "stickied": comment.stickied
-        }
 
 class CommentNode():
     """
@@ -200,11 +158,11 @@ class SortComments():
     def sort_raw(all_comments, submission):
         """
         Sort all comments in raw format. 
+
+        Calls a public method from an external module:
+
+            Objectify().make_comment()
         
-        Calls previously defined public method:
-
-            CreateComment.create()
-
         Parameters
         ----------
         all_comments: list
@@ -218,7 +176,7 @@ class SortComments():
         """
 
         for comment in submission.comments.list():
-            all_comments.append(CreateComment.create(comment))
+            all_comments.append(Objectify().make_comment(comment, False))
 
     @staticmethod
     def sort_structured(submission, url):
@@ -230,11 +188,11 @@ class SortComments():
             CommentNode()
             Forest()
             Forest().seed()
-            CreateComment.create()
 
-        Calls a public method from an external module:
+        Calls public methods from external modules:
 
             EncodeNode().encode()
+            Objectify().make_comment()
 
         Parameters
         ----------
@@ -258,7 +216,7 @@ class SortComments():
 
         seed_status.start()
         for comment in submission.comments.list():
-            comment_node = CommentNode(CreateComment.create(comment))
+            comment_node = CommentNode(Objectify().make_comment(comment, False))
             EncodeNode().encode(comment_node)
 
             forest.seed(comment_node)

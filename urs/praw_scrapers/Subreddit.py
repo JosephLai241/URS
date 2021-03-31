@@ -15,6 +15,7 @@ from colorama import (
 from halo import Halo
 from prettytable import PrettyTable
 
+from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Cli import GetPRAWScrapeSettings
@@ -352,55 +353,13 @@ class FormatSubmissions():
     """
 
     @staticmethod
-    def _make_submission(submission):
-        """
-        Format submission metadata.
-
-        Parameters
-        ----------
-        submission: PRAW submission object
-
-        Returns
-        -------
-        submission_dict: dict
-            Dictionary containing submission metadata
-        """
-
-        return {
-            "author": "u/" + submission.author.name \
-                if hasattr(submission.author, "name") \
-                else "[deleted]",
-            "created_utc": convert_time(submission.created_utc),
-            "distinguished": submission.distinguished,
-            "edited": submission.edited \
-                if submission.edited == False \
-                else convert_time(submission.edited),
-            "id": submission.id,
-            "is_original_content": submission.is_original_content,
-            "is_self": submission.is_self,
-            "link_flair_text": submission.link_flair_text,
-            "locked": submission.locked,
-            "name": submission.name,
-            "num_comments": submission.num_comments,
-            "nsfw": submission.over_18,
-            "permalink": submission.permalink,
-            "score": submission.score,
-            "selftext": submission.selftext,
-            "spoiler": submission.spoiler,
-            "stickied": submission.stickied,
-            "title": submission.title,
-            "upvote_ratio": submission.upvote_ratio,
-            "url": submission.url
-        }
-
-    @staticmethod
     def format_submissions(submissions):
         """
         Format submissions to dictionary structure.
 
-        Calls previously defined private method:
+        Calls a public method from an external module:
 
-            FormatSubmissionsJSON._make_submission()
+            Objectify().make_submission()
 
         Parameters
         ----------
@@ -413,7 +372,7 @@ class FormatSubmissions():
         """
 
         return [
-            FormatSubmissions._make_submission(submission) 
+            Objectify().make_submission(False, submission) 
             for submission in submissions
         ]
 
