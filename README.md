@@ -411,8 +411,6 @@ You can export to raw format by including the `--raw` flag. `-raw` will also be 
 
 Exported files will be saved to the `comments` directory.
 
-***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
-
 ## Analytical Tools
 
 This suite of tools can be used *after* scraping data from Reddit. Both of these tools analyze the frequencies of words found in submission titles and bodies, or comments within JSON scrape data.
