@@ -148,7 +148,7 @@ Scrape speed is determined by a couple things:
 
 ### Getting Started
 
-It is very quick and easy to get Reddit API credentials. Refer to [my guide to get your credentials][How to get Reddit API Credentials for PRAW], then update the `API` dictionary located in `Credentials.py`
+It is very quick and easy to get Reddit API credentials. Refer to [my guide to get your credentials][How to get Reddit API Credentials for PRAW], then update the environment variables located in `.env`.
 
 ### Rate Limits
 
