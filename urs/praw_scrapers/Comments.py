@@ -294,7 +294,6 @@ class GetSort():
         return all_comments[:int(limit)] \
             if int(limit) != 0 \
             else all_comments
-        
 
 class Write():
     """
@@ -354,8 +353,8 @@ class Write():
                     "is_self": submission.is_self,
                     "link_flair_text": submission.link_flair_text,
                     "locked": submission.locked,
-                    "num_comments": submission.num_comments,
                     "nsfw": submission.over_18,
+                    "num_comments": submission.num_comments,
                     "permalink": submission.permalink,
                     "score": submission.score,
                     "selftext": submission.selftext,
