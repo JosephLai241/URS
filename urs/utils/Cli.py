@@ -49,17 +49,16 @@ class Parser():
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-    [--rules]
+        [--rules]
+        [-y]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
-    [--raw] 
+        [--raw] 
     [-b]
 
     [-f <file_path>]
     [-wc <file_path> [<optional_export_format>]]
-    [--nosave]
-
-    [-y]
+        [--nosave]
 
     [--csv] 
 """
