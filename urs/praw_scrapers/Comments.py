@@ -98,7 +98,6 @@ class Forest():
 
         Parameters
         ----------
-        existing_comment: CommentNode
         new_comment: CommentNode
 
         Returns
