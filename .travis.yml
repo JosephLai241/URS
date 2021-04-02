@@ -18,6 +18,8 @@ install:
 
 before_script:
   - rm .env
+  - touch .env
+  - echo USERNAME=$USERNAME
 
 script:
   - pytest --cov=./
