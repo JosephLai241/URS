@@ -16,13 +16,10 @@ before_install:
 install:
   - pip install .
 
-script:
+before_script:
   - rm .env
-  - export CLIENT_ID=$CLIENT_ID
-  - export CLIENT_SECRET=$CLIENT_SECRET
-  - export USER_AGENT=$USER_AGENT
-  - export USERNAME=$USERNAME
-  - export PASSWORD=$PASSWORD
+
+script:
   - pytest --cov=./
 
 after_success:
