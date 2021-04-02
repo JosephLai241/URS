@@ -27,7 +27,7 @@ env:
 before_script:
   - rm .env
   - touch .env 
-  - echo USERNAME=$USERNAME
+  - echo $USERNAME
 
 script:
   - pytest --cov=./
