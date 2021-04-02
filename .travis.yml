@@ -1,13 +1,10 @@
-### Specifying language
 language: python
 
-### Test Python versions
 python:
   - 3.7
   - 3.8
   - 3.9
   
-### Scripts to run before installation
 before_install:
   - python --version
   - pip install -U pip
@@ -16,14 +13,11 @@ before_install:
   - pip install -r requirements.txt
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-### Command to install dependencies
 install:
   - pip install .
 
-### Command to run tests
 script: 
   - pytest --cov=./
 
-### Push coverage report to Codecov after running tests
 after_success: 
   - codecov
