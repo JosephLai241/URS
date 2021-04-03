@@ -346,7 +346,7 @@ class TestFormatSubmissionsFormatSubmissionsMethod():
 
         for submission in submissions_list:
             assert submission["author"] == "[deleted]"
-            assert submission["created_utc"] == "04-01-2021 20:51:59"
+            assert submission["created_utc"] == "04-02-2021 00:51:59"
             assert submission["distinguished"] == None
             assert submission["edited"] == False
             assert submission["id"] == "test_submission_id"
@@ -428,7 +428,7 @@ class TestFormatCSVFormatCsvMethod():
                 if key == "author":
                     assert value == "[deleted]"
                 elif key == "created_utc":
-                    assert value == "04-01-2021 20:51:59"
+                    assert value == "04-02-2021 00:51:59"
                 elif key == "distinguished":
                     assert value == None
                 elif key == "edited":

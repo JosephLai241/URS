@@ -40,7 +40,7 @@ class TestObjectifyMakeCommentMethod():
         assert created_comment["author"] == "[deleted]"
         assert created_comment["body"] == "test body"
         assert created_comment["body_html"] == "<p>test body</p>"
-        assert created_comment["created_utc"] == "04-01-2021 20:51:59"
+        assert created_comment["created_utc"] == "04-02-2021 00:51:59"
         assert created_comment["distinguished"] == None
         assert created_comment["edited"] == False
         assert created_comment["id"] == "t35t"
@@ -74,9 +74,9 @@ class TestObjectifyMakeCommentMethod():
         assert created_comment["author"] == "u/test"
         assert created_comment["body"] == "test body"
         assert created_comment["body_html"] == "<p>test body</p>"
-        assert created_comment["created_utc"] == "04-01-2021 20:51:59"
+        assert created_comment["created_utc"] == "04-02-2021 00:51:59"
         assert created_comment["distinguished"] == None
-        assert created_comment["edited"] == "04-01-2021 20:55:59"
+        assert created_comment["edited"] == "04-02-2021 00:55:59"
         assert created_comment["id"] == "t35t"
         assert created_comment["is_submitter"] == True
         assert created_comment["link_id"] == "t3_asdf"
@@ -149,9 +149,9 @@ class TestObjectifyMakeCommentMethod():
         assert created_comment["author"] == "u/test"
         assert created_comment["body"] == "test body"
         assert created_comment["body_html"] == "<p>test body</p>"
-        assert created_comment["created_utc"] == "04-01-2021 20:51:59"
+        assert created_comment["created_utc"] == "04-02-2021 00:51:59"
         assert created_comment["distinguished"] == None
-        assert created_comment["edited"] == "04-01-2021 20:55:59"
+        assert created_comment["edited"] == "04-02-2021 00:55:59"
         assert created_comment["id"] == "t35t"
         assert created_comment["is_submitter"] == True
         assert created_comment["link_id"] == "t3_asdf"
@@ -162,7 +162,7 @@ class TestObjectifyMakeCommentMethod():
         assert created_comment["type"] == "comment"
 
         assert created_comment["submission"]["author"] == "u/submission_test_name"
-        assert created_comment["submission"]["created_utc"] == "04-01-2021 20:51:59"
+        assert created_comment["submission"]["created_utc"] == "04-02-2021 00:51:59"
         assert created_comment["submission"]["distinguished"] == None
         assert created_comment["submission"]["edited"] == False
         assert created_comment["submission"]["id"] == "test_submission_id"
@@ -184,7 +184,7 @@ class TestObjectifyMakeCommentMethod():
 
         assert created_comment["submission"]["subreddit"]["can_assign_link_flair"] == False
         assert created_comment["submission"]["subreddit"]["can_assign_user_flair"] == False
-        assert created_comment["submission"]["subreddit"]["created_utc"] == "04-01-2021 20:51:59"
+        assert created_comment["submission"]["subreddit"]["created_utc"] == "04-02-2021 00:51:59"
         assert created_comment["submission"]["subreddit"]["description"] == "#Description here"
         assert created_comment["submission"]["subreddit"]["description_html"] == "<p>Description here</p>"
         assert created_comment["submission"]["subreddit"]["display_name"] == "TestSub"
@@ -221,7 +221,7 @@ class TestObjectifyMakeMultireddit():
 
         assert created_multireddit["can_edit"] == True
         assert created_multireddit["copied_from"] == "somewhere"
-        assert created_multireddit["created_utc"] == "04-01-2021 20:51:59"
+        assert created_multireddit["created_utc"] == "04-02-2021 00:51:59"
         assert created_multireddit["description_html"] == "<p>Multireddit description here</p>"
         assert created_multireddit["description_md"] == "#Multireddit description here"
         assert created_multireddit["display_name"] == "Test Multireddit"
@@ -283,7 +283,7 @@ class TestObjectifyMakeMultireddit():
 
         assert created_multireddit["can_edit"] == True
         assert created_multireddit["copied_from"] == "somewhere"
-        assert created_multireddit["created_utc"] == "04-01-2021 20:51:59"
+        assert created_multireddit["created_utc"] == "04-02-2021 00:51:59"
         assert created_multireddit["description_html"] == "<p>Multireddit description here</p>"
         assert created_multireddit["description_md"] == "#Multireddit description here"
         assert created_multireddit["display_name"] == "Test Multireddit"
@@ -294,7 +294,7 @@ class TestObjectifyMakeMultireddit():
         for subreddit in created_multireddit["subreddits"]:
             assert subreddit["can_assign_link_flair"] == False
             assert subreddit["can_assign_user_flair"] == False
-            assert subreddit["created_utc"] == "04-01-2021 20:51:59"
+            assert subreddit["created_utc"] == "04-02-2021 00:51:59"
             assert subreddit["description"] == "#Description here"
             assert subreddit["description_html"] == "<p>Description here</p>"
             assert subreddit["display_name"] == "TestSub"
@@ -340,7 +340,7 @@ class TestObjectifyMakeSubmission():
         created_submission = Objectify().make_submission(False, test_submission)
 
         assert created_submission["author"] == "[deleted]"
-        assert created_submission["created_utc"] == "04-01-2021 20:51:59"
+        assert created_submission["created_utc"] == "04-02-2021 00:51:59"
         assert created_submission["distinguished"] == None
         assert created_submission["edited"] == False
         assert created_submission["id"] == "test_submission_id"
@@ -389,9 +389,9 @@ class TestObjectifyMakeSubmission():
         created_submission = Objectify().make_submission(False, test_submission)
 
         assert created_submission["author"] == "u/submission_test_name"
-        assert created_submission["created_utc"] == "04-01-2021 20:51:59"
+        assert created_submission["created_utc"] == "04-02-2021 00:51:59"
         assert created_submission["distinguished"] == None
-        assert created_submission["edited"] == "04-01-2021 20:55:59"
+        assert created_submission["edited"] == "04-02-2021 00:55:59"
         assert created_submission["id"] == "test_submission_id"
         assert created_submission["is_original_content"] == True
         assert created_submission["is_self"] == True
@@ -455,7 +455,7 @@ class TestObjectifyMakeSubmission():
         created_submission = Objectify().make_submission(True, test_submission)
 
         assert created_submission["author"] == "u/submission_test_name"
-        assert created_submission["created_utc"] == "04-01-2021 20:51:59"
+        assert created_submission["created_utc"] == "04-02-2021 00:51:59"
         assert created_submission["distinguished"] == None
         assert created_submission["edited"] == False
         assert created_submission["id"] == "test_submission_id"
@@ -477,7 +477,7 @@ class TestObjectifyMakeSubmission():
 
         assert created_submission["subreddit"]["can_assign_link_flair"] == False
         assert created_submission["subreddit"]["can_assign_user_flair"] == False
-        assert created_submission["subreddit"]["created_utc"] == "04-01-2021 20:51:59"
+        assert created_submission["subreddit"]["created_utc"] == "04-02-2021 00:51:59"
         assert created_submission["subreddit"]["description"] == "#Description here"
         assert created_submission["subreddit"]["description_html"] == "<p>Description here</p>"
         assert created_submission["subreddit"]["display_name"] == "TestSub"
