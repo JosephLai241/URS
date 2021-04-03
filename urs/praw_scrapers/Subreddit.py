@@ -171,11 +171,19 @@ class GetExtras():
             List containing Subreddit rules
         """
 
-        rules = [rule_list for rule, rule_list in subreddit.rules().items() if rule == "rules"]
-        for rule in rules[0]:
-            rule["created_utc"] = convert_time(rule["created_utc"])
+        rules = [
+            {
+                "created_utc": convert_time(rule.created_utc),
+                "description": rule.description,
+                "kind": rule.kind,
+                "priority": rule.priority,
+                "short_name": rule.short_name,
+                "violation_reason": rule.violation_reason,
+            }
+            for rule in subreddit.rules
+        ]
         
-        return subreddit.post_requirements(), rules[0]
+        return subreddit.post_requirements(), rules
 
 class GetSubmissionsSwitch():
     """
