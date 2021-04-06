@@ -214,7 +214,6 @@ class TestValidationCheckExistenceMethod():
     """
 
     def test_check_existence_only_valid_subreddits(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -225,13 +224,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "subreddit"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert len(valid) == 3
         assert not invalid
 
     def test_check_existence_only_invalid_subreddits(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -242,13 +240,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "subreddit"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert not valid
         assert len(invalid) == 3
 
     def test_check_existence_both_valid_and_invalid_subreddits(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -262,13 +259,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "subreddit"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert len(valid) == 3
         assert len(invalid) == 3
 
     def test_check_existence_only_valid_redditors(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -277,13 +273,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "redditor"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert len(valid) == 1
         assert not invalid
 
     def test_check_existence_only_invalid_redditors(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -292,13 +287,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "redditor"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert not valid
         assert len(invalid) == 1
 
     def test_check_existence_both_valid_and_invalid_redditors(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -308,13 +302,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "redditor"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert len(valid) == 1
         assert len(invalid) == 1
 
     def test_check_existence_only_valid_submissions(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -323,13 +316,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "comments"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert len(valid) == 1
         assert not invalid
 
     def test_check_existence_only_invalid_submissions(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -338,13 +330,12 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "comments"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert not valid
         assert len(invalid) == 1
 
     def test_check_existence_both_valid_and_invalid_submissions(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -354,7 +345,7 @@ class TestValidationCheckExistenceMethod():
 
         scraper_type = "comments"
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
 
         assert len(valid) == 1
         assert len(invalid) == 1
@@ -365,7 +356,6 @@ class TestValidationValidateMethod():
     """
 
     def test_validate_all_valid_reddit_objects(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -376,13 +366,12 @@ class TestValidationValidateMethod():
 
         scraper_type = "subreddit"
 
-        invalid, valid = Validation.validate(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.validate(object_list, reddit, scraper_type)
 
         assert len(valid) == 3
         assert not invalid
 
     def test_validate_both_valid_and_invalid_reddit_objects(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -396,13 +385,12 @@ class TestValidationValidateMethod():
 
         scraper_type = "subreddit"
 
-        invalid, valid = Validation.validate(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.validate(object_list, reddit, scraper_type)
 
         assert len(valid) == 3
         assert len(invalid) == 3
 
     def test_validate_all_invalid_reddit_objects_force_quit(self):
-        parser = MakeArgs.parser_for_testing()
         reddit = Login.create_reddit_object()
 
         object_list = [
@@ -414,7 +402,7 @@ class TestValidationValidateMethod():
         scraper_type = "subreddit"
 
         try:
-            _, _ = Validation.validate(object_list, parser, reddit, scraper_type)
+            _, _ = Validation.validate(object_list, reddit, scraper_type)
             assert False
         except SystemExit:
             assert True
