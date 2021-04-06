@@ -488,7 +488,7 @@ class Write():
     """
 
     @staticmethod
-    def write(args, reddit, u_master):
+    def write(reddit, u_master):
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
@@ -502,8 +502,6 @@ class Write():
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         u_master: dict
@@ -565,10 +563,10 @@ class RunRedditor():
         PRAWTitles.u_title()
 
         user_list = GetPRAWScrapeSettings().create_list(args, "redditor")
-        not_users, users = Validation.validate(user_list, parser, reddit, "redditor")
+        not_users, users = Validation.validate(user_list, reddit, "redditor")
         u_master = make_none_dict(users)
         GetPRAWScrapeSettings().get_settings(args, not_users, u_master, "redditor")
 
-        Write.write(args, reddit, u_master)
+        Write.write(reddit, u_master)
 
         return u_master
