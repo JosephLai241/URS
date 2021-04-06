@@ -491,7 +491,7 @@ class RunComments():
         PRAWTitles.c_title()
 
         post_list = GetPRAWScrapeSettings().create_list(args, "comments")
-        not_posts, posts = Validation.validate(post_list, parser, reddit, "comments")
+        not_posts, posts = Validation.validate(post_list, reddit, "comments")
         c_master = make_none_dict(posts)
         GetPRAWScrapeSettings().get_settings(args, not_posts, c_master, "comments")
 
