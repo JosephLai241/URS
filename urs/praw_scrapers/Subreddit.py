@@ -47,14 +47,12 @@ class PrintConfirm():
     """
 
     @staticmethod
-    def _add_each_setting(args, pretty_subs, s_master):
+    def _add_each_setting(pretty_subs, s_master):
         """
         Add each Subreddit setting to the PrettyTable.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         pretty_subs: PrettyTable
             PrettyTable instance
         s_master: dict
@@ -80,14 +78,12 @@ class PrintConfirm():
                 ])
 
     @staticmethod
-    def print_settings(args, s_master):
+    def print_settings(s_master):
         """
         Print scraping details (PrettyTable) for each Subreddit.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         s_master: dict
             Dictionary containing all scrape settings
 
@@ -106,7 +102,7 @@ class PrintConfirm():
             "Number of results / Keywords"
         ]
 
-        PrintConfirm._add_each_setting(args, pretty_subs, s_master)
+        PrintConfirm._add_each_setting(pretty_subs, s_master)
         pretty_subs.align = "l"
 
         print(pretty_subs)
@@ -677,7 +673,7 @@ class RunSubreddit():
         """
 
         sub_list = GetPRAWScrapeSettings().create_list(args, "subreddit")
-        not_subs, subs = Validation.validate(sub_list, parser, reddit, "subreddit")
+        not_subs, subs = Validation.validate(sub_list, reddit, "subreddit")
         s_master = make_list_dict(subs)
         GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, "subreddit")
 
@@ -709,7 +705,7 @@ class RunSubreddit():
         None
         """
 
-        PrintConfirm.print_settings(args, s_master)
+        PrintConfirm.print_settings(s_master)
         confirm = PrintConfirm.confirm_settings()
         if confirm == "y":
             print()
