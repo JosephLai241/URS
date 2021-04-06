@@ -77,7 +77,7 @@ class Run():
         MainTitle.title()
 
         args, parser = Parser().parse_args()
-        CheckCli().check_args(args, parser)
+        CheckCli().check_args(args)
 
         return args, parser
 
