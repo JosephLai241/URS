@@ -66,7 +66,6 @@ class TestPrintConfirmAddEachSettingMethod():
     """
 
     def test_add_each_setting(self):
-        args = None
         pretty_subs = PrettyTable()
         pretty_subs.field_names = [
             "Subreddit", 
@@ -80,7 +79,7 @@ class TestPrintConfirmAddEachSettingMethod():
         }
 
         try:
-            Subreddit.PrintConfirm._add_each_setting(args, pretty_subs, s_master)
+            Subreddit.PrintConfirm._add_each_setting(pretty_subs, s_master)
             assert True
         except:
             assert False
@@ -91,13 +90,12 @@ class TestPrintConfirmPrintSettingsMethod():
     """
 
     def test_print_settings(self):
-        args = None
         s_master = {
             "askreddit": [["h", 100, None]]
         }
 
         try:
-            Subreddit.PrintConfirm.print_settings(args, s_master)
+            Subreddit.PrintConfirm.print_settings(s_master)
             assert True
         except:
             assert False
