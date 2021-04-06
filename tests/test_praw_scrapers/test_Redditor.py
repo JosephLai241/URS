@@ -28,15 +28,9 @@ class Login():
             password = os.getenv("PASSWORD")
         )
 
-class TestGetInteractions():
+class TestGetInteractionsMakeJsonSkeletonMethod():
     """
-    Testing GetInteractions class methods:
-    
-        GetInteractions._make_json_skeleton()
-        GetInteractions._get_trophies()
-        GetInteractions._get_user_info()
-        GetInteractions._make_interactions_lists()
-    
+    Testing GetInteractions class _make_json_skeleton() method.
     """
 
     def test_make_json_skeleton(self):
@@ -59,6 +53,11 @@ class TestGetInteractions():
         assert redditor == spez
         assert skeleton == test_skeleton
 
+class TestGetInteractionsGetTrophiesMethod():
+    """
+    Testing GetInteractions class _get_trophies() method.
+    """
+
     def test_get_trophies(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
@@ -68,6 +67,11 @@ class TestGetInteractions():
         assert isinstance(trophies, list) == True
         assert len(trophies) > 0
 
+class TestGetInteractionsGetUserInfoMethod():
+    """
+    Testing GetInteractions class _get_user_info() method.
+    """
+    
     def test_get_user_info(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
@@ -108,6 +112,11 @@ class TestGetInteractions():
                 if field in information_fields \
                 else False
 
+class TestGetInteractionsMakeInteractionsListsMethod():
+    """
+    Testing GetInteractions class _make_interactions_lists() method.
+    """
+    
     def test_make_interactions_lists(self):
         skeleton = {
             "data": {
@@ -140,6 +149,11 @@ class TestGetInteractions():
 
             assert skeleton["data"]["interactions"][field] == []
     
+class TestGetInteractionsGetUserInteractionsMethod():
+    """
+    Testing GetInteractions class _get_user_interactions() method.
+    """
+    
     def test_get_user_interactions(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
@@ -160,6 +174,11 @@ class TestGetInteractions():
         assert skeleton["data"]["information"] == None
         assert skeleton["data"]["interactions"]
 
+class TestGetInteractionsGetMethod():
+    """
+    Testing GetInteractions class get() method.
+    """
+    
     def test_get(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
