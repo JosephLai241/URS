@@ -17,6 +17,7 @@ install:
   - pip install .
 
 before_script:
+  - echo "Moving to travis-ci.com"
   - rm .env
 
 script:
