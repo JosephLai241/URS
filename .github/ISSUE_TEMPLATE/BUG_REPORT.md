@@ -31,11 +31,14 @@ A clear and concise description of what actually happened.
 
 If applicable, add screenshots or a code block of the ***entire*** traceback to help explain your problem.
 
+```
+PASTE CODEBLOCK HERE
+```
+
 **Machine Specs**
 
-* OS: [e.g. Arch Linux x86_64]
-* Python: [e.g. Python 3.8.2]
-* PRAW: [e.g. PRAW 7.0.0]
+* OS: [Replace this with your OS, e.g. Arch Linux x86_64]
+* Python: [Replace this with your Python version, e.g. Python 3.8.2]
 
 **Additional Context**
 
