@@ -189,4 +189,17 @@ class TestGetInteractionsGetMethod():
         assert skeleton["scrape_settings"]["n_results"] == 1
 
         assert skeleton["data"]["information"] != None
-        assert skeleton["data"]["interactions"]
+
+        assert len(skeleton["data"]["interactions"]["comments"]) == 1
+        assert len(skeleton["data"]["interactions"]["controversial"]) == 1
+        assert len(skeleton["data"]["interactions"]["gilded"]) == 1
+        assert skeleton["data"]["interactions"]["gildings"][0] == "FORBIDDEN"
+        assert skeleton["data"]["interactions"]["hidden"][0] == "FORBIDDEN"
+        assert len(skeleton["data"]["interactions"]["hot"]) == 1
+        assert len(skeleton["data"]["interactions"]["moderated"]) > 1
+        assert "multireddits" in skeleton["data"]["interactions"].keys()
+        assert len(skeleton["data"]["interactions"]["new"]) == 1
+        assert skeleton["data"]["interactions"]["saved"][0] == "FORBIDDEN"
+        assert len(skeleton["data"]["interactions"]["submissions"]) == 1
+        assert len(skeleton["data"]["interactions"]["top"]) == 1
+        assert skeleton["data"]["interactions"]["upvoted"][0] == "FORBIDDEN"
