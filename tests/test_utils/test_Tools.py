@@ -3,60 +3,44 @@ Testing `Tools.py`.
 """
 
 
+import argparse
+import os
+import praw
+
+from dotenv import load_dotenv
+
 from urs.utils import (
     Global, 
     Tools
 )
 
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
+class Login():
+    """
+    Create a Reddit object with PRAW API credentials.
+    """
 
-### Includes a total of 8 tests.
+    @staticmethod
+    def create_reddit_object():
+        load_dotenv()
+
+        return praw.Reddit(
+            client_id = os.getenv("CLIENT_ID"),
+            client_secret = os.getenv("CLIENT_SECRET"),
+            user_agent = os.getenv("USER_AGENT"),
+            username = os.getenv("USERNAME"),
+            password = os.getenv("PASSWORD")
+        )
 
 class TestRunInitMethod():
     """
-    Testing Run class __init__() method found on line 31 in Tools.py.
-    Have to find a way to test functions that access Reddit without exposing my 
-    personal credentials. Passing for now.
+    Testing Run class __init__() method.
     """
 
-    def test_run_init_method_reddit_instance_variable(self):
-        pass
+    def test_init_instance_variables(self):
+        reddit = Login.create_reddit_object()
 
-    def test_run_init_method_args_and_parser_instance_variables(self):
-        pass
-
-    def test_run_init_method_s_t_instance_variable(self):
-        # assert Tools.Run(reddit)._s_t == Global.s_t
-
-        pass
-
-class TestRunLoginAndArgsMethod():
-    """
-    Testing Run class _login_and_args() method found on line 38 in Tools.py.
-    Have to find a way to test functions that access Reddit without exposing my 
-    personal credentials. Passing for now.
-    Do I need this test? It would also be tested in the class above...
-    """
-
-    def test_login_and_args(self):
-        pass
-
-class TestRunRunUrsMethod():
-    """
-    Testing Run class run_urs() method found on line 48 in Tools.py.
-    Have to find a way to test functions that access Reddit without exposing my 
-    personal credentials. Passing for now.
-    """
-
-    def test_run_urs_run_subreddit(self):
-        pass
-
-    def test_run_urs_run_redditor(self):
-        pass
-
-    def test_run_urs_run_comments(self):
-        pass
-
-    def test_run_urs_run_basic(self):
-        pass
+        try:
+            Tools.Run(reddit)
+            assert False
+        except SystemExit:
+            assert True
