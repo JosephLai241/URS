@@ -45,7 +45,7 @@ class PrintSubs():
     """
 
     @staticmethod
-    def _find_subs(parser, reddit, search_for):
+    def _find_subs(reddit, search_for):
         """
         Return a list of valid and invalid Subreddits.
 
@@ -55,8 +55,6 @@ class PrintSubs():
 
         Parameters
         ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         search_for: str
@@ -72,12 +70,12 @@ class PrintSubs():
 
         search_for = " ".join(search_for.split())
         sub_list = [subreddit for subreddit in search_for.split(" ")]
-        not_subs, subs = Validation.check_existence(sub_list, parser, reddit, "subreddit")
+        not_subs, subs = Validation.check_existence(sub_list, reddit, "subreddit")
 
         return not_subs, subs
 
     @staticmethod
-    def print_subreddits(parser, reddit, search_for):
+    def print_subreddits(reddit, search_for):
         """
         Print valid and invalid Subreddits.
 
@@ -87,8 +85,6 @@ class PrintSubs():
 
         Parameters
         ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         search_for: str
@@ -105,7 +101,7 @@ class PrintSubs():
         check_subs_spinner = Halo(color = "white", text = "Validating Subreddit(s).")
         print()
         check_subs_spinner.start()
-        not_subs, subs = PrintSubs._find_subs(parser, reddit, search_for)
+        not_subs, subs = PrintSubs._find_subs(reddit, search_for)
         check_subs_spinner.succeed("Finished Subreddit validation.")
 
         if subs:
@@ -138,7 +134,7 @@ class GetInput():
     """
 
     @staticmethod
-    def get_subreddits(parser, reddit):
+    def get_subreddits(reddit):
         """
         Enter Subreddit(s) to scrape and check if they exist.
 
@@ -148,8 +144,6 @@ class GetInput():
 
         Parameters
         ----------
-        parser: ArgumentParser
-            argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
 
@@ -169,7 +163,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                 search_for = str(input(subreddit_prompt))
                 if not search_for:
                     raise ValueError
-                return PrintSubs.print_subreddits(parser, reddit, search_for)
+                return PrintSubs.print_subreddits(reddit, search_for)
             except ValueError:
                 print(Fore.RED + Style.BRIGHT + "No Subreddits were specified! Try again.")
 
@@ -396,7 +390,7 @@ class RunBasic():
             Dictionary denoting all Subreddit scrape settings
         """
 
-        subs = GetInput.get_subreddits(parser, reddit)
+        subs = GetInput.get_subreddits(reddit)
         subs = ConfirmInput.confirm_subreddits(subs, parser)
         master = make_list_dict(subs)
         GetInput.get_settings(master, subs)
@@ -426,7 +420,7 @@ class RunBasic():
             Dictionary denoting all Subreddit scrape settings
         """
 
-        PrintConfirm().print_settings(args, master)
+        PrintConfirm.print_settings(master)
         return PrintConfirm().confirm_settings()
 
     @staticmethod
