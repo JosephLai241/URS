@@ -786,7 +786,7 @@ class TestCheckCliCheckArgsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
 
-        Cli.CheckCli().check_args(args, parser)
+        Cli.CheckCli().check_args(args)
 
         assert args.subreddit == [["test_subreddit", "h", "10"]] 
 
@@ -795,7 +795,7 @@ class TestCheckCliCheckArgsMethod():
         args = parser.parse_args(["--subreddit", ["test_subreddit", "w", "asdf"]])
 
         try:
-            Cli.CheckCli().check_args(args, parser)
+            Cli.CheckCli().check_args(args)
             assert False
         except SystemExit:
             assert True
@@ -804,7 +804,7 @@ class TestCheckCliCheckArgsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
 
-        Cli.CheckCli().check_args(args, parser)
+        Cli.CheckCli().check_args(args)
 
         assert args.redditor == [["test_redditor", "10"]]
 
@@ -813,7 +813,7 @@ class TestCheckCliCheckArgsMethod():
         args = parser.parse_args(["--redditor", ["10", "test_redditor"]])
 
         try:
-            Cli.CheckCli().check_args(args, parser)
+            Cli.CheckCli().check_args(args)
             assert False
         except SystemExit:
             assert True
@@ -822,7 +822,7 @@ class TestCheckCliCheckArgsMethod():
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--comments", ["test_url", "2"]])
 
-        Cli.CheckCli().check_args(args, parser)
+        Cli.CheckCli().check_args(args)
 
         assert args.comments == [["test_url", "2"]]
 
@@ -831,7 +831,7 @@ class TestCheckCliCheckArgsMethod():
         args = parser.parse_args(["--comments", ["2", "test_url"]])
 
         try:
-            Cli.CheckCli().check_args(args, parser)
+            Cli.CheckCli().check_args(args)
             assert False
         except SystemExit:
             assert True
