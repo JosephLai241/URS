@@ -10,10 +10,28 @@ class TestGetPathGetScrapeTypeMethod():
     Testing GetPath class get_scrape_type() method found on line 17 in PrepData.py.
     """
 
-    def test_get_scrape_type_method(self):
+    def test_get_scrape_type_method_valid_filepath(self):
         test_path = "../scrapes/some_date/test/some_other_dir/some_file.json"
 
         assert PrepData.GetPath.get_scrape_type(test_path) == "test"
+
+    def test_get_scrape_type_method_invalid_directory(self):
+        test_path = "../scrapes/some_date/test/some_other_dir/some_file.txt"
+
+        try:
+            PrepData.GetPath.get_scrape_type(test_path)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_get_scrape_type_method_invalid_file_type(self):
+        test_path = "../scrapes/some_date/analytics/some_other_dir/some_file.json"
+
+        try:
+            PrepData.GetPath.get_scrape_type(test_path)
+            assert False
+        except SystemExit:
+            assert True
 
 class TestGetPathNameFileMethod():
     """
@@ -56,7 +74,7 @@ class TestCleanDataCountWordsMethod():
     def test_count_words_method(self):
         plt_dict = dict()
         obj = {
-            "first": "Some text here in the first field",
+            "first": "Some text here in the first field [(,",
             "second": "Another line of words here"
         }
 
@@ -70,7 +88,20 @@ class TestPrepSubredditPrepSubredditMethod():
     """
 
     def test_prep_subreddit_method(self):
-        pass
+        data = [
+            {
+                "selftext": "This is a test selftext",
+                "title": "This is a test title"
+            },
+            {
+                "selftext": "This is a test selftext",
+                "title": "This is a test title"
+            }
+        ]
+
+        word_count = PrepData.PrepSubreddit.prep_subreddit(data)
+
+        assert word_count["This"] == 4
 
 class TestPrepRedditorPrepRedditorMethod():
     """
@@ -78,28 +109,80 @@ class TestPrepRedditorPrepRedditorMethod():
     """
 
     def test_prep_redditor_method(self):
-        pass
+        data = {
+            "interactions": {
+                "comments": [
+                    {
+                        "type": "comment",
+                        "body": "This is a test body",
+                    }
+                ],
+                "submissions": [
+                    {
+                        "type": "submission",
+                        "selftext": "This is a test selftext",
+                        "title": "This is a test title"
+                    }
+                ],
+                "hidden": [
+                    "FORBIDDEN"
+                ]
+            }
+        }
 
-class TestPrepCommentsPrepRawMethod():
-    """
-    Testing PrepComments class _prep_raw() method found on line 124 in PrepData.py.
-    """
+        word_count = PrepData.PrepRedditor.prep_redditor(data)
 
-    def test_prep_raw_method(self):
-        pass
-
-class TestPrepCommentsPrepStructuredMethod():
-    """
-    Testing PrepComments class _prep_structured() method found on line 129 in PrepData.py.
-    """
-
-    def test_prep_structured_method(self):
-        pass
+        assert word_count["This"] == 3
+        assert word_count["selftext"] == 1
+        assert word_count["body"] == 1
+        assert "FORBIDDEN" not in word_count.keys()
 
 class TestPrepCommentsPrepCommentsMethod():
     """
     Testing PrepComments class prep_comments() method found on line 142 in PrepData.py.
     """
 
-    def test_prep_comments_method(self):
-        pass
+    def test_prep_comments_method_prep_raw_comments(self):
+        data = {
+            "scrape_settings": {
+                "style": "raw"
+            },
+            "data": {
+                "comments": [
+                    {
+                        "body": "This is a test body"
+                    },
+                    {
+                        "body": "This is a test body"
+                    }
+                ]
+            }
+        }
+
+        word_count = PrepData.PrepComments.prep_comments(data)
+
+        assert word_count["This"] == 2
+
+    def test_prep_comments_method_prep_structured_comments(self):
+        data = {
+            "scrape_settings": {
+                "style": "structured"
+            },
+            "data": {
+                "comments": [
+                    {
+                        "body": "This is a test body",
+                        "replies": [
+                            {
+                                "body": "This is a test body",
+                                "replies": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+
+        word_count = PrepData.PrepComments.prep_comments(data)
+
+        assert word_count["test"] == 2
