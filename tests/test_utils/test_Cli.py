@@ -666,17 +666,33 @@ class TestCheckPRAWCliCheckSubredditMethod():
     Testing CheckPRAWCli class check_subreddit() method.
     """
 
-    def test_check_subreddit_with_correct_args(self):
+    def test_check_subreddit_without_time_filter_with_correct_args(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         Cli.CheckPRAWCli().check_subreddit(args)
 
         assert args.subreddit == [["test_subreddit", "h", "10"]]
 
-    def test_check_subreddit_with_invalid_args(self):
+    def test_check_subreddit_without_time_filter_with_invalid_args(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--subreddit", ["test_subreddit", "w", "asdf"]])
         
+        try:
+            Cli.CheckPRAWCli().check_subreddit(args)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_check_subreddit_with_time_filter_with_correct_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "s", "test", "year"]])
+
+        assert args.subreddit == [["test_subreddit", "s", "test", "year"]]
+
+    def test_check_subreddit_with_time_filter_with_invalid_args(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "s", "test", "asdf"]])
+
         try:
             Cli.CheckPRAWCli().check_subreddit(args)
             assert False
