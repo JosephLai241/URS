@@ -30,9 +30,28 @@ class MakeArgs():
 
         return parser
 
-class TestFix():
+class TestNameFileCheckLenMethod():
     """
-    Testing _fix() function on line 30 in Export.py.
+    Testing NameFile class _check_len() method.
+    """
+
+    def test_check_len_string_is_shorter_than_50_char(self):
+        test_string = "poebtcjocweeooijhyltchjarvu"
+
+        cut_string = Export.NameFile()._check_len(test_string)
+
+        assert test_string == cut_string
+
+    def test_check_len_string_is_longer_than_50_char(self):
+        test_string = "fegskkxjsacxpusflfccqynqchbqdywvvjsmqmhaxyvhtipropqkzqstsxcx"
+
+        cut_string = Export.NameFile()._check_len(test_string)
+
+        assert test_string == "fegskkxjsacxpusflfccqynqchbqdywvvjsmqmhaxyvhtipro--"
+
+class TestNameFileFixMethod():
+    """
+    Testing NameFile class _fix() method.
     """
 
     def test_fix(self):
@@ -41,9 +60,9 @@ class TestFix():
 
         assert fixed == Export.NameFile()._fix(name)
 
-class TestRCategory():
+class TestNameFileRCategory():
     """
-    Testing _r_category() function on line 40 in Export.py.
+    Testing NameFile class _r_category() method.
     """
 
     def test_r_category_first_switch(self):
@@ -53,9 +72,9 @@ class TestRCategory():
         for index, category in enumerate(Global.short_cat[:5]):
             assert Export.NameFile()._r_category(category, 1) == Global.categories[index]
 
-class TestRGetCategory():
+class TestNameFileRGetCategory():
     """
-    Testing _r_get_category() function on line 54 in Export.py.
+    Testing NameFile class _r_get_category() method.
     """
                 
     def test_r_get_category_subreddit_arg_returns_zero(self):
@@ -64,9 +83,9 @@ class TestRGetCategory():
     def test_r_get_category_subreddit_arg_returns_one(self):
         assert Export.NameFile()._r_get_category("C") == 1
 
-class TestGetRawN():
+class TestNameFileGetRawN():
     """
-    Testing _get_raw_n() function on line 80 in Export.py.
+    Testing NameFile class _get_raw_n() method.
     """
 
     def test_get_raw_n_returns_search_filename_format_with_subreddit_args(self):
@@ -89,9 +108,9 @@ class TestGetRawN():
         assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
             "askreddit-hot-1-result"
 
-class TestRFname():
+class TestNameFileRFname():
     """
-    Testing r_fname() function on line 103 in Export.py.
+    Testing NameFile class r_fname() method.
     """
 
     def test_r_fname_ignores_end_string_with_subreddit_args(self):
@@ -121,9 +140,9 @@ class TestRFname():
         assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
             "askreddit-hot-1-result"
 
-class TestUFname():
+class TestNameFileUFname():
     """
-    Testing u_fname() function on line 116 in Export.py.
+    Testing NameFile class u_fname() method.
     """
 
     def test_u_fname_returns_plural_string(self):
@@ -138,9 +157,9 @@ class TestUFname():
 
         assert Export.NameFile().u_fname(limit, string) == "test-1-result"
 
-class TestCFname():
+class TestNameFileCFname():
     """
-    Testing c_fname() function on line 126 in Export.py.
+    Testing NameFile class c_fname() method.
     """
 
     def test_c_fname_returns_plural_string_with_raw_format(self):
@@ -185,10 +204,9 @@ class TestCFname():
 
         assert Export.NameFile().c_fname(args, limit, string) == "test-all"
 
-class TestWriteCSVAndWriteJSON():
+class TestExportWriteCSVAndWriteJSON():
     """
-    Testing write_csv() function on line 153 and write_json() function on line 
-    161 in Export.py.
+    Testing Export class write_csv() and write_json() methods.
     """
 
     def test_write_csv(self):
@@ -226,9 +244,9 @@ class TestWriteCSVAndWriteJSON():
         assert test_dict == overview
         os.remove(filename)
 
-class TestGetFilenameExtension():
+class TestExportGetFilenameExtension():
     """
-    Test _get_filename_extension() function on line 144 in Export.py.
+    Testing Export class _get_filename_extension() method.
     """
 
     def test_get_filename_extension_returns_subreddits_csv(self):
