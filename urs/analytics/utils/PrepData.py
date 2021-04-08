@@ -172,7 +172,7 @@ class PrepSubreddit():
     """
 
     @staticmethod
-    def prep_subreddit(data, file):
+    def prep_subreddit(data):
         """
         Prepare Subreddit data.
 
@@ -184,8 +184,6 @@ class PrepSubreddit():
         ----------
         data: dict
             Dictionary containing extracted scrape data
-        file: str
-            String denoting the filepath
 
         Returns
         -------
@@ -215,7 +213,7 @@ class PrepRedditor():
     """
 
     @staticmethod
-    def prep_redditor(data, file):
+    def prep_redditor(data):
         """
         Prepare Redditor data.
 
@@ -227,8 +225,6 @@ class PrepRedditor():
         ----------
         data: dict
             Dictionary containing extracted scrape data
-        file: str
-            String denoting the filepath
 
         Returns
         -------
@@ -346,7 +342,7 @@ class PrepComments():
         status.succeed()
 
     @staticmethod
-    def prep_comments(data, file):
+    def prep_comments(data):
         """
         Prepare submission comments data.
 
@@ -359,8 +355,6 @@ class PrepComments():
         ----------
         data: dict
             Dictionary containing extracted scrape data
-        file: str
-            String denoting the filepath
 
         Returns
         -------
@@ -408,9 +402,9 @@ class PrepData():
         data = Extract.extract(file)
 
         if scrape_type == "subreddits":
-            return PrepSubreddit.prep_subreddit(data["data"], file)
+            return PrepSubreddit.prep_subreddit(data["data"])
         elif scrape_type == "redditors":
-            return PrepRedditor.prep_redditor(data["data"], file)
+            return PrepRedditor.prep_redditor(data["data"])
         elif scrape_type == "comments":
-            return PrepComments.prep_comments(data, file)
+            return PrepComments.prep_comments(data)
     
