@@ -264,10 +264,9 @@ class TestExportGetFilenameExtension():
 
         assert Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.json" % (date, f_name)
 
-
 class TestExportWriteCSVAndWriteJSON():
     """
-    Testing Export class write_csv() and write_json() methods.
+    Testing Export class write_csv() method.
     """
 
     def test_write_csv(self):
@@ -291,6 +290,11 @@ class TestExportWriteCSVAndWriteJSON():
             assert test_dict == overview
         
         os.remove(filename)
+
+class TestExportWriteJSONMethod():
+    """
+    Testing Export class write_json() method.
+    """
 
     def test_write_json(self):
         filename = os.path.join(sys.path[0], "test_json_writing.json")
