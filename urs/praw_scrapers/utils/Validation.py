@@ -225,7 +225,7 @@ class Validation():
                 invalid.append(post)
 
     @staticmethod
-    def check_existence(object_list, parser, reddit, scraper_type):
+    def check_existence(object_list, reddit, scraper_type):
         """
         Check whether Reddit objects are valid.
 
@@ -233,8 +233,6 @@ class Validation():
         ----------
         object_list: list
             List of Reddit objects to check
-        parser: ArgumentParser
-            argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         scraper_type: str
@@ -268,7 +266,7 @@ class Validation():
         return invalid, valid
 
     @staticmethod
-    def validate(object_list, parser, reddit, scraper_type):
+    def validate(object_list, reddit, scraper_type):
         """
         Check if Subreddit(s), Redditor(s), or submission(s) exist and catch PRAW 
         exceptions. Log invalid Reddit objects to `urs.log` if applicable.
@@ -281,8 +279,6 @@ class Validation():
         ----------
         object_list: list
             List of Reddit objects to check
-        parser: ArgumentParser
-            argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         scraper_type: str
@@ -311,7 +307,7 @@ class Validation():
         logging.info("Validating %s(s)..." % object_type)
         logging.info("")
 
-        invalid, valid = Validation.check_existence(object_list, parser, reddit, scraper_type)
+        invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
         
         check_status.succeed()
         print()

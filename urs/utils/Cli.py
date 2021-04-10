@@ -49,17 +49,16 @@ class Parser():
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-    [--rules]
+        [--rules]
+        [-y]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
-    [--raw] 
+        [--raw] 
     [-b]
 
     [-f <file_path>]
     [-wc <file_path> [<optional_export_format>]]
-    [--nosave]
-
-    [-y]
+        [--nosave]
 
     [--csv] 
 """
@@ -1009,7 +1008,7 @@ class CheckCli():
     Methods for checking CLI arguments and raising errors if they are invalid.
     """
 
-    def check_args(self, args, parser):
+    def check_args(self, args):
         """
         Check all arguments. Calls previously defined methods:
 
@@ -1027,8 +1026,6 @@ class CheckCli():
         args: Namespace
             Namespace object containing all arguments that were defined in the
             previous private methods
-        parser: ArgumentParser
-            argparse ArgumentParser object
 
         Exceptions
         ----------

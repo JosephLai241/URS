@@ -133,7 +133,6 @@ Please describe the tests that you ran to verify your changes. Provide instructi
         * Ran `test command here`.
             + If applicable, more details about the command underneath.
         * Then ran `another test command here`.
-
 ## Test Configuration
 
 **Put "N/A" in this block if this is not applicable.**
@@ -145,6 +144,12 @@ Please describe the tests that you ran to verify your changes. Provide instructi
     + Configuration 2.
         * If applicable, extra details underneath a configuration.
     + Configuration 3.
+
+Travis CI configuration:
+
+```yaml
+If any changes have been made to `.travis.yml`, paste the new configuration file here. Delete this block if not.
+```
 
 ## Dependencies
 

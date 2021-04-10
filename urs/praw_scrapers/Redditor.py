@@ -16,6 +16,7 @@ from colorama import (
 from halo import Halo
 from prawcore import PrawcoreException
 
+from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Cli import GetPRAWScrapeSettings
@@ -38,181 +39,6 @@ from urs.utils.Titles import PRAWTitles
 ### Automate sending reset sequences to turn off color changes at the end of 
 ### every print.
 init(autoreset = True)
-
-class Objectify():
-    """
-    Methods for creating Reddit objects based on metadata.
-    """
-
-    def make_subreddit(self, subreddit):
-        """
-        Make a Subreddit object.
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        subreddit: PRAW Subreddit object
-
-        Returns
-        -------
-        subreddit_object: dict
-            Dictionary containing Subreddit metadata
-        """
-
-        return {
-            "can_assign_link_flair": subreddit.can_assign_link_flair,
-            "can_assign_user_flair": subreddit.can_assign_user_flair,
-            "created_utc": convert_time(subreddit.created_utc),
-            "description": subreddit.description,
-            "description_html": subreddit.description_html,
-            "display_name": subreddit.display_name,
-            "id": subreddit.id,
-            "name": subreddit.name,
-            "nsfw": subreddit.over18,
-            "public_description": subreddit.public_description,
-            "spoilers_enabled": subreddit.spoilers_enabled,
-            "subscribers": subreddit.subscribers,
-            "user_is_banned": subreddit.user_is_banned,
-            "user_is_moderator": subreddit.user_is_moderator,
-            "user_is_subscriber": subreddit.user_is_subscriber
-        }
-
-    def make_submission(self, submission):
-        """
-        Make a submission object.
-
-        Calls a previously defined public method:
-
-            self.make_subreddit()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        submission: PRAW submission object
-
-        Returns
-        -------
-        submission_object: dict
-            Dictionary containing submission metadata
-        """
-
-        return {
-            "type": "submission",
-            "author": "u/" + submission.author.name \
-                if hasattr(submission.author, "name") \
-                else "[deleted]",
-            "created_utc": convert_time(submission.created_utc),
-            "distinguished": submission.distinguished,
-            "edited": submission.edited \
-                if submission.edited == False \
-                else convert_time(submission.edited),
-            "id": submission.id,
-            "is_original_content": submission.is_original_content,
-            "is_self": submission.is_self,
-            "link_flair_text": submission.link_flair_text,
-            "locked": submission.locked,
-            "name": submission.name,
-            "num_comments": submission.num_comments,
-            "nsfw": submission.over_18,
-            "permalink": submission.permalink,
-            "score": submission.score,
-            "selftext": submission.selftext,
-            "spoiler": submission.spoiler,
-            "stickied": submission.stickied,
-            "subreddit": self.make_subreddit(submission.subreddit),
-            "title": submission.title,
-            "upvote_ratio": submission.upvote_ratio,
-            "url": submission.url
-        }
-
-    def make_comment(self, comment):
-        """
-        Make a comment item. 
-        
-        Calls previously defined public method:
-
-            self.make_submission()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        comment: PRAW comment object
-
-        Returns
-        -------
-        redditor_item: dict
-            Dictionary containing comment metadata
-        """
-
-        return {
-            "type": "comment",
-            "body": comment.body,
-            "body_html": comment.body_html,
-            "created_utc": convert_time(comment.created_utc),
-            "distinguished": comment.distinguished,
-            "edited": comment.edited \
-                if comment.edited == False \
-                else convert_time(comment.edited),
-            "id": comment.id,
-            "is_submitter": comment.is_submitter,
-            "link_id": comment.link_id,
-            "parent_id": comment.parent_id,
-            "score": comment.score,
-            "stickied": comment.stickied,
-            "submission": self.make_submission(comment.submission),
-            "subreddit_id": comment.subreddit_id
-        }
-
-    def make_multireddit(self, multireddit):
-        """
-        Make a multireddit item.
-
-        Calls a previously defined public method:
-
-            self.make_subreddit()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        multireddit: PRAW multireddit object
-
-        Returns
-        -------
-        multireddit_object: dict
-            Dictionary containing multireddit metadata
-        """
-
-        multireddit_object = {
-            "can_edit": multireddit.can_edit,
-            "copied_from": multireddit.copied_from,
-            "created_utc": convert_time(multireddit.created_utc),
-            "description_html": multireddit.description_html,
-            "description_md": multireddit.description_md,
-            "display_name": multireddit.display_name,
-            "name": multireddit.name,
-            "nsfw": multireddit.over_18,
-            "subreddits": [],
-            "visibility": multireddit.visibility
-        }
-
-        if multireddit.subreddits:
-            for subreddit in multireddit.subreddits:
-                subreddit = self.make_subreddit(subreddit)
-                multireddit_object["subreddits"].append(subreddit) 
-
-        return multireddit_object
 
 class ProcessInteractions():
     """
@@ -285,7 +111,7 @@ class ProcessInteractions():
         """
         Extracting submission or comment attributes and appending to the skeleton.
 
-        Calls previously defined public methodss:
+        Calls public methods from an external module:
 
             Objectify().make_submission()
             Objectify().make_comment()
@@ -303,9 +129,9 @@ class ProcessInteractions():
         """
 
         for item in obj:
-            redditor_item = Objectify().make_submission(item) \
+            redditor_item = Objectify().make_submission(True, item) \
                 if isinstance(item, praw.models.Submission) \
-                else Objectify().make_comment(item)
+                else Objectify().make_comment(item, True)
 
             self._skeleton["data"]["interactions"][scrape_type].append(redditor_item)
 
@@ -404,7 +230,7 @@ class ProcessInteractions():
         """
         Get Redditor's moderated Subreddits.
 
-        Calls previously defined public methodss:
+        Calls a public method from an external module:
 
             Objectify().make_subreddit()
         """
@@ -419,7 +245,7 @@ class ProcessInteractions():
         """
         Get Redditor's multireddits.
         
-        Calls previously defined public methodss:
+        Calls a public method from an external module:
 
             Objectify().make_multireddit()
         """
@@ -444,7 +270,8 @@ class GetInteractions():
         limit: str
             String denoting n_results returned
         reddit: PRAW Reddit object
-        redditor: PRAW Redditor object
+        redditor: str
+            String denoting the Redditor name
 
         Returns
         -------
@@ -661,7 +488,7 @@ class Write():
     """
 
     @staticmethod
-    def write(args, reddit, u_master):
+    def write(reddit, u_master):
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
@@ -675,8 +502,6 @@ class Write():
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         u_master: dict
@@ -738,10 +563,10 @@ class RunRedditor():
         PRAWTitles.u_title()
 
         user_list = GetPRAWScrapeSettings().create_list(args, "redditor")
-        not_users, users = Validation.validate(user_list, parser, reddit, "redditor")
+        not_users, users = Validation.validate(user_list, reddit, "redditor")
         u_master = make_none_dict(users)
         GetPRAWScrapeSettings().get_settings(args, not_users, u_master, "redditor")
 
-        Write.write(args, reddit, u_master)
+        Write.write(reddit, u_master)
 
         return u_master

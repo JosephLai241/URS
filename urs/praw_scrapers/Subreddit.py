@@ -15,6 +15,7 @@ from colorama import (
 from halo import Halo
 from prettytable import PrettyTable
 
+from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Cli import GetPRAWScrapeSettings
@@ -46,14 +47,12 @@ class PrintConfirm():
     """
 
     @staticmethod
-    def _add_each_setting(args, pretty_subs, s_master):
+    def _add_each_setting(pretty_subs, s_master):
         """
         Add each Subreddit setting to the PrettyTable.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         pretty_subs: PrettyTable
             PrettyTable instance
         s_master: dict
@@ -79,14 +78,12 @@ class PrintConfirm():
                 ])
 
     @staticmethod
-    def print_settings(args, s_master):
+    def print_settings(s_master):
         """
         Print scraping details (PrettyTable) for each Subreddit.
 
         Parameters
         ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
         s_master: dict
             Dictionary containing all scrape settings
 
@@ -105,7 +102,7 @@ class PrintConfirm():
             "Number of results / Keywords"
         ]
 
-        PrintConfirm._add_each_setting(args, pretty_subs, s_master)
+        PrintConfirm._add_each_setting(pretty_subs, s_master)
         pretty_subs.align = "l"
 
         print(pretty_subs)
@@ -170,11 +167,19 @@ class GetExtras():
             List containing Subreddit rules
         """
 
-        rules = [rule_list for rule, rule_list in subreddit.rules().items() if rule == "rules"]
-        for rule in rules[0]:
-            rule["created_utc"] = convert_time(rule["created_utc"])
+        rules = [
+            {
+                "created_utc": convert_time(rule.created_utc),
+                "description": rule.description,
+                "kind": rule.kind,
+                "priority": rule.priority,
+                "short_name": rule.short_name,
+                "violation_reason": rule.violation_reason,
+            }
+            for rule in subreddit.rules
+        ]
         
-        return subreddit.post_requirements(), rules[0]
+        return subreddit.post_requirements(), rules
 
 class GetSubmissionsSwitch():
     """
@@ -352,55 +357,13 @@ class FormatSubmissions():
     """
 
     @staticmethod
-    def _make_submission(submission):
-        """
-        Format submission metadata.
-
-        Parameters
-        ----------
-        submission: PRAW submission object
-
-        Returns
-        -------
-        submission_dict: dict
-            Dictionary containing submission metadata
-        """
-
-        return {
-            "author": "u/" + submission.author.name \
-                if hasattr(submission.author, "name") \
-                else "[deleted]",
-            "created_utc": convert_time(submission.created_utc),
-            "distinguished": submission.distinguished,
-            "edited": submission.edited \
-                if submission.edited == False \
-                else convert_time(submission.edited),
-            "id": submission.id,
-            "is_original_content": submission.is_original_content,
-            "is_self": submission.is_self,
-            "link_flair_text": submission.link_flair_text,
-            "locked": submission.locked,
-            "name": submission.name,
-            "num_comments": submission.num_comments,
-            "nsfw": submission.over_18,
-            "permalink": submission.permalink,
-            "score": submission.score,
-            "selftext": submission.selftext,
-            "spoiler": submission.spoiler,
-            "stickied": submission.stickied,
-            "title": submission.title,
-            "upvote_ratio": submission.upvote_ratio,
-            "url": submission.url
-        }
-
-    @staticmethod
     def format_submissions(submissions):
         """
         Format submissions to dictionary structure.
 
-        Calls previously defined private method:
+        Calls a public method from an external module:
 
-            FormatSubmissionsJSON._make_submission()
+            Objectify().make_submission()
 
         Parameters
         ----------
@@ -413,7 +376,7 @@ class FormatSubmissions():
         """
 
         return [
-            FormatSubmissions._make_submission(submission) 
+            Objectify().make_submission(False, submission) 
             for submission in submissions
         ]
 
@@ -710,7 +673,7 @@ class RunSubreddit():
         """
 
         sub_list = GetPRAWScrapeSettings().create_list(args, "subreddit")
-        not_subs, subs = Validation.validate(sub_list, parser, reddit, "subreddit")
+        not_subs, subs = Validation.validate(sub_list, reddit, "subreddit")
         s_master = make_list_dict(subs)
         GetPRAWScrapeSettings().get_settings(args, not_subs, s_master, "subreddit")
 
@@ -742,7 +705,7 @@ class RunSubreddit():
         None
         """
 
-        PrintConfirm.print_settings(args, s_master)
+        PrintConfirm.print_settings(s_master)
         confirm = PrintConfirm.confirm_settings()
         if confirm == "y":
             print()

@@ -21,17 +21,16 @@ usage: $ Urs.py
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-    [--rules]
+        [--rules]
+        [-y]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
-    [--raw] 
+        [--raw] 
     [-b]
 
     [-f <file_path>]
     [-wc <file_path> [<optional_export_format>]]
-    [--nosave]
-
-    [-y]
+        [--nosave]
 
     [--csv]
 ```
@@ -148,7 +147,7 @@ Scrape speed is determined by a couple things:
 
 ### Getting Started
 
-It is very quick and easy to get Reddit API credentials. Refer to [my guide to get your credentials][How to get Reddit API Credentials for PRAW], then update the `API` dictionary located in `Credentials.py`
+It is very quick and easy to get Reddit API credentials. Refer to [my guide to get your credentials][How to get Reddit API Credentials for PRAW], then update the environment variables located in `.env`.
 
 ### Rate Limits
 
@@ -410,8 +409,6 @@ Raw scrapes do not resemble comment threads, but returns all comments on a submi
 You can export to raw format by including the `--raw` flag. `-raw` will also be appended to the end of the file name.
 
 Exported files will be saved to the `comments` directory.
-
-***NOTE:*** You cannot specify the number of raw comments returned. The program with scrape all comments from the submission. 
 
 ## Analytical Tools
 

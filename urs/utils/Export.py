@@ -351,7 +351,8 @@ class Export():
 
         Returns
         -------
-        None
+        dir_path: str
+            String denoting the directory path
         """
 
         dir_path = "../scrapes/%s/%s" % (date, scrape)

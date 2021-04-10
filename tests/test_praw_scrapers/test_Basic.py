@@ -23,10 +23,7 @@ class MakeArgs():
 
 class TestPrintSubsFindSubsMethod():
     """
-    Testing PrintSubs class _find_subs() method found on line 38 in Basic.py.
-    I am not quite sure how I can test this without exposing my personal PRAW 
-    credentials, so I am just passing these tests until I find a way around the
-    problem.
+    Testing PrintSubs class _find_subs() method.
     """
 
     def test_find_subs_only_returning_found_subreddits(self):
@@ -40,10 +37,7 @@ class TestPrintSubsFindSubsMethod():
 
 class TestPrintSubsPrintSubredditsMethod():
     """
-    Testing PrintSubs class print_subreddits() method found on line 46 in Basic.py.
-    I am not quite sure how I can test this without exposing my personal PRAW 
-    credentials, so I am just passing these tests until I find a way around the
-    problem.
+    Testing PrintSubs class print_subreddits() method.
     """
 
     def test_print_subreddits_only_printing_found_subreddits(self):
@@ -57,9 +51,7 @@ class TestPrintSubsPrintSubredditsMethod():
 
 class TestGetInputGetSubredditsMethod():
     """
-    Testing GetInput class get_subreddits() method found on line 76 in Basic.py.
-    I need to find a way to simulate user input for this function. Passing this
-    test for now.
+    Testing GetInput class get_subreddits() method.
     """
 
     def test_get_input_get_subreddits_no_input_from_user(self):
@@ -70,7 +62,7 @@ class TestGetInputGetSubredditsMethod():
 
 class TestGetInputUpdateMasterMethod():
     """
-    Testing GetInput class _update_master() method found on line 92 in Basic.py.
+    Testing GetInput class _update_master() method.
     """
 
     def test_update_master_not_search_category(self):
@@ -95,9 +87,7 @@ class TestGetInputUpdateMasterMethod():
 
 class TestGetInputGetSearchMethod():
     """
-    Testing GetInput class _get_search() method found on line 102 in Basic.py.
-    I need to find a way to simulate user input for this function. Passing this
-    test for now. 
+    Testing GetInput class _get_search() method.
     """
 
     def test_get_input_search_for_is_a_number(self):
@@ -111,9 +101,7 @@ class TestGetInputGetSearchMethod():
 
 class TestGetInputGetNResultsMethod():
     """
-    Testing GetInput class _get_n_results() method found on line 115 in Basic.py.
-    I need to find a way to simulate user input for this function. Passing this
-    test for now. 
+    Testing GetInput class _get_n_results() method.
     """
 
     def test_get_n_results_normal_input(self):
@@ -127,9 +115,7 @@ class TestGetInputGetNResultsMethod():
 
 class TestGetInputGetSettingsMethod():
     """
-    Testing GetInput class get_settings() method found on line 128 in Basic.py.
-    I need to find a way to simulate user input for this function. Passing this
-    test for now.
+    Testing GetInput class get_settings() method.
     """
 
     def test_get_settings_selected_search_option(self):
@@ -146,9 +132,7 @@ class TestGetInputGetSettingsMethod():
 
 class TestConfirmInputConfirmSubredditsMethod():
     """
-    Testing ConfirmInput class confirm_subreddits() method found on line 161 in Basic.py.
-    I need to find a way to simulate user input for this function. Passing this
-    test for now.
+    Testing ConfirmInput class confirm_subreddits() method.
     """
 
     def test_confirm_subreddits_selected_yes(self):
@@ -162,9 +146,7 @@ class TestConfirmInputConfirmSubredditsMethod():
 
 class TestConfirmInputAnotherMethod():
     """
-    Testing ConfirmInput class another() method found on line 178 in Basic.py.
-    I need to find a way to simulate user input for this function. Passing this
-    test for now.
+    Testing ConfirmInput class another() method.
     """
 
     def test_another_selected_yes(self):
@@ -178,9 +160,7 @@ class TestConfirmInputAnotherMethod():
 
 class TestRunBasicCreateSettingsMethod():
     """
-    Testing RunBasic class _create_settings() method found on line 196 in Basic.py.
-    Waiting to figure out how to test user input before testing this function.
-    Passing for now.
+    Testing RunBasic class _create_settings() method.
     """
 
     def test_create_settings(self):
@@ -188,9 +168,7 @@ class TestRunBasicCreateSettingsMethod():
 
 class TestRunBasicPrintConfirmMethod():
     """
-    Testing RunBasic class _print_confirm() method found on line 206 in Basic.py.
-    Waiting to figure out how to test user input before testing this function.
-    Passing for now.
+    Testing RunBasic class _print_confirm() method.
     """
 
     def test_print_confirm(self):

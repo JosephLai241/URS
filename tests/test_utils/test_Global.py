@@ -1,15 +1,15 @@
+"""
+Testing `Global.py`.
+"""
+
+
 import datetime as dt
 
 from urs.utils import Global
 
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
-
-### Includes a total of 9 tests.
-
 class TestGlobalVariables():
     """
-    Testing all global variables found on lines 7-37 in Global.py.
+    Testing all global variables in Global.py.
     """
 
     def test_date_variable(self):
@@ -23,9 +23,9 @@ class TestGlobalVariables():
         categories = ["Hot", "New", "Controversial", "Top", "Rising", "Search"]
         assert Global.short_cat == [cat[0] for cat in categories]
 
-class TestConvertTime():
+class TestConvertTimeFunction():
     """
-    Test convert_time() function on line 40 in Global.py.
+    Testing convert_time() function.
     """
 
     def test_convert_time(self):
@@ -34,10 +34,9 @@ class TestConvertTime():
 
         assert Global.convert_time(unix_time) == converted_time
 
-class TestMakeDictionary():
+class TestMakeListDictFunction():
     """
-    Test make_list_dict() function on line 44 and make_none_dict() function on
-    line 48 in Global.py.
+    Testing make_list_dict() function.
     """
 
     def test_make_list_dict(self):
@@ -50,6 +49,11 @@ class TestMakeDictionary():
         }
 
         assert Global.make_list_dict(item) == correct_list_dict
+
+class TestMakeNoneDictFunction():
+    """
+    Testing make_none_dict() function.
+    """
 
     def test_make_none_dict(self):
         item = [1, 2, 3, 4]
@@ -64,7 +68,7 @@ class TestMakeDictionary():
 
 class TestStatus():
     """
-    Test Status class found on line 104 in Global.py.
+    Testing Status class.
     """
 
     def test_status_init_method(self):

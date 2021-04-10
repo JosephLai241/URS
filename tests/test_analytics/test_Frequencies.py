@@ -1,11 +1,13 @@
-from urs.analytics import Frequencies
+"""
+Testing `Frequencies.py`.
+"""
 
-### Function names are pretty self-explanatory, so I will not be adding comments 
-### above the functions.
+
+from urs.analytics import Frequencies
 
 class TestSortGetDataMethod():
     """
-    Testing Sort class get_data() method found on line 39 in Frequencies.py.
+    Testing Sort class get_data() method.
     """
 
     def test_get_data_method(self):
@@ -13,8 +15,7 @@ class TestSortGetDataMethod():
 
 class TestSortNameAndCreateDirMethod():
     """
-    Testing Sort class name_and_create_dir() method found on line 44 in 
-    Frequencies.py.
+    Testing Sort class name_and_create_dir() method.
     """
 
     def test_name_and_create_dir_method(self):
@@ -22,7 +23,7 @@ class TestSortNameAndCreateDirMethod():
 
 class TestSortCreateCsvMethod():
     """
-    Testing Sort class create_csv() method found on line 55 in Frequencies.py.
+    Testing Sort class create_csv() method.
     """
 
     def test_create_csv_method(self):
@@ -38,7 +39,7 @@ class TestSortCreateCsvMethod():
     
 class TestSortCreateJsonMethod():
     """
-    Testing Sort class create_json() method found on line 68 in Frequencies.py.
+    Testing Sort class create_json() method.
     """
 
     def test_create_json_method(self):
@@ -58,18 +59,8 @@ class TestSortCreateJsonMethod():
 
 class TestExportFrequenciesExportMethod():
     """
-    Testing ExportFrequencies class export() method found on line 82 in 
-    Frequencies.py.
+    Testing ExportFrequencies class export() method.
     """
 
     def test_export_method(self):
-        pass
-
-
-class TestPrintConfirmConfirmMethod():
-    """
-    Testing PrintConfirm class confirm() method found on line 93 in Frequencies.py.
-    """
-
-    def test_confirm_method(self):
         pass

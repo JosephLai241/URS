@@ -1,13 +1,10 @@
-### Specifying language
 language: python
 
-### Test Python versions
 python:
   - 3.7
   - 3.8
   - 3.9
-  
-### Scripts to run before installation
+
 before_install:
   - python --version
   - pip install -U pip
@@ -16,14 +13,22 @@ before_install:
   - pip install -r requirements.txt
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-### Command to install dependencies
 install:
   - pip install .
 
-### Command to run tests
-script: 
+before_script:
+  - rm .env
+
+script:
   - pytest --cov=./
 
-### Push coverage report to Codecov after running tests
-after_success: 
+after_success:
   - codecov
+
+env:
+  global:
+    - secure: "ACNgPSkJcGI7NK1spo1424u7O36WJHx5qAFeTgySIpQ325C25S/5yL7RY8LnJWZ01f966KLsC/4oFSneygWXSCRjZZgvIR5JITQP8dKlqYH+Ojce5wwyvvaj6EYyrnQspxFHN2z/jzVSWJRILg8X3EULLgNphbKe/ZZSDdf7kagYVV4GZqAMaomPlZ/Ou+WrPq+YGS/KoWGPYJeiEDDDoJTgkM8U7QveOZiuJPQxRl0gz69+Z7rDlkOzJ64m3tdVoaf5+hO3Qnrig6r8avnOyyso5uWHgv2/14GK6hWy3XWug4g9vOnx2Ygs0LL0vxHuLGwPj4jOQcEntsJpnKiW8wAQOW9G2JHEDCSk7oTSKnrvqWnlgVVEqzSzJcxXk1qTU0YAqK1WhVPojETybofo4NXGyYGDjzng6boVuX/4XBUK/QHjCgFmvFnmUveXgERvkdDj3Z/muKNKjI2dKX1ZFCM0W2bsEtpCK++QlXtvaGvKerO8c42ypPrApIVJwq96dRLuCSu2z//LM9fPVSyE1z7PfF8kVAu8liz1yuk4DdwkCO+ky4OqIane5Utp4mahi4oaZle3mTAe/g6hpfmXuTmi8j97Uz7vI3pj/0ZBWJgh1JfWbNKSoVqhApx7z5PqkAcd9JRwglb88hs6OPxWJiGmFYVmjdarCyoy06E80dQ="
+    - secure: "LfG3xmDodmI1DfX6kHn9UD68e7O8RgjIFWcGLocLO6tEE4CiBCGArIkaEoz3/3JfEDKhntOsjNAvqzQLtuz3m5rio/iII3t92fryae8se8nsXAQ57pqGzCMD7zsaKD2s3WENz7RY+XxGzbNtqeRcsj8xJ2S2Bt4szAQFkWLgNE5ERAC+43bWw2qD+ALMq/WbrEh90nDoHloGSShE0BoDX7G0VqXz/ihhhs5O2cDeDWPBkxTIJMtcTEYfS+g+mYUISFdR1RV9NQig1/gmIz2KY+ud4o2zXKerRxi1GNPEfJT3Y/0T8o6EQ8G/gTSvBcRv4aIsEbXUXGpxTLp9JAnfQi3OLab/WDJFfJ4jClBkQURLga4vRhSm7q/URzt91qxkjy4ahVulXxEEnWsd6eBRuVCvs8mSJRI0j7sng9tmCCJzBeurKs0Hdabqw/Werb/FEIDN3Iuj9dSv91EYZXIfzywDmFnyAit9HcbqTmRWCu45nkkB/L4zE0BZJC8mJSkJP1HuIqRpo6j0mmwPl9DucVljbViKzMQMiFHGAFBVVdblg/UMnBJCtaybWKgTGPeq+l9jedMQ2FAIpsXG8kab95qgKBEFluuAfKWHoXNIO2pbPIGx2g41i7rxf9ASBuQkblCih9rtuc6ZEJ348cHBNNzoR1yrpIZno0z+//EyJCU="
+    - secure: "gBBMtvU6mssYisH6osvKgPMyIeAAXkUnmhM/7d6ladUopl2PgeKmqmebRIp0ReUG8QkQr2ARyxMb4FmnbZ6Zg8gmgfDnKM1dZkw7qoZ8L0NU47Jx020nVnQFPzjK0G0FEJkF+RWA40BsqtC9lZyyBVVIUX3STDYxMKJotrCHCUxPVFvHjR1Lvsi9m6FOvR5B08w76rEPWzwIEYcK7SwhGo/yH4BVqpg1B0xRMuM+ASoXHtiqsWw/TRGByOu65Iy9E7RHhxQtErA2OlRrHkYOsiyce75Jzu+HJHEW4DX/s92ZoE9kBqlYyNHod7i5gl4t7ytW+kQcxuzii5vV6aFCVXeFYGAAyI8KbVkaweHYO9iGJ1ZeT/KpkCiUAeTD/yJ97bVUodzfGqKngtp0gk9YJB9hQwaFbVG1+WqCmDC7NSwX6XmPBfrBo1HFlYSmOfvS0qxy6gwwnZMOHyyS/fjJ9/O7fQZRReyofUkzaCX6v+PnqtHwQleLysWJnLleMRRxd0Lp2esFPVd3gxP0il6kR/AcNdxFHVzIrstcj7okZMcl26fwptAuY+fNz9imRupE+nm/u6s05Zk6Chyk256O3k+ME3w5jeYwUytBmGNj8PFW1PCuwmSL7Y2aNtQX4ZdKiRIXgLodY0sg0pTA2gyPNKoju2mY5gtJYguI8sgjq7s="
+    - secure: "GKNtmoF7yuwxlRsxMIDny+hhOckhmEEabG4YT7AnqxN5LF/HeHZ3a4xeBVcEWD4qZnd+Ud/koP8l9zF5f6S3swxfOKBKHyx9sFi/RMZUJxz0R2pfZp/GezWm6yBvxgUeDZe6QKwzTzRA1f7b0iDewqtggrzR/cEm1ugeLauTQ2MiRF1X1ZveFEby2OxCKenkY0Wrl4bDcVccef5L4GTvO+9kcxPxQX+TZ33+ePv6s3eDPAE3ebHWBvqG/PLsGhVvSFHDAJG2cbdUdoDqcTlUMAqCmcVDlTXk2VaNUVFLkm0+piAFplwLNLPMcIqhgjK7WQAM4UWPIqSZI18CDWyhIiHsczO77B03AdVSyM0w4yu9dShanmm5MQ7g9x3ou4B9FDdswYDhwSK/7vytvEqEYu57qtiH/GpSEZE2MVwYK65Dsntx38gIqQpAVKEZBKf+Ex+G18eBz44GQ3BrshdfNKJkYsjkmLVIMgrLx3TPglIdLBIXk55P8unTACrxkiEKcbuEVLCDqVjTHdc0ceTRlcnjNKbWGc716BpGfYEwdO1VicNuLOxn2W2mBUXblv4vThEYpawuePwrzdmlX/w54CKIEIgltm0H/1m5tjTCzjSzoDCfO3hNqGUY+AF202ecE1bC5l2fiGyg8ybv6ig0MH5kyahPx4a/FulgxzU52pA="
+    - secure: "O00neYtvHpRRRdqoCpc3iugK5lvf9XpVx+MeffApZgyU1MP9ky8JTaSFHWQniax/M68b5erNWL9TYlRZM4gr7LR0pKFeLQTBGC7+Of8n6RMw6+p1fou4souHae++2QohFuo745nL2skYJ44w+I+Apw/w32iZZZf8YjNqsTNa6rQBq9m8iI4ye//EDVU3J7enr0otM+Jb9igm6vz6Y5sRokEJgUIi6JDc4mAqeGRimn4b3t0ZpHwX51DTCkQZvkxOmTdyriC9XWo7sP1JoRJxmi+WVBq6sKU2kwz1wR90KeJi7mHZwvnSaDEefkjcul7IrQJW/Xw6prAtUQ/O8yXcQqhun5Jp7tUbL1OLkYrW2PnAFsyPGMmPMVRn/l+R+VQsbNn85jx6G4PcniLucHwJKV3xxy+66tylhLTiFeK2EWVKV9S7kOomxQfL9ETcYzRfTLrATrPzL+TZO1T+5OBcjBN9UvWx44c6yUB4c5T2JR6E1gtCHpL8Al/qdZcahnWjyiqBbOQNKI/Xv+3mp2Q0mcd/F185hgn+XcBgj2NjbF1G2qvxnA60s7+l1teCxn7lYGoK4/j1IhnaalPPTd4kw2u/fi/agjVwsvEfL5woeZHzKx6JwLqhOoRnRHpA91zYpa1cAS0suayP90gcQeGlkhCw0Ea/DxUlnbvRjUO+0PM="
