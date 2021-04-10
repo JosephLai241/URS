@@ -9,9 +9,15 @@ import json
 import os
 import sys
 
-from urs.utils import (
-    Export, 
-    Global
+from urs.utils.Export import (
+    EncodeNode,
+    Export,
+    NameFile
+)
+from urs.utils.Global import (
+    categories,
+    date,
+    short_cat
 )
 
 class MakeArgs():
@@ -38,16 +44,16 @@ class TestNameFileCheckLenMethod():
     def test_check_len_string_is_shorter_than_50_char(self):
         test_string = "poebtcjocweeooijhyltchjarvu"
 
-        cut_string = Export.NameFile()._check_len(test_string)
+        cut_string = NameFile()._check_len(test_string)
 
         assert test_string == cut_string
 
     def test_check_len_string_is_longer_than_50_char(self):
         test_string = "fegskkxjsacxpusflfccqynqchbqdywvvjsmqmhaxyvhtipropqkzqstsxcx"
 
-        cut_string = Export.NameFile()._check_len(test_string)
+        cut_string = NameFile()._check_len(test_string)
 
-        assert test_string == "fegskkxjsacxpusflfccqynqchbqdywvvjsmqmhaxyvhtipro--"
+        assert cut_string == "fegskkxjsacxpusflfccqynqchbqdywvvjsmqmhaxyvhtipr--"
 
 class TestNameFileFixMethod():
     """
@@ -58,7 +64,7 @@ class TestNameFileFixMethod():
         name = "/t\\e?s%t*i:n|g<c@h!a#r$ac^t&e*(r)s>}{~+`="
         fixed = "_t_e_s_t_i_n_g_c_h_a_r_ac_t_e__r_s_______"
 
-        assert fixed == Export.NameFile()._fix(name)
+        assert fixed == NameFile()._fix(name)
 
 class TestNameFileRCategory():
     """
@@ -66,11 +72,11 @@ class TestNameFileRCategory():
     """
 
     def test_r_category_first_switch(self):
-        assert Export.NameFile()._r_category("H", 0) == Global.categories[5]
+        assert NameFile()._r_category("H", 0) == categories[5]
 
     def test_r_category_second_switch(self):
-        for index, category in enumerate(Global.short_cat[:5]):
-            assert Export.NameFile()._r_category(category, 1) == Global.categories[index]
+        for index, category in enumerate(short_cat[:5]):
+            assert NameFile()._r_category(category, 1) == categories[index]
 
 class TestNameFileRGetCategory():
     """
@@ -78,10 +84,10 @@ class TestNameFileRGetCategory():
     """
                 
     def test_r_get_category_subreddit_arg_returns_zero(self):
-        assert Export.NameFile()._r_get_category("S") == 0
+        assert NameFile()._r_get_category("S") == 0
 
     def test_r_get_category_subreddit_arg_returns_one(self):
-        assert Export.NameFile()._r_get_category("C") == 1
+        assert NameFile()._r_get_category("C") == 1
 
 class TestNameFileGetRawN():
     """
@@ -95,8 +101,7 @@ class TestNameFileGetRawN():
         each_sub = ["s", "test", "all"]
         sub = "askreddit"
 
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "askreddit-search-'test'"
+        assert NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == "askreddit-search-'test'"
 
     def test_get_raw_n_returns_category_filename_format_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -105,8 +110,25 @@ class TestNameFileGetRawN():
         each_sub = ["h", "1", None]
         sub = "askreddit"
 
-        assert Export.NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == \
-            "askreddit-hot-1-result"
+        assert NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == "askreddit-hot-1-result"
+
+    def test_get_raw_n_returns_returns_filter_string_with_subreddit_args(self):
+        args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
+        cat_i = "H"
+        end = "result"
+        each_sub = ["h", "1", "year"]
+        sub = "askreddit"
+
+        assert NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == "askreddit-hot-1-result-past-year"
+
+    def test_get_raw_n_returns_returns_filter_string_with_rules_included(self):
+        args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit", "--rules"])
+        cat_i = "H"
+        end = "result"
+        each_sub = ["h", "1", "year"]
+        sub = "askreddit"
+
+        assert NameFile()._get_raw_n(args, cat_i, end, each_sub, sub) == "askreddit-hot-1-result-past-year-rules"
 
 class TestNameFileRFname():
     """
@@ -119,8 +141,7 @@ class TestNameFileRFname():
         each_sub = ["s", "test", "all"]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-search-'test'"
+        assert NameFile().r_fname(args, cat_i, each_sub, sub) == "askreddit-search-'test'"
 
     def test_r_fname_returns_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -128,8 +149,7 @@ class TestNameFileRFname():
         each_sub = ["h", 5, None]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-hot-5-results"
+        assert NameFile().r_fname(args, cat_i, each_sub, sub) == "askreddit-hot-5-results"
 
     def test_r_fname_returns_non_plural_string_with_subreddit_args(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--subreddit"])
@@ -137,8 +157,7 @@ class TestNameFileRFname():
         each_sub = ["h", 1, None]
         sub = "askreddit"
 
-        assert Export.NameFile().r_fname(args, cat_i, each_sub, sub) == \
-            "askreddit-hot-1-result"
+        assert NameFile().r_fname(args, cat_i, each_sub, sub) == "askreddit-hot-1-result"
 
 class TestNameFileUFname():
     """
@@ -149,13 +168,13 @@ class TestNameFileUFname():
         limit = 2
         string = "test"
 
-        assert Export.NameFile().u_fname(limit, string) == "test-2-results"
+        assert NameFile().u_fname(limit, string) == "test-2-results"
 
     def test_u_fname_returns_non_plural_string(self):
         limit = 1
         string = "test"
 
-        assert Export.NameFile().u_fname(limit, string) == "test-1-result"
+        assert NameFile().u_fname(limit, string) == "test-1-result"
 
 class TestNameFileCFname():
     """
@@ -167,42 +186,84 @@ class TestNameFileCFname():
         limit = 2
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-2-results-raw"
+        assert NameFile().c_fname(args, limit, string) == "test-2-results-raw"
 
     def test_c_fname_returns_plural_string_with_structured_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args()
         limit = 2
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-2-results"
+        assert NameFile().c_fname(args, limit, string) == "test-2-results"
 
     def test_c_fname_returns_non_plural_string_with_raw_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
         limit = 1
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-1-result-raw"
+        assert NameFile().c_fname(args, limit, string) == "test-1-result-raw"
 
     def test_c_fname_returns_non_plural_string_with_structured_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args()
         limit = 1
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-1-result"
+        assert NameFile().c_fname(args, limit, string) == "test-1-result"
 
     def test_c_fname_returns_all_comments_with_raw_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args(["--raw"])
         limit = 0
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-all-raw"
+        assert NameFile().c_fname(args, limit, string) == "test-all-raw"
     
     def test_c_fname_returns_all_comments_with_structured_format(self):
         args = MakeArgs.parser_for_testing_export().parse_args()
         limit = 0
         string = "test"
 
-        assert Export.NameFile().c_fname(args, limit, string) == "test-all"
+        assert NameFile().c_fname(args, limit, string) == "test-all"
+
+class TestExportGetFilenameExtension():
+    """
+    Testing Export class _get_filename_extension() method.
+    """
+
+    def test_get_filename_extension_returns_subreddits_csv(self):
+        f_name = "test"
+        f_type = "csv"
+
+        assert Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.csv" % (date, f_name)
+
+    def test_get_filename_extension_returns_redditors_csv(self):
+        f_name = "test"
+        f_type = "csv"
+
+        assert Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.csv" % (date, f_name)
+
+    def test_get_filename_extension_returns_comments_csv(self):
+        f_name = "test"
+        f_type = "csv"
+
+        assert Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.csv" % (date, f_name)
+
+    def test_get_filename_extension_returns_subreddits_json(self):
+        f_name = "test"
+        f_type = "json"
+
+        assert Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.json" % (date, f_name)
+
+    def test_get_filename_extension_returns_redditors_json(self):
+        f_name = "test"
+        f_type = "json"
+
+        assert Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.json" % (date, f_name)
+
+    def test_get_filename_extension_returns_comments_json(self):
+        f_name = "test"
+        f_type = "json"
+
+        assert Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.json" % (date, f_name)
+
 
 class TestExportWriteCSVAndWriteJSON():
     """
@@ -215,9 +276,10 @@ class TestExportWriteCSVAndWriteJSON():
             "this": [1, 2],
             "is": [3, 4],
             "a": [5, 6],
-            "test": [7, 8]}
+            "test": [7, 8]
+        }
 
-        Export.Export.write_csv(overview, filename)
+        Export.write_csv(overview, filename)
 
         with open(filename, "r") as test_csv:
             reader = csv.reader(test_csv)
@@ -226,61 +288,120 @@ class TestExportWriteCSVAndWriteJSON():
                 for row_index, key in enumerate(test_dict.keys()):
                     test_dict[key].append(int(row[row_index]))
 
-        assert test_dict == overview
+            assert test_dict == overview
+        
         os.remove(filename)
 
     def test_write_json(self):
         filename = os.path.join(sys.path[0], "test_json_writing.json")
         overview = {
-            'test_1': {'this': 1, 'is': 1, 'a': 1, 'test': 1},
-            'test_2': {'this': 2, 'is': 2, 'a': 2, 'test': 2}
+            "test_1": {
+                "this": 1, 
+                "is": 1, 
+                "a": 1, 
+                "test": 1
+            },
+            "test_2": {
+                "this": 2, 
+                "is": 2, 
+                "a": 2, 
+                "test": 2
+            }
         }
 
-        Export.Export.write_json(overview, filename)
+        Export.write_json(overview, filename)
 
         with open(filename, "r") as test_json:
             test_dict = json.load(test_json)
-
-        assert test_dict == overview
+            assert test_dict == overview
+        
         os.remove(filename)
 
-class TestExportGetFilenameExtension():
+class MockNode():
     """
-    Testing Export class _get_filename_extension() method.
+    Creating a test node to test write_structured_comments() method.
     """
 
-    def test_get_filename_extension_returns_subreddits_csv(self):
-        f_name = "test"
-        f_type = "csv"
+    def __init__(self, string):
+        self.string = string
+        self.replies = []
 
-        assert Export.Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.csv" % (Global.date, f_name)
+class TestExportWriteStructuredCommentsMethod():
+    """
+    Testing Export class write_structured_comments() method.
+    """
 
-    def test_get_filename_extension_returns_redditors_csv(self):
-        f_name = "test"
-        f_type = "csv"
+    def test_write_structured_comments(self):
+        test_nodes = []
 
-        assert Export.Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.csv" % (Global.date, f_name)
+        first_node = MockNode("test one")
+        EncodeNode().encode(first_node)
+        second_node = MockNode("test two")
+        EncodeNode().encode(second_node)
+        third_node = MockNode("test three")
+        EncodeNode().encode(third_node)
 
-    def test_get_filename_extension_returns_comments_csv(self):
-        f_name = "test"
-        f_type = "csv"
+        first_node.replies.append(second_node)
+        first_node.replies[0].replies.append(third_node)
+        
+        test_nodes.append(first_node)
 
-        assert Export.Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.csv" % (Global.date, f_name)
+        Export.write_structured_comments(test_nodes, "structured_comments_test")
 
-    def test_get_filename_extension_returns_subreddits_json(self):
-        f_name = "test"
+        with open("../scrapes/%s/comments/structured_comments_test.json" % date, "r") as test_json:
+            test_dict = json.load(test_json)
+            assert test_dict == [{'string': 'test one', 'replies': [{'string': 'test two', 'replies': [{'string': 'test three', 'replies': []}]}]}]
+
+class TestExportExportMethod():
+    """
+    Testing Export class export() method.
+    """
+
+    def test_export_write_json(self):
+        data = {
+            "test_1": {
+                "this": 1, 
+                "is": 1, 
+                "a": 1, 
+                "test": 1
+            },
+            "test_2": {
+                "this": 2, 
+                "is": 2, 
+                "a": 2, 
+                "test": 2
+            }
+        }
+
+        f_name = "export_write_json_test"
         f_type = "json"
+        scrape = "subreddits"
 
-        assert Export.Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.json" % (Global.date, f_name)
+        Export.export(data, f_name, f_type, scrape)
 
-    def test_get_filename_extension_returns_redditors_json(self):
-        f_name = "test"
-        f_type = "json"
+        with open("../scrapes/%s/subreddits/export_write_json_test.json" % date, "r") as test_json:
+            test_dict = json.load(test_json)
+            assert test_dict == data
 
-        assert Export.Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.json" % (Global.date, f_name)
+    def test_export_write_csv(self):
+        data = {
+            "this": [1, 2],
+            "is": [3, 4],
+            "a": [5, 6],
+            "test": [7, 8]
+        }
 
-    def test_get_filename_extension_returns_comments_json(self):
-        f_name = "test"
-        f_type = "json"
+        f_name = "export_write_csv_test"
+        f_type = "csv"
+        scrape = "subreddits"
 
-        assert Export.Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.json" % (Global.date, f_name)
+        Export.export(data, f_name, f_type, scrape)
+
+        with open("../scrapes/%s/subreddits/export_write_csv_test.csv" % date, "r") as test_csv:
+            reader = csv.reader(test_csv)
+            test_dict = dict((header, []) for header in next(reader))
+            for row in reader:
+                for row_index, key in enumerate(test_dict.keys()):
+                    test_dict[key].append(int(row[row_index]))
+
+            assert test_dict == data
