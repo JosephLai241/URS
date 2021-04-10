@@ -7,7 +7,7 @@ from urs.analytics.utils import PrepData
 
 class TestGetPathGetScrapeTypeMethod():
     """
-    Testing GetPath class get_scrape_type() method found on line 17 in PrepData.py.
+    Testing GetPath class get_scrape_type() method.
     """
 
     def test_get_scrape_type_method_valid_filepath(self):
@@ -35,7 +35,7 @@ class TestGetPathGetScrapeTypeMethod():
 
 class TestGetPathNameFileMethod():
     """
-    Testing GetPath class name_file() method found on line 22 in PrepData.py.
+    Testing GetPath class name_file() method.
     """
 
     def test_name_file_method(self):
@@ -50,7 +50,7 @@ class TestGetPathNameFileMethod():
 
 class TestExtractExtractMethod():
     """
-    Testing Extract class extract() method found on line 41 in PrepData.py.
+    Testing Extract class extract() method.
     """
 
     def test_extract_method(self):
@@ -58,7 +58,7 @@ class TestExtractExtractMethod():
 
 class TestCleanDataRemoveExtrasMethod():
     """
-    Testing CleanData class _remove_extras() method found on line 52 in PrepData.py.
+    Testing CleanData class _remove_extras() method.
     """
 
     def test_remove_extras_method(self):
@@ -68,7 +68,7 @@ class TestCleanDataRemoveExtrasMethod():
 
 class TestCleanDataCountWordsMethod():
     """
-    Testing CleanData class count_words() method found on line 64 in PrepData.py.
+    Testing CleanData class count_words() method.
     """
 
     def test_count_words_method(self):
@@ -84,7 +84,7 @@ class TestCleanDataCountWordsMethod():
 
 class TestPrepSubredditPrepSubredditMethod():
     """
-    Testing PrepSubreddit class prep_subreddit() method found on line 83 in PrepData.py.
+    Testing PrepSubreddit class prep_subreddit() method.
     """
 
     def test_prep_subreddit_method(self):
@@ -105,7 +105,7 @@ class TestPrepSubredditPrepSubredditMethod():
 
 class TestPrepRedditorPrepRedditorMethod():
     """
-    Testing PrepRedditor class prep_redditor() method found on line 99 in PrepData.py.
+    Testing PrepRedditor class prep_redditor() method.
     """
 
     def test_prep_redditor_method(self):
@@ -139,7 +139,7 @@ class TestPrepRedditorPrepRedditorMethod():
 
 class TestPrepCommentsPrepCommentsMethod():
     """
-    Testing PrepComments class prep_comments() method found on line 142 in PrepData.py.
+    Testing PrepComments class prep_comments() method.
     """
 
     def test_prep_comments_method_prep_raw_comments(self):
