@@ -25,6 +25,7 @@ from urs.utils.Export import (
 )
 from urs.utils.Global import (
     categories,
+    confirm_settings,
     convert_time,
     make_list_dict,
     short_cat,
@@ -106,44 +107,6 @@ class PrintConfirm():
         pretty_subs.align = "l"
 
         print(pretty_subs)
-
-    @staticmethod
-    def confirm_settings():
-        """
-        Confirm scraping options.
-
-        Parameters
-        ----------
-        None
-
-        Exceptions
-        ----------
-        ValueError:
-            Raised if the confirmation input is invalid
-
-        Returns
-        -------
-        confirm: str
-            String denoting whether to confirm settings and continue Subreddit scraping
-        """
-
-        options = [
-            "y", 
-            "n"
-        ]
-
-        while True:
-            try:
-                confirm = input("\nConfirm options? [Y/N] ").strip().lower()
-
-                if confirm == options[0]:
-                    return confirm
-                elif confirm == options[1]:
-                    break
-                elif confirm not in options:
-                    raise ValueError
-            except ValueError:
-                print("Not an option! Try again.")
 
 class GetExtras():
     """
@@ -688,7 +651,7 @@ class RunSubreddit():
         Calls previously defined public methods:
 
             GetSortWrite.gsw(args, reddit, s_master)
-            PrintConfirm.confirm_settings()
+            Global.confirm_settings()
             PrintConfirm.print_settings()
 
         Parameters
@@ -706,7 +669,7 @@ class RunSubreddit():
         """
 
         PrintConfirm.print_settings(s_master)
-        confirm = PrintConfirm.confirm_settings()
+        confirm = confirm_settings()
         if confirm == "y":
             print()
             GetSortWrite.gsw(args, reddit, s_master)
