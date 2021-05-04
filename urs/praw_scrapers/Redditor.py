@@ -26,8 +26,7 @@ from urs.utils.Export import (
 )
 from urs.utils.Global import (
     convert_time,
-    make_none_dict,
-    Status
+    make_none_dict
 )
 from urs.utils.Logger import (
     LogError,
