@@ -10,10 +10,13 @@ import logging
 from urs.analytics.Frequencies import GenerateFrequencies
 from urs.analytics.Wordcloud import GenerateWordcloud
 
-from urs.praw_scrapers.Basic import RunBasic
-from urs.praw_scrapers.Comments import RunComments
-from urs.praw_scrapers.Redditor import RunRedditor
-from urs.praw_scrapers.Subreddit import RunSubreddit
+from urs.praw_scrapers.live_scrapers.Livestream import Livestream
+
+from urs.praw_scrapers.static_scrapers.Basic import RunBasic
+from urs.praw_scrapers.static_scrapers.Comments import RunComments
+from urs.praw_scrapers.static_scrapers.Redditor import RunRedditor
+from urs.praw_scrapers.static_scrapers.Subreddit import RunSubreddit
+
 from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.pushshift_scrapers.SearchSubmissions import SearchSubmissions
@@ -132,6 +135,14 @@ class Run():
             elif self._args.basic:
                 RunBasic.run(self._args, self._parser, self._reddit)
 
+        elif self._args.live_subreddit or self._args.live_redditor:
+            """
+            Run PRAW livestream scrapers.
+            """
+
+            Validation.validate_user(self._parser, self._reddit)
+            Livestream.stream(self._args, self._reddit)
+        
         elif self._args.search_comments or self._args.search_submissions:
             """
             Run Pushshift scrapers.
