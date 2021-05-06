@@ -14,7 +14,7 @@ from colorama import (
 )
 from halo import Halo
 
-from urs.praw_scrapers.Subreddit import (
+from urs.praw_scrapers.static_scrapers.Subreddit import (
     GetSortWrite,
     PrintConfirm
 )
@@ -22,6 +22,7 @@ from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Global import (
     categories,
+    confirm_settings,
     make_list_dict,
     short_cat
 )
@@ -404,8 +405,8 @@ class RunBasic():
 
         Calls previously defined public methods:
 
-            PrintConfirm().confirm_settings()
             PrintConfirm().print_settings()
+            Global().confirm_settings()
 
         Parameters
         ----------
@@ -421,7 +422,7 @@ class RunBasic():
         """
 
         PrintConfirm.print_settings(master)
-        return PrintConfirm().confirm_settings()
+        return confirm_settings()
 
     @staticmethod
     @LogExport.log_export
