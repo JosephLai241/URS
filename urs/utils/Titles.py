@@ -97,6 +97,38 @@ class PRAWTitles():
     \/___/... Only scrapes Subreddits. 
 """)
 
+    @staticmethod
+    def lr_title():
+        """
+        Print Subreddit livestream title.
+        """
+
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ ___            
+/\_ \           
+\//\ \    _ __ ⏺️  
+  \ \ \  /\`'__\
+   \_\ \_\ \ \/ 
+   /\____\\ \_\ 
+   \/____/ \/_/
+""")
+
+    @staticmethod
+    def lu_title():
+        """
+        Print Redditor livestream title.
+        """
+
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ ___              
+/\_ \             
+\//\ \    __  __⏺️  
+  \ \ \  /\ \/\ \ 
+   \_\ \_\ \ \_\ \
+   /\____\\ \____/
+   \/____/ \/___/ 
+""")
+
 class PushshiftTitles():
     """
     Methods for printing Pushshift scraper titles.
