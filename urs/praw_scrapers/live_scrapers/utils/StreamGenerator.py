@@ -32,13 +32,13 @@ class StreamGenerator():
         reddit_object: 
         """
 
-        if object_type == "submissions":
+        if object_type == "submission":
             for submission in stream.submissions(skip_existing = True):
                 yield Objectify().make_submission(False, submission)
 
-        elif object_type == "comments":
-            for obj in stream.comments(skip_existing = True):
-                print(type(obj))
+        elif object_type == "comment":
+            for comment in stream.comments(skip_existing = True):
+                yield Objectify().make_comment(comment, True)
         
     @staticmethod
     def dual_stream(stream):
@@ -54,5 +54,13 @@ class StreamGenerator():
         reddit_objects:
         """
 
-        for comment, submission in zip(stream.comments(), stream.submissions()):
-            print("%s ---- %s" % (type(comment), type(submission)))
+        for comment, submission in zip(stream.comments(skip_existing = True), stream.submissions(skip_existing = True)):
+            yield {
+                "obj": Objectify().make_submission(False, submission), 
+                "object_type": "submission"
+            }
+
+            yield {
+                "obj": Objectify().make_comment(comment, True), 
+                "object_type": "comment"
+            }
