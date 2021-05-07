@@ -46,10 +46,10 @@ class Livestream():
         if args.only_submissions or args.only_comments:
             if args.only_submissions:
                 Halo().info(Fore.WHITE + Style.BRIGHT + "Only displaying submissions.")
-                object_type = "submissions"
+                object_type = "submission"
             elif args.only_comments:
                 Halo().info(Fore.WHITE + Style.BRIGHT + "Only displaying comments.")
-                object_type = "comments"
+                object_type = "comment"
 
             print()
 
@@ -59,7 +59,8 @@ class Livestream():
             Halo().info(Fore.WHITE + Style.BRIGHT + "Displaying comments and submissions.")
             print()
 
-            StreamGenerator.dual_stream(reddit_object.stream)
+            for obj in StreamGenerator.dual_stream(reddit_object.stream):
+                DisplayStream.display(obj["obj"], obj["object_type"])
 
     @staticmethod
     def stream(args, reddit):
