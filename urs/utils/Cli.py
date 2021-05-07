@@ -50,20 +50,55 @@ class Parser():
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
         [--rules]
-        [-y]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
         [--raw] 
     [-b]
 
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--only-submissions]
+        [--only-comments]
+
+    [-ltrs <subreddit>]
+
+    [-sc <keywords>]
+    [-ss <keywords>]
+        [--contest-mode <(true|false)>]
+        [--is-video <(true|false)>]
+        [--locked <(true|false)>]
+        [--nsfw <(true|false)>]
+        [--num-comments <integer_or_greater_or_less_than_integer>]
+        [--score <integer_or_greater_or_less_than_integer>]
+        [--selftext <keywords_or_!keywords>]
+        [--spoiler <(true|false)>]
+        [--stickied <(true|false)>]
+        [--title <(true|false)>]
+
+        [--after <epoch_value_or_integer>]
+        [--aggs <(author,link_id,created_utc,subreddit)>]
+        [--author <redditor>]
+        [--before <epoch_value_or_integer>]
+        [--fields <string_or_comma-delimited_string>]
+        [--frequency <(second|minute|hour|day)>]
+        [--ids <base36_id_or_comma-delimited_base36_ids>]
+        [--metadata]
+        [--size <integer_less_than_or_equal_500>]
+        [--sort <(asc|desc)>]
+        [--sort-type <(created_utc|num_comments|score)>]
+        [--in-subreddit <subreddit>]
+
     [-f <file_path>]
     [-wc <file_path> [<optional_export_format>]]
         [--nosave]
 
-    [--csv] 
+    [--csv]
+
+    [-y] 
 """
         self._description = r"""
-Universal Reddit Scraper v3.2.1 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v3.3.0 - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
@@ -108,13 +143,12 @@ wordcloud export options:
 Arguments:
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-    [--rules]
+        [--rules]
+        [-y]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
-    [--raw] 
+        [--raw] 
     [-b]
-
-    [-y]
 
     [--csv]
 
@@ -175,6 +209,72 @@ SUBMISSION COMMENTS
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 25 --raw
         
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --raw
+
+[PRAW LIVESTREAM SCRAPING]
+
+Arguments:
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+    [-ltrs <subreddit>]
+
+    Optional Parameters for livestreaming Subreddits or Redditors (only for `-lr` and `-lu`):
+
+        [--only-submissions]
+        [--only-comments]
+
+LIVE SUBREDDIT STREAM
+
+LIVE REDDITOR STREAM
+
+
+
+
+
+[PUSHSHIFT SCRAPING]
+
+Arguments:
+
+    [-sc <keywords>]
+    [-ss <keywords_or_!keywords>]
+
+    [-y]
+
+    Optional Parameters (for both comment and submission search):
+
+        [--after <epoch_value_or_integer>]
+        [--aggs <(author,link_id,created_utc,subreddit)>]
+        [--author <redditor>]
+        [--before <epoch_value_or_integer>]
+        [--fields <string_or_comma-delimited_string>]
+        [--frequency <(second|minute|hour|day)>]
+        [--ids <base36_id_or_comma-delimited_base36_ids>]
+        [--metadata]
+        [--size <integer_less_than_or_equal_500>]
+        [--sort <(asc|desc)>]
+        [--sort-type <(created_utc|num_comments|score)>]
+        [--in-subreddit <subreddit>]
+
+    Optional Submission Scraping Parameters (only for `-ss`):
+
+        [--contest-mode <(true|false)>]
+        [--is-video <(true|false)>]
+        [--locked <(true|false)>]
+        [--nsfw <(true|false)>]
+        [--num-comments <integer_or_greater_or_less_than_integer>]
+        [--score <integer_or_greater_or_less_than_integer>]
+        [--selftext <keywords_or_!keywords>]
+        [--spoiler <(true|false)>]
+        [--stickied <(true|false)>]
+        [--title <(true|false)>]
+
+All scrape results are exported to JSON by default.
+
+SEARCH COMMENTS
+
+SEARCH SUBMISSIONS
+
+
 
 [ANALYTICAL TOOLS]
 
@@ -324,7 +424,7 @@ DISPLAY INSTEAD OF SAVING
         praw_flags.add_argument(
             "-b", "--basic", 
             action = "store_true", 
-            help = "initialize non-CLI Subreddit scraper"
+            help = "initialize interactive Subreddit scraper"
         )
     
     def _add_praw_subreddit_options(self, parser):
@@ -373,6 +473,256 @@ DISPLAY INSTEAD OF SAVING
             help = "return comments in raw format instead (default is structured)"
         )
 
+    def _add_praw_livestream_flags(self, parser):
+        """
+        Add PRAW livestream scraper flags.
+
+            -lr: live Subreddit scraping
+            -lu: live Redditor scraping
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        livestream_flags = parser.add_argument_group("PRAW livestream scraping")
+        livestream_flags.add_argument(
+            "-lr", "--live-subreddit",
+            help = "specify Subreddit to livestream",
+            metavar = "<subreddit>"
+        )
+        livestream_flags.add_argument(
+            "-lu", "--live-redditor",
+            help = "specify Redditor to livestream",
+            metavar = "<redditor>"
+        )
+        livestream_flags.add_argument(
+            "-ltrs", "--live-trends-subreddit-submissions",
+            help = "livestream trending submissions within a Subreddit",
+            metavar = "<subreddit>"
+        )
+
+    def _add_praw_livestream_options(self, parser):
+        """
+        Add PRAW livestream options:
+
+            --only-submissions: exclude comments from livestream
+            --only-comments: exclude submissions from livestream
+        """
+
+        livestream_options = parser.add_argument_group("additional PRAW livestream scraping options")
+        livestream_options.add_argument(
+            "--only-submissions",
+            action = "store_true",
+            help = "exclude comments from livestream"
+        )
+        livestream_options.add_argument(
+            "--only-comments",
+            action = "store_true",
+            help = "exclude submissions from livestream"
+        )
+
+    def _add_pushshift_scraper_flags(self, parser):
+        """
+        Add Pushshift scraper flags:
+
+            -sc: search for keywords in all publicly available comments on Reddit
+            -ss: search for or exclude keywords from all publicly available submissions on Reddit
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        pushshift_flags = parser.add_argument_group("Pushshift scraping")
+        pushshift_flags.add_argument(
+            "-sc", "--search-comments",
+            help = "search for keywords in all publicly available comments on Reddit",
+            metavar = "<keywords>",
+        )
+        pushshift_flags.add_argument(
+            "-ss", "--search-submissions",
+            help = "search for or exclude keywords from all publicly available submissions on Reddit",
+            metavar = "<keywords_or_!keywords>",
+        )
+
+    def _add_pushshift_global_parameters(self, parser):
+        """
+        Add additional Pushshift scraping parameters for searching comments or
+        submissions:
+
+            --after: return results after this date
+            --aggs: return aggregation summary
+            --author: restrict results to a specific author
+            --before: return results before this date
+            --fields: return specific fields (all fields returned by default)
+            --frequency: used with the `--aggs` parameter when set to `created_utc`
+            --ids: get specific comments or submissions based on their base36 ID
+            --metadata: include metadata about the query
+            --size: number of results to return (default is 25 results)
+            --sort: sort results in a specific order (default is `desc`)
+            --sort-type: sort by a specific attribute (default is `created_utc`)
+            --in-subreddit: restrict to a specific Subreddit
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        pushshift_global_params = parser.add_argument_group("additional Pushshift parameters (for both comment and submission search)")
+        pushshift_global_params.add_argument(
+            "--after",
+            help = "return results after this date",
+            metavar = "<epoch_value_or_integer>",
+        )
+        pushshift_global_params.add_argument(
+            "--aggs",
+            help = "return aggregation summary",
+            metavar = "<(author,link_id,created_utc,subreddit)>",
+        )
+        pushshift_global_params.add_argument(
+            "--author",
+            help = "restrict results to a specific author",
+            metavar = "<redditor>",
+        )
+        pushshift_global_params.add_argument(
+            "--before",
+            help = "return results before this date",
+            metavar = "<epoch_value_or_integer>",
+        )
+        pushshift_global_params.add_argument(
+            "--fields",
+            help = "return specific fields (all fields returned by default)",
+            metavar = "<string_or_comma-delimited_string>",
+        )
+        pushshift_global_params.add_argument(
+            "--frequency",
+            help = "used with the `--aggs` parameter when set to `created_utc`",
+            metavar = "<(second|minute|hour|day)>",
+        )
+        pushshift_global_params.add_argument(
+            "--ids",
+            help = "get specific comments or submissions based on their base36 ID",
+            metavar = "<base36_id_or_comma-delimited_base36_ids>",
+        )
+        pushshift_global_params.add_argument(
+            "--metadata",
+            action = "store_true",
+            help = "include metadata about the query",
+        )
+        pushshift_global_params.add_argument(
+            "--size",
+            help = "number of results to return (default is 25 results)",
+            metavar = "<integer_less_than_or_equal_500>",
+        )
+        pushshift_global_params.add_argument(
+            "--sort",
+            help = "sort results in a specific order (default is `desc`)",
+            metavar = "<(asc|desc)>",
+        )
+        pushshift_global_params.add_argument(
+            "--sort-type",
+            help = "sort by a specific attribute (default is `created_utc`)",
+            metavar = "<(created_utc|num_comments|score)>",
+        )
+        pushshift_global_params.add_argument(
+            "--in-subreddit",
+            help = "restrict to a specific Subreddit",
+            metavar = "<subreddit>",
+        )
+
+    def _add_pushshift_submission_parameters(self, parser):
+        """
+        Add additional Pushshift submission scraping parameters:
+
+            --contest-mode: exclude or include content mode submissions (both included by default)
+            --is-video: restrict to video content (included by default)
+            --locked: return locked or unlocked threads only (both included by default)
+            --nsfw: restrict to nsfw or sfw content (both included by default)
+            --num-comments: restrict results based on number of comments
+            --score: restrict results based on score
+            --selftext: search for or exclude keywords within the selftext field only
+            --spoiler: exclude or include spoilers only (both included by default)
+            --stickied: return stickied or unstickied content only (both included by default)
+            --title: search for or exclude keywords within the title field only
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        pushshift_submission_params = parser.add_argument_group("additional Pushshift submission search parameters")
+        pushshift_submission_params.add_argument(
+            "--contest-mode",
+            help = "exclude or include content mode submissions (both included by default)",
+            metavar = "<(true|false)>"
+        )
+        pushshift_submission_params.add_argument(
+            "--is-video",
+            help = "restrict to video content (included by default)",
+            metavar = "<(true|false)>"
+        )
+        pushshift_submission_params.add_argument(
+            "--locked",
+            help = "return locked or unlocked threads only (both included by default)",
+            metavar = "<(true|false)>"
+        )
+        pushshift_submission_params.add_argument(
+            "--nsfw",
+            help = "restrict to nsfw or sfw content (both included by default)",
+            metavar = "<(true|false)>"
+        )
+        pushshift_submission_params.add_argument(
+            "--num-comments",
+            help = "restrict results based on number of comments",
+            metavar = "<integer_or_greater_or_less_than_integer>",
+        )
+        pushshift_submission_params.add_argument(
+            "--score",
+            help = "restrict results based on score",
+            metavar = "<integer_or_greater_or_less_than_integer>"
+        )
+        pushshift_submission_params.add_argument(
+            "--selftext",
+            help = "search for or exclude keywords within the selftext field only",
+            metavar = "<keywords_or_!keywords>"
+        )
+        pushshift_submission_params.add_argument(
+            "--spoiler",
+            help = "exclude or include spoilers only (both included by default)",
+            metavar = "<(true|false)>"
+        )
+        pushshift_submission_params.add_argument(
+            "--stickied",
+            help = "return stickied or unstickied content only (both included by default)",
+            metavar = "<(true|false)>"
+        )
+        pushshift_submission_params.add_argument(
+            "--title",
+            help = "search for or exclude keywords within the title field only",
+            metavar = "<(true|false)>"
+        )
+
     def _add_analytics(self, parser):
         """
         Add flags for analytical tools:
@@ -416,7 +766,7 @@ DISPLAY INSTEAD OF SAVING
         """
         Add skip confirmation flags:
 
-            -y: skip options confirmation and scrape immediately
+            -y: skip settings confirmation and scrape immediately
 
         Parameters
         ----------
@@ -432,7 +782,7 @@ DISPLAY INSTEAD OF SAVING
         skip_flags.add_argument(
             "-y", 
             action = "store_true", 
-            help = "skip Subreddit settings confirmation and scrape immediately"
+            help = "skip settings confirmation and scrape immediately"
         )
 
     def _add_export(self, parser):
@@ -495,10 +845,20 @@ DISPLAY INSTEAD OF SAVING
 
         self._add_examples_flag(parser)
         self._add_rate_limit_check_flag(parser)
+
         self._add_praw_scraper_flags(parser)
         self._add_praw_subreddit_options(parser)
         self._add_praw_comments_options(parser)
+
+        self._add_praw_livestream_flags(parser)
+        self._add_praw_livestream_options(parser)
+
+        self._add_pushshift_scraper_flags(parser)
+        self._add_pushshift_global_parameters(parser)
+        self._add_pushshift_submission_parameters(parser)
+
         self._add_analytics(parser)
+
         self._add_skip(parser)
         self._add_export(parser)
 
@@ -882,6 +1242,34 @@ class CheckPRAWCli():
             if any(char.isalpha() for char in submission[1]) \
             or self._illegal_chars.search(submission[1]) != None:
                 raise ValueError
+
+class CheckPushshiftCli():
+    """
+    Methods for checking CLI arguments for Pushshift scrapers and raising errors
+    if they are invalid.
+    """
+
+    @staticmethod
+    def _check_dates(date):
+        """
+        Check date parameters.
+
+        Parameters
+        ----------
+        date: str
+            String denoting the time frame scrape parameter
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if an invalid date is provided
+
+        Returns
+        -------
+        None
+        """
+
+        pass
 
 class CheckAnalyticCli():
     """
