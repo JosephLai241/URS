@@ -1,5 +1,15 @@
 # The Forest
 
+## Table of Contents
+
+* [Introduction](#introduction)
+    + [Motivation](#motivation)
+    + [Inspiration](#inspiration)
+* [How the Forest Works](#how-the-forest-works)
+    + [The `CommentNode`](#the-commentnode)
+    + [The `Forest`](#the-forest-1)
+    + [Serializing the `Forest`](#serializing-the-forest)
+
 ## Introduction
 
 ### Motivation
@@ -144,7 +154,7 @@ I implemented the [depth-first search][Depth-First Search] algorithm to find a c
 
 Within the `seed` method, I first check if the `CommentNode` is a top level comment by comparing its parent ID to the submission ID. Depth-first search is triggered if the `CommentNode` is not a top level comment.
 
-### Serializing the Forest
+### Serializing the `Forest`
 
 Since Python's built-in JSON module can only handle primitive types that have a direct JSON equivalent, a custom encoder is necessary to convert the `Forest` into JSON format. I defined this in `Export.py`.
 
