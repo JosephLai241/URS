@@ -14,11 +14,13 @@ from setuptools import (
     setup
 )
 
+from urs.Version import __version__
+
 with open("README.md", "r") as readme:
     LONG_DESCRIPTION = readme.read()
 
 NAME = "URS"
-VERSION = "3.3.0"
+VERSION = __version__
 AUTHOR = "Joseph Lai"
 EMAIL = "urs_project@protonmail.com"
 URL = "https://www.github.com/JosephLai241/URS"
