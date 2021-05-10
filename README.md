@@ -17,28 +17,65 @@ usage: $ Urs.py
      
     [-h]
     [-e]
+    [-v]
 
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
         [--rules]
-        [-y]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
         [--raw] 
     [-b]
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--only-submissions]
+        [--only-comments]
+
+    [-ltrs <subreddit>]
+
+    [-sc <keywords>]
+    [-ss <keywords>]
+        [--contest-mode <(true|false)>]
+        [--is-video <(true|false)>]
+        [--locked <(true|false)>]
+        [--nsfw <(true|false)>]
+        [--num-comments <integer_or_greater_or_less_than_integer>]
+        [--score <integer_or_greater_or_less_than_integer>]
+        [--selftext <keywords_or_!keywords>]
+        [--spoiler <(true|false)>]
+        [--stickied <(true|false)>]
+        [--title <(true|false)>]
+
+        [--after <epoch_value_or_integer>]
+        [--aggs <(author,link_id,created_utc,subreddit)>]
+        [--author <redditor>]
+        [--before <epoch_value_or_integer>]
+        [--fields <string_or_comma-delimited_string>]
+        [--frequency <(second|minute|hour|day)>]
+        [--ids <base36_id_or_comma-delimited_base36_ids>]
+        [--metadata]
+        [--size <integer_less_than_or_equal_500>]
+        [--sort <(asc|desc)>]
+        [--sort-type <(created_utc|num_comments|score)>]
+        [--in-subreddit <subreddit>]
 
     [-f <file_path>]
     [-wc <file_path> [<optional_export_format>]]
         [--nosave]
 
     [--csv]
+
+    [-y]
 ```
 
 # Table of Contents
 
 * [Contact](#contact)
 * [Introduction](#introduction)
+* [Installation](#installation)
 * [URS Overview](#urs-overview)
     + [Export File Format](#export-file-format)
     + [Export Directory Structure](#export-directory-structure)
@@ -50,6 +87,12 @@ usage: $ Urs.py
         * [Subreddits](#subreddits)
         * [Redditors](#redditors)
         * [Submission Comments](#submission-comments)
+    + [Livestreaming Reddit via PRAW](#livestreaming-reddit-via-praw)
+        * [Livestreaming Subreddits and Redditors](#livestreaming-subreddits-and-redditors)
+        * [Livestreaming Trending Submissions Within Subreddits](#livestreaming-trending-submissions-within-subreddits)
+    + [Scraping Reddit via the Pushshift API](#scraping-reddit-via-the-pushshift-api)
+        * [Searching for Keywords in All Publicly Available Submissions](#searching-for-keywords-in-all-publicly-available-submissions)
+        * [Searching for Keywords in All Publicly Available Comments](#searching-for-keywords-in-all-publicly-available-comments)
     + [Analytical Tools](#analytical-tools)
         * [Target Fields](#target-fields)
         * [File Names](#file-names)
@@ -89,6 +132,13 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
     + Scrape Subreddits
     + Scrape Redditors
     + Scrape submission comments
+* Livestream Reddit via PRAW
+    + Livestream submissions submitted within Subreddits or by Redditors
+    + Livestream comments submitted within Subreddits or by Redditors
+    + Livestream trending submissions within Subreddits
+* Scrape Reddit via the [`Pushshift API`][Pushshift API]
+    + Search for keywords in all publicly available submissions
+    + Search for keywords in all publicly available comments
 * Analytical tools for scraped data
     + Get frequencies for words that are found in submission titles, bodies, and/or comments
     + Generate a wordcloud from scrape results
@@ -551,6 +601,9 @@ This is a showcase for projects that are built on top of URS!
 [Github Actions - Pytest]: https://github.com/JosephLai241/URS/actions?query=workflow%3APytest 
 <!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][Github Actions - Pytest] -->
 [URS Project Email]: mailto:urs_project@protonmail.
+
+<!-- PUSHSHIFT API LINKS -->
+[Pushshift API]: https://github.com/pushshift/api
 
 <!-- DEMO GIFS: Links to demo GIFS -->
 [Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Subreddit_demo.gif
