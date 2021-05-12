@@ -19,7 +19,7 @@ from urs.Version import __version__
 with open("README.md", "r") as readme:
     LONG_DESCRIPTION = readme.read()
 
-NAME = "URS"
+NAME = "urs"
 VERSION = __version__
 AUTHOR = "Joseph Lai"
 EMAIL = "urs_project@protonmail.com"
