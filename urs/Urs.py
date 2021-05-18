@@ -8,13 +8,19 @@ URS, an acronym for "Universal Reddit Scraper", is a comprehensive Reddit scrapi
 command-line tool written in Python.
 
 * Scrape Reddit via PRAW (the official Python Reddit API Wrapper)
-    * Scrape Subreddits
-    * Scrape Redditors
-    * Scrape submission comments
+    + Scrape Subreddits
+    + Scrape Redditors
+    + Scrape submission comments
+* Livestream Reddit via PRAW
+    + Livestream comments or submissions submitted within Subreddits
+    + Livestream comments or submissions submitted by Redditors
+    + Livestream trending submissions within Subreddits
+* Scrape Reddit via the Pushshift API
+    + Search for keywords in all publicly available submissions
+    + Search for keywords in all publicly available comments
 * Analytical tools for scraped data
-    * Generate word frequencies for words that are found in submission titles,
-        bodies, and/or comments
-    * Generate a wordcloud from scrape results
+    + Get frequencies for words that are found in submission titles, bodies, and/or comments
+    + Generate a wordcloud from scrape results
 
 @author: Joseph Lai
 @contact: urs_project@protonmail.com
