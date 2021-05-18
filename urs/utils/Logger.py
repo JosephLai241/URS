@@ -122,7 +122,7 @@ class LogError():
                 args, parser = function(self)
                 return args, parser
             except SystemExit:
-                logging.info("HELP WAS DISPLAYED.\n")
+                logging.info("HELP OR VERSION WAS DISPLAYED.\n")
                 quit()
         
         return wrapper
