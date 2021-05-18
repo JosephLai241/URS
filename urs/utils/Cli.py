@@ -8,12 +8,17 @@ Methods defining the command-line interface for this program.
 import argparse
 import re
 import sys
+import time
 
 from colorama import (
     init, 
     Fore, 
     Style
 )
+
+from urs.Version import __version__
+
+from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Global import short_cat
 from urs.utils.Logger import LogError
@@ -45,6 +50,7 @@ class Parser():
      
     [-h]
     [-e]
+    [-v]
 
     [--check]
 
@@ -58,8 +64,7 @@ class Parser():
     [-lr <subreddit>]
     [-lu <redditor>]
 
-        [--only-submissions]
-        [--only-comments]
+        [--stream-submissions]
 
     [-ltrs <subreddit>]
 
@@ -98,11 +103,11 @@ class Parser():
     [-y] 
 """
         self._description = r"""
-Universal Reddit Scraper v3.3.0 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v{} - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
-"""
+""".format(__version__)
         self._epilog = r"""
 [PRAW SUBREDDIT SCRAPING]
 
@@ -218,18 +223,47 @@ Arguments:
     [-lu <redditor>]
     [-ltrs <subreddit>]
 
-    Optional Parameters for livestreaming Subreddits or Redditors (only for `-lr` and `-lu`):
+    Optional settings for livestreaming Subreddits or Redditors (only for `-lr` and `-lu`):
 
-        [--only-submissions]
-        [--only-comments]
+        [--stream-submissions]
+
+    Optional settings for all livestream functionality:
+
+        [--nosave]
 
 LIVE SUBREDDIT STREAM
 
+    Livestream comments created in r/AskReddit. Writes livestream results to a JSON file:
+
+        $ ./Urs.py -lr askreddit
+
+    Or livestream submissions created in r/AskReddit:
+
+        $ ./Urs.py -lr askreddit --stream-submissions
+
+    If you do not want to save livestream results to file, include the `--nosave` flag:
+
+        $ ./Urs.py -lr askreddit --stream-submissions --nosave
+
 LIVE REDDITOR STREAM
 
+    Livestream comments by u/spez. Writes livestream results to a JSON file:
 
+        $ ./Urs.py -lu spez
 
+    Or livestream submissions by u/spez:
 
+        $ ./Urs.py -lu spez --stream-submissions
+
+    If you do not want to save livestream results to file, include the `--nosave` flag:
+
+        $ ./Urs.py -lu spez --stream-submissions --nosave
+
+LIVE TRENDING SUBREDDIT SUBMISSIONS
+
+################################################################################
+################################################################################
+################################################################################
 
 [PUSHSHIFT SCRAPING]
 
@@ -240,7 +274,7 @@ Arguments:
 
     [-y]
 
-    Optional Parameters (for both comment and submission search):
+    Optional Parameters (for both `-sc` and `-ss`):
 
         [--after <epoch_value_or_integer>]
         [--aggs <(author,link_id,created_utc,subreddit)>]
@@ -272,9 +306,15 @@ All scrape results are exported to JSON by default.
 
 SEARCH COMMENTS
 
+################################################################################
+################################################################################
+################################################################################
+
 SEARCH SUBMISSIONS
 
-
+################################################################################
+################################################################################
+################################################################################
 
 [ANALYTICAL TOOLS]
 
@@ -282,7 +322,7 @@ Arguments:
 
     [-f <file_path>]
     [-wc <file_path> [<optional_export_format>]]
-    [--nosave]
+        [--nosave]
 
 Word frequencies are exported to JSON by default.
 
@@ -356,6 +396,29 @@ DISPLAY INSTEAD OF SAVING
 
         print(self._usage)
         print(self._examples)
+
+    def _add_display_version(self, parser):
+        """
+        Add a flag to display the version number.
+
+            -v: display the version number
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        version_flag = parser.add_argument_group("display the version number")
+        version_flag.add_argument(
+            "-v", "--version",
+            action = "store_true",
+            help = "display the version number"
+        )
 
     def _add_rate_limit_check_flag(self, parser):
         """
@@ -443,7 +506,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        subreddit_flags = parser.add_argument_group("additional PRAW Subreddit scraping arguments")
+        subreddit_flags = parser.add_argument_group("additional PRAW Subreddit scraping arguments (used with `-r`)")
         subreddit_flags.add_argument(
             "--rules",
             action = "store_true",
@@ -466,7 +529,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments")
+        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments (used with `-c`)")
         comments_flags.add_argument(
             "--raw",
             action = "store_true",
@@ -511,20 +574,14 @@ DISPLAY INSTEAD OF SAVING
         """
         Add PRAW livestream options:
 
-            --only-submissions: exclude comments from livestream
-            --only-comments: exclude submissions from livestream
+            --stream-submissions: livestream submissions (default is comments)
         """
 
-        livestream_options = parser.add_argument_group("additional PRAW livestream scraping options")
+        livestream_options = parser.add_argument_group("additional PRAW livestream scraping options (used with `-lr` or `-lu`)")
         livestream_options.add_argument(
-            "--only-submissions",
+            "--stream-submissions",
             action = "store_true",
-            help = "exclude comments from livestream"
-        )
-        livestream_options.add_argument(
-            "--only-comments",
-            action = "store_true",
-            help = "exclude submissions from livestream"
+            help = "livestream submissions instead (default is comments)"
         )
 
     def _add_pushshift_scraper_flags(self, parser):
@@ -584,7 +641,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        pushshift_global_params = parser.add_argument_group("additional Pushshift parameters (for both comment and submission search)")
+        pushshift_global_params = parser.add_argument_group("additional Pushshift parameters (used with `-sc` or `-ss`)")
         pushshift_global_params.add_argument(
             "--after",
             help = "return results after this date",
@@ -671,7 +728,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        pushshift_submission_params = parser.add_argument_group("additional Pushshift submission search parameters")
+        pushshift_submission_params = parser.add_argument_group("additional Pushshift submission search parameters (used with `-ss`)")
         pushshift_submission_params.add_argument(
             "--contest-mode",
             help = "exclude or include content mode submissions (both included by default)",
@@ -778,7 +835,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        skip_flags = parser.add_argument_group("skip confirmation")
+        skip_flags = parser.add_argument_group("skip confirmation (used with `-r`, `-sc`, or `-ss`)")
         skip_flags.add_argument(
             "-y", 
             action = "store_true", 
@@ -801,7 +858,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        export_flags = parser.add_argument_group("export arguments")
+        export_flags = parser.add_argument_group("export arguments (used with `-r` or `-f`)")
         export_flags.add_argument(
             "--csv", 
             action = "store_true", 
@@ -844,6 +901,7 @@ DISPLAY INSTEAD OF SAVING
         )
 
         self._add_examples_flag(parser)
+        self._add_display_version(parser)
         self._add_rate_limit_check_flag(parser)
 
         self._add_praw_scraper_flags(parser)
@@ -869,9 +927,11 @@ DISPLAY INSTEAD OF SAVING
 
         args = parser.parse_args()
 
-        ### Print examples if the flag is present.
         if args.examples:
             self._display_examples()
+            raise SystemExit
+        elif args.version:
+            print(Fore.WHITE + Style.BRIGHT + "Universal Reddit Scraper v%s\n" % __version__)
             raise SystemExit
 
         return args, parser
@@ -1250,9 +1310,9 @@ class CheckPushshiftCli():
     """
 
     @staticmethod
-    def _check_dates(date):
+    def _check_date(date):
         """
-        Check date parameters.
+        Check the date parameter.
 
         Parameters
         ----------
@@ -1269,8 +1329,218 @@ class CheckPushshiftCli():
         None
         """
 
+        if date not in range(1119537833, int(time.time())):
+            raise ValueError
+
+    @staticmethod
+    def _check_aggs(aggs):
+        """
+        Check the aggs parameter.
+
+        Parameters
+        ----------
+        aggs: str
+            String denoting fields to include in aggregation summary
+        
+        Exceptions
+        ----------
+        ValueError:
+            Raised if an invalid date is provided
+
+        Returns
+        -------
+        None
+        """
+
+        valid_fields = [
+            "author",
+            "link_id",
+            "created_utc",
+            "subreddit"
+        ]
+
+        field_list = aggs.split(",") \
+            if "," in aggs \
+            else [aggs]
+
+        for field in field_list:
+            if field not in valid_fields:
+                raise ValueError
+
+    @staticmethod
+    def _check_author(author, reddit):
+        """
+        Check the author parameter.
+
+        Parameters
+        ----------
+        author: str
+            String denoting the target Redditor
+        reddit: Reddit object
+
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if an invalid date is provided
+
+        Returns
+        -------
+        None
+        """
+
+        invalid, _ = Validation.check_existence([author], reddit, "redditor")
+        
+        if invalid:
+            raise ValueError
+
+    @staticmethod
+    def _check_fields(fields):
+        """
+        Check the fields parameter.
+
+        Parameters
+        ----------
+        """
+
+        #########################################################
+        #########################################################
+        #########################################################
+        #########################################################
+        #########################################################
+        #########################################################
         pass
 
+    @staticmethod
+    def _check_list_parameters(parameter, valid_parameters):
+        """
+        Check parameters that only allow for specific values.
+
+        Parameters
+        ----------
+        parameter: str
+            String denoting the parameter provided with the flag
+        valid_parameters: list
+            List containing valid values for the parameter
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if an invalid value is provided
+
+        Returns
+        -------
+        None 
+        """
+
+        if parameter.lower() not in valid_parameters:
+            raise ValueError
+
+    @staticmethod
+    def check_global_parameters(args, reddit):
+        """
+        Check all Pushshift parameters.
+        
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if invalid values are entered
+
+        Returns
+        -------
+        None
+        """
+
+        frequencies = [
+            "second",
+            "minute",
+            "hour",
+            "day",
+        ]
+        sort_by = [
+            "asc",
+            "desc",
+        ]
+        sort_types = [
+            "created_utc",
+            "num_comments",
+            "score",
+        ]
+
+        if args.after:
+            CheckPushshiftCli._check_date(args.after)
+        if args.aggs:
+            CheckPushshiftCli._check_aggs(args.aggs)
+        if args.author:
+            CheckPushshiftCli._check_author(args.author, reddit)
+        if args.before:
+            CheckPushshiftCli._check_date(args.after)
+        if args.fields:
+            pass
+        if args.frequency:
+            CheckPushshiftCli._check_list_parameters(args.frequency, frequencies)
+        if args.ids:
+            pass
+        if args.size:
+            pass
+        if args.sort:
+            CheckPushshiftCli._check_list_parameters(args.sort, sort_by)
+        if args.sort_type:
+            CheckPushshiftCli._check_list_parameters(args.sort, sort_types)
+        if args.in_subreddit:
+            pass
+
+    @staticmethod
+    def check_submission_parameters(args):
+        """
+        Check Pushshift submission parameters.
+
+        Parameters
+        ----------
+        args: Namespace
+            Namespace object containing all arguments used in the CLI
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if invalid values are entered
+
+        Returns
+        -------
+        None
+        """
+
+        booleans = [
+            "true",
+            "false",
+        ]
+
+        if args.contest_mode:
+            CheckPushshiftCli._check_list_parameters(args.contest_mode, booleans)
+        if args.is_video:
+            CheckPushshiftCli._check_list_parameters(args.is_video, booleans)
+        if args.locked:
+            CheckPushshiftCli._check_list_parameters(args.locked, booleans)
+        if args.nsfw:
+            CheckPushshiftCli._check_list_parameters(args.nsfw, booleans)
+        if args.num_comments:
+            pass
+        if args.score:
+            pass
+        if args.selftext:
+            pass
+        if args.spoiler:
+            CheckPushshiftCli._check_list_parameters(args.spoiler, booleans)
+        if args.stickied:
+            CheckPushshiftCli._check_list_parameters(args.stickied, booleans)
+        if args.title:
+            CheckPushshiftCli._check_list_parameters(args.title, booleans)
+    
 class CheckAnalyticCli():
     """
     Methods for checking CLI arguments for analytical tools and raising errors
