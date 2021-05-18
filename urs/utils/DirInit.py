@@ -86,8 +86,7 @@ class InitializeDirectory():
     @staticmethod
     def make_type_directory(scrape):
         """
-        Make Subreddit, Redditor, or comments directory within the date directory
-        if it does not exist.
+        Make sub-directories within the date directory if it does not exist.
 
         Parameters
         ----------
