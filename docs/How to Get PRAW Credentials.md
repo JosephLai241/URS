@@ -14,11 +14,11 @@
 
 ![Click Edit][Click Edit]
 
-### You should see a string of 14 characters on the top left corner underneath "personal use script. " That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. **Save this information as it will be used in the program in order to use the Reddit API**. 
+### You should see a string of 14 characters on the top left corner underneath "personal use script. " That is your API ID. Further down you will see "secret" and a string of 27 characters; that is your API password. **Save this information as it will be used in the program in order to access the Reddit API**. 
 
 ![All Info][All Info]
 
-### You will also have to provide your app name as well as your Reddit account username and password in the block of credentials found in `.env`.
+### You will also have to provide your app name and Reddit account username and password in the block of credentials found in `.env`.
 
 <!-- SCREENSHOT LINKS -->
 [Create an app]: https://i.imgur.com/Bf0pKGJ.png
