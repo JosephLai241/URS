@@ -45,7 +45,7 @@ class DisplayStream():
                 ])
 
     @staticmethod
-    def display(obj, object_type):
+    def display(obj):
         """
         Format and print string containing stream information.
 
@@ -53,8 +53,6 @@ class DisplayStream():
         ----------
         obj: dict
             Dictionary containing Reddit comment or submission data
-        object_type: str
-            String denoting which string format to use
 
         Returns
         -------
@@ -63,11 +61,11 @@ class DisplayStream():
 
         pretty_stream = PrettyTable()
         pretty_stream.field_names = [
-            "%s Attribute" % object_type.capitalize(),
+            "%s Attribute" % obj["type"].capitalize(),
             "Data"
         ]
 
-        if object_type == "submission":
+        if obj["type"] == "submission":
             include_fields = [
                 "author",
                 "created_utc",
@@ -85,7 +83,7 @@ class DisplayStream():
                 "title",
                 "url"
             ]
-        elif object_type == "comment":
+        elif obj["type"] == "comment":
             include_fields = [
                 "author",
                 "body",
@@ -114,7 +112,7 @@ class DisplayStream():
 
         DisplayStream.populate_table(include_fields, obj, "", pretty_stream)
 
-        pretty_stream.sortby = "%s Attribute" % object_type.capitalize()
+        pretty_stream.sortby = "%s Attribute" % obj["type"].capitalize()
         pretty_stream.align = "l"
         pretty_stream.max_width = 120
 
