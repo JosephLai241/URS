@@ -1,6 +1,18 @@
 # Error Messages
 
-This document will briefly go over all the potential error messages you might run into while using URS. 
+This document will briefly go over all the potential error messages you might run into while using URS.
+
+# Table of Contents
+
+* [Global Errors](#global-errors)
+    + [Invalid Arguments](#invalid-arguments)
+    + [Export Error](#export-error)
+* [PRAW Errors](#praw-errors)
+    + [Invalid API Credentials or No Internet Connection](#invalid-api-credentials-or-no-internet-connection)
+    + [No Reddit Objects Left to Scrape](#no-reddit-objects-left-to-scrape)
+    + [Rate Limit Reached](#rate-limit-reached)
+* [Analytical Tool Errors](#analytical-tool-errors)
+    + [Invalid File](#invalid-file)
 
 # Global Errors
 
