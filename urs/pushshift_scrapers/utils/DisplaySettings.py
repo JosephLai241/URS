@@ -30,7 +30,8 @@ class Display():
 
         Returns
         -------
-        None
+        constraints: dict
+            Dictionary containing additional scrape parameters
         """
 
         additional_params = [
@@ -65,12 +66,15 @@ class Display():
         ]
 
         param_count = 0
+        constraints = {}
         for key, value in vars(args).items():
             if key in additional_params and value:
+                constraints[key] = str(value).lower()
                 pretty_params.add_row([
                     key,
-                    value
+                    str(value).lower()
                 ])
+
                 param_count += 1
         
         if param_count > 0:
@@ -78,6 +82,9 @@ class Display():
 
             pretty_params.align = "l"
             print(pretty_params)
+            print()
+
+        return constraints
 
     @staticmethod
     def display_settings(args):
@@ -91,7 +98,8 @@ class Display():
 
         Returns
         -------
-        None
+        constraints: dict
+            Dictionary containing additional scrape parameters
         """
 
         pretty_query = PrettyTable()
@@ -109,4 +117,4 @@ class Display():
         print(pretty_query)
         print()
 
-        Display.pull_additional_params(args)
+        return Display.pull_additional_params(args)
