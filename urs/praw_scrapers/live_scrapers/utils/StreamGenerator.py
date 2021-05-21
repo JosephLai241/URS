@@ -47,4 +47,3 @@ class StreamGenerator():
 
         for comment in stream.comments(skip_existing = True):
             yield Objectify().make_comment(comment, True)
-    
