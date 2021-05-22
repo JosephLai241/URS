@@ -22,53 +22,25 @@ usage: $ Urs.py
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
+        [-y]
+        [--csv]
         [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
         [--raw] 
     [-b]
+        [--csv]
 
     [-lr <subreddit>]
     [-lu <redditor>]
 
-        [--only-submissions]
-        [--only-comments]
-
-    [-ltrs <subreddit>]
-
-    [-sc <keywords>]
-    [-ss <keywords>]
-        [--contest-mode <(true|false)>]
-        [--is-video <(true|false)>]
-        [--locked <(true|false)>]
-        [--nsfw <(true|false)>]
-        [--num-comments <integer_or_greater_or_less_than_integer>]
-        [--score <integer_or_greater_or_less_than_integer>]
-        [--selftext <keywords_or_!keywords>]
-        [--spoiler <(true|false)>]
-        [--stickied <(true|false)>]
-        [--title <(true|false)>]
-
-        [--after <epoch_value_or_integer>]
-        [--aggs <(author,link_id,created_utc,subreddit)>]
-        [--author <redditor>]
-        [--before <epoch_value_or_integer>]
-        [--fields <string_or_comma-delimited_string>]
-        [--frequency <(second|minute|hour|day)>]
-        [--ids <base36_id_or_comma-delimited_base36_ids>]
-        [--metadata]
-        [--size <integer_less_than_or_equal_500>]
-        [--sort <(asc|desc)>]
-        [--sort-type <(created_utc|num_comments|score)>]
-        [--in-subreddit <subreddit>]
+        [--nosave]
+        [--stream-submissions]
 
     [-f <file_path>]
-    [-wc <file_path> [<optional_export_format>]]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]
         [--nosave]
-
-    [--csv]
-
-    [-y]
 ```
 
 # Table of Contents
@@ -76,29 +48,44 @@ usage: $ Urs.py
 * [Contact](#contact)
 * [Introduction](#introduction)
 * [Installation](#installation)
-* [URS Overview](#urs-overview)
+    + [Troubleshooting](#troubleshooting)
+        * [`ModuleNotFoundError`](#modulenotfounderror)
+* [Exporting](#exporting)
     + [Export File Format](#export-file-format)
+        * [Exporting to CSV](#exporting-to-csv)
     + [Export Directory Structure](#export-directory-structure)
+        * [PRAW Scrapers](#praw-scrapers)
+        * [PRAW Livestream Scrapers](#praw-livestream-scrapers)
+        * [Analytical Tools](#analytical-tools)
+* [URS Overview](#urs-overview)
     + [Scrape Speeds](#scrape-speeds)
     + [Scraping Reddit via PRAW](#scraping-reddit-via-praw)
         * [Getting Started](#getting-started)
         * [Rate Limits](#rate-limits)
         * [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes)
+        * [Available Flags](#available-flags)
         * [Subreddits](#subreddits)
+            + [Time Filters](#time-filters)
+            + [Subreddit Rules](#subreddit-rules)
+            + [Bypassing the Final Settings Check](#bypassing-the-final-settings-check)
         * [Redditors](#redditors)
         * [Submission Comments](#submission-comments)
+            + [Number of Comments Returned](#number-of-comments-returned)
+            + [Structured Comments](#structured-comments)
+            + [Raw Comments](#raw-comments)
     + [Livestreaming Reddit via PRAW](#livestreaming-reddit-via-praw)
-        * [Livestreaming Subreddits and Redditors](#livestreaming-subreddits-and-redditors)
-        * [Livestreaming Trending Submissions Within Subreddits](#livestreaming-trending-submissions-within-subreddits)
-    + [Scraping Reddit via the Pushshift API](#scraping-reddit-via-the-pushshift-api)
-        * [Searching for Keywords in All Publicly Available Submissions](#searching-for-keywords-in-all-publicly-available-submissions)
-        * [Searching for Keywords in All Publicly Available Comments](#searching-for-keywords-in-all-publicly-available-comments)
-    + [Analytical Tools](#analytical-tools)
+        * [Attributes](#attributes)
+        * [Available Flags](#available-flags-1)
+        * [Livestreaming Subreddits](#livestreaming-subreddits)
+        * [Livestreaming Redditors](#livestreaming-redditors)
+        * [Do Not Save Livestream to File](#do-not-save-livestream-to-file)
+    + [Analytical Tools](#analytical-tools-1)
         * [Target Fields](#target-fields)
+        * [Available Flags](#available-flags-3)
         * [File Names](#file-names)
         * [Generating Word Frequencies](#generating-word-frequencies)
         * [Generating Wordclouds](#generating-wordclouds)
-    + [Exporting](#exporting)
+            + [Display Wordcloud Instead of Saving](#display-wordcloud-instead-of-saving)
 * [Contributing](#contributing)
     + [Before Making Pull or Feature Requests](#before-making-pull-or-feature-requests)
     + [Building on Top of URS](#building-on-top-of-urs)
@@ -135,63 +122,90 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
 * Livestream Reddit via PRAW
     + Livestream submissions submitted within Subreddits or by Redditors
     + Livestream comments submitted within Subreddits or by Redditors
-    + Livestream trending submissions within Subreddits
-* Scrape Reddit via the [`Pushshift API`][Pushshift API]
-    + Search for keywords in all publicly available submissions
-    + Search for keywords in all publicly available comments
 * Analytical tools for scraped data
-    + Get frequencies for words that are found in submission titles, bodies, and/or comments
+    + Generate frequencies for words that are found in submission titles, bodies, and/or comments
     + Generate a wordcloud from scrape results
-    
-Run `pip install -r requirements.txt` to get all project dependencies. 
 
-You will need your own Reddit account and API credentials for PRAW. See the [Getting Started](#getting-started) section for more information. 
+See the [Getting Started](#getting-started) section to get your API credentials.
+
+# Installation
 
 ***NOTE:* Requires Python 3.7+**
 
-# URS Overview
+```
+git clone --depth=1 https://github.com/JosephLai241/URS.git
+cd URS
+pip3 install . -r requirements.txt
+```
+
+## Troubleshooting
+
+### `ModuleNotFoundError`
+
+You may run into an error that looks like this:
+
+```
+Traceback (most recent call last):
+  File "/home/joseph/URS/urs/./Urs.py", line 30, in <module>
+    from urs.utils.Logger import LogMain
+ModuleNotFoundError: No module named 'urs'
+```
+
+This means you will need to add the `URS` directory to your `PYTHONPATH`. [Here is a link that explains how to do so for each operating system][Export PYTHONPATH Help].
+
+# Exporting
 
 ## Export File Format
 
-**All files except for those generated by the wordcloud tool are exported to JSON by default**. Wordcloud files are exported to PNG by default. URS supports exporting to CSV as well, but JSON is the more versatile option. See the [Exporting](#exporting) section for more information.
+**All files except for those generated by the wordcloud tool are exported to JSON by default**. Wordcloud files are exported to PNG by default. 
+
+URS supports exporting to CSV as well, but JSON is the more versatile option.
+
+### Exporting to CSV
+
+You will have to include the `--csv` flag to export to CSV.
+
+You can only export to CSV when using:
+
++ The Subreddit scrapers
++ The word frequencies generator
+
+These tools are also suitable for CSV format and are optimized to do so if you want to use that format instead.
+
+The `--csv` flag is ignored if it is present while using any of the other scrapers.
 
 ## Export Directory Structure
 
 All exported files are saved within the `scrapes` directory and stored in a sub-directory labeled with the date. Many more sub-directories may be created in the date directory. Sub-directories are only created when its respective tool is run. For example, if you only use the Subreddit scraper, only the `subreddits` directory is created.
 
-The `subreddits`, `redditors`, or `comments` directories are created when you run each scraper.
+### PRAW Scrapers
 
-The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories are created when you run each tool. See the [Analytical Tools](#analytical-tools) section for more information.
+The `subreddits`, `redditors`, or `comments` directories may be created.
+
+### PRAW Livestream Scrapers
+
+The `livestream` directory is created when you run any of the livestream scrapers. Within it, the `subreddit` or `redditor` directories may be created.
+
+### Analytical Tools
+
+The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories may be created. See the [Analytical Tools](#analytical-tools) section for more information.
+
+---
 
 This is the [samples][Samples] directory structure generated by the [tree command][tree].
 
 ```
-scrapes/
-└── 03-24-2021
-    ├── analytics
-    │   ├── frequencies
-    │   │   └── cscareerquestions-search-'job'-past-year.json
-    │   └── wordclouds
-    │       └── If you’re belly button was a real button, what w---all.png
-    ├── comments
-    │   ├── If you’re belly button was a real button, what w---all.json
-    │   └── If you’re belly button was a real button, what w---all-raw.json
-    ├── redditors
-    │   └── spez-5-results.json
-    ├── subreddits
-    │   ├── askreddit-hot-100-results.json
-    │   ├── cscareerquestions-search-'job'-past-year.json
-    │   └── wallstreetbets-top-10-results-past-year-rules.json
-    └── urs.log
+PASTE NEW TREE ONCE COMPLETE
 ```
+
+# URS Overview
 
 ## Scrape Speeds
 
-Scrape speed is determined by a couple things:
+Your internet connection speed is the primary bottleneck that will establish the scrape duration; however, there are additional bottlenecks such as:
 
-* The number of results returned for Subreddit or Redditor scraping
-* The submission's popularity (total number of comments) for submission comments scraping
-* Your internet connection speed
+* The number of results returned for Subreddit or Redditor scraping.
+* The submission's popularity (total number of comments) for submission comments scraping.
 
 ## Scraping Reddit via PRAW
 
@@ -207,13 +221,13 @@ Rate limit information for your account is displayed in a small table underneath
 
 URS will display an error message as well as the rate limit reset date if you have used all your available requests.
 
-There are a couple ways to go about solving issues with rate limits:
+There are a couple ways to circumvent rate limits:
 
 * Scrape intermittently
 * Use an account with high karma to get your PRAW credentials
 * Scrape less results per run
 
-Available requests are refilled if you use the PRAW scrapers intermittently, which might be a good solution for bypassing rate limit issues. This can be especially helpful if you have automated URS and are not looking at the output on each run.
+Available requests are refilled if you use the PRAW scrapers intermittently, which might be the best solution. This can be especially helpful if you have automated URS and are not looking at the output on each run.
 
 ---
 
@@ -255,6 +269,20 @@ These attributes are included in each scrape.
 \*Includes additional attributes; see [Redditors](#redditors) section for more information. 
 
 ---
+
+### Available Flags
+
+```
+[-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
+    [-y]
+    [--csv]
+    [--rules]
+[-u <redditor> <n_results>] 
+[-c <submission_url> <n_results>]
+    [--raw] 
+[-b]
+    [--csv]
+```
 
 ### Subreddits
 
@@ -460,6 +488,66 @@ You can export to raw format by including the `--raw` flag. `-raw` will also be 
 
 Exported files will be saved to the `comments` directory.
 
+## Livestreaming Reddit via PRAW
+
+These tools may be used to livestream submissions or comments from Subreddits or Redditors. 
+
+New submissions or comments will continue to display within your terminal until you abort the stream using `Ctrl + C`. After aborting the stream, the Reddit objects that have appeared during the stream will be written to a JSON file named with the streamed Subreddit or Redditor as well as the stream duration. 
+
+The filenames will follow this format:
+
+`[SUBREDDIT_OR_REDDITOR]-[DURATION].json`
+
+This file is then saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
+
+### Attributes
+
+Comment and submission attributes included in each scrape are identical to those that were listed in the [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes).
+
+---
+
+### Available Flags
+
+```
+[-lr <subreddit>]
+[-lu <redditor>]
+
+    [--nosave]
+    [--stream-submissions]
+```
+
+---
+
+### Livestreaming Subreddits
+
+**Usage:** `$ ./Urs.py -lr SUBREDDIT`
+
+**Supported export formats:** JSON.
+
+You can livestream comments or submissions that are created within a Subreddit. **Comments are streamed by default**; to stream submissions instead, include the `--stream-submissions` flag.
+
+Reddit object information will be displayed in a [PrettyTable][PrettyTable] as they are submitted. 
+
+***NOTE:*** PRAW may not be able to catch all new submissions or comments within a high-volume Subreddit, as mentioned in [these disclaimers located in the "Note" boxes][Subreddit Stream Disclaimer]. 
+
+---
+
+### Livestreaming Redditors
+
+**Usage:** `$ ./Urs.py -lu REDDITOR` 
+
+**Supported export formats:** JSON.
+
+You can livestream comments or submissions that are created by a Redditor. **Comments are streamed by default**; to stream submissions instead, include the `--stream-submissions` flag.
+
+Reddit object information will be displayed in a PrettyTable as they are submitted.
+
+---
+
+### Do Not Save Livestream to File
+
+If you do not want to save the livestream to file, include the `--nosave` flag.
+
 ## Analytical Tools
 
 This suite of tools can be used *after* scraping data from Reddit. Both of these tools analyze the frequencies of words found in submission titles and bodies, or comments within JSON scrape data.
@@ -494,6 +582,17 @@ For Subreddit scrapes, data is pulled from the `selftext` and `title` fields for
 For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The `title` and `body` fields are targeted for submissions, and the `selftext` field is targeted for comments.
 
 For submission comments scrapes, data is only pulled from the `body` field of each comment.
+
+---
+
+### Available Flags
+
+```
+[-f <file_path>]
+    [--csv]
+[-wc <file_path> [<optional_export_format>]]
+    [--nosave]
+```
 
 ---
 
@@ -543,19 +642,6 @@ Exported files will be saved to the `analytics/wordclouds` directory.
 
 Wordclouds are saved to file by default. If you do not want to keep a file, include the `--nosave` flag to only display the wordcloud.
 
-## Exporting
-
-As stated before, URS supports exporting to either JSON or CSV. **JSON is the default format** - you will have to include the `--csv` flag to export to CSV.
-
-You can only export to CSV when using:
-
-+ The Subreddit scraper
-+ The word frequencies generator
-
-These tools are also suitable for CSV format and are optimized to do so if you want to use that format instead.
-
-The `--csv` flag is ignored if it is present while using the Redditor, submission comments scraper, or wordcloud generator.
-
 # Contributing
 
 **See the [Contact](#contact) section for ways to reach me.**
@@ -602,8 +688,8 @@ This is a showcase for projects that are built on top of URS!
 <!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][Github Actions - Pytest] -->
 [URS Project Email]: mailto:urs_project@protonmail.
 
-<!-- PUSHSHIFT API LINKS -->
-[Pushshift API]: https://github.com/pushshift/api
+<!-- PRAW LINKS -->
+[Subreddit Stream Disclaimer]: https://praw.readthedocs.io/en/latest/code_overview/other/subredditstream.html#praw.models.reddit.subreddit.SubredditStream
 
 <!-- DEMO GIFS: Links to demo GIFS -->
 [Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Subreddit_demo.gif
@@ -645,5 +731,7 @@ This is a showcase for projects that are built on top of URS!
 [skiwheelr screenshot]: https://i.imgur.com/ChHdAZv.png
 
 <!-- ADDITIONAL LINKS: A space for useful links -->
+[Export PYTHONPATH Help]: https://bic-berkeley.github.io/psych-214-fall-2016/using_pythonpath.html#setting-pythonpath-more-permanently
 [tree]: http://mama.indstate.edu/users/ice/tree
 [Depth-First Search]: https://www.interviewcake.com/concept/java/dfs
+[PrettyTable]: https://pypi.org/project/prettytable/
