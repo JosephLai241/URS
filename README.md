@@ -184,7 +184,7 @@ The `subreddits`, `redditors`, or `comments` directories may be created.
 
 ### PRAW Livestream Scrapers
 
-The `livestream` directory is created when you run any of the livestream scrapers. Within it, the `subreddit` or `redditor` directories may be created.
+The `livestream` directory is created when you run any of the livestream scrapers. Within it, the `subreddits` or `redditors` directories may be created.
 
 ### Analytical Tools
 
