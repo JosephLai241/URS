@@ -406,9 +406,9 @@ class TestParserAddPrawLivestreamOptions():
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_praw_livestream_flags(parser)
 
-        args = parser.parse_args(["--stream-subreddit"])
+        args = parser.parse_args(["--stream-submissions"])
 
-        assert args.stream_subreddit == True
+        assert args.stream_submissions == True
 
 class TestParserAddAnalyticsFlagMethod():
     """
