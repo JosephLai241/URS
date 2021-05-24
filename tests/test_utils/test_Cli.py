@@ -404,7 +404,7 @@ class TestParserAddPrawLivestreamOptions():
 
     def test_add_praw_livestream_options_flag(self):
         parser = MakeArgs.parser_for_testing_cli()
-        Cli.Parser()._add_praw_livestream_flags(parser)
+        Cli.Parser()._add_praw_livestream_options(parser)
 
         args = parser.parse_args(["--stream-submissions"])
 
