@@ -496,7 +496,7 @@ New submissions or comments will continue to display within your terminal until 
 
 The filenames will follow this format:
 
-`[SUBREDDIT_OR_REDDITOR]-[DURATION].json`
+`[SUBREDDIT_OR_REDDITOR]-[REDDIT_OBJECTS]-[DURATION].json`
 
 This file is then saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
 
