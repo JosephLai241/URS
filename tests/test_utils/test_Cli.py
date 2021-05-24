@@ -376,6 +376,40 @@ class TestParserAddPrawCommentsOptionsFlagMethod():
 
         assert args.raw == True
 
+class TestParserAddPrawLivestreamFlags():
+    """
+    Testing Parser class _add_praw_livestream_flags() method.
+    """
+
+    def test_add_praw_livestream_flags_method_live_subreddit_flag(self):
+        parser = MakeArgs.parser_for_testing_cli()
+        Cli.Parser()._add_praw_livestream_flags(parser)
+
+        args = parser.parse_args("--live-subreddit askreddit".split())
+
+        assert args.live_subreddit == "askreddit"
+
+    def test_add_praw_livestream_flags_method_live_redditor_flag(self):
+        parser = MakeArgs.parser_for_testing_cli()
+        Cli.Parser()._add_praw_livestream_flags(parser)
+
+        args = parser.parse_args("--live-redditor spez".split())
+
+        assert args.live_redditor == "spez"
+
+class TestParserAddPrawLivestreamOptions():
+    """
+    Testing Parser class _add_praw_livestream_options() method.
+    """
+
+    def test_add_praw_livestream_options_flag(self):
+        parser = MakeArgs.parser_for_testing_cli()
+        Cli.Parser()._add_praw_livestream_flags(parser)
+
+        args = parser.parse_args(["--stream-subreddit"])
+
+        assert args.stream_subreddit == True
+
 class TestParserAddAnalyticsFlagMethod():
     """
     Testing Parser class _add_analytics() method.
