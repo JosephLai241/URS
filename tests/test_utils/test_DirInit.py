@@ -10,13 +10,13 @@ from urs.utils.Global import date
 
 class TestInitializeDirectoryCreateMethod():
     """
-    Testing InitializeDirectory class _create() method.
+    Testing InitializeDirectory class create() method.
     """
 
     def test_create(self):
         destination = "../test_dir"
 
-        InitializeDirectory._create(destination)
+        InitializeDirectory.create(destination)
         if os.path.isdir(destination) == True:
             os.rmdir(destination)
             assert True
