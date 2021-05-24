@@ -401,26 +401,26 @@ class TestParserAddAnalyticsFlagMethod():
 
         assert args.wordcloud == test_subreddit_args
 
-    def test_add_analytics_method_nosave_flag(self):
-        parser = MakeArgs.parser_for_testing_cli()
-        Cli.Parser()._add_analytics(parser)
-
-        args = parser.parse_args(["--nosave"])
-
-        assert args.nosave == True
-
-class TestParserAddSkipFlagMethod():
+class TestParserAddExtraOptionsMethod():
     """
-    Testing Parser class _add_skip() method.
+    Testing Parser class _add_extra_options() method.
     """
 
-    def test_add_skip_method_skip_confirmation_flag(self):
+    def test_add_extra_options_method_skip_confirmation_flag(self):
         parser = MakeArgs.parser_for_testing_cli()
-        Cli.Parser()._add_skip(parser)
+        Cli.Parser()._add_extra_options(parser)
 
         args = parser.parse_args(["-y"])
 
         assert args.y == True
+
+    def test_add_extra_options_method_nosave_flag(self):
+        parser = MakeArgs.parser_for_testing_cli()
+        Cli.Parser()._add_extra_options(parser)
+
+        args = parser.parse_args(["--nosave"])
+
+        assert args.nosave == True
 
 class TestParserAddExportMethod():
     """
