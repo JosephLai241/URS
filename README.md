@@ -490,15 +490,19 @@ Exported files will be saved to the `comments` directory.
 
 ## Livestreaming Reddit via PRAW
 
-These tools may be used to livestream submissions or comments from Subreddits or Redditors. 
+These tools may be used to livestream comments or submissions from Subreddits or Redditors. 
 
-New submissions or comments will continue to display within your terminal until you abort the stream using `Ctrl + C`. After aborting the stream, the Reddit objects that have appeared during the stream will be written to a JSON file named with the streamed Subreddit or Redditor as well as the stream duration. 
+**Comments are streamed by default**. To stream submissions instead, include the `--stream-submissions` flag.
+
+**New comments or submissions will continue to display within your terminal until you abort the stream using `Ctrl + C`**. 
 
 The filenames will follow this format:
 
-`[SUBREDDIT_OR_REDDITOR]-[REDDIT_OBJECTS]-[DURATION].json`
+`[SUBREDDIT_OR_REDDITOR]-[comments_OR_submissions]-[DURATION_IN_HOURS_MINUTES_SECONDS].json`
 
 This file is then saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
+
+Reddit objects will be written to this JSON file in real time. After aborting the stream, the filename will be updated with the duration.
 
 ### Attributes
 
@@ -524,7 +528,7 @@ Comment and submission attributes included in each scrape are identical to those
 
 **Supported export formats:** JSON.
 
-You can livestream comments or submissions that are created within a Subreddit. **Comments are streamed by default**; to stream submissions instead, include the `--stream-submissions` flag.
+You can livestream comments or submissions that are created within a Subreddit.
 
 Reddit object information will be displayed in a [PrettyTable][PrettyTable] as they are submitted. 
 
@@ -538,7 +542,7 @@ Reddit object information will be displayed in a [PrettyTable][PrettyTable] as t
 
 **Supported export formats:** JSON.
 
-You can livestream comments or submissions that are created by a Redditor. **Comments are streamed by default**; to stream submissions instead, include the `--stream-submissions` flag.
+You can livestream comments or submissions that are created by a Redditor.
 
 Reddit object information will be displayed in a PrettyTable as they are submitted.
 
