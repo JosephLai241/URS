@@ -100,6 +100,10 @@ class Run():
                 RunRedditor.run()
                 RunComments.run()
                 RunBasic.run()
+
+            PRAW livestream scrapers:
+
+                Livestream.stream()
             
             Analytical tools:
 
@@ -150,4 +154,3 @@ class Run():
                 GenerateFrequencies.generate(self._args)
             if self._args.wordcloud:
                 GenerateWordcloud.generate(self._args)
-        
