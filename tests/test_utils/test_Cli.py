@@ -8,6 +8,8 @@ import pytest
 import re
 import sys
 
+from urs.Version import __version__
+
 from urs.utils import (
     Cli, 
     Global
@@ -44,33 +46,41 @@ class TestParserInitMethod():
      
     [-h]
     [-e]
+    [-v]
 
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-        [--rules]
         [-y]
+        [--csv]
+        [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
         [--raw] 
     [-b]
+        [--csv]
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--nosave]
+        [--stream-submissions]
 
     [-f <file_path>]
-    [-wc <file_path> [<optional_export_format>]]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]
         [--nosave]
-
-    [--csv] 
 """
         
         assert Cli.Parser()._usage == usage
         
     def test_parser_init_method_description_instance_variable(self):
         description = r"""
-Universal Reddit Scraper v3.2.1 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v{} - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
-"""
+""".format(__version__)
         assert Cli.Parser()._description == description
 
     def test_parser_init_method_epilog_instance_variable(self):
@@ -117,15 +127,14 @@ wordcloud export options:
 Arguments:
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-    [--rules]
+        [-y]
+        [--csv]
+        [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
-    [--raw] 
+        [--raw] 
     [-b]
-
-    [-y]
-
-    [--csv]
+        [--csv]
 
 All scrape results are exported to JSON by default.
 
@@ -185,13 +194,52 @@ SUBMISSION COMMENTS
         
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --raw
 
+[PRAW LIVESTREAM SCRAPING]
+
+Arguments:
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--nosave]
+        [--stream-submissions]
+
+LIVE SUBREDDIT STREAM
+
+    Livestream comments created in r/AskReddit. Writes livestream results to a JSON file:
+
+        $ ./Urs.py -lr askreddit
+
+    Or livestream submissions created in r/AskReddit:
+
+        $ ./Urs.py -lr askreddit --stream-submissions
+
+    If you do not want to save livestream results to file, include the `--nosave` flag:
+
+        $ ./Urs.py -lr askreddit --stream-submissions --nosave
+
+LIVE REDDITOR STREAM
+
+    Livestream comments by u/spez. Writes livestream results to a JSON file:
+
+        $ ./Urs.py -lu spez
+
+    Or livestream submissions by u/spez:
+
+        $ ./Urs.py -lu spez --stream-submissions
+
+    If you do not want to save livestream results to file, include the `--nosave` flag:
+
+        $ ./Urs.py -lu spez --stream-submissions --nosave
+
 [ANALYTICAL TOOLS]
 
 Arguments:
 
     [-f <file_path>]
-    [-wc <file_path> [<optional_export_format>]]
-    [--nosave]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]
+        [--nosave]
 
 Word frequencies are exported to JSON by default.
 
