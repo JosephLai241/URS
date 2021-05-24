@@ -490,7 +490,7 @@ Exported files will be saved to the `comments` directory.
 
 ## Livestreaming Reddit via PRAW
 
-These tools may be used to livestream comments or submissions from Subreddits or Redditors. 
+These tools may be used to livestream comments or submissions submitted within Subreddits or by Redditors. 
 
 **Comments are streamed by default**. To stream submissions instead, include the `--stream-submissions` flag.
 
