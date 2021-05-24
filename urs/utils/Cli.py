@@ -67,6 +67,7 @@ class Parser():
     [-lr <subreddit>]
     [-lu <redditor>]
 
+        [--nosave]
         [--stream-submissions]
 
     [-f <file_path>]
