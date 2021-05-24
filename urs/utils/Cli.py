@@ -121,14 +121,14 @@ wordcloud export options:
 Arguments:
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-        [--rules]
         [-y]
+        [--csv]
+        [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
         [--raw] 
     [-b]
-
-    [--csv]
+        [--csv]
 
 All scrape results are exported to JSON by default.
 
@@ -195,13 +195,8 @@ Arguments:
     [-lr <subreddit>]
     [-lu <redditor>]
 
-    Optional settings for livestreaming Subreddits or Redditors (only for `-lr` and `-lu`):
-
-        [--stream-submissions]
-
-    Optional settings for all livestream functionality:
-
         [--nosave]
+        [--stream-submissions]
 
 LIVE SUBREDDIT STREAM
 
@@ -236,7 +231,8 @@ LIVE REDDITOR STREAM
 Arguments:
 
     [-f <file_path>]
-    [-wc <file_path> [<optional_export_format>]]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]
         [--nosave]
 
 Word frequencies are exported to JSON by default.
