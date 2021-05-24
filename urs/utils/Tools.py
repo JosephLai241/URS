@@ -19,8 +19,6 @@ from urs.praw_scrapers.static_scrapers.Subreddit import RunSubreddit
 
 from urs.praw_scrapers.utils.Validation import Validation
 
-from urs.pushshift_scrapers.SearchSubmissions import SearchSubmissions
-
 from urs.utils.Cli import (
     CheckCli,
     Parser
@@ -142,17 +140,6 @@ class Run():
 
             Validation.validate_user(self._parser, self._reddit)
             Livestream.stream(self._args, self._reddit)
-        
-        elif self._args.search_comments or self._args.search_submissions:
-            """
-            Run Pushshift scrapers.
-            """
-
-            if self._args.search_comments:
-                pass
-            
-            elif self._args.search_submissions:
-                SearchSubmissions.run(self._args)
         
         elif self._args.frequencies or self._args.wordcloud:
             """
