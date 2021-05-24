@@ -198,16 +198,17 @@ class SaveStream():
                 print("\n\n")
                 Halo().info(Fore.YELLOW + Style.BRIGHT + "ABORTING LIVESTREAM.")
                 Halo().info("Streamed %s submitted %s for %s." % (object_info, stream_info, duration))
+                print()
 
                 stream_data["livestream_settings"]["stream_duration"] = duration
                 existing_file.seek(0)
                 existing_file.truncate()
                 json.dump(stream_data, existing_file, indent = 4)
 
+        save_spinner = Halo().start("Saving livestream.")
         SaveStream._rename_with_duration(duration, object_info, stream_path)
+        save_spinner.info(Fore.GREEN + Style.BRIGHT + "Livestream has been saved to file.")
 
-        print()
-        Halo().info(Fore.GREEN + Style.BRIGHT + "Livestream has been saved to file.")
         print()
 
 class Livestream():
