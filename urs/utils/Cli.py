@@ -523,17 +523,13 @@ DISPLAY INSTEAD OF SAVING
             metavar = ("<file_path>", "<optional_export_format>"), 
             nargs = "+"
         )
-        analyze_flags.add_argument(
-            "--nosave",
-            action = "store_true",
-            help = "display wordcloud, do not save to file"
-        )
 
-    def _add_skip(self, parser):
+    def _add_extra_options(self, parser):
         """
-        Add skip confirmation flags:
+        Add extra options for various flags:
 
-            -y: skip settings confirmation and scrape immediately
+            -y: skip settings confirmation and scrape immediately (used with `-r`)
+            --nosave: display only; do not save to file (used with `-lr`, `-lu`, or `-wc`)
 
         Parameters
         ----------
@@ -545,11 +541,16 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        skip_flags = parser.add_argument_group("skip confirmation (used with `-r`)")
-        skip_flags.add_argument(
+        extra_flags = parser.add_argument_group("extra options")
+        extra_flags.add_argument(
             "-y", 
             action = "store_true", 
-            help = "skip settings confirmation and scrape immediately"
+            help = "skip settings confirmation and scrape immediately (used with `-r`)"
+        )
+        extra_flags.add_argument(
+            "--nosave",
+            action = "store_true",
+            help = "display only; do not save to file (used with `-lr`, `-lu`, or `-wc`)"
         )
 
     def _add_export(self, parser):
@@ -586,7 +587,7 @@ DISPLAY INSTEAD OF SAVING
             self._add_praw_subreddit_options()
             self._add_praw_comments_options()
             self._add_analytics()
-            self._add_skip()
+            self._add_extra_options()
             self._add_export()
 
         Exceptions
@@ -623,7 +624,7 @@ DISPLAY INSTEAD OF SAVING
 
         self._add_analytics(parser)
 
-        self._add_skip(parser)
+        self._add_extra_options(parser)
         self._add_export(parser)
 
         ### Print help message if no arguments are present.
