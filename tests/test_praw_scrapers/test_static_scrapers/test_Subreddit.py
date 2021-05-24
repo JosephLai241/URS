@@ -10,7 +10,7 @@ import praw
 from dotenv import load_dotenv
 from prettytable import PrettyTable
 
-from urs.praw_scrapers import Subreddit
+from urs.praw_scrapers.static_scrapers import Subreddit
 from urs.utils import Global
 
 class MakeArgs():

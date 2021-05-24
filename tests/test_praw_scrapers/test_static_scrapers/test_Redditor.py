@@ -8,7 +8,7 @@ import praw
 
 from dotenv import load_dotenv
 
-from urs.praw_scrapers import Redditor
+from urs.praw_scrapers.static_scrapers import Redditor
 from urs.utils import Global
 
 class Login():

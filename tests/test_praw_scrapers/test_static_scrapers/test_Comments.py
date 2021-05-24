@@ -9,7 +9,7 @@ import praw
 
 from dotenv import load_dotenv
 
-from urs.praw_scrapers import Comments
+from urs.praw_scrapers.static_scrapers import Comments
 from urs.utils.Export import EncodeNode
 
 class MakeArgs():
