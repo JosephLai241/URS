@@ -50,8 +50,8 @@ class Main():
             client_id = os.getenv("CLIENT_ID"),
             client_secret = os.getenv("CLIENT_SECRET"),
             user_agent = os.getenv("USER_AGENT"),
-            username = os.getenv("USERNAME"),
-            password = os.getenv("PASSWORD")
+            username = os.getenv("REDDIT_USERNAME"),
+            password = os.getenv("REDDIT_PASSWORD")
         )
 
         Run(reddit).run_urs()
