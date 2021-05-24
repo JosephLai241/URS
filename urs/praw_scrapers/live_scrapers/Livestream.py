@@ -146,7 +146,7 @@ class SaveStream():
         new_filename = "..{parent_path}-{object_info}-{duration}.{file_type}".format(
             parent_path = split_stream_path[-2],
             object_info = object_info,
-            duration = duration,
+            duration = duration.replace(":", "_"),
             file_type = split_stream_path[-1]
         )
         
