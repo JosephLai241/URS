@@ -57,7 +57,7 @@ class InitializeDirectory():
     """
 
     @staticmethod
-    def _create(destination):
+    def create(destination):
         """
         Create the directory if it does not exist.
         """
@@ -78,10 +78,10 @@ class InitializeDirectory():
         """
 
         top_dir = "../scrapes/"
-        InitializeDirectory._create(top_dir)
+        InitializeDirectory.create(top_dir)
         
         date_dir = top_dir + date
-        InitializeDirectory._create(date_dir)
+        InitializeDirectory.create(date_dir)
 
     @staticmethod
     def make_type_directory(scrape):
@@ -99,7 +99,7 @@ class InitializeDirectory():
         """
 
         scrape_dir = "../scrapes/%s/%s" % (date, scrape)
-        InitializeDirectory._create(scrape_dir)
+        InitializeDirectory.create(scrape_dir)
     
     @staticmethod
     @LogMissingDir.log
@@ -120,8 +120,8 @@ class InitializeDirectory():
         """
 
         analytics_dir = "../scrapes/%s/analytics/" % date_dir
-        InitializeDirectory._create(analytics_dir)
+        InitializeDirectory.create(analytics_dir)
 
         tool_dir = analytics_dir + tool_type
-        InitializeDirectory._create(tool_dir)
+        InitializeDirectory.create(tool_dir)
         
