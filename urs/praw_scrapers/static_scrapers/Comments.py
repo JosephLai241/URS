@@ -367,6 +367,15 @@ class Write():
                 "comments": None
             }
         }
+
+        try:
+            skeleton["data"]["submission_metadata"]["gallery_data"] = submission.gallery_data
+            skeleton["data"]["submission_metadata"]["media_metadata"] = submission.media_metadata
+
+            skeleton["data"]["submission_metadata"] = dict(sorted(skeleton["data"]["submission_metadata"].items()))
+        except AttributeError:
+            pass
+
         metadata_status.succeed()
 
         return skeleton
