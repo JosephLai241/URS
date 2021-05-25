@@ -17,7 +17,7 @@ class DisplayStream():
     """
 
     @staticmethod
-    def populate_table(include_fields, obj, prefix, pretty_stream):
+    def _populate_table(include_fields, obj, prefix, pretty_stream):
         """
         Populate the PrettyTable rows with Reddit object metadata.
 
@@ -108,9 +108,9 @@ class DisplayStream():
                 "url",
             ]
 
-            DisplayStream.populate_table(submission_fields, obj["submission"], "submission_", pretty_stream)
+            DisplayStream._populate_table(submission_fields, obj["submission"], "submission_", pretty_stream)
 
-        DisplayStream.populate_table(include_fields, obj, "", pretty_stream)
+        DisplayStream._populate_table(include_fields, obj, "", pretty_stream)
 
         pretty_stream.sortby = "%s Attribute" % obj["type"].capitalize()
         pretty_stream.align = "l"
