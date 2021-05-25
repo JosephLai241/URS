@@ -185,7 +185,7 @@ class TestDisplayStreamDisplayMethod():
     """
 
     def test_display_method_comment_object(self):
-        test_comment_object = test_object = {
+        test_comment_object = {
             "author": "u/Flatworm1",
             "body": "They all went to bed hours ago.",
             "body_html": "<div class=\"md\"><p>They all went to bed hours ago.</p>\n</div>",
