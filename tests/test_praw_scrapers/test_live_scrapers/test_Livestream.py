@@ -6,6 +6,7 @@ Testing `Livestream.py`.
 import argparse
 import os
 import praw
+import types
 
 from dotenv import load_dotenv
 
@@ -179,10 +180,28 @@ class TestLivestreamStreamSwitchMethod():
     """
 
     def test_stream_switch_method_default_stream_comments(self):
-        pass
+        reddit = Login.create_reddit_object()
+        subreddit = reddit.subreddit("askreddit")
+
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args("--live-subreddit askreddit".split())
+
+        generator, object_info = Livestream.Livestream._stream_switch(args, subreddit)
+
+        assert isinstance(generator, types.GeneratorType)
+        assert object_info == "comments"
 
     def test_stream_switch_method_stream_submissions(self):
-        pass
+        reddit = Login.create_reddit_object()
+        subreddit = reddit.subreddit("askreddit")
+
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args("--live-subreddit askreddit --stream-submissions".split())
+
+        generator, object_info = Livestream.Livestream._stream_switch(args, subreddit)
+
+        assert isinstance(generator, types.GeneratorType)
+        assert object_info == "submissions"
 
 class TestLivestreamStreamMethod():
     """
