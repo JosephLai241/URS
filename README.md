@@ -370,7 +370,7 @@ You can also scrape Redditor profiles and specify how many results are returned.
 
 Here is a list of Redditor information that is included in scrapes.
 
-| Information          |
+| Redditor Information |
 |----------------------|
 | `comment_karma`      |
 | `created_utc`        |
@@ -458,9 +458,34 @@ Exported files will be saved to the `redditors` directory.
 
 **Supported export formats:** JSON.
 
-You can also scrape comments from submissions and specify the number of results returned. **There are two ways you can scrape comments - structured or raw.**
+You can also scrape comments from submissions and specify the number of results returned.
 
-Comments are sorted by "Best", which is the default sorting option when you visit a submission.
+Submission metadata will be included in the `submission_metadata` field and includes the following attributes:
+
+| Submission Attributes |
+|-----------------------|
+| `author`              |
+| `created_utc`         |
+| `distinguished`       |
+| `edited`              |
+| `is_original_content` |
+| `is_self`             |
+| `link_flair_text`     |
+| `locked`              |
+| `nsfw`                |
+| `num_comments`        |
+| `permalink`           |
+| `score`               |
+| `selftext`            |
+| `spoiler`             |
+| `stickied`            |
+| `subreddit`           |
+| `title`               |
+| `upvote_ratio`        |
+
+If the submission contains a gallery, the attributes `gallery_data` and `media_metadata` will be included.
+
+Comments are written to the `comments` field. They are sorted by "Best", which is the default sorting option when you visit a submission.
 
 PRAW returns submission comments in level order, which means scrape speeds are proportional to the submission's popularity.
 
