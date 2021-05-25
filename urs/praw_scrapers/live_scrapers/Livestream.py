@@ -155,7 +155,17 @@ class SaveStream():
     @staticmethod
     def write(args, generator, object_info, stream_info):
         """
-        Save the livestream to file.
+        Write the livestream to file in real time.
+
+        Calls previously defined private methods:
+
+            SaveStream._create_skeleton()
+            SaveStream._get_temp_filename()
+            SaveStream._rename_with_duration()
+
+        Calls a public method from an external module:
+
+            DisplayStream.display()
 
         Parameters
         ----------
@@ -220,8 +230,13 @@ class Livestream():
     @staticmethod
     def _stream_switch(args, reddit_object):
         """
-        A switch that determines what Reddit objects are yielded (comments,
-        submissions, or both).
+        A switch that determines what Reddit objects are yielded (comments or 
+        submissions).
+
+        Calls public methods from an external module:
+
+            StreamGenerator.stream_submissions()
+            StreamGenerator.stream_comments()
 
         Parameters
         ----------
@@ -252,8 +267,22 @@ class Livestream():
     @staticmethod
     def stream(args, reddit):
         """
-        Livestream comments and/or submissions to terminal, then write stream to 
-        log if applicable.
+        Livestream comments or submissions to terminal. Write the stream to file
+        in real time, if applicable.
+
+        Calls previously defined private methods:
+
+            Livestream._stream_switch()
+            SaveStream.write()
+
+        Calls public methods from external modules:
+
+            DisplayStream.display()
+
+            PRAWTitles.lr_title()
+            PRAWTitles.lu_title()
+
+            Validation.validate()
 
         Parameters
         ----------
