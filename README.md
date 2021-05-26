@@ -523,7 +523,7 @@ These tools may be used to livestream comments or submissions submitted within S
 
 The filenames will follow this format:
 
-`[SUBREDDIT_OR_REDDITOR]-[comments_OR_submissions]-[DURATION_IN_HOURS_MINUTES_SECONDS].json`
+`[SUBREDDIT_OR_REDDITOR]-[comments_OR_submissions]-[START_TIME_IN_HOURS_MINUTES_SECONDS]-[DURATION_IN_HOURS_MINUTES_SECONDS].json`
 
 This file is then saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
 
