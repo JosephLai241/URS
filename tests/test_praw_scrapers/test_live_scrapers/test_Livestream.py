@@ -135,34 +135,36 @@ class TestSaveStreamGetTempFilenameMethod():
 
 class TestSaveStreamRenameWithDurationMethod():
     """
-    Testing SaveStream class _rename_with_duration() method.
+    Testing SaveStream class _rename() method.
     """
 
-    def test_rename_with_duration_method_with_subreddit(self):
+    def test_rename_method_with_subreddit(self):
         test_duration = "00:00:15"
         test_object_info = "comments"
+        test_start_stream = "18:06:06"
         test_stream_path = "../scrapes/%s/livestream/subreddits/askreddit.json" % date
 
         with open(test_stream_path, "w") as _:
             pass
 
-        Livestream.SaveStream._rename_with_duration(test_duration, test_object_info, test_stream_path)
+        Livestream.SaveStream._rename(test_duration, test_object_info, test_start_stream, test_stream_path)
 
-        renamed_file = "../scrapes/%s/livestream/subreddits/askreddit-comments-00_00_15.json" % date
+        renamed_file = "../scrapes/%s/livestream/subreddits/askreddit-comments-18_06_06-00_00_15.json" % date
 
         assert os.path.isfile(renamed_file)
 
-    def test_rename_with_duration_method_with_redditor(self):
+    def test_rename_method_with_redditor(self):
         test_duration = "00:00:15"
         test_object_info = "submissions"
+        test_start_stream = "18:06:06"
         test_stream_path = "../scrapes/%s/livestream/redditors/spez.json" % date
 
         with open(test_stream_path, "w") as _:
             pass
 
-        Livestream.SaveStream._rename_with_duration(test_duration, test_object_info, test_stream_path)
+        Livestream.SaveStream._rename(test_duration, test_object_info, test_start_stream, test_stream_path)
 
-        renamed_file = "../scrapes/%s/livestream/redditors/spez-submissions-00_00_15.json" % date
+        renamed_file = "../scrapes/%s/livestream/redditors/spez-submissions-18_06_06-00_00_15.json" % date
 
         assert os.path.isfile(renamed_file)
 
