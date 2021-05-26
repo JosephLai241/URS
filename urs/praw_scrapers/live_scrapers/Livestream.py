@@ -48,17 +48,18 @@ class SaveStream():
 
         skeleton = {
             "livestream_settings": {},
+            "livestream_metadata": {},
             "data": []
         }
+
+        skeleton["livestream_settings"]["included_reddit_objects"] = "submissions" \
+            if args.stream_submissions \
+            else "comments"
 
         if args.live_subreddit:
             skeleton["livestream_settings"]["subreddit"] = args.live_subreddit
         elif args.live_redditor:
             skeleton["livestream_settings"]["redditor"] = args.live_redditor
-
-        skeleton["livestream_settings"]["included_reddit_objects"] = "submissions" \
-            if args.stream_submissions \
-            else "comments"
 
         return skeleton
 
@@ -124,9 +125,9 @@ class SaveStream():
         return stream_directory + "/" + filename
 
     @staticmethod
-    def _rename_with_duration(duration, object_info, stream_path):
+    def _rename(duration, object_info, start_stream, stream_path):
         """
-        Rename the livestream file by including the duration.
+        Rename the livestream file by including the start time and duration.
 
         Parameters
         ----------
@@ -134,6 +135,8 @@ class SaveStream():
             String denoting the total time spent livestreaming
         object_info: str
             String denoting what kind of Reddit objects were streamed
+        start_stream: str
+            String denoting the time the stream started
         stream_path: str
             String denoting the path to the saved livestream
 
@@ -143,9 +146,10 @@ class SaveStream():
         """
 
         split_stream_path = stream_path.split(".")
-        new_filename = "..{parent_path}-{object_info}-{duration}.{file_type}".format(
+        new_filename = "..{parent_path}-{object_info}-{start_stream}-{duration}.{file_type}".format(
             parent_path = split_stream_path[-2],
             object_info = object_info,
+            start_stream = start_stream.replace(":", "_"),
             duration = duration.replace(":", "_"),
             file_type = split_stream_path[-1]
         )
@@ -161,7 +165,7 @@ class SaveStream():
 
             SaveStream._create_skeleton()
             SaveStream._get_temp_filename()
-            SaveStream._rename_with_duration()
+            SaveStream._rename()
 
         Calls a public method from an external module:
 
@@ -192,7 +196,7 @@ class SaveStream():
         with open(stream_path, "r+", encoding = "utf-8") as existing_file:
             stream_data = json.load(existing_file)
 
-            start_stream = time.time()
+            start_stream = time.mktime(time.localtime())
             try:
                 for obj in generator:
                     DisplayStream.display(obj)
@@ -203,20 +207,24 @@ class SaveStream():
                     json.dump(stream_data, existing_file)
 
             except KeyboardInterrupt:
-                duration = time.strftime("%H:%M:%S", time.gmtime(time.time() - start_stream))
+                end_stream = time.mktime(time.localtime())
+                duration = time.strftime("%H:%M:%S", time.gmtime(end_stream - start_stream))
 
                 print("\n\n")
                 Halo().info(Fore.YELLOW + Style.BRIGHT + "ABORTING LIVESTREAM.")
                 Halo().info("Streamed %s submitted %s for %s." % (object_info, stream_info, duration))
                 print()
 
-                stream_data["livestream_settings"]["stream_duration"] = duration
+                stream_data["livestream_metadata"]["stream_duration"] = duration
+                stream_data["livestream_metadata"]["stream_end"] = time.strftime("%H:%M:%S", time.localtime(end_stream))
+                stream_data["livestream_metadata"]["stream_start"] = time.strftime("%H:%M:%S", time.localtime(start_stream))
+
                 existing_file.seek(0)
                 existing_file.truncate()
                 json.dump(stream_data, existing_file, indent = 4)
 
         save_spinner = Halo().start("Saving livestream.")
-        SaveStream._rename_with_duration(duration, object_info, stream_path)
+        SaveStream._rename(duration, object_info, time.strftime("%H:%M:%S", time.localtime(start_stream)), stream_path)
         save_spinner.info(Fore.GREEN + Style.BRIGHT + "Livestream has been saved to file.")
 
         print()
