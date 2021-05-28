@@ -7,7 +7,6 @@ comments within scraped data.
 
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
@@ -18,22 +17,17 @@ from urs.analytics.utils.PrepData import (
     PrepData
 )
 
-from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Export import Export
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class Sort():
     """
     Methods for sorting the frequencies data.
     """
 
-    def get_data(self, file):
+    def get_data(self, scrape_file):
         """
         Get data from scrape file.
 
@@ -44,32 +38,38 @@ class Sort():
 
         Parameters
         ----------
-        file: list
+        scrape_file: list
             List containing scrape files and file formats to generate wordcloud with
 
         Returns
         -------
+        analytics_dir: str
+            String denoting the path to the directory in which the analytical
+            data will be written
         frequency_data: dict
             Dictionary containing extracted scrape data
         """
 
-        scrape_type = GetPath.get_scrape_type(file[0])
-        return PrepData.prep(file[0], scrape_type)
+        analytics_dir, scrape_type = GetPath.get_scrape_type(scrape_file[0], "frequencies")
 
-    def name_and_create_dir(self, args, file):
+        return analytics_dir, PrepData.prep(scrape_file[0], scrape_type)
+
+    def name_and_create_dir(self, analytics_dir, args, scrape_file):
         """
         Name the new file and create the analytics directory.
 
         Calls public methods from external modules:
 
             GetPath.name_file()
-            InitializeDirectory.make_analytics_directory(
 
         Parameters
         ----------
+        analytics_dir: str
+            String denoting the path to the directory in which the analytical
+            data will be written
         args: Namespace
             Namespace object containing all arguments used in the CLI
-        file: list
+        scrape_file: list
             List containing scrape files and file formats to generate wordcloud with
 
         Returns
@@ -84,8 +84,7 @@ class Sort():
             if args.csv \
             else "json"
 
-        date_dir, filename = GetPath.name_file(f_type, file[0], "frequencies")
-        InitializeDirectory.make_analytics_directory(date_dir, "frequencies")
+        filename = GetPath.name_file(analytics_dir, scrape_file[0])
 
         return f_type, filename
 
@@ -115,16 +114,16 @@ class Sort():
 
         return overview
 
-    def create_json(self, file, plt_dict):
+    def create_json(self, plt_dict, scrape_file):
         """
         Create JSON structure for exporting.
 
         Parameters
         ----------
-        file: list
-            List containing scrape files and file formats to generate wordcloud with
         plt_dict: dict
             Dictionary containing frequency data
+        scrape_file: list
+            List containing scrape files and file formats to generate wordcloud with
 
         Returns
         -------
@@ -133,7 +132,7 @@ class Sort():
         """
 
         return {
-            "raw_file": file[0],
+            "raw_file": scrape_file[0],
             "data": plt_dict
         }
 
@@ -207,15 +206,15 @@ class GenerateFrequencies():
 
         AnalyticsTitles.f_title()
 
-        for file in args.frequencies:
-            f_type, filename = Sort().name_and_create_dir(args, file)
-            plt_dict = Sort().get_data(file)
+        for scrape_file in args.frequencies:
+            analytics_dir, plt_dict = Sort().get_data(scrape_file)
+            f_type, filename = Sort().name_and_create_dir(analytics_dir, args, scrape_file)
 
             Halo().info("Generating frequencies.")
             print()
             data = Sort().create_csv(plt_dict) \
                 if args.csv \
-                else Sort().create_json(file, plt_dict)
+                else Sort().create_json(plt_dict, scrape_file)
 
             export_status = Status(
                 Style.BRIGHT + Fore.GREEN + "Frequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
@@ -227,4 +226,3 @@ class GenerateFrequencies():
             ExportFrequencies.export(data, f_type, filename)
             export_status.succeed()
             print()
-            
