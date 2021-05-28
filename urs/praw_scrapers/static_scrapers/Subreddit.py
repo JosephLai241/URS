@@ -8,7 +8,6 @@ Defining methods for the Subreddit scraper.
 import logging
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
@@ -37,10 +36,6 @@ from urs.utils.Logger import (
     LogPRAWScraper
 )
 from urs.utils.Titles import PRAWTitles
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class PrintConfirm():
     """

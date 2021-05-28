@@ -10,7 +10,6 @@ import praw
 import requests
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
@@ -25,10 +24,6 @@ from prettytable import PrettyTable
 from urs.utils.Global import Status
 from urs.utils.Logger import LogError
 from urs.utils.Titles import Errors
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class Validation():
     """
