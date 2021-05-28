@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 """
 URS
 ===
@@ -15,9 +16,6 @@ command-line tool written in Python.
     + Livestream comments or submissions submitted within Subreddits
     + Livestream comments or submissions submitted by Redditors
     + Livestream trending submissions within Subreddits
-* Scrape Reddit via the Pushshift API
-    + Search for keywords in all publicly available submissions
-    + Search for keywords in all publicly available comments
 * Analytical tools for scraped data
     + Get frequencies for words that are found in submission titles, bodies, and/or comments
     + Generate a wordcloud from scrape results
@@ -31,10 +29,15 @@ command-line tool written in Python.
 import os
 import praw
 
+from colorama import init
 from dotenv import load_dotenv
 
 from urs.utils.Logger import LogMain
 from urs.utils.Tools import Run
+
+### Automate sending reset sequences to turn off color changes at the end of 
+### every print.
+init(autoreset = True)
 
 class Main():
     """
