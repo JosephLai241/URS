@@ -592,8 +592,6 @@ A shortened export path is displayed once URS has completed exporting the data, 
 
 The sub-directories `frequencies` or `wordclouds` are created in `analytics` depending on which tool is run.
 
-***NOTE:*** Do not move the `scrapes` directory elsewhere if you want to use these tools. URS uses a relative path to save the generated files.
-
 ---
 
 ### Target Fields
