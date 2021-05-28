@@ -124,39 +124,6 @@ class PRAWTitles():
    \/____/ \/___/ 
 """)
 
-class PushshiftTitles():
-    """
-    Methods for printing Pushshift scraper titles.
-    """
-
-    @staticmethod
-    def s_c_title():
-        """
-        Print search comments scraper title.
-        """
-
-        print(Fore.WHITE + Style.BRIGHT + r"""
-  ____    ___   
- /',__\  /'___\ 
-/\__, `\/\ \__/ 
-\/\____/\ \____\
- \/___/  \/____/
-""")
-
-    @staticmethod
-    def s_s_title():
-        """
-        Print search submissions scraper title.
-        """
-
-        print(Fore.WHITE + Style.BRIGHT + r"""
-  ____    ____  
- /',__\  /',__\ 
-/\__, `\/\__, `\
-\/\____/\/\____/
- \/___/  \/___/
-""")
-
 class AnalyticsTitles():
     """
     Methods for printing analytical tool titles.
