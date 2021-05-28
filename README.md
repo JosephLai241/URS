@@ -342,7 +342,7 @@ Or if you searched for keywords:
 
 ### Subreddit Rules
 
-You can also include the Subreddit's rules and post requirements in your scrape data by including the `--rules` flag. **This only works when exporting to JSON.**
+You can also include the Subreddit's rules and post requirements in your scrape data by including the `--rules` flag. **This only works when exporting to JSON**. This data will be included in the `subreddit_rules` field.
 
 If rules are included in your file, `-rules` will be appended to the end of the file name.
 
@@ -368,7 +368,7 @@ Exported files will be saved to the `subreddits` directory.
 
 You can also scrape Redditor profiles and specify how many results are returned.
 
-Here is a list of Redditor information that is included in scrapes.
+Redditor information will be included in the `information` field and includes the following attributes:
 
 | Redditor Information |
 |----------------------|
@@ -387,7 +387,7 @@ Here is a list of Redditor information that is included in scrapes.
 | `subreddit`          |
 | `trophies`           |
 
-Here is a table of all Redditor interaction attributes that are also included, how they are sorted, and what type of Reddit objects are included in each.
+Redditor interactions will be included in the `interactions` field. Here is a table of all Redditor interaction attributes that are also included, how they are sorted, and what type of Reddit objects are included in each.
 
 | Attribute Name | Sorted By/Time Filter                       | Reddit Objects           |
 |----------------|---------------------------------------------|--------------------------|
