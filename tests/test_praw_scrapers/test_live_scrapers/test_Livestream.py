@@ -133,7 +133,25 @@ class TestSaveStreamGetTempFilenameMethod():
 
         assert stream_path == "../scrapes/%s/livestream/redditors/spez.json" % date
 
-class TestSaveStreamRenameWithDurationMethod():
+class TestSaveStreamCreateTempFileMethod():
+    """
+    Testing SaveStream class _create_temp_file() method.
+    """
+
+    def test_create_temp_file_method(self):
+        test_skeleton = {
+            "test": 1
+        }
+        test_stream_path = "../scrapes/livestream/subreddits/askreddit.json"
+
+        if not os.path.isdir("../scrapes/livestream/subreddits"):
+            os.makedirs("../scrapes/livestream/subreddits")
+
+        Livestream.SaveStream._create_temp_file(test_skeleton, test_stream_path)
+
+        assert os.path.isfile(test_stream_path)
+
+class TestSaveStreamRenameMethod():
     """
     Testing SaveStream class _rename() method.
     """
@@ -176,6 +194,33 @@ class TestSaveStreamWriteMethod():
     def test_write_method(self):
         pass
 
+class TestLivestreamSetInfoAndObjectMethod():
+    """
+    Testing Livestream class _set_info_and_object() method.
+    """
+
+    def test_set_info_and_object_live_subreddit(self):
+        reddit = Login.create_reddit_object()
+
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args("--live-subreddit askreddit".split())
+
+        reddit_object, stream_info = Livestream.Livestream._set_info_and_object(args, reddit)
+
+        assert isinstance(reddit_object, praw.models.Subreddit)
+        assert stream_info == "in r/askreddit"
+
+    def test_set_info_and_object_live_redditor(self):
+        reddit = Login.create_reddit_object()
+
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args("--live-redditor spez".split())
+
+        reddit_object, stream_info = Livestream.Livestream._set_info_and_object(args, reddit)
+
+        assert isinstance(reddit_object, praw.models.Redditor)
+        assert stream_info == "by u/spez"
+
 class TestLivestreamStreamSwitchMethod():
     """
     Testing Livestream class _stream_switch() method.
@@ -204,6 +249,14 @@ class TestLivestreamStreamSwitchMethod():
 
         assert isinstance(generator, types.GeneratorType)
         assert object_info == "submissions"
+
+class TestLivestreamNoSaveStreamMethod():
+    """
+    Testing livestream class _no_save_stream() method.
+    """
+
+    def test_no_save_stream_method(self):
+        pass
 
 class TestLivestreamStreamMethod():
     """
