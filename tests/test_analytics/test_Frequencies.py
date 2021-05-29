@@ -43,13 +43,13 @@ class TestSortCreateJsonMethod():
     """
 
     def test_create_json_method(self):
-        file = ["test", "something"]
+        scrape_file = ["test", "something"]
         plt_dict = {
             "test": 1,
             "testing": 2
         }
 
-        assert Frequencies.Sort().create_json(file, plt_dict) == {
+        assert Frequencies.Sort().create_json(plt_dict, scrape_file) == {
             "raw_file": "test",
             "data": {
                 "test": 1,
