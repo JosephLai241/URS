@@ -13,13 +13,16 @@ class TestGetPathGetScrapeTypeMethod():
     def test_get_scrape_type_method_valid_filepath(self):
         test_path = "../scrapes/some_date/test/some_other_dir/some_file.json"
 
-        assert PrepData.GetPath.get_scrape_type(test_path) == "test"
+        analytics_dir, scrape_dir = PrepData.GetPath.get_scrape_type(test_path, "frequencies")
+
+        assert analytics_dir == "../scrapes/some_date/analytics/frequencies/test/some_other_dir"
+        assert scrape_dir == "test"
 
     def test_get_scrape_type_method_invalid_directory(self):
         test_path = "../scrapes/some_date/test/some_other_dir/some_file.txt"
 
         try:
-            PrepData.GetPath.get_scrape_type(test_path)
+            PrepData.GetPath.get_scrape_type(test_path, "frequencies")
             assert False
         except SystemExit:
             assert True
@@ -28,7 +31,7 @@ class TestGetPathGetScrapeTypeMethod():
         test_path = "../scrapes/some_date/analytics/some_other_dir/some_file.json"
 
         try:
-            PrepData.GetPath.get_scrape_type(test_path)
+            PrepData.GetPath.get_scrape_type(test_path, "wordcloud")
             assert False
         except SystemExit:
             assert True
@@ -39,14 +42,12 @@ class TestGetPathNameFileMethod():
     """
 
     def test_name_file_method(self):
-        test_export_option = "png"
-        test_path = "../scrapes/some_date/subreddits/some_file.json"
-        test_tool_type = "test_tool"
+        test_analytics = "../scrapes/some_date/analytics/frequencies/test/some_other_dir"
+        test_path = "../something/another_thing/a_third_thing/test.json"
 
-        date_dir, filename = PrepData.GetPath.name_file(test_export_option, test_path, test_tool_type)
+        filename = PrepData.GetPath.name_file(test_analytics, test_path)
 
-        assert date_dir == "some_date"
-        assert filename == "../scrapes/some_date/analytics/test_tool/some_file.png"
+        assert filename == "../scrapes/some_date/analytics/frequencies/test/some_other_dir/test.json"
 
 class TestExtractExtractMethod():
     """
