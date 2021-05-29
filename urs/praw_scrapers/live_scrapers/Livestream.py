@@ -340,11 +340,11 @@ class Livestream():
         """
 
         if args.stream_submissions:
-            Halo().info(Fore.WHITE + Style.BRIGHT + "Displaying submissions.")
+            Halo().info(Fore.BLUE + Style.BRIGHT + "Displaying submissions.")
             object_info = "submissions"
             generator = StreamGenerator.stream_submissions(reddit_object.stream)
         else:
-            Halo().info(Fore.WHITE + Style.BRIGHT + "Displaying comments.")
+            Halo().info(Fore.BLUE + Style.BRIGHT + "Displaying comments.")
             object_info = "comments"
             generator = StreamGenerator.stream_comments(reddit_object.stream)
 
