@@ -549,6 +549,8 @@ Comment and submission attributes included in each scrape are identical to those
 
 ### Livestreaming Subreddits
 
+![Livestream Subreddit Demo GIF][Livestream Subreddit Demo]
+
 **Usage:** `$ ./Urs.py -lr SUBREDDIT`
 
 **Supported export formats:** JSON.
@@ -729,11 +731,15 @@ This is a showcase for projects that are built on top of URS!
 <!-- PRAW LINKS -->
 [Subreddit Stream Disclaimer]: https://praw.readthedocs.io/en/latest/code_overview/other/subredditstream.html#praw.models.reddit.subreddit.SubredditStream
 
-<!-- DEMO GIFS: Links to demo GIFS -->
+<!-- PRAW SCRAPER DEMO GIFS -->
 [Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Subreddit_demo.gif
 [Redditor Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Redditor_demo.gif
 [Submission Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/submission_comments_demo.gif
 
+<!-- PRAW LIVESTREAM DEMO GIFS -->
+[Livestream Subreddit Demo]: https://something.com
+
+<!-- ANALYTICAL TOOLS DEMO GIFS -->
 [Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/frequencies_generator_demo.gif
 [Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/wordcloud_generator_demo.gif
 
