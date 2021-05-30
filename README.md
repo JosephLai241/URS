@@ -553,6 +553,8 @@ Comment and submission attributes included in each scrape are identical to those
 
 **Supported export formats:** JSON.
 
+**Default stream objects:** Comments. To stream submissions instead, include the `--stream-submissions` flag.
+
 You can livestream comments or submissions that are created within a Subreddit.
 
 Reddit object information will be displayed in a [PrettyTable][PrettyTable] as they are submitted. 
@@ -566,6 +568,8 @@ Reddit object information will be displayed in a [PrettyTable][PrettyTable] as t
 **Usage:** `$ ./Urs.py -lu REDDITOR` 
 
 **Supported export formats:** JSON.
+
+**Default stream objects:** Comments. To stream submissions instead, include the `--stream-submissions` flag.
 
 You can livestream comments or submissions that are created by a Redditor.
 
@@ -588,9 +592,16 @@ There are a few ways you can quickly get the correct filepath to the scrape file
 
 Running either tool will create the `analytics` directory within the date directory. **This directory is located in the same directory in which the scrape data resides**. For example, if you run the frequencies generator on February 16th for scrape data that was captured on February 14th, `analytics` will be created in the February 14th directory. Command history will still be written in the February 16th `urs.log`.
 
-A shortened export path is displayed once URS has completed exporting the data, informing you where the file is saved within the `scrapes` directory. You can open `urs.log` to view the full path. 
+The sub-directories `frequencies` or `wordclouds` are created in `analytics` depending on which tool is run. These directories mirror the directories in which the original scrape files reside. For example, if you run the frequencies generator on a Subreddit scrape, the directory structure will look like this:
 
-The sub-directories `frequencies` or `wordclouds` are created in `analytics` depending on which tool is run.
+```
+analytics/
+└── frequencies
+    └── subreddits
+        └── SUBREDDIT_SCRAPE.json
+```
+
+A shortened export path is displayed once URS has completed exporting the data, informing you where the file is saved within the `scrapes` directory. You can open `urs.log` to view the full path.
 
 ---
 
