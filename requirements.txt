@@ -35,7 +35,7 @@ spinners==0.0.24
 termcolor==1.1.0
 toml==0.10.2
 update-checker==0.18.0
-urllib3==1.26.4
+urllib3==1.26.5
 wcwidth==0.2.5
 websocket-client==0.58.0
 wordcloud==1.8.1
