@@ -81,7 +81,7 @@ usage: $ Urs.py
         * [Do Not Save Livestream to File](#do-not-save-livestream-to-file)
     + [Analytical Tools](#analytical-tools-1)
         * [Target Fields](#target-fields)
-        * [Available Flags](#available-flags-3)
+        * [Available Flags](#available-flags-2)
         * [File Names](#file-names)
         * [Generating Word Frequencies](#generating-word-frequencies)
         * [Generating Wordclouds](#generating-wordclouds)
@@ -188,7 +188,7 @@ The `livestream` directory is created when you run any of the livestream scraper
 
 ### Analytical Tools
 
-The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories may be created. See the [Analytical Tools](#analytical-tools) section for more information.
+The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories may be created. See the [Analytical Tools](#analytical-tools-1) section for more information.
 
 ---
 
