@@ -4,20 +4,34 @@
 
 ```
 scrapes/
-└── 03-24-2021
+└── 06-02-2021
     ├── analytics
-    │   ├── frequencies
-    │   │   └── cscareerquestions-search-'job'-past-year.json
-    │   └── wordclouds
-    │       └── If you’re belly button was a real button, what w---all.png
+    │   ├── frequencies
+    │   │   ├── comments
+    │   │   │   └── What’s something from the 90s you miss_-all.json
+    │   │   ├── livestream
+    │   │   │   └── subreddits
+    │   │   │       └── askreddit-comments-20_44_11-00_01_10.json
+    │   │   └── subreddits
+    │   │       └── cscareerquestions-search-'job'-past-year-rules.json
+    │   └── wordcloud
+    │       ├── comments
+    │       │   └── What’s something from the 90s you miss_-all.png
+    │       ├── livestream
+    │       │   └── subreddits
+    │       │       └── askreddit-comments-20_44_11-00_01_10.png
+    │       └── subreddits
+    │           └── cscareerquestions-search-'job'-past-year-rules.png
     ├── comments
-    │   ├── If you’re belly button was a real button, what w---all.json
-    │   └── If you’re belly button was a real button, what w---all-raw.json
+    │   └── What’s something from the 90s you miss_-all.json
+    ├── livestream
+    │   └── subreddits
+    │       ├── askreddit-comments-20_44_11-00_01_10.json
+    │       └── askreddit-submissions-20_46_12-00_01_52.json
     ├── redditors
-    │   └── spez-5-results.json
+    │   └── spez-5-results.json
     ├── subreddits
-    │   ├── askreddit-hot-100-results.json
-    │   ├── cscareerquestions-search-'job'-past-year.json
-    │   └── wallstreetbets-top-10-results-past-year-rules.json
+    │   ├── askreddit-hot-10-results.json
+    │   └── cscareerquestions-search-'job'-past-year-rules.json
     └── urs.log
 ```

@@ -1,0 +1,204 @@
+[2021-06-02 20:18:27,325] [INFO]: INITIALIZING URS.
+[2021-06-02 20:18:27,325] [INFO]: 
+[2021-06-02 20:18:28,738] [INFO]: RATE LIMIT DISPLAYED.
+[2021-06-02 20:18:28,738] [INFO]: Remaining requests: 599
+[2021-06-02 20:18:28,738] [INFO]: Used requests: 1
+[2021-06-02 20:18:28,738] [INFO]: 
+[2021-06-02 20:18:28,739] [INFO]: Successfully logged in as u/urs_project.
+[2021-06-02 20:18:28,739] [INFO]: 
+[2021-06-02 20:18:28,739] [INFO]: RUNNING SUBREDDIT SCRAPER.
+[2021-06-02 20:18:28,739] [INFO]: 
+[2021-06-02 20:18:28,740] [INFO]: Validating Subreddit(s)...
+[2021-06-02 20:18:28,740] [INFO]: 
+[2021-06-02 20:18:33,133] [INFO]: Scraping r/askreddit for 10 Hot results...
+[2021-06-02 20:18:33,133] [INFO]: 
+[2021-06-02 20:18:33,133] [INFO]: SUBREDDIT SCRAPER FINISHED IN 4.39 SECONDS.
+[2021-06-02 20:18:33,134] [INFO]: 
+[2021-06-02 20:18:33,134] [INFO]: Exporting to JSON.
+[2021-06-02 20:18:33,134] [INFO]: 
+[2021-06-02 20:18:33,134] [INFO]: URS COMPLETED IN 5.81 SECONDS.
+
+[2021-06-02 20:20:21,051] [INFO]: INITIALIZING URS.
+[2021-06-02 20:20:21,051] [INFO]: 
+[2021-06-02 20:20:22,021] [INFO]: RATE LIMIT DISPLAYED.
+[2021-06-02 20:20:22,021] [INFO]: Remaining requests: 599
+[2021-06-02 20:20:22,021] [INFO]: Used requests: 1
+[2021-06-02 20:20:22,021] [INFO]: 
+[2021-06-02 20:20:22,021] [INFO]: Successfully logged in as u/urs_project.
+[2021-06-02 20:20:22,022] [INFO]: 
+[2021-06-02 20:20:22,022] [INFO]: RUNNING SUBREDDIT SCRAPER.
+[2021-06-02 20:20:22,022] [INFO]: 
+[2021-06-02 20:20:22,023] [INFO]: Validating Subreddit(s)...
+[2021-06-02 20:20:22,023] [INFO]: 
+[2021-06-02 20:20:25,807] [INFO]: Including Subreddit rules.
+[2021-06-02 20:20:25,807] [INFO]: 
+[2021-06-02 20:20:26,136] [INFO]: Getting posts from the past year for Search results.
+[2021-06-02 20:20:26,136] [INFO]: Searching and scraping r/cscareerquestions for posts containing 'job'...
+[2021-06-02 20:20:26,136] [INFO]: 
+[2021-06-02 20:20:26,136] [INFO]: SUBREDDIT SCRAPER FINISHED IN 4.11 SECONDS.
+[2021-06-02 20:20:26,136] [INFO]: 
+[2021-06-02 20:20:26,136] [INFO]: Exporting to JSON.
+[2021-06-02 20:20:26,136] [INFO]: 
+[2021-06-02 20:20:26,137] [INFO]: URS COMPLETED IN 5.09 SECONDS.
+
+[2021-06-02 20:20:59,832] [INFO]: INITIALIZING URS.
+[2021-06-02 20:20:59,832] [INFO]: 
+[2021-06-02 20:21:00,720] [INFO]: RATE LIMIT DISPLAYED.
+[2021-06-02 20:21:00,720] [INFO]: Remaining requests: 594
+[2021-06-02 20:21:00,720] [INFO]: Used requests: 6
+[2021-06-02 20:21:00,720] [INFO]: 
+[2021-06-02 20:21:00,720] [INFO]: Successfully logged in as u/urs_project.
+[2021-06-02 20:21:00,721] [INFO]: 
+[2021-06-02 20:21:00,721] [INFO]: RUNNING REDDITOR SCRAPER.
+[2021-06-02 20:21:00,721] [INFO]: 
+[2021-06-02 20:21:00,722] [INFO]: Validating Redditor(s)...
+[2021-06-02 20:21:00,722] [INFO]: 
+[2021-06-02 20:21:51,916] [INFO]: Scraping 5 results for u/spez...
+[2021-06-02 20:21:51,917] [INFO]: 
+[2021-06-02 20:21:51,917] [INFO]: REDDITOR SCRAPER FINISHED IN 51.20 SECONDS.
+[2021-06-02 20:21:51,917] [INFO]: 
+[2021-06-02 20:21:51,917] [INFO]: Exporting to JSON.
+[2021-06-02 20:21:51,917] [INFO]: 
+[2021-06-02 20:21:51,917] [INFO]: URS COMPLETED IN 52.09 SECONDS.
+
+[2021-06-02 20:25:24,892] [INFO]: INITIALIZING URS.
+[2021-06-02 20:25:24,893] [INFO]: 
+[2021-06-02 20:25:26,264] [INFO]: RATE LIMIT DISPLAYED.
+[2021-06-02 20:25:26,264] [INFO]: Remaining requests: 506
+[2021-06-02 20:25:26,584] [INFO]: Used requests: 94
+[2021-06-02 20:25:26,585] [INFO]: 
+[2021-06-02 20:25:26,585] [INFO]: Successfully logged in as u/urs_project.
+[2021-06-02 20:25:26,585] [INFO]: 
+[2021-06-02 20:25:26,586] [INFO]: RUNNING COMMENTS SCRAPER.
+[2021-06-02 20:25:26,586] [INFO]: 
+[2021-06-02 20:25:26,587] [INFO]: Validating submission(s)...
+[2021-06-02 20:25:26,587] [INFO]: 
+[2021-06-02 20:29:48,762] [INFO]: Exporting all comments in structured format.
+[2021-06-02 20:29:49,377] [INFO]: Processing all comments from Reddit post https://www.reddit.com/r/AskReddit/comments/nql6xv/whats_something_from_the_90s_you_miss/...
+[2021-06-02 20:29:49,378] [INFO]: 
+[2021-06-02 20:29:49,378] [INFO]: COMMENTS SCRAPER FINISHED IN 262.79 SECONDS.
+[2021-06-02 20:29:49,378] [INFO]: 
+[2021-06-02 20:29:49,378] [INFO]: Exporting to JSON.
+[2021-06-02 20:29:49,378] [INFO]: 
+[2021-06-02 20:29:49,378] [INFO]: URS COMPLETED IN 264.49 SECONDS.
+
+[2021-06-02 20:44:10,363] [INFO]: INITIALIZING URS.
+[2021-06-02 20:44:10,364] [INFO]: 
+[2021-06-02 20:44:11,737] [INFO]: RATE LIMIT DISPLAYED.
+[2021-06-02 20:44:11,737] [INFO]: Remaining requests: 599
+[2021-06-02 20:44:11,737] [INFO]: Used requests: 1
+[2021-06-02 20:44:11,737] [INFO]: 
+[2021-06-02 20:44:11,738] [INFO]: Successfully logged in as u/urs_project.
+[2021-06-02 20:44:11,738] [INFO]: 
+[2021-06-02 20:44:11,740] [INFO]: Validating Subreddit(s)...
+[2021-06-02 20:44:11,740] [INFO]: 
+[2021-06-02 20:44:11,908] [INFO]: Initializing Subreddit livestream for r/askreddit...
+[2021-06-02 20:44:11,915] [INFO]: Writing stream to temporary file: ../scrapes/06-02-2021/livestream/subreddits/askreddit.json.
+[2021-06-02 20:44:11,916] [INFO]: 
+[2021-06-02 20:44:11,916] [INFO]: STREAMING...
+[2021-06-02 20:44:11,916] [INFO]: 
+[2021-06-02 20:45:21,684] [INFO]: ABORTING LIVESTREAM.
+[2021-06-02 20:45:21,684] [INFO]: 
+[2021-06-02 20:45:21,717] [INFO]: Renaming livestream file to: ../scrapes/06-02-2021/livestream/subreddits/askreddit-comments-20_44_11-00_01_10.json.
+[2021-06-02 20:45:21,797] [INFO]: Livestream has been saved to file.
+[2021-06-02 20:45:21,798] [INFO]: 
+[2021-06-02 20:45:21,798] [INFO]: Streamed comments submitted in r/askreddit for 00:01:10.
+[2021-06-02 20:45:21,798] [INFO]: 
+[2021-06-02 20:45:21,798] [INFO]: URS COMPLETED IN 71.43 SECONDS.
+
+[2021-06-02 20:46:11,532] [INFO]: INITIALIZING URS.
+[2021-06-02 20:46:11,532] [INFO]: 
+[2021-06-02 20:46:12,582] [INFO]: RATE LIMIT DISPLAYED.
+[2021-06-02 20:46:12,582] [INFO]: Remaining requests: 524
+[2021-06-02 20:46:12,583] [INFO]: Used requests: 76
+[2021-06-02 20:46:12,583] [INFO]: 
+[2021-06-02 20:46:12,583] [INFO]: Successfully logged in as u/urs_project.
+[2021-06-02 20:46:12,583] [INFO]: 
+[2021-06-02 20:46:12,584] [INFO]: Validating Subreddit(s)...
+[2021-06-02 20:46:12,585] [INFO]: 
+[2021-06-02 20:46:12,749] [INFO]: Initializing Subreddit livestream for r/askreddit...
+[2021-06-02 20:46:12,753] [INFO]: Writing stream to temporary file: ../scrapes/06-02-2021/livestream/subreddits/askreddit.json.
+[2021-06-02 20:46:12,757] [INFO]: 
+[2021-06-02 20:46:12,757] [INFO]: STREAMING...
+[2021-06-02 20:46:12,758] [INFO]: 
+[2021-06-02 20:48:04,196] [INFO]: ABORTING LIVESTREAM.
+[2021-06-02 20:48:04,196] [INFO]: 
+[2021-06-02 20:48:04,200] [INFO]: Renaming livestream file to: ../scrapes/06-02-2021/livestream/subreddits/askreddit-submissions-20_46_12-00_01_52.json.
+[2021-06-02 20:48:04,281] [INFO]: Livestream has been saved to file.
+[2021-06-02 20:48:04,282] [INFO]: 
+[2021-06-02 20:48:04,283] [INFO]: Streamed submissions submitted in r/askreddit for 00:01:52.
+[2021-06-02 20:48:04,283] [INFO]: 
+[2021-06-02 20:48:04,283] [INFO]: URS COMPLETED IN 112.75 SECONDS.
+
+[2021-06-02 20:52:03,598] [INFO]: INITIALIZING URS.
+[2021-06-02 20:52:03,599] [INFO]: 
+[2021-06-02 20:52:03,603] [INFO]: RUNNING FREQUENCIES GENERATOR.
+[2021-06-02 20:52:03,603] [INFO]: 
+[2021-06-02 20:52:03,603] [INFO]: Generating frequencies for file ../scrapes/06-02-2021/subreddits/cscareerquestions-search-'job'-past-year-rules.json...
+[2021-06-02 20:52:03,603] [INFO]: 
+[2021-06-02 20:52:03,823] [INFO]: Exporting to JSON.
+[2021-06-02 20:52:03,824] [INFO]: 
+[2021-06-02 20:52:03,880] [INFO]: FREQUENCIES GENERATOR FINISHED IN 0.28 SECONDS.
+[2021-06-02 20:52:03,880] [INFO]: 
+[2021-06-02 20:52:03,881] [INFO]: URS COMPLETED IN 0.28 SECONDS.
+
+[2021-06-02 20:52:50,366] [INFO]: INITIALIZING URS.
+[2021-06-02 20:52:50,366] [INFO]: 
+[2021-06-02 20:52:50,372] [INFO]: RUNNING FREQUENCIES GENERATOR.
+[2021-06-02 20:52:50,372] [INFO]: 
+[2021-06-02 20:52:50,372] [INFO]: Generating frequencies for file ../scrapes/06-02-2021/comments/What’s something from the 90s you miss_-all.json...
+[2021-06-02 20:52:50,372] [INFO]: 
+[2021-06-02 20:52:51,631] [INFO]: Exporting to JSON.
+[2021-06-02 20:52:51,632] [INFO]: 
+[2021-06-02 20:52:51,709] [INFO]: FREQUENCIES GENERATOR FINISHED IN 1.34 SECONDS.
+[2021-06-02 20:52:51,710] [INFO]: 
+[2021-06-02 20:52:51,710] [INFO]: URS COMPLETED IN 1.34 SECONDS.
+
+[2021-06-02 20:53:31,041] [INFO]: INITIALIZING URS.
+[2021-06-02 20:53:31,041] [INFO]: 
+[2021-06-02 20:53:31,044] [INFO]: RUNNING FREQUENCIES GENERATOR.
+[2021-06-02 20:53:31,045] [INFO]: 
+[2021-06-02 20:53:31,045] [INFO]: Generating frequencies for file ../scrapes/06-02-2021/livestream/subreddits/askreddit-comments-20_44_11-00_01_10.json...
+[2021-06-02 20:53:31,045] [INFO]: 
+[2021-06-02 20:53:31,056] [INFO]: Exporting to JSON.
+[2021-06-02 20:53:31,056] [INFO]: 
+[2021-06-02 20:53:31,135] [INFO]: FREQUENCIES GENERATOR FINISHED IN 0.09 SECONDS.
+[2021-06-02 20:53:31,135] [INFO]: 
+[2021-06-02 20:53:31,135] [INFO]: URS COMPLETED IN 0.09 SECONDS.
+
+[2021-06-02 21:04:48,359] [INFO]: INITIALIZING URS.
+[2021-06-02 21:04:48,359] [INFO]: 
+[2021-06-02 21:04:48,365] [INFO]: RUNNING WORDCLOUD GENERATOR.
+[2021-06-02 21:04:48,365] [INFO]: 
+[2021-06-02 21:04:48,366] [INFO]: Generating wordcloud for file ../scrapes/06-02-2021/comments/What’s something from the 90s you miss_-all.json...
+[2021-06-02 21:04:48,366] [INFO]: 
+[2021-06-02 21:04:58,320] [INFO]: Saved wordcloud to ../scrapes/06-02-2021/analytics/wordcloud/comments/What’s something from the 90s you miss_-all.png.
+[2021-06-02 21:04:58,321] [INFO]: 
+[2021-06-02 21:04:58,321] [INFO]: WORDCLOUD GENERATOR FINISHED IN 9.96 SECONDS.
+[2021-06-02 21:04:58,321] [INFO]: 
+[2021-06-02 21:04:58,321] [INFO]: URS COMPLETED IN 9.96 SECONDS.
+
+[2021-06-02 21:07:01,751] [INFO]: INITIALIZING URS.
+[2021-06-02 21:07:01,751] [INFO]: 
+[2021-06-02 21:07:01,756] [INFO]: RUNNING WORDCLOUD GENERATOR.
+[2021-06-02 21:07:01,756] [INFO]: 
+[2021-06-02 21:07:01,756] [INFO]: Generating wordcloud for file ../scrapes/06-02-2021/subreddits/cscareerquestions-search-'job'-past-year-rules.json...
+[2021-06-02 21:07:01,756] [INFO]: 
+[2021-06-02 21:07:20,536] [INFO]: Saved wordcloud to ../scrapes/06-02-2021/analytics/wordcloud/subreddits/cscareerquestions-search-'job'-past-year-rules.png.
+[2021-06-02 21:07:20,536] [INFO]: 
+[2021-06-02 21:07:20,538] [INFO]: WORDCLOUD GENERATOR FINISHED IN 18.78 SECONDS.
+[2021-06-02 21:07:20,539] [INFO]: 
+[2021-06-02 21:07:20,539] [INFO]: URS COMPLETED IN 18.79 SECONDS.
+
+[2021-06-02 21:08:08,259] [INFO]: INITIALIZING URS.
+[2021-06-02 21:08:08,259] [INFO]: 
+[2021-06-02 21:08:08,266] [INFO]: RUNNING WORDCLOUD GENERATOR.
+[2021-06-02 21:08:08,266] [INFO]: 
+[2021-06-02 21:08:08,267] [INFO]: Generating wordcloud for file ../scrapes/06-02-2021/livestream/subreddits/askreddit-comments-20_44_11-00_01_10.json...
+[2021-06-02 21:08:08,267] [INFO]: 
+[2021-06-02 21:08:27,624] [INFO]: Saved wordcloud to ../scrapes/06-02-2021/analytics/wordcloud/livestream/subreddits/askreddit-comments-20_44_11-00_01_10.png.
+[2021-06-02 21:08:27,625] [INFO]: 
+[2021-06-02 21:08:27,626] [INFO]: WORDCLOUD GENERATOR FINISHED IN 19.36 SECONDS.
+[2021-06-02 21:08:27,627] [INFO]: 
+[2021-06-02 21:08:27,627] [INFO]: URS COMPLETED IN 19.37 SECONDS.
+
