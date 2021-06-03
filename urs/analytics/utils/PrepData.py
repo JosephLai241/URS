@@ -419,8 +419,17 @@ class PrepLivestream():
             List containing extracted scrape data
         """
 
+        status = Status(
+            "Finished livestream analysis.",
+            "Analyzing livestream scrape.",
+            "white"
+        )
+
         plt_dict = {}
+
+        status.start()
         PrepMutts.prep_mutts(data, plt_dict)
+        status.succeed()
 
         return plt_dict
 
