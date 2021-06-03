@@ -124,24 +124,29 @@ class FinalizeWordcloud():
 
         Returns
         -------
-        filename: str
+        new_filename: str
             String denoting the filename for the exported wordcloud
         """
 
         filename = GetPath.name_file(analytics_dir, scrape_file[0])
         
+        split_filename = filename.split(".")
+        split_filename[-1] = scrape_file[1]
+        
+        new_filename = ".".join(split_filename)
+
         export_status = Status(
-            Style.BRIGHT + Fore.GREEN + "Wordcloud exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
+            Style.BRIGHT + Fore.GREEN + "Wordcloud exported to %s." % new_filename,
             "Exporting wordcloud.",
             "white"
         )
 
         export_status.start()
-        wc.to_file(filename)
+        wc.to_file(new_filename)
         export_status.succeed()
         print()
         
-        return filename
+        return new_filename
 
 class GenerateWordcloud():
     """
