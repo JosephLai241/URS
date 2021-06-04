@@ -69,14 +69,10 @@ class DisplayStream():
             include_fields = [
                 "author",
                 "created_utc",
-                "distinguished",
-                "edited",
-                "id",
                 "is_original_content",
                 "is_self",
                 "link_flair_text",
                 "nsfw",
-                "score",
                 "selftext",
                 "spoiler",
                 "stickied",
@@ -88,14 +84,7 @@ class DisplayStream():
                 "author",
                 "body",
                 "created_utc",
-                "distinguished",
-                "edited",
-                "id",
                 "is_submitter",
-                "link_id",
-                "parent_id",
-                "score",
-                "stickied"
             ]
             
             submission_fields = [
