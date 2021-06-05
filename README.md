@@ -650,6 +650,10 @@ For Redditor scrapes, data is pulled from all three fields because both submissi
 
 For submission comments scrapes, data is only pulled from the `body` field of each comment.
 
+### File Names
+
+File names are identical to the original scrape data so that it is easier to distinguish which analytical file corresponds to which scrape.
+
 ### Available Flags
 
 ```
@@ -658,10 +662,6 @@ For submission comments scrapes, data is only pulled from the `body` field of ea
 [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 ```
-
-### File Names
-
-File names are identical to the original scrape data so that it is easier to distinguish which analytical file corresponds to which scrape.
 
 ---
 
