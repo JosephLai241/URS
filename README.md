@@ -47,13 +47,13 @@ All the demo GIFs in one place.
 ![Wordcloud Demo GIF][Wordcloud Demo]
 
 <!-- PRAW SCRAPER DEMO GIFS -->
-[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Subreddit_demo.gif
-[Redditor Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/Redditor_demo.gif
-[Submission Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/submission_comments_demo.gif
+[Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Subreddit_demo.gif
+[Redditor Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Redditor_demo.gif
+[Submission Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif
 
 <!-- PRAW LIVESTREAM DEMO GIFS -->
 [Livestream Demo]: https://something.com
 
 <!-- ANALYTICAL TOOLS DEMO GIFS -->
-[Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/frequencies_generator_demo.gif
-[Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/wordcloud_generator_demo.gif
+[Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/frequencies_generator_demo.gif
+[Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/wordcloud_generator_demo.gif
