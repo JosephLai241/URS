@@ -259,8 +259,6 @@ There are a couple ways to circumvent rate limits:
 
 Available requests are refilled if you use the PRAW scrapers intermittently, which might be the best solution. This can be especially helpful if you have automated URS and are not looking at the output on each run.
 
----
-
 ### A Table of All Subreddit, Redditor, and Submission Comments Attributes
 
 These attributes are included in each scrape. 
@@ -297,8 +295,6 @@ These attributes are included in each scrape.
 |                          | \*`upvoted` (may be forbidden)   |                     |
 
 \*Includes additional attributes; see [Redditors](#redditors) section for more information. 
-
----
 
 ### Available Flags
 
@@ -563,8 +559,6 @@ Reddit objects will be written to this JSON file in real time. After aborting th
 
 Comment and submission attributes included in each scrape are identical to those that were listed in the [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes).
 
----
-
 ### Available Flags
 
 ```
@@ -596,6 +590,8 @@ Reddit object information will be displayed in a [PrettyTable][PrettyTable] as t
 ---
 
 ### Livestreaming Redditors
+
+*Livestream demo was not recorded for Redditors because its functionality is identical to the Subreddit livestream.*
 
 **Usage:** `$ ./Urs.py -lu REDDITOR` 
 
@@ -635,8 +631,6 @@ analytics/
 
 A shortened export path is displayed once URS has completed exporting the data, informing you where the file is saved within the `scrapes` directory. You can open `urs.log` to view the full path.
 
----
-
 ### Target Fields
 
 The data varies depending on the scraper, so these tools target different fields for each type of scrape data:
@@ -653,8 +647,6 @@ For Redditor scrapes, data is pulled from all three fields because both submissi
 
 For submission comments scrapes, data is only pulled from the `body` field of each comment.
 
----
-
 ### Available Flags
 
 ```
@@ -663,8 +655,6 @@ For submission comments scrapes, data is only pulled from the `body` field of ea
 [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 ```
-
----
 
 ### File Names
 
