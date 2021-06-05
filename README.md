@@ -8,7 +8,8 @@ All the demo GIFs in one place.
     + [Subreddit Scraper](#subreddit-scraper)
     + [Redditor Scraper](#redditor-scraper)
     + [Submission Comments Scraper](#submission-comments-scraper)
-* [PRAW Livestream Scraper](#praw-livestream-scraper)
+* [PRAW Livestream Scrapers](#praw-livestream-scrapers)
+    + [Livestreaming Subreddits](#livestreaming-subreddits)
 * [Analytical Tools](#analytical-tools)
     + [Frequencies Generator](#frequencies-generator)
     + [Wordcloud Generator](#wordcloud-generator)
@@ -27,9 +28,13 @@ All the demo GIFs in one place.
 
 ![Submission Comments Demo GIF][Submission Comments Demo]
 
-# PRAW Livestream Scraper
+# PRAW Livestream Scrapers
+
+## Livestreaming Subreddits
 
 ![Livestream Demo GIF][Livestream Demo]
+
+***Redditor livestream demo was not recorded because its functionality is identical to the Subreddit livestream.***
 
 # Analytical Tools
 
