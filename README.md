@@ -75,7 +75,7 @@ usage: $ Urs.py
             + [Structured Comments](#structured-comments)
             + [Raw Comments](#raw-comments)
     + [Livestreaming Reddit via PRAW](#livestreaming-reddit-via-praw)
-        * [Attributes](#attributes)
+        * [Displayed vs. Saved Attributes](#displayed-vs-saved-attributes)
         * [Available Flags](#available-flags-1)
         * [Livestreaming Subreddits](#livestreaming-subreddits)
         * [Livestreaming Redditors](#livestreaming-redditors)
@@ -558,9 +558,25 @@ This file is then saved in the main `livestream` directory into the `subreddits`
 
 Reddit objects will be written to this JSON file in real time. After aborting the stream, the filename will be updated with the duration.
 
-### Attributes
+### Displayed vs. Saved Attributes
 
-Comment and submission attributes included in each scrape are identical to those that were listed in the [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes).
+Displayed comment and submission attributes have been stripped down to essential fields to declutter the output. Here is a table of what is shown during the stream:
+
+| Comment Attributes        | Submission Attributes   |
+|---------------------------|-------------------------|
+| `author`                  | `author`                |
+| `body`                    | `created_utc`           |
+| `created_utc`             | `is_original_content`   |
+| `is_submitter`            | `is_self`               |
+| `submission_created_utc`  | `link_flair_text`       |
+| `submission_nsfw`         | `nsfw`                  |
+| `submission_num_comments` | `selftext`              |
+| `submission_score`        | `spoiler`               |
+| `submission_title`        | `stickied`              |
+| `submission_upvote_ratio` | `title`                 |
+| `submission_url`          | `url`                   |
+
+Comment and submission attributes that are written to file will include the full list of attributes found in the [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes).
 
 ### Available Flags
 
