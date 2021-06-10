@@ -20,7 +20,7 @@ packaging==20.9
 Pillow==8.2.0
 pluggy==0.13.1
 praw==7.2.0
-prawcore==2.0.0
+prawcore==2.1.0
 prettytable==2.1.0
 py==1.10.0
 pylint==2.8.3
@@ -37,6 +37,6 @@ toml==0.10.2
 update-checker==0.18.0
 urllib3==1.26.5
 wcwidth==0.2.5
-websocket-client==1.0.1
+websocket-client==1.1.0
 wordcloud==1.8.1
 wrapt==1.12.1
