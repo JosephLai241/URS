@@ -562,19 +562,21 @@ Reddit objects will be written to this JSON file in real time. After aborting th
 
 Displayed comment and submission attributes have been stripped down to essential fields to declutter the output. Here is a table of what is shown during the stream:
 
-| Comment Attributes        | Submission Attributes   |
-|---------------------------|-------------------------|
-| `author`                  | `author`                |
-| `body`                    | `created_utc`           |
-| `created_utc`             | `is_original_content`   |
-| `is_submitter`            | `is_self`               |
-| `submission_created_utc`  | `link_flair_text`       |
-| `submission_nsfw`         | `nsfw`                  |
-| `submission_num_comments` | `selftext`              |
-| `submission_score`        | `spoiler`               |
-| `submission_title`        | `stickied`              |
-| `submission_upvote_ratio` | `title`                 |
-| `submission_url`          | `url`                   |
+| Comment Attributes           | Submission Attributes |
+|------------------------------|-----------------------|
+| `author`                     | `author`              |
+| `body`                       | `created_utc`         |
+| `created_utc`                | `is_self`             |
+| `is_submitter`               | `link_flair_text`     |
+| `submission_author`          | `nsfw`                |
+| `submission_created_utc`     | `selftext`            |
+| `submission_link_flair_text` | `spoiler`             |
+| `submission_nsfw`            | `stickied`            |
+| `submission_num_comments`    | `title`               |
+| `submission_score`           | `url`                 |
+| `submission_title`           |                       |
+| `submission_upvote_ratio`    |                       |
+| `submission_url`             |                       |
 
 Comment and submission attributes that are written to file will include the full list of attributes found in the [Table of All Subreddit, Redditor, and Submission Comments Attributes](#a-table-of-all-subreddit-redditor-and-submission-comments-attributes).
 
