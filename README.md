@@ -656,17 +656,20 @@ A shortened export path is displayed once URS has completed exporting the data, 
 
 The data varies depending on the scraper, so these tools target different fields for each type of scrape data:
 
-| Scrape Data         | Targets                     |
-|---------------------|-----------------------------|
-| Subreddit           | `selftext`, `title`         |
-| Redditor            | `selftext`, `title`, `body` |
-| Submission Comments | `body`                      |
+| Scrape Data         | Targets                           |
+|---------------------|-----------------------------------|
+| Subreddit           | `selftext`, `title`               |
+| Redditor            | `selftext`, `title`, `body`       |
+| Submission Comments | `body`                            |
+| Livestream          | `selftext` and `title`, or `body` |
 
 For Subreddit scrapes, data is pulled from the `selftext` and `title` fields for each submission (submission title and body).
 
 For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The `title` and `body` fields are targeted for submissions, and the `selftext` field is targeted for comments.
 
 For submission comments scrapes, data is only pulled from the `body` field of each comment.
+
+For livestream scrapes, comments or submissions may be included depending on user settings. The `selftext` and `title` fields are targeted for submissions, and the `body` field is targeted for comments.
 
 ### File Names
 
