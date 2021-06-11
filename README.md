@@ -758,9 +758,11 @@ You are also more than welcome to create a pull request - adding additional feat
 
 This is a showcase for projects that are built on top of URS!
 
-* [skiwheelr/URS][skiwheelr Project Link] 
-    + Contains a bash script built on URS which counts ticker mentions in Subreddits, subsequently cURLs all the relevant links in parallel, and counts the mentions of those.
-    + ![skiwheelr screenshot][skiwheelr screenshot]
+## [skiwheelr/URS][skiwheelr Project Link]
+
+Contains a bash script built on URS which counts ticker mentions in Subreddits, subsequently cURLs all the relevant links in parallel, and counts the mentions of those.
+
+![skiwheelr screenshot][skiwheelr screenshot]
 
 <!-- BADGES: Links for the badges at the top of the README -->
 [Codecov]: https://codecov.io/gh/JosephLai241/URS
