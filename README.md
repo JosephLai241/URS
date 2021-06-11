@@ -93,6 +93,7 @@ usage: $ Urs.py
     + [Making Pull or Feature Requests](#making-pull-or-feature-requests)
 * [Contributors](#contributors)
 * [Derivative Projects](#derivative-projects)
+    + [skiwheelr/URS](#skiwheelrurs)
 * Supplemental Documents
     + [How to get Reddit API Credentials for PRAW][How to get Reddit API Credentials for PRAW]
     + [Error Messages][Error Messages]
