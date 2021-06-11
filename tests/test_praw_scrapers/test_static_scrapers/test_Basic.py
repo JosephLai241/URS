@@ -3,7 +3,7 @@ import sys
 
 from io import StringIO
 
-from urs.praw_scrapers import Basic
+from urs.praw_scrapers.static_scrapers import Basic
 
 ### Function names are pretty self-explanatory, so I will not be adding comments 
 ### above the functions.

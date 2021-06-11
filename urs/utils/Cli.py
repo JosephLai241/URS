@@ -8,19 +8,19 @@ Methods defining the command-line interface for this program.
 import argparse
 import re
 import sys
+import time
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
 
+from urs.Version import __version__
+
+from urs.praw_scrapers.utils.Validation import Validation
+
 from urs.utils.Global import short_cat
 from urs.utils.Logger import LogError
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class Parser():
     """
@@ -45,29 +45,37 @@ class Parser():
      
     [-h]
     [-e]
+    [-v]
 
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-        [--rules]
         [-y]
+        [--csv]
+        [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
         [--raw] 
     [-b]
+        [--csv]
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--nosave]
+        [--stream-submissions]
 
     [-f <file_path>]
-    [-wc <file_path> [<optional_export_format>]]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]
         [--nosave]
-
-    [--csv] 
 """
         self._description = r"""
-Universal Reddit Scraper v3.2.1 - a comprehensive Reddit scraping tool
+Universal Reddit Scraper v{} - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
-"""
+""".format(__version__)
         self._epilog = r"""
 [PRAW SUBREDDIT SCRAPING]
 
@@ -108,15 +116,14 @@ wordcloud export options:
 Arguments:
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
-    [--rules]
+        [-y]
+        [--csv]
+        [--rules]
     [-u <redditor> <n_results>] 
     [-c <submission_url> <n_results>]
-    [--raw] 
+        [--raw] 
     [-b]
-
-    [-y]
-
-    [--csv]
+        [--csv]
 
 All scrape results are exported to JSON by default.
 
@@ -176,13 +183,52 @@ SUBMISSION COMMENTS
         
         $ ./Urs.py -c https://www.reddit.com/r/tifu/comments/a99fw9/tifu_by_buying_everyone_an_ancestrydna_kit_and/ 0 --raw
 
+[PRAW LIVESTREAM SCRAPING]
+
+Arguments:
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--nosave]
+        [--stream-submissions]
+
+LIVE SUBREDDIT STREAM
+
+    Livestream comments created in r/AskReddit. Writes livestream results to a JSON file:
+
+        $ ./Urs.py -lr askreddit
+
+    Or livestream submissions created in r/AskReddit:
+
+        $ ./Urs.py -lr askreddit --stream-submissions
+
+    If you do not want to save livestream results to file, include the `--nosave` flag:
+
+        $ ./Urs.py -lr askreddit --stream-submissions --nosave
+
+LIVE REDDITOR STREAM
+
+    Livestream comments by u/spez. Writes livestream results to a JSON file:
+
+        $ ./Urs.py -lu spez
+
+    Or livestream submissions by u/spez:
+
+        $ ./Urs.py -lu spez --stream-submissions
+
+    If you do not want to save livestream results to file, include the `--nosave` flag:
+
+        $ ./Urs.py -lu spez --stream-submissions --nosave
+
 [ANALYTICAL TOOLS]
 
 Arguments:
 
     [-f <file_path>]
-    [-wc <file_path> [<optional_export_format>]]
-    [--nosave]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]
+        [--nosave]
 
 Word frequencies are exported to JSON by default.
 
@@ -257,6 +303,29 @@ DISPLAY INSTEAD OF SAVING
         print(self._usage)
         print(self._examples)
 
+    def _add_display_version(self, parser):
+        """
+        Add a flag to display the version number.
+
+            -v: display the version number
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        version_flag = parser.add_argument_group("display the version number")
+        version_flag.add_argument(
+            "-v", "--version",
+            action = "store_true",
+            help = "display the version number"
+        )
+
     def _add_rate_limit_check_flag(self, parser):
         """
         Add a flag to check rate limit information:
@@ -324,7 +393,7 @@ DISPLAY INSTEAD OF SAVING
         praw_flags.add_argument(
             "-b", "--basic", 
             action = "store_true", 
-            help = "initialize non-CLI Subreddit scraper"
+            help = "initialize interactive Subreddit scraper"
         )
     
     def _add_praw_subreddit_options(self, parser):
@@ -343,7 +412,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        subreddit_flags = parser.add_argument_group("additional PRAW Subreddit scraping arguments")
+        subreddit_flags = parser.add_argument_group("additional PRAW Subreddit scraping arguments (used with `-r`)")
         subreddit_flags.add_argument(
             "--rules",
             action = "store_true",
@@ -366,11 +435,54 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments")
+        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments (used with `-c`)")
         comments_flags.add_argument(
             "--raw",
             action = "store_true",
             help = "return comments in raw format instead (default is structured)"
+        )
+
+    def _add_praw_livestream_flags(self, parser):
+        """
+        Add PRAW livestream scraper flags.
+
+            -lr: live Subreddit scraping
+            -lu: live Redditor scraping
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+
+        livestream_flags = parser.add_argument_group("PRAW livestream scraping")
+        livestream_flags.add_argument(
+            "-lr", "--live-subreddit",
+            help = "specify Subreddit to livestream",
+            metavar = "<subreddit>"
+        )
+        livestream_flags.add_argument(
+            "-lu", "--live-redditor",
+            help = "specify Redditor to livestream",
+            metavar = "<redditor>"
+        )
+
+    def _add_praw_livestream_options(self, parser):
+        """
+        Add PRAW livestream options:
+
+            --stream-submissions: livestream submissions (default is comments)
+        """
+
+        livestream_options = parser.add_argument_group("additional PRAW livestream scraping options (used with `-lr` or `-lu`)")
+        livestream_options.add_argument(
+            "--stream-submissions",
+            action = "store_true",
+            help = "livestream submissions instead (default is comments)"
         )
 
     def _add_analytics(self, parser):
@@ -406,17 +518,13 @@ DISPLAY INSTEAD OF SAVING
             metavar = ("<file_path>", "<optional_export_format>"), 
             nargs = "+"
         )
-        analyze_flags.add_argument(
-            "--nosave",
-            action = "store_true",
-            help = "display wordcloud, do not save to file"
-        )
 
-    def _add_skip(self, parser):
+    def _add_extra_options(self, parser):
         """
-        Add skip confirmation flags:
+        Add extra options for various flags:
 
-            -y: skip options confirmation and scrape immediately
+            -y: skip settings confirmation and scrape immediately (used with `-r`)
+            --nosave: display only; do not save to file (used with `-lr`, `-lu`, or `-wc`)
 
         Parameters
         ----------
@@ -428,11 +536,16 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        skip_flags = parser.add_argument_group("skip confirmation")
-        skip_flags.add_argument(
+        extra_flags = parser.add_argument_group("extra options")
+        extra_flags.add_argument(
             "-y", 
             action = "store_true", 
-            help = "skip Subreddit settings confirmation and scrape immediately"
+            help = "skip settings confirmation and scrape immediately (used with `-r`)"
+        )
+        extra_flags.add_argument(
+            "--nosave",
+            action = "store_true",
+            help = "display only; do not save to file (used with `-lr`, `-lu`, or `-wc`)"
         )
 
     def _add_export(self, parser):
@@ -451,7 +564,7 @@ DISPLAY INSTEAD OF SAVING
         None
         """
 
-        export_flags = parser.add_argument_group("export arguments")
+        export_flags = parser.add_argument_group("export arguments (used with `-r`, `-b` or `-f`)")
         export_flags.add_argument(
             "--csv", 
             action = "store_true", 
@@ -469,7 +582,7 @@ DISPLAY INSTEAD OF SAVING
             self._add_praw_subreddit_options()
             self._add_praw_comments_options()
             self._add_analytics()
-            self._add_skip()
+            self._add_extra_options()
             self._add_export()
 
         Exceptions
@@ -494,12 +607,19 @@ DISPLAY INSTEAD OF SAVING
         )
 
         self._add_examples_flag(parser)
+        self._add_display_version(parser)
         self._add_rate_limit_check_flag(parser)
+
         self._add_praw_scraper_flags(parser)
         self._add_praw_subreddit_options(parser)
         self._add_praw_comments_options(parser)
+
+        self._add_praw_livestream_flags(parser)
+        self._add_praw_livestream_options(parser)
+
         self._add_analytics(parser)
-        self._add_skip(parser)
+
+        self._add_extra_options(parser)
         self._add_export(parser)
 
         ### Print help message if no arguments are present.
@@ -509,9 +629,11 @@ DISPLAY INSTEAD OF SAVING
 
         args = parser.parse_args()
 
-        ### Print examples if the flag is present.
         if args.examples:
             self._display_examples()
+            raise SystemExit
+        elif args.version:
+            print(Fore.WHITE + Style.BRIGHT + "Universal Reddit Scraper v%s\n" % __version__)
             raise SystemExit
 
         return args, parser
@@ -1038,7 +1160,7 @@ class CheckCli():
 
         """
 
-        ### Check PRAW CLI arguments.
+        ### Check PRAW arguments.
         if args.subreddit:
             CheckPRAWCli().check_subreddit(args)
         if args.redditor:

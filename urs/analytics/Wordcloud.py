@@ -8,29 +8,20 @@ Generate a wordcloud based on word frequencies extracted from scraped data.
 import matplotlib.pyplot as plt
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
 from halo import Halo
-from wordcloud import (
-    ImageColorGenerator,
-    WordCloud
-)
+from wordcloud import WordCloud
 
 from urs.analytics.utils.PrepData import (
     GetPath,
     PrepData
 )
 
-from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class SetUpWordcloud():
     """
@@ -113,43 +104,49 @@ class FinalizeWordcloud():
         plt.show()
 
     @LogAnalytics.log_save("wordcloud")
-    def save_wordcloud(self, file, wc):
+    def save_wordcloud(self, analytics_dir, scrape_file, wc):
         """
         Save wordcloud to file.
 
-        Calls public methods from external modules:
+        Calls a public method from an external module:
 
             GetPath.name_file()
-            InitializeDirectory.make_analytics_directory()
 
         Parameters
         ----------
-        file: list
+        analytics_dir: str
+            String denoting the path to the directory in which the analytical
+            data will be written
+        scrape_file: list
             List containing scrape files and file formats to generate wordcloud with
         wc: WordCloud
             Wordcloud instance
 
         Returns
         -------
-        filename: str
+        new_filename: str
             String denoting the filename for the exported wordcloud
         """
 
-        date_dir, filename = GetPath.name_file(file[1], file[0], "wordclouds")
+        filename = GetPath.name_file(analytics_dir, scrape_file[0])
         
+        split_filename = filename.split(".")
+        split_filename[-1] = scrape_file[1]
+        
+        new_filename = ".".join(split_filename)
+
         export_status = Status(
-            Style.BRIGHT + Fore.GREEN + "Wordcloud exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
+            Style.BRIGHT + Fore.GREEN + "Wordcloud exported to %s." % new_filename,
             "Exporting wordcloud.",
             "white"
         )
 
         export_status.start()
-        InitializeDirectory.make_analytics_directory(date_dir, "wordclouds")
-        wc.to_file(filename)
+        wc.to_file(new_filename)
         export_status.succeed()
         print()
         
-        return filename
+        return new_filename
 
 class GenerateWordcloud():
     """
@@ -186,10 +183,10 @@ class GenerateWordcloud():
 
         AnalyticsTitles.wc_title()
 
-        for file in args.wordcloud:
-            scrape_type = GetPath.get_scrape_type(file[0])
+        for scrape_file in args.wordcloud:
+            analytics_dir, scrape_type = GetPath.get_scrape_type(scrape_file[0], "wordcloud")
             
-            wc = SetUpWordcloud.initialize_wordcloud(file, scrape_type)
+            wc = SetUpWordcloud.initialize_wordcloud(scrape_file, scrape_type)
             
             Halo().info("Generating wordcloud.")
             print()
@@ -197,4 +194,4 @@ class GenerateWordcloud():
             
             FinalizeWordcloud().show_wordcloud(plt) \
                 if args.nosave \
-                else FinalizeWordcloud().save_wordcloud(file, wc)
+                else FinalizeWordcloud().save_wordcloud(analytics_dir, scrape_file, wc)

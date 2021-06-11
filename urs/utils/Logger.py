@@ -9,11 +9,9 @@ import logging
 import time
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
-from prawcore import PrawcoreException
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import (
@@ -24,22 +22,19 @@ from urs.utils.Global import (
 )
 from urs.utils.Titles import Errors
 
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
-
 class LogMain():
     """
     Decorator for logging URS runtime. Also handles KeyboardInterrupt and adds the
     event to the log if applicable.
     """
 
-    ### Makes directory in which the log and scraped files will be stored.
-    InitializeDirectory.make_directory()
-
     ### Set directory path and log format.
     DIR_PATH = "../scrapes/%s" % date
     LOG_FORMAT = "[%(asctime)s] [%(levelname)s]: %(message)s"
+
+    ### Makes the `scrapes/[DATE]` directory in which the log and scraped files
+    ### will be stored.
+    InitializeDirectory.create_dirs(DIR_PATH)
 
     ### Configure logging settings.
     logging.basicConfig(
@@ -122,7 +117,7 @@ class LogError():
                 args, parser = function(self)
                 return args, parser
             except SystemExit:
-                logging.info("HELP WAS DISPLAYED.\n")
+                logging.info("HELP OR VERSION WAS DISPLAYED.\n")
                 quit()
         
         return wrapper
@@ -390,9 +385,9 @@ class LogAnalyticsErrors():
                 logging.critical("ABORTING URS.\n")
                 quit()
             except TypeError:
-                Errors.i_title("Invalid file format. Try again with a valid JSON file.")
+                Errors.i_title("Invalid file. Try again with a valid JSON file.")
                 logging.critical("AN ERROR HAS OCCURRED WHILE PROCESSING SCRAPE DATA.")
-                logging.critical("Invalid file format.")
+                logging.critical("Invalid file.")
                 logging.critical("ABORTING URS.\n")
                 quit()
 

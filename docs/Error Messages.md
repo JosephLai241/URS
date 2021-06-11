@@ -1,6 +1,18 @@
 # Error Messages
 
-This document will briefly go over all the potential error messages you might run into while using URS. 
+This document will briefly go over all the potential error messages you might run into while using URS.
+
+# Table of Contents
+
+* [Global Errors](#global-errors)
+    + [Invalid Arguments](#invalid-arguments)
+    + [Export Error](#export-error)
+* [PRAW Errors](#praw-errors)
+    + [Invalid API Credentials or No Internet Connection](#invalid-api-credentials-or-no-internet-connection)
+    + [No Reddit Objects Left to Scrape](#no-reddit-objects-left-to-scrape)
+    + [Rate Limit Reached](#rate-limit-reached)
+* [Analytical Tool Errors](#analytical-tool-errors)
+    + [Invalid File](#invalid-file)
 
 # Global Errors
 
@@ -48,7 +60,7 @@ This message is displayed if an error occured while exporting the data. This app
 
 This message is displayed if you enter invalid API credentials or if you are not connected to the internet. The exception is printed under the art.
 
-Recheck `Credentials.py` to make sure the `API` dictionary's values are correct.
+Recheck the environment variables in `.env` to make sure your API credentials are correct.
 
 ## No Reddit Objects Left to Scrape
 
@@ -58,7 +70,7 @@ Recheck `Credentials.py` to make sure the `API` dictionary's values are correct.
     \ \_\ \_\
      \/_/\/_/... No [OBJECTS] to scrape! Exiting.
 
-This message is displayed if the Reddit objects you have passed in have failed validation (does not exist), is skipped, and there is no longer any objects left for URS to process for that specific scraper.
+This message is displayed if the Reddit objects you have passed in have failed validation (does not exist), are skipped, and there are no longer any objects left for URS to process for that specific scraper.
 
 ## Rate Limit Reached
 

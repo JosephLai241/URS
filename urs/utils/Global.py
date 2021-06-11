@@ -40,6 +40,43 @@ def convert_time(object):
 
     return dt.datetime.fromtimestamp(object).strftime("%m-%d-%Y %H:%M:%S")
 
+def confirm_settings():
+        """
+        Confirm scraping options.
+
+        Parameters
+        ----------
+        None
+
+        Exceptions
+        ----------
+        ValueError:
+            Raised if the confirmation input is invalid
+
+        Returns
+        -------
+        confirm: str
+            String denoting whether to confirm settings and continue scraping
+        """
+
+        options = [
+            "y", 
+            "n"
+        ]
+
+        while True:
+            try:
+                confirm = input("\nConfirm options? [Y/N] ").strip().lower()
+
+                if confirm == options[0]:
+                    return confirm
+                elif confirm == options[1]:
+                    break
+                elif confirm not in options:
+                    raise ValueError
+            except ValueError:
+                print("Not an option! Try again.")
+
 def make_list_dict(item):
     """
     Initialize a dictionary of keys with empty lists as values.

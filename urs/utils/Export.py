@@ -163,8 +163,9 @@ class NameFile():
 
     def _get_raw_n(self, args, cat_i, end, each_sub, sub):
         """
-        Determine filename format for the Subreddit scraper. Calls previously
-        defined private methods:
+        Determine filename format for the Subreddit scraper. 
+        
+        Calls previously defined private methods:
 
             self._r_get_category()
             self._r_category()
@@ -253,8 +254,9 @@ class NameFile():
 
     def u_fname(self, limit, string):
         """
-        Determine filename format for Redditor scraping. Calls previously defined
-        private methods:
+        Determine filename format for Redditor scraping. 
+        
+        Calls previously defined private methods:
 
             self._fix()
 
@@ -280,8 +282,9 @@ class NameFile():
 
     def c_fname(self, args, limit, string):
         """
-        Determine filename format for submission comments scraping. Calls previously
-        defined private methods:
+        Determine filename format for submission comments scraping. 
+        
+        Calls previously defined private methods:
 
             self._check_len()
             self._fix()
@@ -391,6 +394,10 @@ class Export():
         Write structured comments to JSON by using the custom JSONEncoder class
         with the `cls` parameter within `json.dumps()`.
 
+        Calls a method from an external module:
+
+            InitializeDirectory.create_dirs()    
+
         Parameters
         ----------
         data: dict
@@ -403,8 +410,8 @@ class Export():
         None 
         """
 
-        InitializeDirectory.make_type_directory("comments")
         filename = Export._get_filename_extension(f_name, "json", "comments")
+        InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
         with open(filename, "w", encoding = "utf-8") as results:
             json.dump(data, results, indent = 4, cls = EncodeNode)
@@ -432,10 +439,13 @@ class Export():
     @staticmethod
     def export(data, f_name, f_type, scrape):
         """
-        Write data to either CSV or JSON. Calls external module methods and 
-        previously defined private and public methods:
+        Write data to either CSV or JSON. 
+        
+        Calls a method from an external module:
 
-            InitializeDirectory.make_type_directory()
+            InitializeDirectory.create_dirs()
+
+        Calls previously defined private and public methods:
 
             Export._get_filename_extension()
             Export.write_json()
@@ -457,8 +467,8 @@ class Export():
         None
         """
 
-        InitializeDirectory.make_type_directory(scrape)
         filename = Export._get_filename_extension(f_name, f_type, scrape)
+        InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
         Export.write_json(data, filename) \
             if f_type == "json" \

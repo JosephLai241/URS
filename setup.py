@@ -14,14 +14,16 @@ from setuptools import (
     setup
 )
 
+from urs.Version import __version__
+
 with open("README.md", "r") as readme:
     LONG_DESCRIPTION = readme.read()
 
-NAME = "URS"
-VERSION = "3.2.1"
+NAME = "urs"
+VERSION = __version__
 AUTHOR = "Joseph Lai"
 EMAIL = "urs_project@protonmail.com"
-URL = "https://github.com/JosephLai241/URS"
+URL = "https://www.github.com/JosephLai241/URS"
 
 DESCRIPTION = "URS: A comprehensive Reddit scraping & OSINT command-line tool."
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
@@ -38,12 +40,13 @@ CLASSIFIERS = [
     "Operating System :: OS Independent", 
     
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3 :: Only", 
 
-    "Topic :: Terminals", 
+    "Topic :: Terminals",
+    "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Utilities"
 ]
 KEYWORDS = [
@@ -66,14 +69,14 @@ LICENSE = "MIT"
 
 PACKAGES = find_packages()
 
-REQUIRES_PYTHON = ">=3.6"
+REQUIRES_PYTHON = ">=3.7"
 
 PROJECT_URLS = {
-    "Bug Reports": "https://github.com/JosephLai241/URS/issues",
-    "Build Status": "https://travis-ci.com/github/JosephLai241/URS",
-    "Coverage": "https://codecov.io/gh/JosephLai241/URS",
+    "Bug Reports": "https://www.github.com/JosephLai241/URS/issues",
+    "Build Status": "https://www.travis-ci.com/github/JosephLai241/URS",
+    "Coverage": "https://www.codecov.io/gh/JosephLai241/URS",
     "Say Thanks!": "https://saythanks.io/to/jlai24142%40gmail.com",
-    "Source": "https://github.com/JosephLai241/URS"
+    "Source": "https://www.github.com/JosephLai241/URS"
 }
 
 setup(

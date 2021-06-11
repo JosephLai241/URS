@@ -6,14 +6,9 @@ Display ASCII art that is used throughout this program.
 
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class MainTitle():
     """
@@ -97,9 +92,41 @@ class PRAWTitles():
     \/___/... Only scrapes Subreddits. 
 """)
 
+    @staticmethod
+    def lr_title():
+        """
+        Print Subreddit livestream title.
+        """
+
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ ___            
+/\_ \           
+\//\ \    _ __ ⏺️  
+  \ \ \  /\`'__\
+   \_\ \_\ \ \/ 
+   /\____\\ \_\ 
+   \/____/ \/_/
+""")
+
+    @staticmethod
+    def lu_title():
+        """
+        Print Redditor livestream title.
+        """
+
+        print(Fore.WHITE + Style.BRIGHT + r"""
+ ___              
+/\_ \             
+\//\ \    __  __⏺️  
+  \ \ \  /\ \/\ \ 
+   \_\ \_\ \ \_\ \
+   /\____\\ \____/
+   \/____/ \/___/ 
+""")
+
 class AnalyticsTitles():
     """
-    Methods for printing for analytical tool titles.
+    Methods for printing analytical tool titles.
     """
 
     @staticmethod

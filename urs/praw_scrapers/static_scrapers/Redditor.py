@@ -9,7 +9,6 @@ import logging
 import praw
 
 from colorama import (
-    init, 
     Fore, 
     Style
 )
@@ -26,8 +25,7 @@ from urs.utils.Export import (
 )
 from urs.utils.Global import (
     convert_time,
-    make_none_dict,
-    Status
+    make_none_dict
 )
 from urs.utils.Logger import (
     LogError,
@@ -35,10 +33,6 @@ from urs.utils.Logger import (
     LogPRAWScraper
 )
 from urs.utils.Titles import PRAWTitles
-
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
 
 class ProcessInteractions():
     """

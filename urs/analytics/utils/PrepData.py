@@ -7,8 +7,7 @@ Helper methods to prepare data for frequencies and wordcloud generators.
 
 import json
 
-from halo import Halo
-
+from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalyticsErrors
 
@@ -19,14 +18,17 @@ class GetPath():
 
     @staticmethod
     @LogAnalyticsErrors.log_invalid_top_dir
-    def get_scrape_type(file):
+    def get_scrape_type(scrape_file, tool):
         """
-        Get the name of the scrape-specific directory in which the data is stored.
+        Get the name of the scrape-specific directory in which the data is stored
+        and create the directories within the `analytics` folder.
 
         Parameters
         ----------
-        file: str
+        scrape_file: str
             String denoting the filepath
+        tool: str
+            String denoting the tool type
 
         Exceptions
         ----------
@@ -36,47 +38,50 @@ class GetPath():
 
         Returns
         -------
+        analytics_dir: str
+            String denoting the path to the directory in which the analytical
+            data will be written
         scrape_dir: str
             String denoting the scrape-specific directory
         """
 
-        if file.split("/")[-1].split(".")[-1] != "json" \
-        or file.split("/")[file.split("/").index("scrapes") + 2] == "analytics":
+        split_path = scrape_file.split("/")
+        scrape_dir = split_path[split_path.index("scrapes") + 2]
+
+        if split_path[-1].split(".")[-1] != "json" or scrape_dir == "analytics":
             raise TypeError
-        
-        return file.split("/")[file.split("/").index("scrapes") + 2]
+
+        split_analytics_dir = []
+        split_analytics_dir.extend(split_path[:split_path.index("scrapes") + 2])
+        split_analytics_dir.append("analytics")
+        split_analytics_dir.append(tool)
+        split_analytics_dir.extend(split_path[split_path.index("scrapes") + 2:-1])
+
+        analytics_dir = "/".join(split_analytics_dir)
+        InitializeDirectory.create_dirs(analytics_dir)
+
+        return analytics_dir, scrape_dir
 
     @staticmethod
-    def name_file(export_option, path, tool_type):
+    def name_file(analytics_dir, path):
         """
-        Name the chart or wordcloud when saving to file.
+        Name the frequencies data or wordcloud when saving to file.
 
         Parameters
         ----------
-        export_option: str
-            String denoting the file format when exporting files
+        analytics_dir: str
+            String denoting the path to the directory in which the analytical
+            data will be written
         path: str
             String denoting the full filepath
-        tool_type: str
-            String denoting the type of analytical tool
 
         Returns
         -------
-        date_dir: str
-            String denoting the date directory
-        new_path: str
+        filename: str
             String denoting the new filepath to save file
         """
 
-        split_path = path.split("/")
-        date_dir = split_path[split_path.index("scrapes") + 1]
-        split_path[split_path.index("scrapes") + 2] = "analytics/%s" % tool_type
-
-        split_file = split_path[-1].split(".")
-        split_file[-1] = export_option
-        split_path[-1] = ".".join(split_file)
-        
-        return date_dir, "/".join(split_path)
+        return analytics_dir + "/" + path.split("/")[-1]
 
 class Extract():
     """
@@ -84,13 +89,13 @@ class Extract():
     """
 
     @staticmethod
-    def extract(file):
+    def extract(scrape_file):
         """
         Extract data from the file.
 
         Parameters
         ----------
-        file: str
+        scrape_file: str
             String denoting the filepath
 
         Returns
@@ -99,7 +104,7 @@ class Extract():
             Dictionary containing extracted scrape data
         """
 
-        with open(str(file), "r", encoding = "utf-8") as raw_data:
+        with open(str(scrape_file), "r", encoding = "utf-8") as raw_data:
             return json.load(raw_data)
 
 class CleanData():
@@ -182,8 +187,8 @@ class PrepSubreddit():
 
         Parameters
         ----------
-        data: dict
-            Dictionary containing extracted scrape data
+        data: list
+            List containing extracted scrape data
 
         Returns
         -------
@@ -205,7 +210,44 @@ class PrepSubreddit():
             CleanData.count_words("title", submission, plt_dict)
 
         status.succeed()
-        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
+        return plt_dict
+
+class PrepMutts():
+    """
+    Methods for preparing data that may contain a mix of Reddit objects.
+    """
+
+    @staticmethod
+    def prep_mutts(data, plt_dict):
+        """
+        Prepare data that may contain a mix of Reddit objects.
+
+        Parameters
+        ----------
+        data: list
+            List containing Reddit objects
+        plt_dict: dict
+            Dictionary containing frequency data
+
+        Returns
+        -------
+        None
+        """
+
+        for obj in data:
+            ### Indicates there is valid data in this field.
+            if isinstance(obj, dict):
+                try:
+                    if obj["type"] == "submission":
+                        CleanData.count_words("selftext", obj, plt_dict)
+                        CleanData.count_words("title", obj, plt_dict)
+                    elif obj["type"] == "comment":
+                        CleanData.count_words("body", obj, plt_dict)
+                except KeyError:
+                    continue
+            ### Indicates this field is forbidden when analyzing Redditor scrapes.
+            elif isinstance(obj, str):
+                continue
 
 class PrepRedditor():
     """
@@ -217,9 +259,10 @@ class PrepRedditor():
         """
         Prepare Redditor data.
 
-        Calls previously defined public method:
+        Calls previously defined public methods:
 
             CleanData.count_words()
+            PrepMutts.prep_mutts()
 
         Parameters
         ----------
@@ -242,20 +285,10 @@ class PrepRedditor():
 
         status.start()
         for interactions in data["interactions"].values():
-            for obj in interactions:
-                ### Indicates there is valid data in this field.
-                if isinstance(obj, dict):
-                    if obj["type"] == "submission":
-                        CleanData.count_words("selftext", obj, plt_dict)
-                        CleanData.count_words("title", obj, plt_dict)
-                    elif obj["type"] == "comment":
-                        CleanData.count_words("body", obj, plt_dict)
-                ### Indicates this field is forbidden.
-                elif isinstance(obj, str):
-                    continue
+            PrepMutts.prep_mutts(interactions, plt_dict)
 
         status.succeed()
-        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
+        return plt_dict
 
 class PrepComments():
     """
@@ -368,7 +401,37 @@ class PrepComments():
             if data["scrape_settings"]["style"] == "raw" \
             else PrepComments._prep_structured(data["data"]["comments"], plt_dict)
 
-        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
+        return plt_dict
+
+class PrepLivestream():
+    """
+    Methods for preparing livestream data.
+    """
+
+    @staticmethod
+    def prep_livestream(data):
+        """
+        Prepare livestream data.
+
+        Parameters
+        ----------
+        data: list
+            List containing extracted scrape data
+        """
+
+        status = Status(
+            "Finished livestream analysis.",
+            "Analyzing livestream scrape.",
+            "white"
+        )
+
+        plt_dict = {}
+
+        status.start()
+        PrepMutts.prep_mutts(data, plt_dict)
+        status.succeed()
+
+        return plt_dict
 
 class PrepData():
     """
@@ -376,7 +439,7 @@ class PrepData():
     """
 
     @staticmethod
-    def prep(file, scrape_type):
+    def prep(scrape_file, scrape_type):
         """
         Combine all prep methods into one public method.
 
@@ -388,7 +451,7 @@ class PrepData():
 
         Parameters
         ----------
-        file: str
+        scrape_file: str
             String denoting the filepath
         scrape_type: str
             String denoting the scrape type 
@@ -399,12 +462,15 @@ class PrepData():
             Dictionary containing extracted scrape data
         """
 
-        data = Extract.extract(file)
+        data = Extract.extract(scrape_file)
 
         if scrape_type == "subreddits":
-            return PrepSubreddit.prep_subreddit(data["data"])
+            plt_dict = PrepSubreddit.prep_subreddit(data["data"])
         elif scrape_type == "redditors":
-            return PrepRedditor.prep_redditor(data["data"])
+            plt_dict = PrepRedditor.prep_redditor(data["data"])
         elif scrape_type == "comments":
-            return PrepComments.prep_comments(data)
-    
+            plt_dict = PrepComments.prep_comments(data)
+        elif scrape_type == "livestream":
+            plt_dict = PrepLivestream.prep_livestream(data["data"])
+
+        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 """
 URS
 ===
@@ -8,13 +9,16 @@ URS, an acronym for "Universal Reddit Scraper", is a comprehensive Reddit scrapi
 command-line tool written in Python.
 
 * Scrape Reddit via PRAW (the official Python Reddit API Wrapper)
-    * Scrape Subreddits
-    * Scrape Redditors
-    * Scrape submission comments
+    + Scrape Subreddits
+    + Scrape Redditors
+    + Scrape submission comments
+* Livestream Reddit via PRAW
+    + Livestream comments or submissions submitted within Subreddits
+    + Livestream comments or submissions submitted by Redditors
+    + Livestream trending submissions within Subreddits
 * Analytical tools for scraped data
-    * Generate word frequencies for words that are found in submission titles,
-        bodies, and/or comments
-    * Generate a wordcloud from scrape results
+    + Get frequencies for words that are found in submission titles, bodies, and/or comments
+    + Generate a wordcloud from scrape results
 
 @author: Joseph Lai
 @contact: urs_project@protonmail.com
@@ -25,10 +29,15 @@ command-line tool written in Python.
 import os
 import praw
 
+from colorama import init
 from dotenv import load_dotenv
 
 from urs.utils.Logger import LogMain
 from urs.utils.Tools import Run
+
+### Automate sending reset sequences to turn off color changes at the end of 
+### every print.
+init(autoreset = True)
 
 class Main():
     """

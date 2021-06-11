@@ -10,10 +10,13 @@ import logging
 from urs.analytics.Frequencies import GenerateFrequencies
 from urs.analytics.Wordcloud import GenerateWordcloud
 
-from urs.praw_scrapers.Basic import RunBasic
-from urs.praw_scrapers.Comments import RunComments
-from urs.praw_scrapers.Redditor import RunRedditor
-from urs.praw_scrapers.Subreddit import RunSubreddit
+from urs.praw_scrapers.live_scrapers.Livestream import Livestream
+
+from urs.praw_scrapers.static_scrapers.Basic import RunBasic
+from urs.praw_scrapers.static_scrapers.Comments import RunComments
+from urs.praw_scrapers.static_scrapers.Redditor import RunRedditor
+from urs.praw_scrapers.static_scrapers.Subreddit import RunSubreddit
+
 from urs.praw_scrapers.utils.Validation import Validation
 
 from urs.utils.Cli import (
@@ -97,6 +100,10 @@ class Run():
                 RunRedditor.run()
                 RunComments.run()
                 RunBasic.run()
+
+            PRAW livestream scrapers:
+
+                Livestream.stream()
             
             Analytical tools:
 
@@ -129,6 +136,14 @@ class Run():
                 RunComments.run(self._args, self._parser, self._reddit)
             elif self._args.basic:
                 RunBasic.run(self._args, self._parser, self._reddit)
+
+        elif self._args.live_subreddit or self._args.live_redditor:
+            """
+            Run PRAW livestream scrapers.
+            """
+
+            Validation.validate_user(self._parser, self._reddit)
+            Livestream.stream(self._args, self._reddit)
         
         elif self._args.frequencies or self._args.wordcloud:
             """
@@ -139,4 +154,3 @@ class Run():
                 GenerateFrequencies.generate(self._args)
             if self._args.wordcloud:
                 GenerateWordcloud.generate(self._args)
-        
