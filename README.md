@@ -121,7 +121,7 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
     + Scrape Subreddits
     + Scrape Redditors
     + Scrape submission comments
-* Livestream Reddit via PRAW
+* Livestream Reddit via `PRAW`
     + Livestream comments submitted within Subreddits or by Redditors
     + Livestream submissions submitted within Subreddits or by Redditors
 * Analytical tools for scraped data
@@ -629,7 +629,7 @@ Reddit object information will be displayed in a PrettyTable as they are submitt
 
 ### Do Not Save Livestream to File
 
-If you do not want to save the livestream to file, include the `--nosave` flag.
+Include the `--nosave` flag if you do not want to save the livestream to file.
 
 ## Analytical Tools
 
