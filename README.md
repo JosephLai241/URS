@@ -32,7 +32,7 @@ All the demo GIFs in one place.
 
 ## Livestreaming Subreddits
 
-![Livestream Demo GIF][Livestream Demo]
+![Livestream Subreddit Demo GIF][Livestream Subreddit Demo]
 
 ***Redditor livestream demo was not recorded because its functionality is identical to the Subreddit livestream.***
 
@@ -52,7 +52,7 @@ All the demo GIFs in one place.
 [Submission Comments Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif
 
 <!-- PRAW LIVESTREAM DEMO GIFS -->
-[Livestream Demo]: https://something.com
+[Livestream Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/live_scrapers/livestream_subreddit_demo.gif
 
 <!-- ANALYTICAL TOOLS DEMO GIFS -->
 [Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/frequencies_generator_demo.gif
