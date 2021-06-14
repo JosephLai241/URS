@@ -597,6 +597,8 @@ Comment and submission attributes that are written to file will include the full
 
 ![Livestream Subreddit Demo GIF][Livestream Subreddit Demo]
 
+\*This GIF has been cut for demonstration purposes.
+
 **Usage:** `$ ./Urs.py -lr SUBREDDIT`
 
 **Supported export formats:** JSON.
