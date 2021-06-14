@@ -341,7 +341,11 @@ The file names for all categories except for Search will follow this format:
 
 If you searched for keywords, file names will follow this format:
 
-`"[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"` 
+`"[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]"`
+
+Scrape data is exported to the `subreddits` directory.
+
+***NOTE:*** Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.
 
 ### Time Filters
 
@@ -379,10 +383,6 @@ If rules are included in your file, `-rules` will be appended to the end of the 
 ### Bypassing the Final Settings Check
 
 After submitting the arguments and Reddit validation, URS will display a table of Subreddit scraping settings as a final check before executing. You can include the `-y` flag to bypass this and immediately scrape.
-
-Exported files will be saved to the `subreddits` directory.
-
-***NOTE:*** Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.
 
 ---
 
@@ -470,7 +470,7 @@ The file names will follow this format:
 
 `"[USERNAME]-[N_RESULTS]-result(s).json"` 
 
-Exported files will be saved to the `redditors` directory.
+Scrape data is exported to the `redditors` directory.
 
 ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append `"FORBIDDEN"` underneath that section in the exported file. 
 
@@ -523,6 +523,8 @@ The file names will generally follow this format:
 
 `"[POST_TITLE]-[N_RESULTS]-result(s).json"` 
 
+Scrape data is exported to the `comments` directory.
+
 ### Number of Comments Returned
 
 You can scrape all comments from a submission by passing in `0` for `N_RESULTS`. Subsequently, `[N_RESULTS]-result(s)` in the file name will be replaced with `all`. 
@@ -541,8 +543,6 @@ Raw scrapes do not resemble comment threads, but returns all comments on a submi
 
 You can export to raw format by including the `--raw` flag. `-raw` will also be appended to the end of the file name.
 
-Exported files will be saved to the `comments` directory.
-
 ## Livestreaming Reddit via PRAW
 
 These tools may be used to livestream comments or submissions submitted within Subreddits or by Redditors. 
@@ -555,7 +555,7 @@ The filenames will follow this format:
 
 `[SUBREDDIT_OR_REDDITOR]-[comments_OR_submissions]-[START_TIME_IN_HOURS_MINUTES_SECONDS]-[DURATION_IN_HOURS_MINUTES_SECONDS].json`
 
-This file is then saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
+This file is saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
 
 Reddit objects will be written to this JSON file in real time. After aborting the stream, the filename will be updated with the duration.
 
