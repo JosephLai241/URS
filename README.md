@@ -557,7 +557,7 @@ The filenames will follow this format:
 
 This file is saved in the main `livestream` directory into the `subreddits` or `redditors` directory depending on which stream was run.
 
-Reddit objects will be written to this JSON file in real time. After aborting the stream, the filename will be updated with the duration.
+Reddit objects will be written to this JSON file in real time. After aborting the stream, the filename will be updated with the start time and duration.
 
 ### Displayed vs. Saved Attributes
 
