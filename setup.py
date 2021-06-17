@@ -16,7 +16,7 @@ from setuptools import (
 
 from urs.Version import __version__
 
-with open("README.md", "r") as readme:
+with open("README.md", "r", encoding = "utf-8") as readme:
     LONG_DESCRIPTION = readme.read()
 
 NAME = "urs"
