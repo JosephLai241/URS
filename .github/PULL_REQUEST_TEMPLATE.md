@@ -11,20 +11,28 @@ Delete this line and write your motivation/context here. Section your motivation
 ## New Dependencies
 
 ```
-Delete this line and paste your new dependencies here. **Put "None" here if there are no new dependencies.**
+Delete this line and paste your new dependencies here. Put "None" here if there are no new dependencies.
 ```
 
 ## Issue Fix or Enhancement Request
 
 **Put "N/A" in this block if this is not applicable.**
 
-If it fixes an open issue, link the issue in this pull request like so:
+If it fixes an open issue, link the issue and write a summary for the bug and fix like so:
 
-Fixes #issue_number_here.
+* Fixes #issue_number_here.
+    + **Bug:** Write a brief description of the bug.
+    + **Fix:** Write a brief description of the fix.
+        * If applicable, add additional information for the fix.
 
-Alternatively, if it fulfills an enhancement request, link the request in this pull request like so:
+Alternatively, if it resolves an open feature/enhancement request, link the request in this pull request like so:
 
-Fulfilled enhancement request #issue_number_here.
+* Resolves #issue_number_here.
+    + **Enhancement/Feature Request:** Write a brief description of the enhancement/feature request.
+    + **Enhancement or Feature:** Write a brief description of what is new in this pull request.
+        * If applicable, add additional information for the enhancement or feature.
+
+If neither of the above apply, use the templates described above and replace the issue number with a summary of the new changes you have made.
 
 # Type of Change
 
@@ -43,10 +51,8 @@ Fulfilled enhancement request #issue_number_here.
 
 Delete this line and describe how URS breaks. Then provide a code block or screenshots of the ***entire*** traceback underneath your description. Section your description by relevance if it is lengthy. 
 
-```python
-
+```
 Paste entire traceback here. Make sure the traceback is formatted correctly.
-
 ```
 
 # List All Changes That Have Been Made
@@ -120,7 +126,7 @@ Paste entire traceback here. Make sure the traceback is formatted correctly.
 
 **Put "N/A" in this block if this is not applicable.**
 
-Please describe the tests that you ran to verify your changes. Provide instructions so I can reproduce. Please also list any relevant details for your test configuration. Section your tests by relevance if it is lengthy.
+Please describe the tests that you ran to verify your changes. Provide instructions so I can reproduce. Please also list any relevant details for your test configuration. Section your tests by relevance if it is lengthy. An example outline is shown below:
 
 * Summary of a test here
     + Details here with relevant test commands underneath.
@@ -128,24 +134,21 @@ Please describe the tests that you ran to verify your changes. Provide instructi
             + If applicable, more details about the command underneath.
         * Then ran `another test command here`.
 
-* Summary of another test here
-    + Details here with relevant test commands underneath.
-        * Ran `test command here`.
-            + If applicable, more details about the command underneath.
-        * Then ran `another test command here`.
 ## Test Configuration
 
 **Put "N/A" in this block if this is not applicable.**
 
 * Python version: 3.x.x
 
-* If applicable, describe more configuration settings. Summary goes here.
+If applicable, describe more configuration settings. An example outline is shown below:
+
+* Summary goes here.
     + Configuration 1.
     + Configuration 2.
-        * If applicable, extra details underneath a configuration.
+        * If applicable, provide extra details underneath a configuration.
     + Configuration 3.
 
-Travis CI configuration:
+New Travis CI configuration:
 
 ```yaml
 If any changes have been made to `.travis.yml`, paste the new configuration file here. Delete this block if not.
@@ -154,7 +157,7 @@ If any changes have been made to `.travis.yml`, paste the new configuration file
 ## Dependencies
 
 ```
-**Paste your new `requirements.txt` here. Put "N/A" in this block if this is not applicable.**
+Paste your new `requirements.txt` here. Put "N/A" in this block if this is not applicable.
 ```
 
 # Checklist

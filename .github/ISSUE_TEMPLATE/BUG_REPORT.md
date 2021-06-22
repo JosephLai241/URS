@@ -1,45 +1,50 @@
 ---
 name: Bug Report
-about: Fill out this issue template to help me improve URS.
-title: "Bug Report"
+about: Report a bug that you have encountered while using URS.
+title: "Bug Report | ADD A SHORT SUMMARY OF THE BUG HERE"
 labels: bug
 assignees: JosephLai241
 ---
 
-**Describe The Bug**
+# **DO NOT DELETE THIS TEMPLATE**
 
-A clear and concise description of what the bug is.
+## Describe The Bug
 
-**Steps To Reproduce**
+Delete this line and write a clear and concise description for the bug.
 
-Steps to reproduce the behavior:
+## Expected Behavior
 
-* Put the summary for this block of commands here.
-    + Ran `put_a_command_here`
-        * If applicable, provide additional information below each bullet point.
-    + Then ran `put_another_command_here`
+Delete this line and write a description of what you expected to happen.
 
-**Expected Behavior**
+## Actual Behavior
 
-A clear and concise description of what you expected to happen.
+Delete this line and write a description of what actually happened.
 
-**Actual Behavior**
+## Steps To Reproduce
 
-A clear and concise description of what actually happened.
+Delete this line and describe how to reproduce this behavior. Create an outline if there is additional relevant information you would like to share. An example outline is shown below:
 
-**Screenshots**
+* I ran `a command here`.
+* Then I ran `a second command here`.
+    + Providing additional information about this bullet point here.
 
-If applicable, add screenshots or a code block of the ***entire*** traceback to help explain your problem.
+## Screenshots/Traceback
+
+**Put "N/A" in this block if this is not applicable.**
+
+Add screenshot(s) or a codeblock of the *entire* traceback here to help explain your problem.
 
 ```
-PASTE CODEBLOCK HERE
+Paste the traceback here. Make sure it is formatted correctly.
 ```
 
-**Machine Specs**
+## Machine Specs
 
-* OS: [Replace this with your OS, e.g. Arch Linux x86_64]
-* Python: [Replace this with your Python version, e.g. Python 3.8.2]
+* Operating System: Write your operating system here, e.g. Arch Linux x86_64
+* Python Version: Write your Python version here, e.g. Python 3.8.2
 
-**Additional Context**
+## Additional Context
 
-Add any other context about the problem here. Put "N/A" if not applicable.
+**Put "N/A" in this block if this is not applicable.**
+
+Delete this line and add any other context about the problem here. 
