@@ -28,15 +28,38 @@ Delete this line and describe how to reproduce this behavior. Create an outline 
 * Then I ran `a second command here`.
     + Providing additional information about this bullet point here.
 
-## Screenshots/Traceback
+If the command is long, wrap it in a code block like so:
+
+* Ran the command:
+
+```
+Paste long command here.
+```
+
+## Traceback, `urs.log`, or Screenshots
 
 **Put "N/A" in this block if this is not applicable.**
 
-Add screenshot(s) or a codeblock of the *entire* traceback here to help explain your problem.
+Add a codeblock of the *entire* traceback here to help explain your problem.
 
 ```
 Paste the traceback here. Make sure it is formatted correctly.
 ```
+
+**The traceback is mandatory**, however you can also add the following information below.
+
+A log of command history, `urs.log`, is written to the date directory every time you run URS. You can also add the relevant log block within a codeblock to help explain your problem. An example log is shown:
+
+```
+[2021-06-22 19:22:32,296] [INFO]: INITIALIZING URS.
+[2021-06-22 19:22:32,296] [INFO]: 
+[2021-06-22 19:22:32,301] [CRITICAL]: RECEIVED INVALID SCRAPE FILE FOR FREQUENCIES.
+[2021-06-22 19:22:32,301] [CRITICAL]: ABORTING URS.
+```
+
+You can also add a screenshot of your issue like so:
+
+![Error Screenshot](PASTE_URL_TO_IMAGE_HERE)
 
 ## Machine Specs
 
