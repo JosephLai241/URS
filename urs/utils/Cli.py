@@ -70,12 +70,12 @@ class Parser():
     [-wc <file_path> [<optional_export_format>]
         [--nosave]
 """
-        self._description = r"""
-Universal Reddit Scraper v{} - a comprehensive Reddit scraping tool
+        self._description = fr"""
+Universal Reddit Scraper v{__version__} - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
-""".format(__version__)
+"""
         self._epilog = r"""
 [PRAW SUBREDDIT SCRAPING]
 
@@ -633,7 +633,7 @@ DISPLAY INSTEAD OF SAVING
             self._display_examples()
             raise SystemExit
         elif args.version:
-            print(Fore.WHITE + Style.BRIGHT + "Universal Reddit Scraper v%s\n" % __version__)
+            print(Fore.WHITE + Style.BRIGHT + f"Universal Reddit Scraper v{__version__}\n")
             raise SystemExit
 
         return args, parser
@@ -1054,7 +1054,7 @@ class CheckAnalyticCli():
         """
 
         try:
-            _ = open("%s" % file)
+            _ = open(f"{file}")
         except FileNotFoundError:
             raise ValueError
 
