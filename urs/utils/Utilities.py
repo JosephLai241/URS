@@ -45,7 +45,7 @@ class DateTree():
 
         Raises
         ------
-        ValueError: 
+        TypeError: 
             raised if an invalid date format is entered
 
         Returns
@@ -57,7 +57,7 @@ class DateTree():
         split_date = [char for char in date]
 
         if not any(char in split_date for char in ["-", "/"]):
-            raise ValueError
+            raise TypeError
 
         if "/" in split_date:
             for i in range(len(split_date)):
@@ -169,6 +169,7 @@ class DateTree():
         """
 
         logging.info(f"Running tree command...")
+        logging.info("")
 
         try:
             search_date = DateTree._check_date_format(search_date)
@@ -189,14 +190,21 @@ class DateTree():
                 DateTree._create_directory_tree(date_dir, dir_tree)
 
                 rich.print(tree)
+                logging.info(f"Displayed directory tree for scrapes run on {search_date}.")
+                logging.info("")
                 print()
             else:
-                find_dir_halo.fail(Fore.RED + Style.BRIGHT + f"URS was not run on {search_date}.")
+                error_messsage = f"URS was not run on {search_date}."
+                find_dir_halo.fail(Fore.RED + Style.BRIGHT + error_messsage)
                 print()
-                quit()
-        except ValueError:
-            logging.info("INVALID DATE FORMAT.")
-            logging.info("EXITING.\n")
 
-            Errors.e_title("INVALID DATE FORMAT. ACCEPTED FORMATS: MM-DD-YYYY, MM/DD/YYYY")
+                logging.critical(error_messsage)
+                logging.critical("ABORTING URS.\n")
+
+                quit()
+        except TypeError:
+            logging.critical("INVALID DATE FORMAT.")
+            logging.critical("ABORTING URS.\n")
+
+            Errors.e_title("INVALID DATE FORMAT. ACCEPTED FORMATS: MM-DD-YYYY or MM/DD/YYYY.")
             quit()
