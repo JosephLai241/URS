@@ -148,9 +148,9 @@ class NameFile():
             The filename for Subreddit scrapes
         """
 
-        filter_str = "-past-%s" % time_filter
-        search = "%s-%s-'%s'" % (subreddit, category.lower(), n_res_or_kwds)
-        standard = "%s-%s-%s-%s" % (subreddit, category.lower(), n_res_or_kwds, end)
+        filter_str = f"-past-{time_filter}"
+        search = f"{subreddit}-{category.lower()}-'{n_res_or_kwds}'"
+        standard = f"{subreddit}-{category.lower()}-{n_res_or_kwds}-{end}"
 
         filenames = {
             0: search,
@@ -276,7 +276,7 @@ class NameFile():
         end = "result" \
             if int(limit) < 2 \
             else "results"
-        raw_n = str("%s-%s-%s" % (string, limit, end))
+        raw_n = f"{string}-{limit}-{end}"
 
         return self._fix(raw_n)
 
@@ -311,13 +311,12 @@ class NameFile():
             plurality = "result" \
                 if int(limit) < 2 \
                 else "results"
-            raw_n = str("%s-%s-%s-%s" % (string, limit, plurality, "raw")) \
-                if args.raw \
-                else str("%s-%s-%s" % (string, limit, plurality))
+            raw_n = f"{string}-{limit}-{plurality}"
         else:
-            raw_n = str("%s-%s-%s" % (string, "all", "raw")) \
-                if args.raw \
-                else str("%s-%s" % (string, "all"))
+            raw_n = f"{string}-all"
+
+        if args.raw:
+            raw_n = raw_n + "-raw"
 
         return self._fix(raw_n)
 
@@ -358,13 +357,13 @@ class Export():
             String denoting the directory path
         """
 
-        dir_path = "../scrapes/%s/%s" % (date, scrape)
+        dir_path = f"../scrapes/{date}/{scrape}"
 
         extension = ".csv" \
             if f_type == "csv" \
             else ".json"
 
-        return dir_path + "/%s%s" % (f_name, extension)
+        return dir_path + f"/{f_name}{extension}"
 
     @staticmethod
     def write_csv(data, filename):

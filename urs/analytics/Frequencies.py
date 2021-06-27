@@ -217,7 +217,7 @@ class GenerateFrequencies():
                 else Sort().create_json(plt_dict, scrape_file)
 
             export_status = Status(
-                Style.BRIGHT + Fore.GREEN + "Frequencies exported to %s." % "/".join(filename.split("/")[filename.split("/").index("scrapes"):]),
+                Style.BRIGHT + Fore.GREEN + f"Frequencies exported to {'/'.join(filename.split('/')[filename.split('/').index('scrapes'):])}.",
                 "Exporting frequencies.",
                 "white"
             )

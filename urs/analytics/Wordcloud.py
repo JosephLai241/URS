@@ -136,7 +136,7 @@ class FinalizeWordcloud():
         new_filename = ".".join(split_filename)
 
         export_status = Status(
-            Style.BRIGHT + Fore.GREEN + "Wordcloud exported to %s." % new_filename,
+            Style.BRIGHT + Fore.GREEN + f"Wordcloud exported to {new_filename}.",
             "Exporting wordcloud.",
             "white"
         )

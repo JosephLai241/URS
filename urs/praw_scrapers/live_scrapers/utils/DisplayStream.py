@@ -61,7 +61,7 @@ class DisplayStream():
 
         pretty_stream = PrettyTable()
         pretty_stream.field_names = [
-            "%s Attribute" % obj["type"].capitalize(),
+            f"{obj['type'].capitalize()} Attribute",
             "Data"
         ]
 
@@ -100,7 +100,7 @@ class DisplayStream():
 
         DisplayStream._populate_table(include_fields, obj, "", pretty_stream)
 
-        pretty_stream.sortby = "%s Attribute" % obj["type"].capitalize()
+        pretty_stream.sortby = f"{obj['type'].capitalize()} Attribute"
         pretty_stream.align = "l"
         pretty_stream.max_width = 120
 

@@ -399,12 +399,12 @@ class Write():
         """
 
         if args.raw:
-            export_status = "Exporting %s comments in raw format." % data["scrape_settings"]["n_results"]
+            export_status = f"Exporting {data['scrape_settings']['n_results']} comments in raw format."
             Halo().info(export_status)
             logging.info(export_status)
             Export.export(data, f_name, "json", "comments")
         else:
-            export_status = "Exporting %s comments in structured format." % data["scrape_settings"]["n_results"]
+            export_status = f"Exporting {data['scrape_settings']['n_results']} comments in structured format."
             Halo().info(export_status)
             logging.info(export_status)
             Export.write_structured_comments(data, f_name)
@@ -449,7 +449,7 @@ class Write():
             Write._determine_export(args, data, f_name)
 
             print()
-            Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "JSON file for '%s' comments created." % submission.title).succeed()
+            Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + f"JSON file for '{submission.title}' comments created.").succeed()
             print()
 
 class RunComments():

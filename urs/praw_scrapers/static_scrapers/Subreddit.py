@@ -233,14 +233,14 @@ class GetSubmissions():
         search_submissions: PRAW ListingGenerator
         """
 
-        Halo().info("Searching submissions in r/%s for '%s'." % (sub, search_for))
+        Halo().info(f"Searching submissions in r/{sub} for '{search_for}'.")
         
         if time_filter != None:
-            Halo().info("Time filter: %s" % time_filter.capitalize())
+            Halo().info(f"Time filter: {time_filter.capitalize()}")
 
-        return subreddit.search("%s" % search_for, time_filter = time_filter) \
+        return subreddit.search(f"{search_for}", time_filter = time_filter) \
             if time_filter != None \
-            else subreddit.search("%s" % search_for)
+            else subreddit.search(f"{search_for}")
 
     @staticmethod
     def _collect_others(cat_i, search_for, sub, subreddit, time_filter):
@@ -271,10 +271,10 @@ class GetSubmissions():
         category = categories[short_cat.index(cat_i)]
         index = short_cat.index(cat_i)
         
-        Halo().info("Processing %s %s results from r/%s." % (search_for, category, sub))
+        Halo().info(f"Processing {search_for} {category} results from r/{sub}.")
         
         if time_filter != None:
-            Halo().info("Time filter: %s" % time_filter.capitalize())
+            Halo().info(f"Time filter: {time_filter.capitalize()}")
 
         return GetSubmissionsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
 
@@ -563,7 +563,7 @@ class GetSortWrite():
         Export.export(data, f_name, export_option, "subreddits")
 
         print()
-        Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + "%s file for r/%s created." % (export_option.upper(), sub)).succeed()
+        Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + f"{export_option.upper()} file for r/{sub} created.").succeed()
         print()
 
     @staticmethod
