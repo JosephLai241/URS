@@ -19,7 +19,10 @@ from urs.Version import __version__
 
 from urs.praw_scrapers.utils.Validation import Validation
 
-from urs.utils.Global import short_cat
+from urs.utils.Global import (
+    date,
+    short_cat
+)
 from urs.utils.Logger import LogError
 
 class Parser():
@@ -349,6 +352,30 @@ DISPLAY INSTEAD OF SAVING
             help = "display rate limit information for your Reddit account"
         )
 
+    def _add_display_scrapes_tree_flag(self, parser):
+        """
+        Add a flag to display the scrapes directory for a specific date.
+
+            -t: display scrapes directory tree for a specific date (default is 
+                the current day)
+
+        Parameters
+        ----------
+        parser: ArgumentParser
+            argparse ArgumentParser instance
+
+        Returns
+        -------
+        None
+        """
+        
+        tree_flag = parser.add_argument_group("display scrapes directory tree")
+        tree_flag.add_argument(
+            "-t", "--tree",
+            const = date,
+            nargs = "?"
+        )
+
     def _add_praw_scraper_flags(self, parser):
         """
         Add PRAW scraper flags:
@@ -609,6 +636,7 @@ DISPLAY INSTEAD OF SAVING
         self._add_examples_flag(parser)
         self._add_display_version(parser)
         self._add_rate_limit_check_flag(parser)
+        self._add_display_scrapes_tree_flag(parser)
 
         self._add_praw_scraper_flags(parser)
         self._add_praw_subreddit_options(parser)
