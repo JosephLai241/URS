@@ -29,7 +29,7 @@ class LogMain():
     """
 
     ### Set directory path and log format.
-    DIR_PATH = "../scrapes/%s" % date
+    DIR_PATH = f"../scrapes/{date}"
     LOG_FORMAT = "[%(asctime)s] [%(levelname)s]: %(message)s"
 
     ### Makes the `scrapes/[DATE]` directory in which the log and scraped files
@@ -80,7 +80,7 @@ class LogMain():
                 logging.warning("URS ABORTED BY USER.\n")
                 quit()
 
-            logging.info("URS COMPLETED IN %.2f SECONDS.\n" % (time.time() - start))
+            logging.info(f"URS COMPLETED IN {time.time() - start:.2f} SECONDS.\n")
 
         return wrapper
 
@@ -144,8 +144,8 @@ class LogError():
                 try:
                     function(*args)
                 except ValueError:
-                    Errors.e_title("INVALID %s." % error)
-                    logging.critical("RECEIVED INVALID %s." % error)
+                    Errors.e_title(f"INVALID {error}.")
+                    logging.critical(f"RECEIVED INVALID {error}.")
                     logging.critical("ABORTING URS.\n")
                     quit()
 
@@ -173,13 +173,13 @@ class LogError():
             user_limits = function(reddit)
 
             logging.info("RATE LIMIT DISPLAYED.")
-            logging.info("Remaining requests: %s" % int(user_limits["remaining"]))
-            logging.info("Used requests: %s" % user_limits["used"])
+            logging.info(f"Remaining requests: {user_limits['remaining']}")
+            logging.info(f"Used requests: {user_limits['used']}")
             logging.info("")
 
             if int(user_limits["remaining"]) == 0:
                 Errors.l_title(convert_time(user_limits["reset_timestamp"]))
-                logging.critical("RATE LIMIT REACHED. RATE LIMIT WILL RESET AT %s." % convert_time(user_limits["reset_timestamp"]))
+                logging.critical(f"RATE LIMIT REACHED. RATE LIMIT WILL RESET AT {convert_time(user_limits['reset_timestamp'])}.")
                 logging.critical("ABORTING URS.\n")
                 quit()
             
@@ -217,11 +217,11 @@ class LogPRAWScraper():
         for subreddit_name, settings in settings_dict.items():
             for each_setting in settings:
                 if each_setting[2] in time_filters:
-                    logging.info("Getting posts from the past %s for %s results." % (each_setting[2], categories[short_cat.index(each_setting[0].upper())]))
+                    logging.info(f"Getting posts from the past {each_setting[2]} for {categories[short_cat.index(each_setting[0].upper())]} results.")
                 if each_setting[0].lower() != "s":
-                    logging.info("Scraping r/%s for %s %s results..." % (subreddit_name, each_setting[1], categories[short_cat.index(each_setting[0].upper())]))
+                    logging.info(f"Scraping r/{subreddit_name} for {each_setting[1]} {categories[short_cat.index(each_setting[0].upper())]} results...")
                 elif each_setting[0].lower() == "s":
-                    logging.info("Searching and scraping r/%s for posts containing '%s'..." % (subreddit_name, each_setting[1]))
+                    logging.info(f"Searching and scraping r/{subreddit_name} for posts containing '{each_setting[1]}'...")
 
                 logging.info("")
 
@@ -249,11 +249,11 @@ class LogPRAWScraper():
                 else "result"
             
             if scraper_type == "redditor":
-                logging.info("Scraping %s %s for u/%s..." % (n_results, plurality, reddit_object))
+                logging.info(f"Scraping {n_results} {plurality} for u/{reddit_object}...")
             elif scraper_type == "comments":
-                logging.info("Processing all comments from Reddit post %s..." % reddit_object) \
+                logging.info(f"Processing all comments from Reddit post {reddit_object}...") \
                     if int(n_results) == 0 \
-                    else logging.info("Processing %s %s from Reddit post %s..." % (n_results, plurality, reddit_object))            
+                    else logging.info(f"Processing {n_results} {plurality} from Reddit post {reddit_object}...")            
 
             logging.info("")
 
@@ -306,14 +306,14 @@ class LogPRAWScraper():
             def wrapper(*args):
                 start = time.time()
 
-                logging.info("RUNNING %s SCRAPER." % scraper.upper())
+                logging.info(f"RUNNING {scraper.upper()} SCRAPER.")
                 logging.info("")
 
                 settings_dict = function(*args)
 
                 LogPRAWScraper._format_scraper_log(scraper, settings_dict)
 
-                logging.info("%s SCRAPER FINISHED IN %.2f SECONDS." % (scraper.upper(), time.time() - start))
+                logging.info(f"{scraper.upper()} SCRAPER FINISHED IN {time.time() - start:.2f} SECONDS.")
                 logging.info("")
 
             return wrapper
@@ -448,7 +448,7 @@ class LogAnalytics():
             def wrapper(*args):
                 filename = function(*args)
                 
-                logging.info("Saved %s to %s." % (tool, filename))
+                logging.info(f"Saved {tool} to {filename}.")
                 logging.info("")
                 
             return wrapper
@@ -475,7 +475,7 @@ class LogAnalytics():
             def wrapper(*args):
                 function(*args)
                 
-                logging.info("Displayed %s." % tool)
+                logging.info(f"Displayed {tool}.")
                 logging.info("")
                 
             return wrapper
@@ -533,7 +533,7 @@ class LogAnalytics():
             except Exception as e:
                 Errors.ex_title(e)
                 logging.critical("AN ERROR HAS OCCURRED WHILE EXPORTING SCRAPED DATA.")
-                logging.critical("%s" % e)
+                logging.critical(f"{e}")
                 logging.critical("ABORTING URS.\n")
                 quit()
 
@@ -558,8 +558,8 @@ class LogAnalytics():
 
         args_list = LogAnalytics._get_args_switch(args, tool)
 
-        for file in args_list:
-            logging.info("Generating %s for file %s..." % (tool, file[0]))
+        for filename in args_list:
+            logging.info(f"Generating {tool} for file {filename[0]}...")
             logging.info("")
 
     @staticmethod
@@ -583,14 +583,14 @@ class LogAnalytics():
             def wrapper(*args):
                 start = time.time()
 
-                logging.info("RUNNING %s GENERATOR." % tool.upper())
+                logging.info(f"RUNNING {tool.upper()} GENERATOR.")
                 logging.info("")
 
                 LogAnalytics._log_tool(args[0], tool)
                 
                 function(*args)
 
-                logging.info("%s GENERATOR FINISHED IN %.2f SECONDS." % (tool.upper(), time.time() - start))
+                logging.info(f"{tool.upper()} GENERATOR FINISHED IN {time.time() - start:.2f} SECONDS.")
                 logging.info("")
 
             return wrapper
@@ -653,7 +653,7 @@ class LogExport():
             except Exception as e:
                 Errors.ex_title(e)
                 logging.critical("AN ERROR HAS OCCURRED WHILE EXPORTING SCRAPED DATA.")
-                logging.critical("%s" % e)
+                logging.critical(f"{e}")
                 logging.critical("ABORTING URS.\n")
                 quit()
 
