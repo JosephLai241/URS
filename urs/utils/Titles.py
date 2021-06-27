@@ -179,15 +179,15 @@ class Errors():
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + r"""
+        print(Fore.RED + Style.BRIGHT + fr"""
    __   
  /'__`\ 
 /\  __/ 
 \ \____\
- \/____/... %s
+ \/____/... {invalid_message}
  
 Please recheck args or refer to help or usage examples.
-""" % invalid_message)
+""")
 
     @staticmethod
     def n_title(reddit_object):
@@ -204,13 +204,13 @@ Please recheck args or refer to help or usage examples.
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + r"""
+        print(Fore.RED + Style.BRIGHT + fr"""
   ___    
  /' _`\  
 /\ \/\ \ 
 \ \_\ \_\
- \/_/\/_/... No %s to scrape! Aborting URS.     
-""" % reddit_object)
+ \/_/\/_/... No {reddit_object} to scrape! Aborting URS.     
+""")
 
     @staticmethod
     def i_title(error):
@@ -223,14 +223,14 @@ Please recheck args or refer to help or usage examples.
             String denoting the specific error associated with invalid files
         """
 
-        print(Fore.RED + Style.BRIGHT + r"""
+        print(Fore.RED + Style.BRIGHT + fr"""
  __    
 /\_\   
 \/\ \  
  \ \ \ 
   \ \_\
-   \/_/... %s     
-""" % error)
+   \/_/... {error}     
+""")
 
     @staticmethod
     def p_title(error):
@@ -247,7 +247,7 @@ Please recheck args or refer to help or usage examples.
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + r"""
+        print(Fore.RED + Style.BRIGHT + fr"""
  _____   
 /\ '__`\ 
 \ \ \L\ \
@@ -256,8 +256,8 @@ Please recheck args or refer to help or usage examples.
    \ \_\ 
     \/_/
 
-Prawcore exception: %s
-""" % error)
+Prawcore exception: {error}
+""")
 
     @staticmethod
     def l_title(reset_timestamp):
@@ -274,7 +274,7 @@ Prawcore exception: %s
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + r"""
+        print(Fore.RED + Style.BRIGHT + fr"""
  __        
 /\ \       
 \ \ \      
@@ -283,8 +283,8 @@ Prawcore exception: %s
    \ \____/
     \/___/... You have reached your rate limit.
 
-Please try again when your rate limit is reset: %s
-""" % reset_timestamp)
+Please try again when your rate limit is reset: {reset_timestamp}
+""")
 
     @staticmethod
     def ex_title(error):
@@ -301,7 +301,7 @@ Please try again when your rate limit is reset: %s
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + r"""
+        print(Fore.RED + Style.BRIGHT + fr"""
  __     
 /\ \    
 \ \ \   
@@ -310,5 +310,5 @@ Please try again when your rate limit is reset: %s
    \/\_\
     \/_/... An error has occurred while exporting scraped data.
     
-%s
-""" % error)
+{error}
+""" )
