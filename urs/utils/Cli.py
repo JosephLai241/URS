@@ -368,11 +368,13 @@ DISPLAY INSTEAD OF SAVING
         -------
         None
         """
-        
+
         tree_flag = parser.add_argument_group("display scrapes directory tree")
         tree_flag.add_argument(
             "-t", "--tree",
             const = date,
+            help = "display a visual directory tree for a date (default is the current day)",
+            metavar = "<optional_date>",
             nargs = "?"
         )
 
