@@ -12,6 +12,7 @@ from colorama import (
     Style
 )
 from halo import Halo
+from pathlib import Path
 from wordcloud import WordCloud
 
 from urs.analytics.utils.PrepData import (
@@ -129,11 +130,14 @@ class FinalizeWordcloud():
         """
 
         filename = GetPath.name_file(analytics_dir, scrape_file[0])
-        
-        split_filename = filename.split(".")
-        split_filename[-1] = scrape_file[1]
-        
-        new_filename = ".".join(split_filename)
+
+        split_path = list(Path(filename).parts)
+
+        split_filename = split_path[-1].split(".")
+        split_filename[-1] = scrape_file[-1]
+
+        split_path[-1] = ".".join(split_filename)
+        new_filename = "/".join(split_path)
 
         export_status = Status(
             Style.BRIGHT + Fore.GREEN + f"Wordcloud exported to {new_filename}.",
@@ -186,7 +190,15 @@ class GenerateWordcloud():
         for scrape_file in args.wordcloud:
             analytics_dir, scrape_type = GetPath.get_scrape_type(scrape_file[0], "wordcloud")
             
+            initialize_status = Status(
+                "Initialized wordcloud.",
+                "Initializing wordcloud.",
+                "white"
+            )
+
+            initialize_status.start()
             wc = SetUpWordcloud.initialize_wordcloud(scrape_file, scrape_type)
+            initialize_status.succeed()
             
             Halo().info("Generating wordcloud.")
             print()
