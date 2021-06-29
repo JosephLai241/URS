@@ -56,7 +56,7 @@ class DateTree():
 
         split_date = [char for char in date]
 
-        if not any(char in split_date for char in ["-", "/"]):
+        if not any(char in split_date for char in ["-", "/"]) or len(split_date) < 10:
             raise TypeError
 
         if "/" in split_date:
@@ -157,6 +157,12 @@ class DateTree():
     def display_tree(search_date):
         """
         Display the scrapes directory for a specific date.
+
+        Calls previously defined private methods:
+
+            DateTree._check_date_format()
+            DateTree._create_directory_tree()
+            DateTree._find_date_directory()
 
         Parameters
         ----------
