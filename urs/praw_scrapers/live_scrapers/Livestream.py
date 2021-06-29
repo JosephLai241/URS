@@ -168,7 +168,7 @@ class SaveStream():
         """
 
         split_stream_path = stream_path.split(".")
-        new_filename = f"..{split_stream_path[-2]}-{object_info}-{start_stream.replace(':', '_')}-{duration.replace(':', '_')}-{split_stream_path[-1]}"
+        new_filename = f"..{split_stream_path[-2]}-{object_info}-{start_stream.replace(':', '_')}-{duration.replace(':', '_')}.{split_stream_path[-1]}"
 
         logging.info(f"Renaming livestream file to: {new_filename}.")
         os.rename(stream_path, new_filename)
