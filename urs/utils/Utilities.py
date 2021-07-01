@@ -93,6 +93,31 @@ class DateTree():
         return dir_exists
 
     @staticmethod
+    def _create_stack(directory, tree):
+        """
+        Create a stack containing paths within a directory.
+
+        Parameters
+        ----------
+        directory: str
+            String denoting the path to the directory
+        tree: Tree instance
+
+        Returns
+        -------
+        stack: list
+            List containing tuples of type (Path, Tree)
+        """
+
+        return [
+            (path, tree)
+            for path in sorted(
+                Path(directory).iterdir(), 
+                key = lambda path: (path.is_file(), path.name.lower())
+            )
+        ]
+
+    @staticmethod
     def _create_directory_tree(date_dir, tree):
         """
         Create the directory Tree based on the date_dir Path using iterative 
@@ -115,13 +140,7 @@ class DateTree():
             "cyan"
         )
 
-        stack = [
-            (path, tree)
-            for path in sorted(
-                Path(date_dir).iterdir(), 
-                key = lambda path: (path.is_file(), path.name.lower())
-            )
-        ]
+        stack = DateTree._create_stack(date_dir, tree)
 
         visited = set()
         visited.add(Path(date_dir))
@@ -135,15 +154,9 @@ class DateTree():
                 continue
             elif current_path.is_dir():
                 sub_tree = current_tree.add(f"[bold blue]{current_path.name}")
-
-                sorted_sub_paths = [
-                    (sub_path, sub_tree)
-                    for sub_path in sorted(
-                        Path(current_path).iterdir(), 
-                        key = lambda path: (path.is_file(), path.name.lower())
-                    )
-                ]
-                stack = sorted_sub_paths + stack
+                sub_paths = DateTree._create_stack(current_path, sub_tree)
+                
+                stack = sub_paths + stack
             elif current_path.is_file():
                 file_size = current_path.stat().st_size
                 current_tree.add(f"[bold]{current_path.name} [{decimal(file_size)}]")
