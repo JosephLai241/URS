@@ -47,7 +47,9 @@ class TestGetPathNameFileMethod():
 
         filename = PrepData.GetPath.name_file(test_analytics, test_path)
 
-        assert filename == "../scrapes/some_date/analytics/frequencies/test/some_other_dir/test.json"
+        assert filename == "..\\scrapes\\some_date\\analytics\\frequencies\\test\\some_other_dir/test.json" \
+            if "\\" in filename \
+            else "../scrapes/some_date/analytics/frequencies/test/some_other_dir/test.json"
 
 class TestExtractExtractMethod():
     """
