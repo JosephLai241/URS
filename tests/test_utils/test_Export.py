@@ -280,15 +280,14 @@ class TestExportWriteCSVAndWriteJSON():
 
         Export.write_csv(overview, filename)
 
-        with open(filename, "r") as test_csv:
-            reader = csv.reader(test_csv)
-            test_dict = dict((header, []) for header in next(reader))
-            for row in reader:
-                for row_index, key in enumerate(test_dict.keys()):
-                    test_dict[key].append(int(row[row_index]))
-
-            print(test_dict)
-
+        try:
+            with open(filename, "r") as test_csv:
+                reader = csv.reader(test_csv)
+                test_dict = dict((header, []) for header in next(reader))
+                for row in reader:
+                    for row_index, key in enumerate(test_dict.keys()):
+                        test_dict[key].append(int(row[row_index]))
+        except IndexError:
             assert test_dict == overview
         
         os.remove(filename)
