@@ -21,6 +21,7 @@ jobs:
           USER_AGENT: ${{ secrets.USER_AGENT }}
           REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          TEST_VAR: "TESTING ENV"
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -40,3 +41,6 @@ jobs:
       - name: Test with Pytest
         run: |
           pytest --cov=./
+
+      - name: Test environment variable
+        run: echo "$TEST_VAR"
