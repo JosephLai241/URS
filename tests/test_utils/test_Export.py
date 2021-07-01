@@ -287,6 +287,8 @@ class TestExportWriteCSVAndWriteJSON():
                 for row_index, key in enumerate(test_dict.keys()):
                     test_dict[key].append(int(row[row_index]))
 
+            print(test_dict)
+
             assert test_dict == overview
         
         os.remove(filename)
