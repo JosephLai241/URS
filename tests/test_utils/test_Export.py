@@ -281,7 +281,7 @@ class TestExportWriteCSVAndWriteJSON():
         Export.write_csv(overview, filename)
 
         try:
-            with open(filename, "r", newline = "") as test_csv:
+            with open(filename, "r", newline = "", encoding = "utf-8") as test_csv:
                 reader = csv.reader(test_csv)
                 test_dict = dict((header, []) for header in next(reader))
                 for row in reader:
@@ -319,7 +319,7 @@ class TestExportWriteJSONMethod():
 
         Export.write_json(overview, filename)
 
-        with open(filename, "r") as test_json:
+        with open(filename, "r", encoding = "utf-8") as test_json:
             test_dict = json.load(test_json)
             assert test_dict == overview
         
@@ -356,7 +356,7 @@ class TestExportWriteStructuredCommentsMethod():
 
         Export.write_structured_comments(test_nodes, "structured_comments_test")
 
-        with open(f"../scrapes/{date}/comments/structured_comments_test.json", "r") as test_json:
+        with open(f"../scrapes/{date}/comments/structured_comments_test.json", "r", encoding = "utf-8") as test_json:
             test_dict = json.load(test_json)
             assert test_dict == [{'string': 'test one', 'replies': [{'string': 'test two', 'replies': [{'string': 'test three', 'replies': []}]}]}]
 
@@ -387,7 +387,7 @@ class TestExportExportMethod():
 
         Export.export(data, f_name, f_type, scrape)
 
-        with open(f"../scrapes/{date}/subreddits/export_write_json_test.json", "r") as test_json:
+        with open(f"../scrapes/{date}/subreddits/export_write_json_test.json", "r", encoding = "utf-8") as test_json:
             test_dict = json.load(test_json)
             assert test_dict == data
 
@@ -405,7 +405,7 @@ class TestExportExportMethod():
 
         Export.export(data, f_name, f_type, scrape)
 
-        with open(f"../scrapes/{date}/subreddits/export_write_csv_test.csv", "r", newline = "") as test_csv:
+        with open(f"../scrapes/{date}/subreddits/export_write_csv_test.csv", "r", newline="", encoding = "utf-8") as test_csv:
             reader = csv.reader(test_csv)
             test_dict = dict((header, []) for header in next(reader))
             for row in reader:

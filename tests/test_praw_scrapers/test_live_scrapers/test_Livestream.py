@@ -162,7 +162,7 @@ class TestSaveStreamRenameMethod():
         test_start_stream = "18:06:06"
         test_stream_path = f"../scrapes/{date}/livestream/subreddits/askreddit.json"
 
-        with open(test_stream_path, "w") as _:
+        with open(test_stream_path, "w", encoding = "utf-8") as _:
             pass
 
         Livestream.SaveStream._rename(test_duration, test_object_info, test_start_stream, test_stream_path)
@@ -177,7 +177,7 @@ class TestSaveStreamRenameMethod():
         test_start_stream = "18:06:06"
         test_stream_path = f"../scrapes/{date}/livestream/redditors/spez.json"
 
-        with open(test_stream_path, "w") as _:
+        with open(test_stream_path, "w", encoding = "utf-8") as _:
             pass
 
         Livestream.SaveStream._rename(test_duration, test_object_info, test_start_stream, test_stream_path)
