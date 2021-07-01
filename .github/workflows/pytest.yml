@@ -43,4 +43,6 @@ jobs:
           pytest --cov=./
 
       - name: Test environment variable
-        run: echo "$TEST_VAR"
+        run: |
+          echo "TESTING ENVIRONMENT VARIABLE"
+          echo "$TEST_VAR"
