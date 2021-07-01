@@ -12,16 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        
-      - name: Set encrypted API credentials
-        run: echo "Setting encrypted API credentials"
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          USER_AGENT: ${{ secrets.USER_AGENT }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
-          TEST_VAR: "TESTING ENV"
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -39,10 +29,12 @@ jobs:
           pip install .
       
       - name: Test with Pytest
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          USER_AGENT: ${{ secrets.USER_AGENT }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          TEST_VAR: "TESTING ENV"
         run: |
           pytest --cov=./
-
-      - name: Test environment variable
-        run: |
-          echo "TESTING ENVIRONMENT VARIABLE"
-          echo "$TEST_VAR"
