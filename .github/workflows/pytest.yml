@@ -3,7 +3,7 @@ name: Pytest
 on: [push, pull_request]
 
 jobs:
-  build:
+  pytest:
     runs-on: ${{ matrix.os }}
     
     strategy:
@@ -37,6 +37,8 @@ jobs:
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
         run: |
           pytest --cov=./
-
-      - name: Send coverage data to Codecov
-        uses: codecov/codecov-action@v1
+      
+      if: matrix.os == 'ubuntu-latest'
+        steps:
+          - name: Send coverage data to Codecov
+            uses: codecov/codecov-action@v1
