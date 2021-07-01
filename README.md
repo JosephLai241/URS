@@ -6,7 +6,7 @@
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?logo=Python)
 [![PRAW Version](https://img.shields.io/badge/PRAW-7.2.0-red?logo=Reddit)][PRAW]
-[![Build Status](https://img.shields.io/travis/JosephLai241/URS?logo=Travis)][Travis CI Build Status]
+[![Build Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][GitHub Workflow Status]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
 ![Total lines](https://img.shields.io/tokei/lines/github/JosephLai241/URS)
@@ -19,6 +19,7 @@ usage: $ Urs.py
     [-e]
     [-v]
 
+    [-t [<optional_date>]]
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
@@ -67,7 +68,7 @@ usage: $ Urs.py
         * [Available Flags](#available-flags)
         * [Subreddits](#subreddits)
             + [Time Filters](#time-filters)
-            + [Subreddit Rules](#subreddit-rules)
+            + [Subreddit Rules and Post Requirements](#subreddit-rules-and-post-requirements)
             + [Bypassing the Final Settings Check](#bypassing-the-final-settings-check)
         * [Redditors](#redditors)
         * [Submission Comments](#submission-comments)
@@ -87,11 +88,15 @@ usage: $ Urs.py
         * [Generating Word Frequencies](#generating-word-frequencies)
         * [Generating Wordclouds](#generating-wordclouds)
             + [Display Wordcloud Instead of Saving](#display-wordcloud-instead-of-saving)
+    + [Utilities](#utilities)
+        * [Display Directory Tree](#display-directory-tree)
+        * [Check PRAW Rate Limits](#check-praw-rate-limits)
+* [Sponsors](#sponsors)
+* [Contributors](#contributors)
 * [Contributing](#contributing)
     + [Before Making Pull or Feature Requests](#before-making-pull-or-feature-requests)
     + [Building on Top of URS](#building-on-top-of-urs)
     + [Making Pull or Feature Requests](#making-pull-or-feature-requests)
-* [Contributors](#contributors)
 * [Derivative Projects](#derivative-projects)
     + [skiwheelr/URS](#skiwheelrurs)
 * Supplemental Documents
@@ -132,7 +137,7 @@ See the [Getting Started](#getting-started) section to get your API credentials.
 
 # Installation
 
-***NOTE:* Requires Python 3.7+**
+> ***NOTE:* Requires Python 3.7+**
 
 ```
 git clone --depth=1 https://github.com/JosephLai241/URS.git
@@ -345,7 +350,7 @@ If you searched for keywords, file names will follow this format:
 
 Scrape data is exported to the `subreddits` directory.
 
-***NOTE:*** Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.
+> ***NOTE:*** Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.
 
 ### Time Filters
 
@@ -374,7 +379,7 @@ Or if you searched for keywords:
 
 `"[SUBREDDIT]-Search-'[KEYWORDS]'-past-[TIME_FILTER].[FILE_FORMAT]"`
 
-### Subreddit Rules
+### Subreddit Rules and Post Requirements
 
 You can also include the Subreddit's rules and post requirements in your scrape data by including the `--rules` flag. **This only works when exporting to JSON**. This data will be included in the `subreddit_rules` field.
 
@@ -472,9 +477,9 @@ The file names will follow this format:
 
 Scrape data is exported to the `redditors` directory.
 
-***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append `"FORBIDDEN"` underneath that section in the exported file. 
+> ***NOTE:*** If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append `"FORBIDDEN"` underneath that section in the exported file. 
 
-***NOTE:*** The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
+> ***NOTE:*** The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes. 
 
 ---
 
@@ -609,7 +614,7 @@ You can livestream comments or submissions that are created within a Subreddit.
 
 Reddit object information will be displayed in a [PrettyTable][PrettyTable] as they are submitted. 
 
-***NOTE:*** PRAW may not be able to catch all new submissions or comments within a high-volume Subreddit, as mentioned in [these disclaimers located in the "Note" boxes][Subreddit Stream Disclaimer]. 
+> ***NOTE:*** PRAW may not be able to catch all new submissions or comments within a high-volume Subreddit, as mentioned in [these disclaimers located in the "Note" boxes][Subreddit Stream Disclaimer]. 
 
 ---
 
@@ -699,7 +704,7 @@ File names are identical to the original scrape data so that it is easier to dis
 
 **Supported export formats:** JSON and CSV. To export to CSV, include the `--csv` flag.
 
-You can generate a dictionary of word frequencies created from the words within the target fields. 
+You can generate a dictionary of word frequencies created from the words within the target fields. These frequencies are sorted from highest to lowest.
 
 Frequencies export to JSON by default, but this tool also works well in CSV format.
 
@@ -728,6 +733,46 @@ Exported files will be saved to the `analytics/wordclouds` directory.
 ### Display Wordcloud Instead of Saving
 
 Wordclouds are saved to file by default. If you do not want to keep a file, include the `--nosave` flag to only display the wordcloud.
+
+## Utilities
+
+In this section, I will briefly go over a few utilities included with URS.
+
+### Available Flags
+
+```
+[-t [<optional_date>]]
+[--check]
+```
+
+### Display Directory Tree
+
+**Usage:** `$ ./Urs.py -t`
+
+If no date is provided, you can quickly view the directory structure for the current date. This is a quick alternative to the [`tree`][tree] command.
+
+You can also display a different day's scrapes by providing a date after the `-t` flag. 
+
+**Usage:** `$ ./Urs.py -t OPTIONAL_DATE`
+
+The following date formats are supported:
+
+* `MM-DD-YYYY`
+* `MM/DD/YYYY`
+
+An error is displayed if URS was not run on the entered date (if the date directory is not found within the `scrapes` directory).
+
+### Check PRAW Rate Limits
+
+**Usage:** `$ ./Urs.py --check`
+
+You can quickly check the rate limits for your account by using this flag. 
+
+# Sponsors
+
+This is a shout-out section for my patrons - thank you so much for sponsoring this project!
+
+* [lolfilmworks][lolfilmworks]
 
 # Contributing
 
@@ -772,9 +817,8 @@ Contains a bash script built on URS which counts ticker mentions in Subreddits, 
 [PRAW]: https://pypi.org/project/praw/
 [Releases]: https://github.com/JosephLai241/URS/releases
 [Say Thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
-[Travis CI Build Status]: https://travis-ci.com/github/JosephLai241/URS
-[Github Actions - Pytest]: https://github.com/JosephLai241/URS/actions?query=workflow%3APytest 
-<!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][Github Actions - Pytest] -->
+<!-- [Travis CI Build Status]: https://travis-ci.com/github/JosephLai241/URS -->
+[GitHub Workflow Status]: https://github.com/JosephLai241/URS/actions/workflows/pytest.yml
 [URS Project Email]: mailto:urs_project@protonmail.
 
 <!-- PRAW LINKS -->
@@ -807,14 +851,16 @@ Contains a bash script built on URS which counts ticker mentions in Subreddits, 
 <!-- SAMPLES: Links to the samples directory -->
 [Samples]: https://github.com/JosephLai241/URS/tree/samples
 
+<!-- SPONSORS: Links to sponsors -->
+[lolfilmworks]: https://github.com/lolfilmworks
+
+<!-- CONTRIBUTORS LINKS: Links to contributor profile and pull request -->
 <!-- ThereGoesMySanity: Links for user ThereGoesMySanity and pull request -->
 [ThereGoesMySanity]: https://github.com/ThereGoesMySanity
 [ThereGoesMySanity Pull Request]: https://github.com/JosephLai241/URS/pull/9
-
 <!-- LukeDSchenk: Links for user LukeDSchenk and pull request -->
 [LukeDSchenk]: https://github.com/LukeDSchenk
 [LukeDSchenk Pull Request]: https://github.com/JosephLai241/URS/pull/19
-
 <!-- IceBerge421: Links for user IceBerge421 and pull request -->
 [IceBerge421]: https://github.com/IceBerge421
 [IceGerge421 Pull Request]: https://github.com/JosephLai241/URS/pull/20
