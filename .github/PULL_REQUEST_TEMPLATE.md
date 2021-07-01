@@ -148,12 +148,6 @@ If applicable, describe more configuration settings. An example outline is shown
         * If applicable, provide extra details underneath a configuration.
     + Configuration 3.
 
-New Travis CI configuration:
-
-```yaml
-If any changes have been made to `.travis.yml`, paste the new configuration file here. Delete this block if not.
-```
-
 ## Dependencies
 
 ```
