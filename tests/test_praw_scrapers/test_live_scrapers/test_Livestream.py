@@ -105,14 +105,14 @@ class TestSaveStreamMakeLivestreamDirMethod():
 
         stream_directory = Livestream.SaveStream._make_livestream_dir(test_split_stream_info)
 
-        assert stream_directory == "../scrapes/%s/livestream/subreddits" % date
+        assert stream_directory == f"../scrapes/{date}/livestream/subreddits"
 
     def test_make_livestream_dir_method_redditors_subdirectory(self):
         test_split_stream_info = ["u"]
 
         stream_directory = Livestream.SaveStream._make_livestream_dir(test_split_stream_info)
 
-        assert stream_directory == "../scrapes/%s/livestream/redditors" % date
+        assert stream_directory == f"../scrapes/{date}/livestream/redditors"
 
 class TestSaveStreamGetTempFilenameMethod():
     """
@@ -124,14 +124,14 @@ class TestSaveStreamGetTempFilenameMethod():
 
         stream_path = Livestream.SaveStream._get_temp_filename(test_stream_info)
 
-        assert stream_path == "../scrapes/%s/livestream/subreddits/askreddit.json" % date
+        assert stream_path == f"../scrapes/{date}/livestream/subreddits/askreddit.json"
 
     def test_get_temp_filename_method_with_redditor(self):
         test_stream_info = "by u/spez"
 
         stream_path = Livestream.SaveStream._get_temp_filename(test_stream_info)
 
-        assert stream_path == "../scrapes/%s/livestream/redditors/spez.json" % date
+        assert stream_path == f"../scrapes/{date}/livestream/redditors/spez.json"
 
 class TestSaveStreamCreateTempFileMethod():
     """
@@ -160,14 +160,14 @@ class TestSaveStreamRenameMethod():
         test_duration = "00:00:15"
         test_object_info = "comments"
         test_start_stream = "18:06:06"
-        test_stream_path = "../scrapes/%s/livestream/subreddits/askreddit.json" % date
+        test_stream_path = f"../scrapes/{date}/livestream/subreddits/askreddit.json"
 
         with open(test_stream_path, "w") as _:
             pass
 
         Livestream.SaveStream._rename(test_duration, test_object_info, test_start_stream, test_stream_path)
 
-        renamed_file = "../scrapes/%s/livestream/subreddits/askreddit-comments-18_06_06-00_00_15.json" % date
+        renamed_file = f"../scrapes/{date}/livestream/subreddits/askreddit-comments-18_06_06-00_00_15.json"
 
         assert os.path.isfile(renamed_file)
 
@@ -175,14 +175,14 @@ class TestSaveStreamRenameMethod():
         test_duration = "00:00:15"
         test_object_info = "submissions"
         test_start_stream = "18:06:06"
-        test_stream_path = "../scrapes/%s/livestream/redditors/spez.json" % date
+        test_stream_path = f"../scrapes/{date}/livestream/redditors/spez.json"
 
         with open(test_stream_path, "w") as _:
             pass
 
         Livestream.SaveStream._rename(test_duration, test_object_info, test_start_stream, test_stream_path)
 
-        renamed_file = "../scrapes/%s/livestream/redditors/spez-submissions-18_06_06-00_00_15.json" % date
+        renamed_file = f"../scrapes/{date}/livestream/redditors/spez-submissions-18_06_06-00_00_15.json"
 
         assert os.path.isfile(renamed_file)
 

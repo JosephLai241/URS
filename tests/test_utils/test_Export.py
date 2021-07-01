@@ -232,37 +232,37 @@ class TestExportGetFilenameExtension():
         f_name = "test"
         f_type = "csv"
 
-        assert Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.csv" % (date, f_name)
+        assert Export._get_filename_extension(f_name, f_type, "subreddits") == f"../scrapes/{date}/subreddits/{f_name}.csv"
 
     def test_get_filename_extension_returns_redditors_csv(self):
         f_name = "test"
         f_type = "csv"
 
-        assert Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.csv" % (date, f_name)
+        assert Export._get_filename_extension(f_name, f_type, "redditors") == f"../scrapes/{date}/redditors/{f_name}.csv"
 
     def test_get_filename_extension_returns_comments_csv(self):
         f_name = "test"
         f_type = "csv"
 
-        assert Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.csv" % (date, f_name)
+        assert Export._get_filename_extension(f_name, f_type, "comments") == f"../scrapes/{date}/comments/{f_name}.csv"
 
     def test_get_filename_extension_returns_subreddits_json(self):
         f_name = "test"
         f_type = "json"
 
-        assert Export._get_filename_extension(f_name, f_type, "subreddits") == "../scrapes/%s/subreddits/%s.json" % (date, f_name)
+        assert Export._get_filename_extension(f_name, f_type, "subreddits") == f"../scrapes/{date}/subreddits/{f_name}.json"
 
     def test_get_filename_extension_returns_redditors_json(self):
         f_name = "test"
         f_type = "json"
 
-        assert Export._get_filename_extension(f_name, f_type, "redditors") == "../scrapes/%s/redditors/%s.json" % (date, f_name)
+        assert Export._get_filename_extension(f_name, f_type, "redditors") == f"../scrapes/{date}/redditors/{f_name}.json"
 
     def test_get_filename_extension_returns_comments_json(self):
         f_name = "test"
         f_type = "json"
 
-        assert Export._get_filename_extension(f_name, f_type, "comments") == "../scrapes/%s/comments/%s.json" % (date, f_name)
+        assert Export._get_filename_extension(f_name, f_type, "comments") == f"../scrapes/{date}/comments/{f_name}.json"
 
 class TestExportWriteCSVAndWriteJSON():
     """
@@ -356,7 +356,7 @@ class TestExportWriteStructuredCommentsMethod():
 
         Export.write_structured_comments(test_nodes, "structured_comments_test")
 
-        with open("../scrapes/%s/comments/structured_comments_test.json" % date, "r") as test_json:
+        with open(f"../scrapes/{date}/comments/structured_comments_test.json", "r") as test_json:
             test_dict = json.load(test_json)
             assert test_dict == [{'string': 'test one', 'replies': [{'string': 'test two', 'replies': [{'string': 'test three', 'replies': []}]}]}]
 
@@ -387,7 +387,7 @@ class TestExportExportMethod():
 
         Export.export(data, f_name, f_type, scrape)
 
-        with open("../scrapes/%s/subreddits/export_write_json_test.json" % date, "r") as test_json:
+        with open(f"../scrapes/{date}/subreddits/export_write_json_test.json", "r") as test_json:
             test_dict = json.load(test_json)
             assert test_dict == data
 
@@ -405,7 +405,7 @@ class TestExportExportMethod():
 
         Export.export(data, f_name, f_type, scrape)
 
-        with open("../scrapes/%s/subreddits/export_write_csv_test.csv" % date, "r") as test_csv:
+        with open(f"../scrapes/{date}/subreddits/export_write_csv_test.csv", "r", newline = "") as test_csv:
             reader = csv.reader(test_csv)
             test_dict = dict((header, []) for header in next(reader))
             for row in reader:
