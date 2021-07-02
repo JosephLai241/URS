@@ -286,10 +286,11 @@ class TestExportWriteCSVAndWriteJSON():
                 test_dict = dict((header, []) for header in next(reader))
                 for row in reader:
                     print(f"ROW: {row}")
-                    for row_index, key in enumerate(test_dict.keys()):
-                        test_dict[key].append(int(row[row_index]))
+            #         for row_index, key in enumerate(test_dict.keys()):
+            #             test_dict[key].append(int(row[row_index]))
 
-            assert test_dict == overview
+            # assert test_dict == overview
+            assert False
         except IndexError:
             print("\nIndexError: Windows sucks.")
             print(f"test_dict: {test_dict}")
