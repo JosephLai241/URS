@@ -280,22 +280,17 @@ class TestExportWriteCSVAndWriteJSON():
 
         Export.write_csv(overview, filename)
 
-        try:
-            with open(filename, "r", newline = "", encoding = "utf-8") as test_csv:
-                reader = csv.reader(test_csv)
-                test_dict = dict((header, []) for header in next(reader))
-                for row in reader:
-                    print(f"ROW: {row}")
-            #         for row_index, key in enumerate(test_dict.keys()):
-            #             test_dict[key].append(int(row[row_index]))
+        with open(filename, "r", newline = "", encoding = "utf-8") as test_csv:
+            reader = csv.reader(test_csv)
+            test_dict = dict((header, []) for header in next(reader))
+            for row in reader:
+                try:
+                    for row_index, key in enumerate(test_dict.keys()):
+                        test_dict[key].append(int(row[row_index]))
+                except IndexError:
+                    continue
 
-            # assert test_dict == overview
-            assert False
-        except IndexError:
-            print("\nIndexError: Windows sucks.")
-            print(f"test_dict: {test_dict}")
-            assert False
-
+        assert test_dict == overview
         os.remove(filename)
 
 class TestExportWriteJSONMethod():
