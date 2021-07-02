@@ -104,19 +104,19 @@ class Validation():
         try:
             redditor = reddit.user.me()
 
-            login_spinner.succeed(Style.BRIGHT + Fore.GREEN + "Successfully logged in as u/%s." % redditor)
+            login_spinner.succeed(Style.BRIGHT + Fore.GREEN + f"Successfully logged in as u/{redditor}.")
             print()
 
             Validation.print_rate_limit(reddit)
 
-            logging.info("Successfully logged in as u/%s." % redditor)
+            logging.info(f"Successfully logged in as u/{redditor}.")
             logging.info("")
         except PrawcoreException as error:
             login_spinner.fail(Style.BRIGHT + Fore.RED + "Failed to log in.")
 
             Errors.p_title(error)
             logging.critical("LOGIN FAILED.")
-            logging.critical("PRAWCORE EXCEPTION: %s." % error)
+            logging.critical(f"PRAWCORE EXCEPTION: {error}.")
             logging.critical("ABORTING URS.\n")
             parser.exit()
 
@@ -292,14 +292,14 @@ class Validation():
             else scraper_type.capitalize()
 
         check_status = Status(
-            "Finished %s validation." % object_type,
-            "Validating %s(s)" % object_type,
+            f"Finished {object_type} validation.",
+            f"Validating {object_type}(s)",
             "white"
         )
 
         check_status.start()
 
-        logging.info("Validating %s(s)..." % object_type)
+        logging.info(f"Validating {object_type}(s)...")
         logging.info("")
 
         invalid, valid = Validation.check_existence(object_list, reddit, scraper_type)
@@ -308,21 +308,21 @@ class Validation():
         print()
 
         if invalid:
-            warning_message = "The following %ss were not found and will be skipped:" % object_type
+            warning_message = f"The following {object_type}s were not found and will be skipped:"
 
             print(Fore.YELLOW + Style.BRIGHT + warning_message)
             print(Fore.YELLOW + Style.BRIGHT + "-" * len(warning_message))
             print(*invalid, sep = "\n")
 
-            logging.warning("Failed to validate the following %ss:" % object_type)
-            logging.warning("%s" % (invalid))
+            logging.warning(f"Failed to validate the following {object_type}s:")
+            logging.warning(f"{invalid}")
             logging.warning("Skipping.")
             logging.info("")
 
         if not valid:
-            logging.critical("ALL %sS FAILED VALIDATION." % object_type.upper())
+            logging.critical(f"ALL {object_type.upper()}S FAILED VALIDATION.")
             Errors.n_title(object_type + "s")
-            logging.critical("NO %sS LEFT TO SCRAPE." % object_type.upper())
+            logging.critical(f"NO {object_type.upper()}S LEFT TO SCRAPE.")
             logging.critical("ABORTING URS.\n")
             
             quit()

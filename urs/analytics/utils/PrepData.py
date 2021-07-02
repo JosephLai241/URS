@@ -7,6 +7,8 @@ Helper methods to prepare data for frequencies and wordcloud generators.
 
 import json
 
+from pathlib import Path
+
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalyticsErrors
@@ -45,17 +47,16 @@ class GetPath():
             String denoting the scrape-specific directory
         """
 
-        split_path = scrape_file.split("/")
-        scrape_dir = split_path[split_path.index("scrapes") + 2]
+        file_path = Path(scrape_file)
+        scrape_dir = list(file_path.parts)[file_path.parts.index("scrapes") + 2]
 
-        if split_path[-1].split(".")[-1] != "json" or scrape_dir == "analytics":
+        if file_path.name.split(".")[1] != "json" or scrape_dir == "analytics":
             raise TypeError
 
-        split_analytics_dir = []
-        split_analytics_dir.extend(split_path[:split_path.index("scrapes") + 2])
-        split_analytics_dir.append("analytics")
-        split_analytics_dir.append(tool)
-        split_analytics_dir.extend(split_path[split_path.index("scrapes") + 2:-1])
+        split_analytics_dir = \
+            list(file_path.parts)[:file_path.parts.index("scrapes") + 2] + \
+            ["analytics", tool] + \
+            list(file_path.parts)[file_path.parts.index("scrapes") + 2:-1]
 
         analytics_dir = "/".join(split_analytics_dir)
         InitializeDirectory.create_dirs(analytics_dir)
@@ -81,7 +82,7 @@ class GetPath():
             String denoting the new filepath to save file
         """
 
-        return analytics_dir + "/" + path.split("/")[-1]
+        return f"{Path(analytics_dir)}/{Path(path).name}"
 
 class Extract():
     """

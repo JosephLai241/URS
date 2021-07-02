@@ -110,7 +110,7 @@ class PrintSubs():
             print(*not_subs, sep = "\n")
 
             logging.warning("Failed to validate the following Subreddits:")
-            logging.warning("%s" % not_subs)
+            logging.warning(f"{not_subs}")
             logging.warning("Skipping.")
             logging.info("")
 
@@ -290,8 +290,8 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
         for sub in subs:
             while True:
                 try:
-                    cat_i = int(input((Style.BRIGHT + """
-Select a category to display for r/%s
+                    cat_i = int(input((Style.BRIGHT + fr"""
+Select a category to display for r/{sub}
 -------------------
     0: Hot
     1: New
@@ -300,13 +300,13 @@ Select a category to display for r/%s
     4: Rising
     5: Search
 -------------------
-        """ + Style.RESET_ALL) % sub))
+        """ + Style.RESET_ALL)))
 
                     if cat_i == 5:
                         print("\nSelected search")
                         GetInput._get_search(cat_i, master, sub)
                     else:
-                        print("\nSelected category: %s" % categories[cat_i])
+                        print(f"\nSelected category: {categories[cat_i]}")
                         GetInput._get_n_results(cat_i, master, sub)
                     break
                 except (IndexError, ValueError):
@@ -467,4 +467,3 @@ class RunBasic():
         GetSortWrite().gsw(args, reddit, master)
 
         return master
-        

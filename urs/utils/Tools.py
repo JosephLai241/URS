@@ -24,6 +24,7 @@ from urs.utils.Cli import (
     Parser
 )
 from urs.utils.Titles import MainTitle
+from urs.utils.Utilities import DateTree
 
 class Run():
     """
@@ -120,6 +121,13 @@ class Run():
             logging.info("")
 
             Validation.validate_user(self._parser, self._reddit)
+
+        elif self._args.tree:
+            """
+            Display visual directory tree for a date (default is the current date).
+            """
+
+            DateTree.display_tree(self._args.tree)
 
         elif self._args.subreddit or self._args.redditor or self._args.comments or self._args.basic:
             """

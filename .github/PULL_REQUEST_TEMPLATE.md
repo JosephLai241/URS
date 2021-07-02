@@ -1,5 +1,7 @@
 # Overview
 
+[![Pytest](https://github.com/JosephLai241/URS/actions/workflows/pytest.yml/badge.svg?branch=master&event=pull_request)](https://github.com/JosephLai241/URS/actions/workflows/pytest.yml)
+
 ## Summary
 
 Delete this line and write your summary here. Section your summary by relevance if it is lengthy.
@@ -147,12 +149,6 @@ If applicable, describe more configuration settings. An example outline is shown
     + Configuration 2.
         * If applicable, provide extra details underneath a configuration.
     + Configuration 3.
-
-New Travis CI configuration:
-
-```yaml
-If any changes have been made to `.travis.yml`, paste the new configuration file here. Delete this block if not.
-```
 
 ## Dependencies
 

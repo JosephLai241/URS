@@ -89,7 +89,7 @@ class SaveStream():
         elif split_stream_info[0] == "u":
             sub_directory = "redditors"
 
-        stream_directory = "../scrapes/%s/livestream/%s" % (date, sub_directory)
+        stream_directory = f"../scrapes/{date}/livestream/{sub_directory}"
         InitializeDirectory.create_dirs(stream_directory)
 
         return stream_directory
@@ -121,7 +121,7 @@ class SaveStream():
         stream_directory = SaveStream._make_livestream_dir(split_stream_info)
         stream_path = stream_directory + "/" + filename
 
-        logging.info("Writing stream to temporary file: %s." % stream_path)
+        logging.info(f"Writing stream to temporary file: {stream_path}.")
 
         return stream_path
 
@@ -168,16 +168,9 @@ class SaveStream():
         """
 
         split_stream_path = stream_path.split(".")
-        new_filename = "..{parent_path}-{object_info}-{start_stream}-{duration}.{file_type}".format(
-            parent_path = split_stream_path[-2],
-            object_info = object_info,
-            start_stream = start_stream.replace(":", "_"),
-            duration = duration.replace(":", "_"),
-            file_type = split_stream_path[-1]
-        )
-        
-        logging.info("Renaming livestream file to: %s." % new_filename)
+        new_filename = f"..{split_stream_path[-2]}-{object_info}-{start_stream.replace(':', '_')}-{duration.replace(':', '_')}.{split_stream_path[-1]}"
 
+        logging.info(f"Renaming livestream file to: {new_filename}.")
         os.rename(stream_path, new_filename)
 
     @staticmethod
@@ -237,7 +230,7 @@ class SaveStream():
             except KeyboardInterrupt:
                 end_stream = time.mktime(time.localtime())
                 duration = time.strftime("%H:%M:%S", time.gmtime(end_stream - start_stream))
-                stream_statistics = "Streamed %s submitted %s for %s." % (object_info, stream_info, duration)
+                stream_statistics = f"Streamed {object_info} submitted {stream_info} for {duration}."
 
                 print("\n\n")
                 Halo().info(Fore.YELLOW + Style.BRIGHT + "ABORTING LIVESTREAM.")
@@ -294,9 +287,9 @@ class Livestream():
 
             Validation.validate([args.live_subreddit], reddit, "subreddit")
 
-            initial_message = "Initializing Subreddit livestream for r/%s." % args.live_subreddit
+            initial_message = f"Initializing Subreddit livestream for r/{args.live_subreddit}."
             
-            stream_info = "in r/%s" % args.live_subreddit
+            stream_info = f"in r/{args.live_subreddit}"
             reddit_object = reddit.subreddit(args.live_subreddit)
 
         elif args.live_redditor:
@@ -304,9 +297,9 @@ class Livestream():
 
             Validation.validate([args.live_redditor], reddit, "redditor")
 
-            initial_message = "Initializing Redditor livestream for u/%s." % args.live_redditor
+            initial_message = f"Initializing Redditor livestream for u/{args.live_redditor}."
             
-            stream_info = "by u/%s" % args.live_redditor
+            stream_info = f"by u/{args.live_redditor}"
             reddit_object = reddit.redditor(args.live_redditor)
         
         Halo().info(Fore.CYAN + Style.BRIGHT + initial_message)
@@ -383,14 +376,14 @@ class Livestream():
                 DisplayStream.display(obj)
         except KeyboardInterrupt:
             duration = time.strftime("%H:%M:%S", time.gmtime(time.time() - start_stream))
-            stream_statistics = "Streamed %s submitted %s for %s." % (object_info, stream_info, duration)
+            stream_statistics = f"Streamed {object_info} submitted {stream_info} for {duration}."
 
             print("\n\n")
             Halo().info(Fore.YELLOW + Style.BRIGHT + "ABORTING LIVESTREAM.")
             logging.info("ABORTING LIVESTREAM.")
             logging.info("")
 
-            Halo().info("Streamed %s submitted %s for %s." % (object_info, stream_info, duration))
+            Halo().info(stream_statistics)
             print()
 
         return stream_statistics

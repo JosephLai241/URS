@@ -216,8 +216,8 @@ class ProcessInteractions():
             try:
                 self._extract(interaction, category)
             except PrawcoreException as error:
-                access_halo.warn(Fore.YELLOW + "Access to %s interactions forbidden: %s. SKIPPING." % (category.capitalize(), error))
-                self._skeleton["data"]["interactions"]["%s" % category].append("FORBIDDEN")
+                access_halo.warn(Fore.YELLOW + f"Access to {category.capitalize()} interactions forbidden: {error}. SKIPPING.")
+                self._skeleton["data"]["interactions"][f"{category}"].append("FORBIDDEN")
 
     @Halo(color = "white", text = "Extracting moderated Subreddits.")
     def get_moderated(self):
@@ -278,7 +278,7 @@ class GetInteractions():
             if int(limit) > 1 \
             else "result"
 
-        Halo().info("Processing %s %s from u/%s's profile." % (limit, plurality, redditor))
+        Halo().info(f"Processing {limit} {plurality} from u/{redditor}'s profile.")
         
         skeleton = {
             "scrape_settings": {
@@ -513,7 +513,7 @@ class Write():
             Export.export(data, f_name, "json", "redditors")
             
             print()
-            Halo().succeed(Style.BRIGHT + Fore.GREEN + "JSON file for u/%s created." % redditor)
+            Halo().succeed(Style.BRIGHT + Fore.GREEN + f"JSON file for u/{redditor} created.")
             print()
 
 class RunRedditor():
