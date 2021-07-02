@@ -1,6 +1,9 @@
 name: Pytest
 
 on: [push, pull_request]
+  branches-ignore:
+    - 'demo-gifs'
+    - 'samples'
 
 jobs:
   pytest:
