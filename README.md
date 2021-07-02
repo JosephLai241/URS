@@ -736,7 +736,7 @@ Wordclouds are saved to file by default. If you do not want to keep a file, incl
 
 ## Utilities
 
-In this section, I will briefly go over a few utilities included with URS.
+This section briefly outlines the utilities included with URS.
 
 ### Available Flags
 
@@ -745,7 +745,11 @@ In this section, I will briefly go over a few utilities included with URS.
 [--check]
 ```
 
+---
+
 ### Display Directory Tree
+
+![Tree Demo GIF][Tree Demo]
 
 **Usage:** `$ ./Urs.py -t`
 
@@ -763,6 +767,8 @@ The following date formats are supported:
 An error is displayed if URS was not run on the entered date (if the date directory is not found within the `scrapes` directory).
 
 ### Check PRAW Rate Limits
+
+![Rate Limit Demo GIF][Rate Limit Demo]
 
 **Usage:** `$ ./Urs.py --check`
 
@@ -835,6 +841,10 @@ Contains a bash script built on URS which counts ticker mentions in Subreddits, 
 <!-- ANALYTICAL TOOLS DEMO GIFS -->
 [Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/frequencies_generator_demo.gif
 [Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/wordcloud_generator_demo.gif
+
+<!-- UTILITIES DEMO GIFS -->
+[Tree Demo]: https://alinkhere.com
+[Rate Limit Demo]: https://alinkhere.com
 
 <!-- GITHUB LINKS: Links around the URS repo on GitHub -->
 [Issues]: https://github.com/JosephLai241/URS/issues
