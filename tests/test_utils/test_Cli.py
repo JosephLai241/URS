@@ -48,6 +48,7 @@ class TestParserInitMethod():
     [-e]
     [-v]
 
+    [-t [<optional_date>]]
     [--check]
 
     [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
@@ -276,6 +277,31 @@ DISPLAY INSTEAD OF SAVING
     If you do not wish to save the wordcloud to file, include the `--nosave` flag:
 
         $ ./Urs.py -wc ../scrapes/02-15-2021/subreddits/askreddit-hot-100-results.json --nosave
+
+[UTILITIES]
+
+Arguments:
+
+    [-t [<optional_date>]]
+    [--check]
+
+DISPLAY SCRAPES DIRECTORY TREE
+
+    You can display the scrapes directory tree for the current day by using the `-t` flag:
+
+        $ ./Urs.py -t
+
+    You can also include a date to display the directory tree for that date.
+    The following date formats are accepted: MM-DD-YYYY, MM/DD/YYYY:
+
+        $ ./Urs.py -t 06-02-2021
+        $ ./Urs.py -t 06/02/2021
+
+CHECK PRAW RATE LIMITS
+
+    You can quickly check the rate limits for your account by using the `--check` flag:
+
+        $ ./Urs.py --check
 
 """
 
