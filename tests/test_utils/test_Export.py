@@ -407,7 +407,10 @@ class TestExportExportMethod():
             reader = csv.reader(test_csv)
             test_dict = dict((header, []) for header in next(reader))
             for row in reader:
-                for row_index, key in enumerate(test_dict.keys()):
-                    test_dict[key].append(int(row[row_index]))
+                try:
+                    for row_index, key in enumerate(test_dict.keys()):
+                        test_dict[key].append(int(row[row_index]))
+                except IndexError:
+                    continue
 
             assert test_dict == data
