@@ -1,7 +1,5 @@
 # Overview
 
-[![Pytest](https://github.com/JosephLai241/URS/actions/workflows/pytest.yml/badge.svg?branch=master&event=pull_request)](https://github.com/JosephLai241/URS/actions/workflows/pytest.yml)
-
 ## Summary
 
 Delete this line and write your summary here. Section your summary by relevance if it is lengthy.
