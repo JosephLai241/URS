@@ -52,11 +52,23 @@ class SetUpWordcloud():
             WordCloud instance
         """
 
-        return WordCloud(
+        frequencies = PrepData.prep(file[0], scrape_type)
+
+        initialize_status = Status(
+            "Generated wordcloud.",
+            "Generating wordcloud.",
+            "white"
+        )
+
+        initialize_status.start()
+        wordcloud = WordCloud(
             height = 1200,
             max_font_size = 400,
             width = 1600
-        ).generate_from_frequencies(PrepData.prep(file[0], scrape_type))
+        ).generate_from_frequencies(frequencies)
+        initialize_status.succeed()
+
+        return wordcloud
 
     @staticmethod
     def modify_wordcloud(wc):
@@ -189,21 +201,9 @@ class GenerateWordcloud():
 
         for scrape_file in args.wordcloud:
             analytics_dir, scrape_type = GetPath.get_scrape_type(scrape_file[0], "wordcloud")
-            
-            initialize_status = Status(
-                "Initialized wordcloud.",
-                "Initializing wordcloud.",
-                "white"
-            )
-
-            initialize_status.start()
             wc = SetUpWordcloud.initialize_wordcloud(scrape_file, scrape_type)
-            initialize_status.succeed()
-            
-            Halo().info("Generating wordcloud.")
-            print()
             plt = SetUpWordcloud.modify_wordcloud(wc)
-            
+
             FinalizeWordcloud().show_wordcloud(plt) \
                 if args.nosave \
                 else FinalizeWordcloud().save_wordcloud(analytics_dir, scrape_file, wc)
