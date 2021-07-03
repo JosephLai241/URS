@@ -749,7 +749,7 @@ This section briefly outlines the utilities included with URS.
 
 ### Display Directory Tree
 
-![Tree Demo GIF][Tree Demo]
+![Display Directory Tree Demo GIF][Display Directory Tree Demo]
 
 **Usage:** `$ ./Urs.py -t`
 
@@ -768,7 +768,7 @@ An error is displayed if URS was not run on the entered date (if the date direct
 
 ### Check PRAW Rate Limits
 
-![Rate Limit Demo GIF][Rate Limit Demo]
+![Check PRAW Rate Limits Demo GIF][Check PRAW Rate Limits Demo]
 
 **Usage:** `$ ./Urs.py --check`
 
@@ -843,8 +843,8 @@ Contains a bash script built on URS which counts ticker mentions in Subreddits, 
 [Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/wordcloud_generator_demo.gif
 
 <!-- UTILITIES DEMO GIFS -->
-[Tree Demo]: https://alinkhere.com
-[Rate Limit Demo]: https://alinkhere.com
+[Display Directory Tree Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/tree_demo.gif
+[Check PRAW Rate Limits Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/check_rate_limit_demo.gif
 
 <!-- GITHUB LINKS: Links around the URS repo on GitHub -->
 [Issues]: https://github.com/JosephLai241/URS/issues
