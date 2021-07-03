@@ -13,6 +13,9 @@ All the demo GIFs in one place.
 * [Analytical Tools](#analytical-tools)
     + [Frequencies Generator](#frequencies-generator)
     + [Wordcloud Generator](#wordcloud-generator)
+* [Utilities](#utilities)
+    + [Display Directory Tree](#display-directory-tree)
+    + [Check PRAW Rate Limits](#check-praw-rate-limits)
 
 # PRAW Scrapers
 
@@ -46,6 +49,16 @@ All the demo GIFs in one place.
 
 ![Wordcloud Demo GIF][Wordcloud Demo]
 
+# Utilities
+
+## Display Directory Tree
+
+![Display Directory Tree Demo GIF][Display Directory Tree Demo]
+
+## Check PRAW Rate Limits
+
+![Check PRAW Rate Limits Demo GIF][Check PRAW Rate Limits Demo]
+
 <!-- PRAW SCRAPER DEMO GIFS -->
 [Subreddit Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Subreddit_demo.gif
 [Redditor Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Redditor_demo.gif
@@ -57,3 +70,7 @@ All the demo GIFs in one place.
 <!-- ANALYTICAL TOOLS DEMO GIFS -->
 [Frequencies Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/frequencies_generator_demo.gif
 [Wordcloud Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/wordcloud_generator_demo.gif
+
+<!-- UTILITIES DEMO GIFS -->
+[Display Directory Tree Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/tree_demo.gif
+[Check PRAW Rate Limits Demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/check_rate_limit_demo.gif
