@@ -67,6 +67,40 @@ class TestGetInteractionsGetTrophiesMethod():
         assert isinstance(trophies, list) == True
         assert len(trophies) > 0
 
+class TestGetUserSubredditMethod():
+    """
+    Testing GetInteractions class _get_user_subreddit() method.
+    """
+
+    def test_get_user_subreddit(self):
+        reddit = Login.create_reddit_object()
+        spez = reddit.redditor("spez")
+
+        redditor_subreddit = Redditor.GetInteractions._get_user_subreddit(spez)
+
+        dict_fields = [
+            "can_assign_link_flair",
+            "can_assign_user_flair",
+            "created_utc",
+            "description",
+            "description_html",
+            "display_name",
+            "id",
+            "name",
+            "nsfw",
+            "public_description",
+            "spoilers_enabled",
+            "subscribers",
+            "user_is_banned",
+            "user_is_moderator",
+            "user_is_subscriber"
+        ]
+
+        assert isinstance(redditor_subreddit, dict) == True
+
+        for key in redditor_subreddit.keys():
+            assert key in dict_fields
+
 class TestGetInteractionsGetUserInfoMethod():
     """
     Testing GetInteractions class _get_user_info() method.
