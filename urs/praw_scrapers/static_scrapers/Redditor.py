@@ -323,6 +323,41 @@ class GetInteractions():
             ]
 
     @staticmethod
+    def _get_user_subreddit(redditor):
+        """
+        Get Redditor's Subreddit.
+
+        Parameters
+        ----------
+        redditor: PRAW Redditor object
+
+        Returns
+        -------
+        redditor_subreddit: dict
+            Dictionary containing Redditor Subreddit data
+        """
+
+        subreddit = redditor.subreddit
+
+        return {
+            "can_assign_link_flair": subreddit.can_assign_link_flair,
+            "can_assign_user_flair": subreddit.can_assign_user_flair,
+            "created_utc": subreddit.created_utc,
+            "description": subreddit.description,
+            "description_html": subreddit.description_html,
+            "display_name": subreddit.display_name,
+            "id": subreddit.id,
+            "name": subreddit.name,
+            "nsfw": subreddit.over18,
+            "public_description": subreddit.public_description,
+            "spoilers_enabled": subreddit.spoilers_enabled,
+            "subscribers": subreddit.subscribers,
+            "user_is_banned": subreddit.user_is_banned,
+            "user_is_moderator": subreddit.user_is_moderator,
+            "user_is_subscriber": subreddit.user_is_subscriber
+        }
+
+    @staticmethod
     @Halo(color = "white", text = "Extracting Redditor information.")
     def _get_user_info(redditor, skeleton):
         """
@@ -366,7 +401,7 @@ class GetInteractions():
                 "is_gold": redditor.is_gold,
                 "link_karma": redditor.link_karma,
                 "name": redditor.name,
-                "subreddit": redditor.subreddit,
+                "subreddit": GetInteractions._get_user_subreddit(redditor),
                 "trophies": GetInteractions._get_trophies(redditor)
             }
 

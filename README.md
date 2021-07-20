@@ -5,7 +5,7 @@
       \/___/  \/_/ \/___/... Universal Reddit Scraper 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?logo=Python)
-[![PRAW Version](https://img.shields.io/badge/PRAW-7.2.0-red?logo=Reddit)][PRAW]
+[![PRAW Version](https://img.shields.io/badge/PRAW-7.3.0-red?logo=Reddit)][PRAW]
 [![Build Status](https://img.shields.io/github/workflow/status/JosephLai241/URS/Pytest?logo=github)][GitHub Workflow Status]
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][Codecov]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/URS)][Releases]
