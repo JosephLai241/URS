@@ -10,7 +10,7 @@ import datetime as dt
 from halo import Halo
 
 ### Get current date.
-date = dt.datetime.now().strftime("%m-%d-%Y")
+date = dt.datetime.now().strftime("%Y-%m-%d")
 
 ### Subreddit categories.
 categories = [
