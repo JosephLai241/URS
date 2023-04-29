@@ -1,0 +1,26 @@
+name: Code formatting checks
+
+on:
+  push:
+    branches-ignore:
+      - "demo-gifs"
+      - "samples"
+  pull_request:
+    branches-ignore:
+      - "demo-gifs"
+      - "samples"
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Black formatting check
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose --diff --color"
+
+      - name: isort formatting check
+        uses: isort/isort-action@master
+        with:
+          configuration: "--check-only --verbose --diff --color --profile black"
