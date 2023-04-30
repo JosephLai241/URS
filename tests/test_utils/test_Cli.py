@@ -4,18 +4,16 @@ Testing `Cli.py`.
 
 
 import argparse
-import pytest
 import re
 import sys
 
+import pytest
+
+from urs.utils import Cli, Global
 from urs.Version import __version__
 
-from urs.utils import (
-    Cli, 
-    Global
-)
 
-class MakeArgs():
+class MakeArgs:
     """
     Making dummy args to test Cli.py methods.
     """
@@ -28,15 +26,16 @@ class MakeArgs():
     @staticmethod
     def make_scraper_args():
         parser = MakeArgs.parser_for_testing_cli()
-        parser.add_argument("--subreddit", nargs = 1)
-        parser.add_argument("--redditor", nargs = 1)
-        parser.add_argument("--comments", nargs = 1)
-        parser.add_argument("--frequencies", nargs = 1)
-        parser.add_argument("--wordcloud", nargs = 1)
+        parser.add_argument("--subreddit", nargs=1)
+        parser.add_argument("--redditor", nargs=1)
+        parser.add_argument("--comments", nargs=1)
+        parser.add_argument("--frequencies", nargs=1)
+        parser.add_argument("--wordcloud", nargs=1)
 
         return parser
 
-class TestParserInitMethod():
+
+class TestParserInitMethod:
     """
     Testing Parser class __init__() method.
     """
@@ -72,16 +71,18 @@ class TestParserInitMethod():
     [-wc <file_path> [<optional_export_format>]
         [--nosave]
 """
-        
+
         assert Cli.Parser()._usage == usage
-        
+
     def test_parser_init_method_description_instance_variable(self):
         description = r"""
 Universal Reddit Scraper v{} - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
 Contact: urs_project@protonmail.com
-""".format(__version__)
+""".format(
+            __version__
+        )
         assert Cli.Parser()._description == description
 
     def test_parser_init_method_epilog_instance_variable(self):
@@ -307,7 +308,8 @@ CHECK PRAW RATE LIMITS
 
         assert Cli.Parser()._examples == examples
 
-class TestParserAddExamplesFlagMethod():
+
+class TestParserAddExamplesFlagMethod:
     """
     Testing Parser class _add_examples_flag() method.
     """
@@ -320,7 +322,8 @@ class TestParserAddExamplesFlagMethod():
 
         assert args.examples == True
 
-class TestParserAddRateLimitCheckFlagMethod():
+
+class TestParserAddRateLimitCheckFlagMethod:
     """
     Testing Parser class _add_rate_limit_check_flag() method.
     """
@@ -333,14 +336,15 @@ class TestParserAddRateLimitCheckFlagMethod():
 
         assert args.check == True
 
-class TestParserAddPrawScraperFlagsMethod():
+
+class TestParserAddPrawScraperFlagsMethod:
     """
     Testing Parser class _add_praw_scraper_flags() method.
     """
 
     def test_add_praw_scraper_flags_method_subreddit_flag(self):
         test_subreddit_args = [["test_subreddit", "h", "10"]]
-        
+
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_praw_scraper_flags(parser)
 
@@ -350,7 +354,7 @@ class TestParserAddPrawScraperFlagsMethod():
 
     def test_add_praw_scraper_flags_method_redditor_flag(self):
         test_subreddit_args = [["test_redditor", "10"]]
-        
+
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_praw_scraper_flags(parser)
 
@@ -360,7 +364,7 @@ class TestParserAddPrawScraperFlagsMethod():
 
     def test_add_praw_scraper_flags_method_comments_flag(self):
         test_subreddit_args = [["test_url", "10"]]
-        
+
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_praw_scraper_flags(parser)
 
@@ -376,7 +380,8 @@ class TestParserAddPrawScraperFlagsMethod():
 
         assert args.basic == True
 
-class TestParserAddPrawSubredditOptionsFlagMethod():
+
+class TestParserAddPrawSubredditOptionsFlagMethod:
     """
     Testing Parser class _add_praw_subreddit_options() method.
     """
@@ -389,7 +394,8 @@ class TestParserAddPrawSubredditOptionsFlagMethod():
 
         assert args.rules == True
 
-class TestParserAddPrawCommentsOptionsFlagMethod():
+
+class TestParserAddPrawCommentsOptionsFlagMethod:
     """
     Testing Parser class _add_praw_comments_options() method.
     """
@@ -402,7 +408,8 @@ class TestParserAddPrawCommentsOptionsFlagMethod():
 
         assert args.raw == True
 
-class TestParserAddPrawLivestreamFlags():
+
+class TestParserAddPrawLivestreamFlags:
     """
     Testing Parser class _add_praw_livestream_flags() method.
     """
@@ -423,7 +430,8 @@ class TestParserAddPrawLivestreamFlags():
 
         assert args.live_redditor == "spez"
 
-class TestParserAddPrawLivestreamOptions():
+
+class TestParserAddPrawLivestreamOptions:
     """
     Testing Parser class _add_praw_livestream_options() method.
     """
@@ -436,14 +444,15 @@ class TestParserAddPrawLivestreamOptions():
 
         assert args.stream_submissions == True
 
-class TestParserAddAnalyticsFlagMethod():
+
+class TestParserAddAnalyticsFlagMethod:
     """
     Testing Parser class _add_analytics() method.
     """
 
     def test_add_analytics_method_frequencies_flag(self):
         test_subreddit_args = [["test_file"]]
-        
+
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_analytics(parser)
 
@@ -453,7 +462,7 @@ class TestParserAddAnalyticsFlagMethod():
 
     def test_add_analytics_method_wordcloud_flag(self):
         test_subreddit_args = [["test_file"]]
-        
+
         parser = MakeArgs.parser_for_testing_cli()
         Cli.Parser()._add_analytics(parser)
 
@@ -461,7 +470,8 @@ class TestParserAddAnalyticsFlagMethod():
 
         assert args.wordcloud == test_subreddit_args
 
-class TestParserAddExtraOptionsMethod():
+
+class TestParserAddExtraOptionsMethod:
     """
     Testing Parser class _add_extra_options() method.
     """
@@ -482,7 +492,8 @@ class TestParserAddExtraOptionsMethod():
 
         assert args.nosave == True
 
-class TestParserAddExportMethod():
+
+class TestParserAddExportMethod:
     """
     Testing Parser class _add_export() method.
     """
@@ -495,7 +506,8 @@ class TestParserAddExportMethod():
 
         assert args.csv == True
 
-class TestParserParseArgsMethod():
+
+class TestParserParseArgsMethod:
     """
     Testing Parser class parse_args() method.
     """
@@ -507,7 +519,7 @@ class TestParserParseArgsMethod():
             sys.argv.append(arg)
 
         args, _ = Cli.Parser().parse_args()
-        
+
         assert args.subreddit == [["test_subreddit", "h", "10"]]
         assert args.csv == True
 
@@ -518,7 +530,7 @@ class TestParserParseArgsMethod():
             sys.argv.append(arg)
 
         args, _ = Cli.Parser().parse_args()
-        
+
         assert args.redditor == [["test_redditor", "10"]]
         assert args.csv == False
 
@@ -529,7 +541,7 @@ class TestParserParseArgsMethod():
             sys.argv.append(arg)
 
         args, _ = Cli.Parser().parse_args()
-        
+
         assert args.comments == [["test_url", "10"]]
         assert args.csv == False
 
@@ -553,7 +565,8 @@ class TestParserParseArgsMethod():
 
         sys.argv = [sys.argv[0]]
 
-class TestGetPRAWScrapeSettingsListSwitchMethod():
+
+class TestGetPRAWScrapeSettingsListSwitchMethod:
     """
     Testing GetPRAWScrapeSettings class _list_switch() method.
     """
@@ -564,15 +577,19 @@ class TestGetPRAWScrapeSettingsListSwitchMethod():
         args = parser.parse_args(["--subreddit", "test_subreddit"])
         index = 0
 
-        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == ["test_subreddit"]
-    
+        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == [
+            "test_subreddit"
+        ]
+
     def test_list_switch_method_second_switch(self):
         parser = MakeArgs.make_scraper_args()
 
         args = parser.parse_args(["--redditor", "test_redditor"])
         index = 1
 
-        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == ["test_redditor"]
+        assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == [
+            "test_redditor"
+        ]
 
     def test_list_switch_method_third_switch(self):
         parser = MakeArgs.make_scraper_args()
@@ -582,7 +599,8 @@ class TestGetPRAWScrapeSettingsListSwitchMethod():
 
         assert Cli.GetPRAWScrapeSettings()._list_switch(args, index) == ["test_url"]
 
-class TestGetPRAWScrapeSettingsCreateListMethod():
+
+class TestGetPRAWScrapeSettingsCreateListMethod:
     """
     Testing GetPRAWScrapeSettings class create_list() method.
     """
@@ -593,7 +611,9 @@ class TestGetPRAWScrapeSettingsCreateListMethod():
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         l_type = "subreddit"
 
-        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == ["test_subreddit"]
+        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == [
+            "test_subreddit"
+        ]
 
     def test_create_list_from_redditor_args(self):
         parser = MakeArgs.make_scraper_args()
@@ -601,7 +621,9 @@ class TestGetPRAWScrapeSettingsCreateListMethod():
         args = parser.parse_args(["--redditor", ["test_redditor", "10"]])
         l_type = "redditor"
 
-        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == ["test_redditor"]
+        assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == [
+            "test_redditor"
+        ]
 
     def test_create_list_from_comments_args(self):
         parser = MakeArgs.make_scraper_args()
@@ -611,7 +633,8 @@ class TestGetPRAWScrapeSettingsCreateListMethod():
 
         assert Cli.GetPRAWScrapeSettings().create_list(args, l_type) == ["test_url"]
 
-class TestGetPRAWScrapeSettingsSetSubSettings():
+
+class TestGetPRAWScrapeSettingsSetSubSettings:
     """
     Testing GetPRAWScrapeSettings class _set_sub_settings() method.
     """
@@ -637,7 +660,8 @@ class TestGetPRAWScrapeSettingsSetSubSettings():
 
         assert ["S", "20", "day"] == settings
 
-class TestGetPRAWScrapeSettingsSubredditSettingsMethod():
+
+class TestGetPRAWScrapeSettingsSubredditSettingsMethod:
     """
     Testing GetPRAWScrapeSettings class _subreddit_settings() method.
     """
@@ -647,11 +671,14 @@ class TestGetPRAWScrapeSettingsSubredditSettingsMethod():
         args = parser.parse_args(["--subreddit", ["test_subreddit", "h", "10"]])
         master = {"test_subreddit": []}
         invalids = []
-        Cli.GetPRAWScrapeSettings()._subreddit_settings(args.subreddit, invalids, master)
+        Cli.GetPRAWScrapeSettings()._subreddit_settings(
+            args.subreddit, invalids, master
+        )
 
         assert master == {"test_subreddit": [["h", "10", None]]}
 
-class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod():
+
+class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod:
     """
     Testing GetPRAWScrapeSettings class _two_arg_settings() method.
     """
@@ -674,7 +701,8 @@ class TestGetPRAWScrapeSettingsTwoArgsSettingsMethod():
 
         assert master == {"test_url": "2"}
 
-class TestGetPRAWScrapeSettingsGetSettingsMethod():
+
+class TestGetPRAWScrapeSettingsGetSettingsMethod:
     """
     Testing GetPRAWScrapeSettings class get_settings() method.
     """
@@ -709,32 +737,36 @@ class TestGetPRAWScrapeSettingsGetSettingsMethod():
 
         assert master == {"test_url": "2"}
 
-class TestCheckPRAWCliInitMethod():
+
+class TestCheckPRAWCliInitMethod:
     """
     Testing CheckPRAWCli class __init__() method.
     """
 
     def test_check_praw_cli_init_method_illegal_chars_instance_variable(self):
-        assert Cli.CheckPRAWCli()._illegal_chars == re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
+        assert Cli.CheckPRAWCli()._illegal_chars == re.compile(
+            "[@_!#$%^&*()<>?/\\|}{~:+`=]"
+        )
 
     def test_check_praw_cli_init_method_filterables_instance_variable(self):
         assert Cli.CheckPRAWCli()._filterables == [
-                Global.short_cat[2], 
-                Global.short_cat[3], 
-                Global.short_cat[5]
-            ]
+            Global.short_cat[2],
+            Global.short_cat[3],
+            Global.short_cat[5],
+        ]
 
     def test_check_praw_cli_init_method_time_filters_instance_variable(self):
         assert Cli.CheckPRAWCli()._time_filters == [
-                "all", 
-                "day", 
-                "hour", 
-                "month", 
-                "week", 
-                "year"
-            ]
+            "all",
+            "day",
+            "hour",
+            "month",
+            "week",
+            "year",
+        ]
 
-class TestCheckPRAWCliCheckNResultsMethod():
+
+class TestCheckPRAWCliCheckNResultsMethod:
     """
     Testing CheckPRAWCli class _check_n_results() method.
     """
@@ -769,7 +801,8 @@ class TestCheckPRAWCliCheckNResultsMethod():
         except SystemExit:
             assert False
 
-class TestCheckPRAWCliCheckSubredditMethod():
+
+class TestCheckPRAWCliCheckSubredditMethod:
     """
     Testing CheckPRAWCli class check_subreddit() method.
     """
@@ -784,7 +817,7 @@ class TestCheckPRAWCliCheckSubredditMethod():
     def test_check_subreddit_without_time_filter_with_invalid_args(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--subreddit", ["test_subreddit", "w", "asdf"]])
-        
+
         try:
             Cli.CheckPRAWCli().check_subreddit(args)
             assert False
@@ -803,13 +836,17 @@ class TestCheckPRAWCliCheckSubredditMethod():
 
     def test_check_subreddit_with_time_filter_with_correct_args(self):
         parser = MakeArgs.make_scraper_args()
-        args = parser.parse_args(["--subreddit", ["test_subreddit", "s", "test", "year"]])
+        args = parser.parse_args(
+            ["--subreddit", ["test_subreddit", "s", "test", "year"]]
+        )
 
         assert args.subreddit == [["test_subreddit", "s", "test", "year"]]
 
     def test_check_subreddit_with_time_filter_with_invalid_args(self):
         parser = MakeArgs.make_scraper_args()
-        args = parser.parse_args(["--subreddit", ["test_subreddit", "s", "test", "asdf"]])
+        args = parser.parse_args(
+            ["--subreddit", ["test_subreddit", "s", "test", "asdf"]]
+        )
 
         try:
             Cli.CheckPRAWCli().check_subreddit(args)
@@ -817,7 +854,8 @@ class TestCheckPRAWCliCheckSubredditMethod():
         except SystemExit:
             assert True
 
-class TestCheckPRAWCliCheckRedditorMethod():
+
+class TestCheckPRAWCliCheckRedditorMethod:
     """
     Testing CheckPRAWCli class check_redditor() method.
     """
@@ -832,14 +870,15 @@ class TestCheckPRAWCliCheckRedditorMethod():
     def test_check_redditor_with_invalid_args(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--redditor", ["10", "test_redditor"]])
-        
+
         try:
             Cli.CheckPRAWCli().check_redditor(args)
             assert False
         except SystemExit:
             assert True
 
-class TestCheckPRAWCliCheckCommentsMethod():
+
+class TestCheckPRAWCliCheckCommentsMethod:
     """
     Testing CheckPRAWCli class check_comments() method.
     """
@@ -854,32 +893,34 @@ class TestCheckPRAWCliCheckCommentsMethod():
     def test_check_comments_with_invalid_args(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--comments", ["2", "test_url"]])
-        
+
         try:
             Cli.CheckPRAWCli().check_comments(args)
             assert False
         except SystemExit:
             assert True
 
-class TestCheckAnalyticCliInitMethod():
+
+class TestCheckAnalyticCliInitMethod:
     """
     Testing CheckAnalyticCli class __init__() method.
     """
 
     def test_check_analytic_cli_init_method_export_options_instance_variable(self):
         assert Cli.CheckAnalyticCli()._export_options == [
-                "eps",
-                "jpeg",
-                "jpg",
-                "pdf",
-                "png",
-                "ps",
-                "rgba",
-                "tif",
-                "tiff"
-            ]
+            "eps",
+            "jpeg",
+            "jpg",
+            "pdf",
+            "png",
+            "ps",
+            "rgba",
+            "tif",
+            "tiff",
+        ]
 
-class TestCheckAnalyticCliCheckFrequenciesMethod():
+
+class TestCheckAnalyticCliCheckFrequenciesMethod:
     """
     Testing CheckAnalyticCli class check_frequencies() method.
     """
@@ -890,7 +931,8 @@ class TestCheckAnalyticCliCheckFrequenciesMethod():
     def test_check_frequencies_with_invalid_file(self):
         pass
 
-class TestCheckAnalyticCliCheckWordcloudMethod():
+
+class TestCheckAnalyticCliCheckWordcloudMethod:
     """
     Testing CheckAnalyticCli class check_wordcloud() method.
     """
@@ -898,7 +940,7 @@ class TestCheckAnalyticCliCheckWordcloudMethod():
     def test_check_wordcloud_len_is_greater_than_two(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args(["--wordcloud", ["test_file", "png", "asdf"]])
-        
+
         try:
             Cli.CheckAnalyticCli().check_wordcloud(args)
             assert False
@@ -911,7 +953,8 @@ class TestCheckAnalyticCliCheckWordcloudMethod():
     def test_check_wordcloud_with_invalid_file(self):
         pass
 
-class TestCheckCliCheckArgsMethod():
+
+class TestCheckCliCheckArgsMethod:
     """
     Testing CheckCli class check_args() method.
     """
@@ -922,7 +965,7 @@ class TestCheckCliCheckArgsMethod():
 
         Cli.CheckCli().check_args(args)
 
-        assert args.subreddit == [["test_subreddit", "h", "10"]] 
+        assert args.subreddit == [["test_subreddit", "h", "10"]]
 
     def test_check_args_with_invalid_subreddit_args(self):
         parser = MakeArgs.make_scraper_args()
@@ -981,4 +1024,3 @@ class TestCheckCliCheckArgsMethod():
 
     def test_check_args_with_invalid_wordcloud_args(self):
         pass
-    

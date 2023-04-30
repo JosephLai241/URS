@@ -9,24 +9,18 @@ import logging
 
 from urs.analytics.Frequencies import GenerateFrequencies
 from urs.analytics.Wordcloud import GenerateWordcloud
-
 from urs.praw_scrapers.live_scrapers.Livestream import Livestream
-
 from urs.praw_scrapers.static_scrapers.Basic import RunBasic
 from urs.praw_scrapers.static_scrapers.Comments import RunComments
 from urs.praw_scrapers.static_scrapers.Redditor import RunRedditor
 from urs.praw_scrapers.static_scrapers.Subreddit import RunSubreddit
-
 from urs.praw_scrapers.utils.Validation import Validation
-
-from urs.utils.Cli import (
-    CheckCli,
-    Parser
-)
+from urs.utils.Cli import CheckCli, Parser
 from urs.utils.Titles import MainTitle
 from urs.utils.Utilities import DateTree
 
-class Run():
+
+class Run:
     """
     Methods to call CLI and all tools.
     """
@@ -54,7 +48,7 @@ class Run():
 
         self._reddit = reddit
         self._args, self._parser = self._introduce_then_args()
-        
+
     def _introduce_then_args(self):
         """
         Print title, then run checks for CLI args and PRAW credentials.
@@ -105,7 +99,7 @@ class Run():
             PRAW livestream scrapers:
 
                 Livestream.stream()
-            
+
             Analytical tools:
 
                 GenerateFrequencies.generate()
@@ -129,11 +123,16 @@ class Run():
 
             DateTree.display_tree(self._args.tree)
 
-        elif self._args.subreddit or self._args.redditor or self._args.comments or self._args.basic:
+        elif (
+            self._args.subreddit
+            or self._args.redditor
+            or self._args.comments
+            or self._args.basic
+        ):
             """
             Run PRAW scrapers.
             """
-            
+
             Validation.validate_user(self._parser, self._reddit)
 
             if self._args.subreddit:
@@ -152,7 +151,7 @@ class Run():
 
             Validation.validate_user(self._parser, self._reddit)
             Livestream.stream(self._args, self._reddit)
-        
+
         elif self._args.frequencies or self._args.wordcloud:
             """
             Run analytical tools.

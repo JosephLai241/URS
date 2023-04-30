@@ -6,27 +6,19 @@ Miscellaneous utilities for URS.
 
 
 import logging
-import rich
+from pathlib import Path, PurePath
 
-from colorama import (
-    Fore,
-    Style
-)
+import rich
+from colorama import Fore, Style
 from halo import Halo
-from pathlib import (
-    Path,
-    PurePath
-)
 from rich.filesize import decimal
 from rich.tree import Tree
 
-from urs.utils.Global import (
-    date,
-    Status
-)
+from urs.utils.Global import Status, date
 from urs.utils.Titles import Errors
 
-class DateTree():
+
+class DateTree:
     """
     Methods for creating a visual representation of a target date directory located
     within the `scrapes` directory.
@@ -45,7 +37,7 @@ class DateTree():
 
         Raises
         ------
-        TypeError: 
+        TypeError:
             raised if an invalid date format is entered
 
         Returns
@@ -112,15 +104,15 @@ class DateTree():
         return [
             (path, tree)
             for path in sorted(
-                Path(directory).iterdir(), 
-                key = lambda path: (path.is_file(), path.name.lower())
+                Path(directory).iterdir(),
+                key=lambda path: (path.is_file(), path.name.lower()),
             )
         ]
 
     @staticmethod
     def _create_directory_tree(date_dir, tree):
         """
-        Create the directory Tree based on the date_dir Path using iterative 
+        Create the directory Tree based on the date_dir Path using iterative
         depth-first search.
 
         Parameters
@@ -137,7 +129,7 @@ class DateTree():
         build_tree_status = Status(
             "Displaying directory tree.",
             f"Building directory tree for {date_dir}.",
-            "cyan"
+            "cyan",
         )
 
         stack = DateTree._create_stack(date_dir, tree)
@@ -155,14 +147,14 @@ class DateTree():
             elif current_path.is_dir():
                 sub_tree = current_tree.add(f"[bold blue]{current_path.name}")
                 sub_paths = DateTree._create_stack(current_path, sub_tree)
-                
+
                 stack = sub_paths + stack
             elif current_path.is_file():
                 file_size = current_path.stat().st_size
                 current_tree.add(f"[bold]{current_path.name} [{decimal(file_size)}]")
 
                 visited.add(current_path)
-        
+
         build_tree_status.succeed()
         print()
 
@@ -193,23 +185,28 @@ class DateTree():
         try:
             search_date = DateTree._check_date_format(search_date)
 
-            find_dir_halo = Halo(color = "white", text = f"Searching for {search_date} directory within `scrapes`.")
+            find_dir_halo = Halo(
+                color="white",
+                text=f"Searching for {search_date} directory within `scrapes`.",
+            )
 
             find_dir_halo.start()
-            
+
             dir_exists = DateTree._find_date_directory(search_date)
             if dir_exists:
-                find_dir_halo.succeed(text = f"URS was run on {search_date}.")
+                find_dir_halo.succeed(text=f"URS was run on {search_date}.")
 
                 date_dir = f"{Path(Path.cwd()).parents[0]}/scrapes/{search_date}"
-                
+
                 tree = Tree(f"[bold blue]scrapes/")
                 dir_tree = tree.add(f"[bold blue]{search_date}")
 
                 DateTree._create_directory_tree(date_dir, dir_tree)
 
                 rich.print(tree)
-                logging.info(f"Displayed directory tree for scrapes run on {search_date}.")
+                logging.info(
+                    f"Displayed directory tree for scrapes run on {search_date}."
+                )
                 logging.info("")
                 print()
             else:
@@ -225,5 +222,7 @@ class DateTree():
             logging.critical("INVALID DATE FORMAT.")
             logging.critical("ABORTING URS.\n")
 
-            Errors.e_title("INVALID DATE FORMAT. ACCEPTED FORMATS: MM-DD-YYYY or MM/DD/YYYY.")
+            Errors.e_title(
+                "INVALID DATE FORMAT. ACCEPTED FORMATS: MM-DD-YYYY or MM/DD/YYYY."
+            )
             quit()

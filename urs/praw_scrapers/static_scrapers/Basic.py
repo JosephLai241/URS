@@ -7,35 +7,17 @@ Defining the interface for the basic Subreddit scraper.
 
 import logging
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 from halo import Halo
 
-from urs.praw_scrapers.static_scrapers.Subreddit import (
-    GetSortWrite,
-    PrintConfirm
-)
+from urs.praw_scrapers.static_scrapers.Subreddit import GetSortWrite, PrintConfirm
 from urs.praw_scrapers.utils.Validation import Validation
+from urs.utils.Global import categories, confirm_settings, make_list_dict, short_cat
+from urs.utils.Logger import LogError, LogExport, LogPRAWScraper
+from urs.utils.Titles import Errors, PRAWTitles
 
-from urs.utils.Global import (
-    categories,
-    confirm_settings,
-    make_list_dict,
-    short_cat
-)
-from urs.utils.Logger import (
-    LogError,
-    LogExport,
-    LogPRAWScraper
-)
-from urs.utils.Titles import (
-    Errors,
-    PRAWTitles
-)
 
-class PrintSubs():
+class PrintSubs:
     """
     Methods for printing found and invalid Subreddits.
     """
@@ -94,20 +76,28 @@ class PrintSubs():
             List of invalid Subreddits
         """
 
-        check_subs_spinner = Halo(color = "white", text = "Validating Subreddit(s).")
+        check_subs_spinner = Halo(color="white", text="Validating Subreddit(s).")
         print()
         check_subs_spinner.start()
         not_subs, subs = PrintSubs._find_subs(reddit, search_for)
         check_subs_spinner.succeed("Finished Subreddit validation.")
 
         if subs:
-            print(Fore.GREEN + Style.BRIGHT + "\nThe following Subreddits were found and will be scraped:")
+            print(
+                Fore.GREEN
+                + Style.BRIGHT
+                + "\nThe following Subreddits were found and will be scraped:"
+            )
             print(Fore.GREEN + Style.BRIGHT + "-" * 56)
-            print(*subs, sep = "\n")
+            print(*subs, sep="\n")
         if not_subs:
-            print(Fore.YELLOW + Style.BRIGHT + "\nThe following Subreddits were not found and will be skipped:")
+            print(
+                Fore.YELLOW
+                + Style.BRIGHT
+                + "\nThe following Subreddits were not found and will be skipped:"
+            )
             print(Fore.YELLOW + Style.BRIGHT + "-" * 60)
-            print(*not_subs, sep = "\n")
+            print(*not_subs, sep="\n")
 
             logging.warning("Failed to validate the following Subreddits:")
             logging.warning(f"{not_subs}")
@@ -119,12 +109,13 @@ class PrintSubs():
             Errors.n_title("Subreddits")
             logging.critical("NO SUBREDDITS LEFT TO SCRAPE.")
             logging.critical("ABORTING URS.\n")
-            
+
             quit()
 
         return subs
 
-class GetInput():
+
+class GetInput:
     """
     Methods for handling user input.
     """
@@ -149,10 +140,14 @@ class GetInput():
             List of valid Subreddits
         """
 
-        subreddit_prompt = Style.BRIGHT + """
+        subreddit_prompt = (
+            Style.BRIGHT
+            + """
 Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
-""" + Style.RESET_ALL
+"""
+            + Style.RESET_ALL
+        )
 
         while True:
             try:
@@ -161,7 +156,9 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
                     raise ValueError
                 return PrintSubs.print_subreddits(reddit, search_for)
             except ValueError:
-                print(Fore.RED + Style.BRIGHT + "No Subreddits were specified! Try again.")
+                print(
+                    Fore.RED + Style.BRIGHT + "No Subreddits were specified! Try again."
+                )
 
     @staticmethod
     def _update_master(cat_i, master, search_for, sub):
@@ -175,7 +172,7 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
         master: dict
             Dictionary denoting all scrape settings
         search_for: str
-            String denoting n_results to return or keywords to search for 
+            String denoting n_results to return or keywords to search for
         sub: str
             Subreddit name
 
@@ -186,15 +183,9 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
         for sub_name in master.keys():
             if sub_name == sub:
-                time_filter = "all" \
-                    if cat_i in [2, 3, 5] \
-                    else None
-                
-                settings = [
-                    short_cat[cat_i].lower(), 
-                    search_for,
-                    time_filter
-                ]
+                time_filter = "all" if cat_i in [2, 3, 5] else None
+
+                settings = [short_cat[cat_i].lower(), search_for, time_filter]
                 master[sub].append(settings)
 
     @staticmethod
@@ -222,7 +213,15 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
         while True:
             try:
-                search_for = str(input(Style.BRIGHT + "\nWhat would you like to search for in r/" + sub + "? " + Style.RESET_ALL)).strip()
+                search_for = str(
+                    input(
+                        Style.BRIGHT
+                        + "\nWhat would you like to search for in r/"
+                        + sub
+                        + "? "
+                        + Style.RESET_ALL
+                    )
+                ).strip()
                 if not search_for:
                     raise ValueError
                 else:
@@ -256,7 +255,13 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
 
         while True:
             try:
-                search_for = input(Style.BRIGHT + "\nHow many results do you want to capture from r/" + sub + "? " + Style.RESET_ALL).strip()
+                search_for = input(
+                    Style.BRIGHT
+                    + "\nHow many results do you want to capture from r/"
+                    + sub
+                    + "? "
+                    + Style.RESET_ALL
+                ).strip()
                 if search_for.isalpha() or not search_for:
                     raise ValueError
                 else:
@@ -290,7 +295,11 @@ Enter Subreddit or a list of Subreddits (separated by a space) to scrape:
         for sub in subs:
             while True:
                 try:
-                    cat_i = int(input((Style.BRIGHT + fr"""
+                    cat_i = int(
+                        input(
+                            (
+                                Style.BRIGHT
+                                + rf"""
 Select a category to display for r/{sub}
 -------------------
     0: Hot
@@ -300,7 +309,11 @@ Select a category to display for r/{sub}
     4: Rising
     5: Search
 -------------------
-        """ + Style.RESET_ALL)))
+        """
+                                + Style.RESET_ALL
+                            )
+                        )
+                    )
 
                     if cat_i == 5:
                         print("\nSelected search")
@@ -312,7 +325,8 @@ Select a category to display for r/{sub}
                 except (IndexError, ValueError):
                     print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")
 
-class ConfirmInput():
+
+class ConfirmInput:
     """
     Methods for handling user confirmation.
     """
@@ -335,10 +349,7 @@ class ConfirmInput():
             List of Subreddits
         """
 
-        options = [
-            "y", 
-            "n"
-        ]
+        options = ["y", "n"]
 
         while True:
             try:
@@ -353,7 +364,8 @@ class ConfirmInput():
             except ValueError:
                 print(Fore.RED + Style.BRIGHT + "\nNot an option! Try again.")
 
-class RunBasic():
+
+class RunBasic:
     """
     Run the basic Subreddit scraper.
     """
@@ -368,7 +380,7 @@ class RunBasic():
             GetInput.get_settings()
             GetInput.get_subreddits()
             ConfirmInput.confirm_subreddits()
-        
+
         Calls a public method from an external module:
 
             Global.make_list_dict()
@@ -445,7 +457,7 @@ class RunBasic():
             argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
-            
+
         Returns
         -------
         master: dict
@@ -453,8 +465,8 @@ class RunBasic():
         """
 
         PRAWTitles.b_title()
-                    
-        while True:                
+
+        while True:
             master = RunBasic._create_settings(parser, reddit)
 
             confirm = RunBasic._print_confirm(args, master)
@@ -463,7 +475,7 @@ class RunBasic():
             else:
                 print(Fore.RED + Style.BRIGHT + "\nExiting.\n")
                 parser.exit()
-        
+
         GetSortWrite().gsw(args, reddit, master)
 
         return master

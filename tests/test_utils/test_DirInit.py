@@ -7,7 +7,8 @@ import os
 
 from urs.utils.DirInit import InitializeDirectory
 
-class TestInitializeDirectoryCreateDirsMethod():
+
+class TestInitializeDirectoryCreateDirsMethod:
     """
     Testing InitializeDirectory class create_dirs() method.
     """
@@ -17,6 +18,4 @@ class TestInitializeDirectoryCreateDirsMethod():
 
         InitializeDirectory.create_dirs(test_path)
 
-        assert True \
-            if os.path.isdir(test_path) \
-            else False
+        assert True if os.path.isdir(test_path) else False

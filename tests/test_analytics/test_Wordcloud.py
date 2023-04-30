@@ -5,7 +5,8 @@ Testing `Wordcloud.py`.
 
 from urs.analytics import Wordcloud
 
-class TestSetUpWordcloudInitializeWordcloudMethod():
+
+class TestSetUpWordcloudInitializeWordcloudMethod:
     """
     Testing SetUpWordcloud class initialize_wordcloud() method.
     """
@@ -13,7 +14,8 @@ class TestSetUpWordcloudInitializeWordcloudMethod():
     def test_initialize_wordcloud_method(self):
         pass
 
-class TestSetUpWordcloudModifyWordcloudMethod():
+
+class TestSetUpWordcloudModifyWordcloudMethod:
     """
     Testing SetUpWordcloud class modify_wordcloud() method.
     """
@@ -21,7 +23,8 @@ class TestSetUpWordcloudModifyWordcloudMethod():
     def test_modify_wordcloud_method(self):
         pass
 
-class TestFinalizeWordcloudShowWordcloudMethod():
+
+class TestFinalizeWordcloudShowWordcloudMethod:
     """
     Testing FinalizeWordcloud class show_wordcloud() method.
     """
@@ -29,7 +32,8 @@ class TestFinalizeWordcloudShowWordcloudMethod():
     def test_show_wordcloud_method(self):
         pass
 
-class TestFinalizeWordcloudSaveWordcloudMethod():
+
+class TestFinalizeWordcloudSaveWordcloudMethod:
     """
     Testing FinalizeWordcloud class save_wordcloud() method.
     """

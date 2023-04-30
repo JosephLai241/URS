@@ -7,37 +7,27 @@ Defining methods for the Subreddit scraper.
 
 import logging
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 from halo import Halo
 from prettytable import PrettyTable
 
 from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
-
 from urs.utils.Cli import GetPRAWScrapeSettings
-from urs.utils.Export import (
-    Export,
-    NameFile
-)
+from urs.utils.Export import Export, NameFile
 from urs.utils.Global import (
+    Status,
     categories,
     confirm_settings,
     convert_time,
     make_list_dict,
     short_cat,
-    Status
 )
-from urs.utils.Logger import (
-    LogError,
-    LogExport, 
-    LogPRAWScraper
-)
+from urs.utils.Logger import LogError, LogExport, LogPRAWScraper
 from urs.utils.Titles import PRAWTitles
 
-class PrintConfirm():
+
+class PrintConfirm:
     """
     Methods for printing Subreddit settings and confirm settings.
     """
@@ -62,16 +52,11 @@ class PrintConfirm():
         for sub, settings in s_master.items():
             for each_sub in settings:
                 cat_i = short_cat.index(each_sub[0].upper())
-                time_filter = each_sub[2].capitalize() \
-                    if each_sub[2] != None \
-                    else each_sub[2]
-                
-                pretty_subs.add_row([
-                    sub, 
-                    categories[cat_i], 
-                    time_filter, 
-                    each_sub[1]
-                ])
+                time_filter = (
+                    each_sub[2].capitalize() if each_sub[2] != None else each_sub[2]
+                )
+
+                pretty_subs.add_row([sub, categories[cat_i], time_filter, each_sub[1]])
 
     @staticmethod
     def print_settings(s_master):
@@ -92,10 +77,10 @@ class PrintConfirm():
 
         pretty_subs = PrettyTable()
         pretty_subs.field_names = [
-            "Subreddit", 
-            "Category", 
+            "Subreddit",
+            "Category",
             "Time Filter",
-            "Number of results / Keywords"
+            "Number of results / Keywords",
         ]
 
         PrintConfirm._add_each_setting(pretty_subs, s_master)
@@ -103,7 +88,8 @@ class PrintConfirm():
 
         print(pretty_subs)
 
-class GetExtras():
+
+class GetExtras:
     """
     Methods for getting a Subreddit's rules and post requirements.
     """
@@ -136,10 +122,11 @@ class GetExtras():
             }
             for rule in subreddit.rules
         ]
-        
+
         return subreddit.post_requirements(), rules
 
-class GetSubmissionsSwitch():
+
+class GetSubmissionsSwitch:
     """
     Implementing Pythonic switch case to determine which Subreddit category to
     get results from.
@@ -170,28 +157,32 @@ class GetSubmissionsSwitch():
         None
         """
 
-        self._controversial = subreddit.controversial(limit = int(search_for), time_filter = time_filter) \
-            if time_filter != None \
-            else subreddit.controversial(limit = int(search_for))
-        self._hot = subreddit.hot(limit = int(search_for))
-        self._new = subreddit.new(limit = int(search_for))
-        self._rising = subreddit.rising(limit = int(search_for))
-        self._top = subreddit.top(limit = int(search_for), time_filter = time_filter) \
-            if time_filter != None \
-            else subreddit.top(limit = int(search_for))
+        self._controversial = (
+            subreddit.controversial(limit=int(search_for), time_filter=time_filter)
+            if time_filter != None
+            else subreddit.controversial(limit=int(search_for))
+        )
+        self._hot = subreddit.hot(limit=int(search_for))
+        self._new = subreddit.new(limit=int(search_for))
+        self._rising = subreddit.rising(limit=int(search_for))
+        self._top = (
+            subreddit.top(limit=int(search_for), time_filter=time_filter)
+            if time_filter != None
+            else subreddit.top(limit=int(search_for))
+        )
 
         self._switch = {
             0: self._hot,
             1: self._new,
             2: self._controversial,
             3: self._top,
-            4: self._rising
+            4: self._rising,
         }
 
     def scrape_sub(self, index):
         """
-        Return a command based on the chosen category. 
-        
+        Return a command based on the chosen category.
+
         Calls previously defined private method:
 
             self._switch()
@@ -208,7 +199,8 @@ class GetSubmissionsSwitch():
 
         return self._switch.get(index)
 
-class GetSubmissions():
+
+class GetSubmissions:
     """
     Methods for getting submissions from a Subreddit.
     """
@@ -234,19 +226,21 @@ class GetSubmissions():
         """
 
         Halo().info(f"Searching submissions in r/{sub} for '{search_for}'.")
-        
+
         if time_filter != None:
             Halo().info(f"Time filter: {time_filter.capitalize()}")
 
-        return subreddit.search(f"{search_for}", time_filter = time_filter) \
-            if time_filter != None \
+        return (
+            subreddit.search(f"{search_for}", time_filter=time_filter)
+            if time_filter != None
             else subreddit.search(f"{search_for}")
+        )
 
     @staticmethod
     def _collect_others(cat_i, search_for, sub, subreddit, time_filter):
         """
         Return PRAW ListingGenerator for all other categories (excluding Search).
-        
+
         Calls previously defined private method:
 
             GetSubmissionsSwitch().scrape_sub()
@@ -270,19 +264,21 @@ class GetSubmissions():
 
         category = categories[short_cat.index(cat_i)]
         index = short_cat.index(cat_i)
-        
+
         Halo().info(f"Processing {search_for} {category} results from r/{sub}.")
-        
+
         if time_filter != None:
             Halo().info(f"Time filter: {time_filter.capitalize()}")
 
-        return GetSubmissionsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
+        return GetSubmissionsSwitch(search_for, subreddit, time_filter).scrape_sub(
+            index
+        )
 
     @staticmethod
     def get(cat_i, search_for, sub, subreddit, time_filter):
         """
-        Get Subreddit submissions and return the PRAW ListingGenerator. 
-        
+        Get Subreddit submissions and return the PRAW ListingGenerator.
+
         Calls previously defined private methods:
 
             GetSubmissions._collect_search()
@@ -305,11 +301,16 @@ class GetSubmissions():
         submissions: PRAW ListingGenerator
         """
 
-        return GetSubmissions._collect_search(search_for, sub, subreddit, time_filter) \
-            if cat_i == short_cat[5] \
-            else GetSubmissions._collect_others(cat_i, search_for, sub, subreddit, time_filter)
+        return (
+            GetSubmissions._collect_search(search_for, sub, subreddit, time_filter)
+            if cat_i == short_cat[5]
+            else GetSubmissions._collect_others(
+                cat_i, search_for, sub, subreddit, time_filter
+            )
+        )
 
-class FormatSubmissions():
+
+class FormatSubmissions:
     """
     Methods for formatting PRAW submissions.
     """
@@ -334,11 +335,11 @@ class FormatSubmissions():
         """
 
         return [
-            Objectify().make_submission(False, submission) 
-            for submission in submissions
+            Objectify().make_submission(False, submission) for submission in submissions
         ]
 
-class FormatCSV():
+
+class FormatCSV:
     """
     Methods for formatting PRAW submission objects in CSV format.
     """
@@ -362,7 +363,7 @@ class FormatCSV():
         format_status = Status(
             "Finished formatting data for CSV export.",
             "Formatting data for CSV export.",
-            "white"
+            "white",
         )
 
         overview = dict()
@@ -372,15 +373,16 @@ class FormatCSV():
             for field, metadata in submission.items():
                 if field not in overview.keys():
                     overview[field] = []
-                
+
                 overview[field].append(metadata)
-        
+
         format_status.succeed()
         return overview
 
-class FormatJSON():
+
+class FormatJSON:
     """
-    Methods for formatting PRAW submission objects in JSON format. 
+    Methods for formatting PRAW submission objects in JSON format.
     """
 
     @staticmethod
@@ -440,9 +442,9 @@ class FormatJSON():
                 "subreddit": sub,
                 "category": categories[short_cat.index(cat_i)].lower(),
                 "n_results_or_keywords": search_for,
-                "time_filter": time_filter
+                "time_filter": time_filter,
             },
-            "data": None
+            "data": None,
         }
 
         return skeleton
@@ -455,7 +457,7 @@ class FormatJSON():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         reddit: PRAW Reddit object
         skeleton: dict
             Dictionary containing all Subreddit scrape data
@@ -468,18 +470,19 @@ class FormatJSON():
         format_status = Status(
             "Finished formatting data for JSON export.",
             "Formatting data for JSON export.",
-            "white"
+            "white",
         )
 
         format_status.start()
         skeleton["data"] = submissions
-        
+
         if args.rules:
             FormatJSON._add_subreddit_rules(skeleton, subreddit)
-        
+
         format_status.succeed()
 
-class GetSortWrite():
+
+class GetSortWrite:
     """
     Methods to get, sort, then write scraped Subreddit submissions to CSV or JSON.
     """
@@ -487,8 +490,8 @@ class GetSortWrite():
     @staticmethod
     def _get_sort(args, cat_i, search_for, sub, subreddit, time_filter):
         """
-        Get and sort submissions. 
-        
+        Get and sort submissions.
+
         Calls previously defined public methods:
 
             GetExtras.get_rules()
@@ -498,7 +501,7 @@ class GetSortWrite():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         cat_i: str
             String denoting n_results returned or keywords searched for
         search_for: str
@@ -512,7 +515,7 @@ class GetSortWrite():
         Returns
         -------
         data: dict
-            Dictionary containing scraped Subreddit submission data 
+            Dictionary containing scraped Subreddit submission data
         """
 
         submissions = GetSubmissions.get(cat_i, search_for, sub, subreddit, time_filter)
@@ -529,8 +532,8 @@ class GetSortWrite():
     @staticmethod
     def _write(args, cat_i, data, each_sub, sub):
         """
-        Write submissions to file. 
-        
+        Write submissions to file.
+
         Calls methods from external modules:
 
             NameFile().r_fname()
@@ -539,11 +542,11 @@ class GetSortWrite():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         cat_i: str
             String denoting n_results returned or keywords searched for
         data: dict
-            Dictionary containing scraped Subreddit submission data 
+            Dictionary containing scraped Subreddit submission data
         each_sub: list
             List of Subreddit scraping settings
         sub: str
@@ -555,15 +558,18 @@ class GetSortWrite():
         """
 
         f_name = NameFile().r_fname(args, cat_i, each_sub, sub)
-        
-        export_option = "json" \
-            if not args.csv \
-            else "csv"
+
+        export_option = "json" if not args.csv else "csv"
 
         Export.export(data, f_name, export_option, "subreddits")
 
         print()
-        Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + f"{export_option.upper()} file for r/{sub} created.").succeed()
+        Halo(
+            color="green",
+            text=Style.BRIGHT
+            + Fore.GREEN
+            + f"{export_option.upper()} file for r/{sub} created.",
+        ).succeed()
         print()
 
     @staticmethod
@@ -579,7 +585,7 @@ class GetSortWrite():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         s_master: dict
@@ -595,10 +601,13 @@ class GetSortWrite():
                 cat_i = each_sub[0].upper()
                 subreddit = reddit.subreddit(sub)
 
-                data = GetSortWrite._get_sort(args, cat_i, str(each_sub[1]), sub, subreddit, each_sub[2])
+                data = GetSortWrite._get_sort(
+                    args, cat_i, str(each_sub[1]), sub, subreddit, each_sub[2]
+                )
                 GetSortWrite._write(args, cat_i, data, each_sub, sub)
 
-class RunSubreddit():
+
+class RunSubreddit:
     """
     Run the Subreddit scraper.
     """
@@ -606,8 +615,8 @@ class RunSubreddit():
     @staticmethod
     def _create_settings(args, parser, reddit):
         """
-        Create settings for each user input. 
-        
+        Create settings for each user input.
+
         Calls methods from an external modules:
 
             GetPRAWScrapeSettings().create_list()
@@ -618,7 +627,7 @@ class RunSubreddit():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         parser: ArgumentParser
             argparse ArgumentParser object
         reddit: Reddit object
@@ -641,8 +650,8 @@ class RunSubreddit():
     @LogPRAWScraper.log_cancel
     def _confirm_write(args, reddit, s_master):
         """
-        Print the confirm screen if the user did not specify the `-y` flag. 
-        
+        Print the confirm screen if the user did not specify the `-y` flag.
+
         Calls previously defined public methods:
 
             GetSortWrite.gsw(args, reddit, s_master)
@@ -652,7 +661,7 @@ class RunSubreddit():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         s_master: dict
@@ -675,8 +684,8 @@ class RunSubreddit():
     def _write_file(args, reddit, s_master):
         """
         Skip or print Subreddit scraping settings if the `-y` flag is entered.
-        Then write or quit scraper. 
-        
+        Then write or quit scraper.
+
         Calls previously defined public methods:
 
             GetSortWrite.gsw()
@@ -685,7 +694,7 @@ class RunSubreddit():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
         s_master: dict
@@ -696,17 +705,17 @@ class RunSubreddit():
         None
         """
 
-        GetSortWrite.gsw(args, reddit, s_master) \
-            if args.y \
-            else RunSubreddit._confirm_write(args, reddit, s_master)
+        GetSortWrite.gsw(
+            args, reddit, s_master
+        ) if args.y else RunSubreddit._confirm_write(args, reddit, s_master)
 
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer("subreddit")
     def run(args, parser, reddit):
         """
-        Run Subreddit scraper. 
-        
+        Run Subreddit scraper.
+
         Calls previously defined public methods:
 
             RunSubreddit._create_settings()
@@ -719,9 +728,9 @@ class RunSubreddit():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         parser: ArgumentParser
-            argparse ArgumentParser object 
+            argparse ArgumentParser object
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
 
@@ -735,5 +744,5 @@ class RunSubreddit():
 
         s_master = RunSubreddit._create_settings(args, parser, reddit)
         RunSubreddit._write_file(args, reddit, s_master)
-        
+
         return s_master

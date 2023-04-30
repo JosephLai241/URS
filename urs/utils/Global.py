@@ -13,15 +13,9 @@ from halo import Halo
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
 ### Subreddit categories.
-categories = [
-    "Hot", 
-    "New", 
-    "Controversial", 
-    "Top", 
-    "Rising", 
-    "Search"
-]
+categories = ["Hot", "New", "Controversial", "Top", "Rising", "Search"]
 short_cat = [cat[0] for cat in categories]
+
 
 def convert_time(object):
     """
@@ -40,42 +34,41 @@ def convert_time(object):
 
     return dt.datetime.fromtimestamp(object).strftime("%m-%d-%Y %H:%M:%S")
 
+
 def confirm_settings():
-        """
-        Confirm scraping options.
+    """
+    Confirm scraping options.
 
-        Parameters
-        ----------
-        None
+    Parameters
+    ----------
+    None
 
-        Exceptions
-        ----------
-        ValueError:
-            Raised if the confirmation input is invalid
+    Exceptions
+    ----------
+    ValueError:
+        Raised if the confirmation input is invalid
 
-        Returns
-        -------
-        confirm: str
-            String denoting whether to confirm settings and continue scraping
-        """
+    Returns
+    -------
+    confirm: str
+        String denoting whether to confirm settings and continue scraping
+    """
 
-        options = [
-            "y", 
-            "n"
-        ]
+    options = ["y", "n"]
 
-        while True:
-            try:
-                confirm = input("\nConfirm options? [Y/N] ").strip().lower()
+    while True:
+        try:
+            confirm = input("\nConfirm options? [Y/N] ").strip().lower()
 
-                if confirm == options[0]:
-                    return confirm
-                elif confirm == options[1]:
-                    break
-                elif confirm not in options:
-                    raise ValueError
-            except ValueError:
-                print("Not an option! Try again.")
+            if confirm == options[0]:
+                return confirm
+            elif confirm == options[1]:
+                break
+            elif confirm not in options:
+                raise ValueError
+        except ValueError:
+            print("Not an option! Try again.")
+
 
 def make_list_dict(item):
     """
@@ -95,6 +88,7 @@ def make_list_dict(item):
 
     return dict((obj, []) for obj in item)
 
+
 def make_none_dict(item):
     """
     Initialize a dictionary of keys with None as values.
@@ -113,7 +107,8 @@ def make_none_dict(item):
 
     return dict((obj, None) for obj in item)
 
-class Status():
+
+class Status:
     """
     Methods for defining status spinners.
     """
@@ -146,7 +141,7 @@ class Status():
         self._before_message = before_message
         self._color = color
 
-        self.spinner = Halo(color = self._color, text = self._before_message)
+        self.spinner = Halo(color=self._color, text=self._before_message)
 
     def start(self):
         """

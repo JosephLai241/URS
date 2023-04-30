@@ -5,26 +5,20 @@ Generate a wordcloud based on word frequencies extracted from scraped data.
 """
 
 
-import matplotlib.pyplot as plt
-
-from colorama import (
-    Fore, 
-    Style
-)
-from halo import Halo
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+from colorama import Fore, Style
+from halo import Halo
 from wordcloud import WordCloud
 
-from urs.analytics.utils.PrepData import (
-    GetPath,
-    PrepData
-)
-
+from urs.analytics.utils.PrepData import GetPath, PrepData
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
 
-class SetUpWordcloud():
+
+class SetUpWordcloud:
     """
     Methods for setting up the wordcloud.
     """
@@ -55,16 +49,12 @@ class SetUpWordcloud():
         frequencies = PrepData.prep(file[0], scrape_type)
 
         initialize_status = Status(
-            "Generated wordcloud.",
-            "Generating wordcloud.",
-            "white"
+            "Generated wordcloud.", "Generating wordcloud.", "white"
         )
 
         initialize_status.start()
         wordcloud = WordCloud(
-            height = 1200,
-            max_font_size = 400,
-            width = 1600
+            height=1200, max_font_size=400, width=1600
         ).generate_from_frequencies(frequencies)
         initialize_status.succeed()
 
@@ -86,12 +76,13 @@ class SetUpWordcloud():
             matplotlib.pyplot instance
         """
 
-        plt.imshow(wc, interpolation = "bilinear")
+        plt.imshow(wc, interpolation="bilinear")
         plt.axis("off")
 
         return plt
 
-class FinalizeWordcloud():
+
+class FinalizeWordcloud:
     """
     Methods for either saving or displaying the wordcloud.
     """
@@ -154,17 +145,18 @@ class FinalizeWordcloud():
         export_status = Status(
             Style.BRIGHT + Fore.GREEN + f"Wordcloud exported to {new_filename}.",
             "Exporting wordcloud.",
-            "white"
+            "white",
         )
 
         export_status.start()
         wc.to_file(new_filename)
         export_status.succeed()
         print()
-        
+
         return new_filename
 
-class GenerateWordcloud():
+
+class GenerateWordcloud:
     """
     Methods for generating a wordcloud.
     """
@@ -186,7 +178,7 @@ class GenerateWordcloud():
 
             AnalyticsTitles.wc_title()
             GetPath.get_scrape_type()
-        
+
         Parameters
         ----------
         args: Namespace
@@ -200,10 +192,14 @@ class GenerateWordcloud():
         AnalyticsTitles.wc_title()
 
         for scrape_file in args.wordcloud:
-            analytics_dir, scrape_type = GetPath.get_scrape_type(scrape_file[0], "wordcloud")
+            analytics_dir, scrape_type = GetPath.get_scrape_type(
+                scrape_file[0], "wordcloud"
+            )
             wc = SetUpWordcloud.initialize_wordcloud(scrape_file, scrape_type)
             plt = SetUpWordcloud.modify_wordcloud(wc)
 
-            FinalizeWordcloud().show_wordcloud(plt) \
-                if args.nosave \
-                else FinalizeWordcloud().save_wordcloud(analytics_dir, scrape_file, wc)
+            FinalizeWordcloud().show_wordcloud(
+                plt
+            ) if args.nosave else FinalizeWordcloud().save_wordcloud(
+                analytics_dir, scrape_file, wc
+            )

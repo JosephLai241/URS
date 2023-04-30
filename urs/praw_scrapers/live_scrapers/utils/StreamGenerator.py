@@ -8,9 +8,10 @@ converts them to JSON serializable objects when saving to file.
 
 from urs.praw_scrapers.utils.Objectify import Objectify
 
-class StreamGenerator():
+
+class StreamGenerator:
     """
-    Methods for creating a generator which yields new Reddit objects while 
+    Methods for creating a generator which yields new Reddit objects while
     streaming.
     """
 
@@ -25,10 +26,10 @@ class StreamGenerator():
 
         Yields
         ------
-        submission: Reddit submission object 
+        submission: Reddit submission object
         """
 
-        for submission in stream.submissions(skip_existing = True):
+        for submission in stream.submissions(skip_existing=True):
             yield Objectify().make_submission(True, submission)
 
     @staticmethod
@@ -42,8 +43,8 @@ class StreamGenerator():
 
         Yields
         ------
-        submission: Reddit comment object 
+        submission: Reddit comment object
         """
 
-        for comment in stream.comments(skip_existing = True):
+        for comment in stream.comments(skip_existing=True):
             yield Objectify().make_comment(comment, True)

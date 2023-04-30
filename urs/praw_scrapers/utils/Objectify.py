@@ -7,15 +7,16 @@ Defining methods to create JSON serializable objects from Reddit metadata.
 
 from urs.utils.Global import convert_time
 
-class Objectify():
+
+class Objectify:
     """
     Methods for creating JSON serializable objects from Reddit metadata.
     """
 
     def make_comment(self, comment, include_all):
         """
-        Make a comment item. 
-        
+        Make a comment item.
+
         Calls previously defined public method:
 
             self.make_submission()
@@ -37,16 +38,16 @@ class Objectify():
         """
 
         comment_object = {
-            "author": "u/" + comment.author.name \
-                if hasattr(comment.author, "name") \
-                else "[deleted]",
+            "author": "u/" + comment.author.name
+            if hasattr(comment.author, "name")
+            else "[deleted]",
             "body": comment.body,
             "body_html": comment.body_html,
             "created_utc": convert_time(comment.created_utc),
             "distinguished": comment.distinguished,
-            "edited": comment.edited \
-                if comment.edited == False \
-                else convert_time(comment.edited),
+            "edited": comment.edited
+            if comment.edited == False
+            else convert_time(comment.edited),
             "id": comment.id,
             "is_submitter": comment.is_submitter,
             "link_id": comment.link_id,
@@ -56,7 +57,9 @@ class Objectify():
         }
 
         if include_all:
-            comment_object["submission"] = self.make_submission(include_all, comment.submission)
+            comment_object["submission"] = self.make_submission(
+                include_all, comment.submission
+            )
             comment_object["subreddit_id"] = comment.subreddit_id
             comment_object["type"] = "comment"
 
@@ -96,7 +99,7 @@ class Objectify():
             "name": multireddit.name,
             "nsfw": multireddit.over_18,
             "subreddits": [],
-            "visibility": multireddit.visibility
+            "visibility": multireddit.visibility,
         }
 
         if multireddit.subreddits:
@@ -105,7 +108,7 @@ class Objectify():
                 multireddit_object["subreddits"].append(subreddit)
 
         return multireddit_object
-    
+
     def make_submission(self, include_all, submission):
         """
         Make a submission object.
@@ -131,14 +134,14 @@ class Objectify():
         """
 
         submission_object = {
-            "author": "u/" + submission.author.name \
-                if hasattr(submission.author, "name") \
-                else "[deleted]",
+            "author": "u/" + submission.author.name
+            if hasattr(submission.author, "name")
+            else "[deleted]",
             "created_utc": convert_time(submission.created_utc),
             "distinguished": submission.distinguished,
-            "edited": submission.edited \
-                if submission.edited == False \
-                else convert_time(submission.edited),
+            "edited": submission.edited
+            if submission.edited == False
+            else convert_time(submission.edited),
             "id": submission.id,
             "is_original_content": submission.is_original_content,
             "is_self": submission.is_self,
@@ -154,7 +157,7 @@ class Objectify():
             "stickied": submission.stickied,
             "title": submission.title,
             "upvote_ratio": submission.upvote_ratio,
-            "url": submission.url
+            "url": submission.url,
         }
 
         if include_all:
@@ -198,5 +201,5 @@ class Objectify():
             "subscribers": subreddit.subscribers,
             "user_is_banned": subreddit.user_is_banned,
             "user_is_moderator": subreddit.user_is_moderator,
-            "user_is_subscriber": subreddit.user_is_subscriber
+            "user_is_subscriber": subreddit.user_is_subscriber,
         }

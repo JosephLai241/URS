@@ -11,22 +11,18 @@ import logging
 import os
 import time
 
-from colorama import (
-    Fore,
-    Style
-)
+from colorama import Fore, Style
 from halo import Halo
 
 from urs.praw_scrapers.live_scrapers.utils.DisplayStream import DisplayStream
 from urs.praw_scrapers.live_scrapers.utils.StreamGenerator import StreamGenerator
-
 from urs.praw_scrapers.utils.Validation import Validation
-
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import date
 from urs.utils.Titles import PRAWTitles
 
-class SaveStream():
+
+class SaveStream:
     """
     Methods for saving the livestream to file.
     """
@@ -39,7 +35,7 @@ class SaveStream():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
 
         Returns
         -------
@@ -47,15 +43,11 @@ class SaveStream():
             Dictionary containing data pertaining to the livestream
         """
 
-        skeleton = {
-            "livestream_settings": {},
-            "livestream_metadata": {},
-            "data": []
-        }
+        skeleton = {"livestream_settings": {}, "livestream_metadata": {}, "data": []}
 
-        skeleton["livestream_settings"]["included_reddit_objects"] = "submissions" \
-            if args.stream_submissions \
-            else "comments"
+        skeleton["livestream_settings"]["included_reddit_objects"] = (
+            "submissions" if args.stream_submissions else "comments"
+        )
 
         if args.live_subreddit:
             skeleton["livestream_settings"]["subreddit"] = args.live_subreddit
@@ -143,7 +135,7 @@ class SaveStream():
         """
 
         if not os.path.isfile(stream_path):
-            with open(stream_path, "w", encoding = "utf-8") as new_file:
+            with open(stream_path, "w", encoding="utf-8") as new_file:
                 json.dump(skeleton, new_file)
 
     @staticmethod
@@ -191,7 +183,7 @@ class SaveStream():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         generator: Reddit object generator
         object_info: str
             String denoting which Reddit objects are displayed in the stream
@@ -204,13 +196,13 @@ class SaveStream():
             String denoting the livestream statistics (Reddit objects, Subreddit
             or Redditor, and duration)
         """
-        
+
         skeleton = SaveStream._create_skeleton(args)
         stream_path = SaveStream._get_temp_filename(stream_info)
 
         SaveStream._create_temp_file(skeleton, stream_path)
 
-        with open(stream_path, "r+", encoding = "utf-8") as existing_file:
+        with open(stream_path, "r+", encoding="utf-8") as existing_file:
             stream_data = json.load(existing_file)
 
             start_stream = time.mktime(time.localtime())
@@ -229,8 +221,12 @@ class SaveStream():
 
             except KeyboardInterrupt:
                 end_stream = time.mktime(time.localtime())
-                duration = time.strftime("%H:%M:%S", time.gmtime(end_stream - start_stream))
-                stream_statistics = f"Streamed {object_info} submitted {stream_info} for {duration}."
+                duration = time.strftime(
+                    "%H:%M:%S", time.gmtime(end_stream - start_stream)
+                )
+                stream_statistics = (
+                    f"Streamed {object_info} submitted {stream_info} for {duration}."
+                )
 
                 print("\n\n")
                 Halo().info(Fore.YELLOW + Style.BRIGHT + "ABORTING LIVESTREAM.")
@@ -241,16 +237,27 @@ class SaveStream():
                 print()
 
                 stream_data["livestream_metadata"]["stream_duration"] = duration
-                stream_data["livestream_metadata"]["stream_end"] = time.strftime("%H:%M:%S", time.localtime(end_stream))
-                stream_data["livestream_metadata"]["stream_start"] = time.strftime("%H:%M:%S", time.localtime(start_stream))
+                stream_data["livestream_metadata"]["stream_end"] = time.strftime(
+                    "%H:%M:%S", time.localtime(end_stream)
+                )
+                stream_data["livestream_metadata"]["stream_start"] = time.strftime(
+                    "%H:%M:%S", time.localtime(start_stream)
+                )
 
                 existing_file.seek(0)
                 existing_file.truncate()
-                json.dump(stream_data, existing_file, indent = 4)
+                json.dump(stream_data, existing_file, indent=4)
 
         save_spinner = Halo().start("Saving livestream.")
-        SaveStream._rename(duration, object_info, time.strftime("%H:%M:%S", time.localtime(start_stream)), stream_path)
-        save_spinner.info(Fore.GREEN + Style.BRIGHT + "Livestream has been saved to file.")
+        SaveStream._rename(
+            duration,
+            object_info,
+            time.strftime("%H:%M:%S", time.localtime(start_stream)),
+            stream_path,
+        )
+        save_spinner.info(
+            Fore.GREEN + Style.BRIGHT + "Livestream has been saved to file."
+        )
 
         logging.info("Livestream has been saved to file.")
         logging.info("")
@@ -259,7 +266,8 @@ class SaveStream():
 
         return stream_statistics
 
-class Livestream():
+
+class Livestream:
     """
     Methods for livestreaming a Subreddit or Redditor's new comments or submissions.
     """
@@ -287,8 +295,10 @@ class Livestream():
 
             Validation.validate([args.live_subreddit], reddit, "subreddit")
 
-            initial_message = f"Initializing Subreddit livestream for r/{args.live_subreddit}."
-            
+            initial_message = (
+                f"Initializing Subreddit livestream for r/{args.live_subreddit}."
+            )
+
             stream_info = f"in r/{args.live_subreddit}"
             reddit_object = reddit.subreddit(args.live_subreddit)
 
@@ -297,11 +307,13 @@ class Livestream():
 
             Validation.validate([args.live_redditor], reddit, "redditor")
 
-            initial_message = f"Initializing Redditor livestream for u/{args.live_redditor}."
-            
+            initial_message = (
+                f"Initializing Redditor livestream for u/{args.live_redditor}."
+            )
+
             stream_info = f"by u/{args.live_redditor}"
             reddit_object = reddit.redditor(args.live_redditor)
-        
+
         Halo().info(Fore.CYAN + Style.BRIGHT + initial_message)
         logging.info(initial_message + "..")
         Halo().info("New entries will appear when posted to Reddit.")
@@ -311,7 +323,7 @@ class Livestream():
     @staticmethod
     def _stream_switch(args, reddit_object):
         """
-        A switch that determines what Reddit objects are yielded (comments or 
+        A switch that determines what Reddit objects are yielded (comments or
         submissions).
 
         Calls public methods from an external module:
@@ -375,8 +387,12 @@ class Livestream():
             for obj in generator:
                 DisplayStream.display(obj)
         except KeyboardInterrupt:
-            duration = time.strftime("%H:%M:%S", time.gmtime(time.time() - start_stream))
-            stream_statistics = f"Streamed {object_info} submitted {stream_info} for {duration}."
+            duration = time.strftime(
+                "%H:%M:%S", time.gmtime(time.time() - start_stream)
+            )
+            stream_statistics = (
+                f"Streamed {object_info} submitted {stream_info} for {duration}."
+            )
 
             print("\n\n")
             Halo().info(Fore.YELLOW + Style.BRIGHT + "ABORTING LIVESTREAM.")
@@ -411,7 +427,7 @@ class Livestream():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         reddit: Reddit object
             Reddit instance created by PRAW API credentials
 
@@ -423,9 +439,11 @@ class Livestream():
         reddit_object, stream_info = Livestream._set_info_and_object(args, reddit)
         generator, object_info = Livestream._stream_switch(args, reddit_object)
 
-        stream_statistics = Livestream._no_save_stream(generator, object_info, stream_info) \
-            if args.nosave \
+        stream_statistics = (
+            Livestream._no_save_stream(generator, object_info, stream_info)
+            if args.nosave
             else SaveStream.write(args, generator, object_info, stream_info)
+        )
 
         logging.info(stream_statistics)
         logging.info("")

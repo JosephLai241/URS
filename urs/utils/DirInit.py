@@ -7,7 +7,8 @@ Initialize directories in which scraped or analytical data is stored.
 
 import os
 
-class InitializeDirectory():
+
+class InitializeDirectory:
     """
     Methods for initializing directories for the exported files.
     """

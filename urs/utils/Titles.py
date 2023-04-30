@@ -5,12 +5,10 @@ Display ASCII art that is used throughout this program.
 """
 
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 
-class MainTitle():
+
+class MainTitle:
     """
     Method for printing the main URS title.
     """
@@ -21,15 +19,20 @@ class MainTitle():
         Print URS title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  __  __  _ __   ____  
 /\ \/\ \/\`'__\/',__\ 
 \ \ \_\ \ \ \//\__, `\
  \ \____/\ \_\\/\____/
   \/___/  \/_/ \/___/ 
-""")
+"""
+        )
 
-class PRAWTitles():
+
+class PRAWTitles:
     """
     Methods for printing PRAW scraper titles.
     """
@@ -40,13 +43,17 @@ class PRAWTitles():
         Print Subreddit scraper title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  _ __  
 /\`'__\
 \ \ \/ 
  \ \_\ 
   \/_/ 
-""")
+"""
+        )
 
     @staticmethod
     def u_title():
@@ -54,13 +61,17 @@ class PRAWTitles():
         Print Redditor scraper title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  __  __  
 /\ \/\ \ 
 \ \ \_\ \
  \ \____/
   \/___/ 
-""")
+"""
+        )
 
     @staticmethod
     def c_title():
@@ -68,13 +79,17 @@ class PRAWTitles():
         Print comments scraper title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
   ___   
  /'___\ 
 /\ \__/ 
 \ \____\
  \/____/
-""")
+"""
+        )
 
     @staticmethod
     def b_title():
@@ -82,7 +97,10 @@ class PRAWTitles():
         Print basic scraper title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  __        
 /\ \       
 \ \ \____  
@@ -90,7 +108,8 @@ class PRAWTitles():
   \ \ \L\ \
    \ \_,__/
     \/___/... Only scrapes Subreddits. 
-""")
+"""
+        )
 
     @staticmethod
     def lr_title():
@@ -98,7 +117,10 @@ class PRAWTitles():
         Print Subreddit livestream title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  ___            
 /\_ \           
 \//\ \    _ __ ⏺️  
@@ -106,7 +128,8 @@ class PRAWTitles():
    \_\ \_\ \ \/ 
    /\____\\ \_\ 
    \/____/ \/_/
-""")
+"""
+        )
 
     @staticmethod
     def lu_title():
@@ -114,7 +137,10 @@ class PRAWTitles():
         Print Redditor livestream title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  ___              
 /\_ \             
 \//\ \    __  __⏺️  
@@ -122,9 +148,11 @@ class PRAWTitles():
    \_\ \_\ \ \_\ \
    /\____\\ \____/
    \/____/ \/___/ 
-""")
+"""
+        )
 
-class AnalyticsTitles():
+
+class AnalyticsTitles:
     """
     Methods for printing analytical tool titles.
     """
@@ -135,7 +163,10 @@ class AnalyticsTitles():
         Print frequencies title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
   ___  
  /'___\ 📈
 /\ \__/ 
@@ -143,7 +174,8 @@ class AnalyticsTitles():
  \ \ \_/
   \ \_\ 
    \/_/
-""")
+"""
+        )
 
     @staticmethod
     def wc_title():
@@ -151,15 +183,20 @@ class AnalyticsTitles():
         Print wordcloud title.
         """
 
-        print(Fore.WHITE + Style.BRIGHT + r"""
+        print(
+            Fore.WHITE
+            + Style.BRIGHT
+            + r"""
  __  __  __    ___ 🖌️ 
 /\ \/\ \/\ \  /'___\ 
 \ \ \_/ \_/ \/\ \__/ 
  \ \___x___/'\ \____\
   \/__//__/   \/____/
-""")
+"""
+        )
 
-class Errors():
+
+class Errors:
     """
     Methods for printing error titles.
     """
@@ -179,7 +216,10 @@ class Errors():
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + fr"""
+        print(
+            Fore.RED
+            + Style.BRIGHT
+            + rf"""
    __   
  /'__`\ 
 /\  __/ 
@@ -187,7 +227,8 @@ class Errors():
  \/____/... {invalid_message}
  
 Please recheck args or refer to help or usage examples.
-""")
+"""
+        )
 
     @staticmethod
     def n_title(reddit_object):
@@ -204,13 +245,17 @@ Please recheck args or refer to help or usage examples.
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + fr"""
+        print(
+            Fore.RED
+            + Style.BRIGHT
+            + rf"""
   ___    
  /' _`\  
 /\ \/\ \ 
 \ \_\ \_\
  \/_/\/_/... No {reddit_object} to scrape! Aborting URS.     
-""")
+"""
+        )
 
     @staticmethod
     def i_title(error):
@@ -223,14 +268,18 @@ Please recheck args or refer to help or usage examples.
             String denoting the specific error associated with invalid files
         """
 
-        print(Fore.RED + Style.BRIGHT + fr"""
+        print(
+            Fore.RED
+            + Style.BRIGHT
+            + rf"""
  __    
 /\_\   
 \/\ \  
  \ \ \ 
   \ \_\
    \/_/... {error}     
-""")
+"""
+        )
 
     @staticmethod
     def p_title(error):
@@ -247,7 +296,10 @@ Please recheck args or refer to help or usage examples.
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + fr"""
+        print(
+            Fore.RED
+            + Style.BRIGHT
+            + rf"""
  _____   
 /\ '__`\ 
 \ \ \L\ \
@@ -257,7 +309,8 @@ Please recheck args or refer to help or usage examples.
     \/_/
 
 Prawcore exception: {error}
-""")
+"""
+        )
 
     @staticmethod
     def l_title(reset_timestamp):
@@ -274,7 +327,10 @@ Prawcore exception: {error}
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + fr"""
+        print(
+            Fore.RED
+            + Style.BRIGHT
+            + rf"""
  __        
 /\ \       
 \ \ \      
@@ -284,7 +340,8 @@ Prawcore exception: {error}
     \/___/... You have reached your rate limit.
 
 Please try again when your rate limit is reset: {reset_timestamp}
-""")
+"""
+        )
 
     @staticmethod
     def ex_title(error):
@@ -301,7 +358,10 @@ Please try again when your rate limit is reset: {reset_timestamp}
         None
         """
 
-        print(Fore.RED + Style.BRIGHT + fr"""
+        print(
+            Fore.RED
+            + Style.BRIGHT
+            + rf"""
  __     
 /\ \    
 \ \ \   
@@ -311,4 +371,5 @@ Please try again when your rate limit is reset: {reset_timestamp}
     \/_/... An error has occurred while exporting scraped data.
     
 {error}
-""" )
+"""
+        )

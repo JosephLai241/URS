@@ -6,23 +6,17 @@ comments within scraped data.
 """
 
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 from halo import Halo
 
-from urs.analytics.utils.PrepData import (
-    GetPath,
-    PrepData
-)
-
+from urs.analytics.utils.PrepData import GetPath, PrepData
 from urs.utils.Export import Export
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalytics
 from urs.utils.Titles import AnalyticsTitles
 
-class Sort():
+
+class Sort:
     """
     Methods for sorting the frequencies data.
     """
@@ -50,7 +44,9 @@ class Sort():
             Dictionary containing extracted scrape data
         """
 
-        analytics_dir, scrape_type = GetPath.get_scrape_type(scrape_file[0], "frequencies")
+        analytics_dir, scrape_type = GetPath.get_scrape_type(
+            scrape_file[0], "frequencies"
+        )
 
         return analytics_dir, PrepData.prep(scrape_file[0], scrape_type)
 
@@ -80,9 +76,7 @@ class Sort():
             String denoting the filename
         """
 
-        f_type = "csv" \
-            if args.csv \
-            else "json"
+        f_type = "csv" if args.csv else "json"
 
         filename = GetPath.name_file(analytics_dir, scrape_file[0])
 
@@ -103,10 +97,7 @@ class Sort():
             Dictionary containing frequency data
         """
 
-        overview = {
-            "words": [],
-            "frequencies": []
-        }
+        overview = {"words": [], "frequencies": []}
 
         for word, frequency in plt_dict.items():
             overview["words"].append(word)
@@ -131,12 +122,10 @@ class Sort():
             Dictionary containing frequency data
         """
 
-        return {
-            "raw_file": scrape_file[0],
-            "data": plt_dict
-        }
+        return {"raw_file": scrape_file[0], "data": plt_dict}
 
-class ExportFrequencies():
+
+class ExportFrequencies:
     """
     Methods for exporting the frequencies data.
     """
@@ -166,11 +155,12 @@ class ExportFrequencies():
         None
         """
 
-        Export.write_json(data, filename) \
-            if f_type == "json" \
-            else Export.write_csv(data, filename)
+        Export.write_json(data, filename) if f_type == "json" else Export.write_csv(
+            data, filename
+        )
 
-class GenerateFrequencies():
+
+class GenerateFrequencies:
     """
     Methods for generating word frequencies.
     """
@@ -189,7 +179,7 @@ class GenerateFrequencies():
             Sort().create_json()
             Sort().get_data()
             Sort().name_and_create_dir()
-        
+
         Calls public methods from external modules:
 
             AnalyticsTitles.f_title()
@@ -208,20 +198,26 @@ class GenerateFrequencies():
 
         for scrape_file in args.frequencies:
             analytics_dir, plt_dict = Sort().get_data(scrape_file)
-            f_type, filename = Sort().name_and_create_dir(analytics_dir, args, scrape_file)
+            f_type, filename = Sort().name_and_create_dir(
+                analytics_dir, args, scrape_file
+            )
 
             Halo().info("Generating frequencies.")
             print()
-            data = Sort().create_csv(plt_dict) \
-                if args.csv \
+            data = (
+                Sort().create_csv(plt_dict)
+                if args.csv
                 else Sort().create_json(plt_dict, scrape_file)
+            )
 
             export_status = Status(
-                Style.BRIGHT + Fore.GREEN + f"Frequencies exported to {'/'.join(filename.split('/')[filename.split('/').index('scrapes'):])}.",
+                Style.BRIGHT
+                + Fore.GREEN
+                + f"Frequencies exported to {'/'.join(filename.split('/')[filename.split('/').index('scrapes'):])}.",
                 "Exporting frequencies.",
-                "white"
+                "white",
             )
-            
+
             export_status.start()
             ExportFrequencies.export(data, f_type, filename)
             export_status.succeed()

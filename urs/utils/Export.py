@@ -7,17 +7,13 @@ Methods for naming and exporting scraped data.
 
 import csv
 import json
-
 from json import JSONEncoder
 
 from urs.utils.DirInit import InitializeDirectory
-from urs.utils.Global import (
-    categories,
-    date,
-    short_cat
-)
+from urs.utils.Global import categories, date, short_cat
 
-class NameFile():
+
+class NameFile:
     """
     Methods for naming the exported files.
     """
@@ -70,11 +66,7 @@ class NameFile():
             Fixed filename
         """
 
-        fixed = [
-            "_" 
-                if char in self._illegal_chars
-                else char for char in name
-        ]
+        fixed = ["_" if char in self._illegal_chars else char for char in name]
 
         return "".join(fixed)
 
@@ -97,9 +89,7 @@ class NameFile():
 
         switch = {
             0: categories[5],
-            1: categories[short_cat.index(cat_i)] \
-                if cat_i != short_cat[5] \
-                else None
+            1: categories[short_cat.index(cat_i)] if cat_i != short_cat[5] else None,
         }
 
         return switch.get(category_n)
@@ -119,11 +109,11 @@ class NameFile():
             Integer denoting the selected category's index
         """
 
-        return 0 \
-            if cat_i == short_cat[5] \
-            else 1
+        return 0 if cat_i == short_cat[5] else 1
 
-    def _get_sub_fname(self, category, end, index, n_res_or_kwds, subreddit, time_filter):
+    def _get_sub_fname(
+        self, category, end, index, n_res_or_kwds, subreddit, time_filter
+    ):
         """
         File name switch that stores all possible Subreddit filename formats
 
@@ -156,15 +146,15 @@ class NameFile():
             0: search,
             1: standard,
             2: search + filter_str,
-            3: standard + filter_str
+            3: standard + filter_str,
         }
 
         return filenames.get(index)
 
     def _get_raw_n(self, args, cat_i, end, each_sub, sub):
         """
-        Determine filename format for the Subreddit scraper. 
-        
+        Determine filename format for the Subreddit scraper.
+
         Calls previously defined private methods:
 
             self._r_get_category()
@@ -193,28 +183,24 @@ class NameFile():
         category_n = self._r_get_category(cat_i)
         category = self._r_category(cat_i, category_n)
 
-        ending = None \
-            if cat_i == short_cat[5] \
-            else end
-        time_filter = None \
-            if each_sub[2] == None or each_sub[2] == "all" \
-            else each_sub[2]
+        ending = None if cat_i == short_cat[5] else end
+        time_filter = (
+            None if each_sub[2] == None or each_sub[2] == "all" else each_sub[2]
+        )
 
         if each_sub[2] == None or each_sub[2] == "all":
-            index = 0 \
-                if cat_i == short_cat[5] \
-                else 1
+            index = 0 if cat_i == short_cat[5] else 1
         else:
-            index = 2 \
-                if cat_i == short_cat[5] \
-                else 3
+            index = 2 if cat_i == short_cat[5] else 3
 
-        filename = self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
+        filename = self._get_sub_fname(
+            category, ending, index, each_sub[1], sub, time_filter
+        )
         filename = self._check_len(filename)
 
         if args.rules:
             return filename + "-rules"
-        
+
         return filename
 
     def r_fname(self, args, cat_i, each_sub, sub):
@@ -244,9 +230,11 @@ class NameFile():
         """
 
         raw_n = ""
-        end = "result" \
-            if isinstance(each_sub[1], int) and int(each_sub[1]) < 2 \
+        end = (
+            "result"
+            if isinstance(each_sub[1], int) and int(each_sub[1]) < 2
             else "results"
+        )
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
 
@@ -254,8 +242,8 @@ class NameFile():
 
     def u_fname(self, limit, string):
         """
-        Determine filename format for Redditor scraping. 
-        
+        Determine filename format for Redditor scraping.
+
         Calls previously defined private methods:
 
             self._fix()
@@ -270,20 +258,18 @@ class NameFile():
         Returns
         -------
         filename: str
-            Finalized Redditor filename after string formatting and checking 
+            Finalized Redditor filename after string formatting and checking
         """
 
-        end = "result" \
-            if int(limit) < 2 \
-            else "results"
+        end = "result" if int(limit) < 2 else "results"
         raw_n = f"{string}-{limit}-{end}"
 
         return self._fix(raw_n)
 
     def c_fname(self, args, limit, string):
         """
-        Determine filename format for submission comments scraping. 
-        
+        Determine filename format for submission comments scraping.
+
         Calls previously defined private methods:
 
             self._check_len()
@@ -301,16 +287,14 @@ class NameFile():
         Returns
         -------
         filename: str
-            Finalized submission comments filename after string formatting and 
-            checking 
+            Finalized submission comments filename after string formatting and
+            checking
         """
 
         string = self._check_len(string)
-        
+
         if int(limit) != 0:
-            plurality = "result" \
-                if int(limit) < 2 \
-                else "results"
+            plurality = "result" if int(limit) < 2 else "results"
             raw_n = f"{string}-{limit}-{plurality}"
         else:
             raw_n = f"{string}-all"
@@ -320,19 +304,21 @@ class NameFile():
 
         return self._fix(raw_n)
 
+
 class EncodeNode(JSONEncoder):
     """
-    Methods to serialize CommentNodes for JSON export. 
+    Methods to serialize CommentNodes for JSON export.
     """
 
     def default(self, object):
         """
-        Override the default JSONEncoder `default()` method. 
+        Override the default JSONEncoder `default()` method.
         """
 
         return object.__dict__
 
-class Export():
+
+class Export:
     """
     Methods for creating directories and export the file.
     """
@@ -359,9 +345,7 @@ class Export():
 
         dir_path = f"../scrapes/{date}/{scrape}"
 
-        extension = ".csv" \
-            if f_type == "csv" \
-            else ".json"
+        extension = ".csv" if f_type == "csv" else ".json"
 
         return dir_path + f"/{f_name}{extension}"
 
@@ -379,11 +363,11 @@ class Export():
 
         Returns
         -------
-        None 
+        None
         """
 
-        with open(filename, "w", encoding = "utf-8") as results:
-            writer = csv.writer(results, delimiter = ",")
+        with open(filename, "w", encoding="utf-8") as results:
+            writer = csv.writer(results, delimiter=",")
             writer.writerow(data.keys())
             writer.writerows(zip(*data.values()))
 
@@ -395,7 +379,7 @@ class Export():
 
         Calls a method from an external module:
 
-            InitializeDirectory.create_dirs()    
+            InitializeDirectory.create_dirs()
 
         Parameters
         ----------
@@ -406,14 +390,14 @@ class Export():
 
         Returns
         -------
-        None 
+        None
         """
 
         filename = Export._get_filename_extension(f_name, "json", "comments")
         InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
-        with open(filename, "w", encoding = "utf-8") as results:
-            json.dump(data, results, indent = 4, cls = EncodeNode)
+        with open(filename, "w", encoding="utf-8") as results:
+            json.dump(data, results, indent=4, cls=EncodeNode)
 
     @staticmethod
     def write_json(data, filename):
@@ -429,17 +413,17 @@ class Export():
 
         Returns
         -------
-        None 
+        None
         """
 
-        with open(filename, "w", encoding = "utf-8") as results:
-            json.dump(data, results, indent = 4)
-    
+        with open(filename, "w", encoding="utf-8") as results:
+            json.dump(data, results, indent=4)
+
     @staticmethod
     def export(data, f_name, f_type, scrape):
         """
-        Write data to either CSV or JSON. 
-        
+        Write data to either CSV or JSON.
+
         Calls a method from an external module:
 
             InitializeDirectory.create_dirs()
@@ -469,6 +453,6 @@ class Export():
         filename = Export._get_filename_extension(f_name, f_type, scrape)
         InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
-        Export.write_json(data, filename) \
-            if f_type == "json" \
-            else Export.write_csv(data, filename)
+        Export.write_json(data, filename) if f_type == "json" else Export.write_csv(
+            data, filename
+        )

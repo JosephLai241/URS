@@ -6,14 +6,14 @@ Helper methods to prepare data for frequencies and wordcloud generators.
 
 
 import json
-
 from pathlib import Path
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import Status
 from urs.utils.Logger import LogAnalyticsErrors
 
-class GetPath():
+
+class GetPath:
     """
     Methods for determining file paths.
     """
@@ -36,7 +36,7 @@ class GetPath():
         ----------
         TypeError:
             Raised if the file is not JSON or if the file resides in the `analytics`
-            directory 
+            directory
 
         Returns
         -------
@@ -53,10 +53,11 @@ class GetPath():
         if file_path.name.split(".")[1] != "json" or scrape_dir == "analytics":
             raise TypeError
 
-        split_analytics_dir = \
-            list(file_path.parts)[:file_path.parts.index("scrapes") + 2] + \
-            ["analytics", tool] + \
-            list(file_path.parts)[file_path.parts.index("scrapes") + 2:-1]
+        split_analytics_dir = (
+            list(file_path.parts)[: file_path.parts.index("scrapes") + 2]
+            + ["analytics", tool]
+            + list(file_path.parts)[file_path.parts.index("scrapes") + 2 : -1]
+        )
 
         analytics_dir = "/".join(split_analytics_dir)
         InitializeDirectory.create_dirs(analytics_dir)
@@ -84,7 +85,8 @@ class GetPath():
 
         return f"{Path(analytics_dir)}/{Path(path).name}"
 
-class Extract():
+
+class Extract:
     """
     Methods for extracting the data from scrape files.
     """
@@ -105,10 +107,11 @@ class Extract():
             Dictionary containing extracted scrape data
         """
 
-        with open(str(scrape_file), "r", encoding = "utf-8") as raw_data:
+        with open(str(scrape_file), "r", encoding="utf-8") as raw_data:
             return json.load(raw_data)
 
-class CleanData():
+
+class CleanData:
     """
     Methods for cleaning words found in "title", "body" or "text" fields.
     """
@@ -130,11 +133,7 @@ class CleanData():
         """
 
         illegal_chars = [char for char in "[(),:;.}{<>`]"]
-        fixed = [
-            " "
-                if char in illegal_chars
-                else char for char in word
-        ]
+        fixed = [" " if char in illegal_chars else char for char in word]
 
         return "".join(fixed).strip()
 
@@ -166,13 +165,14 @@ class CleanData():
             word = CleanData._remove_extras(word)
             if not word:
                 continue
-            
+
             if word not in plt_dict.keys():
                 plt_dict[word] = 1
             else:
                 plt_dict[word] += 1
 
-class PrepSubreddit():
+
+class PrepSubreddit:
     """
     Methods for preparing Subreddit data.
     """
@@ -198,9 +198,7 @@ class PrepSubreddit():
         """
 
         status = Status(
-            "Finished Subreddit analysis.",
-            "Analyzing Subreddit scrape.",
-            "white"
+            "Finished Subreddit analysis.", "Analyzing Subreddit scrape.", "white"
         )
 
         plt_dict = dict()
@@ -213,7 +211,8 @@ class PrepSubreddit():
         status.succeed()
         return plt_dict
 
-class PrepMutts():
+
+class PrepMutts:
     """
     Methods for preparing data that may contain a mix of Reddit objects.
     """
@@ -250,7 +249,8 @@ class PrepMutts():
             elif isinstance(obj, str):
                 continue
 
-class PrepRedditor():
+
+class PrepRedditor:
     """
     Methods for preparing Redditor data.
     """
@@ -277,9 +277,7 @@ class PrepRedditor():
         """
 
         status = Status(
-            "Finished Redditor analysis.",
-            "Analyzing Redditor scrape.",
-            "white"
+            "Finished Redditor analysis.", "Analyzing Redditor scrape.", "white"
         )
 
         plt_dict = dict()
@@ -291,7 +289,8 @@ class PrepRedditor():
         status.succeed()
         return plt_dict
 
-class PrepComments():
+
+class PrepComments:
     """
     Methods for preparing submission comments data.
     """
@@ -320,13 +319,13 @@ class PrepComments():
         status = Status(
             "Finished raw submission comments analysis.",
             "Analyzing raw submission comments scrape.",
-            "white"
+            "white",
         )
 
         status.start()
         for comment in data:
             CleanData.count_words("body", comment, plt_dict)
-        
+
         status.succeed()
 
     @staticmethod
@@ -350,7 +349,7 @@ class PrepComments():
         status = Status(
             "Finished structured submission comments analysis.",
             "Analyzing structured submission comments scrape.",
-            "white"
+            "white",
         )
 
         status.start()
@@ -359,13 +358,13 @@ class PrepComments():
 
             stack = []
             stack.append(comment)
-            
+
             visited = []
             visited.append(comment)
 
             while stack:
                 current_comment = stack.pop(0)
-                
+
                 for reply in current_comment["replies"]:
                     CleanData.count_words("body", reply, plt_dict)
 
@@ -398,13 +397,16 @@ class PrepComments():
 
         plt_dict = dict()
 
-        PrepComments._prep_raw(data["data"]["comments"], plt_dict) \
-            if data["scrape_settings"]["style"] == "raw" \
-            else PrepComments._prep_structured(data["data"]["comments"], plt_dict)
+        PrepComments._prep_raw(data["data"]["comments"], plt_dict) if data[
+            "scrape_settings"
+        ]["style"] == "raw" else PrepComments._prep_structured(
+            data["data"]["comments"], plt_dict
+        )
 
         return plt_dict
 
-class PrepLivestream():
+
+class PrepLivestream:
     """
     Methods for preparing livestream data.
     """
@@ -421,9 +423,7 @@ class PrepLivestream():
         """
 
         status = Status(
-            "Finished livestream analysis.",
-            "Analyzing livestream scrape.",
-            "white"
+            "Finished livestream analysis.", "Analyzing livestream scrape.", "white"
         )
 
         plt_dict = {}
@@ -434,9 +434,10 @@ class PrepLivestream():
 
         return plt_dict
 
-class PrepData():
+
+class PrepData:
     """
-    Calling all methods for preparing scraped data. 
+    Calling all methods for preparing scraped data.
     """
 
     @staticmethod
@@ -455,7 +456,7 @@ class PrepData():
         scrape_file: str
             String denoting the filepath
         scrape_type: str
-            String denoting the scrape type 
+            String denoting the scrape type
 
         Returns
         -------
@@ -474,4 +475,4 @@ class PrepData():
         elif scrape_type == "livestream":
             plt_dict = PrepLivestream.prep_livestream(data["data"])
 
-        return dict(sorted(plt_dict.items(), key = lambda item: item[1], reverse = True))
+        return dict(sorted(plt_dict.items(), key=lambda item: item[1], reverse=True))

@@ -8,21 +8,14 @@ Decorators that log what is happening behind the scenes to `urs.log`.
 import logging
 import time
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 
 from urs.utils.DirInit import InitializeDirectory
-from urs.utils.Global import (
-    categories,
-    convert_time,
-    date,
-    short_cat
-)
+from urs.utils.Global import categories, convert_time, date, short_cat
 from urs.utils.Titles import Errors
 
-class LogMain():
+
+class LogMain:
     """
     Decorator for logging URS runtime. Also handles KeyboardInterrupt and adds the
     event to the log if applicable.
@@ -38,11 +31,9 @@ class LogMain():
 
     ### Configure logging settings.
     logging.basicConfig(
-        filename = DIR_PATH + "/urs.log", 
-        format = LOG_FORMAT, 
-        level = logging.INFO
+        filename=DIR_PATH + "/urs.log", format=LOG_FORMAT, level=logging.INFO
     )
-    
+
     @staticmethod
     def master_timer(function):
         """
@@ -71,7 +62,7 @@ class LogMain():
             logging.info("")
 
             start = time.time()
-            
+
             try:
                 function(*args)
             except KeyboardInterrupt:
@@ -84,7 +75,8 @@ class LogMain():
 
         return wrapper
 
-class LogError():
+
+class LogError:
     """
     Decorator for logging args, PRAW, or rate limit errors.
     """
@@ -103,7 +95,7 @@ class LogError():
         Exceptions
         ----------
         SystemExit:
-            Raised if no, invalid, or example args were entered 
+            Raised if no, invalid, or example args were entered
 
         Returns
         -------
@@ -119,7 +111,7 @@ class LogError():
             except SystemExit:
                 logging.info("HELP OR VERSION WAS DISPLAYED.\n")
                 quit()
-        
+
         return wrapper
 
     @staticmethod
@@ -150,6 +142,7 @@ class LogError():
                     quit()
 
             return wrapper
+
         return decorator
 
     @staticmethod
@@ -179,14 +172,18 @@ class LogError():
 
             if int(user_limits["remaining"]) == 0:
                 Errors.l_title(convert_time(user_limits["reset_timestamp"]))
-                logging.critical(f"RATE LIMIT REACHED. RATE LIMIT WILL RESET AT {convert_time(user_limits['reset_timestamp'])}.")
+                logging.critical(
+                    f"RATE LIMIT REACHED. RATE LIMIT WILL RESET AT {convert_time(user_limits['reset_timestamp'])}."
+                )
                 logging.critical("ABORTING URS.\n")
                 quit()
-            
+
             return user_limits
+
         return wrapper
 
-class LogPRAWScraper():
+
+class LogPRAWScraper:
     """
     Decorator for logging scraper runtimes and events.
     """
@@ -206,22 +203,22 @@ class LogPRAWScraper():
         None
         """
 
-        time_filters = [ 
-            "day", 
-            "hour", 
-            "month", 
-            "week", 
-            "year"
-        ]
+        time_filters = ["day", "hour", "month", "week", "year"]
 
         for subreddit_name, settings in settings_dict.items():
             for each_setting in settings:
                 if each_setting[2] in time_filters:
-                    logging.info(f"Getting posts from the past {each_setting[2]} for {categories[short_cat.index(each_setting[0].upper())]} results.")
+                    logging.info(
+                        f"Getting posts from the past {each_setting[2]} for {categories[short_cat.index(each_setting[0].upper())]} results."
+                    )
                 if each_setting[0].lower() != "s":
-                    logging.info(f"Scraping r/{subreddit_name} for {each_setting[1]} {categories[short_cat.index(each_setting[0].upper())]} results...")
+                    logging.info(
+                        f"Scraping r/{subreddit_name} for {each_setting[1]} {categories[short_cat.index(each_setting[0].upper())]} results..."
+                    )
                 elif each_setting[0].lower() == "s":
-                    logging.info(f"Searching and scraping r/{subreddit_name} for posts containing '{each_setting[1]}'...")
+                    logging.info(
+                        f"Searching and scraping r/{subreddit_name} for posts containing '{each_setting[1]}'..."
+                    )
 
                 logging.info("")
 
@@ -244,16 +241,18 @@ class LogPRAWScraper():
         """
 
         for reddit_object, n_results in settings_dict.items():
-            plurality = "results" \
-                if int(n_results) > 1 \
-                else "result"
-            
+            plurality = "results" if int(n_results) > 1 else "result"
+
             if scraper_type == "redditor":
-                logging.info(f"Scraping {n_results} {plurality} for u/{reddit_object}...")
+                logging.info(
+                    f"Scraping {n_results} {plurality} for u/{reddit_object}..."
+                )
             elif scraper_type == "comments":
-                logging.info(f"Processing all comments from Reddit post {reddit_object}...") \
-                    if int(n_results) == 0 \
-                    else logging.info(f"Processing {n_results} {plurality} from Reddit post {reddit_object}...")            
+                logging.info(
+                    f"Processing all comments from Reddit post {reddit_object}..."
+                ) if int(n_results) == 0 else logging.info(
+                    f"Processing {n_results} {plurality} from Reddit post {reddit_object}..."
+                )
 
             logging.info("")
 
@@ -313,10 +312,13 @@ class LogPRAWScraper():
 
                 LogPRAWScraper._format_scraper_log(scraper, settings_dict)
 
-                logging.info(f"{scraper.upper()} SCRAPER FINISHED IN {time.time() - start:.2f} SECONDS.")
+                logging.info(
+                    f"{scraper.upper()} SCRAPER FINISHED IN {time.time() - start:.2f} SECONDS."
+                )
                 logging.info("")
 
             return wrapper
+
         return decorator
 
     @staticmethod
@@ -345,10 +347,11 @@ class LogPRAWScraper():
                 logging.info("")
                 logging.info("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
                 quit()
-            
+
         return wrapper
 
-class LogAnalyticsErrors():
+
+class LogAnalyticsErrors:
     """
     Decorator for logging errors while exporting analytical data.
     """
@@ -379,9 +382,13 @@ class LogAnalyticsErrors():
             try:
                 return function(*args)
             except ValueError:
-                Errors.i_title("Scrape data is not located within the `scrapes` directory.")
+                Errors.i_title(
+                    "Scrape data is not located within the `scrapes` directory."
+                )
                 logging.critical("AN ERROR HAS OCCURRED WHILE PROCESSING SCRAPE DATA.")
-                logging.critical("Scrape data is not located within the `scrapes` directory.")
+                logging.critical(
+                    "Scrape data is not located within the `scrapes` directory."
+                )
                 logging.critical("ABORTING URS.\n")
                 quit()
             except TypeError:
@@ -393,7 +400,8 @@ class LogAnalyticsErrors():
 
         return wrapper
 
-class LogAnalytics():
+
+class LogAnalytics:
     """
     Decorator for logging analytical tools.
     """
@@ -417,12 +425,12 @@ class LogAnalytics():
         """
 
         tools = {
-            "frequencies": [arg_set for arg_set in args.frequencies] \
-                if args.frequencies \
-                else None,
-            "wordcloud": [arg_set for arg_set in args.wordcloud] \
-                if args.wordcloud \
-                else None
+            "frequencies": [arg_set for arg_set in args.frequencies]
+            if args.frequencies
+            else None,
+            "wordcloud": [arg_set for arg_set in args.wordcloud]
+            if args.wordcloud
+            else None,
         }
 
         return tools.get(tool)
@@ -447,11 +455,12 @@ class LogAnalytics():
         def decorator(function):
             def wrapper(*args):
                 filename = function(*args)
-                
+
                 logging.info(f"Saved {tool} to {filename}.")
                 logging.info("")
-                
+
             return wrapper
+
         return decorator
 
     @staticmethod
@@ -474,11 +483,12 @@ class LogAnalytics():
         def decorator(function):
             def wrapper(*args):
                 function(*args)
-                
+
                 logging.info(f"Displayed {tool}.")
                 logging.info("")
-                
+
             return wrapper
+
         return decorator
 
     @staticmethod
@@ -497,10 +507,7 @@ class LogAnalytics():
             String denoting export option
         """
 
-        export_options = {
-            0: "Exporting to JSON.",
-            1: "Exporting to CSV."
-        }
+        export_options = {0: "Exporting to JSON.", 1: "Exporting to CSV."}
 
         if f_type == "csv":
             return export_options.get(1)
@@ -587,16 +594,20 @@ class LogAnalytics():
                 logging.info("")
 
                 LogAnalytics._log_tool(args[0], tool)
-                
+
                 function(*args)
 
-                logging.info(f"{tool.upper()} GENERATOR FINISHED IN {time.time() - start:.2f} SECONDS.")
+                logging.info(
+                    f"{tool.upper()} GENERATOR FINISHED IN {time.time() - start:.2f} SECONDS."
+                )
                 logging.info("")
 
             return wrapper
+
         return decorator
 
-class LogExport():
+
+class LogExport:
     """
     Decorator for logging exporting files.
     """
@@ -617,10 +628,7 @@ class LogExport():
             String denoting export option
         """
 
-        export_options = {
-            0: "Exporting to JSON.",
-            1: "Exporting to CSV."
-        }
+        export_options = {0: "Exporting to JSON.", 1: "Exporting to CSV."}
 
         if args.csv:
             return export_options.get(1)

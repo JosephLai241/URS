@@ -10,22 +10,15 @@ import re
 import sys
 import time
 
-from colorama import (
-    Fore, 
-    Style
-)
-
-from urs.Version import __version__
+from colorama import Fore, Style
 
 from urs.praw_scrapers.utils.Validation import Validation
-
-from urs.utils.Global import (
-    date,
-    short_cat
-)
+from urs.utils.Global import date, short_cat
 from urs.utils.Logger import LogError
+from urs.Version import __version__
 
-class Parser():
+
+class Parser:
     """
     Methods for parsing CLI arguments.
     """
@@ -74,7 +67,7 @@ class Parser():
     [-wc <file_path> [<optional_export_format>]
         [--nosave]
 """
-        self._description = fr"""
+        self._description = rf"""
 Universal Reddit Scraper v{__version__} - a comprehensive Reddit scraping tool
 
 Author: Joseph Lai
@@ -315,9 +308,7 @@ CHECK PRAW RATE LIMITS
 
         example_flag = parser.add_argument_group("display examples")
         example_flag.add_argument(
-            "-e", "--examples", 
-            action = "store_true", 
-            help = "display example use cases"
+            "-e", "--examples", action="store_true", help="display example use cases"
         )
 
     def _display_examples(self):
@@ -350,9 +341,7 @@ CHECK PRAW RATE LIMITS
 
         version_flag = parser.add_argument_group("display the version number")
         version_flag.add_argument(
-            "-v", "--version",
-            action = "store_true",
-            help = "display the version number"
+            "-v", "--version", action="store_true", help="display the version number"
         )
 
     def _add_rate_limit_check_flag(self, parser):
@@ -370,19 +359,19 @@ CHECK PRAW RATE LIMITS
         -------
         None
         """
-        
+
         rate_flag = parser.add_argument_group("check rate limit")
         rate_flag.add_argument(
             "--check",
-            action = "store_true",
-            help = "display rate limit information for your Reddit account"
+            action="store_true",
+            help="display rate limit information for your Reddit account",
         )
 
     def _add_display_scrapes_tree_flag(self, parser):
         """
         Add a flag to display the scrapes directory for a specific date.
 
-            -t: display scrapes directory tree for a specific date (default is 
+            -t: display scrapes directory tree for a specific date (default is
                 the current day)
 
         Parameters
@@ -397,11 +386,12 @@ CHECK PRAW RATE LIMITS
 
         tree_flag = parser.add_argument_group("display scrapes directory tree")
         tree_flag.add_argument(
-            "-t", "--tree",
-            const = date,
-            help = "display a visual directory tree for a date (default is the current day)",
-            metavar = "<optional_date>",
-            nargs = "?"
+            "-t",
+            "--tree",
+            const=date,
+            help="display a visual directory tree for a date (default is the current day)",
+            metavar="<optional_date>",
+            nargs="?",
         )
 
     def _add_praw_scraper_flags(self, parser):
@@ -425,32 +415,39 @@ CHECK PRAW RATE LIMITS
 
         praw_flags = parser.add_argument_group("PRAW scraping")
         praw_flags.add_argument(
-            "-r", "--subreddit", 
-            action = "append", 
-            help = "specify Subreddit to scrape",
-            metavar = ("<subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords>", "<optional_time_filter>"), 
-            nargs = "+"
-        ) 
-        praw_flags.add_argument(
-            "-u", "--redditor", 
-            action = "append", 
-            help = "specify Redditor to scrape",
-            metavar = ("<redditor>", "<n_results>"), 
-            nargs = 2
-        ) 
-        praw_flags.add_argument(
-            "-c", "--comments", 
-            action = "append", 
-            help = "specify the URL of the submission to scrape comments",
-            metavar = ("<submission_url>", "<n_results>"), 
-            nargs = 2
-        ) 
-        praw_flags.add_argument(
-            "-b", "--basic", 
-            action = "store_true", 
-            help = "initialize interactive Subreddit scraper"
+            "-r",
+            "--subreddit",
+            action="append",
+            help="specify Subreddit to scrape",
+            metavar=(
+                "<subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords>",
+                "<optional_time_filter>",
+            ),
+            nargs="+",
         )
-    
+        praw_flags.add_argument(
+            "-u",
+            "--redditor",
+            action="append",
+            help="specify Redditor to scrape",
+            metavar=("<redditor>", "<n_results>"),
+            nargs=2,
+        )
+        praw_flags.add_argument(
+            "-c",
+            "--comments",
+            action="append",
+            help="specify the URL of the submission to scrape comments",
+            metavar=("<submission_url>", "<n_results>"),
+            nargs=2,
+        )
+        praw_flags.add_argument(
+            "-b",
+            "--basic",
+            action="store_true",
+            help="initialize interactive Subreddit scraper",
+        )
+
     def _add_praw_subreddit_options(self, parser):
         """
         Add extra options for PRAW Subreddit scraping:
@@ -467,11 +464,13 @@ CHECK PRAW RATE LIMITS
         None
         """
 
-        subreddit_flags = parser.add_argument_group("additional PRAW Subreddit scraping arguments (used with `-r`)")
+        subreddit_flags = parser.add_argument_group(
+            "additional PRAW Subreddit scraping arguments (used with `-r`)"
+        )
         subreddit_flags.add_argument(
             "--rules",
-            action = "store_true",
-            help = "include Subreddit rules in scrape data"
+            action="store_true",
+            help="include Subreddit rules in scrape data",
         )
 
     def _add_praw_comments_options(self, parser):
@@ -490,11 +489,13 @@ CHECK PRAW RATE LIMITS
         None
         """
 
-        comments_flags = parser.add_argument_group("additional PRAW submission comments scraping arguments (used with `-c`)")
+        comments_flags = parser.add_argument_group(
+            "additional PRAW submission comments scraping arguments (used with `-c`)"
+        )
         comments_flags.add_argument(
             "--raw",
-            action = "store_true",
-            help = "return comments in raw format instead (default is structured)"
+            action="store_true",
+            help="return comments in raw format instead (default is structured)",
         )
 
     def _add_praw_livestream_flags(self, parser):
@@ -516,14 +517,16 @@ CHECK PRAW RATE LIMITS
 
         livestream_flags = parser.add_argument_group("PRAW livestream scraping")
         livestream_flags.add_argument(
-            "-lr", "--live-subreddit",
-            help = "specify Subreddit to livestream",
-            metavar = "<subreddit>"
+            "-lr",
+            "--live-subreddit",
+            help="specify Subreddit to livestream",
+            metavar="<subreddit>",
         )
         livestream_flags.add_argument(
-            "-lu", "--live-redditor",
-            help = "specify Redditor to livestream",
-            metavar = "<redditor>"
+            "-lu",
+            "--live-redditor",
+            help="specify Redditor to livestream",
+            metavar="<redditor>",
         )
 
     def _add_praw_livestream_options(self, parser):
@@ -533,11 +536,13 @@ CHECK PRAW RATE LIMITS
             --stream-submissions: livestream submissions (default is comments)
         """
 
-        livestream_options = parser.add_argument_group("additional PRAW livestream scraping options (used with `-lr` or `-lu`)")
+        livestream_options = parser.add_argument_group(
+            "additional PRAW livestream scraping options (used with `-lr` or `-lu`)"
+        )
         livestream_options.add_argument(
             "--stream-submissions",
-            action = "store_true",
-            help = "livestream submissions instead (default is comments)"
+            action="store_true",
+            help="livestream submissions instead (default is comments)",
         )
 
     def _add_analytics(self, parser):
@@ -560,18 +565,20 @@ CHECK PRAW RATE LIMITS
 
         analyze_flags = parser.add_argument_group("analytical tools")
         analyze_flags.add_argument(
-            "-f", "--frequencies",
-            action = "append",
-            help = "get word frequencies present in submission titles, bodies, and/or comments",
-            metavar = "<file_path>", 
-            nargs = 1
+            "-f",
+            "--frequencies",
+            action="append",
+            help="get word frequencies present in submission titles, bodies, and/or comments",
+            metavar="<file_path>",
+            nargs=1,
         )
         analyze_flags.add_argument(
-            "-wc", "--wordcloud",
-            action = "append",
-            help = "create a wordcloud for a scrape file",
-            metavar = ("<file_path>", "<optional_export_format>"), 
-            nargs = "+"
+            "-wc",
+            "--wordcloud",
+            action="append",
+            help="create a wordcloud for a scrape file",
+            metavar=("<file_path>", "<optional_export_format>"),
+            nargs="+",
         )
 
     def _add_extra_options(self, parser):
@@ -593,14 +600,14 @@ CHECK PRAW RATE LIMITS
 
         extra_flags = parser.add_argument_group("extra options")
         extra_flags.add_argument(
-            "-y", 
-            action = "store_true", 
-            help = "skip settings confirmation and scrape immediately (used with `-r`)"
+            "-y",
+            action="store_true",
+            help="skip settings confirmation and scrape immediately (used with `-r`)",
         )
         extra_flags.add_argument(
             "--nosave",
-            action = "store_true",
-            help = "display only; do not save to file (used with `-lr`, `-lu`, or `-wc`)"
+            action="store_true",
+            help="display only; do not save to file (used with `-lr`, `-lu`, or `-wc`)",
         )
 
     def _add_export(self, parser):
@@ -619,11 +626,13 @@ CHECK PRAW RATE LIMITS
         None
         """
 
-        export_flags = parser.add_argument_group("export arguments (used with `-r`, `-b` or `-f`)")
+        export_flags = parser.add_argument_group(
+            "export arguments (used with `-r`, `-b` or `-f`)"
+        )
         export_flags.add_argument(
-            "--csv", 
-            action = "store_true", 
-            help = "export scrape data to CSV instead (default is JSON)"
+            "--csv",
+            action="store_true",
+            help="export scrape data to CSV instead (default is JSON)",
         )
 
     @LogError.log_no_args
@@ -642,7 +651,7 @@ CHECK PRAW RATE LIMITS
 
         Exceptions
         ----------
-        SystemExit: 
+        SystemExit:
             Raised when no arguments were entered or if the examples flag was provided
 
         Returns
@@ -655,10 +664,10 @@ CHECK PRAW RATE LIMITS
         """
 
         parser = argparse.ArgumentParser(
-            description = self._description,
-            epilog = self._epilog, 
-            formatter_class = argparse.RawDescriptionHelpFormatter,
-            usage = self._usage
+            description=self._description,
+            epilog=self._epilog,
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            usage=self._usage,
         )
 
         self._add_examples_flag(parser)
@@ -689,12 +698,15 @@ CHECK PRAW RATE LIMITS
             self._display_examples()
             raise SystemExit
         elif args.version:
-            print(Fore.WHITE + Style.BRIGHT + f"Universal Reddit Scraper v{__version__}\n")
+            print(
+                Fore.WHITE + Style.BRIGHT + f"Universal Reddit Scraper v{__version__}\n"
+            )
             raise SystemExit
 
         return args, parser
 
-class GetPRAWScrapeSettings():
+
+class GetPRAWScrapeSettings:
     """
     Methods for creating data structures to store PRAW scrape settings.
     """
@@ -710,11 +722,7 @@ class GetPRAWScrapeSettings():
         None
         """
 
-        self._filterables = [
-            short_cat[2], 
-            short_cat[3], 
-            short_cat[5]
-        ]
+        self._filterables = [short_cat[2], short_cat[3], short_cat[5]]
 
     def _list_switch(self, args, index):
         """
@@ -739,11 +747,7 @@ class GetPRAWScrapeSettings():
             arguments
         """
 
-        switch = {
-            0: args.subreddit,
-            1: args.redditor,
-            2: args.comments
-        }
+        switch = {0: args.subreddit, 1: args.redditor, 2: args.comments}
 
         return switch.get(index)
 
@@ -771,11 +775,7 @@ class GetPRAWScrapeSettings():
             to scrape for
         """
 
-        scraper_types = [
-            "subreddit",
-            "redditor",
-            "comments"
-        ]
+        scraper_types = ["subreddit", "redditor", "comments"]
 
         index = scraper_types.index(l_type)
         item_list = [item[0] for item in self._list_switch(args, index)]
@@ -799,9 +799,7 @@ class GetPRAWScrapeSettings():
         """
 
         if len(sub) == 3:
-            time_filter = "all" \
-                if sub[1].upper() in self._filterables \
-                else None
+            time_filter = "all" if sub[1].upper() in self._filterables else None
             settings = [sub[1], sub[2], time_filter]
         if len(sub) == 4:
             settings = [sub[1], sub[2], sub[3]]
@@ -836,7 +834,7 @@ class GetPRAWScrapeSettings():
             for sub in args:
                 if sub[0] not in invalids:
                     settings = self._set_sub_settings(sub)
-                    
+
                     if sub_n == sub[0]:
                         master[sub_n].append(settings)
 
@@ -848,7 +846,7 @@ class GetPRAWScrapeSettings():
             Redditor scraper
             Submission comments scraper
 
-        Only appends settings for Redditors or submission URLs that have been 
+        Only appends settings for Redditors or submission URLs that have been
         validated.
 
         Parameters
@@ -865,7 +863,7 @@ class GetPRAWScrapeSettings():
         -------
         None
         """
-        
+
         for arg in args:
             if arg[0] not in invalids:
                 master[arg[0]] = arg[1]
@@ -903,7 +901,8 @@ class GetPRAWScrapeSettings():
         elif s_type == "comments":
             self._two_arg_settings(args.comments, invalids, master)
 
-class CheckPRAWCli():
+
+class CheckPRAWCli:
     """
     Methods for checking CLI arguments for PRAW scrapers and raising errors if
     they are invalid.
@@ -923,20 +922,9 @@ class CheckPRAWCli():
         """
 
         self._illegal_chars = re.compile("[@_!#$%^&*()<>?/\\|}{~:+`=]")
-        
-        self._filterables = [
-            short_cat[2], 
-            short_cat[3], 
-            short_cat[5]
-        ]
-        self._time_filters = [
-            "all", 
-            "day", 
-            "hour", 
-            "month", 
-            "week", 
-            "year"
-        ]
+
+        self._filterables = [short_cat[2], short_cat[3], short_cat[5]]
+        self._time_filters = ["all", "day", "hour", "month", "week", "year"]
 
     @LogError.log_args("SUBREDDIT N_RESULTS")
     def _check_n_results(self, n_results, sub):
@@ -959,7 +947,7 @@ class CheckPRAWCli():
         -------
         None
         """
-        
+
         if sub[1].upper() != "S":
             try:
                 int(n_results)
@@ -967,12 +955,12 @@ class CheckPRAWCli():
                     raise ValueError
             except ValueError:
                 raise ValueError
-    
+
     @LogError.log_args("SUBREDDIT ARGS")
     def check_subreddit(self, args):
         """
-        Check all Subreddit args. 
-        
+        Check all Subreddit args.
+
         Calls previously defined private method:
 
             self._check_n_results()
@@ -1000,10 +988,16 @@ class CheckPRAWCli():
             elif sub[1].upper() in short_cat:
                 ### Check args if a time filter is present.
                 if len(sub) == 4:
-                    if sub[1].upper() not in self._filterables \
-                    or sub[3].lower() not in self._time_filters:
+                    if (
+                        sub[1].upper() not in self._filterables
+                        or sub[3].lower() not in self._time_filters
+                    ):
                         if sub[1].upper() not in self._filterables:
-                            print(Fore.RED + Style.BRIGHT + "\nTIME FILTER IS NOT AVAILABLE FOR THIS CATEGORY.")
+                            print(
+                                Fore.RED
+                                + Style.BRIGHT
+                                + "\nTIME FILTER IS NOT AVAILABLE FOR THIS CATEGORY."
+                            )
                         elif sub[3].lower() not in self._time_filters:
                             print(Fore.RED + Style.BRIGHT + "\nINVALID TIME FILTER.")
                         raise ValueError
@@ -1031,9 +1025,11 @@ class CheckPRAWCli():
         """
 
         for user in args.redditor:
-            if any(char.isalpha() for char in user[1]) \
-            or self._illegal_chars.search(user[1]) != None \
-            or int(user[1]) == 0:
+            if (
+                any(char.isalpha() for char in user[1])
+                or self._illegal_chars.search(user[1]) != None
+                or int(user[1]) == 0
+            ):
                 raise ValueError
 
     @LogError.log_args("SUBMISSION ARGS")
@@ -1057,11 +1053,14 @@ class CheckPRAWCli():
         """
 
         for submission in args.comments:
-            if any(char.isalpha() for char in submission[1]) \
-            or self._illegal_chars.search(submission[1]) != None:
+            if (
+                any(char.isalpha() for char in submission[1])
+                or self._illegal_chars.search(submission[1]) != None
+            ):
                 raise ValueError
 
-class CheckAnalyticCli():
+
+class CheckAnalyticCli:
     """
     Methods for checking CLI arguments for analytical tools and raising errors
     if they are invalid.
@@ -1087,7 +1086,7 @@ class CheckAnalyticCli():
             "ps",
             "rgba",
             "tif",
-            "tiff"
+            "tiff",
         ]
 
     def _check_valid_file(self, file):
@@ -1117,8 +1116,8 @@ class CheckAnalyticCli():
     @LogError.log_args("SCRAPE FILE FOR FREQUENCIES")
     def check_frequencies(self, args):
         """
-        Check all frequencies args. 
-        
+        Check all frequencies args.
+
         Calls previously defined private method:
 
             self._check_valid_file()
@@ -1144,8 +1143,8 @@ class CheckAnalyticCli():
     @LogError.log_args("SCRAPE FILE FOR WORDCLOUD")
     def check_wordcloud(self, args):
         """
-        Check all wordcloud args. 
-        
+        Check all wordcloud args.
+
         Calls previously defined private method:
 
             self._check_valid_file()
@@ -1169,9 +1168,9 @@ class CheckAnalyticCli():
         for file in args.wordcloud:
             if len(file) > 2:
                 raise ValueError
-            
+
             self._check_valid_file(file[0])
-            
+
             if len(file) == 1:
                 file.append("png")
             else:
@@ -1181,7 +1180,8 @@ class CheckAnalyticCli():
 
                 file[1] = file[1].lower()
 
-class CheckCli():
+
+class CheckCli:
     """
     Methods for checking CLI arguments and raising errors if they are invalid.
     """
@@ -1223,7 +1223,7 @@ class CheckCli():
             CheckPRAWCli().check_redditor(args)
         if args.comments:
             CheckPRAWCli().check_comments(args)
-        
+
         ### Check analytical tool arguments.
         if args.frequencies:
             CheckAnalyticCli().check_frequencies(args)

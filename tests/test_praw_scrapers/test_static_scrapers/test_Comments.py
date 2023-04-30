@@ -5,14 +5,15 @@ Testing `Comments.py`.
 
 import argparse
 import os
-import praw
 
+import praw
 from dotenv import load_dotenv
 
 from urs.praw_scrapers.static_scrapers import Comments
 from urs.utils.Export import EncodeNode
 
-class MakeArgs():
+
+class MakeArgs:
     """
     Making dummy args to test Comments.py methods.
     """
@@ -25,11 +26,12 @@ class MakeArgs():
     @staticmethod
     def make_scraper_args():
         parser = MakeArgs.parser_for_testing()
-        parser.add_argument("--raw", action = "store_true")
+        parser.add_argument("--raw", action="store_true")
 
         return parser
 
-class Login():
+
+class Login:
     """
     Create a Reddit object with PRAW API credentials.
     """
@@ -39,22 +41,21 @@ class Login():
         load_dotenv()
 
         return praw.Reddit(
-            client_id = os.getenv("CLIENT_ID"),
-            client_secret = os.getenv("CLIENT_SECRET"),
-            user_agent = os.getenv("USER_AGENT"),
-            username = os.getenv("REDDIT_USERNAME"),
-            password = os.getenv("REDDIT_PASSWORD")
+            client_id=os.getenv("CLIENT_ID"),
+            client_secret=os.getenv("CLIENT_SECRET"),
+            user_agent=os.getenv("USER_AGENT"),
+            username=os.getenv("REDDIT_USERNAME"),
+            password=os.getenv("REDDIT_PASSWORD"),
         )
 
-class TestCommentNodeInitMethod():
+
+class TestCommentNodeInitMethod:
     """
     Testing CommentNode class __init__() method.
     """
 
     def test_init_method_with_one_id_attribute(self):
-        metadata = {
-            "id": "test_id"
-        }
+        metadata = {"id": "test_id"}
 
         test_node = Comments.CommentNode(metadata)
 
@@ -73,7 +74,7 @@ class TestCommentNodeInitMethod():
             "link_id": "t3_asdfgh",
             "parent_id": "t3_abc123",
             "score": 666,
-            "stickied": False
+            "stickied": False,
         }
 
         test_node = Comments.CommentNode(metadata)
@@ -90,24 +91,22 @@ class TestCommentNodeInitMethod():
         assert getattr(test_node, "score") == 666
         assert getattr(test_node, "stickied") == False
 
-class TestForestInitMethod():
+
+class TestForestInitMethod:
     """
-    Testing Forest class __init__() method. 
+    Testing Forest class __init__() method.
     """
 
     def test_init_method_set_root(self):
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/md0ny3/what_nonsensical_invasive_thoughts_do_you_have/"
 
-
-        forest = Comments.Forest(
-            reddit.submission(url = url),
-            url
-        )
+        forest = Comments.Forest(reddit.submission(url=url), url)
 
         assert getattr(forest.root, "id") == "md0ny3"
 
-class TestForestSeedMethod():
+
+class TestForestSeedMethod:
     """
     Testing Forest class seed() method.
     """
@@ -116,11 +115,7 @@ class TestForestSeedMethod():
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/md0ny3/what_nonsensical_invasive_thoughts_do_you_have/"
 
-
-        forest = Comments.Forest(
-            reddit.submission(url = url),
-            url
-        )
+        forest = Comments.Forest(reddit.submission(url=url), url)
 
         metadata = {
             "body": "A test node.",
@@ -138,11 +133,7 @@ class TestForestSeedMethod():
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/md0ny3/what_nonsensical_invasive_thoughts_do_you_have/"
 
-
-        forest = Comments.Forest(
-            reddit.submission(url = url),
-            url
-        )
+        forest = Comments.Forest(reddit.submission(url=url), url)
 
         metadata = {
             "body": "A test node.",
@@ -152,7 +143,7 @@ class TestForestSeedMethod():
         reply = Comments.CommentNode(metadata)
 
         EncodeNode().encode(reply)
-        
+
         try:
             forest.seed(reply)
             assert False
@@ -160,7 +151,8 @@ class TestForestSeedMethod():
             assert True
             assert len(forest.root.replies) == 0
 
-class TestSortCommentsSortRawMethod():
+
+class TestSortCommentsSortRawMethod:
     """
     Testing SortComments class sort_raw() method.
     """
@@ -169,9 +161,8 @@ class TestSortCommentsSortRawMethod():
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
 
-
         all_comments = []
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         Comments.SortComments().sort_raw(all_comments, submission)
 
@@ -181,13 +172,14 @@ class TestSortCommentsSortRawMethod():
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
 
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         forest_replies = Comments.SortComments().sort_structured(submission, url)
 
         assert len(forest_replies) > 0
 
-class TestGetSortGetSortMethod():
+
+class TestGetSortGetSortMethod:
     """
     Testing GetSort class get_sort() method.
     """
@@ -198,12 +190,12 @@ class TestGetSortGetSortMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         test_get_sort = Comments.GetSort(args, submission, url)
 
         all_comments = test_get_sort.get_sort(args, 0)
-    
+
         assert len(all_comments) > 0
 
     def test_get_sort_raw_flag_is_included_with_limit(self):
@@ -212,26 +204,26 @@ class TestGetSortGetSortMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         test_get_sort = Comments.GetSort(args, submission, url)
 
         all_comments = test_get_sort.get_sort(args, 1)
-    
+
         assert len(all_comments) == 1
-    
+
     def test_get_sort_no_raw_flag_is_included_with_no_limit(self):
         parser = MakeArgs.make_scraper_args()
         args = parser.parse_args([])
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         test_get_sort = Comments.GetSort(args, submission, url)
 
         all_comments = test_get_sort.get_sort(args, 0)
-    
+
         assert len(all_comments) > 0
 
     def test_get_sort_no_raw_flag_is_included_with_limit(self):
@@ -240,15 +232,16 @@ class TestGetSortGetSortMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         test_get_sort = Comments.GetSort(args, submission, url)
 
         all_comments = test_get_sort.get_sort(args, 1)
-    
+
         assert len(all_comments) == 1
-    
-class TestWriteMakeJsonSkeletonMethod():
+
+
+class TestWriteMakeJsonSkeletonMethod:
     """
     Testing Write class _make_json_skeleton() method.
     """
@@ -259,7 +252,7 @@ class TestWriteMakeJsonSkeletonMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         skeleton = Comments.Write._make_json_skeleton(args, 0, submission, url)
 
@@ -292,7 +285,7 @@ class TestWriteMakeJsonSkeletonMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         skeleton = Comments.Write._make_json_skeleton(args, 1, submission, url)
 
@@ -325,7 +318,7 @@ class TestWriteMakeJsonSkeletonMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         skeleton = Comments.Write._make_json_skeleton(args, 0, submission, url)
 
@@ -358,7 +351,7 @@ class TestWriteMakeJsonSkeletonMethod():
 
         reddit = Login.create_reddit_object()
         url = "https://www.reddit.com/r/AskReddit/comments/mg8fhz/if_you_could_tell_yourself_anything_what_would/"
-        submission = reddit.submission(url = url)
+        submission = reddit.submission(url=url)
 
         skeleton = Comments.Write._make_json_skeleton(args, 1, submission, url)
 

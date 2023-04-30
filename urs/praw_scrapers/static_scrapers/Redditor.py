@@ -6,39 +6,26 @@ Defining methods for the Redditor scraper.
 
 
 import logging
-import praw
 
-from colorama import (
-    Fore, 
-    Style
-)
+import praw
+from colorama import Fore, Style
 from halo import Halo
 from prawcore import PrawcoreException
 
 from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
-
 from urs.utils.Cli import GetPRAWScrapeSettings
-from urs.utils.Export import (
-    Export,
-    NameFile
-)
-from urs.utils.Global import (
-    convert_time,
-    make_none_dict
-)
-from urs.utils.Logger import (
-    LogError,
-    LogExport, 
-    LogPRAWScraper
-)
+from urs.utils.Export import Export, NameFile
+from urs.utils.Global import convert_time, make_none_dict
+from urs.utils.Logger import LogError, LogExport, LogPRAWScraper
 from urs.utils.Titles import PRAWTitles
 
-class ProcessInteractions():
+
+class ProcessInteractions:
     """
     Methods for sorting and labeling comment or submission objects correctly.
-     
-    Some Redditor attributes will return a ListingGenerator which includes both 
+
+    Some Redditor attributes will return a ListingGenerator which includes both
     comments and submissions. These attributes will need to be sorted accordingly:
     - Downvoted (may be forbidden)
     - Gilded
@@ -70,7 +57,7 @@ class ProcessInteractions():
             self._submissions: Redditor's submission objects
             self._top: Redditor's top objects
             self._upvoted: Redditor's upvoted objects
-            
+
         Parameters
         ----------
         limit: int
@@ -86,20 +73,20 @@ class ProcessInteractions():
 
         self._skeleton = skeleton
 
-        self._comments = redditor.comments.new(limit = limit)
-        self._controversial = redditor.controversial(limit = limit)
-        self._downvoted = redditor.downvoted(limit = limit)
-        self._gilded = redditor.gilded(limit = limit)
-        self._gildings = redditor.gildings(limit = limit)
-        self._hidden = redditor.hidden(limit = limit)
-        self._hot = redditor.hot(limit = limit)
+        self._comments = redditor.comments.new(limit=limit)
+        self._controversial = redditor.controversial(limit=limit)
+        self._downvoted = redditor.downvoted(limit=limit)
+        self._gilded = redditor.gilded(limit=limit)
+        self._gildings = redditor.gildings(limit=limit)
+        self._hidden = redditor.hidden(limit=limit)
+        self._hot = redditor.hot(limit=limit)
         self._moderated = redditor.moderated()
         self._multireddits = redditor.multireddits()
-        self._new = redditor.new(limit = limit)
-        self._saved = redditor.saved(limit = limit)
-        self._submissions = redditor.submissions.new(limit = limit)
-        self._top = redditor.top(limit = limit)
-        self._upvoted = redditor.upvoted(limit = limit)
+        self._new = redditor.new(limit=limit)
+        self._saved = redditor.saved(limit=limit)
+        self._submissions = redditor.submissions.new(limit=limit)
+        self._top = redditor.top(limit=limit)
+        self._upvoted = redditor.upvoted(limit=limit)
 
     def _extract(self, obj, scrape_type):
         """
@@ -113,7 +100,7 @@ class ProcessInteractions():
         Parameters
         ----------
         obj: PRAW object
-            PRAW Redditor object that may contain Redditor submissions or comments 
+            PRAW Redditor object that may contain Redditor submissions or comments
         scrape_type: str
             String denoting the field within the skeleton
 
@@ -123,17 +110,19 @@ class ProcessInteractions():
         """
 
         for item in obj:
-            redditor_item = Objectify().make_submission(True, item) \
-                if isinstance(item, praw.models.Submission) \
+            redditor_item = (
+                Objectify().make_submission(True, item)
+                if isinstance(item, praw.models.Submission)
                 else Objectify().make_comment(item, True)
+            )
 
             self._skeleton["data"]["interactions"][scrape_type].append(redditor_item)
 
-    @Halo(color = "white", text = "Extracting submissions.")
+    @Halo(color="white", text="Extracting submissions.")
     def get_submissions(self):
         """
-        Get Redditor submissions. 
-        
+        Get Redditor submissions.
+
         Calls previously defined private method:
 
             self._extract()
@@ -141,11 +130,11 @@ class ProcessInteractions():
 
         self._extract(self._submissions, "submissions")
 
-    @Halo(color = "white", text = "Extracting comments.")
+    @Halo(color="white", text="Extracting comments.")
     def get_comments(self):
         """
-        Get Redditor comments. 
-        
+        Get Redditor comments.
+
         Calls previously defined private method:
 
             self._extract()
@@ -153,73 +142,72 @@ class ProcessInteractions():
 
         self._extract(self._comments, "comments")
 
-    @Halo(color = "white", text = "Extracting Controversial, Gilded, Hot, New, and Top interactions.")
+    @Halo(
+        color="white",
+        text="Extracting Controversial, Gilded, Hot, New, and Top interactions.",
+    )
     def get_mutts(self):
         """
         Get Controversial, Gilded, Hot, New, and Top Redditor posts. The ListingGenerator
         returns a mix of submissions and comments, so handling each differently is
-        necessary. 
-        
+        necessary.
+
         Calls previously defined private method:
 
             self._extract()
         """
 
         mutt_interactions = [
-            self._controversial, 
-            self._gilded, 
-            self._hot, 
-            self._new, 
-            self._top
+            self._controversial,
+            self._gilded,
+            self._hot,
+            self._new,
+            self._top,
         ]
-        mutt_names = [
-            "controversial", 
-            "gilded", 
-            "hot", 
-            "new", 
-            "top"
-        ]
+        mutt_names = ["controversial", "gilded", "hot", "new", "top"]
 
         for category, interaction in zip(mutt_names, mutt_interactions):
             self._extract(interaction, category)
-            
+
     def get_access(self):
         """
         Get Upvoted, Downvoted, Gildings, Hidden, and Saved Redditor posts. These
         lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
-        handling is necessary. 
-        
+        handling is necessary.
+
         Calls previously defined private method:
 
             self._extract()
         """
 
         access_interactions = [
-            self._downvoted, 
-            self._gildings, 
-            self._hidden, 
-            self._saved, 
-            self._upvoted
+            self._downvoted,
+            self._gildings,
+            self._hidden,
+            self._saved,
+            self._upvoted,
         ]
-        access_names = [
-            "downvoted", 
-            "gildings", 
-            "hidden", 
-            "saved", 
-            "upvoted"
-        ]
+        access_names = ["downvoted", "gildings", "hidden", "saved", "upvoted"]
 
-        access_halo = Halo(color = "white", text = "Extracting Upvoted, Downvoted, Gildings, Hidden, and Saved interactions.")
+        access_halo = Halo(
+            color="white",
+            text="Extracting Upvoted, Downvoted, Gildings, Hidden, and Saved interactions.",
+        )
 
         access_halo.start()
         for category, interaction in zip(access_names, access_interactions):
             try:
                 self._extract(interaction, category)
             except PrawcoreException as error:
-                access_halo.warn(Fore.YELLOW + f"Access to {category.capitalize()} interactions forbidden: {error}. SKIPPING.")
-                self._skeleton["data"]["interactions"][f"{category}"].append("FORBIDDEN")
+                access_halo.warn(
+                    Fore.YELLOW
+                    + f"Access to {category.capitalize()} interactions forbidden: {error}. SKIPPING."
+                )
+                self._skeleton["data"]["interactions"][f"{category}"].append(
+                    "FORBIDDEN"
+                )
 
-    @Halo(color = "white", text = "Extracting moderated Subreddits.")
+    @Halo(color="white", text="Extracting moderated Subreddits.")
     def get_moderated(self):
         """
         Get Redditor's moderated Subreddits.
@@ -234,11 +222,11 @@ class ProcessInteractions():
                 subreddit = Objectify().make_subreddit(subreddit)
                 self._skeleton["data"]["interactions"]["moderated"].append(subreddit)
 
-    @Halo(color = "white", text = "Extracting multireddits.")
+    @Halo(color="white", text="Extracting multireddits.")
     def get_multireddits(self):
         """
         Get Redditor's multireddits.
-        
+
         Calls a public method from an external module:
 
             Objectify().make_multireddit()
@@ -247,9 +235,12 @@ class ProcessInteractions():
         if self._multireddits:
             for multireddit in self._multireddits:
                 multireddit = Objectify().make_multireddit(multireddit)
-                self._skeleton["data"]["interactions"]["multireddits"].append(multireddit)
-        
-class GetInteractions():
+                self._skeleton["data"]["interactions"]["multireddits"].append(
+                    multireddit
+                )
+
+
+class GetInteractions:
     """
     Methods for getting Redditor information and interactions.
     """
@@ -274,21 +265,13 @@ class GetInteractions():
         redditor: PRAW Redditor object
         """
 
-        plurality = "results" \
-            if int(limit) > 1 \
-            else "result"
+        plurality = "results" if int(limit) > 1 else "result"
 
         Halo().info(f"Processing {limit} {plurality} from u/{redditor}'s profile.")
-        
+
         skeleton = {
-            "scrape_settings": {
-                "redditor": redditor,
-                "n_results": limit
-            },
-            "data": {
-                "information": None,
-                "interactions": {}
-            }
+            "scrape_settings": {"redditor": redditor, "n_results": limit},
+            "data": {"information": None, "interactions": {}},
         }
         redditor = reddit.redditor(redditor)
 
@@ -317,7 +300,7 @@ class GetInteractions():
                     "icon_40": trophy.icon_40,
                     "icon_70": trophy.icon_70,
                     "name": trophy.name,
-                    "url": trophy.url
+                    "url": trophy.url,
                 }
                 for trophy in redditor.trophies()
             ]
@@ -354,11 +337,11 @@ class GetInteractions():
             "subscribers": subreddit.subscribers,
             "user_is_banned": subreddit.user_is_banned,
             "user_is_moderator": subreddit.user_is_moderator,
-            "user_is_subscriber": subreddit.user_is_subscriber
+            "user_is_subscriber": subreddit.user_is_subscriber,
         }
 
     @staticmethod
-    @Halo(color = "white", text = "Extracting Redditor information.")
+    @Halo(color="white", text="Extracting Redditor information.")
     def _get_user_info(redditor, skeleton):
         """
         Get Redditor account information.
@@ -385,7 +368,7 @@ class GetInteractions():
         try:
             skeleton["data"]["information"] = {
                 "is_suspended": redditor.is_suspended,
-                "name": redditor.name
+                "name": redditor.name,
             }
         except AttributeError:
             skeleton["data"]["information"] = {
@@ -402,7 +385,7 @@ class GetInteractions():
                 "link_karma": redditor.link_karma,
                 "name": redditor.name,
                 "subreddit": GetInteractions._get_user_subreddit(redditor),
-                "trophies": GetInteractions._get_trophies(redditor)
+                "trophies": GetInteractions._get_trophies(redditor),
             }
 
     @staticmethod
@@ -420,21 +403,21 @@ class GetInteractions():
         None
         """
 
-        interaction_titles = [ 
-            "comments", 
-            "controversial", 
-            "downvoted", 
-            "gilded", 
-            "gildings", 
-            "hidden", 
-            "hot", 
+        interaction_titles = [
+            "comments",
+            "controversial",
+            "downvoted",
+            "gilded",
+            "gildings",
+            "hidden",
+            "hot",
             "moderated",
             "multireddits",
-            "new", 
+            "new",
             "saved",
-            "submissions", 
-            "top", 
-            "upvoted", 
+            "submissions",
+            "top",
+            "upvoted",
         ]
 
         for interaction_title in interaction_titles:
@@ -505,13 +488,16 @@ class GetInteractions():
             Dictionary containing all Redditor data
         """
 
-        redditor, skeleton = GetInteractions._make_json_skeleton(limit, reddit, redditor)
+        redditor, skeleton = GetInteractions._make_json_skeleton(
+            limit, reddit, redditor
+        )
         GetInteractions._get_user_info(redditor, skeleton)
         GetInteractions._get_user_interactions(limit, redditor, skeleton)
 
         return skeleton
 
-class Write():
+
+class Write:
     """
     Methods for writing scraped Redditor information to CSV or JSON.
     """
@@ -546,12 +532,15 @@ class Write():
             f_name = NameFile().u_fname(limit, redditor)
 
             Export.export(data, f_name, "json", "redditors")
-            
+
             print()
-            Halo().succeed(Style.BRIGHT + Fore.GREEN + f"JSON file for u/{redditor} created.")
+            Halo().succeed(
+                Style.BRIGHT + Fore.GREEN + f"JSON file for u/{redditor} created."
+            )
             print()
 
-class RunRedditor():
+
+class RunRedditor:
     """
     Run the Redditor scraper.
     """
@@ -567,7 +556,7 @@ class RunRedditor():
 
             Write.write()
 
-        Calls public methods from external modules: 
+        Calls public methods from external modules:
 
             GetPRAWScrapeSettings().create_list()
             Validation.validate()
@@ -577,7 +566,7 @@ class RunRedditor():
         Parameters
         ----------
         args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
+            Namespace object containing all arguments that were defined in the CLI
         parser: ArgumentParser
             argparse ArgumentParser object
         reddit: Reddit object

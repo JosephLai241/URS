@@ -7,34 +7,19 @@ Defining methods for the submission comments scraper.
 
 import logging
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 from halo import Halo
 
 from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
-
 from urs.utils.Cli import GetPRAWScrapeSettings
-from urs.utils.Export import (
-    EncodeNode,
-    Export,
-    NameFile
-)
-from urs.utils.Global import (
-    convert_time,
-    make_none_dict,
-    Status
-)
-from urs.utils.Logger import (
-    LogError,
-    LogExport, 
-    LogPRAWScraper
-)
+from urs.utils.Export import EncodeNode, Export, NameFile
+from urs.utils.Global import Status, convert_time, make_none_dict
+from urs.utils.Logger import LogError, LogExport, LogPRAWScraper
 from urs.utils.Titles import PRAWTitles
 
-class CommentNode():
+
+class CommentNode:
     """
     Defining a node object that stores comment metadata for the comments tree.
     """
@@ -62,7 +47,8 @@ class CommentNode():
 
         self.replies = []
 
-class Forest():
+
+class Forest:
     """
     Methods to nurture the comment forest.
     """
@@ -84,11 +70,11 @@ class Forest():
         None
         """
 
-        self.root = CommentNode({ "id": submission.id_from_url(url) })
-    
+        self.root = CommentNode({"id": submission.id_from_url(url)})
+
     def _dfs_insert(self, new_comment):
         """
-        An iterative implementation of depth-first search to insert a new comment 
+        An iterative implementation of depth-first search to insert a new comment
         into a comment tree.
 
         Parameters
@@ -102,14 +88,14 @@ class Forest():
 
         stack = []
         stack.append(self.root)
-        
+
         visited = set()
         visited.add(self.root)
 
         found = False
         while not found:
             current_comment = stack.pop(0)
-            
+
             for reply in current_comment.replies:
                 if new_comment.parent_id.split("_", 1)[1] == reply.id:
                     reply.replies.append(new_comment)
@@ -138,25 +124,26 @@ class Forest():
 
         parent_id = new_comment.parent_id.split("_", 1)[1]
 
-        self.root.replies.append(new_comment) \
-            if parent_id == getattr(self.root, "id") \
-            else self._dfs_insert(new_comment)
+        self.root.replies.append(new_comment) if parent_id == getattr(
+            self.root, "id"
+        ) else self._dfs_insert(new_comment)
 
-class SortComments():
+
+class SortComments:
     """
-    Methods for sorting comments depending on which style of comments was 
+    Methods for sorting comments depending on which style of comments was
     specified (raw or structured).
     """
 
     @staticmethod
     def sort_raw(all_comments, submission):
         """
-        Sort all comments in raw format. 
+        Sort all comments in raw format.
 
         Calls a public method from an external module:
 
             Objectify().make_comment()
-        
+
         Parameters
         ----------
         all_comments: list
@@ -175,8 +162,8 @@ class SortComments():
     @staticmethod
     def sort_structured(submission, url):
         """
-        Sort all comments in structured format. 
-        
+        Sort all comments in structured format.
+
         Calls previously defined public methods:
 
             CommentNode()
@@ -199,13 +186,13 @@ class SortComments():
         replies: list
             List containing `CommentNode`s
         """
-        
+
         forest = Forest(submission, url)
 
         seed_status = Status(
             "Forest has fully matured.",
             Fore.CYAN + Style.BRIGHT + "Seeding Forest.",
-            "cyan"
+            "cyan",
         )
 
         seed_status.start()
@@ -218,7 +205,8 @@ class SortComments():
         seed_status.succeed()
         return forest.root.replies
 
-class GetSort():
+
+class GetSort:
     """
     Methods for getting comments from a Reddit submission.
     """
@@ -249,19 +237,21 @@ class GetSort():
 
         more_comments_status = Status(
             "Finished resolving instances of MoreComments.",
-            Fore.CYAN + Style.BRIGHT + "Resolving instances of MoreComments. This may take a while. Please wait.",
-            "cyan"
+            Fore.CYAN
+            + Style.BRIGHT
+            + "Resolving instances of MoreComments. This may take a while. Please wait.",
+            "cyan",
         )
 
         more_comments_status.start()
         self._submission = submission
-        self._submission.comments.replace_more(limit = None)
+        self._submission.comments.replace_more(limit=None)
         more_comments_status.succeed()
 
     def get_sort(self, args, limit):
         """
-        Get comments from posts. 
-        
+        Get comments from posts.
+
         Calls previously defined private methods:
 
             self._get_raw()
@@ -286,11 +276,10 @@ class GetSort():
         else:
             all_comments = SortComments().sort_structured(self._submission, self._url)
 
-        return all_comments[:int(limit)] \
-            if int(limit) != 0 \
-            else all_comments
+        return all_comments[: int(limit)] if int(limit) != 0 else all_comments
 
-class Write():
+
+class Write:
     """
     Methods for writing scraped comments to CSV or JSON.
     """
@@ -318,32 +307,26 @@ class Write():
         """
 
         metadata_status = Status(
-            "Extracted submission metadata.",
-            "Extracting submission metadata.",
-            "white"
+            "Extracted submission metadata.", "Extracting submission metadata.", "white"
         )
 
         metadata_status.start()
         skeleton = {
             "scrape_settings": {
-                "n_results": int(limit) \
-                    if int(limit) > 0 \
-                    else "all",
-                "style": "structured" \
-                    if not args.raw \
-                    else "raw",
-                "url": url
+                "n_results": int(limit) if int(limit) > 0 else "all",
+                "style": "structured" if not args.raw else "raw",
+                "url": url,
             },
             "data": {
                 "submission_metadata": {
-                    "author": "u/" + submission.author.name \
-                        if hasattr(submission.author, "name") \
-                        else "[deleted]",
+                    "author": "u/" + submission.author.name
+                    if hasattr(submission.author, "name")
+                    else "[deleted]",
                     "created_utc": convert_time(submission.created_utc),
                     "distinguished": submission.distinguished,
-                    "edited": submission.edited \
-                        if submission.edited == False \
-                        else convert_time(submission.edited),
+                    "edited": submission.edited
+                    if submission.edited == False
+                    else convert_time(submission.edited),
                     "is_original_content": submission.is_original_content,
                     "is_self": submission.is_self,
                     "link_flair_text": submission.link_flair_text,
@@ -357,17 +340,23 @@ class Write():
                     "stickied": submission.stickied,
                     "subreddit": submission.subreddit.display_name,
                     "title": submission.title,
-                    "upvote_ratio": submission.upvote_ratio
+                    "upvote_ratio": submission.upvote_ratio,
                 },
-                "comments": None
-            }
+                "comments": None,
+            },
         }
 
         try:
-            skeleton["data"]["submission_metadata"]["gallery_data"] = submission.gallery_data
-            skeleton["data"]["submission_metadata"]["media_metadata"] = submission.media_metadata
+            skeleton["data"]["submission_metadata"][
+                "gallery_data"
+            ] = submission.gallery_data
+            skeleton["data"]["submission_metadata"][
+                "media_metadata"
+            ] = submission.media_metadata
 
-            skeleton["data"]["submission_metadata"] = dict(sorted(skeleton["data"]["submission_metadata"].items()))
+            skeleton["data"]["submission_metadata"] = dict(
+                sorted(skeleton["data"]["submission_metadata"].items())
+            )
         except AttributeError:
             pass
 
@@ -408,7 +397,7 @@ class Write():
             Halo().info(export_status)
             logging.info(export_status)
             Export.write_structured_comments(data, f_name)
-        
+
     @staticmethod
     def write(args, c_master, reddit):
         """
@@ -441,18 +430,26 @@ class Write():
         """
 
         for url, limit in c_master.items():
-            submission = reddit.submission(url = url)
+            submission = reddit.submission(url=url)
             data = Write._make_json_skeleton(args, limit, submission, url)
-            data["data"]["comments"] = GetSort(args, submission, url).get_sort(args, limit)
-            
+            data["data"]["comments"] = GetSort(args, submission, url).get_sort(
+                args, limit
+            )
+
             f_name = NameFile().c_fname(args, limit, submission.title)
             Write._determine_export(args, data, f_name)
 
             print()
-            Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + f"JSON file for '{submission.title}' comments created.").succeed()
+            Halo(
+                color="green",
+                text=Style.BRIGHT
+                + Fore.GREEN
+                + f"JSON file for '{submission.title}' comments created.",
+            ).succeed()
             print()
 
-class RunComments():
+
+class RunComments:
     """
     Run the comments scraper.
     """
