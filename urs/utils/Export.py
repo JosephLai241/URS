@@ -397,7 +397,7 @@ class Export:
         InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
         with open(filename, "w", encoding="utf-8") as results:
-            json.dump(data, results, indent=4, cls=EncodeNode)
+            json.dump(data, results, cls=EncodeNode)
 
     @staticmethod
     def write_json(data, filename):
@@ -417,7 +417,7 @@ class Export:
         """
 
         with open(filename, "w", encoding="utf-8") as results:
-            json.dump(data, results, indent=4)
+            json.dump(data, results)
 
     @staticmethod
     def export(data, f_name, f_type, scrape):
