@@ -246,7 +246,7 @@ class SaveStream:
 
                 existing_file.seek(0)
                 existing_file.truncate()
-                json.dump(stream_data, existing_file)
+                json.dump(stream_data, existing_file, indent=2)
 
         save_spinner = Halo().start("Saving livestream.")
         SaveStream._rename(
