@@ -14,19 +14,12 @@ class InitializeDirectory:
     """
 
     @staticmethod
-    def create_dirs(path):
+    def create_dirs(path: str) -> None:
         """
         Make directories for scrape files.
 
-        Parameters
-        ----------
-        path: str
-            String denoting the path to the directories in which scrape files are
-            saved
-
-        Returns
-        -------
-        None
+        :param str path: The path to the directories in which scrape files are
+            saved.
         """
 
         if not os.path.isdir(path):

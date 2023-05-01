@@ -5,7 +5,10 @@ Defining methods for the submission comments scraper.
 """
 
 
+import json
 import logging
+from argparse import Namespace
+from typing import Any, Dict, List
 
 from colorama import Fore, Style
 from halo import Halo
@@ -136,55 +139,29 @@ class SortComments:
     """
 
     @staticmethod
-    def sort_raw(all_comments, submission):
+    def sort_raw(all_comments: List[Dict[str, Any]], submission: Submission) -> None:
         """
         Sort all comments in raw format.
 
-        Calls a public method from an external module:
-
-            Objectify().make_comment()
-
-        Parameters
-        ----------
-        all_comments: list
-            List containing all comments within a submission
-        submission: PRAW submission object
-            Reddit submission object
-
-        Returns
-        -------
-        None
+        :param list[dict[str, Any]] all_comments: A `list[dict[str, Any]]` containing
+            all comments within a submission.
+        :param Submission submission: PRAW `Submission` object.
         """
 
         for comment in submission.comments.list():
             all_comments.append(Objectify().make_comment(comment, False))
 
     @staticmethod
-    def sort_structured(submission, url):
+    def sort_structured(submission: Submission, url: str) -> List[Dict[str, Any]]:
         """
         Sort all comments in structured format.
 
-        Calls previously defined public methods:
+        :param Submission submission: PRAW `Submission` object.
+        :param str url: The submission's URL.
 
-            CommentNode()
-            Forest()
-            Forest().seed()
-
-        Calls public methods from external modules:
-
-            EncodeNode().encode()
-            Objectify().make_comment()
-
-        Parameters
-        ----------
-        submission: PRAW submission object
-        url: str
-            String denoting the submission's url
-
-        Returns
-        -------
-        replies: list
-            List containing `CommentNode`s
+        :returns: A `list[dict[str, Any]]` containing `CommentNode`s in `dict`
+            form.
+        :rtype: `list[dict[str, Any]]`
         """
 
         forest = Forest(submission, url)
@@ -211,25 +188,14 @@ class GetSort:
     Methods for getting comments from a Reddit submission.
     """
 
-    def __init__(self, args, submission, url):
+    def __init__(self, args: Namespace, submission: Submission, url: str) -> None:
         """
         Initialize variables used in later methods:
 
-            self._submission: PRAW submission object
-
-        Calls replace_more() method on submission object to get nested comments.
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        submission: PRAW submission object
-        url: str
-            String denoting the submission's url
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Submission submission: PRAW `Submission` object.
+        :param str url: The submission's URL.
         """
 
         self._args = args
@@ -248,26 +214,16 @@ class GetSort:
         self._submission.comments.replace_more(limit=None)
         more_comments_status.succeed()
 
-    def get_sort(self, args, limit):
+    def get_sort(self, args: Namespace, limit: str) -> List[Dict[str, Any]]:
         """
         Get comments from posts.
 
-        Calls previously defined private methods:
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str limit: A `str` indicating the number of results to return.
 
-            self._get_raw()
-            self._get_structured()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        limit: str
-            String denoting the number of results to return
-
-        Returns
-        -------
-        all_comments: list
-            List containing all comments within a submission
+        :returns: A `list[dict[str, Any]]` containing all comments within a submission.
+        :rtype: `list[dict[str, Any]]`
         """
 
         if args.raw:
@@ -285,25 +241,21 @@ class Write:
     """
 
     @staticmethod
-    def _make_json_skeleton(args, limit, submission, url):
+    def _make_json_skeleton(
+        args: Namespace, limit: str, submission: Submission, url: str
+    ) -> Dict[str, Dict[str, Any]]:
         """
         Create a skeleton for JSON export. Include scrape details at the top.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        limit: str
-            Integer of string type denoting n_results or RAW format
-        submission: PRAW submission object
-        url: str
-            String denoting submission URL
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str limit: A `str` indicating the number of results to return.
+        :param Submission submission: PRAW `Submission` object.
+        :param str url: The submission's URL.
 
-
-        Returns
-        -------
-        skeleton: dict
-            Dictionary containing scrape settings and all scrape data
+        :returns: A `dict[str, dict[str, Any]]` containing scrape settings and
+            all scrape data.
+        :rtype: `dict[str, dict[str, Any]]`
         """
 
         metadata_status = Status(
@@ -365,26 +317,14 @@ class Write:
         return skeleton
 
     @staticmethod
-    def _determine_export(args, data, f_name):
+    def _determine_export(args: Namespace, data: Dict[str, Any], f_name: str) -> None:
         """
         Export either structured or raw comments.
 
-        Calls a public method from an external module:
-
-            Export.export()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        data: dict
-            Dictionary containing all scraped data
-        f_name: str
-            String denoting the filename
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param dict[str, Any] data: A `dict[str, Any]` containing all scraped data.
+        :param str f_name: The filename.
         """
 
         if args.raw:
@@ -399,34 +339,14 @@ class Write:
             Export.write_structured_comments(data, f_name)
 
     @staticmethod
-    def write(args, c_master, reddit):
+    def write(args: Namespace, c_master: Dict[str, Any], reddit: Reddit):
         """
         Get, sort, then write scraped comments to CSV or JSON.
 
-        Calls previously defined public and private methods:
-
-            GetSort().get_sort()
-
-            Write._determine_export()
-            Write._make_json_skeleton()
-            Write._print_confirm()
-
-        Calls a public method from an external module:
-
-            NameFile().c_fname()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        c_master: dict
-            Dictionary containing all scrape settings
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param dict[str, Any] data: A `dict[str, Any]` containing all scraped data.
+        :param Reddit reddit: PRAW Reddit instance.
         """
 
         for url, limit in c_master.items():
@@ -457,36 +377,17 @@ class RunComments:
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer("comments")
-    def run(args, parser, reddit):
+    def run(args: Namespace, parser, reddit: Reddit) -> Dict[str, Any]:
         """
         Run comments scraper.
 
-        Calls a previously defined public method:
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: PRAW Reddit instance.
 
-            Write.write()
-
-        Calls public methods from external modules:
-
-            GetPRAWScrapeSettings().create_list()
-            Validation.validate()
-            GetPRAWScrapeSettings().get_settings()
-            Global.make_none_dict()
-
-            PRAWTitles.c_title()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        c_master: dict
-            Dictionary containing all submission comments scrape settings
+        :returns: A `dict[str, Any]` containing all submission comments scrape
+            settings.
+        :rtype: `dict[str, Any]`
         """
 
         PRAWTitles.c_title()

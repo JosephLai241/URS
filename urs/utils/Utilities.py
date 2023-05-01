@@ -7,6 +7,7 @@ Miscellaneous utilities for URS.
 
 import logging
 from pathlib import Path, PurePath
+from typing import List, Tuple
 
 import rich
 from colorama import Fore, Style
@@ -14,7 +15,7 @@ from halo import Halo
 from rich.filesize import decimal
 from rich.tree import Tree
 
-from urs.utils.Global import Status, date
+from urs.utils.Global import Status
 from urs.utils.Titles import Errors
 
 
@@ -25,25 +26,17 @@ class DateTree:
     """
 
     @staticmethod
-    def _check_date_format(date):
+    def _check_date_format(date: str) -> str:
         """
         Check if the date format is valid. Revise date separation character if
         '/' was used instead of '-'.
 
-        Parameters
-        ----------
-        date: str
-            String denoting the date of the scrapes directory
+        :param str date: The date of the scrapes directory.
 
-        Raises
-        ------
-        TypeError:
-            raised if an invalid date format is entered
+        :raises TypeError: Raised if an invalid date format is entered.
 
-        Returns
-        -------
-        search_date:
-            String denoting the date to search for
+        :returns: The date to search for.
+        :rtype: `str`
         """
 
         split_date = [char for char in date]
@@ -59,20 +52,14 @@ class DateTree:
         return "".join(split_date)
 
     @staticmethod
-    def _find_date_directory(date):
+    def _find_date_directory(date: str) -> bool:
         """
         Traverse the `scrapes/` directory to find the corresponding date directory.
 
-        Parameters
-        ----------
-        date: str
-            String denoting the date of the scrapes directory
+        :param str date: The date of the scrapes directory.
 
-        Returns
-        -------
-        dir_exists: boolean
-            Boolean denoting whether the date directory exists within the `scrapes/`
-                directory
+        :returns: Whether the date directory exists within the `scrapes/` directory.
+        :rtype: `bool`
         """
 
         dir_exists = False
@@ -85,20 +72,15 @@ class DateTree:
         return dir_exists
 
     @staticmethod
-    def _create_stack(directory, tree):
+    def _create_stack(directory: str, tree: Tree) -> List[Tuple[Path, Tree]]:
         """
         Create a stack containing paths within a directory.
 
-        Parameters
-        ----------
-        directory: str
-            String denoting the path to the directory
-        tree: Tree instance
+        :param str directory: The path to the directory.
+        :param Tree tree: The `Tree` instance.
 
-        Returns
-        -------
-        stack: list
-            List containing tuples of type (Path, Tree)
+        :returns: A `list[(Path, Tree)]` of paths and sub-`Tree`s.
+        :rtype: `list[(Path, Tree)]`
         """
 
         return [
@@ -110,20 +92,13 @@ class DateTree:
         ]
 
     @staticmethod
-    def _create_directory_tree(date_dir, tree):
+    def _create_directory_tree(date_dir: str, tree: Tree) -> None:
         """
         Create the directory Tree based on the date_dir Path using iterative
         depth-first search.
 
-        Parameters
-        ----------
-        date_dir: str
-            String denoting the path to the date directory
-        tree: Tree instance
-
-        Returns
-        -------
-        None
+        :param str date_dir: The path to the directory.
+        :param Tree tree: The `Tree` instance.
         """
 
         build_tree_status = Status(
@@ -159,24 +134,12 @@ class DateTree:
         print()
 
     @staticmethod
-    def display_tree(search_date):
+    def display_tree(search_date: str) -> None:
         """
         Display the scrapes directory for a specific date.
 
-        Calls previously defined private methods:
-
-            DateTree._check_date_format()
-            DateTree._create_directory_tree()
-            DateTree._find_date_directory()
-
-        Parameters
-        ----------
-        search_date: str
-            String denoting the date within the scrapes directory to search for
-
-        Returns
-        -------
-        None
+        :param str search_date: The date within the `scrapes/` directory to search
+            for.
         """
 
         logging.info(f"Running tree command...")

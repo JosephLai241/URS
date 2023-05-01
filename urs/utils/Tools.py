@@ -6,6 +6,10 @@ Running all tools that URS has to offer.
 
 
 import logging
+from argparse import ArgumentParser, Namespace
+from typing import Tuple
+
+from praw import Reddit
 
 from urs.analytics.Frequencies import GenerateFrequencies
 from urs.analytics.Wordcloud import GenerateWordcloud
@@ -25,7 +29,7 @@ class Run:
     Methods to call CLI and all tools.
     """
 
-    def __init__(self, reddit):
+    def __init__(self, reddit: Reddit) -> None:
         """
         Initialize variables used in instance methods:
 
@@ -33,43 +37,18 @@ class Run:
             self._args: argparse Namespace object
             self._parser: argparse ArgumentParser object
 
-        Calls a private method:
-
-            self._introduce_then_args()
-
-        Parameters
-        ----------
-        reddit: PRAW Reddit object
-
-        Returns
-        -------
-        None
+        :param Reddit reddit: PRAW `Reddit` object.
         """
 
         self._reddit = reddit
         self._args, self._parser = self._introduce_then_args()
 
-    def _introduce_then_args(self):
+    def _introduce_then_args(self) -> Tuple[Namespace, ArgumentParser]:
         """
         Print title, then run checks for CLI args and PRAW credentials.
 
-        Calls previously defined public methods:
-
-            MainTitle.title()
-
-            Parser().parse_args()
-            CheckCli().check_args()
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        args: Namespace
-            argparse Namespace object
-        parser: ArgumentParser
-            argparse ArgumentParser object
+        :returns: The `Namespace` and `ArgumentParser` objects.
+        :rtype: `(Namespace, ArgumentParser)`
         """
 
         MainTitle.title()
@@ -79,31 +58,9 @@ class Run:
 
         return args, parser
 
-    def run_urs(self):
+    def run_urs(self) -> None:
         """
         Switch for running all URS tools.
-
-        Calls previously defined public methods:
-
-            PRAW validation:
-
-                Validation.validate_user()
-
-            PRAW scrapers:
-
-                RunSubreddit.run()
-                RunRedditor.run()
-                RunComments.run()
-                RunBasic.run()
-
-            PRAW livestream scrapers:
-
-                Livestream.stream()
-
-            Analytical tools:
-
-                GenerateFrequencies.generate()
-                GenerateWordcloud.generate()
         """
 
         if self._args.check:
@@ -138,9 +95,9 @@ class Run:
             if self._args.subreddit:
                 RunSubreddit.run(self._args, self._parser, self._reddit)
             if self._args.redditor:
-                RunRedditor.run(self._args, self._parser, self._reddit)
+                RunRedditor.run(self._args, self._reddit)
             if self._args.comments:
-                RunComments.run(self._args, self._parser, self._reddit)
+                RunComments.run(self._args, self._reddit)
             elif self._args.basic:
                 RunBasic.run(self._args, self._parser, self._reddit)
 
