@@ -93,7 +93,7 @@ class Run:
             Validation.validate_user(self._parser, self._reddit)
 
             if self._args.subreddit:
-                RunSubreddit.run(self._args, self._parser, self._reddit)
+                RunSubreddit.run(self._args, self._reddit)
             if self._args.redditor:
                 RunRedditor.run(self._args, self._reddit)
             if self._args.comments:
