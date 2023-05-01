@@ -5,6 +5,10 @@ Defining methods to create JSON serializable objects from Reddit metadata.
 """
 
 
+from typing import Any, Dict
+
+from praw.models import Comment, Multireddit, Submission, Subreddit
+
 from urs.utils.Global import convert_time
 
 
@@ -13,28 +17,15 @@ class Objectify:
     Methods for creating JSON serializable objects from Reddit metadata.
     """
 
-    def make_comment(self, comment, include_all):
+    def make_comment(self, comment: Comment, include_all: bool) -> Dict[str, Any]:
         """
         Make a comment item.
 
-        Calls previously defined public method:
+        :param Comment comment: PRAW Comment object.
+        :param bool include_all: Whether the `"type"` field should be included.
 
-            self.make_submission()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        comment: PRAW comment object
-        include_all: boolean
-            Boolean to determine whether the "type" field should be included
-
-        Returns
-        -------
-        redditor_item: dict
-            Dictionary containing comment metadata
+        :returns: A `dict[str, Any]` containing comment metadata.
+        :rtype: `dict[str, Any]`
         """
 
         comment_object = {
@@ -67,26 +58,14 @@ class Objectify:
 
         return comment_object
 
-    def make_multireddit(self, multireddit):
+    def make_multireddit(self, multireddit: Multireddit) -> Dict[str, Any]:
         """
         Make a multireddit item.
 
-        Calls a previously defined public method:
+        :param Multireddit multireddit: PRAW Multireddit object.
 
-            self.make_subreddit()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        multireddit: PRAW multireddit object
-
-        Returns
-        -------
-        multireddit_object: dict
-            Dictionary containing multireddit metadata
+        :returns: A `dict[str, Any]` containing Multireddit data.
+        :rtype: `Dict[str, Any]`
         """
 
         multireddit_object = {
@@ -109,28 +88,17 @@ class Objectify:
 
         return multireddit_object
 
-    def make_submission(self, include_all, submission):
+    def make_submission(
+        self, include_all: bool, submission: Submission
+    ) -> Dict[str, Any]:
         """
         Make a submission object.
 
-        Calls a previously defined public method:
+        :param bool include_all: Whether the `"type"` field should be included.
+        :param Submission submission: PRAW Submission object.
 
-            self.make_subreddit()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        include_all: boolean
-            Boolean to determine whether the "type" field should be included
-        submission: PRAW submission object
-
-        Returns
-        -------
-        submission_object: dict
-            Dictionary containing submission metadata
+        :returns: A `dict[str, Any]` containing Submission data.
+        :rtype: `Dict[str, Any]`
         """
 
         submission_object = {
@@ -168,22 +136,14 @@ class Objectify:
 
         return submission_object
 
-    def make_subreddit(self, subreddit):
+    def make_subreddit(self, subreddit: Subreddit) -> Dict[str, Any]:
         """
         Make a Subreddit object.
 
-        Calls a public method from an external module:
+        :param Subreddit subreddit: PRAW Subreddit object.
 
-            Global.convert_time()
-
-        Parameters
-        ----------
-        subreddit: PRAW Subreddit object
-
-        Returns
-        -------
-        subreddit_object: dict
-            Dictionary containing Subreddit metadata
+        :returns: A `dict[str, Any]` containing Subreddit data.
+        :rtype: `Dict[str, Any]`
         """
 
         return {

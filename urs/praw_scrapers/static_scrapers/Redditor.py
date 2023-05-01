@@ -5,11 +5,13 @@ Defining methods for the Redditor scraper.
 """
 
 
-import logging
+from argparse import Namespace
+from typing import Any, Dict, List, Tuple, Union
 
-import praw
 from colorama import Fore, Style
 from halo import Halo
+from praw import Reddit
+from praw.models import Comment, Redditor, Submission
 from prawcore import PrawcoreException
 
 from urs.praw_scrapers.utils.Objectify import Objectify
@@ -17,7 +19,7 @@ from urs.praw_scrapers.utils.Validation import Validation
 from urs.utils.Cli import GetPRAWScrapeSettings
 from urs.utils.Export import Export, NameFile
 from urs.utils.Global import convert_time, make_none_dict
-from urs.utils.Logger import LogError, LogExport, LogPRAWScraper
+from urs.utils.Logger import LogExport, LogPRAWScraper
 from urs.utils.Titles import PRAWTitles
 
 
@@ -37,7 +39,9 @@ class ProcessInteractions:
     - Upvoted (may be forbidden)
     """
 
-    def __init__(self, limit, redditor, skeleton):
+    def __init__(
+        self, limit: int, redditor: Redditor, skeleton: Dict[str, Any]
+    ) -> None:
         """
         Initialize variables used in later methods:
 
@@ -58,17 +62,10 @@ class ProcessInteractions:
             self._top: Redditor's top objects
             self._upvoted: Redditor's upvoted objects
 
-        Parameters
-        ----------
-        limit: int
-            Integer denoting n_results to return
-        redditor: PRAW object
-        skeleton: dict
-            Dictionary containing all Redditor data
-
-        Returns
-        -------
-        None
+        :param int limit: The number of results to return.
+        :param Redditor redditor: A PRAW Redditor object.
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing all Redditor
+            data.
         """
 
         self._skeleton = skeleton
@@ -88,56 +85,36 @@ class ProcessInteractions:
         self._top = redditor.top(limit=limit)
         self._upvoted = redditor.upvoted(limit=limit)
 
-    def _extract(self, obj, scrape_type):
+    def _extract(self, obj: List[Union[Comment, Submission]], scrape_type: str) -> None:
         """
         Extracting submission or comment attributes and appending to the skeleton.
 
-        Calls public methods from an external module:
-
-            Objectify().make_submission()
-            Objectify().make_comment()
-
-        Parameters
-        ----------
-        obj: PRAW object
-            PRAW Redditor object that may contain Redditor submissions or comments
-        scrape_type: str
-            String denoting the field within the skeleton
-
-        Returns
-        -------
-        None
+        :param list[Comment | Submission] obj: A list of PRAW Redditor objects
+            that may contain submissions or comments.
+        :param str scrape_type: The scrape type field within the skeleton.
         """
 
         for item in obj:
             redditor_item = (
                 Objectify().make_submission(True, item)
-                if isinstance(item, praw.models.Submission)
+                if isinstance(item, Submission)
                 else Objectify().make_comment(item, True)
             )
 
             self._skeleton["data"]["interactions"][scrape_type].append(redditor_item)
 
     @Halo(color="white", text="Extracting submissions.")
-    def get_submissions(self):
+    def get_submissions(self) -> None:
         """
         Get Redditor submissions.
-
-        Calls previously defined private method:
-
-            self._extract()
         """
 
         self._extract(self._submissions, "submissions")
 
     @Halo(color="white", text="Extracting comments.")
-    def get_comments(self):
+    def get_comments(self) -> None:
         """
         Get Redditor comments.
-
-        Calls previously defined private method:
-
-            self._extract()
         """
 
         self._extract(self._comments, "comments")
@@ -146,15 +123,11 @@ class ProcessInteractions:
         color="white",
         text="Extracting Controversial, Gilded, Hot, New, and Top interactions.",
     )
-    def get_mutts(self):
+    def get_mutts(self) -> None:
         """
         Get Controversial, Gilded, Hot, New, and Top Redditor posts. The ListingGenerator
         returns a mix of submissions and comments, so handling each differently is
         necessary.
-
-        Calls previously defined private method:
-
-            self._extract()
         """
 
         mutt_interactions = [
@@ -169,15 +142,11 @@ class ProcessInteractions:
         for category, interaction in zip(mutt_names, mutt_interactions):
             self._extract(interaction, category)
 
-    def get_access(self):
+    def get_access(self) -> None:
         """
         Get Upvoted, Downvoted, Gildings, Hidden, and Saved Redditor posts. These
         lists tend to raise a 403 HTTP Forbidden exception, so naturally exception
         handling is necessary.
-
-        Calls previously defined private method:
-
-            self._extract()
         """
 
         access_interactions = [
@@ -208,13 +177,9 @@ class ProcessInteractions:
                 )
 
     @Halo(color="white", text="Extracting moderated Subreddits.")
-    def get_moderated(self):
+    def get_moderated(self) -> None:
         """
         Get Redditor's moderated Subreddits.
-
-        Calls a public method from an external module:
-
-            Objectify().make_subreddit()
         """
 
         if self._moderated:
@@ -223,13 +188,9 @@ class ProcessInteractions:
                 self._skeleton["data"]["interactions"]["moderated"].append(subreddit)
 
     @Halo(color="white", text="Extracting multireddits.")
-    def get_multireddits(self):
+    def get_multireddits(self) -> None:
         """
         Get Redditor's multireddits.
-
-        Calls a public method from an external module:
-
-            Objectify().make_multireddit()
         """
 
         if self._multireddits:
@@ -246,50 +207,43 @@ class GetInteractions:
     """
 
     @staticmethod
-    def _make_json_skeleton(limit, reddit, redditor):
+    def _make_json_skeleton(
+        limit: str, reddit: Reddit, redditor_name: str
+    ) -> Tuple[Redditor, Dict[str, Any]]:
         """
         Create a skeleton for JSON export. Include scrape details at the top.
 
-        Parameters
-        ----------
-        limit: str
-            String denoting n_results returned
-        reddit: PRAW Reddit object
-        redditor: str
-            String denoting the Redditor name
+        :param str limit: The number of results to return.
+        :param Reddit reddit: PRAW Reddit object.
+        :param str redditor: The Redditor's name.
 
-        Returns
-        -------
-        skeleton: dict
-            Dictionary containing all Redditor data
-        redditor: PRAW Redditor object
+        :returns: The Redditor instance and a `dict[str, Any]` containing all
+            Redditor data.
+        :rtype: `(Redditor, dict[str, Any])`
         """
 
         plurality = "results" if int(limit) > 1 else "result"
 
-        Halo().info(f"Processing {limit} {plurality} from u/{redditor}'s profile.")
+        Halo().info(f"Processing {limit} {plurality} from u/{redditor_name}'s profile.")
 
         skeleton = {
-            "scrape_settings": {"redditor": redditor, "n_results": limit},
+            "scrape_settings": {"redditor": redditor_name, "n_results": limit},
             "data": {"information": None, "interactions": {}},
         }
-        redditor = reddit.redditor(redditor)
+        redditor = reddit.redditor(redditor_name)
 
         return redditor, skeleton
 
     @staticmethod
-    def _get_trophies(redditor):
+    def _get_trophies(redditor: Redditor) -> Union[List[Dict[str, Any]], None]:
         """
         Get Redditor's trophies.
 
-        Parameters
-        ----------
-        redditor: PRAW Redditor object
+        :param Redditor redditor: The Redditor instance.
 
-        Returns
-        -------
-        trophies: list
-            List containing Redditor trophies
+        :returns: A `list[str, Any]` containing Redditor trophies, or `None` if
+            the Redditor does not have any trophies.
+        :rtype: `list[dict[str, Any]] | None`
         """
 
         if redditor.trophies():
@@ -306,18 +260,14 @@ class GetInteractions:
             ]
 
     @staticmethod
-    def _get_user_subreddit(redditor):
+    def _get_user_subreddit(redditor: Redditor) -> Dict[str, Any]:
         """
         Get Redditor's Subreddit.
 
-        Parameters
-        ----------
-        redditor: PRAW Redditor object
+        :param Redditor redditor: The Redditor instance.
 
-        Returns
-        -------
-        redditor_subreddit: dict
-            Dictionary containing Redditor Subreddit data
+        :returns: A `dict[str, Any]` containing Redditor Subreddit data.
+        :rtype: `dict[str, Any]`
         """
 
         subreddit = redditor.subreddit
@@ -342,27 +292,13 @@ class GetInteractions:
 
     @staticmethod
     @Halo(color="white", text="Extracting Redditor information.")
-    def _get_user_info(redditor, skeleton):
+    def _get_user_info(redditor: Redditor, skeleton: Dict[str, Any]) -> None:
         """
         Get Redditor account information.
 
-        Calls a previously defined public method:
-
-            GetInteractions._get_trophies()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        redditor: PRAW Redditor object
-        skeleton: dict
-            Dictionary containing all Redditor data
-
-        Returns
-        -------
-        None
+        :param Redditor redditor: The Redditor instance.
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing all Redditor
+            data.
         """
 
         try:
@@ -389,18 +325,12 @@ class GetInteractions:
             }
 
     @staticmethod
-    def _make_interactions_lists(skeleton):
+    def _make_interactions_lists(skeleton: Dict[str, Any]) -> None:
         """
         Make empty lists for each Redditor interaction field.
 
-        Parameters
-        ----------
-        skeleton: dict
-            Dictionary containing all Redditor data
-
-        Returns
-        -------
-        None
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing all Redditor
+            data.
         """
 
         interaction_titles = [
@@ -424,34 +354,16 @@ class GetInteractions:
             skeleton["data"]["interactions"][interaction_title] = []
 
     @staticmethod
-    def _get_user_interactions(limit, redditor, skeleton):
+    def _get_user_interactions(
+        limit: str, redditor: Redditor, skeleton: Dict[str, Any]
+    ) -> None:
         """
         Get Redditor interactions on Reddit.
 
-        Calls previously defined private and public methods:
-
-            GetInteractions._make_interactions_lists()
-
-            ProcessInteractions()
-            ProcessInteractions().get_submissions()
-            ProcessInteractions().get_comments()
-            ProcessInteractions().get_mutts()
-            ProcessInteractions().get_moderated()
-            ProcessInteractions().get_multireddits()
-            ProcessInteractions().get_access()
-
-
-        Parameters
-        ----------
-        limit: str
-            String denoting n_results returned
-        redditor: PRAW Redditor object
-        skeleton: dict
-            Dictionary containing all Redditor data
-
-        Returns
-        -------
-        None
+        :param str limit: The number of results to return.
+        :param Redditor redditor: A PRAW Redditor object.
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing all Redditor
+            data.
         """
 
         GetInteractions._make_interactions_lists(skeleton)
@@ -465,31 +377,20 @@ class GetInteractions:
         interactions.get_access()
 
     @staticmethod
-    def get(limit, reddit, redditor):
+    def get(limit: str, reddit: Reddit, redditor_name: str) -> Dict[str, Any]:
         """
         Get Redditor information and interactions.
 
-        Calls previously defined private methods:
+        :param str limit: The number of results to return.
+        :param Reddit reddit: PRAW Reddit object.
+        :param str redditor_name: The name of the Redditor.
 
-            GetInteractions._make_json_skeleton()
-            GetInteractions._get_user_info()
-            GetInteractions._get_user_interactions()
-
-        Parameters
-        ----------
-        limit: str
-            String denoting n_results returned
-        reddit: PRAW Reddit object
-        redditor: PRAW Redditor object
-
-        Returns
-        -------
-        skeleton: dict
-            Dictionary containing all Redditor data
+        :returns: A `dict[str, Any]` containing all Redditor data.
+        :rtype: `dict[str, Any]`
         """
 
         redditor, skeleton = GetInteractions._make_json_skeleton(
-            limit, reddit, redditor
+            limit, reddit, redditor_name
         )
         GetInteractions._get_user_info(redditor, skeleton)
         GetInteractions._get_user_interactions(limit, redditor, skeleton)
@@ -503,28 +404,13 @@ class Write:
     """
 
     @staticmethod
-    def write(reddit, u_master):
+    def write(reddit: Reddit, u_master: Dict[str, Any]) -> None:
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
-        Calls a previously defined public method:
-
-            GetInteractions.get()
-
-        Calls a public method from an external module:
-
-            NameFile().u_fname()
-
-        Parameters
-        ----------
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        u_master: dict
-            Dictionary containing all scrape settings
-
-        Returns
-        -------
-        None
+        :param Reddit reddit: PRAW Reddit object.
+        :param dict[str, Any] u_master: A `dict[str, Any]` containing all scrape
+            settings.
         """
 
         for redditor, limit in u_master.items():
@@ -548,34 +434,16 @@ class RunRedditor:
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer("redditor")
-    def run(args, parser, reddit):
+    def run(args: Namespace, reddit: Reddit) -> Dict[str, Any]:
         """
         Get, sort, then write scraped Redditor information to CSV or JSON.
 
-        Calls a previously defined public method:
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: PRAW Reddit object.
 
-            Write.write()
-
-        Calls public methods from external modules:
-
-            GetPRAWScrapeSettings().create_list()
-            Validation.validate()
-            Global.make_none_dict()
-            GetPRAWScrapeSettings().get_settings()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        u_master: dict
-            Dictionary containing all Redditor scrape settings
+        :returns: A `dict[str, Any]` containing all Redditor scrape settings.
+        :rtype: `dict[str, Any]`
         """
 
         PRAWTitles.u_title()

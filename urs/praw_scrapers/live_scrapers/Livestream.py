@@ -10,9 +10,13 @@ import json
 import logging
 import os
 import time
+from argparse import Namespace
+from typing import Any, Dict, Generator, List, Literal, Tuple, Union
 
 from colorama import Fore, Style
 from halo import Halo
+from praw import Reddit
+from praw.models import Redditor, Subreddit
 
 from urs.praw_scrapers.live_scrapers.utils.DisplayStream import DisplayStream
 from urs.praw_scrapers.live_scrapers.utils.StreamGenerator import StreamGenerator
@@ -28,19 +32,15 @@ class SaveStream:
     """
 
     @staticmethod
-    def _create_skeleton(args):
+    def _create_skeleton(args: Namespace) -> Dict[str, Any]:
         """
         Create a JSON skeleton to store livestream data.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
 
-        Returns
-        -------
-        skeleton: dict
-            Dictionary containing data pertaining to the livestream
+        :returns: A `dict[str, Any]` containing data pertaining to the livestream.
+        :rtype: `dict[str, Any]`
         """
 
         skeleton = {"livestream_settings": {}, "livestream_metadata": {}, "data": []}
@@ -57,23 +57,14 @@ class SaveStream:
         return skeleton
 
     @staticmethod
-    def _make_livestream_dir(split_stream_info):
+    def _make_livestream_dir(split_stream_info: List[str]) -> str:
         """
         Make the `livestream` directory within the `scrapes/[DATE]` directory.
 
-        Calls public methods from an external module:
+        :param list[str] split_stream_info: A `list[str]` containing stream information.
 
-            InitializeDirectory.create_dirs()
-
-        Parameters
-        ----------
-        split_stream_info: list
-            List containing stream information
-
-        Returns
-        -------
-        stream_directory: str
-            String denoting the path to the directory in which the stream is saved
+        :returns: The path to the directory in which the stream is saved.
+        :rtype: `str`
         """
 
         if split_stream_info[0] == "r":
@@ -87,24 +78,15 @@ class SaveStream:
         return stream_directory
 
     @staticmethod
-    def _get_temp_filename(stream_info):
+    def _get_temp_filename(stream_info: str) -> str:
         """
         Create a temporary filename to write stream data in real time.
 
-        Calls previously defined private method:
+        :param str stream_info: The stream information (Subreddit and Subreddit
+            name, or Redditor and Redditor name).
 
-            SaveStream._make_livestream_dir()
-
-        Parameters
-        ----------
-        stream_info: str
-            String denoting the stream information (Subreddit and Subreddit name
-            or Redditor and Redditor name)
-
-        Returns
-        -------
-        stream_path: str
-            String denoting the filepath
+        :returns: The filepath.
+        :rtype: `str`
         """
 
         split_stream_info = stream_info.split(" ")[1].split("/")
@@ -118,20 +100,13 @@ class SaveStream:
         return stream_path
 
     @staticmethod
-    def _create_temp_file(skeleton, stream_path):
+    def _create_temp_file(skeleton: Dict[str, Any], stream_path: str) -> None:
         """
         Create a temporary file to write stream data in real time.
 
-        Parameters
-        ----------
-        skeleton: dict
-            Dictionary containing data pertaining to the livestream
-        stream_path: str
-            String denoting the path to the saved livestream
-
-        Returns
-        -------
-        None
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing data pertaining
+            to the livestream.
+        :param str stream_path: The path to the saved livestream.
         """
 
         if not os.path.isfile(stream_path):
@@ -139,24 +114,16 @@ class SaveStream:
                 json.dump(skeleton, new_file)
 
     @staticmethod
-    def _rename(duration, object_info, start_stream, stream_path):
+    def _rename(
+        duration: str, object_info: str, start_stream: str, stream_path: str
+    ) -> None:
         """
         Rename the livestream file by including the start time and duration.
 
-        Parameters
-        ----------
-        duration: str
-            String denoting the total time spent livestreaming
-        object_info: str
-            String denoting what kind of Reddit objects were streamed
-        start_stream: str
-            String denoting the time the stream started
-        stream_path: str
-            String denoting the path to the saved livestream
-
-        Returns
-        -------
-        None
+        :param str duration: The total time spent livestreaming.
+        :param str object_info: The kind of Reddit objects that were streamed.
+        :param str start_stream: The time the stream started.
+        :param str stream_path: The path to the saved livestream.
         """
 
         split_stream_path = stream_path.split(".")
@@ -166,35 +133,25 @@ class SaveStream:
         os.rename(stream_path, new_filename)
 
     @staticmethod
-    def write(args, generator, object_info, stream_info):
+    def write(
+        args: Namespace,
+        generator: Generator[Dict[str, Any], None, None],
+        object_info: str,
+        stream_info: str,
+    ) -> str:
         """
         Write the livestream to file in real time.
 
-        Calls previously defined private methods:
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Generator[Dict[str, Any], None, None] generator: Reddit object
+            generator.
+        :param str object_info: Which Reddit objects are displayed in the stream.
+        :param str stream_info: Livestream information.
 
-            SaveStream._create_skeleton()
-            SaveStream._get_temp_filename()
-            SaveStream._rename()
-
-        Calls a public method from an external module:
-
-            DisplayStream.display()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        generator: Reddit object generator
-        object_info: str
-            String denoting which Reddit objects are displayed in the stream
-        stream_info: str
-            String denoting the livestream information
-
-        Returns
-        -------
-        stream_statistics: str
-            String denoting the livestream statistics (Reddit objects, Subreddit
-            or Redditor, and duration)
+        :returns: The livestream statistics (Reddit objects, Subreddit or Redditor,
+            and duration of the stream).
+        :rtype: `str`
         """
 
         skeleton = SaveStream._create_skeleton(args)
@@ -273,21 +230,19 @@ class Livestream:
     """
 
     @staticmethod
-    def _set_info_and_object(args, reddit):
+    def _set_info_and_object(
+        args: Namespace, reddit: Reddit
+    ) -> Tuple[Union[Redditor, Subreddit], str]:
         """
         Set the stream information and Reddit object based on CLI args.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        reddit: PRAW Reddit object
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: PRAW Reddit object.
 
-        Returns
-        -------
-        reddit_object: PRAW Subreddit or Redditor object
-        stream_info: str
-            String denoting the livestream information
+        :returns: The PRAW `Redditor` or `Subreddit` object, and the livestream
+            information.
+        :rtype: `(Redditor | Subreddit, str)`
         """
 
         if args.live_subreddit:
@@ -321,27 +276,23 @@ class Livestream:
         return reddit_object, stream_info
 
     @staticmethod
-    def _stream_switch(args, reddit_object):
+    def _stream_switch(
+        args: Namespace, reddit_object: Union[Redditor, Subreddit]
+    ) -> Tuple[
+        Generator[Dict[str, Any], None, None], Literal["comments", "submissions"]
+    ]:
         """
         A switch that determines what Reddit objects are yielded (comments or
         submissions).
 
-        Calls public methods from an external module:
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Redditor | Subreddit reddit_object: Reddit Redditor or Subreddit
+            object.
 
-            StreamGenerator.stream_submissions()
-            StreamGenerator.stream_comments()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        reddit_object: Reddit Subreddit or Redditor object
-
-        Returns
-        -------
-        generator: Reddit object generator
-        object_info: str
-            String denoting which Reddit objects are displayed in the stream
+        :returns: The Reddit object Generator and a `str` indicating which Reddit
+            objects are displayed in the stream.
+        :rtype: `(Generator[Dict[str, Any], None, None], Literal["comments", "submissions"])`
         """
 
         if args.stream_submissions:
@@ -358,23 +309,22 @@ class Livestream:
         return generator, object_info
 
     @staticmethod
-    def _no_save_stream(generator, object_info, stream_info):
+    def _no_save_stream(
+        generator: Generator[Dict[str, Any], None, None],
+        object_info: str,
+        stream_info: str,
+    ) -> str:
         """
         Only stream new Reddit comments or submissions. Do not save to file.
 
-        Parameters
-        ----------
-        generator: Reddit object generator
-        object_info: str
-            String denoting which Reddit objects are displayed in the stream
-        stream_info: str
-            String denoting the livestream information
+        :param Generator[Dict[str, Any], None, None] generator: Reddit object generator.
+        :param str object_info: A `str` denoting which Reddit objects are displayed
+            in the stream.
+        :param str stream_info: Livestream information.
 
-        Returns
-        -------
-        stream_statistics: str
-            String denoting the livestream statistics (Reddit objects, Subreddit
-            or Redditor, and duration)
+        :returns: The livestream statistics (Reddit objects, Subreddit or Redditor,
+            and the duration of the stream).
+        :rtype: `str`
         """
 
         start_stream = time.time()
@@ -405,35 +355,14 @@ class Livestream:
         return stream_statistics
 
     @staticmethod
-    def stream(args, reddit):
+    def stream(args: Namespace, reddit: Reddit) -> None:
         """
         Livestream comments or submissions to terminal. Write the stream to file
         in real time, if applicable.
 
-        Calls previously defined private methods:
-
-            Livestream._stream_switch()
-            SaveStream.write()
-
-        Calls public methods from external modules:
-
-            DisplayStream.display()
-
-            PRAWTitles.lr_title()
-            PRAWTitles.lu_title()
-
-            Validation.validate()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: PRAW Reddit object.
         """
 
         reddit_object, stream_info = Livestream._set_info_and_object(args, reddit)

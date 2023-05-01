@@ -7,6 +7,7 @@ Helper methods to prepare data for frequencies and wordcloud generators.
 
 import json
 from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
 from urs.utils.DirInit import InitializeDirectory
 from urs.utils.Global import Status
@@ -20,31 +21,19 @@ class GetPath:
 
     @staticmethod
     @LogAnalyticsErrors.log_invalid_top_dir
-    def get_scrape_type(scrape_file, tool):
+    def get_scrape_type(scrape_file: str, tool: str) -> Tuple[str, str]:
         """
         Get the name of the scrape-specific directory in which the data is stored
         and create the directories within the `analytics` folder.
 
-        Parameters
-        ----------
-        scrape_file: str
-            String denoting the filepath
-        tool: str
-            String denoting the tool type
+        :param str scrape_file: The filepath to the scrape file.
+        :param str tool: The name of the tool that was run.
 
-        Exceptions
-        ----------
-        TypeError:
-            Raised if the file is not JSON or if the file resides in the `analytics`
-            directory
+        :raises TypeError: Raised if the file is not JSON or if the file resides
+            in the `analytics` directory.
 
-        Returns
-        -------
-        analytics_dir: str
-            String denoting the path to the directory in which the analytical
-            data will be written
-        scrape_dir: str
-            String denoting the scrape-specific directory
+        :returns: The path to the analytics directory and the scrape directory.
+        :rtype: `(str, str)`
         """
 
         file_path = Path(scrape_file)
@@ -65,22 +54,16 @@ class GetPath:
         return analytics_dir, scrape_dir
 
     @staticmethod
-    def name_file(analytics_dir, path):
+    def name_file(analytics_dir: str, path: str) -> str:
         """
         Name the frequencies data or wordcloud when saving to file.
 
-        Parameters
-        ----------
-        analytics_dir: str
-            String denoting the path to the directory in which the analytical
-            data will be written
-        path: str
-            String denoting the full filepath
+        :param str analytics_dir: The path to the directory in which the analytical
+            data will be written.
+        :param str path: The full filepath.
 
-        Returns
-        -------
-        filename: str
-            String denoting the new filepath to save file
+        :returns: The new filepath to save the file.
+        :rtype: `str`
         """
 
         return f"{Path(analytics_dir)}/{Path(path).name}"
@@ -92,19 +75,14 @@ class Extract:
     """
 
     @staticmethod
-    def extract(scrape_file):
+    def extract(scrape_file: str) -> Dict[str, Any]:
         """
         Extract data from the file.
 
-        Parameters
-        ----------
-        scrape_file: str
-            String denoting the filepath
+        :param str scrape_file: The filepath.
 
-        Returns
-        -------
-        data: dict
-            Dictionary containing extracted scrape data
+        :returns: A `dict` containing extracted scrape data.
+        :rtype: `dict[str, Any]`
         """
 
         with open(str(scrape_file), "r", encoding="utf-8") as raw_data:
@@ -117,19 +95,14 @@ class CleanData:
     """
 
     @staticmethod
-    def _remove_extras(word):
+    def _remove_extras(word: str) -> str:
         """
         Removing unnecessary characters from words.
 
-        Parameters
-        ----------
-        word: str
-            String denoting the word to clean
+        :param str word: The word to clean.
 
-        Returns
-        -------
-        cleaned_word: str
-            String denoting the cleaned word
+        :returns: The cleaned word.
+        :rtype: `str`
         """
 
         illegal_chars = [char for char in "[(),:;.}{<>`]"]
@@ -138,26 +111,13 @@ class CleanData:
         return "".join(fixed).strip()
 
     @staticmethod
-    def count_words(field, obj, plt_dict):
+    def count_words(field: str, obj: Dict[str, Any], plt_dict: Dict[str, int]) -> None:
         """
-        Count words that are present in a field, then update the plt_dict dictionary.
+        Count words that are present in a field, then update the `plt_dict` dictionary.
 
-        Calls previously defined private method:
-
-            CleanData._remove_extras()
-
-        Parameters
-        ----------
-        field: str
-            String denoting the dictionary key to extract data from
-        obj: dict
-            Dictionary containing scrape data
-        plt_dict: dict
-            Dictionary containing frequency data
-
-        Returns
-        -------
-        None
+        :param str field: Extract data from this key in the `dict`.
+        :param dict[str, Any] obj: A `dict` containing the scrape data.
+        :param dict[str, int] plt_dict: A `dict` containing frequency data.
         """
 
         words = obj[field].split(" ")
@@ -178,23 +138,14 @@ class PrepSubreddit:
     """
 
     @staticmethod
-    def prep_subreddit(data):
+    def prep_subreddit(data: List[Dict[str, Any]]) -> Dict[str, int]:
         """
         Prepare Subreddit data.
 
-        Calls previously defined public method:
+        :param list[dict[str, Any]] data: A `list` containing scraped Subreddit data.
 
-            CleanData.count_words()
-
-        Parameters
-        ----------
-        data: list
-            List containing extracted scrape data
-
-        Returns
-        -------
-        frequencies: dict
-            Dictionary containing finalized word frequencies
+        :returns: A `dict` containing finalized word frequencies.
+        :rtype: `dict[str, int]`
         """
 
         status = Status(
@@ -218,24 +169,16 @@ class PrepMutts:
     """
 
     @staticmethod
-    def prep_mutts(data, plt_dict):
+    def prep_mutts(data: List[Dict[str, Any]], plt_dict: Dict[str, int]) -> None:
         """
         Prepare data that may contain a mix of Reddit objects.
 
-        Parameters
-        ----------
-        data: list
-            List containing Reddit objects
-        plt_dict: dict
-            Dictionary containing frequency data
-
-        Returns
-        -------
-        None
+        :param list[dict[str, Any]] data: A `list` containing Reddit objects.
+        :param dict[str, int] plt_dict: A `dict` containing frequency data.
         """
 
         for obj in data:
-            ### Indicates there is valid data in this field.
+            # Indicates there is valid data in this field.
             if isinstance(obj, dict):
                 try:
                     if obj["type"] == "submission":
@@ -245,7 +188,7 @@ class PrepMutts:
                         CleanData.count_words("body", obj, plt_dict)
                 except KeyError:
                     continue
-            ### Indicates this field is forbidden when analyzing Redditor scrapes.
+            # Indicates this field is forbidden when analyzing Redditor scrapes.
             elif isinstance(obj, str):
                 continue
 
@@ -256,24 +199,14 @@ class PrepRedditor:
     """
 
     @staticmethod
-    def prep_redditor(data):
+    def prep_redditor(data: Dict[str, Any]) -> Dict[str, int]:
         """
         Prepare Redditor data.
 
-        Calls previously defined public methods:
+        :param dict[str, Any] data: A `dict` containing scraped Redditor data.
 
-            CleanData.count_words()
-            PrepMutts.prep_mutts()
-
-        Parameters
-        ----------
-        data: dict
-            Dictionary containing extracted scrape data
-
-        Returns
-        -------
-        frequencies: dict
-            Dictionary containing finalized word frequencies
+        :returns: A `dict` containing finalized word frequencies.
+        :rtype: `dict[str, int]`
         """
 
         status = Status(
@@ -296,24 +229,12 @@ class PrepComments:
     """
 
     @staticmethod
-    def _prep_raw(data, plt_dict):
+    def _prep_raw(data: List[Dict[str, Any]], plt_dict: Dict[str, int]) -> None:
         """
         Prepare raw submission comments.
 
-        Calls previously defined public method:
-
-            CleanData.count_words()
-
-        Parameters
-        ----------
-        data: list
-            List containing extracted scrape data
-        plt_dict: dict
-            Dictionary containing frequency data
-
-        Returns
-        -------
-        None
+        :param list[dict[str, Any]] data: A `list` containing comment data.
+        :param dict[str, int] plt_dict: A `dict` containing frequency data.
         """
 
         status = Status(
@@ -329,21 +250,13 @@ class PrepComments:
         status.succeed()
 
     @staticmethod
-    def _prep_structured(data, plt_dict):
+    def _prep_structured(data: List[Dict[str, Any]], plt_dict: Dict[str, int]) -> None:
         """
         An iterative implementation of depth-first search to prepare structured
         comments.
 
-        Parameters
-        ----------
-        data: list
-            List containing extracted scrape data
-        plt_dict: dict
-            Dictionary containing frequency data
-
-        Returns
-        -------
-        None
+        :param list[dict[str, Any]] data: A `list` containing comment data.
+        :param dict[str, int] plt_dict: A `dict` containing frequency data.
         """
 
         status = Status(
@@ -375,24 +288,14 @@ class PrepComments:
         status.succeed()
 
     @staticmethod
-    def prep_comments(data):
+    def prep_comments(data: Dict[str, Any]) -> Dict[str, int]:
         """
         Prepare submission comments data.
 
-        Calls previously defined private methods:
+        :param list[dict[str, Any]] data: A `list` containing Reddit objects.
 
-            PrepComments._prep_raw()
-            PrepComments._prep_structured()
-
-        Parameters
-        ----------
-        data: dict
-            Dictionary containing extracted scrape data
-
-        Returns
-        -------
-        frequencies: dict
-            Dictionary containing finalized word frequencies
+        :returns: A `dict` containing finalized word frequencies.
+        :rtype: `dict[str, int]`
         """
 
         plt_dict = dict()
@@ -412,14 +315,14 @@ class PrepLivestream:
     """
 
     @staticmethod
-    def prep_livestream(data):
+    def prep_livestream(data: List[Dict[str, Any]]) -> Dict[str, int]:
         """
         Prepare livestream data.
 
-        Parameters
-        ----------
-        data: list
-            List containing extracted scrape data
+        :param list[dict[str, Any]] data: A `list` containing livestream data.
+
+        :returns: A `dict` containing finalized word frequencies.
+        :rtype: `dict[str, int]`
         """
 
         status = Status(
@@ -441,27 +344,15 @@ class PrepData:
     """
 
     @staticmethod
-    def prep(scrape_file, scrape_type):
+    def prep(scrape_file: str, scrape_type: str) -> Dict[str, int]:
         """
         Combine all prep methods into one public method.
 
-        Calls previously defined public methods:
+        :param str scrape_file: The filepath.
+        :param str scrape_type: The scrape type.
 
-            PrepSubreddit.prep_subreddit()
-            PrepSubreddit.prep_redditor()
-            PrepSubreddit.prep_comments()
-
-        Parameters
-        ----------
-        scrape_file: str
-            String denoting the filepath
-        scrape_type: str
-            String denoting the scrape type
-
-        Returns
-        -------
-        frequency_data: dict
-            Dictionary containing extracted scrape data
+        :returns: A `dict` containing finalized word frequencies.
+        :rtype: `dict[str, int]`
         """
 
         data = Extract.extract(scrape_file)

@@ -6,6 +6,11 @@ converts them to JSON serializable objects when saving to file.
 """
 
 
+from typing import Any, Dict, Generator, Union
+
+from praw.models.reddit.redditor import RedditorStream
+from praw.models.reddit.subreddit import SubredditStream
+
 from urs.praw_scrapers.utils.Objectify import Objectify
 
 
@@ -16,34 +21,30 @@ class StreamGenerator:
     """
 
     @staticmethod
-    def stream_submissions(stream):
+    def stream_submissions(
+        stream: Union[RedditorStream, SubredditStream]
+    ) -> Generator[Dict[str, Any], None, None]:
         """
         Yield new Reddit submissions.
 
-        Parameters
-        ----------
-        stream: Reddit stream instance
+        :param RedditorStream | SubredditStream stream: The Reddit stream instance.
 
-        Yields
-        ------
-        submission: Reddit submission object
+        :yields: Reddit submission object.
         """
 
         for submission in stream.submissions(skip_existing=True):
             yield Objectify().make_submission(True, submission)
 
     @staticmethod
-    def stream_comments(stream):
+    def stream_comments(
+        stream: Union[RedditorStream, SubredditStream]
+    ) -> Generator[Dict[str, Any], None, None]:
         """
         Yield new Reddit comments.
 
-        Parameters
-        ----------
-        stream: Reddit stream instance
+        :param RedditorStream | SubredditStream stream: The Reddit stream instance.
 
-        Yields
-        ------
-        submission: Reddit comment object
+        :yields: Reddit comment object.
         """
 
         for comment in stream.comments(skip_existing=True):

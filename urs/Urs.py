@@ -34,8 +34,8 @@ from dotenv import load_dotenv
 from urs.utils.Logger import LogMain
 from urs.utils.Tools import Run
 
-### Automate sending reset sequences to turn off color changes at the end of
-### every print.
+# Automate sending reset sequences to turn off color changes at the end of
+# every print.
 init(autoreset=True)
 
 
@@ -46,7 +46,7 @@ class Main:
 
     @staticmethod
     @LogMain.master_timer
-    def main():
+    def main() -> None:
         load_dotenv()
 
         reddit = praw.Reddit(
