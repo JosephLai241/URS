@@ -59,7 +59,7 @@ class Parser:
 
     [-f <file_path>]
         [--csv]
-    [-wc <file_path> [<optional_export_format>]
+    [-wc <file_path> [<optional_export_format>]]
         [--nosave]
 """
         self._description = rf"""
