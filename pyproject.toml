@@ -29,5 +29,5 @@ features = ["pyo3/extension-module"]
 python-source = "urs"
 
 [build-system]
-requires = ["maturin>=0.14,<0.15"]
+requires = ["maturin>=0.14,<0.15", "poetry-core"]
 build-backend = "maturin"
