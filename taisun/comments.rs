@@ -160,23 +160,21 @@ impl Forest {
     /// Create a new `Forest`.
     #[new]
     fn new(submission_id: String) -> PyResult<Self> {
-        let root = CommentNode::new(format!(
-            r#"{{
-  "author": "",
-  "body": "",
-  "body_html": "",
-  "created_utc": "",
-  "distinguished": null,
-  "edited": false,
-  "id": "{submission_id}",
-  "is_submitter": true,
-  "link_id": "",
-  "parent_id": "",
-  "score": 0,
-  "stickied": false,
-  "replies": []
-}}"#,
-        ))?;
+        let root = CommentNode {
+            author: "".to_string(),
+            body: "".to_string(),
+            body_html: "".to_string(),
+            created_utc: "".to_string(),
+            distinguished: None,
+            edited: BoolOrDate::Bool(false),
+            id: submission_id,
+            is_submitter: true,
+            link_id: "".to_string(),
+            parent_id: "".to_string(),
+            score: 0,
+            stickied: false,
+            replies: vec![],
+        };
 
         Ok(Self { root })
     }
