@@ -32,11 +32,11 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Sourcing the virtualenv
-        run: source .venv/bin/activate
-
       - name: Build taisun
-        run: maturin develop --release
+        uses: PyO3/maturin-action@v1
+        with:
+          command: build
+          args: --release
 
       - name: Run Pytest
         env:
