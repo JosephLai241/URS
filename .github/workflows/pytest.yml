@@ -33,7 +33,7 @@ jobs:
         run: poetry install
 
       - name: Build taisun
-        run: maturin develop
+        run: maturin develop --release
 
       - name: Run Pytest
         env:
