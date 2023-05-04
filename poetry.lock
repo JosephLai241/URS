@@ -594,6 +594,33 @@ pyparsing = ">=2.3.1"
 python-dateutil = ">=2.7"
 
 [[package]]
+name = "maturin"
+version = "0.14.17"
+description = "Build and publish crates with pyo3, rust-cpython and cffi bindings as well as rust binaries as python packages"
+category = "dev"
+optional = false
+python-versions = ">= 3.7"
+files = [
+    {file = "maturin-0.14.17-py3-none-linux_armv6l.whl", hash = "sha256:2684302ded1559a26635ec45e91ae7913aeb386a8b658d5c2eb13ff410df7930"},
+    {file = "maturin-0.14.17-py3-none-macosx_10_7_x86_64.whl", hash = "sha256:7fef3950a34c0b5c1806637169fca12f89b7440d7608832bf7765b34f394b06a"},
+    {file = "maturin-0.14.17-py3-none-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:a7f06984bd3ffa4ab7be67f7352353a486f262d7a0dbd4dc305944e0b09c8f35"},
+    {file = "maturin-0.14.17-py3-none-manylinux_2_12_i686.manylinux2010_i686.musllinux_1_1_i686.whl", hash = "sha256:cf1429a7854ecd4830bb42407d30ff0625c3f6480fa7b1e90da2896ba7a1b2fc"},
+    {file = "maturin-0.14.17-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.musllinux_1_1_x86_64.whl", hash = "sha256:0308d4124311c92ec5c08600f93385a5ff16f7764410585261d1ca0aed739764"},
+    {file = "maturin-0.14.17-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.musllinux_1_1_aarch64.whl", hash = "sha256:8076993118089abb19e7d2312b138afea418dccea60be4198ab9f348618b47df"},
+    {file = "maturin-0.14.17-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.musllinux_1_1_armv7l.whl", hash = "sha256:3bf173adac3e9f84a84123ec0b5b4b28b2de79446a49da2b4549016614025b83"},
+    {file = "maturin-0.14.17-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.musllinux_1_1_ppc64le.whl", hash = "sha256:dcd44c2fa66d79497e2f4361654ed0d1c2ef1c58139469e8e0083409f948eea4"},
+    {file = "maturin-0.14.17-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:64dd1b017eab2f9c938d833522bb505506908d824388927011dbdfff26ccea2c"},
+    {file = "maturin-0.14.17-py3-none-win32.whl", hash = "sha256:683e1127b54b9fbdbd661ce3b27b073bd5d7c51d7e980870f4caffdb40f364b0"},
+    {file = "maturin-0.14.17-py3-none-win_amd64.whl", hash = "sha256:bb8f8ac375d022c5de5da3efed79e712129de13ebdb9f668b96bf5df0673bc03"},
+    {file = "maturin-0.14.17-py3-none-win_arm64.whl", hash = "sha256:abfd98529cfab59deb59639962d93df72121013d5151a5f01c66cda19d9c88a9"},
+    {file = "maturin-0.14.17.tar.gz", hash = "sha256:fb4e3311e8ce707843235fbe8748a05a3ae166c3efd6d2aa335b53dfc2bd3b88"},
+]
+
+[package.extras]
+patchelf = ["patchelf"]
+zig = ["ziglang (>=0.10.0,<0.11.0)"]
+
+[[package]]
 name = "mdurl"
 version = "0.1.2"
 description = "Markdown URL utilities"
@@ -1166,4 +1193,4 @@ pillow = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7a6cd81a33c2cebde0adeaf70d697dff92a75c04e4bf3e850abfbb856aff6c5d"
+content-hash = "d05e8438553936e30af8005929ffbdc7c736bba4505913cc155063e58836d1ee"

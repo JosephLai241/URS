@@ -12,124 +12,26 @@ from typing import Any, Dict, List
 
 from colorama import Fore, Style
 from halo import Halo
+from praw import Reddit
+from praw.models import Submission
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    RenderableColumn,
+    SpinnerColumn,
+    TextColumn,
+    TimeRemainingColumn,
+)
+from taisun.comments_utils import CommentNode, Forest
 
 from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
 from urs.utils.Cli import GetPRAWScrapeSettings
-from urs.utils.Export import EncodeNode, Export, NameFile
+from urs.utils.Export import Export, NameFile
 from urs.utils.Global import Status, convert_time, make_none_dict
-from urs.utils.Logger import LogError, LogExport, LogPRAWScraper
+from urs.utils.Logger import LogExport, LogPRAWScraper
 from urs.utils.Titles import PRAWTitles
-
-
-class CommentNode:
-    """
-    Defining a node object that stores comment metadata for the comments tree.
-    """
-
-    def __init__(self, metadata):
-        """
-        Set the node's comment data.
-
-            self.__setattr__(key, value): set node attributes based on the `metadata`
-                dictionary
-            self.replies: list containing CommentNodes
-
-        Parameters
-        ----------
-        metadata: dict
-            Dictionary containing comment metadata
-
-        Returns
-        -------
-        None
-        """
-
-        for key, value in metadata.items():
-            self.__setattr__(key, value)
-
-        self.replies = []
-
-
-class Forest:
-    """
-    Methods to nurture the comment forest.
-    """
-
-    def __init__(self, submission, url):
-        """
-        Initialize the collective root.
-
-            self.root: list containing CommentNodes
-
-        Parameters
-        ----------
-        submission: PRAW submission object
-        url: str
-            String denoting the submission's url
-
-        Returns
-        -------
-        None
-        """
-
-        self.root = CommentNode({"id": submission.id_from_url(url)})
-
-    def _dfs_insert(self, new_comment):
-        """
-        An iterative implementation of depth-first search to insert a new comment
-        into a comment tree.
-
-        Parameters
-        ----------
-        new_comment: CommentNode
-
-        Returns
-        -------
-        None
-        """
-
-        stack = []
-        stack.append(self.root)
-
-        visited = set()
-        visited.add(self.root)
-
-        found = False
-        while not found:
-            current_comment = stack.pop(0)
-
-            for reply in current_comment.replies:
-                if new_comment.parent_id.split("_", 1)[1] == reply.id:
-                    reply.replies.append(new_comment)
-                    found = True
-                else:
-                    if reply not in visited:
-                        stack.insert(0, reply)
-                        visited.add(reply)
-
-    def seed(self, new_comment):
-        """
-        Insert a new CommentNode into a comment tree within the Forest.
-
-        Calls previously defined private method:
-
-            self._dfs_insert()
-
-        Parameters
-        ----------
-        new_comment: CommentNode
-
-        Returns
-        -------
-        None
-        """
-
-        parent_id = new_comment.parent_id.split("_", 1)[1]
-
-        self.root.replies.append(new_comment) if parent_id == getattr(
-            self.root, "id"
-        ) else self._dfs_insert(new_comment)
 
 
 class SortComments:
@@ -164,22 +66,29 @@ class SortComments:
         :rtype: `list[dict[str, Any]]`
         """
 
-        forest = Forest(submission, url)
+        renderable_column = RenderableColumn(renderable="|")
+        spinner_column = SpinnerColumn(spinner_name="noise")
+        text_column = TextColumn("Seeding Forest")
 
-        seed_status = Status(
-            "Forest has fully matured.",
-            Fore.CYAN + Style.BRIGHT + "Seeding Forest.",
-            "cyan",
+        progress_bar = Progress(
+            spinner_column,
+            text_column,
+            BarColumn(),
+            MofNCompleteColumn(),
+            renderable_column,
+            TimeRemainingColumn(),
         )
 
-        seed_status.start()
-        for comment in submission.comments.list():
-            comment_node = CommentNode(Objectify().make_comment(comment, False))
-            EncodeNode().encode(comment_node)
+        forest = Forest(submission.id_from_url(url))
 
-            forest.seed(comment_node)
+        with progress_bar:
+            for comment in progress_bar.track(submission.comments.list()):
+                comment_node = CommentNode(
+                    json.dumps((Objectify().make_comment(comment, False)))
+                )
 
-        seed_status.succeed()
+                forest.seed_comment(comment_node)
+
         return forest.root.replies
 
 
@@ -377,7 +286,7 @@ class RunComments:
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer("comments")
-    def run(args: Namespace, parser, reddit: Reddit) -> Dict[str, Any]:
+    def run(args: Namespace, reddit: Reddit) -> Dict[str, Any]:
         """
         Run comments scraper.
 

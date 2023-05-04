@@ -1,0 +1,19 @@
+[package]
+authors = ["Joseph Lai <urs_project@protonmail.com>"]
+description = "The heavy lifter for URS"
+edition = "2021"
+homepage = "https://github.com/JosephLai241/URS"
+license = "MIT"
+name = "taisun"
+repository = "https://github.com/JosephLai241/URS"
+version = "1.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+name = "taisun"
+path = "taisun/lib.rs"
+
+[dependencies]
+pyo3 = { version = "0.17.3", features = ["extension-module", "serde"] }
+serde = { version = "1.0.148", features = ["derive"] }
+serde_json = "1.0.89"
