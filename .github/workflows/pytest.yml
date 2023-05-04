@@ -38,6 +38,9 @@ jobs:
           command: build
           args: --release
 
+      - name: Source the virtualenv
+        run: poetry shell
+
       - name: Run Pytest
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
