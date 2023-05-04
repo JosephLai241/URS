@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Build taisun
+        run: maturin develop
+
       - name: Run Pytest
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
