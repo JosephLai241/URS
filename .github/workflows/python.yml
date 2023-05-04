@@ -11,7 +11,7 @@ on:
       - "samples"
 
 jobs:
-  python-formatting-checks:
+  formatting-checks:
     runs-on: ubuntu-latest
 
     steps:
