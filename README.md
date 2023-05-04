@@ -64,7 +64,7 @@
 
 Whether you are using `URS` for enterprise or personal use, I am very interested in hearing about your use case and how it has helped you achieve a goal.
 
-Additionally, please send me an email if you would like to [contribute](#contributing), have questions, or want to share something you have built on top of it.
+Additionally, please send me an email if you would like to [contribute][contributing manual link], have questions, or want to share something you have built on top of it.
 
 You can send me an email or leave a note by clicking on either of these badges. I look forward to hearing from you!
 
@@ -148,6 +148,7 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 <!--Manual links-->
 
 [check praw rate limits manual link]: UPDATETHISLINKLATER
+[contributing manual link]: UPDATETHISLINKLATER
 [display directory tree manual link]: UPDATETHISLINKLATER
 [frequencies scraping manual link]: UPDATETHISLINKLATER
 [livestream scraping manual link]: UPDATETHISLINKLATER
