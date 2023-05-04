@@ -1,4 +1,4 @@
-name: Pytest
+name: Python code checks
 
 on:
   push:
@@ -11,6 +11,20 @@ on:
       - "samples"
 
 jobs:
+  python-formatting-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Black formatting check
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose --diff --color"
+
+      - name: isort formatting check
+        uses: isort/isort-action@master
+        with:
+          configuration: "--check-only --verbose --diff --color --profile black"
+
   pytest:
     runs-on: ${{ matrix.os }}
 

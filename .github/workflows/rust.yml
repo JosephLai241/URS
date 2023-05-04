@@ -1,4 +1,4 @@
-name: Rustfmt check
+name: Rust code checks
 
 on:
   push:
@@ -23,3 +23,18 @@ jobs:
         uses: mbrobbel/rustfmt-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  clippy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Add clippy via rustup
+        run: rustup component add clippy
+
+      - name: Clippy check
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features
