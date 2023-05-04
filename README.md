@@ -62,14 +62,11 @@
 
 # Contact
 
-Whether you are using `URS` for enterprise or personal use, I am very interested in hearing about your use case and how it has helped you achieve a goal.
+Whether you are using `URS` for enterprise or personal use, I am very interested in hearing about your use case and how it has helped you achieve a goal. Additionally, please send me an email if you would like to [contribute][contributing manual link], have questions, or want to share something you have built on top of it.
 
-Additionally, please send me an email if you would like to [contribute][contributing manual link], have questions, or want to share something you have built on top of it.
+You can send me an email by clicking on the badge. I look forward to hearing from you!
 
-You can send me an email or leave a note by clicking on either of these badges. I look forward to hearing from you!
-
-[![Email](https://img.shields.io/badge/Email-urs__project%40protonmail.com-informational?logo=ProtonMail)][urs project email]
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-blue)][say thanks!]
+[![ProtonMail](https://img.shields.io/badge/ProtonMail-urs__project%40protonmail.com-informational?logo=protonmail)][urs project email]
 
 # Introduction
 
@@ -136,15 +133,6 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 
 - [lolfilmworks][lolfilmworks]
 
-[codecov]: https://codecov.io/gh/JosephLai241/URS
-[github workflow status]: https://github.com/JosephLai241/URS/actions/workflows/pytest.yml
-[mdbook]: https://github.com/rust-lang/mdBook
-[praw]: https://pypi.org/project/praw/
-[releases]: https://github.com/JosephLai241/URS/releases
-[say thanks!]: https://saythanks.io/to/jlai24142%40gmail.com
-[urs project email]: mailto:urs_project@protonmail.
-[lolfilmworks]: https://github.com/lolfilmworks
-
 <!--Manual links-->
 
 [check praw rate limits manual link]: UPDATETHISLINKLATER
@@ -168,3 +156,17 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 [submission comments demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif
 [subreddit demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Subreddit_demo.gif
 [wordcloud demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/wordcloud_generator_demo.gif
+
+<!--Contact links-->
+
+[urs project email]: mailto:urs_project@protonmail.com
+
+<!--Miscellaneous links-->
+
+[codecov]: https://codecov.io/gh/JosephLai241/URS
+[mdbook]: https://github.com/rust-lang/mdBook
+[releases]: https://github.com/JosephLai241/URS/releases
+
+<!--Sponsors links-->
+
+[lolfilmworks]: https://github.com/lolfilmworks
