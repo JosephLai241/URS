@@ -6,7 +6,6 @@
 
 > **U**niversal **R**eddit **S**craper - A comprehensive Reddit scraping command-line tool written in Python.
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/URS?logo=Python)
 ![GitHub Workflow Status (Python)](https://img.shields.io/github/actions/workflow/status/JosephLai241/URS/python?label=Python&logo=python&logoColor=blue)
 ![GitHub Workflow Status (Rust)](https://img.shields.io/github/actions/workflow/status/JosephLai241/URS/rust?label=Rust&logo=rust&logoColor=orange)
 [![Codecov](https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov)][codecov]
