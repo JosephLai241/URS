@@ -6,7 +6,7 @@ Run the following commands to install `URS`:
 git clone --depth=1 https://github.com/JosephLai241/URS.git
 cd URS
 poetry install
-maturin develop
+maturin develop --release
 ```
 
 [Poetry installation page]: https://python-poetry.org/docs/#installation
