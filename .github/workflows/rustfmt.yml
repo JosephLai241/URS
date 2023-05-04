@@ -1,0 +1,25 @@
+name: Rustfmt check
+
+on:
+  push:
+    branches-ignore:
+      - "demo-gifs"
+      - "samples"
+  pull_request:
+    branches-ignore:
+      - "demo-gifs"
+      - "samples"
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Rustfmt check
+        uses: mbrobbel/rustfmt-check@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

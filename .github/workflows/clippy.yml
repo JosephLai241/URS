@@ -1,0 +1,27 @@
+name: Clippy checks
+
+on:
+  push:
+    branches-ignore:
+      - "demo-gifs"
+      - "samples"
+  pull_request:
+    branches-ignore:
+      - "demo-gifs"
+      - "samples"
+
+jobs:
+  clippy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Add clippy via rustup
+        run: rustup component add clippy
+
+      - name: Clippy check
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features
