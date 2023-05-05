@@ -79,7 +79,7 @@ class TestObjectifyMakeCommentMethod:
         assert created_comment["body_html"] == "<p>test body</p>"
         assert created_comment["created_utc"] == "2021-04-02 00:51:59"
         assert created_comment["distinguished"] == None
-        assert created_comment["edited"] == "2021-04-02 00:51:59"
+        assert created_comment["edited"] == "2021-04-02 00:55:59"
         assert created_comment["id"] == "t35t"
         assert created_comment["is_submitter"] == True
         assert created_comment["link_id"] == "t3_asdf"
@@ -156,7 +156,7 @@ class TestObjectifyMakeCommentMethod:
         assert created_comment["body_html"] == "<p>test body</p>"
         assert created_comment["created_utc"] == "2021-04-02 00:51:59"
         assert created_comment["distinguished"] == None
-        assert created_comment["edited"] == "2021-04-02 00:51:59"
+        assert created_comment["edited"] == "2021-04-02 00:55:59"
         assert created_comment["id"] == "t35t"
         assert created_comment["is_submitter"] == True
         assert created_comment["link_id"] == "t3_asdf"
@@ -432,7 +432,7 @@ class TestObjectifyMakeSubmission:
         assert created_submission["author"] == "u/submission_test_name"
         assert created_submission["created_utc"] == "2021-04-02 00:51:59"
         assert created_submission["distinguished"] == None
-        assert created_submission["edited"] == "2021-04-02 00:51:59"
+        assert created_submission["edited"] == "2021-04-02 00:55:59"
         assert created_submission["id"] == "test_submission_id"
         assert created_submission["is_original_content"] == True
         assert created_submission["is_self"] == True
