@@ -797,6 +797,6 @@ class TestRunSubredditCreateSettingsMethod:
         args = parser.parse_args(["--subreddit", "askreddit", "h", "100"])
         reddit = Login.create_reddit_object()
 
-        s_master = Subreddit.RunSubreddit._create_settings(args, parser, reddit)
+        s_master = Subreddit.RunSubreddit._create_settings(args, reddit)
 
         assert s_master == {"askreddit": [["h", "100", None]]}

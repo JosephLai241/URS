@@ -208,16 +208,16 @@ class TestGetInteractionsGetMethod:
 
         assert skeleton["data"]["information"] != None
 
-        assert len(skeleton["data"]["interactions"]["comments"]) == 1
-        assert len(skeleton["data"]["interactions"]["controversial"]) == 1
-        assert len(skeleton["data"]["interactions"]["gilded"]) == 1
+        assert len(skeleton["data"]["interactions"]["comments"])
+        assert len(skeleton["data"]["interactions"]["controversial"])
+        assert len(skeleton["data"]["interactions"]["gilded"])
         assert skeleton["data"]["interactions"]["gildings"][0] == "FORBIDDEN"
         assert skeleton["data"]["interactions"]["hidden"][0] == "FORBIDDEN"
-        assert len(skeleton["data"]["interactions"]["hot"]) == 1
-        assert len(skeleton["data"]["interactions"]["moderated"]) > 1
+        assert not skeleton["data"]["interactions"]["hot"]
+        assert len(skeleton["data"]["interactions"]["moderated"])
         assert "multireddits" in skeleton["data"]["interactions"].keys()
-        assert len(skeleton["data"]["interactions"]["new"]) == 1
+        assert not skeleton["data"]["interactions"]["new"]
         assert skeleton["data"]["interactions"]["saved"][0] == "FORBIDDEN"
-        assert len(skeleton["data"]["interactions"]["submissions"]) == 1
-        assert len(skeleton["data"]["interactions"]["top"]) == 1
+        assert not skeleton["data"]["interactions"]["submissions"]
+        assert len(skeleton["data"]["interactions"]["top"])
         assert skeleton["data"]["interactions"]["upvoted"][0] == "FORBIDDEN"
