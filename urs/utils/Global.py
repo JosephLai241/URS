@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Union
 from halo import Halo
 
 # Get current date.
-date = dt.datetime.now().strftime("%m-%d-%Y")
+date = dt.datetime.now().strftime("%Y-%m-%d")
 
 # Subreddit categories.
 categories = ["Hot", "New", "Controversial", "Top", "Rising", "Search"]
@@ -28,7 +28,7 @@ def convert_time(raw_timestamp: float) -> str:
     :rtype: `str`
     """
 
-    return dt.datetime.fromtimestamp(raw_timestamp).strftime("%m-%d-%Y %H:%M:%S")
+    return dt.datetime.fromtimestamp(raw_timestamp).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def confirm_settings() -> Union[str, None]:

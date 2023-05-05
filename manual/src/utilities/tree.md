@@ -22,8 +22,8 @@ poetry run Urs.py -t [<optional_date>]
 
 The following date formats are supported:
 
-- `MM-DD-YYYY`
-- `MM/DD/YYYY`
+- `YYYY-MM-DD`
+- `YYYY/MM/DD`
 
 An error is displayed if `URS` was not run on the entered date (if the date directory is not found within the `scrapes/` directory).
 
