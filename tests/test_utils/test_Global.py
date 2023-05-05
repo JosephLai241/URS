@@ -14,7 +14,7 @@ class TestGlobalVariables:
     """
 
     def test_date_variable(self):
-        assert Global.date == dt.datetime.now().strftime("%m-%d-%Y")
+        assert Global.date == dt.datetime.now().strftime("%Y-%m-%d")
 
     def test_subreddit_categories_list(self):
         assert Global.categories == [
@@ -38,7 +38,7 @@ class TestConvertTimeFunction:
 
     def test_convert_time(self):
         unix_time = 1592291124
-        converted_time = "06-16-2020 07:05:24"
+        converted_time = "2020-06-16 07:05:24"
 
         assert Global.convert_time(unix_time) == converted_time
 
