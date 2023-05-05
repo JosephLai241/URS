@@ -10,10 +10,10 @@ from typing import Any, Dict, List, Union
 
 from halo import Halo
 
-### Get current date.
+# Get current date.
 date = dt.datetime.now().strftime("%m-%d-%Y")
 
-### Subreddit categories.
+# Subreddit categories.
 categories = ["Hot", "New", "Controversial", "Top", "Rising", "Search"]
 short_cat = [cat[0] for cat in categories]
 
