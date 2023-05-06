@@ -135,16 +135,16 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 
 <!--Manual links-->
 
-[check praw rate limits manual link]: UPDATETHISLINKLATER
-[contributing manual link]: UPDATETHISLINKLATER
-[display directory tree manual link]: UPDATETHISLINKLATER
-[frequencies scraping manual link]: UPDATETHISLINKLATER
-[livestream scraping manual link]: UPDATETHISLINKLATER
-[redditor scraping manual link]: UPDATETHISLINKLATER
-[submission comments scraping manual link]: UPDATETHISLINKLATER
-[subreddit scraping manual link]: UPDATETHISLINKLATER
+[check praw rate limits manual link]: UPDATETHISLINKLATER/utilities/rate-limit-checking.html
+[contributing manual link]: UPDATETHISLINKLATER/contributing/before-making-pull-or-feature-requests.html
+[display directory tree manual link]: UPDATETHISLINKLATER/utilities/tree.html
+[frequencies scraping manual link]: UPDATETHISLINKLATER/analytical-tools/frequencies-and-wordclouds.html#generating-word-frequencies
+[livestream scraping manual link]: UPDATETHISLINKLATER/livestreaming-reddit/general-information.html
+[redditor scraping manual link]: UPDATETHISLINKLATER/scraping-reddit/redditor.html
+[submission comments scraping manual link]: UPDATETHISLINKLATER/scraping-reddit/submission-comments.html
+[subreddit scraping manual link]: UPDATETHISLINKLATER/scraping-reddit/subreddit.html
 [urs manual]: UPDATETHISLINKLATER
-[wordcloud scraping manual link]: UPDATETHISLINKLATER
+[wordcloud scraping manual link]: UPDATETHISLINKLATER/analytical-tools/frequencies-and-wordclouds.html#generating-wordclouds
 
 <!-- PRAW SCRAPER DEMO GIFS -->
 

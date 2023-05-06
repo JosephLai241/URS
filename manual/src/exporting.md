@@ -43,7 +43,7 @@ The `livestream` directory is created when you run any of the livestream scraper
 
 ### Analytical Tools
 
-The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories may be created. See the [Analytical Tools](UPDATE THIS LINK) section for more information.
+The `analytics` directory is created when you run any of the analytical tools. Within it, the `frequencies` or `wordclouds` directories may be created. See the [Analytical Tools](./analytical-tools/general-information.md) section for more information.
 
 ### Example Directory Structure
 
