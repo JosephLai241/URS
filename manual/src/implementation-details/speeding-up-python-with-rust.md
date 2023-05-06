@@ -222,7 +222,7 @@ poetry install
 poetry shell
 
 maturin develop --release
-poetry run rust_vs_python.py
+poetry run python rust_vs_python.py
 ```
 
 [black ops ripper taunt]: https://www.youtube.com/embed/AgY5WyYo5no?start=1&end=5
