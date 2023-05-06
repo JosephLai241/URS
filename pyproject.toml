@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "rust-vs-python-demo"
+version = "1.0.0"
+description = "URS (Universal Reddit Scraper): A comprehensive Reddit scraping and OSINT command-line tool"
+authors = ["Joseph Lai <urs_project@protonmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+rich = "^13.3.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+isort = "^5.12.0"
+maturin = "^0.14.17"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "python"
+
+[build-system]
+requires = ["maturin>=0.14,<0.15", "poetry-core"]
+build-backend = "maturin"
