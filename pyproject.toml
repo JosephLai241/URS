@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "urs"
-version = "3.3.3"
+version = "3.4.0"
 description = "URS (Universal Reddit Scraper): A comprehensive Reddit scraping and OSINT command-line tool"
 authors = ["Joseph Lai <urs_project@protonmail.com>"]
 license = "MIT"
