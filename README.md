@@ -89,11 +89,13 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
 
 This `README` has become too long to contain all usage information for this tool. Consequently, the information that used to be in this file has been moved to a separate manual created with [mdBook][mdbook], a Rust command-line tool for creating books from Markdown files.
 
-> **_Note_**: You can also find the link in the About sidebar in this repository.
+> **_Note:_** You can also find the link in the About sidebar in this repository.
 
 # Demo GIFs
 
 Here are all the demo GIFs recorded for `URS`.
+
+> **_Note:_** The `nd` command is [`nomad`][nomad], a modern `tree` alternative I wrote in Rust.
 
 ## [Subreddit Scraping][subreddit scraping manual link]
 
@@ -165,6 +167,7 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 
 [codecov]: https://codecov.io/gh/JosephLai241/URS
 [mdbook]: https://github.com/rust-lang/mdBook
+[nomad]: https://github.com/JosephLai241/nomad
 [releases]: https://github.com/JosephLai241/URS/releases
 
 <!--Sponsors links-->
