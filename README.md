@@ -4,7 +4,7 @@ This branch contains a Python script demonstrating the performance differences b
 
 # "What happens when I run this demo?"
 
-I have included a JSON file containing 56,107 unstructured comments that were scraped from [this r/AskReddit post][askreddit post]. The demo will run both Rust and Python implementations concurrently and display a progress bar for each task. The far right columns contain the number of comments processed and the total number of comments to process as well as the time elapsed.
+I have included a JSON file containing 56,107 unstructured comments that were scraped from [this r/AskReddit post][askreddit post]. The demo will run both Rust and Python implementations concurrently and display a progress bar for each task. The far right columns contain the number of comments processed over the total number of comments to process as well as the time elapsed.
 
 Here is a screenshot of one particular run:
 
