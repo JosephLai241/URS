@@ -76,11 +76,13 @@ Otherwise, specify the number of results you want returned. If you passed in a s
 
 **This is the default export style.** Structured scrapes resemble comment threads on Reddit. This style takes just a little longer to export compared to the raw format because `URS` uses [depth-first search][depth-first search] to create the comment `Forest` after retrieving all comments from a submission.
 
+If you want to learn more about how it works, refer to [The Forest](../implementation-details/the-forest.md), where I describe how I implemented the `Forest`, and [Speeding up Python With Rust](../implementation-details/speeding-up-python-with-rust.md) to learn about how I drastically improved the performance of the `Forest` by rewriting it in Rust.
+
 ## Raw Comments
 
 Raw scrapes do not resemble comment threads, but returns all comments on a submission in level order: all top-level comments are listed first, followed by all second-level comments, then third, etc.
 
 You can export to raw format by including the `--raw` flag. `-raw` will also be appended to the end of the file name.
 
-[submission comments demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif
 [depth-first search]: https://www.interviewcake.com/concept/java/dfs
+[submission comments demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif

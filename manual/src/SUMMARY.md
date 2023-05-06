@@ -35,6 +35,11 @@
 - [2-Factor Authentication](./additional-information/2fa-information.md)
 - [Error Messages](./additional-information/error-messages.md)
 
+# Implementation Details
+
+- [The Forest](./implementation-details/the-forest.md)
+- [Speeding Up Python with Rust](./implementation-details/speeding-up-python-with-rust.md)
+
 # Contributing
 
 - [Before Making Pull or Feature Requests](./contributing/before-making-pull-or-feature-requests.md)
