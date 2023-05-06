@@ -1,1 +1,4 @@
+demo-results/
 target/
+
+Cargo.lock
