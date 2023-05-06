@@ -1,20 +1,18 @@
-# Overview
-
-## Summary
+# Summary
 
 Delete this line and write your summary here. Section your summary by relevance if it is lengthy.
 
-## Motivation/Context
+# Motivation/Context
 
 Delete this line and write your motivation/context here. Section your motivation/context by relevance if it is lengthy.
 
-## New Dependencies
+# New Dependencies
 
 ```
 Delete this line and paste your new dependencies here. Put "None" here if there are no new dependencies.
 ```
 
-## Issue Fix or Enhancement Request
+# Issue Fix or Enhancement Request
 
 **Put "N/A" in this block if this is not applicable.**
 
@@ -59,7 +57,7 @@ Paste entire traceback here. Make sure the traceback is formatted correctly.
 
 **Please delete sections and/or fields that are not relevant.**
 
-### Added
+## Added
 
 - Summary of some new feature
   - Description of the addition
@@ -70,7 +68,7 @@ Paste entire traceback here. Make sure the traceback is formatted correctly.
 - Summary of some new feature
   - Description of the addition
 
-### Changed
+## Changed
 
 - Summary of something that changed
   - Description of the change
@@ -81,7 +79,7 @@ Paste entire traceback here. Make sure the traceback is formatted correctly.
 - Summary of something that changed
   - Description of the change
 
-### Deprecated
+## Deprecated
 
 - Summary of something that has been deprecated
   - Summary of what has been deprecated
@@ -118,7 +116,7 @@ If applicable, describe more configuration settings. An example outline is shown
     - If applicable, provide extra details underneath a configuration.
   - Configuration 3.
 
-## `pyproject.toml`
+# `pyproject.toml`
 
 ```
 Paste your new `pyproject.toml` here. Put "N/A" in this block if this is not applicable.
