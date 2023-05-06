@@ -55,72 +55,42 @@ Delete this line and describe how URS breaks. Then provide a code block or scree
 Paste entire traceback here. Make sure the traceback is formatted correctly.
 ```
 
-# List All Changes That Have Been Made
+# List the Most Significant Changes That Have Been Made
 
 **Please delete sections and/or fields that are not relevant.**
 
 ### Added
 
-- User interface
-  - Summary of change
-    - Describing the change
-- Source code
-  - Summary of change
-    - Describing the change
-- `README`
-  - Summary of change
-    - Describing the change
-- Tests
-  - Summary of change
-    - Describing the change
-- Repository documents
-  - Summary of change
-    - Describing the change
-- Community documents
-  - Summary of change
-    - Describing the change
+- Summary of some new feature
+  - Description of the addition
+- Summary of some new feature
+  - Description of the addition
+- Summary of some new feature
+  - Description of the addition
+- Summary of some new feature
+  - Description of the addition
 
 ### Changed
 
-- User interface
-  - Summary of change
-    - Describing the change
-- Source code
-  - Summary of change
-    - Describing the change
-- `README`
-  - Summary of change
-    - Describing the change
-- Tests
-  - Summary of change
-    - Describing the change
-- Repository documents
-  - Summary of change
-    - Describing the change
-- Community documents
-  - Summary of change
-    - Describing the change
+- Summary of something that changed
+  - Description of the change
+- Summary of something that changed
+  - Description of the change
+- Summary of something that changed
+  - Description of the change
+- Summary of something that changed
+  - Description of the change
 
 ### Deprecated
 
-- User interface
-  - Summary of change
-    - Describing the change
-- Source code
-  - Summary of change
-    - Describing the change
-- `README`
-  - Summary of change
-    - Describing the change
-- Tests
-  - Summary of change
-    - Describing the change
-- Repository documents
-  - Summary of change
-    - Describing the change
-- Community documents
-  - Summary of change
-    - Describing the change
+- Summary of something that has been deprecated
+  - Summary of what has been deprecated
+- Summary of something that has been deprecated
+  - Summary of what has been deprecated
+- Summary of something that has been deprecated
+  - Summary of what has been deprecated
+- Summary of something that has been deprecated
+  - Summary of what has been deprecated
 
 # How Has This Been Tested?
 
