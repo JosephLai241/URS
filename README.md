@@ -83,7 +83,7 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
   - Generate frequencies for words that are found in submission titles, bodies, and/or comments
   - Generate a wordcloud from scrape results
 
-# Where’s the Manual?
+# "Where’s the Manual?"
 
 ### [`URS` Manual][urs manual]
 
