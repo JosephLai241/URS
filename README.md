@@ -14,6 +14,8 @@ Here is a screenshot of one particular run:
 
 # Running the Demo
 
+> **NOTE:** This demo requires [`Poetry`][poetry] installed on your system.
+
 Run the following commands to install and run the demo:
 
 ```
@@ -33,4 +35,5 @@ poetry run python rust_vs_python.py
 ```
 
 [askreddit post]: https://www.reddit.com/r/AskReddit/comments/ifomdz/what_old_video_games_do_you_still_play_regularly/
+[poetry]: https://python-poetry.org/docs/#installation
 [rust vs python demo screenshot]: https://i.imgur.com/pTXblAV.png
