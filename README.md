@@ -137,16 +137,16 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 
 <!--Manual links-->
 
-[check praw rate limits manual link]: UPDATETHISLINKLATER/utilities/rate-limit-checking.html
-[contributing manual link]: UPDATETHISLINKLATER/contributing/before-making-pull-or-feature-requests.html
-[display directory tree manual link]: UPDATETHISLINKLATER/utilities/tree.html
-[frequencies scraping manual link]: UPDATETHISLINKLATER/analytical-tools/frequencies-and-wordclouds.html#generating-word-frequencies
-[livestream scraping manual link]: UPDATETHISLINKLATER/livestreaming-reddit/general-information.html
-[redditor scraping manual link]: UPDATETHISLINKLATER/scraping-reddit/redditor.html
-[submission comments scraping manual link]: UPDATETHISLINKLATER/scraping-reddit/submission-comments.html
-[subreddit scraping manual link]: UPDATETHISLINKLATER/scraping-reddit/subreddit.html
-[urs manual]: UPDATETHISLINKLATER
-[wordcloud scraping manual link]: UPDATETHISLINKLATER/analytical-tools/frequencies-and-wordclouds.html#generating-wordclouds
+[check praw rate limits manual link]: https://josephlai241.github.io/URS/utilities/rate-limit-checking.html
+[contributing manual link]: https://josephlai241.github.io/URS/contributing/before-making-pull-or-feature-requests.html
+[display directory tree manual link]: https://josephlai241.github.io/URS/utilities/tree.html
+[frequencies scraping manual link]: https://josephlai241.github.io/URS/analytical-tools/frequencies-and-wordclouds.html#generating-word-frequencies
+[livestream scraping manual link]: https://josephlai241.github.io/URS/livestreaming-reddit/general-information.html
+[redditor scraping manual link]: https://josephlai241.github.io/URS/scraping-reddit/redditor.html
+[submission comments scraping manual link]: https://josephlai241.github.io/URS/scraping-reddit/submission-comments.html
+[subreddit scraping manual link]: https://josephlai241.github.io/URS/scraping-reddit/subreddit.html
+[urs manual]: https://josephlai241.github.io/URS
+[wordcloud scraping manual link]: https://josephlai241.github.io/URS/analytical-tools/frequencies-and-wordclouds.html#generating-wordclouds
 
 <!-- PRAW SCRAPER DEMO GIFS -->
 
