@@ -47,7 +47,7 @@
 
 - [Contact](#contact)
 - [Introduction](#introduction)
-- [Where’s the Manual?](#wheres-the-manual)
+- ["Where’s the Manual?"](#wheres-the-manual)
   - [`URS` Manual](#urs-manual)
 - [Demo GIFs](#demo-gifs)
   - [Subreddit Scraping](#subreddit-scraping)
@@ -87,7 +87,7 @@ This is a comprehensive Reddit scraping tool that integrates multiple features:
 
 ### [`URS` Manual][urs manual]
 
-This `README` has become too long to contain all usage information for this tool. Consequently, the information that used to be in this file has been moved to a separate manual created with [mdBook][mdbook], a Rust command-line tool for creating books from Markdown files.
+This `README` has become too long to comfortably contain all usage information for this tool. Consequently, the information that used to be in this file has been moved to a separate manual created with [mdBook][mdbook], a Rust command-line tool for creating books from Markdown files.
 
 > **_Note:_** You can also find the link in the About sidebar in this repository.
 
