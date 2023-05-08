@@ -1,0 +1,1250 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>URS User Guide</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">URS</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">2.</strong> Installation</a></li><li class="chapter-item expanded "><a href="exporting.html"><strong aria-hidden="true">3.</strong> Exporting</a></li><li class="chapter-item expanded "><a href="credentials.html"><strong aria-hidden="true">4.</strong> How to Get Reddit API Credentials for PRAW</a></li><li class="chapter-item expanded affix "><li class="part-title">Scraping Reddit</li><li class="chapter-item expanded "><a href="scraping-reddit/scrape-speeds-and-rate-limits.html"><strong aria-hidden="true">5.</strong> Scrape Speeds and Rate Limits</a></li><li class="chapter-item expanded "><a href="scraping-reddit/all-attributes-table.html"><strong aria-hidden="true">6.</strong> A Table of All Subreddit, Redditor, and Submission Comments Attributes</a></li><li class="chapter-item expanded "><a href="scraping-reddit/subreddit.html"><strong aria-hidden="true">7.</strong> Scraping Subreddits</a></li><li class="chapter-item expanded "><a href="scraping-reddit/redditor.html"><strong aria-hidden="true">8.</strong> Scraping Redditors</a></li><li class="chapter-item expanded "><a href="scraping-reddit/submission-comments.html"><strong aria-hidden="true">9.</strong> Scraping Submission Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Livestreaming Reddit</li><li class="chapter-item expanded "><a href="livestreaming-reddit/general-information.html"><strong aria-hidden="true">10.</strong> General Information</a></li><li class="chapter-item expanded "><a href="livestreaming-reddit/livestreaming-subreddits-and-redditors.html"><strong aria-hidden="true">11.</strong> Livestreaming Subreddits and Redditors</a></li><li class="chapter-item expanded affix "><li class="part-title">Analytical Tools</li><li class="chapter-item expanded "><a href="analytical-tools/general-information.html"><strong aria-hidden="true">12.</strong> General Information</a></li><li class="chapter-item expanded "><a href="analytical-tools/frequencies-and-wordclouds.html"><strong aria-hidden="true">13.</strong> Generating Word Frequencies and Wordclouds</a></li><li class="chapter-item expanded affix "><li class="part-title">Utilities</li><li class="chapter-item expanded "><a href="utilities/tree.html"><strong aria-hidden="true">14.</strong> Built-in Tree</a></li><li class="chapter-item expanded "><a href="utilities/rate-limit-checking.html"><strong aria-hidden="true">15.</strong> PRAW Rate Limit Check</a></li><li class="chapter-item expanded affix "><li class="part-title">Additional Information</li><li class="chapter-item expanded "><a href="additional-information/2fa-information.html"><strong aria-hidden="true">16.</strong> 2-Factor Authentication</a></li><li class="chapter-item expanded "><a href="additional-information/error-messages.html"><strong aria-hidden="true">17.</strong> Error Messages</a></li><li class="chapter-item expanded affix "><li class="part-title">Implementation Details</li><li class="chapter-item expanded "><a href="implementation-details/the-forest.html"><strong aria-hidden="true">18.</strong> The Forest</a></li><li class="chapter-item expanded "><a href="implementation-details/speeding-up-python-with-rust.html"><strong aria-hidden="true">19.</strong> Speeding Up Python with Rust</a></li><li class="chapter-item expanded affix "><li class="part-title">Contributing</li><li class="chapter-item expanded "><a href="contributing/before-making-pull-or-feature-requests.html"><strong aria-hidden="true">20.</strong> Before Making Pull or Feature Requests</a></li><li class="chapter-item expanded "><a href="contributing/building-on-top-of-urs.html"><strong aria-hidden="true">21.</strong> Building on Top of URS</a></li><li class="chapter-item expanded "><a href="contributing/making-pull-or-feature-requests.html"><strong aria-hidden="true">22.</strong> Making Pull or Feature Requests</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contributors.html">Contributors</a></li><li class="chapter-item expanded affix "><a href="derivative-projects.html">Derivative Projects</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">URS User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <pre><code> __  __  _ __   ____
+/\ \/\ \/\`'__\/',__\
+\ \ \_\ \ \ \//\__, `\
+ \ \____/\ \_\\/\____/
+  \/___/  \/_/ \/___/
+</code></pre>
+<blockquote>
+<p><strong>U</strong>niversal <strong>R</strong>eddit <strong>S</strong>craper - A comprehensive Reddit scraping command-line tool written in Python.</p>
+</blockquote>
+<p><img src="https://img.shields.io/github/actions/workflow/status/JosephLai241/URS/python.yml?label=Python&amp;logo=python&amp;logoColor=blue" alt="GitHub Workflow Status (Python)" />
+<img src="https://img.shields.io/github/actions/workflow/status/JosephLai241/URS/rust.yml?label=Rust&amp;logo=rust&amp;logoColor=orange" alt="GitHub Workflow Status (Rust)" />
+<a href="https://codecov.io/gh/JosephLai241/URS"><img src="https://img.shields.io/codecov/c/gh/JosephLai241/URS?logo=Codecov" alt="Codecov" /></a>
+<a href="https://github.com/JosephLai241/URS/releases"><img src="https://img.shields.io/github/v/release/JosephLai241/URS" alt="GitHub release (latest by date)" /></a>
+<img src="https://img.shields.io/tokei/lines/github/JosephLai241/URS" alt="Total lines" />
+<img src="https://img.shields.io/github/license/JosephLai241/URS" alt="License" /></p>
+<pre><code>[-h]
+[-e]
+[-v]
+
+[-t [&lt;optional_date&gt;]]
+[--check]
+
+[-r &lt;subreddit&gt; &lt;(h|n|c|t|r|s)&gt; &lt;n_results_or_keywords&gt; [&lt;optional_time_filter&gt;]]
+    [-y]
+    [--csv]
+    [--rules]
+[-u &lt;redditor&gt; &lt;n_results&gt;]
+[-c &lt;submission_url&gt; &lt;n_results&gt;]
+    [--raw]
+[-b]
+    [--csv]
+
+[-lr &lt;subreddit&gt;]
+[-lu &lt;redditor&gt;]
+
+    [--nosave]
+    [--stream-submissions]
+
+[-f &lt;file_path&gt;]
+    [--csv]
+[-wc &lt;file_path&gt; [&lt;optional_export_format&gt;]]
+    [--nosave]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>This is a comprehensive Reddit scraping tool that integrates multiple features:</p>
+<ul>
+<li>Scrape Reddit via <a href="https://pypi.org/project/praw/"><code>PRAW</code></a> (the official Python Reddit API Wrapper)
+<ul>
+<li>Scrape Subreddits</li>
+<li>Scrape Redditors</li>
+<li>Scrape submission comments</li>
+</ul>
+</li>
+<li>Livestream Reddit via <code>PRAW</code>
+<ul>
+<li>Livestream comments submitted within Subreddits or by Redditors</li>
+<li>Livestream submissions submitted within Subreddits or by Redditors</li>
+</ul>
+</li>
+<li>Analytical tools for scraped data
+<ul>
+<li>Generate frequencies for words that are found in submission titles, bodies, and/or comments</li>
+<li>Generate a wordcloud from scrape results</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><blockquote>
+<p><strong><em>NOTE:</em> Requires Python 3.11+ and <a href="https://python-poetry.org/docs/#installation">Poetry</a> installed on your system.</strong></p>
+</blockquote>
+<p>Run the following commands to install <code>URS</code>:</p>
+<pre><code>git clone --depth=1 https://github.com/JosephLai241/URS.git
+cd URS
+poetry install
+poetry shell
+maturin develop --release
+</code></pre>
+<blockquote>
+<p><strong><em>TIP:</em></strong> If <code>poetry shell</code> does not activate the virtual environment created by <code>Poetry</code>, run the following command to activate it:</p>
+<pre><code>source .venv/bin/activate
+</code></pre>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="exporting"><a class="header" href="#exporting">Exporting</a></h1>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="exporting.html#export-file-format">Export File Format</a>
+<ul>
+<li><a href="exporting.html#exporting-to-csv">Exporting to CSV</a></li>
+</ul>
+</li>
+<li><a href="exporting.html#export-directory-structure">Export Directory Structure</a>
+<ul>
+<li><a href="exporting.html#praw-scrapers">PRAW Scrapers</a></li>
+<li><a href="exporting.html#praw-livestream-scrapers">PRAW Livestream Scrapers</a></li>
+<li><a href="exporting.html#analytical-tools">Analytical Tools</a></li>
+<li><a href="exporting.html#example-directory-structure">Example Directory Structure</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="export-file-format"><a class="header" href="#export-file-format">Export File Format</a></h2>
+<p><strong>All files except for those generated by the wordcloud tool are exported to JSON by default</strong>. Wordcloud files are exported to PNG by default.</p>
+<p><code>URS</code> supports exporting to CSV as well, but JSON is the more versatile option.</p>
+<h3 id="exporting-to-csv"><a class="header" href="#exporting-to-csv">Exporting to CSV</a></h3>
+<p>You will have to include the <code>--csv</code> flag to export to CSV.</p>
+<p>You can only export to CSV when using:</p>
+<ul>
+<li>The Subreddit scrapers.</li>
+<li>The word frequencies generator.</li>
+</ul>
+<p>These tools are also suitable for CSV format and are optimized to do so if you want to use that format instead.</p>
+<p>The <code>--csv</code> flag is ignored if it is present while using any of the other scrapers.</p>
+<h2 id="export-directory-structure"><a class="header" href="#export-directory-structure">Export Directory Structure</a></h2>
+<p>All exported files are saved within the <code>scrapes</code> directory and stored in a sub-directory labeled with the date. Many more sub-directories may be created in the date directory. Sub-directories are only created when its respective tool is run. For example, if you only use the Subreddit scraper, only the <code>subreddits</code> directory is created.</p>
+<h3 id="praw-scrapers"><a class="header" href="#praw-scrapers">PRAW Scrapers</a></h3>
+<p>The <code>subreddits</code>, <code>redditors</code>, or <code>comments</code> directories may be created.</p>
+<h3 id="praw-livestream-scrapers"><a class="header" href="#praw-livestream-scrapers">PRAW Livestream Scrapers</a></h3>
+<p>The <code>livestream</code> directory is created when you run any of the livestream scrapers. Within it, the <code>subreddits</code> or <code>redditors</code> directories may be created.</p>
+<h3 id="analytical-tools"><a class="header" href="#analytical-tools">Analytical Tools</a></h3>
+<p>The <code>analytics</code> directory is created when you run any of the analytical tools. Within it, the <code>frequencies</code> or <code>wordclouds</code> directories may be created. See the <a href="./analytical-tools/general-information.html">Analytical Tools</a> section for more information.</p>
+<h3 id="example-directory-structure"><a class="header" href="#example-directory-structure">Example Directory Structure</a></h3>
+<p>This is the <a href="https://github.com/JosephLai241/URS/tree/samples">samples</a> directory structure generated by <a href="https://github.com/JosephLai241/nomad"><code>nomad</code></a>, a modern <code>tree</code> alternative I wrote in <a href="https://www.rust-lang.org/">Rust</a>.</p>
+<pre><code>scrapes/
+└── 06-02-2021
+    ├── analytics
+    │   ├── frequencies
+    │   │   ├── comments
+    │   │   │   └── What’s something from the 90s you miss_-all.json
+    │   │   ├── livestream
+    │   │   │   └── subreddits
+    │   │   │       └── askreddit-comments-20_44_11-00_01_10.json
+    │   │   └── subreddits
+    │   │       └── cscareerquestions-search-'job'-past-year-rules.json
+    │   └── wordcloud
+    │       ├── comments
+    │       │   └── What’s something from the 90s you miss_-all.png
+    │       ├── livestream
+    │       │   └── subreddits
+    │       │       └── askreddit-comments-20_44_11-00_01_10.png
+    │       └── subreddits
+    │           └── cscareerquestions-search-'job'-past-year-rules.png
+    ├── comments
+    │   └── What’s something from the 90s you miss_-all.json
+    ├── livestream
+    │   └── subreddits
+    │       ├── askreddit-comments-20_44_11-00_01_10.json
+    │       └── askreddit-submissions-20_46_12-00_01_52.json
+    ├── redditors
+    │   └── spez-5-results.json
+    ├── subreddits
+    │   ├── askreddit-hot-10-results.json
+    │   └── cscareerquestions-search-'job'-past-year-rules.json
+    └── urs.log
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-get-praw-credentials"><a class="header" href="#how-to-get-praw-credentials">How to Get PRAW Credentials</a></h1>
+<p>Create your own Reddit account and then head over to <a href="https://old.reddit.com/prefs/apps">Reddit's apps page</a>.</p>
+<p>Click <code>&quot;are you a developer? create an app... &quot;</code>.</p>
+<p><img src="https://i.imgur.com/Bf0pKGJ.png" alt="Create an app screenshot" /></p>
+<p>Name your app, choose <code>&quot;script&quot;</code> for the type of app, and type <code>&quot;http://localhost:8080&quot;</code> in the redirect URI field since this is a personal use app. You can also add a description and an about URL.</p>
+<p><img src="https://i.imgur.com/g0xARWA.png" alt="Enter Stuff In Boxes screenshot" /></p>
+<p>Click <code>&quot;create app&quot;</code>, then <code>&quot;edit&quot;</code> to reveal more information.</p>
+<p><img src="https://i.imgur.com/1NOyMTN.png" alt="Click Edit screenshot" /></p>
+<p>You should see a string of 14 characters on the top left corner underneath <code>&quot;personal use script&quot;</code>. That is your API ID. Further down you will see <code>&quot;secret&quot;</code> and a string of 27 characters; that is your API password. <strong>Save this information as it will be used in the program in order to access the Reddit API</strong>.</p>
+<p><img src="https://i.imgur.com/VajTKJu.png" alt="All Info screenshot" /></p>
+<p>You will also have to provide your app name and Reddit account username and password in the block of credentials found in <code>.env</code>.</p>
+<!-- SCREENSHOT LINKS -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scrape-speeds"><a class="header" href="#scrape-speeds">Scrape Speeds</a></h1>
+<p>Your internet connection speed is the primary bottleneck that will establish the scrape duration; however, there are additional bottlenecks such as:</p>
+<ul>
+<li>The number of results returned for Subreddit or Redditor scraping.</li>
+<li>The submission's popularity (total number of comments) for submission comments scraping.</li>
+</ul>
+<h1 id="rate-limits"><a class="header" href="#rate-limits">Rate Limits</a></h1>
+<p>Yes, PRAW has rate limits. These limits are proportional to how much karma you have accumulated -- the higher the karma, the higher the rate limit. This has been implemented to mitigate spammers and bots that utilize PRAW.</p>
+<p>Rate limit information for your account is displayed in a small table underneath the successful login message each time you run any of the PRAW scrapers. I have also added a <a href="scraping-reddit/../utilities/rate-limit-checking.html"><code>--check</code> flag</a> if you want to quickly view this information.</p>
+<p><code>URS</code> will display an error message as well as the rate limit reset date if you have used all your available requests.</p>
+<p>There are a couple ways to circumvent rate limits:</p>
+<ul>
+<li>Scrape intermittently</li>
+<li>Use an account with high karma to get your PRAW credentials</li>
+<li>Scrape less results per run</li>
+</ul>
+<p>Available requests are refilled if you use the PRAW scrapers intermittently, which might be the best solution. This can be especially helpful if you have automated <code>URS</code> and are not looking at the output on each run.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="subreddit-redditor-and-submission-comments-attributes"><a class="header" href="#subreddit-redditor-and-submission-comments-attributes">Subreddit, Redditor, and Submission Comments Attributes</a></h1>
+<p>These attributes are included in each scrape.</p>
+<div class="table-wrapper"><table><thead><tr><th>Subreddits (submissions)</th><th>Redditors</th><th>Submission Comments</th></tr></thead><tbody>
+<tr><td><code>author</code></td><td><code>comment_karma</code></td><td><code>author</code></td></tr>
+<tr><td><code>created_utc</code></td><td><code>created_utc</code></td><td><code>body</code></td></tr>
+<tr><td><code>distinguished</code></td><td><code>fullname</code></td><td><code>body_html</code></td></tr>
+<tr><td><code>edited</code></td><td><code>has_verified_email</code></td><td><code>created_utc</code></td></tr>
+<tr><td><code>id</code></td><td><code>icon_img</code></td><td><code>distinguished</code></td></tr>
+<tr><td><code>is_original_content</code></td><td><code>id</code></td><td><code>edited</code></td></tr>
+<tr><td><code>is_self</code></td><td><code>is_employee</code></td><td><code>id</code></td></tr>
+<tr><td><code>link_flair_text</code></td><td><code>is_friend</code></td><td><code>is_submitter</code></td></tr>
+<tr><td><code>locked</code></td><td><code>is_mod</code></td><td><code>link_id</code></td></tr>
+<tr><td><code>name</code></td><td><code>is_gold</code></td><td><code>parent_id</code></td></tr>
+<tr><td><code>num_comments</code></td><td><code>link_karma</code></td><td><code>score</code></td></tr>
+<tr><td><code>nsfw</code></td><td><code>name</code></td><td><code>stickied</code></td></tr>
+<tr><td><code>permalink</code></td><td><code>subreddit</code></td><td></td></tr>
+<tr><td><code>score</code></td><td>*<code>trophies</code></td><td></td></tr>
+<tr><td><code>selftext</code></td><td>*<code>comments</code></td><td></td></tr>
+<tr><td><code>spoiler</code></td><td>*<code>controversial</code></td><td></td></tr>
+<tr><td><code>stickied</code></td><td>*<code>downvoted</code> (may be forbidden)</td><td></td></tr>
+<tr><td><code>title</code></td><td>*<code>gilded</code></td><td></td></tr>
+<tr><td><code>upvote_ratio</code></td><td>*<code>gildings</code> (may be forbidden)</td><td></td></tr>
+<tr><td><code>url</code></td><td>*<code>hidden</code> (may be forbidden)</td><td></td></tr>
+<tr><td></td><td>*<code>hot</code></td><td></td></tr>
+<tr><td></td><td>*<code>moderated</code></td><td></td></tr>
+<tr><td></td><td>*<code>multireddits</code></td><td></td></tr>
+<tr><td></td><td>*<code>new</code></td><td></td></tr>
+<tr><td></td><td>*<code>saved</code> (may be forbidden)</td><td></td></tr>
+<tr><td></td><td>*<code>submissions</code></td><td></td></tr>
+<tr><td></td><td>*<code>top</code></td><td></td></tr>
+<tr><td></td><td>*<code>upvoted</code> (may be forbidden)</td><td></td></tr>
+</tbody></table>
+</div>
+<p>*<em>Includes additional attributes; see the <a href="scraping-reddit/./redditor.html">Scraping Redditors</a> section for more information.</em></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents-1"><a class="header" href="#table-of-contents-1">Table of Contents</a></h1>
+<ul>
+<li><a href="scraping-reddit/subreddit.html#subreddits">Subreddits</a>
+<ul>
+<li><a href="scraping-reddit/subreddit.html#all-flags">All Flags</a></li>
+<li><a href="scraping-reddit/subreddit.html#basic-usage">Basic Usage</a></li>
+<li><a href="scraping-reddit/subreddit.html#filename-naming-conventions">Filename Naming Conventions</a></li>
+</ul>
+</li>
+<li><a href="scraping-reddit/subreddit.html#time-filters">Time Filters</a>
+<ul>
+<li><a href="scraping-reddit/subreddit.html#filename-naming-conventions-1">Filename Naming Conventions</a></li>
+</ul>
+</li>
+<li><a href="scraping-reddit/subreddit.html#subreddit-rules-and-post-requirements">Subreddit Rules and Post Requirements</a></li>
+<li><a href="scraping-reddit/subreddit.html#bypassing-the-final-settings-check">Bypassing the Final Settings Check</a></li>
+</ul>
+<h1 id="subreddits"><a class="header" href="#subreddits">Subreddits</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Subreddit_demo.gif" alt="Subreddit Demo GIF" /></p>
+<h2 id="all-flags"><a class="header" href="#all-flags">All Flags</a></h2>
+<p>These are all the flags that may be used when scraping Subreddits.</p>
+<pre><code>[-r &lt;subreddit&gt; &lt;(h|n|c|t|r|s)&gt; &lt;n_results_or_keywords&gt; [&lt;optional_time_filter&gt;]]
+    [-y]
+    [--csv]
+    [--rules]
+</code></pre>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<pre><code>poetry run Urs.py -r &lt;subreddit&gt; &lt;(h|n|c|t|r|s)&gt; &lt;n_results_or_keywords&gt;
+</code></pre>
+<p><strong>Supports exporting to CSV.</strong> To export to CSV, include the <code>--csv</code> flag.</p>
+<p>Specify Subreddits, the submission category, and how many results are returned from each scrape. I have also added a search option where you can search for keywords within a Subreddit.</p>
+<p>These are the submission categories:</p>
+<ul>
+<li>Hot</li>
+<li>New</li>
+<li>Controversial</li>
+<li>Top</li>
+<li>Rising</li>
+<li>Search</li>
+</ul>
+<h2 id="filename-naming-conventions"><a class="header" href="#filename-naming-conventions">Filename Naming Conventions</a></h2>
+<p>The file names for all categories except for Search will follow this format:</p>
+<pre><code>[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s).[FILE_FORMAT]
+</code></pre>
+<p>If you searched for keywords, file names will follow this format:</p>
+<pre><code>[SUBREDDIT]-Search-'[KEYWORDS]'.[FILE_FORMAT]
+</code></pre>
+<p>Scrape data is exported to the <code>subreddits</code> directory.</p>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> Up to 100 results are returned if you search for keywords within a Subreddit. You will not be able to specify how many results to keep.</p>
+</blockquote>
+<h1 id="time-filters"><a class="header" href="#time-filters">Time Filters</a></h1>
+<p>Time filters may be applied to some categories. Here is a table of the categories on which you can apply a time filter as well as the valid time filters.</p>
+<div class="table-wrapper"><table><thead><tr><th>Categories</th><th>Time Filters</th></tr></thead><tbody>
+<tr><td>Controversial</td><td>All (default)</td></tr>
+<tr><td>Search</td><td>Day</td></tr>
+<tr><td>Top</td><td>Hour</td></tr>
+<tr><td></td><td>Month</td></tr>
+<tr><td></td><td>Week</td></tr>
+<tr><td></td><td>Year</td></tr>
+</tbody></table>
+</div>
+<p>Specify the time filter after the number of results returned or keywords you want to search for:</p>
+<pre><code>poetry run Urs.py -r &lt;subreddit&gt; &lt;(c|t|s)&gt; &lt;n_results_or_keywords&gt; [&lt;time_filter&gt;]
+</code></pre>
+<p>If no time filter is specified, the default time filter <code>all</code> is applied. The Subreddit settings table will display <code>None</code> for categories that do not offer the additional time filter option.</p>
+<h2 id="filename-naming-conventions-1"><a class="header" href="#filename-naming-conventions-1">Filename Naming Conventions</a></h2>
+<p>If you specified a time filter, <code>-past-[TIME_FILTER]</code> will be appended to the file name before the file format like so:</p>
+<pre><code>[SUBREDDIT]-[POST_CATEGORY]-[N_RESULTS]-result(s)-past-[TIME_FILTER].[FILE_FORMAT]
+</code></pre>
+<p>Or if you searched for keywords:</p>
+<pre><code>[SUBREDDIT]-Search-'[KEYWORDS]'-past-[TIME_FILTER].[FILE_FORMAT]
+</code></pre>
+<h1 id="subreddit-rules-and-post-requirements"><a class="header" href="#subreddit-rules-and-post-requirements">Subreddit Rules and Post Requirements</a></h1>
+<p>You can also include the Subreddit's rules and post requirements in your scrape data by including the <code>--rules</code> flag. <strong>This is only compatible with JSON</strong>. This data will be included in the <code>subreddit_rules</code> field.</p>
+<p>If rules are included in your file, <code>-rules</code> will be appended to the end of the file name.</p>
+<h1 id="bypassing-the-final-settings-check"><a class="header" href="#bypassing-the-final-settings-check">Bypassing the Final Settings Check</a></h1>
+<p>After submitting the arguments and Reddit validation, <code>URS</code> will display a table of Subreddit scraping settings as a final check before executing. You can include the <code>-y</code> flag to bypass this and immediately scrape.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents-2"><a class="header" href="#table-of-contents-2">Table of Contents</a></h1>
+<ul>
+<li><a href="scraping-reddit/redditor.html#redditors">Redditors</a>
+<ul>
+<li><a href="scraping-reddit/redditor.html#all-flags">All Flags</a></li>
+<li><a href="scraping-reddit/redditor.html#usage">Usage</a></li>
+<li><a href="scraping-reddit/redditor.html#redditor-interaction-attributes">Redditor Interaction Attributes</a></li>
+<li><a href="scraping-reddit/redditor.html#reddit-object-attributes">Reddit Object Attributes</a></li>
+<li><a href="scraping-reddit/redditor.html#file-naming-conventions">File Naming Conventions</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="redditors"><a class="header" href="#redditors">Redditors</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Redditor_demo.gif" alt="Redditor Demo GIF" /></p>
+<p>*<em>This GIF has been cut for demonstration purposes.</em></p>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> If you are not allowed to access a Redditor's lists, PRAW will raise a 403 HTTP Forbidden exception and the program will just append <code>&quot;FORBIDDEN&quot;</code> underneath that section in the exported file.</p>
+</blockquote>
+<h2 id="all-flags-1"><a class="header" href="#all-flags-1">All Flags</a></h2>
+<p>These are all the flags that may be used when scraping Redditors.</p>
+<pre><code>[-u &lt;redditor&gt; &lt;n_results&gt;]
+</code></pre>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> The number of results returned are applied to all attributes. I have not implemented code to allow users to specify different number of results returned for individual attributes.</p>
+</blockquote>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<pre><code>poetry run Urs.py -u &lt;redditor&gt; &lt;n_results&gt;
+</code></pre>
+<p>Redditor information will be included in the <code>information</code> field and includes the following attributes:</p>
+<ul>
+<li><code>comment_karma</code></li>
+<li><code>created_utc</code></li>
+<li><code>fullname</code></li>
+<li><code>has_verified_email</code></li>
+<li><code>icon_img</code></li>
+<li><code>id</code></li>
+<li><code>is_employee</code></li>
+<li><code>is_friend</code></li>
+<li><code>is_mod</code></li>
+<li><code>is_gold</code></li>
+<li><code>link_karma</code></li>
+<li><code>name</code></li>
+<li><code>subreddit</code></li>
+<li><code>trophies</code></li>
+</ul>
+<h2 id="redditor-interaction-attributes"><a class="header" href="#redditor-interaction-attributes">Redditor Interaction Attributes</a></h2>
+<p>Redditor interactions will be included in the <code>interactions</code> field. Here is a table of all Redditor interaction attributes that are also included, how they are sorted, and what type of Reddit objects are included in each.</p>
+<div class="table-wrapper"><table><thead><tr><th>Attribute Name</th><th>Sorted By/Time Filter</th><th>Reddit Objects</th></tr></thead><tbody>
+<tr><td>Comments</td><td>Sorted By: New</td><td>Comments</td></tr>
+<tr><td>Controversial</td><td>Time Filter: All</td><td>Comments and submissions</td></tr>
+<tr><td>Downvoted</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+<tr><td>Gilded</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+<tr><td>Gildings</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+<tr><td>Hidden</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+<tr><td>Hot</td><td>Determined by other Redditors' interactions</td><td>Comments and submissions</td></tr>
+<tr><td>Moderated</td><td>N/A</td><td>Subreddits</td></tr>
+<tr><td>Multireddits</td><td>N/A</td><td>Multireddits</td></tr>
+<tr><td>New</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+<tr><td>Saved</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+<tr><td>Submissions</td><td>Sorted By: New</td><td>Submissions</td></tr>
+<tr><td>Top</td><td>Time Filter: All</td><td>Comments and submissions</td></tr>
+<tr><td>Upvoted</td><td>Sorted By: New</td><td>Comments and submissions</td></tr>
+</tbody></table>
+</div>
+<p>These attributes contain comments or submissions. Subreddit attributes are also included within both.</p>
+<h2 id="reddit-object-attributes"><a class="header" href="#reddit-object-attributes">Reddit Object Attributes</a></h2>
+<p>This is a table of all attributes that are included for each Reddit object:</p>
+<div class="table-wrapper"><table><thead><tr><th>Subreddits</th><th>Comments</th><th>Submissions</th><th>Multireddits</th><th>Trophies</th></tr></thead><tbody>
+<tr><td><code>can_assign_link_flair</code></td><td><code>body</code></td><td><code>author</code></td><td><code>can_edit</code></td><td><code>award_id</code></td></tr>
+<tr><td><code>can_assign_user_flair</code></td><td><code>body_html</code></td><td><code>created_utc</code></td><td><code>copied_from</code></td><td><code>description</code></td></tr>
+<tr><td><code>created_utc</code></td><td><code>created_utc</code></td><td><code>distinguished</code></td><td><code>created_utc</code></td><td><code>icon_40</code></td></tr>
+<tr><td><code>description</code></td><td><code>distinguished</code></td><td><code>edited</code></td><td><code>description_html</code></td><td><code>icon_70</code></td></tr>
+<tr><td><code>description_html</code></td><td><code>edited</code></td><td><code>id</code></td><td><code>description_md</code></td><td><code>name</code></td></tr>
+<tr><td><code>display_name</code></td><td><code>id</code></td><td><code>is_original_content</code></td><td><code>display_name</code></td><td><code>url</code></td></tr>
+<tr><td><code>id</code></td><td><code>is_submitter</code></td><td><code>is_self</code></td><td><code>name</code></td><td></td></tr>
+<tr><td><code>name</code></td><td><code>link_id</code></td><td><code>link_flair_text</code></td><td><code>nsfw</code></td><td></td></tr>
+<tr><td><code>nsfw</code></td><td><code>parent_id</code></td><td><code>locked</code></td><td><code>subreddits</code></td><td></td></tr>
+<tr><td><code>public_description</code></td><td><code>score</code></td><td><code>name</code></td><td><code>visibility</code></td><td></td></tr>
+<tr><td><code>spoilers_enabled</code></td><td><code>stickied</code></td><td><code>num_comments</code></td><td></td><td></td></tr>
+<tr><td><code>subscribers</code></td><td>*<code>submission</code></td><td><code>nsfw</code></td><td></td><td></td></tr>
+<tr><td><code>user_is_banned</code></td><td><code>subreddit_id</code></td><td><code>permalink</code></td><td></td><td></td></tr>
+<tr><td><code>user_is_moderator</code></td><td></td><td><code>score</code></td><td></td><td></td></tr>
+<tr><td><code>user_is_subscriber</code></td><td></td><td><code>selftext</code></td><td></td><td></td></tr>
+<tr><td></td><td></td><td><code>spoiler</code></td><td></td><td></td></tr>
+<tr><td></td><td></td><td><code>stickied</code></td><td></td><td></td></tr>
+<tr><td></td><td></td><td>*<code>subreddit</code></td><td></td><td></td></tr>
+<tr><td></td><td></td><td><code>title</code></td><td></td><td></td></tr>
+<tr><td></td><td></td><td><code>upvote_ratio</code></td><td></td><td></td></tr>
+<tr><td></td><td></td><td><code>url</code></td><td></td><td></td></tr>
+</tbody></table>
+</div>
+<p>* Contains additional metadata.</p>
+<h2 id="file-naming-conventions"><a class="header" href="#file-naming-conventions">File Naming Conventions</a></h2>
+<p>The file names will follow this format:</p>
+<pre><code>[USERNAME]-[N_RESULTS]-result(s).json
+</code></pre>
+<p>Scrape data is exported to the <code>redditors</code> directory.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents-3"><a class="header" href="#table-of-contents-3">Table of Contents</a></h1>
+<ul>
+<li><a href="scraping-reddit/submission-comments.html#submission-comments">Submission Comments</a>
+<ul>
+<li><a href="scraping-reddit/submission-comments.html#all-flags">All Flags</a></li>
+<li><a href="scraping-reddit/submission-comments.html#usage">Usage</a></li>
+<li><a href="scraping-reddit/submission-comments.html#file-naming-conventions">File Naming Conventions</a></li>
+<li><a href="scraping-reddit/submission-comments.html#number-of-comments-returned">Number of Comments Returned</a></li>
+<li><a href="scraping-reddit/submission-comments.html#structured-comments">Structured Comments</a></li>
+<li><a href="scraping-reddit/submission-comments.html#raw-comments">Raw Comments</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="submission-comments"><a class="header" href="#submission-comments">Submission Comments</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif" alt="Submission Comments Demo GIF" /></p>
+<p>*<em>This GIF has been cut for demonstration purposes.</em></p>
+<h2 id="all-flags-2"><a class="header" href="#all-flags-2">All Flags</a></h2>
+<p>These are all the flags that may be used when scraping submission comments.</p>
+<pre><code>[-c &lt;submission_url&gt; &lt;n_results&gt;]
+    [--raw]
+</code></pre>
+<h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
+<pre><code>poetry run Urs.py -c &lt;submission_url&gt; &lt;n_results&gt;
+</code></pre>
+<p>Submission metadata will be included in the <code>submission_metadata</code> field and includes the following attributes:</p>
+<ul>
+<li><code>author</code></li>
+<li><code>created_utc</code></li>
+<li><code>distinguished</code></li>
+<li><code>edited</code></li>
+<li><code>is_original_content</code></li>
+<li><code>is_self</code></li>
+<li><code>link_flair_text</code></li>
+<li><code>locked</code></li>
+<li><code>nsfw</code></li>
+<li><code>num_comments</code></li>
+<li><code>permalink</code></li>
+<li><code>score</code></li>
+<li><code>selftext</code></li>
+<li><code>spoiler</code></li>
+<li><code>stickied</code></li>
+<li><code>subreddit</code></li>
+<li><code>title</code></li>
+<li><code>upvote_ratio</code></li>
+</ul>
+<p>If the submission contains a gallery, the attributes <code>gallery_data</code> and <code>media_metadata</code> will be included.</p>
+<p>Comments are written to the <code>comments</code> field. They are sorted by &quot;Best&quot;, which is the default sorting option when you visit a submission.</p>
+<p>PRAW returns submission comments in level order, which means scrape speeds are proportional to the submission's popularity.</p>
+<h2 id="file-naming-conventions-1"><a class="header" href="#file-naming-conventions-1">File Naming Conventions</a></h2>
+<p>The file names will generally follow this format:</p>
+<pre><code>[POST_TITLE]-[N_RESULTS]-result(s).json
+</code></pre>
+<p>Scrape data is exported to the <code>comments</code> directory.</p>
+<h2 id="number-of-comments-returned"><a class="header" href="#number-of-comments-returned">Number of Comments Returned</a></h2>
+<p>You can scrape all comments from a submission by passing in <code>0</code> for <code>&lt;n_results&gt;</code>. Subsequently, <code>[N_RESULTS]-result(s)</code> in the file name will be replaced with <code>all</code>.</p>
+<p>Otherwise, specify the number of results you want returned. If you passed in a specific number of results, the structured export will return up to <code>&lt;n_results&gt;</code> top level comments and include all of its replies.</p>
+<h2 id="structured-comments"><a class="header" href="#structured-comments">Structured Comments</a></h2>
+<p><strong>This is the default export style.</strong> Structured scrapes resemble comment threads on Reddit. This style takes just a little longer to export compared to the raw format because <code>URS</code> uses <a href="https://www.interviewcake.com/concept/java/dfs">depth-first search</a> to create the comment <code>Forest</code> after retrieving all comments from a submission.</p>
+<p>If you want to learn more about how it works, refer to <a href="scraping-reddit/../implementation-details/the-forest.html">The Forest</a>, where I describe how I implemented the <code>Forest</code>, and <a href="scraping-reddit/../implementation-details/speeding-up-python-with-rust.html">Speeding up Python With Rust</a> to learn about how I drastically improved the performance of the <code>Forest</code> by rewriting it in Rust.</p>
+<h2 id="raw-comments"><a class="header" href="#raw-comments">Raw Comments</a></h2>
+<p>Raw scrapes do not resemble comment threads, but returns all comments on a submission in level order: all top-level comments are listed first, followed by all second-level comments, then third, etc.</p>
+<p>You can export to raw format by including the <code>--raw</code> flag. <code>-raw</code> will also be appended to the end of the file name.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="livestreaming-reddit-via-praw"><a class="header" href="#livestreaming-reddit-via-praw">Livestreaming Reddit via PRAW</a></h1>
+<p>These tools may be used to livestream comments or submissions submitted within Subreddits or by Redditors.</p>
+<p><strong>Comments are streamed by default</strong>. To stream submissions instead, include the <code>--stream-submissions</code> flag.</p>
+<p><strong>New comments or submissions will continue to display within your terminal until you abort the stream using <code>Ctrl + C</code></strong>.</p>
+<h2 id="file-naming-conventions-2"><a class="header" href="#file-naming-conventions-2">File Naming Conventions</a></h2>
+<p>The filenames will follow this format:</p>
+<pre><code>[SUBREDDIT_OR_REDDITOR]-[comments_OR_submissions]-[START_TIME_IN_HOURS_MINUTES_SECONDS]-[DURATION_IN_HOURS_MINUTES_SECONDS].json
+</code></pre>
+<p>This file is saved in the main <code>livestream</code> directory into the <code>subreddits</code> or <code>redditors</code> directory depending on which stream was run.</p>
+<p>Reddit objects will be written to this JSON file in real time. After aborting the stream, the filename will be updated with the start time and duration.</p>
+<h2 id="displayed-vs-saved-attributes"><a class="header" href="#displayed-vs-saved-attributes">Displayed vs. Saved Attributes</a></h2>
+<p>Displayed comment and submission attributes have been stripped down to essential fields to declutter the output. Here is a table of what is shown during the stream:</p>
+<div class="table-wrapper"><table><thead><tr><th>Comment Attributes</th><th>Submission Attributes</th></tr></thead><tbody>
+<tr><td><code>author</code></td><td><code>author</code></td></tr>
+<tr><td><code>body</code></td><td><code>created_utc</code></td></tr>
+<tr><td><code>created_utc</code></td><td><code>is_self</code></td></tr>
+<tr><td><code>is_submitter</code></td><td><code>link_flair_text</code></td></tr>
+<tr><td><code>submission_author</code></td><td><code>nsfw</code></td></tr>
+<tr><td><code>submission_created_utc</code></td><td><code>selftext</code></td></tr>
+<tr><td><code>submission_link_flair_text</code></td><td><code>spoiler</code></td></tr>
+<tr><td><code>submission_nsfw</code></td><td><code>stickied</code></td></tr>
+<tr><td><code>submission_num_comments</code></td><td><code>title</code></td></tr>
+<tr><td><code>submission_score</code></td><td><code>url</code></td></tr>
+<tr><td><code>submission_title</code></td><td></td></tr>
+<tr><td><code>submission_upvote_ratio</code></td><td></td></tr>
+<tr><td><code>submission_url</code></td><td></td></tr>
+</tbody></table>
+</div>
+<p>Comment and submission attributes that are written to file will include the full list of attributes found in the <a href="livestreaming-reddit/../scraping-reddit/all-attributes-table.html">Table of All Subreddit, Redditor, and Submission Comments Attributes</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="livestreaming-subreddits"><a class="header" href="#livestreaming-subreddits">Livestreaming Subreddits</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/live_scrapers/livestream_subreddit_demo.gif" alt="Livestream Subreddit Demo GIF" /></p>
+<p>*<em>This GIF has been cut for demonstration purposes.</em></p>
+<h2 id="all-flags-3"><a class="header" href="#all-flags-3">All Flags</a></h2>
+<p>These are all the flags that may be used when livestreaming Subreddits.</p>
+<pre><code>[-lr &lt;subreddit&gt;]
+    [--nosave]
+    [--stream-submissions]
+</code></pre>
+<h2 id="usage-2"><a class="header" href="#usage-2">Usage</a></h2>
+<pre><code>poetry run Urs.py -lr &lt;subreddit&gt;
+</code></pre>
+<p><strong>Default stream objects:</strong> Comments. To stream submissions instead, include the <code>--stream-submissions</code> flag.</p>
+<p>You can livestream comments or submissions that are created within a Subreddit.</p>
+<p>Reddit object information will be displayed in a <a href="https://pypi.org/project/prettytable/">PrettyTable</a> as they are submitted.</p>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> PRAW may not be able to catch all new submissions or comments within a high-volume Subreddit, as mentioned in <a href="https://praw.readthedocs.io/en/latest/code_overview/other/subredditstream.html#praw.models.reddit.subreddit.SubredditStream">these disclaimers located in the &quot;Note&quot; boxes</a>.</p>
+</blockquote>
+<h1 id="livestreaming-redditors"><a class="header" href="#livestreaming-redditors">Livestreaming Redditors</a></h1>
+<p><em>Livestream demo was not recorded for Redditors because its functionality is identical to the Subreddit livestream.</em></p>
+<h2 id="all-flags-4"><a class="header" href="#all-flags-4">All Flags</a></h2>
+<p>These are all the flags that may be used when livestreaming Redditors.</p>
+<pre><code>[-lu &lt;redditor&gt;]
+    [--nosave]
+    [--stream-submissions]
+</code></pre>
+<h2 id="usage-3"><a class="header" href="#usage-3">Usage</a></h2>
+<pre><code>poetry run Urs.py -lu &lt;redditor&gt;
+</code></pre>
+<p><strong>Default stream objects:</strong> Comments. To stream submissions instead, include the <code>--stream-submissions</code> flag.</p>
+<p>You can livestream comments or submissions that are created by a Redditor.</p>
+<p>Reddit object information will be displayed in a PrettyTable as they are submitted.</p>
+<h1 id="do-not-save-livestream-to-file"><a class="header" href="#do-not-save-livestream-to-file">Do Not Save Livestream to File</a></h1>
+<p>Include the <code>--nosave</code> flag if you do not want to save the livestream to file.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="analytical-tools-1"><a class="header" href="#analytical-tools-1">Analytical Tools</a></h1>
+<p>This suite of tools can be used <em>after</em> scraping data from Reddit. Both of these tools analyze the frequencies of words found in submission titles and bodies, or comments within JSON scrape data.</p>
+<p>There are a few ways you can quickly get the correct filepath to the scrape file:</p>
+<ul>
+<li>Drag and drop the file into the terminal.</li>
+<li>Partially type the path and rely on tab completion support to finish the full path for you.</li>
+</ul>
+<p>Running either tool will create the <code>analytics</code> directory within the date directory. <strong>This directory is located in the same directory in which the scrape data resides</strong>. For example, if you run the frequencies generator on February 16th for scrape data that was captured on February 14th, <code>analytics</code> will be created in the February 14th directory. Command history will still be written in the February 16th <code>urs.log</code>.</p>
+<p>The sub-directories <code>frequencies</code> or <code>wordclouds</code> are created in <code>analytics</code> depending on which tool is run. These directories mirror the directories in which the original scrape files reside. For example, if you run the frequencies generator on a Subreddit scrape, the directory structure will look like this:</p>
+<pre><code>analytics/
+└── frequencies
+    └── subreddits
+        └── SUBREDDIT_SCRAPE.json
+</code></pre>
+<p>A shortened export path is displayed once <code>URS</code> has completed exporting the data, informing you where the file is saved within the <code>scrapes</code> directory. You can open <code>urs.log</code> to view the full path.</p>
+<h1 id="target-fields"><a class="header" href="#target-fields">Target Fields</a></h1>
+<p>The data varies depending on the scraper, so these tools target different fields for each type of scrape data:</p>
+<div class="table-wrapper"><table><thead><tr><th>Scrape Data</th><th>Targets</th></tr></thead><tbody>
+<tr><td>Subreddit</td><td><code>selftext</code>, <code>title</code></td></tr>
+<tr><td>Redditor</td><td><code>selftext</code>, <code>title</code>, <code>body</code></td></tr>
+<tr><td>Submission Comments</td><td><code>body</code></td></tr>
+<tr><td>Livestream</td><td><code>selftext</code> and <code>title</code>, or <code>body</code></td></tr>
+</tbody></table>
+</div>
+<p>For Subreddit scrapes, data is pulled from the <code>selftext</code> and <code>title</code> fields for each submission (submission title and body).</p>
+<p>For Redditor scrapes, data is pulled from all three fields because both submission and comment data is returned. The <code>title</code> and <code>body</code> fields are targeted for submissions, and the <code>selftext</code> field is targeted for comments.</p>
+<p>For submission comments scrapes, data is only pulled from the <code>body</code> field of each comment.</p>
+<p>For livestream scrapes, comments or submissions may be included depending on user settings. The <code>selftext</code> and <code>title</code> fields are targeted for submissions, and the <code>body</code> field is targeted for comments.</p>
+<h1 id="file-names"><a class="header" href="#file-names">File Names</a></h1>
+<p>File names are identical to the original scrape data so that it is easier to distinguish which analytical file corresponds to which scrape.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="generating-word-frequencies"><a class="header" href="#generating-word-frequencies">Generating Word Frequencies</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/frequencies_generator_demo.gif" alt="Frequencies Demo GIF" /></p>
+<h2 id="all-flags-5"><a class="header" href="#all-flags-5">All Flags</a></h2>
+<p>These are all the flags that may be used when generating word frequencies.</p>
+<pre><code>[-f &lt;file_path&gt;]
+    [--csv]
+</code></pre>
+<h2 id="usage-4"><a class="header" href="#usage-4">Usage</a></h2>
+<pre><code>poetry run Urs.py -f &lt;file_path&gt;
+</code></pre>
+<p><strong>Supports exporting to CSV.</strong> To export to CSV, include the <code>--csv</code> flag.</p>
+<p>You can generate a dictionary of word frequencies created from the words within the target fields. These frequencies are sorted from highest to lowest.</p>
+<p>Frequencies export to JSON by default, but this tool also works well in CSV format.</p>
+<p>Exported files will be saved to the <code>analytics/frequencies</code> directory.</p>
+<h1 id="generating-wordclouds"><a class="header" href="#generating-wordclouds">Generating Wordclouds</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/analytical_tools/wordcloud_generator_demo.gif" alt="Wordcloud Demo GIF" /></p>
+<h2 id="all-flags-6"><a class="header" href="#all-flags-6">All Flags</a></h2>
+<pre><code>[-wc &lt;file_path&gt; [&lt;optional_export_format&gt;]]
+    [--nosave]
+</code></pre>
+<h2 id="usage-5"><a class="header" href="#usage-5">Usage</a></h2>
+<pre><code>poetry run Urs.py -wc &lt;file_path&gt;
+</code></pre>
+<h2 id="supported-export-formats"><a class="header" href="#supported-export-formats">Supported Export Formats</a></h2>
+<p>The following are the supported export formats for wordclouds:</p>
+<ul>
+<li><code>eps</code></li>
+<li><code>jpeg</code></li>
+<li><code>jpg</code></li>
+<li><code>pdf</code></li>
+<li><code>png</code> (default)</li>
+<li><code>ps</code></li>
+<li><code>rgba</code></li>
+<li><code>tif</code></li>
+<li><code>tiff</code></li>
+</ul>
+<p>Taking word frequencies to the next level, you can generate wordclouds based on word frequencies. This tool is independent of the frequencies generator -- you do not need to run the frequencies generator before creating a wordcloud.</p>
+<p>PNG is the default format, but you can also export to any of the options listed above by including the format as the second flag argument.</p>
+<pre><code>poetry run Urs.py -wc &lt;file_path&gt; [&lt;optional_export_format&gt;]
+</code></pre>
+<p>Exported files will be saved to the <code>analytics/wordclouds</code> directory.</p>
+<h2 id="display-wordcloud-instead-of-saving"><a class="header" href="#display-wordcloud-instead-of-saving">Display Wordcloud Instead of Saving</a></h2>
+<p>Wordclouds are saved to file by default. If you do not want to keep a file, include the <code>--nosave</code> flag to only display the wordcloud.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="display-directory-tree"><a class="header" href="#display-directory-tree">Display Directory Tree</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/tree_demo.gif" alt="Display Directory Tree Demo GIF" /></p>
+<h2 id="all-flags-7"><a class="header" href="#all-flags-7">All Flags</a></h2>
+<p>These are all the flags that may be used when displaying the directory tree.</p>
+<pre><code>[-t [&lt;optional_date&gt;]]
+</code></pre>
+<h2 id="usage-6"><a class="header" href="#usage-6">Usage</a></h2>
+<p>If no date is provided, you can quickly view the directory structure for the current date. This is a quick alternative to <a href="https://github.com/JosephLai241/nomad"><code>nomad</code></a> or the <code>tree</code> command.</p>
+<p>You can also display a different day's scrapes by providing a date after the <code>-t</code> flag.</p>
+<pre><code>poetry run Urs.py -t [&lt;optional_date&gt;]
+</code></pre>
+<p>The following date formats are supported:</p>
+<ul>
+<li><code>YYYY-MM-DD</code></li>
+<li><code>YYYY/MM/DD</code></li>
+</ul>
+<p>An error is displayed if <code>URS</code> was not run on the entered date (if the date directory is not found within the <code>scrapes/</code> directory).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="check-praw-rate-limits"><a class="header" href="#check-praw-rate-limits">Check PRAW Rate Limits</a></h1>
+<p><img src="https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/check_rate_limit_demo.gif" alt="Check PRAW Rate Limits Demo GIF" /></p>
+<p>You can quickly check the rate limits for your account by using this flag.</p>
+<pre><code>poetry run Urs.py --check
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="two-factor-authentication"><a class="header" href="#two-factor-authentication">Two-Factor Authentication</a></h1>
+<p>If you choose to use 2FA with your Reddit account, enter your password followed by a colon and then your 2FA token in the <code>password</code> field on line 26. For example, if your password is <code>&quot;p4ssw0rd&quot;</code> and your 2FA token is <code>&quot;123456&quot;</code>, you will enter <code>&quot;p4ssw0rd:123456&quot;</code> in the <code>password</code> field.</p>
+<p><strong>2FA is NOT recommended for use with this program.</strong> This is because PRAW will raise an OAuthException after one hour, prompting you to refresh your 2FA token and re-enter your credentials. Additionally, this means your 2FA token would be stored alongside your Reddit username and password, which would defeat the purpose of enabling 2FA in the first place. See <a href="https://praw.readthedocs.io/en/latest/getting_started/authentication.html#two-factor-authentication">here</a> for more information.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="error-messages"><a class="header" href="#error-messages">Error Messages</a></h1>
+<p>This document will briefly go over all the potential error messages you might run into while using URS.</p>
+<h1 id="table-of-contents-4"><a class="header" href="#table-of-contents-4">Table of Contents</a></h1>
+<ul>
+<li><a href="additional-information/error-messages.html#global-errors">Global Errors</a>
+<ul>
+<li><a href="additional-information/error-messages.html#invalid-arguments">Invalid Arguments</a></li>
+<li><a href="additional-information/error-messages.html#export-error">Export Error</a></li>
+</ul>
+</li>
+<li><a href="additional-information/error-messages.html#praw-errors">PRAW Errors</a>
+<ul>
+<li><a href="additional-information/error-messages.html#invalid-api-credentials-or-no-internet-connection">Invalid API Credentials or No Internet Connection</a></li>
+<li><a href="additional-information/error-messages.html#no-reddit-objects-left-to-scrape">No Reddit Objects Left to Scrape</a></li>
+<li><a href="additional-information/error-messages.html#rate-limit-reached">Rate Limit Reached</a></li>
+</ul>
+</li>
+<li><a href="additional-information/error-messages.html#analytical-tool-errors">Analytical Tool Errors</a>
+<ul>
+<li><a href="additional-information/error-messages.html#invalid-file">Invalid File</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="global-errors"><a class="header" href="#global-errors">Global Errors</a></h1>
+<h2 id="invalid-arguments"><a class="header" href="#invalid-arguments">Invalid Arguments</a></h2>
+<pre><code>   __
+ /'__`\
+/\  __/
+\ \____\
+ \/____/... [ERROR MESSAGE]
+
+ Please recheck args or refer to help for usage examples.
+</code></pre>
+<p>This message is displayed if you have entered invalid arguments. The specific error will follow <code>...</code>.</p>
+<p>You can use the <code>-h</code> flag to see the help message or the <code>-e</code> flag to display example usage.</p>
+<h2 id="export-error"><a class="header" href="#export-error">Export Error</a></h2>
+<pre><code> __
+/\ \
+\ \ \
+ \ \ \
+  \ \_\
+   \/\_\
+    \/_/... An error has occurred while exporting scraped data.
+
+[ERROR MESSAGE]
+</code></pre>
+<p>This message is displayed if an error occured while exporting the data. This applies to the scraper tools or word frequencies tool. The specific error will be printed under the art.</p>
+<h1 id="praw-errors"><a class="header" href="#praw-errors">PRAW Errors</a></h1>
+<h2 id="invalid-api-credentials-or-no-internet-connection"><a class="header" href="#invalid-api-credentials-or-no-internet-connection">Invalid API Credentials or No Internet Connection</a></h2>
+<pre><code> _____
+/\ '__`\
+\ \ \L\ \
+ \ \ ,__/... Please recheck API credentials or your internet connection.
+  \ \ \/
+   \ \_\
+    \/_/
+
+Prawcore exception: [EXCEPTION]
+</code></pre>
+<p>This message is displayed if you enter invalid API credentials or if you are not connected to the internet. The exception is printed under the art.</p>
+<p>Recheck the environment variables in <code>.env</code> to make sure your API credentials are correct.</p>
+<h2 id="no-reddit-objects-left-to-scrape"><a class="header" href="#no-reddit-objects-left-to-scrape">No Reddit Objects Left to Scrape</a></h2>
+<pre><code>  ___
+/' _ `\
+/\ \/\ \
+\ \_\ \_\
+ \/_/\/_/... No [OBJECTS] to scrape! Exiting.
+</code></pre>
+<p>This message is displayed if the Reddit objects you have passed in have failed validation (does not exist), are skipped, and there are no longer any objects left for URS to process for that specific scraper.</p>
+<h2 id="rate-limit-reached"><a class="header" href="#rate-limit-reached">Rate Limit Reached</a></h2>
+<pre><code> __
+/\ \
+\ \ \
+ \ \ \  __
+  \ \ \L\ \
+   \ \____/
+    \/___/... You have reached your rate limit.
+
+Please try again when your rate limit is reset: [DATE]
+</code></pre>
+<p>PRAW has rate limits. This message is displayed if you have reached the rate limit set for your account. The reset date will vary depending on when you ran URS. The date I received during testing is usually 24 hours later.</p>
+<h1 id="analytical-tool-errors"><a class="header" href="#analytical-tool-errors">Analytical Tool Errors</a></h1>
+<h2 id="invalid-file"><a class="header" href="#invalid-file">Invalid File</a></h2>
+<pre><code> __
+/\_\
+\/\ \
+ \ \ \
+  \ \_\
+   \/_/... [ERROR MESSAGE]
+</code></pre>
+<p>This message is displayed when you have passed in an invalid file to generate word frequencies or a wordcloud for. The specific error will follow <code>...</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-forest"><a class="header" href="#the-forest">The Forest</a></h1>
+<p><strong>Created:</strong> March 17, 2021</p>
+<blockquote>
+<p>This Python code has been deprecated as of <code>URS v3.4.0</code> and has been rewritten in Rust. However, the concepts discussed in this document as well as the implementation are still applicable to the Rust rewrite.</p>
+<p>See <a href="implementation-details/./speeding-up-python-with-rust.html">Speeding Up Python with Rust</a> for details on how I rewrote this code in Rust and how it yielded drastic performance improvements if you are interested in learning more.</p>
+</blockquote>
+<h1 id="table-of-contents-5"><a class="header" href="#table-of-contents-5">Table of Contents</a></h1>
+<ul>
+<li><a href="implementation-details/the-forest.html#introduction">Introduction</a>
+<ul>
+<li><a href="implementation-details/the-forest.html#motivation">Motivation</a></li>
+<li><a href="implementation-details/the-forest.html#inspiration">Inspiration</a></li>
+</ul>
+</li>
+<li><a href="implementation-details/the-forest.html#how-the-forest-works">How the Forest Works</a>
+<ul>
+<li><a href="implementation-details/the-forest.html#the-commentnode">The <code>CommentNode</code></a></li>
+<li><a href="implementation-details/the-forest.html#the-forest-1">The <code>Forest</code></a>
+<ul>
+<li><a href="implementation-details/the-forest.html#the-root-node">The Root Node</a></li>
+<li><a href="implementation-details/the-forest.html#how-praw-comments-are-linked">How <code>PRAW</code> Comments Are Linked</a></li>
+<li><a href="implementation-details/the-forest.html#the-insertion-methods">The Insertion Methods</a></li>
+</ul>
+</li>
+<li><a href="implementation-details/the-forest.html#serializing-the-forest">Serializing the <code>Forest</code></a></li>
+</ul>
+</li>
+</ul>
+<h1 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h1>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<p>I am a self-taught software developer who just recently graduated from college and am currently looking for my first full-time job. I do not have a computer science degree, so I have had to teach myself a ton of concepts that I would have learned if I got the degree. A class I wish I was able to take in college is data structures and algorithms because that seems to be all the buzz when it comes to the technical interview, which I unfortunately struggle with greatly due to my lack of experience and practice.</p>
+<p>Recently (March 2021) I have been teaching myself DSA. Implementing simple examples of each topic within DSA was not so bad (I am currently working on a study guide/reference repository containing these implementations in both Python and Rust that I will make public soon), but practicing Leetcode problems was and still is a difficult process for me. I will continue to power through the struggle because my livelihood and future career depends on it, though.</p>
+<p>While it has not been a smooth journey, I have come to realize how useful DSA is and am implementing what I have learned in a real-world use case. I do not think I would have been able to figure out a solution to the structured comments scraper's prior shortcomings if I had not studied this area within computer science. I recently implemented my first <a href="https://www.interviewcake.com/concept/java/trie">trie</a> and was fascinated by how abstract data structures worked. I immediately realized I needed to use a tree data structure for the structured comments scraper in order to take it to the next level, which is the purpose of <a href="https://github.com/JosephLai241/URS/pull/24">this pull request</a>.</p>
+<h2 id="inspiration"><a class="header" href="#inspiration">Inspiration</a></h2>
+<p>The <code>Forest</code> is named after <code>PRAW</code>'s <a href="https://praw.readthedocs.io/en/latest/code_overview/other/commentforest.html"><code>CommentForest</code></a>. The <code>CommentForest</code> does not return comments in structured format, so I wrote my own implementation of it.</p>
+<p>The trie was a huge inspiration for the <code>Forest</code>. I will quickly explain my implementation of the trie node.</p>
+<pre><code class="language-python">class TrieNode():
+    def __init__(self, char, is_word):
+        self.char = char
+        self.is_word = is_word
+        self.children = dict()
+</code></pre>
+<p>Each node of the trie contains a character, a boolean flag indicating whether the node denotes the end of a word, and holds a dictionary filled with child nodes as values and their respective characters as keys. I could have used an array and the indices within it to emulate a dictionary, but I figured I could save some access time at the cost of extra space.</p>
+<p>Anyways, the trie implementation is very similar to how the <code>Forest</code> works.</p>
+<h1 id="how-the-forest-works"><a class="header" href="#how-the-forest-works">How the Forest Works</a></h1>
+<h2 id="the-commentnode"><a class="header" href="#the-commentnode">The <code>CommentNode</code></a></h2>
+<p>I created a class <code>CommentNode</code> to store each comment's metadata and replies:</p>
+<pre><code class="language-python">class CommentNode():
+    def __init__(self, metadata):
+        for key, value in metadata.items():
+            self.__setattr__(key, value)
+
+        self.replies = []
+</code></pre>
+<p>I used <code>__setattr__()</code> because the root node defers from the standard comment node schema. By using <code>__setattr__()</code>, <code>CommentNode</code> attributes will be dynamically set based on the <code>metadata</code> dictionary that has been passed in. <code>self.replies</code> holds additional <code>CommentNode</code>s.</p>
+<h2 id="the-forest-1"><a class="header" href="#the-forest-1">The <code>Forest</code></a></h2>
+<p>Next, I created a class <code>Forest</code> which holds the root node and includes methods for insertion.</p>
+<h3 id="the-root-node"><a class="header" href="#the-root-node">The Root Node</a></h3>
+<p>First, let's go over the root node.</p>
+<pre><code class="language-python">class Forest():
+    def __init__(self):
+        self.root = CommentNode({ &quot;id&quot;: &quot;abc123&quot; })
+</code></pre>
+<p>The only key in the dictionary passed into <code>CommentNode</code> is <code>id</code>, therefore the root <code>CommentNode</code> will only contain the attributes <code>self.id</code> and <code>self.replies</code>. A mock submission ID is shown. The actual source code will pull the submission's ID based on the URL that was passed into the <code>-c</code> flag and set the <code>id</code> value accordingly.</p>
+<p>Before I get to the insertion methods, I will explain how comments and their replies are linked.</p>
+<h3 id="how-praw-comments-are-linked"><a class="header" href="#how-praw-comments-are-linked">How <code>PRAW</code> Comments Are Linked</a></h3>
+<p><code>PRAW</code> returns all submission comments by level order. This means all top levels are returned first, followed by all second-level replies, then third, so on and so forth.</p>
+<p>I will create some mock comment objects to demonstrate. Here is a top level comment corresponding to the mock submisssion ID. Note the <code>parent_id</code> contains the submission's <code>id</code>, which is stored in <code>self.root.id</code>:</p>
+<pre><code class="language-json">{
+  &quot;author&quot;: &quot;u/asdfasdfasdfasdf&quot;,
+  &quot;body&quot;: &quot;A top level comment here.&quot;,
+  &quot;created_utc&quot;: &quot;06-06-2006 06:06:06&quot;,
+  &quot;distinguished&quot;: null,
+  &quot;edited&quot;: false,
+  &quot;id&quot;: &quot;qwerty1&quot;,
+  &quot;is_submitter&quot;: false,
+  &quot;link_id&quot;: &quot;t3_asdfgh&quot;,
+  &quot;parent_id&quot;: &quot;t3_abc123&quot;,
+  &quot;score&quot;: 666,
+  &quot;stickied&quot;: false
+}
+</code></pre>
+<p>Here is a second-level reply to the top comment. Note the <code>parent_id</code> contains the top comment's <code>id</code>:</p>
+<pre><code class="language-json">{
+  &quot;author&quot;: &quot;u/hjklhjklhjklhjkl&quot;,
+  &quot;body&quot;: &quot;A reply here.&quot;,
+  &quot;created_utc&quot;: &quot;06-06-2006 18:06:06&quot;,
+  &quot;distinguished&quot;: null,
+  &quot;edited&quot;: false,
+  &quot;id&quot;: &quot;hjkl234&quot;,
+  &quot;is_submitter&quot;: true,
+  &quot;link_id&quot;: &quot;t3_1a2b3c&quot;,
+  &quot;parent_id&quot;: &quot;t1_qwerty1&quot;,
+  &quot;score&quot;: 6,
+  &quot;stickied&quot;: false
+}
+</code></pre>
+<p>This pattern continues all the way down to the last level of comments. It is now very easy to link the correct comments together. I do this by calling <code>split(&quot;_&quot;, 1)</code> on the <code>parent_id</code> and then getting the second item in the split list to compare values. I also specify the <code>maxsplit</code> parameter to force one split.</p>
+<h3 id="the-insertion-methods"><a class="header" href="#the-insertion-methods">The Insertion Methods</a></h3>
+<p>I then defined the methods for <code>CommentNode</code> insertion.</p>
+<pre><code class="language-python">    def _dfs_insert(self, new_comment):
+        stack = []
+        stack.append(self.root)
+
+        visited = set()
+        visited.add(self.root)
+
+        found = False
+        while not found:
+            current_comment = stack.pop(0)
+
+            for reply in current_comment.replies:
+                if new_comment.parent_id.split(&quot;_&quot;, 1)[1] == reply.id:
+                    reply.replies.append(new_comment)
+                    found = True
+                else:
+                    if reply not in visited:
+                        stack.insert(0, reply)
+                        visited.add(reply)
+
+    def seed(self, new_comment):
+        parent_id = new_comment.parent_id.split(&quot;_&quot;, 1)[1]
+
+        self.root.replies.append(new_comment) \
+            if parent_id == getattr(self.root, &quot;id&quot;) \
+            else self._dfs_insert(new_comment)
+</code></pre>
+<p>I implemented the <a href="https://www.interviewcake.com/concept/java/dfs">depth-first search</a> algorithm to find a comment's parent node and insert it into the parent node's <code>replies</code> array. I defined a separate <code>visited</code> set to keep track of visited <code>CommentNode</code>s to avoid an infinite loop of inserting <code>CommentNode</code>s that were already visited into the <code>stack</code>. At first I wrote a recursive version of depth-first search, but then opted for an iterative version because it would not scale well for submissions that included large amounts of comments, ie. stack overflow.</p>
+<p>Within the <code>seed</code> method, I first check if the <code>CommentNode</code> is a top level comment by comparing its parent ID to the submission ID. Depth-first search is triggered if the <code>CommentNode</code> is not a top level comment.</p>
+<h2 id="serializing-the-forest"><a class="header" href="#serializing-the-forest">Serializing the <code>Forest</code></a></h2>
+<p>Since Python's built-in JSON module can only handle primitive types that have a direct JSON equivalent, a custom encoder is necessary to convert the <code>Forest</code> into JSON format. I defined this in <code>Export.py</code>.</p>
+<pre><code class="language-python">from json import JSONEncoder
+
+class EncodeNode(JSONEncoder):
+    def default(self, object):
+        return object.__dict__
+</code></pre>
+<p>The <code>default()</code> method overrides <code>JSONEncoder</code>'s <code>default()</code> method and serializes the <code>CommentNode</code> by converting it into a dictionary, which is a primitive type that has a direct JSON equivalent:</p>
+<pre><code class="language-python">EncodeNode().encode(CommentNode)
+</code></pre>
+<p>This ensures the node is correctly encoded before I call the <code>seed()</code> method to insert a new <code>CommentNode</code> into the <code>replies</code> arrays of its respective parent <code>CommentNode</code>.</p>
+<p>I can then use this custom <code>JSONEncoder</code> subclass while exporting by specifying it within <code>json.dump()</code> with the <code>cls</code> kwarg:</p>
+<pre><code class="language-python">with open(filename, &quot;w&quot;, encoding = &quot;utf-8&quot;) as results:
+    json.dump(data, results, indent = 4, cls = EncodeNode)
+</code></pre>
+<p>This was how the structured comments export was implemented. Refer to the source code located in <code>urs/praw_scrapers/Comments.py</code> to see more. I hope this was somewhat interesting and/or informative. Thanks for reading!</p>
+<!-- LINKS -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="speeding-up-python-with-rust"><a class="header" href="#speeding-up-python-with-rust">Speeding Up Python with Rust</a></h1>
+<p><strong>Created:</strong> May 05, 2023</p>
+<h1 id="table-of-contents-6"><a class="header" href="#table-of-contents-6">Table of Contents</a></h1>
+<ul>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#introduction">Introduction</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#some-reasons-why-i-love-rust">Some Reasons Why I Love Rust</a>
+<ul>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#great-performance-without-sacrificing-memory-safety">Great Performance Without Sacrificing Memory Safety</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#all-bases-covered">All Bases Covered</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#compiler-error-messages-are-actually-useful">Compiler Error Messages Are Actually Useful</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#fantastic-developer-ecosystem">Fantastic Developer Ecosystem</a></li>
+</ul>
+</li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#controllable-bottlenecks-in-urs">Controllable Bottlenecks in <code>URS</code></a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#depth---first-search">Depth-First Search</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#submission-comments-returned-by-praw">Submission Comments Returned by PRAW</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#translating-python-to-rust">Translating Python to Rust</a></li>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#the-performance-increase">The Performance Increase</a>
+<ul>
+<li><a href="implementation-details/speeding-up-python-with-rust.html#rust-vs-python-demo">Rust vs. Python Demo</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h1>
+<p>I was only proficient in Python when I initially created <code>URS</code> in 2019. Four years later, I have accumulated experience with a variety of programming languages such as JavaScript, Java, Go, and Rust. Of all the languages I have tried, I have found Rust was the only one that does everything better than all other programming languages, learning curve notwithstanding.</p>
+<p>This document briefly details how I wrote a Python module in Rust to improve the performance of the submission comments scraper, particularly when creating the structured comments JSON format.</p>
+<h1 id="some-reasons-why-i-love-rust"><a class="header" href="#some-reasons-why-i-love-rust">Some Reasons Why I Love Rust</a></h1>
+<p>I will try to keep this section short, but here are a few major reasons why I love Rust. Feel free to skip this section.</p>
+<h2 id="great-performance-without-sacrificing-memory-safety"><a class="header" href="#great-performance-without-sacrificing-memory-safety">Great Performance Without Sacrificing Memory Safety</a></h2>
+<p>The performance you get from Rust programs are as fast as, or even faster, than those written in C or C++. The difference is Rust offers a unique way for developers to manage memory and makes it less likely for a program to have memory leaks. You have to make a conscious decision to make your Rust program <em>not</em> memory safe. On the other hand, it is extremely easy to accidentally mess up memory management in C or C++, causing all kinds of bad shit to happen.</p>
+<h2 id="all-bases-covered"><a class="header" href="#all-bases-covered">All Bases Covered</a></h2>
+<p>Assuming you have followed good Rust development practices, you do not need to risk running into a runtime error when you deploy your application because you have already handled what should happen if something within your application fails. This means there is (typically) no unexpected behavior, which means it is less likely to crash and, if used in a professional setting, you are less likely to be called into work to fix something during the weekend just because something crashed.</p>
+<p>Getting used to this paradigm has had a net positive on the way I write code, especially in dynamically interpreted programming languages such as Python and JavaScript. I have become more aware of where runtime errors may potentially occur and try my best to handle them in advance.</p>
+<h2 id="compiler-error-messages-are-actually-useful"><a class="header" href="#compiler-error-messages-are-actually-useful">Compiler Error Messages Are Actually Useful</a></h2>
+<p>The title says it all -- the error messages you see when you get compiler errors are actually useful and will clearly tell you exactly where the error is, why it happened, and what you need to do to fix it. None of that lengthy, useless bullshit you might see from an error raised in a JavaScript or Java program, for example.</p>
+<p>Here is an example of an error message you might see when compiling a Rust program:</p>
+<p><img src="https://blog.rust-lang.org/images/2020-05-15-five-years-of-rust/borrow-error-1.43.0.png" alt="useful Rust compiler error message" /></p>
+<p>Now compare it to this:</p>
+<p><img src="https://i.stack.imgur.com/QX9zY.png" alt="JavaScript is fucking garbage" /></p>
+<p>All I can say (on Rust's behalf) is:</p>
+<p><a href="https://www.youtube.com/embed/AgY5WyYo5no?start=1&amp;end=5"><img src="https://i.imgur.com/jXqo8PC.png" alt="you've seen my work, it speaks for itself" /></a></p>
+<blockquote>
+<p>Click the screenshot to play.</p>
+</blockquote>
+<h2 id="fantastic-developer-ecosystem"><a class="header" href="#fantastic-developer-ecosystem">Fantastic Developer Ecosystem</a></h2>
+<p><code>cargo</code> is an amazing CLI tool, making it incredibly easy to manage Rust projects. Here are some of the most notable features:</p>
+<ul>
+<li>Managing (adding/modifying/removing) dependencies</li>
+<li>Compiling your project</li>
+<li>Formatting and linting code</li>
+<li>Generating documentation from the docstrings you have written within your code</li>
+<li>Publishing your project to <a href="https://crates.io">crates.io</a> and documentation to <a href="https://docs.rs">docs.rs</a></li>
+</ul>
+<p>Additionally, the <code>Cargo.toml</code> file makes it very easy to set project metadata. Thankfully Python's <a href="https://python-poetry.org/"><code>Poetry</code></a> brings a <code>cargo</code>-esque experience to Python projects, making the old <code>setup.py</code> + <code>requirements.txt</code> project format feel very outdated (which it is, as <code>pyproject.toml</code> is now the new standard way to specify project metadata per <a href="https://peps.python.org/pep-0621/">PEP 621</a>).</p>
+<p>Upgrading Rust is also a very simple <code>rustup upgrade</code> command in the terminal.</p>
+<hr />
+<p>I will leave the list at that for now, but I strongly encourage anyone who is looking to learn something new to <a href="https://doc.rust-lang.org/book/">learn Rust</a>.</p>
+<h1 id="controllable-bottlenecks-in-urs"><a class="header" href="#controllable-bottlenecks-in-urs">Controllable Bottlenecks in <code>URS</code></a></h1>
+<p>Diving into the practical reasons as to why I rewrote parts of <code>URS</code> in Rust, we first have to consider performance bottlenecks that I can optimize.</p>
+<p>The biggest bottlenecks for how fast <code>URS</code> can scrape Reddit are the user's internet connection speed and the number of results returned when scraping Subreddits, Redditors, or submission comments. Unfortunately those variables are out of my control, so there is nothing I can do to optimize on that end. However, I <em>can</em> optimize the speed of which the raw data returned from the Reddit API is processed.</p>
+<p>The depth-first search algorithm that is used when exporting structured comments is the most obvious performance bottleneck, which is why I rewrote this functionality in Rust.</p>
+<h1 id="depth-first-search"><a class="header" href="#depth-first-search">Depth-First Search</a></h1>
+<p>Here's a quick refresher for the algorithm. Depth-first search is a search algorithm that traverses depth-first within a tree to find the target node, traversing deep into a node before moving on to the next in the tree. Here is a GIF visualizing the algorithm's steps:</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif" alt="depth-first search demo GIF" /></p>
+<p>The time complexity for this algorithm is <code>O(V + E)</code>, where <code>V</code> is the number of vertices and <code>E</code> is the number of edges in the tree, since the algorithm explores each vertex and edge exactly one time.</p>
+<h1 id="submission-comments-returned-by-praw"><a class="header" href="#submission-comments-returned-by-praw">Submission Comments Returned by <code>PRAW</code></a></h1>
+<p>Submission comments are returned by <code>PRAW</code> in order level. This means we get a <strong><em>P H A T</em></strong> list of comments containing all top-level comments first, followed by second-level comments, third-level comments, so on and so forth. Refer to the <a href="implementation-details/./the-forest.html#how-praw-comments-are-linked">&quot;How <code>PRAW</code> Comments Are Linked&quot; section in The Forest</a> to see an example of what I am describing.</p>
+<p>The more comments are processed while creating the structured JSON via the depth-first search algorithm, the more deeply nested those comments are within the existing comment thread structure.</p>
+<p>It would be ideal to have this algorithm run as fast as possible, especially for Reddit submissions that contain a substantial number of comments, such as some r/AskReddit threads.</p>
+<h1 id="translating-python-to-rust"><a class="header" href="#translating-python-to-rust">Translating Python to Rust</a></h1>
+<p>I was able to write a Python module in Rust via the <a href="https://pyo3.rs/v0.12.3/"><code>PyO3</code></a> crate, using <a href="https://www.maturin.rs/tutorial.html"><code>maturin</code></a> to compile my Rust code and install it into my Python virtual environment. Refer to the linked documentation to learn more about how you can integrate Rust with your own Python project.</p>
+<p>I will not explain every single line of the Python to Rust translation since a Rust/<code>PyO3</code>/<code>maturin</code> tutorial is not within the scope of this document, but I will paste the depth-first search algorithm to showcase the nearly direct 1-to-1 translation between the two languages.</p>
+<p>Here is the code for the original Python implementation:</p>
+<pre><code class="language-python">class Forest():
+    def _dfs_insert(self, new_comment: CommentNode) -&gt; None:
+        stack = []
+        stack.append(self.root)
+
+        visited = set()
+        visited.add(self.root)
+
+        found = False
+        while not found:
+            current_comment = stack.pop(0)
+
+            for reply in current_comment.replies:
+                if new_comment.parent_id.split(&quot;_&quot;, 1)[1] == reply.id:
+                    reply.replies.append(new_comment)
+                    found = True
+                else:
+                    if reply not in visited:
+                        stack.insert(0, reply)
+                        visited.add(reply)
+
+    def seed(self, new_comment: CommentNode) -&gt; None:
+        parent_id = new_comment.parent_id.split(&quot;_&quot;, 1)[1]
+
+        if parent_id == getattr(self.root, &quot;id&quot;):
+            self.root.replies.append(new_comment)
+        else:
+            self._dfs_insert(new_comment)
+</code></pre>
+<p>Here is the Rust translation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Forest {
+    fn _dfs_insert(&amp;mut self, new_comment: CommentNode) {
+        let root_id = &amp;self.root.id.clone();
+
+        let mut stack: VecDeque&lt;&amp;mut CommentNode&gt; = VecDeque::new();
+        stack.push_front(&amp;mut self.root);
+
+        let mut visited: HashSet&lt;String&gt; = HashSet::new();
+        visited.insert(root_id.to_string());
+
+        let target_id = &amp;new_comment
+            .parent_id
+            .split('_')
+            .last()
+            .unwrap_or(&amp;new_comment.parent_id)
+            .to_string();
+
+        let mut found = false;
+
+        while !found {
+            if let Some(comment_node) = stack.pop_front() {
+                for reply in comment_node.replies.iter_mut() {
+                    if target_id == &amp;reply.id {
+                        reply.replies.push(new_comment.clone());
+                        found = true;
+                    } else {
+                        let child_id = reply.id.clone();
+
+                        if !visited.contains(child_id.as_str()) {
+                            stack.push_front(reply);
+                            visited.insert(child_id);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fn seed_comment(&amp;mut self, new_comment: CommentNode) {
+        let parent_id = &amp;new_comment
+            .parent_id
+            .split('_')
+            .last()
+            .unwrap_or(&amp;new_comment.parent_id)
+            .to_string();
+
+        if parent_id == &amp;self.root.id {
+            self.root.replies.push(new_comment);
+        } else {
+            self._dfs_insert(new_comment);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>Refer to the <a href="https://github.com/JosephLai241/URS/tree/master/taisun"><code>taisun/</code></a> directory to view the full Rust implementation.</p>
+</blockquote>
+<h1 id="the-performance-increase"><a class="header" href="#the-performance-increase">The Performance Increase</a></h1>
+<p>I have no words for how much faster the Rust implementation is compared to the original Python implementation. All I can do is provide you with this screenshot and let you interpret the results for yourself. The timestamp in the far right column is the time elapsed in <code>HH:MM:SS</code>.</p>
+<p><img src="https://i.imgur.com/pTXblAV.png" alt="DAMN BOI RUST FAST BOI THAT'S A FAST ASS BOI DAMN screenshot" /></p>
+<blockquote>
+<p>I hope the emojis make it obvious which progress bar corresponds to which implementation, but just to be extra clear: 🐍 = Python, 🦀 = Rust.</p>
+</blockquote>
+<blockquote>
+<p>This test was run on a 2021 MacBook Pro with the binned M1 Pro chip.</p>
+</blockquote>
+<h2 id="rust-vs-python-demo"><a class="header" href="#rust-vs-python-demo">Rust vs. Python Demo</a></h2>
+<p>You do not have to take my word for it -- I have put together a small demo located on the <a href="https://github.com/JosephLai241/URS/tree/rust-demo"><code>rust-demo</code> branch</a> in the repository.</p>
+<p>The demo branch includes a JSON file which contains 56,107 unstructured comments scraped from <a href="https://www.reddit.com/r/AskReddit/comments/ifomdz/what_old_video_games_do_you_still_play_regularly/">this r/AskReddit post</a>. The demo Python script will read the unstructured comments from the JSON file and run the depth-first search algorithm in both Python and Rust concurrently. Progress bars for each task will visualize the progress made with each implementation and display the time elapsed at the far right column.</p>
+<p>Run the following commands to install and run the demo:</p>
+<pre><code>git clone -b rust-demo https://github.com/JosephLai241/URS.git --depth=1
+poetry install
+
+# You do not need to run the following command if the virtualenv is already
+# activated.
+#
+# If this command fails/does not activate the virtualenv, run
+# `source .venv/bin/activate` to activate the virtualenv created by `Poetry`.
+poetry shell
+
+maturin develop --release
+poetry run python rust_vs_python.py
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="before-making-pull-or-feature-requests"><a class="header" href="#before-making-pull-or-feature-requests">Before Making Pull or Feature Requests</a></h1>
+<p>Consider the scope of this project before submitting a pull or feature request. <code>URS</code> stands for Universal Reddit Scraper. Two important aspects are listed in its name - <em>universal</em> and <em>scraper</em>.</p>
+<p>I will not approve feature or pull requests that deviate from its sole purpose. This may include scraping a specific aspect of Reddit or <a href="https://github.com/JosephLai241/URS/issues/17">adding functionality that allows you to post a comment with <code>URS</code></a>. Adding either of these requests will no longer allow <code>URS</code> to be universal or merely a scraper. However, I am more than happy to approve requests that enhance the current scraping capabilities of <code>URS</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-on-top-of-urs"><a class="header" href="#building-on-top-of-urs">Building on Top of <code>URS</code></a></h1>
+<p>Although I will not approve requests that deviate from the project scope, feel free to reach out if you have built something on top of <code>URS</code> or have made modifications to scrape something specific on Reddit. I will add your project to the <a href="contributing/../derivative-projects.html">Derivative Projects</a> section!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="making-pull-or-feature-requests"><a class="header" href="#making-pull-or-feature-requests">Making Pull or Feature Requests</a></h1>
+<p>You can suggest new features or changes by going to the <a href="https://github.com/JosephLai241/URS/issues">Issues tab</a> and fill out the Feature Request template. If there is a good reason for a new feature, I will consider adding it.</p>
+<p>You are also more than welcome to create a pull request -- adding additional features, improving runtime, or refactoring existing code. If it is approved, I will merge the pull request into the master branch and credit you for contributing to this project.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
+<div class="table-wrapper"><table><thead><tr><th>Date</th><th>User</th><th>Contribution</th></tr></thead><tbody>
+<tr><td>March 11, 2020</td><td><a href="https://github.com/ThereGoesMySanity">ThereGoesMySanity</a></td><td>Created a <a href="https://github.com/JosephLai241/URS/pull/9">pull request</a> adding 2FA information to README</td></tr>
+<tr><td>October 6, 2020</td><td><a href="https://github.com/LukeDSchenk">LukeDSchenk</a></td><td>Created a <a href="https://github.com/JosephLai241/URS/pull/19">pull request</a> fixing <code>&quot;[Errno 36] File name too long&quot;</code> issue, making it impossible to save comment scrapes with long titles</td></tr>
+<tr><td>October 10, 2020</td><td><a href="https://github.com/IceBerge421">IceBerge421</a></td><td>Created a <a href="https://github.com/JosephLai241/URS/pull/20">pull request</a> fixing a cloning error occuring on Windows machines due to illegal file name characters, <code>&quot;</code>, found in two scrape samples</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="derivative-projects"><a class="header" href="#derivative-projects">Derivative Projects</a></h1>
+<p>This is a showcase for projects that are built on top of URS!</p>
+<h2 id="skiwheelrurs"><a class="header" href="#skiwheelrurs"><a href="https://github.com/skiwheelr/URS">skiwheelr/URS</a></a></h2>
+<p><img src="https://i.imgur.com/ChHdAZv.png" alt="skiwheelr project output screenshot" /></p>
+<p>Contains a bash script built on URS which counts ticker mentions in Subreddits, subsequently cURLs all the relevant links in parallel, and counts the mentions of those.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

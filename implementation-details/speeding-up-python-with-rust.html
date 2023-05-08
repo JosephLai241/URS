@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Speeding Up Python with Rust - URS User Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">URS</a></li><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../installation.html"><strong aria-hidden="true">2.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../exporting.html"><strong aria-hidden="true">3.</strong> Exporting</a></li><li class="chapter-item expanded "><a href="../credentials.html"><strong aria-hidden="true">4.</strong> How to Get Reddit API Credentials for PRAW</a></li><li class="chapter-item expanded affix "><li class="part-title">Scraping Reddit</li><li class="chapter-item expanded "><a href="../scraping-reddit/scrape-speeds-and-rate-limits.html"><strong aria-hidden="true">5.</strong> Scrape Speeds and Rate Limits</a></li><li class="chapter-item expanded "><a href="../scraping-reddit/all-attributes-table.html"><strong aria-hidden="true">6.</strong> A Table of All Subreddit, Redditor, and Submission Comments Attributes</a></li><li class="chapter-item expanded "><a href="../scraping-reddit/subreddit.html"><strong aria-hidden="true">7.</strong> Scraping Subreddits</a></li><li class="chapter-item expanded "><a href="../scraping-reddit/redditor.html"><strong aria-hidden="true">8.</strong> Scraping Redditors</a></li><li class="chapter-item expanded "><a href="../scraping-reddit/submission-comments.html"><strong aria-hidden="true">9.</strong> Scraping Submission Comments</a></li><li class="chapter-item expanded affix "><li class="part-title">Livestreaming Reddit</li><li class="chapter-item expanded "><a href="../livestreaming-reddit/general-information.html"><strong aria-hidden="true">10.</strong> General Information</a></li><li class="chapter-item expanded "><a href="../livestreaming-reddit/livestreaming-subreddits-and-redditors.html"><strong aria-hidden="true">11.</strong> Livestreaming Subreddits and Redditors</a></li><li class="chapter-item expanded affix "><li class="part-title">Analytical Tools</li><li class="chapter-item expanded "><a href="../analytical-tools/general-information.html"><strong aria-hidden="true">12.</strong> General Information</a></li><li class="chapter-item expanded "><a href="../analytical-tools/frequencies-and-wordclouds.html"><strong aria-hidden="true">13.</strong> Generating Word Frequencies and Wordclouds</a></li><li class="chapter-item expanded affix "><li class="part-title">Utilities</li><li class="chapter-item expanded "><a href="../utilities/tree.html"><strong aria-hidden="true">14.</strong> Built-in Tree</a></li><li class="chapter-item expanded "><a href="../utilities/rate-limit-checking.html"><strong aria-hidden="true">15.</strong> PRAW Rate Limit Check</a></li><li class="chapter-item expanded affix "><li class="part-title">Additional Information</li><li class="chapter-item expanded "><a href="../additional-information/2fa-information.html"><strong aria-hidden="true">16.</strong> 2-Factor Authentication</a></li><li class="chapter-item expanded "><a href="../additional-information/error-messages.html"><strong aria-hidden="true">17.</strong> Error Messages</a></li><li class="chapter-item expanded affix "><li class="part-title">Implementation Details</li><li class="chapter-item expanded "><a href="../implementation-details/the-forest.html"><strong aria-hidden="true">18.</strong> The Forest</a></li><li class="chapter-item expanded "><a href="../implementation-details/speeding-up-python-with-rust.html" class="active"><strong aria-hidden="true">19.</strong> Speeding Up Python with Rust</a></li><li class="chapter-item expanded affix "><li class="part-title">Contributing</li><li class="chapter-item expanded "><a href="../contributing/before-making-pull-or-feature-requests.html"><strong aria-hidden="true">20.</strong> Before Making Pull or Feature Requests</a></li><li class="chapter-item expanded "><a href="../contributing/building-on-top-of-urs.html"><strong aria-hidden="true">21.</strong> Building on Top of URS</a></li><li class="chapter-item expanded "><a href="../contributing/making-pull-or-feature-requests.html"><strong aria-hidden="true">22.</strong> Making Pull or Feature Requests</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributors.html">Contributors</a></li><li class="chapter-item expanded affix "><a href="../derivative-projects.html">Derivative Projects</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">URS User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="speeding-up-python-with-rust"><a class="header" href="#speeding-up-python-with-rust">Speeding Up Python with Rust</a></h1>
+<p><strong>Created:</strong> May 05, 2023</p>
+<h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#some-reasons-why-i-love-rust">Some Reasons Why I Love Rust</a>
+<ul>
+<li><a href="#great-performance-without-sacrificing-memory-safety">Great Performance Without Sacrificing Memory Safety</a></li>
+<li><a href="#all-bases-covered">All Bases Covered</a></li>
+<li><a href="#compiler-error-messages-are-actually-useful">Compiler Error Messages Are Actually Useful</a></li>
+<li><a href="#fantastic-developer-ecosystem">Fantastic Developer Ecosystem</a></li>
+</ul>
+</li>
+<li><a href="#controllable-bottlenecks-in-urs">Controllable Bottlenecks in <code>URS</code></a></li>
+<li><a href="#depth---first-search">Depth-First Search</a></li>
+<li><a href="#submission-comments-returned-by-praw">Submission Comments Returned by PRAW</a></li>
+<li><a href="#translating-python-to-rust">Translating Python to Rust</a></li>
+<li><a href="#the-performance-increase">The Performance Increase</a>
+<ul>
+<li><a href="#rust-vs-python-demo">Rust vs. Python Demo</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>I was only proficient in Python when I initially created <code>URS</code> in 2019. Four years later, I have accumulated experience with a variety of programming languages such as JavaScript, Java, Go, and Rust. Of all the languages I have tried, I have found Rust was the only one that does everything better than all other programming languages, learning curve notwithstanding.</p>
+<p>This document briefly details how I wrote a Python module in Rust to improve the performance of the submission comments scraper, particularly when creating the structured comments JSON format.</p>
+<h1 id="some-reasons-why-i-love-rust"><a class="header" href="#some-reasons-why-i-love-rust">Some Reasons Why I Love Rust</a></h1>
+<p>I will try to keep this section short, but here are a few major reasons why I love Rust. Feel free to skip this section.</p>
+<h2 id="great-performance-without-sacrificing-memory-safety"><a class="header" href="#great-performance-without-sacrificing-memory-safety">Great Performance Without Sacrificing Memory Safety</a></h2>
+<p>The performance you get from Rust programs are as fast as, or even faster, than those written in C or C++. The difference is Rust offers a unique way for developers to manage memory and makes it less likely for a program to have memory leaks. You have to make a conscious decision to make your Rust program <em>not</em> memory safe. On the other hand, it is extremely easy to accidentally mess up memory management in C or C++, causing all kinds of bad shit to happen.</p>
+<h2 id="all-bases-covered"><a class="header" href="#all-bases-covered">All Bases Covered</a></h2>
+<p>Assuming you have followed good Rust development practices, you do not need to risk running into a runtime error when you deploy your application because you have already handled what should happen if something within your application fails. This means there is (typically) no unexpected behavior, which means it is less likely to crash and, if used in a professional setting, you are less likely to be called into work to fix something during the weekend just because something crashed.</p>
+<p>Getting used to this paradigm has had a net positive on the way I write code, especially in dynamically interpreted programming languages such as Python and JavaScript. I have become more aware of where runtime errors may potentially occur and try my best to handle them in advance.</p>
+<h2 id="compiler-error-messages-are-actually-useful"><a class="header" href="#compiler-error-messages-are-actually-useful">Compiler Error Messages Are Actually Useful</a></h2>
+<p>The title says it all -- the error messages you see when you get compiler errors are actually useful and will clearly tell you exactly where the error is, why it happened, and what you need to do to fix it. None of that lengthy, useless bullshit you might see from an error raised in a JavaScript or Java program, for example.</p>
+<p>Here is an example of an error message you might see when compiling a Rust program:</p>
+<p><img src="https://blog.rust-lang.org/images/2020-05-15-five-years-of-rust/borrow-error-1.43.0.png" alt="useful Rust compiler error message" /></p>
+<p>Now compare it to this:</p>
+<p><img src="https://i.stack.imgur.com/QX9zY.png" alt="JavaScript is fucking garbage" /></p>
+<p>All I can say (on Rust's behalf) is:</p>
+<p><a href="https://www.youtube.com/embed/AgY5WyYo5no?start=1&amp;end=5"><img src="https://i.imgur.com/jXqo8PC.png" alt="you've seen my work, it speaks for itself" /></a></p>
+<blockquote>
+<p>Click the screenshot to play.</p>
+</blockquote>
+<h2 id="fantastic-developer-ecosystem"><a class="header" href="#fantastic-developer-ecosystem">Fantastic Developer Ecosystem</a></h2>
+<p><code>cargo</code> is an amazing CLI tool, making it incredibly easy to manage Rust projects. Here are some of the most notable features:</p>
+<ul>
+<li>Managing (adding/modifying/removing) dependencies</li>
+<li>Compiling your project</li>
+<li>Formatting and linting code</li>
+<li>Generating documentation from the docstrings you have written within your code</li>
+<li>Publishing your project to <a href="https://crates.io">crates.io</a> and documentation to <a href="https://docs.rs">docs.rs</a></li>
+</ul>
+<p>Additionally, the <code>Cargo.toml</code> file makes it very easy to set project metadata. Thankfully Python's <a href="https://python-poetry.org/"><code>Poetry</code></a> brings a <code>cargo</code>-esque experience to Python projects, making the old <code>setup.py</code> + <code>requirements.txt</code> project format feel very outdated (which it is, as <code>pyproject.toml</code> is now the new standard way to specify project metadata per <a href="https://peps.python.org/pep-0621/">PEP 621</a>).</p>
+<p>Upgrading Rust is also a very simple <code>rustup upgrade</code> command in the terminal.</p>
+<hr />
+<p>I will leave the list at that for now, but I strongly encourage anyone who is looking to learn something new to <a href="https://doc.rust-lang.org/book/">learn Rust</a>.</p>
+<h1 id="controllable-bottlenecks-in-urs"><a class="header" href="#controllable-bottlenecks-in-urs">Controllable Bottlenecks in <code>URS</code></a></h1>
+<p>Diving into the practical reasons as to why I rewrote parts of <code>URS</code> in Rust, we first have to consider performance bottlenecks that I can optimize.</p>
+<p>The biggest bottlenecks for how fast <code>URS</code> can scrape Reddit are the user's internet connection speed and the number of results returned when scraping Subreddits, Redditors, or submission comments. Unfortunately those variables are out of my control, so there is nothing I can do to optimize on that end. However, I <em>can</em> optimize the speed of which the raw data returned from the Reddit API is processed.</p>
+<p>The depth-first search algorithm that is used when exporting structured comments is the most obvious performance bottleneck, which is why I rewrote this functionality in Rust.</p>
+<h1 id="depth-first-search"><a class="header" href="#depth-first-search">Depth-First Search</a></h1>
+<p>Here's a quick refresher for the algorithm. Depth-first search is a search algorithm that traverses depth-first within a tree to find the target node, traversing deep into a node before moving on to the next in the tree. Here is a GIF visualizing the algorithm's steps:</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif" alt="depth-first search demo GIF" /></p>
+<p>The time complexity for this algorithm is <code>O(V + E)</code>, where <code>V</code> is the number of vertices and <code>E</code> is the number of edges in the tree, since the algorithm explores each vertex and edge exactly one time.</p>
+<h1 id="submission-comments-returned-by-praw"><a class="header" href="#submission-comments-returned-by-praw">Submission Comments Returned by <code>PRAW</code></a></h1>
+<p>Submission comments are returned by <code>PRAW</code> in order level. This means we get a <strong><em>P H A T</em></strong> list of comments containing all top-level comments first, followed by second-level comments, third-level comments, so on and so forth. Refer to the <a href="./the-forest.html#how-praw-comments-are-linked">&quot;How <code>PRAW</code> Comments Are Linked&quot; section in The Forest</a> to see an example of what I am describing.</p>
+<p>The more comments are processed while creating the structured JSON via the depth-first search algorithm, the more deeply nested those comments are within the existing comment thread structure.</p>
+<p>It would be ideal to have this algorithm run as fast as possible, especially for Reddit submissions that contain a substantial number of comments, such as some r/AskReddit threads.</p>
+<h1 id="translating-python-to-rust"><a class="header" href="#translating-python-to-rust">Translating Python to Rust</a></h1>
+<p>I was able to write a Python module in Rust via the <a href="https://pyo3.rs/v0.12.3/"><code>PyO3</code></a> crate, using <a href="https://www.maturin.rs/tutorial.html"><code>maturin</code></a> to compile my Rust code and install it into my Python virtual environment. Refer to the linked documentation to learn more about how you can integrate Rust with your own Python project.</p>
+<p>I will not explain every single line of the Python to Rust translation since a Rust/<code>PyO3</code>/<code>maturin</code> tutorial is not within the scope of this document, but I will paste the depth-first search algorithm to showcase the nearly direct 1-to-1 translation between the two languages.</p>
+<p>Here is the code for the original Python implementation:</p>
+<pre><code class="language-python">class Forest():
+    def _dfs_insert(self, new_comment: CommentNode) -&gt; None:
+        stack = []
+        stack.append(self.root)
+
+        visited = set()
+        visited.add(self.root)
+
+        found = False
+        while not found:
+            current_comment = stack.pop(0)
+
+            for reply in current_comment.replies:
+                if new_comment.parent_id.split(&quot;_&quot;, 1)[1] == reply.id:
+                    reply.replies.append(new_comment)
+                    found = True
+                else:
+                    if reply not in visited:
+                        stack.insert(0, reply)
+                        visited.add(reply)
+
+    def seed(self, new_comment: CommentNode) -&gt; None:
+        parent_id = new_comment.parent_id.split(&quot;_&quot;, 1)[1]
+
+        if parent_id == getattr(self.root, &quot;id&quot;):
+            self.root.replies.append(new_comment)
+        else:
+            self._dfs_insert(new_comment)
+</code></pre>
+<p>Here is the Rust translation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Forest {
+    fn _dfs_insert(&amp;mut self, new_comment: CommentNode) {
+        let root_id = &amp;self.root.id.clone();
+
+        let mut stack: VecDeque&lt;&amp;mut CommentNode&gt; = VecDeque::new();
+        stack.push_front(&amp;mut self.root);
+
+        let mut visited: HashSet&lt;String&gt; = HashSet::new();
+        visited.insert(root_id.to_string());
+
+        let target_id = &amp;new_comment
+            .parent_id
+            .split('_')
+            .last()
+            .unwrap_or(&amp;new_comment.parent_id)
+            .to_string();
+
+        let mut found = false;
+
+        while !found {
+            if let Some(comment_node) = stack.pop_front() {
+                for reply in comment_node.replies.iter_mut() {
+                    if target_id == &amp;reply.id {
+                        reply.replies.push(new_comment.clone());
+                        found = true;
+                    } else {
+                        let child_id = reply.id.clone();
+
+                        if !visited.contains(child_id.as_str()) {
+                            stack.push_front(reply);
+                            visited.insert(child_id);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fn seed_comment(&amp;mut self, new_comment: CommentNode) {
+        let parent_id = &amp;new_comment
+            .parent_id
+            .split('_')
+            .last()
+            .unwrap_or(&amp;new_comment.parent_id)
+            .to_string();
+
+        if parent_id == &amp;self.root.id {
+            self.root.replies.push(new_comment);
+        } else {
+            self._dfs_insert(new_comment);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>Refer to the <a href="https://github.com/JosephLai241/URS/tree/master/taisun"><code>taisun/</code></a> directory to view the full Rust implementation.</p>
+</blockquote>
+<h1 id="the-performance-increase"><a class="header" href="#the-performance-increase">The Performance Increase</a></h1>
+<p>I have no words for how much faster the Rust implementation is compared to the original Python implementation. All I can do is provide you with this screenshot and let you interpret the results for yourself. The timestamp in the far right column is the time elapsed in <code>HH:MM:SS</code>.</p>
+<p><img src="https://i.imgur.com/pTXblAV.png" alt="DAMN BOI RUST FAST BOI THAT'S A FAST ASS BOI DAMN screenshot" /></p>
+<blockquote>
+<p>I hope the emojis make it obvious which progress bar corresponds to which implementation, but just to be extra clear: 🐍 = Python, 🦀 = Rust.</p>
+</blockquote>
+<blockquote>
+<p>This test was run on a 2021 MacBook Pro with the binned M1 Pro chip.</p>
+</blockquote>
+<h2 id="rust-vs-python-demo"><a class="header" href="#rust-vs-python-demo">Rust vs. Python Demo</a></h2>
+<p>You do not have to take my word for it -- I have put together a small demo located on the <a href="https://github.com/JosephLai241/URS/tree/rust-demo"><code>rust-demo</code> branch</a> in the repository.</p>
+<p>The demo branch includes a JSON file which contains 56,107 unstructured comments scraped from <a href="https://www.reddit.com/r/AskReddit/comments/ifomdz/what_old_video_games_do_you_still_play_regularly/">this r/AskReddit post</a>. The demo Python script will read the unstructured comments from the JSON file and run the depth-first search algorithm in both Python and Rust concurrently. Progress bars for each task will visualize the progress made with each implementation and display the time elapsed at the far right column.</p>
+<p>Run the following commands to install and run the demo:</p>
+<pre><code>git clone -b rust-demo https://github.com/JosephLai241/URS.git --depth=1
+poetry install
+
+# You do not need to run the following command if the virtualenv is already
+# activated.
+#
+# If this command fails/does not activate the virtualenv, run
+# `source .venv/bin/activate` to activate the virtualenv created by `Poetry`.
+poetry shell
+
+maturin develop --release
+poetry run python rust_vs_python.py
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../implementation-details/the-forest.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../contributing/before-making-pull-or-feature-requests.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../implementation-details/the-forest.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../contributing/before-making-pull-or-feature-requests.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
