@@ -1,11 +1,6 @@
 name: Rust code checks
 
 on:
-  push:
-    branches-ignore:
-      - "demo-gifs"
-      - "rust-demo"
-      - "samples"
   pull_request:
     branches-ignore:
       - "demo-gifs"
