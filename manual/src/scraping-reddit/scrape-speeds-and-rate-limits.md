@@ -9,7 +9,7 @@ Your internet connection speed is the primary bottleneck that will establish the
 
 Yes, PRAW has rate limits. These limits are proportional to how much karma you have accumulated -- the higher the karma, the higher the rate limit. This has been implemented to mitigate spammers and bots that utilize PRAW.
 
-Rate limit information for your account is displayed in a small table underneath the successful login message each time you run any of the PRAW scrapers. I have also added a `--check` flag if you want to quickly view this information.
+Rate limit information for your account is displayed in a small table underneath the successful login message each time you run any of the PRAW scrapers. I have also added a [`--check` flag](../utilities/rate-limit-checking.md) if you want to quickly view this information.
 
 `URS` will display an error message as well as the rate limit reset date if you have used all your available requests.
 

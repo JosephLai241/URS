@@ -33,5 +33,4 @@ These attributes are included in each scrape.
 |                          | \*`top`                          |                     |
 |                          | \*`upvoted` (may be forbidden)   |                     |
 
-\*Includes additional attributes; see the [Scraping Redditors](./redditor.md) section for more information.
-
+\*_Includes additional attributes; see the [Scraping Redditors](./redditor.md) section for more information._

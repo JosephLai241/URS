@@ -42,4 +42,3 @@ For livestream scrapes, comments or submissions may be included depending on use
 # File Names
 
 File names are identical to the original scrape data so that it is easier to distinguish which analytical file corresponds to which scrape.
-

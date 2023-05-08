@@ -1,11 +1,11 @@
 # Table of Contents
 
 - [Subreddits](#subreddits)
-    - [All Flags](#all-flags)
-    - [Basic Usage](#basic-usage)
-    - [Filename Naming Conventions](#filename-naming-conventions)
+  - [All Flags](#all-flags)
+  - [Basic Usage](#basic-usage)
+  - [Filename Naming Conventions](#filename-naming-conventions)
 - [Time Filters](#time-filters)
-    - [Filename Naming Conventions](#filename-naming-conventions-1)
+  - [Filename Naming Conventions](#filename-naming-conventions-1)
 - [Subreddit Rules and Post Requirements](#subreddit-rules-and-post-requirements)
 - [Bypassing the Final Settings Check](#bypassing-the-final-settings-check)
 
@@ -68,8 +68,8 @@ Time filters may be applied to some categories. Here is a table of the categorie
 | Categories    | Time Filters  |
 | ------------- | ------------- |
 | Controversial | All (default) |
-| Top           | Day           |
-| Search        | Hour          |
+| Search        | Day           |
+| Top           | Hour          |
 |               | Month         |
 |               | Week          |
 |               | Year          |

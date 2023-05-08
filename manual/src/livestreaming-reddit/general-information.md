@@ -39,4 +39,3 @@ Displayed comment and submission attributes have been stripped down to essential
 | `submission_url`             |                       |
 
 Comment and submission attributes that are written to file will include the full list of attributes found in the [Table of All Subreddit, Redditor, and Submission Comments Attributes](../scraping-reddit/all-attributes-table.md).
-
