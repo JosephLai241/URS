@@ -10,7 +10,7 @@ poetry shell
 maturin develop --release
 ```
 
-> **_TIP:_** If `poetry shell` does not source the virtual environment created by `Poetry`, run the following command to activate it:
+> **_TIP:_** If `poetry shell` does not activate the virtual environment created by `Poetry`, run the following command to activate it:
 >
 > ```
 > source .venv/bin/activate
