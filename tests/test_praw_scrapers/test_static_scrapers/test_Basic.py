@@ -1,16 +1,16 @@
 import argparse
 import sys
-
 from io import StringIO
 
 from urs.praw_scrapers.static_scrapers import Basic
 
-### Function names are pretty self-explanatory, so I will not be adding comments 
+### Function names are pretty self-explanatory, so I will not be adding comments
 ### above the functions.
 
 ### Includes a total of 30 tests.
 
-class MakeArgs():
+
+class MakeArgs:
     """
     Making dummy args to test Basic.py functions.
     """
@@ -18,10 +18,11 @@ class MakeArgs():
     @staticmethod
     def parser_for_testing_basic():
         parser = argparse.ArgumentParser()
-        parser.add_argument("--basic", action = "store_true")
+        parser.add_argument("--basic", action="store_true")
         return parser
 
-class TestPrintSubsFindSubsMethod():
+
+class TestPrintSubsFindSubsMethod:
     """
     Testing PrintSubs class _find_subs() method.
     """
@@ -35,7 +36,8 @@ class TestPrintSubsFindSubsMethod():
     def test_find_subs_returning_both_found_and_not_found_subreddits(self):
         pass
 
-class TestPrintSubsPrintSubredditsMethod():
+
+class TestPrintSubsPrintSubredditsMethod:
     """
     Testing PrintSubs class print_subreddits() method.
     """
@@ -49,7 +51,8 @@ class TestPrintSubsPrintSubredditsMethod():
     def test_print_subreddits_printing_both_found_and_not_found_subreddits(self):
         pass
 
-class TestGetInputGetSubredditsMethod():
+
+class TestGetInputGetSubredditsMethod:
     """
     Testing GetInput class get_subreddits() method.
     """
@@ -60,7 +63,8 @@ class TestGetInputGetSubredditsMethod():
     def test_get_input_get_subreddits_valid_input(self):
         pass
 
-class TestGetInputUpdateMasterMethod():
+
+class TestGetInputUpdateMasterMethod:
     """
     Testing GetInput class _update_master() method.
     """
@@ -85,7 +89,8 @@ class TestGetInputUpdateMasterMethod():
 
         assert test_master == {"test_subreddit": [["s", "test string", "all"]]}
 
-class TestGetInputGetSearchMethod():
+
+class TestGetInputGetSearchMethod:
     """
     Testing GetInput class _get_search() method.
     """
@@ -99,7 +104,8 @@ class TestGetInputGetSearchMethod():
     def test_get_input_search_for_no_input(self):
         pass
 
-class TestGetInputGetNResultsMethod():
+
+class TestGetInputGetNResultsMethod:
     """
     Testing GetInput class _get_n_results() method.
     """
@@ -113,7 +119,8 @@ class TestGetInputGetNResultsMethod():
     def test_get_n_results_no_input(self):
         pass
 
-class TestGetInputGetSettingsMethod():
+
+class TestGetInputGetSettingsMethod:
     """
     Testing GetInput class get_settings() method.
     """
@@ -130,7 +137,8 @@ class TestGetInputGetSettingsMethod():
     def test_get_settings_invalid_option_is_not_a_number(self):
         pass
 
-class TestConfirmInputConfirmSubredditsMethod():
+
+class TestConfirmInputConfirmSubredditsMethod:
     """
     Testing ConfirmInput class confirm_subreddits() method.
     """
@@ -144,7 +152,8 @@ class TestConfirmInputConfirmSubredditsMethod():
     def test_confirm_subreddits_invalid_option(self):
         pass
 
-class TestConfirmInputAnotherMethod():
+
+class TestConfirmInputAnotherMethod:
     """
     Testing ConfirmInput class another() method.
     """
@@ -158,7 +167,8 @@ class TestConfirmInputAnotherMethod():
     def test_another_invalid_option(self):
         pass
 
-class TestRunBasicCreateSettingsMethod():
+
+class TestRunBasicCreateSettingsMethod:
     """
     Testing RunBasic class _create_settings() method.
     """
@@ -166,7 +176,8 @@ class TestRunBasicCreateSettingsMethod():
     def test_create_settings(self):
         pass
 
-class TestRunBasicPrintConfirmMethod():
+
+class TestRunBasicPrintConfirmMethod:
     """
     Testing RunBasic class _print_confirm() method.
     """

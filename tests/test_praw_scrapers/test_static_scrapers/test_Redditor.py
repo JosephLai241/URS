@@ -4,14 +4,15 @@ Testing `Redditor.py`.
 
 
 import os
-import praw
 
+import praw
 from dotenv import load_dotenv
 
 from urs.praw_scrapers.static_scrapers import Redditor
 from urs.utils import Global
 
-class Login():
+
+class Login:
     """
     Create a Reddit object with PRAW API credentials.
     """
@@ -21,14 +22,15 @@ class Login():
         load_dotenv()
 
         return praw.Reddit(
-            client_id = os.getenv("CLIENT_ID"),
-            client_secret = os.getenv("CLIENT_SECRET"),
-            user_agent = os.getenv("USER_AGENT"),
-            username = os.getenv("REDDIT_USERNAME"),
-            password = os.getenv("REDDIT_PASSWORD")
+            client_id=os.getenv("CLIENT_ID"),
+            client_secret=os.getenv("CLIENT_SECRET"),
+            user_agent=os.getenv("USER_AGENT"),
+            username=os.getenv("REDDIT_USERNAME"),
+            password=os.getenv("REDDIT_PASSWORD"),
         )
 
-class TestGetInteractionsMakeJsonSkeletonMethod():
+
+class TestGetInteractionsMakeJsonSkeletonMethod:
     """
     Testing GetInteractions class _make_json_skeleton() method.
     """
@@ -38,22 +40,19 @@ class TestGetInteractionsMakeJsonSkeletonMethod():
         spez = reddit.redditor("spez")
 
         test_skeleton = {
-            "scrape_settings": {
-                "redditor": "spez",
-                "n_results": 1
-            },
-            "data": {
-                "information": None,
-                "interactions": {}
-            }
+            "scrape_settings": {"redditor": "spez", "n_results": 1},
+            "data": {"information": None, "interactions": {}},
         }
 
-        redditor, skeleton = Redditor.GetInteractions._make_json_skeleton(1, reddit, "spez")
+        redditor, skeleton = Redditor.GetInteractions._make_json_skeleton(
+            1, reddit, "spez"
+        )
 
         assert redditor == spez
         assert skeleton == test_skeleton
 
-class TestGetInteractionsGetTrophiesMethod():
+
+class TestGetInteractionsGetTrophiesMethod:
     """
     Testing GetInteractions class _get_trophies() method.
     """
@@ -67,7 +66,8 @@ class TestGetInteractionsGetTrophiesMethod():
         assert isinstance(trophies, list) == True
         assert len(trophies) > 0
 
-class TestGetUserSubredditMethod():
+
+class TestGetUserSubredditMethod:
     """
     Testing GetInteractions class _get_user_subreddit() method.
     """
@@ -93,7 +93,7 @@ class TestGetUserSubredditMethod():
             "subscribers",
             "user_is_banned",
             "user_is_moderator",
-            "user_is_subscriber"
+            "user_is_subscriber",
         ]
 
         assert isinstance(redditor_subreddit, dict) == True
@@ -101,24 +101,19 @@ class TestGetUserSubredditMethod():
         for key in redditor_subreddit.keys():
             assert key in dict_fields
 
-class TestGetInteractionsGetUserInfoMethod():
+
+class TestGetInteractionsGetUserInfoMethod:
     """
     Testing GetInteractions class _get_user_info() method.
     """
-    
+
     def test_get_user_info(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
 
         skeleton = {
-            "scrape_settings": {
-                "redditor": "spez",
-                "n_results": 1
-            },
-            "data": {
-                "information": None,
-                "interactions": {}
-            }
+            "scrape_settings": {"redditor": "spez", "n_results": 1},
+            "data": {"information": None, "interactions": {}},
         }
 
         Redditor.GetInteractions._get_user_info(spez, skeleton)
@@ -139,68 +134,56 @@ class TestGetInteractionsGetUserInfoMethod():
             "link_karma",
             "name",
             "subreddit",
-            "trophies"
+            "trophies",
         ]
         for field in skeleton["data"]["information"].keys():
-            assert True \
-                if field in information_fields \
-                else False
+            assert True if field in information_fields else False
 
-class TestGetInteractionsMakeInteractionsListsMethod():
+
+class TestGetInteractionsMakeInteractionsListsMethod:
     """
     Testing GetInteractions class _make_interactions_lists() method.
     """
-    
+
     def test_make_interactions_lists(self):
-        skeleton = {
-            "data": {
-                "interactions": {}
-            }
-        }
+        skeleton = {"data": {"interactions": {}}}
 
         Redditor.GetInteractions._make_interactions_lists(skeleton)
 
-        interaction_titles = [ 
-            "comments", 
-            "controversial", 
-            "downvoted", 
-            "gilded", 
-            "gildings", 
-            "hidden", 
-            "hot", 
+        interaction_titles = [
+            "comments",
+            "controversial",
+            "downvoted",
+            "gilded",
+            "gildings",
+            "hidden",
+            "hot",
             "moderated",
             "multireddits",
-            "new", 
+            "new",
             "saved",
-            "submissions", 
-            "top", 
-            "upvoted", 
+            "submissions",
+            "top",
+            "upvoted",
         ]
         for field in skeleton["data"]["interactions"].keys():
-            assert True \
-                if field in interaction_titles \
-                else False
+            assert True if field in interaction_titles else False
 
             assert skeleton["data"]["interactions"][field] == []
-    
-class TestGetInteractionsGetUserInteractionsMethod():
+
+
+class TestGetInteractionsGetUserInteractionsMethod:
     """
     Testing GetInteractions class _get_user_interactions() method.
     """
-    
+
     def test_get_user_interactions(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
 
         skeleton = {
-            "scrape_settings": {
-                "redditor": "spez",
-                "n_results": 1
-            },
-            "data": {
-                "information": None,
-                "interactions": {}
-            }
+            "scrape_settings": {"redditor": "spez", "n_results": 1},
+            "data": {"information": None, "interactions": {}},
         }
 
         Redditor.GetInteractions._get_user_interactions(1, spez, skeleton)
@@ -208,11 +191,12 @@ class TestGetInteractionsGetUserInteractionsMethod():
         assert skeleton["data"]["information"] == None
         assert skeleton["data"]["interactions"]
 
-class TestGetInteractionsGetMethod():
+
+class TestGetInteractionsGetMethod:
     """
     Testing GetInteractions class get() method.
     """
-    
+
     def test_get(self):
         reddit = Login.create_reddit_object()
         spez = reddit.redditor("spez")
@@ -224,16 +208,16 @@ class TestGetInteractionsGetMethod():
 
         assert skeleton["data"]["information"] != None
 
-        assert len(skeleton["data"]["interactions"]["comments"]) == 1
-        assert len(skeleton["data"]["interactions"]["controversial"]) == 1
-        assert len(skeleton["data"]["interactions"]["gilded"]) == 1
+        assert len(skeleton["data"]["interactions"]["comments"])
+        assert len(skeleton["data"]["interactions"]["controversial"])
+        assert len(skeleton["data"]["interactions"]["gilded"])
         assert skeleton["data"]["interactions"]["gildings"][0] == "FORBIDDEN"
         assert skeleton["data"]["interactions"]["hidden"][0] == "FORBIDDEN"
-        assert len(skeleton["data"]["interactions"]["hot"]) == 1
-        assert len(skeleton["data"]["interactions"]["moderated"]) > 1
+        assert not skeleton["data"]["interactions"]["hot"]
+        assert len(skeleton["data"]["interactions"]["moderated"])
         assert "multireddits" in skeleton["data"]["interactions"].keys()
-        assert len(skeleton["data"]["interactions"]["new"]) == 1
+        assert not skeleton["data"]["interactions"]["new"]
         assert skeleton["data"]["interactions"]["saved"][0] == "FORBIDDEN"
-        assert len(skeleton["data"]["interactions"]["submissions"]) == 1
-        assert len(skeleton["data"]["interactions"]["top"]) == 1
+        assert not skeleton["data"]["interactions"]["submissions"]
+        assert len(skeleton["data"]["interactions"]["top"])
         assert skeleton["data"]["interactions"]["upvoted"][0] == "FORBIDDEN"

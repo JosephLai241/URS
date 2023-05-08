@@ -5,13 +5,14 @@ Testing `Validation.py`.
 
 import argparse
 import os
-import praw
 
+import praw
 from dotenv import load_dotenv
 
 from urs.praw_scrapers.utils.Validation import Validation
 
-class MakeArgs():
+
+class MakeArgs:
     """
     Making dummy args to test Comments.py methods.
     """
@@ -24,15 +25,16 @@ class MakeArgs():
     @staticmethod
     def make_scraper_args():
         parser = MakeArgs.parser_for_testing()
-        parser.add_argument("--subreddit", action = "append", nargs = "+")
-        parser.add_argument("--redditor", action = "append", nargs = 2)
-        parser.add_argument("--comments", action = "append", nargs = 2)
-        parser.add_argument("--csv", action = "store_true")
-        parser.add_argument("--rules", action = "store_true")
+        parser.add_argument("--subreddit", action="append", nargs="+")
+        parser.add_argument("--redditor", action="append", nargs=2)
+        parser.add_argument("--comments", action="append", nargs=2)
+        parser.add_argument("--csv", action="store_true")
+        parser.add_argument("--rules", action="store_true")
 
         return parser
 
-class Login():
+
+class Login:
     """
     Create a Reddit object with PRAW API credentials.
     """
@@ -42,17 +44,18 @@ class Login():
         load_dotenv()
 
         return praw.Reddit(
-            client_id = os.getenv("CLIENT_ID"),
-            client_secret = os.getenv("CLIENT_SECRET"),
-            user_agent = os.getenv("USER_AGENT"),
-            username = os.getenv("REDDIT_USERNAME"),
-            password = os.getenv("REDDIT_PASSWORD")
+            client_id=os.getenv("CLIENT_ID"),
+            client_secret=os.getenv("CLIENT_SECRET"),
+            user_agent=os.getenv("USER_AGENT"),
+            username=os.getenv("REDDIT_USERNAME"),
+            password=os.getenv("REDDIT_PASSWORD"),
         )
 
-class TestValidationValidateUserMethod():
+
+class TestValidationValidateUserMethod:
     """
     Testing Validation class validate_user() method.
-    """ 
+    """
 
     def test_validate_user(self):
         parser = MakeArgs.make_scraper_args()
@@ -64,7 +67,8 @@ class TestValidationValidateUserMethod():
         except:
             assert False
 
-class TestValidationCheckSubredditsMethod():
+
+class TestValidationCheckSubredditsMethod:
     """
     Testing Validation class _check_subreddits() method.
     """
@@ -73,11 +77,7 @@ class TestValidationCheckSubredditsMethod():
         invalid, valid = [], []
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "askreddit",
-            "wallstreetbets",
-            "cscareerquestions"
-        ]
+        object_list = ["askreddit", "wallstreetbets", "cscareerquestions"]
 
         Validation._check_subreddits(invalid, object_list, reddit, valid)
 
@@ -91,14 +91,14 @@ class TestValidationCheckSubredditsMethod():
         object_list = [
             "shdg8h342842h3gidbsfgjdbs",
             "asdfhauhwspf8912034812hudfghb979023974ht",
-            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l"
+            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l",
         ]
 
         Validation._check_subreddits(invalid, object_list, reddit, valid)
 
         assert not valid
         assert len(invalid) == 3
-    
+
     def test_check_subreddit_both_valid_and_invalid_subreddits(self):
         invalid, valid = [], []
         reddit = Login.create_reddit_object()
@@ -110,7 +110,7 @@ class TestValidationCheckSubredditsMethod():
             "shdg8h342842h3gidbsfgjdbs",
             "asdfhauhwspf8912034812hudfghb979023974ht",
             "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l",
-            "u0893-45u238hdusafghudsgh982"
+            "u0893-45u238hdusafghudsgh982",
         ]
 
         Validation._check_subreddits(invalid, object_list, reddit, valid)
@@ -118,7 +118,8 @@ class TestValidationCheckSubredditsMethod():
         assert len(valid) == 3
         assert len(invalid) == 4
 
-class TestValidationCheckRedditorsMethod():
+
+class TestValidationCheckRedditorsMethod:
     """
     Testing Validation class _check_redditors() method.
     """
@@ -127,22 +128,18 @@ class TestValidationCheckRedditorsMethod():
         invalid, valid = [], []
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "spez"
-        ]
+        object_list = ["spez"]
 
         Validation._check_redditors(invalid, object_list, reddit, valid)
 
         assert len(valid) == 1
         assert not invalid
-    
+
     def test_check_redditor_only_invalid_redditors(self):
         invalid, valid = [], []
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"
-        ]
+        object_list = ["sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"]
 
         Validation._check_redditors(invalid, object_list, reddit, valid)
 
@@ -153,17 +150,15 @@ class TestValidationCheckRedditorsMethod():
         invalid, valid = [], []
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "spez",
-            "sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"
-        ]
+        object_list = ["spez", "sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"]
 
         Validation._check_redditors(invalid, object_list, reddit, valid)
 
         assert len(valid) == 1
         assert len(invalid) == 1
 
-class TestValidationCheckSubmissionsMethod():
+
+class TestValidationCheckSubmissionsMethod:
     """
     Testing Validation class _check_submissions() method.
     """
@@ -200,7 +195,7 @@ class TestValidationCheckSubmissionsMethod():
 
         object_list = [
             "https://www.reddit.com/r/announcements/comments/mcisdf/an_update_on_the_recent_issues_surrounding_a/",
-            "https://www.reddit.com/r/heresaninvalidlinkjasdfhuwhrpguhpasdf/"
+            "https://www.reddit.com/r/heresaninvalidlinkjasdfhuwhrpguhpasdf/",
         ]
 
         Validation._check_submissions(invalid, object_list, reddit, valid)
@@ -208,7 +203,8 @@ class TestValidationCheckSubmissionsMethod():
         assert len(valid) == 1
         assert len(invalid) == 1
 
-class TestValidationCheckExistenceMethod():
+
+class TestValidationCheckExistenceMethod:
     """
     Testing Validation class check_existence() method.
     """
@@ -216,11 +212,7 @@ class TestValidationCheckExistenceMethod():
     def test_check_existence_only_valid_subreddits(self):
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "askreddit",
-            "wallstreetbets",
-            "cscareerquestions"
-        ]
+        object_list = ["askreddit", "wallstreetbets", "cscareerquestions"]
 
         scraper_type = "subreddit"
 
@@ -235,7 +227,7 @@ class TestValidationCheckExistenceMethod():
         object_list = [
             "shdg8h342842h3gidbsfgjdbs",
             "asdfhauhwspf8912034812hudfghb979023974ht",
-            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l"
+            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l",
         ]
 
         scraper_type = "subreddit"
@@ -254,7 +246,7 @@ class TestValidationCheckExistenceMethod():
             "cscareerquestions",
             "shdg8h342842h3gidbsfgjdbs",
             "asdfhauhwspf8912034812hudfghb979023974ht",
-            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l"
+            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l",
         ]
 
         scraper_type = "subreddit"
@@ -267,9 +259,7 @@ class TestValidationCheckExistenceMethod():
     def test_check_existence_only_valid_redditors(self):
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "spez"
-        ]
+        object_list = ["spez"]
 
         scraper_type = "redditor"
 
@@ -281,9 +271,7 @@ class TestValidationCheckExistenceMethod():
     def test_check_existence_only_invalid_redditors(self):
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"
-        ]
+        object_list = ["sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"]
 
         scraper_type = "redditor"
 
@@ -295,10 +283,7 @@ class TestValidationCheckExistenceMethod():
     def test_check_existence_both_valid_and_invalid_redditors(self):
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "spez",
-            "sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"
-        ]
+        object_list = ["spez", "sdhfgiuoh3284th9enbsprgh8-w-wher9ghwe9hw49"]
 
         scraper_type = "redditor"
 
@@ -340,7 +325,7 @@ class TestValidationCheckExistenceMethod():
 
         object_list = [
             "https://www.reddit.com/r/announcements/comments/mcisdf/an_update_on_the_recent_issues_surrounding_a/",
-            "https://www.reddit.com/r/heresaninvalidlinkjasdfhuwhrpguhpasdf/"
+            "https://www.reddit.com/r/heresaninvalidlinkjasdfhuwhrpguhpasdf/",
         ]
 
         scraper_type = "comments"
@@ -350,7 +335,8 @@ class TestValidationCheckExistenceMethod():
         assert len(valid) == 1
         assert len(invalid) == 1
 
-class TestValidationValidateMethod():
+
+class TestValidationValidateMethod:
     """
     Testing Validation class validate() method.
     """
@@ -358,11 +344,7 @@ class TestValidationValidateMethod():
     def test_validate_all_valid_reddit_objects(self):
         reddit = Login.create_reddit_object()
 
-        object_list = [
-            "askreddit",
-            "wallstreetbets",
-            "cscareerquestions"
-        ]
+        object_list = ["askreddit", "wallstreetbets", "cscareerquestions"]
 
         scraper_type = "subreddit"
 
@@ -380,7 +362,7 @@ class TestValidationValidateMethod():
             "cscareerquestions",
             "shdg8h342842h3gidbsfgjdbs",
             "asdfhauhwspf8912034812hudfghb979023974ht",
-            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l"
+            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l",
         ]
 
         scraper_type = "subreddit"
@@ -396,7 +378,7 @@ class TestValidationValidateMethod():
         object_list = [
             "shdg8h342842h3gidbsfgjdbs",
             "asdfhauhwspf8912034812hudfghb979023974ht",
-            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l"
+            "xcvhcsxiuvbeidefgh3qw48tr324805tyasdguap;l",
         ]
 
         scraper_type = "subreddit"

@@ -7,47 +7,34 @@ Methods for naming and exporting scraped data.
 
 import csv
 import json
-
+from argparse import Namespace
 from json import JSONEncoder
+from typing import Any, Dict, List, Literal
 
 from urs.utils.DirInit import InitializeDirectory
-from urs.utils.Global import (
-    categories,
-    date,
-    short_cat
-)
+from urs.utils.Global import categories, date, short_cat
 
-class NameFile():
+
+class NameFile:
     """
     Methods for naming the exported files.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize variables used in naming the file:
-
-            self._illegal_chars: list denoting illegal filename characters
-
-        Returns
-        -------
-        None
         """
 
         self._illegal_chars = [char for char in '[@!#$%^&*()<>?/"\\|}{~:+`=]']
 
-    def _check_len(self, name):
+    def _check_len(self, name: str) -> str:
         """
         Verify filename is not too long. Slices the name if it exceeds 50 characters.
 
-        Parameters
-        ----------
-        name: str
-            Original filename
+        :param str name: The original filename to check.
 
-        Returns
-        -------
-        name: str
-            Sliced filename if applicable
+        :returns: The sliced filename if it is too long, or the original filename.
+        :rtype: `str`
         """
 
         if len(name) > 50:
@@ -55,97 +42,70 @@ class NameFile():
 
         return name
 
-    def _fix(self, name):
+    def _fix(self, name: str) -> str:
         """
         Fix filename if illegal characters are present.
 
-        Parameters
-        ----------
-        name: str
-            Original filename
+        :param str name: The original filename to check.
 
-        Returns
-        -------
-        name: str
-            Fixed filename
+        :returns: The fixed filename if it contains any illegal filename characters.
+        :rtype: `str`
         """
 
-        fixed = [
-            "_" 
-                if char in self._illegal_chars
-                else char for char in name
-        ]
+        fixed = ["_" if char in self._illegal_chars else char for char in name]
 
         return "".join(fixed)
 
-    def _r_category(self, cat_i, category_n):
+    def _r_category(self, cat_i: str, category_n: int) -> str:
         """
         Subreddit category name switch.
 
-        Parameters
-        ----------
-        cat_i: str
-            String denoting the abbreviated category
-        category_n: int
-            Integer denoting a dictionary key
+        :param str cat_i: The abbreviated category name.
+        :param int category_n: The `int` corresponding to the dictionary key.
 
-        Returns
-        -------
-        category: str
-            The category name
+        :returns: The category name.
+        :rtype: `str`
         """
 
         switch = {
             0: categories[5],
-            1: categories[short_cat.index(cat_i)] \
-                if cat_i != short_cat[5] \
-                else None
+            1: categories[short_cat.index(cat_i)] if cat_i != short_cat[5] else None,
         }
 
         return switch.get(category_n)
 
-    def _r_get_category(self, cat_i):
+    def _r_get_category(self, cat_i: str) -> Literal[0, 1]:
         """
         Choose the Subreddit category index.
 
-        Parameters
-        ----------
-        cat_i: int
-            Integer denoting the full category's index
+        :param str cat_i: The abbreviated category name.
 
-        Returns
-        -------
-        category_n: int
-            Integer denoting the selected category's index
+        :returns: An `int` denoting the selected category's index (`0` or `1`)
+        :rtype: `int`
         """
 
-        return 0 \
-            if cat_i == short_cat[5] \
-            else 1
+        return 0 if cat_i == short_cat[5] else 1
 
-    def _get_sub_fname(self, category, end, index, n_res_or_kwds, subreddit, time_filter):
+    def _get_sub_fname(
+        self,
+        category: str,
+        end: str,
+        index: int,
+        n_res_or_kwds: str,
+        subreddit: str,
+        time_filter: str,
+    ) -> str:
         """
         File name switch that stores all possible Subreddit filename formats
 
-        Parameters
-        ----------
-        category: str
-            Full Subreddit category name
-        end: str
-            "result" or "results" depending on n_results
-        index: int
-            Integer denoting the dictionary key to return
-        n_res_or_kwds: str
-            n_results to return or keywords to search for
-        subreddit: str
-            Subreddit name
-        time_filter: str
-            Time filter if applicable
+        :param str category: The full Subreddit category name.
+        :param str end: `"result"` or `"results"` depending on the value of `n_res_or_kwds`.
+        :param int index: The `int` corresponding to the dictionary key.
+        :param str n_res_or_kwds: The number of results or keywords to search for.
+        :param str time_filter: The time filter applied to the scrape, if applicable.
 
-        Returns
-        -------
-        filename: str
-            The filename for Subreddit scrapes
+        :returns: The filename for Subreddit scrapes.
+        :rtype: `str`
         """
 
         filter_str = f"-past-{time_filter}"
@@ -156,319 +116,238 @@ class NameFile():
             0: search,
             1: standard,
             2: search + filter_str,
-            3: standard + filter_str
+            3: standard + filter_str,
         }
 
         return filenames.get(index)
 
-    def _get_raw_n(self, args, cat_i, end, each_sub, sub):
+    def _get_raw_n(
+        self,
+        args: Namespace,
+        cat_i: str,
+        end: str,
+        each_sub: List[str],
+        sub: str,
+    ) -> str:
         """
-        Determine filename format for the Subreddit scraper. 
-        
-        Calls previously defined private methods:
+        Determine filename format for the Subreddit scraper.
 
-            self._r_get_category()
-            self._r_category()
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str cat_i: The abbreviated category name.
+        :param str end: `"result"` or `"results"` depending on the number of results
+            returned.
+        :param list[str] each_sub: A `list[str]` containing Subreddit scraping
+            settings.
+        :param str sub: The name of the Subreddit.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
-        cat_i: str or int
-            Either a single character or integer denoting the full category's index
-            or abbreviated category
-        end: str
-            "results" or "result" depending on n_results
-        each_sub: list
-            List of Subreddit scraping settings
-        sub: str
-            Subreddit name
-
-        Returns
-        -------
-        filename: str
-            Raw filename for Subreddits
+        :returns: The raw filename for Subreddit scrapes.
+        :rtype: `str`
         """
 
         category_n = self._r_get_category(cat_i)
         category = self._r_category(cat_i, category_n)
 
-        ending = None \
-            if cat_i == short_cat[5] \
-            else end
-        time_filter = None \
-            if each_sub[2] == None or each_sub[2] == "all" \
-            else each_sub[2]
+        ending = None if cat_i == short_cat[5] else end
+        time_filter = (
+            None if each_sub[2] == None or each_sub[2] == "all" else each_sub[2]
+        )
 
         if each_sub[2] == None or each_sub[2] == "all":
-            index = 0 \
-                if cat_i == short_cat[5] \
-                else 1
+            index = 0 if cat_i == short_cat[5] else 1
         else:
-            index = 2 \
-                if cat_i == short_cat[5] \
-                else 3
+            index = 2 if cat_i == short_cat[5] else 3
 
-        filename = self._get_sub_fname(category, ending, index, each_sub[1], sub, time_filter)
+        filename = self._get_sub_fname(
+            category, ending, index, each_sub[1], sub, time_filter
+        )
         filename = self._check_len(filename)
 
         if args.rules:
             return filename + "-rules"
-        
+
         return filename
 
-    def r_fname(self, args, cat_i, each_sub, sub):
+    def r_fname(
+        self, args: Namespace, cat_i: str, each_sub: List[str], sub: str
+    ) -> str:
         """
         Determine the filename format for Subreddit scraping by combining previously
-        defined private methods:
+        defined private methods.
 
-            self._get_raw_n()
-            self._fix()
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str cat_i: The abbreviated category name.
+        :param list[str] each_sub: A `list[str]` containing Subreddit scraping
+            settings.
+        :param str sub: The name of the Subreddit.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
-        cat_i: str or int
-            Either a single character or integer denoting the full category's index
-            or abbreviated category
-        each_sub: list
-            List of Subreddit scraping settings
-        sub: str
-            Subreddit name
-
-        Returns
-        -------
-        filename: str
-            Finalized Subreddit filename after string formatting and checking
+        :returns: The finalized Subreddit filename after string formatting and
+            checking.
+        :rtype: `str`
         """
 
         raw_n = ""
-        end = "result" \
-            if isinstance(each_sub[1], int) and int(each_sub[1]) < 2 \
+        end = (
+            "result"
+            if isinstance(each_sub[1], int) and int(each_sub[1]) < 2
             else "results"
+        )
 
         raw_n = self._get_raw_n(args, cat_i, end, each_sub, sub)
 
         return self._fix(raw_n)
 
-    def u_fname(self, limit, string):
+    def u_fname(self, limit: str, redditor: str) -> str:
         """
-        Determine filename format for Redditor scraping. 
-        
-        Calls previously defined private methods:
+        Determine filename format for Redditor scraping.
 
-            self._fix()
+        :param str limit: The number of results to return.,
+        :param str redditor: The Redditor's name.
 
-        Parameters
-        ----------
-        limit: str
-            Integer in string format denoting the number of results to return
-        string: str
-            String denoting the Redditor name
-
-        Returns
-        -------
-        filename: str
-            Finalized Redditor filename after string formatting and checking 
+        :returns: The finalized Redditor filename after string formatting and
+            checking.
+        :rtype: `str`
         """
 
-        end = "result" \
-            if int(limit) < 2 \
-            else "results"
-        raw_n = f"{string}-{limit}-{end}"
+        end = "result" if int(limit) < 2 else "results"
+        raw_n = f"{redditor}-{limit}-{end}"
 
         return self._fix(raw_n)
 
-    def c_fname(self, args, limit, string):
+    def c_fname(self, args: Namespace, limit: str, submission_title: str) -> str:
         """
-        Determine filename format for submission comments scraping. 
-        
-        Calls previously defined private methods:
+        Determine filename format for submission comments scraping.
 
-            self._check_len()
-            self._fix()
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str limit: The number of results to return.
+        :param str submission_title: The submission's title.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
-        limit: str
-            Integer in string format denoting the number of results to return
-        string: str
-            String denoting the submission's title
-
-        Returns
-        -------
-        filename: str
-            Finalized submission comments filename after string formatting and 
-            checking 
+        :returns: The finalized submission filename after string formatting and
+            checking.
+        :rtype: `str`
         """
 
-        string = self._check_len(string)
-        
+        submission_title = self._check_len(submission_title)
+
         if int(limit) != 0:
-            plurality = "result" \
-                if int(limit) < 2 \
-                else "results"
-            raw_n = f"{string}-{limit}-{plurality}"
+            plurality = "result" if int(limit) < 2 else "results"
+            raw_n = f"{submission_title}-{limit}-{plurality}"
         else:
-            raw_n = f"{string}-all"
+            raw_n = f"{submission_title}-all"
 
         if args.raw:
             raw_n = raw_n + "-raw"
 
         return self._fix(raw_n)
 
+
 class EncodeNode(JSONEncoder):
     """
-    Methods to serialize CommentNodes for JSON export. 
+    Methods to serialize CommentNodes for JSON export.
     """
 
-    def default(self, object):
+    def default(self, obj: Any) -> Dict[str, Any]:
         """
-        Override the default JSONEncoder `default()` method. 
+        Override the default JSONEncoder `default()` method.
+
+        :param Any obj: A `CommentNode` to convert into a `dict[str, Any]`.
+
+        :returns: A `dict[str, Any]` containing `CommentNode` data.
+        :rtype: `dict[str, Any]`
         """
 
-        return object.__dict__
+        return obj.__dict__
 
-class Export():
+
+class Export:
     """
     Methods for creating directories and export the file.
     """
 
     @staticmethod
-    def _get_filename_extension(f_name, f_type, scrape):
+    def _get_filename_extension(
+        f_name: str, f_type: str, scrape: Literal["subreddits", "redditors", "comments"]
+    ) -> str:
         """
         Get filename extension.
 
-        Parameters
-        ----------
-        f_name: str
-            Filename
-        f_type: str
-            File type (.csv or .json)
-        scrape: str
-            Scrape type ("subreddits", "redditors", or "comments")
+        :param str f_name: The filename.
+        :param str f_type: The filetype.
+        :param str scrape: The scrape type ("subreddits", "redditors", or "comments").
 
-        Returns
-        -------
-        dir_path: str
-            String denoting the directory path
+        :returns: The path to the file.
+        :rtype: `str`
         """
 
         dir_path = f"../scrapes/{date}/{scrape}"
 
-        extension = ".csv" \
-            if f_type == "csv" \
-            else ".json"
+        extension = ".csv" if f_type == "csv" else ".json"
 
         return dir_path + f"/{f_name}{extension}"
 
     @staticmethod
-    def write_csv(data, filename):
+    def write_csv(data: Dict[str, Any], filename: str) -> None:
         """
         Write data to CSV.
 
-        Parameters
-        ----------
-        data: dict
-            Dictionary of scrape data
-        filename: str
-            String denoting the filename
-
-        Returns
-        -------
-        None 
+        :param dict[str, Any] data: The `dict[str, Any]` containing scrape data.
+        :param str filename: The filename.
         """
 
-        with open(filename, "w", encoding = "utf-8") as results:
-            writer = csv.writer(results, delimiter = ",")
+        with open(filename, "w", encoding="utf-8") as results:
+            writer = csv.writer(results, delimiter=",")
             writer.writerow(data.keys())
             writer.writerows(zip(*data.values()))
 
     @staticmethod
-    def write_structured_comments(data, f_name):
+    def write_structured_comments(data: Dict[str, Any], f_name: str) -> None:
         """
         Write structured comments to JSON by using the custom JSONEncoder class
         with the `cls` parameter within `json.dumps()`.
 
-        Calls a method from an external module:
-
-            InitializeDirectory.create_dirs()    
-
-        Parameters
-        ----------
-        data: dict
-            Dictionary of scrape data
-        f_name: str
-            String denoting the filename
-
-        Returns
-        -------
-        None 
+        :param dict[str, Any] data: The `dict[str, Any]` containing scrape data.
+        :param str f_name: The filename.
         """
 
         filename = Export._get_filename_extension(f_name, "json", "comments")
         InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
-        with open(filename, "w", encoding = "utf-8") as results:
-            json.dump(data, results, indent = 4, cls = EncodeNode)
+        with open(filename, "w", encoding="utf-8") as results:
+            json.dump(data, results, cls=EncodeNode, indent=2)
 
     @staticmethod
-    def write_json(data, filename):
+    def write_json(data: Dict[str, Any], filename: str) -> None:
         """
         Write data to JSON.
 
-        Parameters
-        ----------
-        data: dict
-            Dictionary of scrape data
-        filename: str
-            String denoting the filename
-
-        Returns
-        -------
-        None 
+        :param dict[str, Any] data: The `dict[str, Any]` containing scrape data.
+        :param str f_name: The filename.
         """
 
-        with open(filename, "w", encoding = "utf-8") as results:
-            json.dump(data, results, indent = 4)
-    
+        with open(filename, "w", encoding="utf-8") as results:
+            json.dump(data, results, indent=2)
+
     @staticmethod
-    def export(data, f_name, f_type, scrape):
+    def export(
+        data: Dict[str, Any],
+        f_name: str,
+        f_type: str,
+        scrape: Literal["subreddits", "redditors", "comments"],
+    ) -> None:
         """
-        Write data to either CSV or JSON. 
-        
-        Calls a method from an external module:
+        Write data to either CSV or JSON.
 
-            InitializeDirectory.create_dirs()
-
-        Calls previously defined private and public methods:
-
-            Export._get_filename_extension()
-            Export.write_json()
-            Export.write_csv()
-
-        Parameters
-        ----------
-        data: dict
-            Dictionary of scrape data
-        f_name: str
-            Filename
-        f_type: str
-            File type (.csv or .json)
-        scrape: str
-            Scrape type ("subreddits", "redditors", or "comments")
-
-        Returns
-        -------
-        None
+        :param dict[str, Any] data: The `dict[str, Any]` containing scrape data.
+        :param str f_name: The filename.
+        :param str f_type: The file type.
+        :param str scrape: The scrape type ("subreddits", "redditors", or "comments").
         """
 
         filename = Export._get_filename_extension(f_name, f_type, scrape)
         InitializeDirectory.create_dirs("/".join(filename.split("/")[:-1]))
 
-        Export.write_json(data, filename) \
-            if f_type == "json" \
-            else Export.write_csv(data, filename)
+        Export.write_json(data, filename) if f_type == "json" else Export.write_csv(
+            data, filename
+        )

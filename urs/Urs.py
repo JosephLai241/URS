@@ -26,37 +26,39 @@ command-line tool written in Python.
 
 
 import os
-import praw
 
+import praw
 from colorama import init
 from dotenv import load_dotenv
 
 from urs.utils.Logger import LogMain
 from urs.utils.Tools import Run
 
-### Automate sending reset sequences to turn off color changes at the end of 
-### every print.
-init(autoreset = True)
+# Automate sending reset sequences to turn off color changes at the end of
+# every print.
+init(autoreset=True)
 
-class Main():
+
+class Main:
     """
     Run URS.
     """
 
     @staticmethod
     @LogMain.master_timer
-    def main():
+    def main() -> None:
         load_dotenv()
 
         reddit = praw.Reddit(
-            client_id = os.getenv("CLIENT_ID"),
-            client_secret = os.getenv("CLIENT_SECRET"),
-            user_agent = os.getenv("USER_AGENT"),
-            username = os.getenv("REDDIT_USERNAME"),
-            password = os.getenv("REDDIT_PASSWORD")
+            client_id=os.getenv("CLIENT_ID"),
+            client_secret=os.getenv("CLIENT_SECRET"),
+            user_agent=os.getenv("USER_AGENT"),
+            username=os.getenv("REDDIT_USERNAME"),
+            password=os.getenv("REDDIT_PASSWORD"),
         )
 
         Run(reddit).run_urs()
+
 
 if __name__ == "__main__":
     Main.main()

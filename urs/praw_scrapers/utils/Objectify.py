@@ -5,48 +5,40 @@ Defining methods to create JSON serializable objects from Reddit metadata.
 """
 
 
+from typing import Any, Dict
+
+from praw.models import Comment, Multireddit, Submission, Subreddit
+
 from urs.utils.Global import convert_time
 
-class Objectify():
+
+class Objectify:
     """
     Methods for creating JSON serializable objects from Reddit metadata.
     """
 
-    def make_comment(self, comment, include_all):
+    def make_comment(self, comment: Comment, include_all: bool) -> Dict[str, Any]:
         """
-        Make a comment item. 
-        
-        Calls previously defined public method:
+        Make a comment item.
 
-            self.make_submission()
+        :param Comment comment: PRAW Comment object.
+        :param bool include_all: Whether the `"type"` field should be included.
 
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        comment: PRAW comment object
-        include_all: boolean
-            Boolean to determine whether the "type" field should be included
-
-        Returns
-        -------
-        redditor_item: dict
-            Dictionary containing comment metadata
+        :returns: A `dict[str, Any]` containing comment metadata.
+        :rtype: `dict[str, Any]`
         """
 
         comment_object = {
-            "author": "u/" + comment.author.name \
-                if hasattr(comment.author, "name") \
-                else "[deleted]",
+            "author": "u/" + comment.author.name
+            if hasattr(comment.author, "name")
+            else "[deleted]",
             "body": comment.body,
             "body_html": comment.body_html,
             "created_utc": convert_time(comment.created_utc),
             "distinguished": comment.distinguished,
-            "edited": comment.edited \
-                if comment.edited == False \
-                else convert_time(comment.edited),
+            "edited": comment.edited
+            if comment.edited == False
+            else convert_time(comment.edited),
             "id": comment.id,
             "is_submitter": comment.is_submitter,
             "link_id": comment.link_id,
@@ -56,7 +48,9 @@ class Objectify():
         }
 
         if include_all:
-            comment_object["submission"] = self.make_submission(include_all, comment.submission)
+            comment_object["submission"] = self.make_submission(
+                include_all, comment.submission
+            )
             comment_object["subreddit_id"] = comment.subreddit_id
             comment_object["type"] = "comment"
 
@@ -64,26 +58,14 @@ class Objectify():
 
         return comment_object
 
-    def make_multireddit(self, multireddit):
+    def make_multireddit(self, multireddit: Multireddit) -> Dict[str, Any]:
         """
         Make a multireddit item.
 
-        Calls a previously defined public method:
+        :param Multireddit multireddit: PRAW Multireddit object.
 
-            self.make_subreddit()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        multireddit: PRAW multireddit object
-
-        Returns
-        -------
-        multireddit_object: dict
-            Dictionary containing multireddit metadata
+        :returns: A `dict[str, Any]` containing Multireddit data.
+        :rtype: `Dict[str, Any]`
         """
 
         multireddit_object = {
@@ -96,7 +78,7 @@ class Objectify():
             "name": multireddit.name,
             "nsfw": multireddit.over_18,
             "subreddits": [],
-            "visibility": multireddit.visibility
+            "visibility": multireddit.visibility,
         }
 
         if multireddit.subreddits:
@@ -105,40 +87,29 @@ class Objectify():
                 multireddit_object["subreddits"].append(subreddit)
 
         return multireddit_object
-    
-    def make_submission(self, include_all, submission):
+
+    def make_submission(
+        self, include_all: bool, submission: Submission
+    ) -> Dict[str, Any]:
         """
         Make a submission object.
 
-        Calls a previously defined public method:
+        :param bool include_all: Whether the `"type"` field should be included.
+        :param Submission submission: PRAW Submission object.
 
-            self.make_subreddit()
-
-        Calls a public method from an external module:
-
-            Global.convert_time()
-
-        Parameters
-        ----------
-        include_all: boolean
-            Boolean to determine whether the "type" field should be included
-        submission: PRAW submission object
-
-        Returns
-        -------
-        submission_object: dict
-            Dictionary containing submission metadata
+        :returns: A `dict[str, Any]` containing Submission data.
+        :rtype: `Dict[str, Any]`
         """
 
         submission_object = {
-            "author": "u/" + submission.author.name \
-                if hasattr(submission.author, "name") \
-                else "[deleted]",
+            "author": "u/" + submission.author.name
+            if hasattr(submission.author, "name")
+            else "[deleted]",
             "created_utc": convert_time(submission.created_utc),
             "distinguished": submission.distinguished,
-            "edited": submission.edited \
-                if submission.edited == False \
-                else convert_time(submission.edited),
+            "edited": submission.edited
+            if submission.edited == False
+            else convert_time(submission.edited),
             "id": submission.id,
             "is_original_content": submission.is_original_content,
             "is_self": submission.is_self,
@@ -154,7 +125,7 @@ class Objectify():
             "stickied": submission.stickied,
             "title": submission.title,
             "upvote_ratio": submission.upvote_ratio,
-            "url": submission.url
+            "url": submission.url,
         }
 
         if include_all:
@@ -165,22 +136,14 @@ class Objectify():
 
         return submission_object
 
-    def make_subreddit(self, subreddit):
+    def make_subreddit(self, subreddit: Subreddit) -> Dict[str, Any]:
         """
         Make a Subreddit object.
 
-        Calls a public method from an external module:
+        :param Subreddit subreddit: PRAW Subreddit object.
 
-            Global.convert_time()
-
-        Parameters
-        ----------
-        subreddit: PRAW Subreddit object
-
-        Returns
-        -------
-        subreddit_object: dict
-            Dictionary containing Subreddit metadata
+        :returns: A `dict[str, Any]` containing Subreddit data.
+        :rtype: `Dict[str, Any]`
         """
 
         return {
@@ -198,5 +161,5 @@ class Objectify():
             "subscribers": subreddit.subscribers,
             "user_is_banned": subreddit.user_is_banned,
             "user_is_moderator": subreddit.user_is_moderator,
-            "user_is_subscriber": subreddit.user_is_subscriber
+            "user_is_subscriber": subreddit.user_is_subscriber,
         }

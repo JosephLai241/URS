@@ -6,96 +6,72 @@ Defining methods for the Subreddit scraper.
 
 
 import logging
+from argparse import Namespace
+from typing import Any, Dict, Iterator, List, Tuple
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
 from halo import Halo
+from praw import Reddit
+from praw.models import Subreddit
 from prettytable import PrettyTable
 
 from urs.praw_scrapers.utils.Objectify import Objectify
 from urs.praw_scrapers.utils.Validation import Validation
-
 from urs.utils.Cli import GetPRAWScrapeSettings
-from urs.utils.Export import (
-    Export,
-    NameFile
-)
+from urs.utils.Export import Export, NameFile
 from urs.utils.Global import (
+    Status,
     categories,
     confirm_settings,
     convert_time,
     make_list_dict,
     short_cat,
-    Status
 )
-from urs.utils.Logger import (
-    LogError,
-    LogExport, 
-    LogPRAWScraper
-)
+from urs.utils.Logger import LogExport, LogPRAWScraper
 from urs.utils.Titles import PRAWTitles
 
-class PrintConfirm():
+
+class PrintConfirm:
     """
     Methods for printing Subreddit settings and confirm settings.
     """
 
     @staticmethod
-    def _add_each_setting(pretty_subs, s_master):
+    def _add_each_setting(pretty_subs: PrettyTable, s_master: Dict[str, Any]) -> None:
         """
         Add each Subreddit setting to the PrettyTable.
 
-        Parameters
-        ----------
-        pretty_subs: PrettyTable
-            PrettyTable instance
-        s_master: dict
-            Dictionary containing all scrape settings
-
-        Returns
-        -------
-        None
+        :param PrettyTable pretty_subs: The `PrettyTable` instance.
+        :pararm dict[str, Any] s_master: A `dict[str, Any]` containing all scrape
+            settings.
         """
 
         for sub, settings in s_master.items():
             for each_sub in settings:
                 cat_i = short_cat.index(each_sub[0].upper())
-                time_filter = each_sub[2].capitalize() \
-                    if each_sub[2] != None \
-                    else each_sub[2]
-                
-                pretty_subs.add_row([
-                    sub, 
-                    categories[cat_i], 
-                    time_filter, 
-                    each_sub[1]
-                ])
+                time_filter = (
+                    each_sub[2].capitalize() if each_sub[2] != None else each_sub[2]
+                )
+
+                pretty_subs.add_row([sub, categories[cat_i], time_filter, each_sub[1]])
 
     @staticmethod
-    def print_settings(s_master):
+    def print_settings(s_master: Dict[str, Any]) -> None:
         """
         Print scraping details (PrettyTable) for each Subreddit.
 
-        Parameters
-        ----------
-        s_master: dict
-            Dictionary containing all scrape settings
-
-        Returns
-        -------
-        None
+        :pararm dict[str, Any] s_master: A `dict[str, Any]` containing all scrape
+            settings.
         """
 
         Halo().info(Fore.CYAN + Style.BRIGHT + "Current settings for each Subreddit")
 
         pretty_subs = PrettyTable()
         pretty_subs.field_names = [
-            "Subreddit", 
-            "Category", 
+            "Subreddit",
+            "Category",
             "Time Filter",
-            "Number of results / Keywords"
+            "Number of results / Keywords",
         ]
 
         PrintConfirm._add_each_setting(pretty_subs, s_master)
@@ -103,26 +79,23 @@ class PrintConfirm():
 
         print(pretty_subs)
 
-class GetExtras():
+
+class GetExtras:
     """
     Methods for getting a Subreddit's rules and post requirements.
     """
 
     @staticmethod
-    def get_rules(subreddit):
+    def get_rules(
+        subreddit: Subreddit,
+    ) -> Tuple[Dict[str, str | int | bool], List[Dict[str, Any]]]:
         """
         Return post requirements and Subreddit rules.
 
-        Parameters
-        ----------
-        subreddit: PRAW Subreddit object
+        :param Subreddit subreddit: The PRAW `Subreddit` instance.
 
-        Returns
-        -------
-        post_requirements: dict
-            Dictionary containing Subreddit's post requirements
-        rules: list[str]
-            List containing Subreddit rules
+        :returns: The post requirements and the rules for the Subreddit.
+        :rtype: `(dict[str, str | int | bool], list[dict[str, Any]])`
         """
 
         rules = [
@@ -136,16 +109,17 @@ class GetExtras():
             }
             for rule in subreddit.rules
         ]
-        
+
         return subreddit.post_requirements(), rules
 
-class GetSubmissionsSwitch():
+
+class GetSubmissionsSwitch:
     """
     Implementing Pythonic switch case to determine which Subreddit category to
     get results from.
     """
 
-    def __init__(self, search_for, subreddit, time_filter):
+    def __init__(self, search_for: str, subreddit: Subreddit, time_filter: str) -> None:
         """
         Initialize variables used in later methods:
 
@@ -157,212 +131,176 @@ class GetSubmissionsSwitch():
 
             self._switch: dictionary containing all Subreddit categories
 
-        Parameters
-        ----------
-        search_for: str
-            String denoting n_results to return
-        subreddit: PRAW ListingGenerator
-        time_filter: str
-            String denoting time filter to apply (for controversial or top categories)
-
-        Returns
-        -------
-        None
+        :param str search_for: A `str` indicating the number of results to return
+        :param Subreddit subreddit: The PRAW `Subreddit` instance.
+        :param str time_filter: The time filter to apply (for Controversial and
+            Top categories).
         """
 
-        self._controversial = subreddit.controversial(limit = int(search_for), time_filter = time_filter) \
-            if time_filter != None \
-            else subreddit.controversial(limit = int(search_for))
-        self._hot = subreddit.hot(limit = int(search_for))
-        self._new = subreddit.new(limit = int(search_for))
-        self._rising = subreddit.rising(limit = int(search_for))
-        self._top = subreddit.top(limit = int(search_for), time_filter = time_filter) \
-            if time_filter != None \
-            else subreddit.top(limit = int(search_for))
+        self._controversial = (
+            subreddit.controversial(limit=int(search_for), time_filter=time_filter)
+            if time_filter != None
+            else subreddit.controversial(limit=int(search_for))
+        )
+        self._hot = subreddit.hot(limit=int(search_for))
+        self._new = subreddit.new(limit=int(search_for))
+        self._rising = subreddit.rising(limit=int(search_for))
+        self._top = (
+            subreddit.top(limit=int(search_for), time_filter=time_filter)
+            if time_filter != None
+            else subreddit.top(limit=int(search_for))
+        )
 
         self._switch = {
             0: self._hot,
             1: self._new,
             2: self._controversial,
             3: self._top,
-            4: self._rising
+            4: self._rising,
         }
 
-    def scrape_sub(self, index):
+    def scrape_sub(self, index: int) -> Iterator[Any]:
         """
-        Return a command based on the chosen category. 
-        
-        Calls previously defined private method:
+        Return a command based on the chosen category.
 
-            self._switch()
+        :param int index: An `int` indicating the dictionary key to target.
 
-        Parameters
-        ----------
-        index: int
-            Integer denoting dictionary key
-
-        Returns
-        -------
-        category_submissions: PRAW ListingGenerator
+        :returns: An `Iterator` over the Subreddit's posts in a particular category.
+        :rtype: `Iterator[Any]`
         """
 
         return self._switch.get(index)
 
-class GetSubmissions():
+
+class GetSubmissions:
     """
     Methods for getting submissions from a Subreddit.
     """
 
     @staticmethod
-    def _collect_search(search_for, sub, subreddit, time_filter):
+    def _collect_search(
+        search_for: str, sub: str, subreddit: Subreddit, time_filter: str
+    ) -> Iterator[Any]:
         """
         Return PRAW ListingGenerator for searching keywords.
 
-        Parameters
-        ----------
-        search_for: str
-            String denoting keywords to search for
-        sub: str
-            String denoting Subreddit name
-        subreddit: PRAW Subreddit object
-        time_filter: str
-            String denoting time filter to apply
+        :param str search_for: Keywords to search for.
+        :param str sub: The Subreddit's name.
+        :param Subreddit subreddit: The `Subreddit` instance.
+        :param str time_filter: The time filter to apply to the query.
 
-        Returns
-        -------
-        search_submissions: PRAW ListingGenerator
+        :returns: An `Iterator` over the Subreddit's posts.
+        :rtype: `Iterator[Any]`
         """
 
         Halo().info(f"Searching submissions in r/{sub} for '{search_for}'.")
-        
+
         if time_filter != None:
             Halo().info(f"Time filter: {time_filter.capitalize()}")
 
-        return subreddit.search(f"{search_for}", time_filter = time_filter) \
-            if time_filter != None \
+        return (
+            subreddit.search(f"{search_for}", time_filter=time_filter)
+            if time_filter != None
             else subreddit.search(f"{search_for}")
+        )
 
     @staticmethod
-    def _collect_others(cat_i, search_for, sub, subreddit, time_filter):
+    def _collect_others(
+        cat_i: str, search_for: str, sub: str, subreddit: Subreddit, time_filter: str
+    ) -> Iterator[Any]:
         """
         Return PRAW ListingGenerator for all other categories (excluding Search).
-        
-        Calls previously defined private method:
 
-            GetSubmissionsSwitch().scrape_sub()
+        :param str cat_i: The shortened category name.
+        :param str search_for: Keywords to search for.
+        :param str sub: The Subreddit's name.
+        :param Subreddit subreddit: The `Subreddit` instance.
+        :param str time_filter: The time filter to apply to the query.
 
-        Parameters
-        ----------
-        cat_i: int
-            Integer denoting the index within the categories or short_cat lists
-        search_for: str
-            String denoting keywords to search for
-        sub: str
-            String denoting Subreddit name
-        subreddit: PRAW Subreddit object
-        time_filter: str
-            String denoting time filter to apply
-
-        Returns
-        -------
-        category_submissions: PRAW ListingGenerator
+        :returns: An `Iterator` over the Subreddit's posts.
+        :rtype: `Iterator[Any]`
         """
 
         category = categories[short_cat.index(cat_i)]
         index = short_cat.index(cat_i)
-        
+
         Halo().info(f"Processing {search_for} {category} results from r/{sub}.")
-        
+
         if time_filter != None:
             Halo().info(f"Time filter: {time_filter.capitalize()}")
 
-        return GetSubmissionsSwitch(search_for, subreddit, time_filter).scrape_sub(index)
+        return GetSubmissionsSwitch(search_for, subreddit, time_filter).scrape_sub(
+            index
+        )
 
     @staticmethod
-    def get(cat_i, search_for, sub, subreddit, time_filter):
+    def get(
+        cat_i: str, search_for: str, sub: str, subreddit: Subreddit, time_filter: str
+    ) -> Iterator[Any]:
         """
-        Get Subreddit submissions and return the PRAW ListingGenerator. 
-        
-        Calls previously defined private methods:
+        Get Subreddit submissions and return the PRAW ListingGenerator.
 
-            GetSubmissions._collect_search()
-            GetSubmissions._collect_others()
+        :param str cat_i: The shortened category name.
+        :param str search_for: Keywords to search for.
+        :param str sub: The Subreddit's name.
+        :param Subreddit subreddit: The `Subreddit` instance.
+        :param str time_filter: The time filter to apply to the query.
 
-        Parameters
-        ----------
-        cat_i: int
-            Integer denoting the index within the categories or short_cat lists
-        search_for: str
-            String denoting keywords to search for
-        sub: str
-            String denoting Subreddit name
-        subreddit: PRAW Subreddit object
-        time_filter: str
-            String denoting time filter to apply
-
-        Returns
-        -------
-        submissions: PRAW ListingGenerator
+        :returns: An `Iterator` over the Subreddit's posts.
+        :rtype: `Iterator[Any]`
         """
 
-        return GetSubmissions._collect_search(search_for, sub, subreddit, time_filter) \
-            if cat_i == short_cat[5] \
-            else GetSubmissions._collect_others(cat_i, search_for, sub, subreddit, time_filter)
+        return (
+            GetSubmissions._collect_search(search_for, sub, subreddit, time_filter)
+            if cat_i == short_cat[5]
+            else GetSubmissions._collect_others(
+                cat_i, search_for, sub, subreddit, time_filter
+            )
+        )
 
-class FormatSubmissions():
+
+class FormatSubmissions:
     """
     Methods for formatting PRAW submissions.
     """
 
     @staticmethod
-    def format_submissions(submissions):
+    def format_submissions(submissions: Iterator[Any]) -> List[Dict[str, Any]]:
         """
         Format submissions to dictionary structure.
 
-        Calls a public method from an external module:
+        :param Iterator[Any] submissions: PRAW `ListingGenerator` for submissions.
 
-            Objectify().make_submission()
-
-        Parameters
-        ----------
-        submissions: PRAW ListingGenerator
-
-        Returns
-        -------
-        submissions_list: list
-            List containing formatted submissions
+        :returns: A `list[dict[str, Any]]` containing formatted submissions.
+        :rtype: `list[dict[str, Any]]`
         """
 
         return [
-            Objectify().make_submission(False, submission) 
-            for submission in submissions
+            Objectify().make_submission(False, submission) for submission in submissions
         ]
 
-class FormatCSV():
+
+class FormatCSV:
     """
     Methods for formatting PRAW submission objects in CSV format.
     """
 
     @staticmethod
-    def format_csv(submissions):
+    def format_csv(submissions: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Format submission metadata for CSV export.
 
-        Parameters
-        ----------
-        submissions: list
-            List containing submission objects
+        :param list[dict[str, Any]] submissions: A `list[dict[str, Any]]` containing
+            submission objects.
 
-        Returns
-        -------
-        overview: dict
-            Dictionary containing submission data
+        :returns: A `dict[str, Any]` containing submission data.
+        :rtype: `dict[str, Any]`
         """
 
         format_status = Status(
             "Finished formatting data for CSV export.",
             "Formatting data for CSV export.",
-            "white"
+            "white",
         )
 
         overview = dict()
@@ -372,35 +310,26 @@ class FormatCSV():
             for field, metadata in submission.items():
                 if field not in overview.keys():
                     overview[field] = []
-                
+
                 overview[field].append(metadata)
-        
+
         format_status.succeed()
         return overview
 
-class FormatJSON():
+
+class FormatJSON:
     """
-    Methods for formatting PRAW submission objects in JSON format. 
+    Methods for formatting PRAW submission objects in JSON format.
     """
 
     @staticmethod
-    def _add_subreddit_rules(skeleton, subreddit):
+    def _add_subreddit_rules(skeleton: Dict[str, Any], subreddit: Subreddit) -> None:
         """
         Add Subreddit rules and post requirements to the JSON skeleton.
 
-        Calls previously defined public method:
-
-            GetExtras.get_rules()
-
-        Parameters
-        ----------
-        skeleton: dict
-            Dictionary containing all Subreddit scrape data
-        subreddit: PRAW Subreddit object
-
-        Returns
-        -------
-        None
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing all Subreddit
+            scrape data.
+        :param Subreddit subreddit: The `Subreddit` instance.
         """
 
         Halo().info("Including Subreddit rules.")
@@ -414,25 +343,19 @@ class FormatJSON():
         skeleton["subreddit_rules"]["post_requirements"] = post_requirements
 
     @staticmethod
-    def make_json_skeleton(cat_i, search_for, sub, time_filter):
+    def make_json_skeleton(
+        cat_i: str, search_for: str, sub: str, time_filter: str
+    ) -> Dict[str, Any]:
         """
         Create a skeleton for JSON export. Include scrape details at the top.
 
-        Parameters
-        ----------
-        cat_i: str
-            String denoting the shortened category in the `short_cat` list
-        search_for: str
-            String denoting n_results returned or keywords searched for
-        sub: str
-            String denoting the Subreddit name
-        time_filter: str
-            String denoting the time filter applied to the scrape
+        :param str cat_i: The index within the `categories` or `short_cat` lists.
+        :param str search_for: Keywords to search for.
+        :param str sub: The Subreddit's name.
+        :param str time_filter: The time filter to apply to the query.
 
-        Returns
-        -------
-        skeleton: dict
-            Dictionary containing Subreddit data
+        :returns: A `dict[str, Any]` containing Subreddit data.
+        :rtype: `dict[str, Any]`
         """
 
         skeleton = {
@@ -440,79 +363,74 @@ class FormatJSON():
                 "subreddit": sub,
                 "category": categories[short_cat.index(cat_i)].lower(),
                 "n_results_or_keywords": search_for,
-                "time_filter": time_filter
+                "time_filter": time_filter,
             },
-            "data": None
+            "data": None,
         }
 
         return skeleton
 
     @staticmethod
-    def format_json(args, skeleton, submissions, subreddit):
+    def format_json(
+        args: Namespace,
+        skeleton: Dict[str, Any],
+        submissions: List[Dict[str, Any]],
+        subreddit: Subreddit,
+    ) -> None:
         """
         Format submission metadata for JSON export.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        reddit: PRAW Reddit object
-        skeleton: dict
-            Dictionary containing all Subreddit scrape data
-        sub: str
-            String denoting the Subreddit name
-        submissions: list
-            List containing submission objects
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param dict[str, Any] skeleton: A `dict[str, Any]` containing all Subreddit
+            scrape data.
+        :param list[dict[str, Any]] submissions: A `list[dict[str, Any]]` containing
+            submission objects.
+        :param Subreddit subreddit: The PRAW `Subreddit` instance.
         """
 
         format_status = Status(
             "Finished formatting data for JSON export.",
             "Formatting data for JSON export.",
-            "white"
+            "white",
         )
 
         format_status.start()
         skeleton["data"] = submissions
-        
+
         if args.rules:
             FormatJSON._add_subreddit_rules(skeleton, subreddit)
-        
+
         format_status.succeed()
 
-class GetSortWrite():
+
+class GetSortWrite:
     """
     Methods to get, sort, then write scraped Subreddit submissions to CSV or JSON.
     """
 
     @staticmethod
-    def _get_sort(args, cat_i, search_for, sub, subreddit, time_filter):
+    def _get_sort(
+        args: Namespace,
+        cat_i: str,
+        search_for: str,
+        sub: str,
+        subreddit: Subreddit,
+        time_filter: str,
+    ) -> Dict[str, Any]:
         """
-        Get and sort submissions. 
-        
-        Calls previously defined public methods:
+        Get and sort submissions.
 
-            GetExtras.get_rules()
-            GetSubmissions.get()
-            SortSubmissions().sort()
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str cat_i: The shortened category index.
+        :param str search_for: Keywords to search for.
+        :param str sub: The Subreddit's name.
+        :param Subreddit subreddit: The `Subreddit` instance.
+        :param str time_filter: The time filter to apply to the query.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        cat_i: str
-            String denoting n_results returned or keywords searched for
-        search_for: str
-            String denoting n_results returned or keywords searched for
-        sub: str
-            String denoting the Subreddit name
-        subreddit: PRAW Subreddit object
-        time_filter: str
-            String denoting the time filter applied to the scrape
-
-        Returns
-        -------
-        data: dict
-            Dictionary containing scraped Subreddit submission data 
+        :returns: A `dict[str, Any]` containing scraped Subreddit submission data.
+        :rtype: `dict[str, Any]`
         """
 
         submissions = GetSubmissions.get(cat_i, search_for, sub, subreddit, time_filter)
@@ -527,67 +445,51 @@ class GetSortWrite():
         return skeleton
 
     @staticmethod
-    def _write(args, cat_i, data, each_sub, sub):
+    def _write(
+        args: Namespace,
+        cat_i: str,
+        data: Dict[str, Any],
+        each_sub: List[str],
+        sub: str,
+    ) -> None:
         """
-        Write submissions to file. 
-        
-        Calls methods from external modules:
+        Write submissions to file.
 
-            NameFile().r_fname()
-            Export.export()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        cat_i: str
-            String denoting n_results returned or keywords searched for
-        data: dict
-            Dictionary containing scraped Subreddit submission data 
-        each_sub: list
-            List of Subreddit scraping settings
-        sub: str
-            String denoting the Subreddit name
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str cat_i: The shortened category index.
+        :param dict[str, Any] data: A `dict[str, Any]` containing scraped Subreddit
+            submission data.
+        :param list[str] each_sub: A `list[str]` containing Subreddit scraping
+            settings.
+        :param str sub: The Subreddit's name.
         """
 
         f_name = NameFile().r_fname(args, cat_i, each_sub, sub)
-        
-        export_option = "json" \
-            if not args.csv \
-            else "csv"
+
+        export_option = "json" if not args.csv else "csv"
 
         Export.export(data, f_name, export_option, "subreddits")
 
         print()
-        Halo(color = "green", text = Style.BRIGHT + Fore.GREEN + f"{export_option.upper()} file for r/{sub} created.").succeed()
+        Halo(
+            color="green",
+            text=Style.BRIGHT
+            + Fore.GREEN
+            + f"{export_option.upper()} file for r/{sub} created.",
+        ).succeed()
         print()
 
     @staticmethod
-    def gsw(args, reddit, s_master):
+    def gsw(args: Namespace, reddit: Reddit, s_master: Dict[str, Any]) -> None:
         """
         Get, sort, then write submissions to file.
 
-        Calls previously defined private methods:
-
-            GetSortWrite._get_sort()
-            GetSortWrite._write()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        s_master: dict
-            Dictionary containing all scrape settings
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: The Reddit instance.
+        :param dict[str, Any] s_master: A `dict[str, Any]` containing all scrape
+            settings.
         """
 
         for sub, settings in s_master.items():
@@ -595,39 +497,28 @@ class GetSortWrite():
                 cat_i = each_sub[0].upper()
                 subreddit = reddit.subreddit(sub)
 
-                data = GetSortWrite._get_sort(args, cat_i, str(each_sub[1]), sub, subreddit, each_sub[2])
+                data = GetSortWrite._get_sort(
+                    args, cat_i, str(each_sub[1]), sub, subreddit, each_sub[2]
+                )
                 GetSortWrite._write(args, cat_i, data, each_sub, sub)
 
-class RunSubreddit():
+
+class RunSubreddit:
     """
     Run the Subreddit scraper.
     """
 
     @staticmethod
-    def _create_settings(args, parser, reddit):
+    def _create_settings(args: Namespace, reddit: Reddit) -> Dict[str, List[Any]]:
         """
-        Create settings for each user input. 
-        
-        Calls methods from an external modules:
+        Create settings for each user input.
 
-            GetPRAWScrapeSettings().create_list()
-            Validation.validate()
-            GetPRAWScrapeSettings().get_settings()
-            Global.make_list_dict()
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: The Reddit instance.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        parser: ArgumentParser
-            argparse ArgumentParser object
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        s_master: dict
-            Dictionary containing all scrape settings
+        :returns: A `dict[str, list[Any]]` containing all scrape settings.
+        :rtype: `dict[str, list[Any]]`
         """
 
         sub_list = GetPRAWScrapeSettings().create_list(args, "subreddit")
@@ -639,28 +530,17 @@ class RunSubreddit():
 
     @staticmethod
     @LogPRAWScraper.log_cancel
-    def _confirm_write(args, reddit, s_master):
+    def _confirm_write(
+        args: Namespace, reddit: Reddit, s_master: Dict[str, Any]
+    ) -> None:
         """
-        Print the confirm screen if the user did not specify the `-y` flag. 
-        
-        Calls previously defined public methods:
+        Print the confirm screen if the user did not specify the `-y` flag.
 
-            GetSortWrite.gsw(args, reddit, s_master)
-            Global.confirm_settings()
-            PrintConfirm.print_settings()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        s_master: dict
-            Dictionary containing all scrape settings
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: The Reddit instance.
+        :param dict[str, Any] s_master: A `dict[str, Any]` containing all scrape
+            settings.
         """
 
         PrintConfirm.print_settings(s_master)
@@ -672,68 +552,37 @@ class RunSubreddit():
             raise KeyboardInterrupt
 
     @staticmethod
-    def _write_file(args, reddit, s_master):
+    def _write_file(args: Namespace, reddit: Reddit, s_master: Dict[str, Any]) -> None:
         """
         Skip or print Subreddit scraping settings if the `-y` flag is entered.
-        Then write or quit scraper. 
-        
-        Calls previously defined public methods:
+        Then write or quit scraper.
 
-            GetSortWrite.gsw()
-            RunSubreddit._confirm_write()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-        s_master: dict
-            Dictionary containing all scrape settings
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: The Reddit instance.
+        :param dict[str, Any] s_master: A `dict[str, Any]` containing all scrape
+            settings.
         """
 
-        GetSortWrite.gsw(args, reddit, s_master) \
-            if args.y \
-            else RunSubreddit._confirm_write(args, reddit, s_master)
+        GetSortWrite.gsw(
+            args, reddit, s_master
+        ) if args.y else RunSubreddit._confirm_write(args, reddit, s_master)
 
     @staticmethod
     @LogExport.log_export
     @LogPRAWScraper.scraper_timer("subreddit")
-    def run(args, parser, reddit):
+    def run(args: Namespace, reddit: Reddit) -> Dict[str, List[Any]]:
         """
-        Run Subreddit scraper. 
-        
-        Calls previously defined public methods:
+        Run Subreddit scraper.
 
-            RunSubreddit._create_settings()
-            RunSubreddit._write_file()
-
-        Calls a method from an external module:
-
-            PRAWTitles.r_title()
-
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments that were defined in the CLI 
-        parser: ArgumentParser
-            argparse ArgumentParser object 
-        reddit: Reddit object
-            Reddit instance created by PRAW API credentials
-
-        Returns
-        -------
-        s_master: dict
-            Dictionary containing all Subreddit scrape settings
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param Reddit reddit: The Reddit instance.
         """
 
         PRAWTitles.r_title()
 
-        s_master = RunSubreddit._create_settings(args, parser, reddit)
+        s_master = RunSubreddit._create_settings(args, reddit)
         RunSubreddit._write_file(args, reddit, s_master)
-        
+
         return s_master

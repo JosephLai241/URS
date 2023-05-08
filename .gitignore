@@ -1,7 +1,6 @@
 __pycache__/
-env/*
-.vscode/*
 
 scrapes/*
+target/*
 
-URS.egg-info/*
+Cargo.lock

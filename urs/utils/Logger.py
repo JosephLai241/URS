@@ -7,22 +7,18 @@ Decorators that log what is happening behind the scenes to `urs.log`.
 
 import logging
 import time
+from argparse import ArgumentParser, Namespace
+from typing import Any, Callable, Dict, List, Literal, Tuple
 
-from colorama import (
-    Fore, 
-    Style
-)
+from colorama import Fore, Style
+from praw import Reddit
 
 from urs.utils.DirInit import InitializeDirectory
-from urs.utils.Global import (
-    categories,
-    convert_time,
-    date,
-    short_cat
-)
+from urs.utils.Global import categories, convert_time, date, short_cat
 from urs.utils.Titles import Errors
 
-class LogMain():
+
+class LogMain:
     """
     Decorator for logging URS runtime. Also handles KeyboardInterrupt and adds the
     event to the log if applicable.
@@ -38,40 +34,30 @@ class LogMain():
 
     ### Configure logging settings.
     logging.basicConfig(
-        filename = DIR_PATH + "/urs.log", 
-        format = LOG_FORMAT, 
-        level = logging.INFO
+        filename=DIR_PATH + "/urs.log", format=LOG_FORMAT, level=logging.INFO
     )
-    
+
     @staticmethod
-    def master_timer(function):
+    def master_timer(function: Callable[[None], None]) -> Callable[[None], None]:
         """
         Wrapper for logging the amount of time it took to execute main(). Handle
         KeyboardInterrupt if user cancels URS.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[[None], None] function: The function to run in the wrapper.
 
-        Exceptions
-        ----------
-        KeyboardInterrupt:
-            Raised if user cancels URS
+        :raises KeyboardInterrupt: Raised if the user cancels URS.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The wrapper function that runs the function passed into the
+            decorator.
+        :rtype: `Callable[[None], None]`
         """
 
-        def wrapper(*args):
+        def wrapper(*args: Any) -> None:
             logging.info("INITIALIZING URS.")
             logging.info("")
 
             start = time.time()
-            
+
             try:
                 function(*args)
             except KeyboardInterrupt:
@@ -84,63 +70,53 @@ class LogMain():
 
         return wrapper
 
-class LogError():
+
+class LogError:
     """
     Decorator for logging args, PRAW, or rate limit errors.
     """
 
     @staticmethod
-    def log_no_args(function):
+    def log_no_args(
+        function: Callable[[Any], Tuple[Namespace, ArgumentParser]]
+    ) -> Callable[[Any], Tuple[Namespace, ArgumentParser]]:
         """
         Wrapper for logging if the help message was printed/if no arguments were
         given.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[[Any], Tuple[Namespace, ArgumentParser]] function: The
+            function to run in the wrapper.
 
-        Exceptions
-        ----------
-        SystemExit:
-            Raised if no, invalid, or example args were entered 
+        :raises SystemExit: Raised if no, invalid, or example args were entered.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The `Namespace` and `ArgumentParser` objects.
+        :rtype: `(Namespace, ArgumentParser)`
         """
 
-        def wrapper(self):
+        def wrapper(self: Any) -> Tuple[Namespace, ArgumentParser]:
             try:
                 args, parser = function(self)
                 return args, parser
             except SystemExit:
                 logging.info("HELP OR VERSION WAS DISPLAYED.\n")
                 quit()
-        
+
         return wrapper
 
     @staticmethod
-    def log_args(error):
+    def log_args(error: str) -> Callable[..., Callable[..., None]]:
         """
         Wrapper for logging individual (specific) arg errors.
 
-        Parameters
-        ----------
-        error: str
-            String denoting the specific error that was raised when processing args
+        :param str error: The specific error that was raised when processing args.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The decorator function that runs the function that is passed
+            into it.
+        :rtype: `Callable[..., Callable[..., None]]`
         """
 
-        def decorator(function):
-            def wrapper(*args):
+        def decorator(function: Callable[..., None]) -> Callable[..., None]:
+            def wrapper(*args: Any) -> None:
                 try:
                     function(*args)
                 except ValueError:
@@ -150,26 +126,25 @@ class LogError():
                     quit()
 
             return wrapper
+
         return decorator
 
     @staticmethod
-    def log_rate_limit(function):
+    def log_rate_limit(
+        function: Callable[[Reddit], Dict[str, Any]]
+    ) -> Callable[[Reddit], Dict[str, Any]]:
         """
         Wrapper for logging rate limit and errors.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[[Reddit], dict[str, Any]] function: The function to run
+            within the wrapper function.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The wrapper function that runs the function passed into the
+            decorator.
+        :rtype: `Callable[[Reddit], Dict[str, Any]]`
         """
 
-        def wrapper(reddit):
+        def wrapper(reddit: Reddit) -> Dict[str, Any]:
             user_limits = function(reddit)
 
             logging.info("RATE LIMIT DISPLAYED.")
@@ -179,103 +154,91 @@ class LogError():
 
             if int(user_limits["remaining"]) == 0:
                 Errors.l_title(convert_time(user_limits["reset_timestamp"]))
-                logging.critical(f"RATE LIMIT REACHED. RATE LIMIT WILL RESET AT {convert_time(user_limits['reset_timestamp'])}.")
+                logging.critical(
+                    f"RATE LIMIT REACHED. RATE LIMIT WILL RESET AT {convert_time(user_limits['reset_timestamp'])}."
+                )
                 logging.critical("ABORTING URS.\n")
                 quit()
-            
+
             return user_limits
+
         return wrapper
 
-class LogPRAWScraper():
+
+class LogPRAWScraper:
     """
     Decorator for logging scraper runtimes and events.
     """
 
     @staticmethod
-    def _format_subreddit_log(settings_dict):
+    def _format_subreddit_log(settings_dict: Dict[str, Any]) -> None:
         """
         Format Subreddit log message.
 
-        Parameters
-        ----------
-        settings_dict: dict
-            Dictionary containing Subreddit scraping settings
-
-        Returns
-        -------
-        None
+        :param dict[str, Any] settings_dict: A `dict[str, Any]` containing Subreddit
+            scraping settings.
         """
 
-        time_filters = [ 
-            "day", 
-            "hour", 
-            "month", 
-            "week", 
-            "year"
-        ]
+        time_filters = ["day", "hour", "month", "week", "year"]
 
         for subreddit_name, settings in settings_dict.items():
             for each_setting in settings:
                 if each_setting[2] in time_filters:
-                    logging.info(f"Getting posts from the past {each_setting[2]} for {categories[short_cat.index(each_setting[0].upper())]} results.")
+                    logging.info(
+                        f"Getting posts from the past {each_setting[2]} for {categories[short_cat.index(each_setting[0].upper())]} results."
+                    )
                 if each_setting[0].lower() != "s":
-                    logging.info(f"Scraping r/{subreddit_name} for {each_setting[1]} {categories[short_cat.index(each_setting[0].upper())]} results...")
+                    logging.info(
+                        f"Scraping r/{subreddit_name} for {each_setting[1]} {categories[short_cat.index(each_setting[0].upper())]} results..."
+                    )
                 elif each_setting[0].lower() == "s":
-                    logging.info(f"Searching and scraping r/{subreddit_name} for posts containing '{each_setting[1]}'...")
+                    logging.info(
+                        f"Searching and scraping r/{subreddit_name} for posts containing '{each_setting[1]}'..."
+                    )
 
                 logging.info("")
 
     @staticmethod
-    def _format_two_arg_log(scraper_type, settings_dict):
+    def _format_two_arg_log(
+        scraper_type: Literal["comments", "redditor"], settings_dict: Dict[str, Any]
+    ) -> None:
         """
         Format Redditor or submission comments log message. Both only take two
         arguments, which is why only one method is needed to format the messages.
 
-        Parameters
-        ----------
-        scraper_type: str
-            String denoting the scraper type (Redditors or submission comments)
-        settings_dict: dict
-            Dictionary containing Redditor scraping settings
-
-        Returns
-        -------
-        None
+        :param str scrape_type: The scraper type (`"comments"` or `"redditor"`)
+        :param dict[str, Any] settings_dict: A `dict[str, Any]` containing Redditor
+            scraping settings.
         """
 
         for reddit_object, n_results in settings_dict.items():
-            plurality = "results" \
-                if int(n_results) > 1 \
-                else "result"
-            
+            plurality = "results" if int(n_results) > 1 else "result"
+
             if scraper_type == "redditor":
-                logging.info(f"Scraping {n_results} {plurality} for u/{reddit_object}...")
+                logging.info(
+                    f"Scraping {n_results} {plurality} for u/{reddit_object}..."
+                )
             elif scraper_type == "comments":
-                logging.info(f"Processing all comments from Reddit post {reddit_object}...") \
-                    if int(n_results) == 0 \
-                    else logging.info(f"Processing {n_results} {plurality} from Reddit post {reddit_object}...")            
+                logging.info(
+                    f"Processing all comments from Reddit post {reddit_object}..."
+                ) if int(n_results) == 0 else logging.info(
+                    f"Processing {n_results} {plurality} from Reddit post {reddit_object}..."
+                )
 
             logging.info("")
 
     @staticmethod
-    def _format_scraper_log(scraper, settings_dict):
+    def _format_scraper_log(
+        scraper: Literal["comments", "redditor", "subreddit"],
+        settings_dict: Dict[str, Any],
+    ) -> None:
         """
-        Format log depending on raw or structured export. Calls previously
-        defined private methods:
+        Format log depending on raw or structured export.
 
-            LogPRAWScraper._format_subreddit_log()
-            LogPRAWScraper._format_two_arg_log()
-
-        Parameters
-        ----------
-        scraper: str
-            String denoting the scraper that was run
-        settings_dict: dict
-            Dictionary containing scrape settings
-
-        Returns
-        -------
-        None
+        :param str scrape_type: The scraper type (`"comments"`, `"redditor"`, or
+            `"subreddit"`).
+        :param dict[str, Any] settings_dict: A `dict[str, Any]` containing Redditor
+            scraping settings.
         """
 
         if scraper == "subreddit":
@@ -286,24 +249,22 @@ class LogPRAWScraper():
             LogPRAWScraper._format_two_arg_log("comments", settings_dict)
 
     @staticmethod
-    def scraper_timer(scraper):
+    def scraper_timer(
+        scraper: Literal["comments", "redditor", "subreddit"]
+    ) -> Callable[..., Any]:
         """
         Wrapper for logging the amount of time it took to execute a scraper.
 
-        Parameters
-        ----------
-        scraper: str
-            String denoting the scraper that is run
+        :param str scraper: The scraper that is ran (`"comments"`, `"redditor"`,
+            or `"subreddit"`).
 
-        Returns
-        -------
-        decorator: function()
-            Return the decorator function that runs the method passed into this
-            method
+        :returns: The decorator function that runs the function passed into this
+            function.
+        :rtype: `Callable[..., Any]`
         """
 
-        def decorator(function):
-            def wrapper(*args):
+        def decorator(function: Callable[..., Any]) -> Callable[..., None]:
+            def wrapper(*args: Any) -> None:
                 start = time.time()
 
                 logging.info(f"RUNNING {scraper.upper()} SCRAPER.")
@@ -313,31 +274,29 @@ class LogPRAWScraper():
 
                 LogPRAWScraper._format_scraper_log(scraper, settings_dict)
 
-                logging.info(f"{scraper.upper()} SCRAPER FINISHED IN {time.time() - start:.2f} SECONDS.")
+                logging.info(
+                    f"{scraper.upper()} SCRAPER FINISHED IN {time.time() - start:.2f} SECONDS."
+                )
                 logging.info("")
 
             return wrapper
+
         return decorator
 
     @staticmethod
-    def log_cancel(function):
+    def log_cancel(function: Callable[..., None]) -> Callable[..., None]:
         """
         Wrapper for logging if the user cancelled Subreddit scraping at the
         confirmation page.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[..., None] function: The function to run within the wrapper.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The wrapper function that runs the function passed into the
+            decorator.
+        :rtype: `Callable[..., None]`
         """
 
-        def wrapper(*args):
+        def wrapper(*args: Any) -> None:
             try:
                 function(*args)
             except KeyboardInterrupt:
@@ -345,43 +304,44 @@ class LogPRAWScraper():
                 logging.info("")
                 logging.info("SUBREDDIT SCRAPING CANCELLED BY USER.\n")
                 quit()
-            
+
         return wrapper
 
-class LogAnalyticsErrors():
+
+class LogAnalyticsErrors:
     """
     Decorator for logging errors while exporting analytical data.
     """
 
     @staticmethod
-    def log_invalid_top_dir(function):
+    def log_invalid_top_dir(
+        function: Callable[..., Tuple[str, str]]
+    ) -> Callable[..., Tuple[str, str]]:
         """
         Log invalid top directory when running analytical tools.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[..., Tuple[str, str]] function: The function to run within
+            the wrapper function.
 
-        Exceptions
-        ----------
-        ValueError:
-            Raised if the file is not located within the scrapes directory
+        :raises ValueError: Raise if the file is not located within the `scrapes/`
+            directory.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
+        :returns: The wrapper function that runs the function passed into the
             decorator
+        :rtype: `Callable[..., Tuple[str, str]]`
         """
 
-        def wrapper(*args):
+        def wrapper(*args: Any) -> Tuple[str, str]:
             try:
                 return function(*args)
             except ValueError:
-                Errors.i_title("Scrape data is not located within the `scrapes` directory.")
+                Errors.i_title(
+                    "Scrape data is not located within the `scrapes` directory."
+                )
                 logging.critical("AN ERROR HAS OCCURRED WHILE PROCESSING SCRAPE DATA.")
-                logging.critical("Scrape data is not located within the `scrapes` directory.")
+                logging.critical(
+                    "Scrape data is not located within the `scrapes` directory."
+                )
                 logging.critical("ABORTING URS.\n")
                 quit()
             except TypeError:
@@ -393,114 +353,97 @@ class LogAnalyticsErrors():
 
         return wrapper
 
-class LogAnalytics():
+
+class LogAnalytics:
     """
     Decorator for logging analytical tools.
     """
 
     @staticmethod
-    def _get_args_switch(args, tool):
+    def _get_args_switch(
+        args: Namespace, tool: Literal["frequencies", "wordcloud"]
+    ) -> List[List[str]]:
         """
         Get tool type for logging.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
-        tool: str
-            Tool type which denotes a key in the dictionary
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str tool: The name of the tool that is run (`"frequencies"` or
+            `"wordcloud"`).
 
-        Returns
-        -------
-        scraper_args: list
-            List of arguments returned from args
+        :returns: A `list[list[str]]` of scraping arguments.
+        :rtype: `list[list[str]]`
         """
 
         tools = {
-            "frequencies": [arg_set for arg_set in args.frequencies] \
-                if args.frequencies \
-                else None,
-            "wordcloud": [arg_set for arg_set in args.wordcloud] \
-                if args.wordcloud \
-                else None
+            "frequencies": [arg_set for arg_set in args.frequencies]
+            if args.frequencies
+            else None,
+            "wordcloud": [arg_set for arg_set in args.wordcloud]
+            if args.wordcloud
+            else None,
         }
 
         return tools.get(tool)
 
     @staticmethod
-    def log_save(tool):
+    def log_save(tool: str) -> Callable[..., Callable[..., None]]:
         """
         Wrapper for logging if the result was saved.
 
-        Parameters
-        ----------
-        tool: str
-            String denoting the tool that is run
+        :param str tool: The name of the tool that is run.
 
-        Returns
-        -------
-        decorator: function()
-            Return the decorator function that runs the method passed into this
-            method
+        :returns: The decorator function that runs the function passed into this
+            function.
+        :rtype: `Callable[..., Callable[..., None]]`
         """
 
-        def decorator(function):
-            def wrapper(*args):
+        def decorator(function: Callable[..., None]) -> Callable[..., None]:
+            def wrapper(*args: Any) -> None:
                 filename = function(*args)
-                
+
                 logging.info(f"Saved {tool} to {filename}.")
                 logging.info("")
-                
+
             return wrapper
+
         return decorator
 
     @staticmethod
-    def log_show(tool):
+    def log_show(tool: str) -> Callable[..., Callable[..., None]]:
         """
         Wrapper for logging if the result was displayed.
 
-        Parameters
-        ----------
-        tool: str
-            String denoting the tool that is run
+        :param str tool: The name of the tool that is run.
 
-        Returns
-        -------
-        decorator: function()
-            Return the decorator method that runs the method passed into this
-            method
+        :returns: The decorator function that runs the function passed into this
+            function.
+        :rtype: `Callable[..., Callable[..., None]]`
         """
 
-        def decorator(function):
-            def wrapper(*args):
+        def decorator(function: Callable[..., None]) -> Callable[..., None]:
+            def wrapper(*args: Any) -> None:
                 function(*args)
-                
+
                 logging.info(f"Displayed {tool}.")
                 logging.info("")
-                
+
             return wrapper
+
         return decorator
 
     @staticmethod
-    def _get_export_switch(f_type):
+    def _get_export_switch(f_type: Literal["csv", "json"]) -> str:
         """
         Get export type for logging.
 
-        Parameters
-        ----------
-        f_type: str
-            String denoting the file type
+        :param str f_type: The file type (`"csv"` or `"json"`).
 
-        Returns
-        -------
-        export_message: str
-            String denoting export option
+        :returns: The export option.
+        :rtype: `str`
         """
 
-        export_options = {
-            0: "Exporting to JSON.",
-            1: "Exporting to CSV."
-        }
+        export_options = {0: "Exporting to JSON.", 1: "Exporting to CSV."}
 
         if f_type == "csv":
             return export_options.get(1)
@@ -508,23 +451,18 @@ class LogAnalytics():
         return export_options.get(0)
 
     @staticmethod
-    def log_export(function):
+    def log_export(function: Callable[..., None]) -> Callable[..., None]:
         """
         Log the export format for the frequencies generator.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[..., None] function: Run this function within the wrapper.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The decorator function that runs the function passed into this
+            function.
+        :rtype: `Callable[..., None]`
         """
 
-        def wrapper(*args):
+        def wrapper(*args: Any) -> None:
             try:
                 function(*args)
 
@@ -540,20 +478,13 @@ class LogAnalytics():
         return wrapper
 
     @staticmethod
-    def _log_tool(args, tool):
+    def _log_tool(args: Namespace, tool: str) -> None:
         """
         Log the analytical tool that was used.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
-        tool: str
-            String denoting the analytical tool
-
-        Returns
-        -------
-        None
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
+        :param str tool: The name of the tool that is run.
         """
 
         args_list = LogAnalytics._get_args_switch(args, tool)
@@ -563,64 +494,56 @@ class LogAnalytics():
             logging.info("")
 
     @staticmethod
-    def generator_timer(tool):
+    def generator_timer(tool: str) -> Callable[..., Callable[..., None]]:
         """
         Wrapper for logging the amount of time it took to execute a tool.
 
-        Parameters
-        ----------
-        tool: str
-            String denoting the tool that is run
+        :param str tool: The name of the tool that is run.
 
-        Returns
-        -------
-        decorator: function()
-            Return the decorator method that runs the method passed into this
-            method
+        :returns: The decorator function that runs the function passed into this
+            function.
+        :rtype: `Callable[..., Callable[..., None]]`
         """
 
-        def decorator(function):
-            def wrapper(*args):
+        def decorator(function: Callable[..., None]) -> Callable[..., None]:
+            def wrapper(*args: Any) -> None:
                 start = time.time()
 
                 logging.info(f"RUNNING {tool.upper()} GENERATOR.")
                 logging.info("")
 
                 LogAnalytics._log_tool(args[0], tool)
-                
+
                 function(*args)
 
-                logging.info(f"{tool.upper()} GENERATOR FINISHED IN {time.time() - start:.2f} SECONDS.")
+                logging.info(
+                    f"{tool.upper()} GENERATOR FINISHED IN {time.time() - start:.2f} SECONDS."
+                )
                 logging.info("")
 
             return wrapper
+
         return decorator
 
-class LogExport():
+
+class LogExport:
     """
     Decorator for logging exporting files.
     """
 
     @staticmethod
-    def _get_export_switch(args):
+    def _get_export_switch(args: Namespace) -> str:
         """
         Get export type for logging.
 
-        Parameters
-        ----------
-        args: Namespace
-            Namespace object containing all arguments used in the CLI
+        :param Namespace args: A `Namespace` object containing all arguments used
+            in the CLI.
 
-        Returns
-        -------
-        export_message: str
-            String denoting export option
+        :returns: The export option.
+        :rtype: `str`
         """
 
-        export_options = {
-            0: "Exporting to JSON.",
-            1: "Exporting to CSV."
-        }
+        export_options = {0: "Exporting to JSON.", 1: "Exporting to CSV."}
 
         if args.csv:
             return export_options.get(1)
@@ -628,23 +551,18 @@ class LogExport():
         return export_options.get(0)
 
     @staticmethod
-    def log_export(function):
+    def log_export(function: Callable[..., None]) -> Callable[..., None]:
         """
         Wrapper for logging the export option.
 
-        Parameters
-        ----------
-        function: function()
-            Run method within the wrapper
+        :param Callable[..., None] function: Run this function within the wrapper.
 
-        Returns
-        -------
-        wrapper: function()
-            Return the wrapper method that runs the method passed into the
-            decorator
+        :returns: The decorator function that runs the function passed into this
+            function.
+        :rtype: `Callable[..., Callable[..., None]]`
         """
 
-        def wrapper(*args):
+        def wrapper(*args: Any) -> None:
             try:
                 function(*args)
 

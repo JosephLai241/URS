@@ -4,42 +4,42 @@ This document will briefly go over all the potential error messages you might ru
 
 # Table of Contents
 
-* [Global Errors](#global-errors)
-    + [Invalid Arguments](#invalid-arguments)
-    + [Export Error](#export-error)
-* [PRAW Errors](#praw-errors)
-    + [Invalid API Credentials or No Internet Connection](#invalid-api-credentials-or-no-internet-connection)
-    + [No Reddit Objects Left to Scrape](#no-reddit-objects-left-to-scrape)
-    + [Rate Limit Reached](#rate-limit-reached)
-* [Analytical Tool Errors](#analytical-tool-errors)
-    + [Invalid File](#invalid-file)
+- [Global Errors](#global-errors)
+  - [Invalid Arguments](#invalid-arguments)
+  - [Export Error](#export-error)
+- [PRAW Errors](#praw-errors)
+  - [Invalid API Credentials or No Internet Connection](#invalid-api-credentials-or-no-internet-connection)
+  - [No Reddit Objects Left to Scrape](#no-reddit-objects-left-to-scrape)
+  - [Rate Limit Reached](#rate-limit-reached)
+- [Analytical Tool Errors](#analytical-tool-errors)
+  - [Invalid File](#invalid-file)
 
 # Global Errors
 
 ## Invalid Arguments
 
-       __   
-     /'__`\ 
-    /\  __/ 
+       __
+     /'__`\
+    /\  __/
     \ \____\
      \/____/... [ERROR MESSAGE]
-     
+
      Please recheck args or refer to help for usage examples.
 
-This message is displayed if you have entered invalid arguments. The specific error will follow `...`. 
+This message is displayed if you have entered invalid arguments. The specific error will follow `...`.
 
 You can use the `-h` flag to see the help message or the `-e` flag to display example usage.
 
 ## Export Error
 
-     __     
-    /\ \    
-    \ \ \   
-     \ \ \  
-      \ \_\ 
+     __
+    /\ \
+    \ \ \
+     \ \ \
+      \ \_\
        \/\_\
         \/_/... An error has occurred while exporting scraped data.
-        
+
     [ERROR MESSAGE]
 
 This message is displayed if an error occured while exporting the data. This applies to the scraper tools or word frequencies tool. The specific error will be printed under the art.
@@ -48,12 +48,12 @@ This message is displayed if an error occured while exporting the data. This app
 
 ## Invalid API Credentials or No Internet Connection
 
-     _____   
-    /\ '__`\ 
+     _____
+    /\ '__`\
     \ \ \L\ \
      \ \ ,__/... Please recheck API credentials or your internet connection.
-      \ \ \/ 
-       \ \_\ 
+      \ \ \/
+       \ \_\
         \/_/
 
     Prawcore exception: [EXCEPTION]
@@ -64,9 +64,9 @@ Recheck the environment variables in `.env` to make sure your API credentials ar
 
 ## No Reddit Objects Left to Scrape
 
-      ___    
-    /' _ `\  
-    /\ \/\ \ 
+      ___
+    /' _ `\
+    /\ \/\ \
     \ \_\ \_\
      \/_/\/_/... No [OBJECTS] to scrape! Exiting.
 
@@ -74,10 +74,10 @@ This message is displayed if the Reddit objects you have passed in have failed v
 
 ## Rate Limit Reached
 
-     __        
-    /\ \       
-    \ \ \      
-     \ \ \  __ 
+     __
+    /\ \
+    \ \ \
+     \ \ \  __
       \ \ \L\ \
        \ \____/
         \/___/... You have reached your rate limit.
@@ -90,10 +90,10 @@ PRAW has rate limits. This message is displayed if you have reached the rate lim
 
 ## Invalid File
 
-     __    
-    /\_\   
-    \/\ \  
-     \ \ \ 
+     __
+    /\_\
+    \/\ \
+     \ \ \
       \ \_\
        \/_/... [ERROR MESSAGE]
 

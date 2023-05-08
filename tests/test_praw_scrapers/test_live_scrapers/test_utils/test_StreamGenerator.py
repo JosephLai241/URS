@@ -4,14 +4,15 @@ Testing `StreamGenerator.py`.
 
 
 import os
-import praw
 import types
 
+import praw
 from dotenv import load_dotenv
 
 from urs.praw_scrapers.live_scrapers.utils import StreamGenerator
 
-class Login():
+
+class Login:
     """
     Create a Reddit object with PRAW API credentials.
     """
@@ -21,14 +22,15 @@ class Login():
         load_dotenv()
 
         return praw.Reddit(
-            client_id = os.getenv("CLIENT_ID"),
-            client_secret = os.getenv("CLIENT_SECRET"),
-            user_agent = os.getenv("USER_AGENT"),
-            username = os.getenv("REDDIT_USERNAME"),
-            password = os.getenv("REDDIT_PASSWORD")
+            client_id=os.getenv("CLIENT_ID"),
+            client_secret=os.getenv("CLIENT_SECRET"),
+            user_agent=os.getenv("USER_AGENT"),
+            username=os.getenv("REDDIT_USERNAME"),
+            password=os.getenv("REDDIT_PASSWORD"),
         )
 
-class TestStreamGeneratorStreamSubmissionsMethod():
+
+class TestStreamGeneratorStreamSubmissionsMethod:
     """
     Testing StreamGenerator class stream_submissions() method.
     """
@@ -46,7 +48,8 @@ class TestStreamGeneratorStreamSubmissionsMethod():
                 assert True
                 break
 
-class TestStreamGeneratorStreamCommentsMethod():
+
+class TestStreamGeneratorStreamCommentsMethod:
     """
     Testing StreamGenerator class stream_comments() method.
     """

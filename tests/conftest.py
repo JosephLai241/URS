@@ -3,9 +3,10 @@ Cleanup scripts that are run after tests are done.
 """
 
 
+from pathlib import Path
+
 import pytest
 
-from pathlib import Path
 
 def remove_directories(directory):
     """
@@ -22,13 +23,12 @@ def remove_directories(directory):
 
     directory = Path(directory)
     for item in directory.iterdir():
-        remove_directories(item) \
-            if item.is_dir() \
-            else item.unlink()
+        remove_directories(item) if item.is_dir() else item.unlink()
 
     directory.rmdir()
 
-@pytest.hookimpl(trylast = True)
+
+@pytest.hookimpl(trylast=True)
 def pytest_sessionfinish():
     """
     Clean up after `pytest` is done running tests.
