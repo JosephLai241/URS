@@ -27,5 +27,5 @@ The following date formats are supported:
 
 An error is displayed if `URS` was not run on the entered date (if the date directory is not found within the `scrapes/` directory).
 
-[display directory tree demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/tree_demo.gif
+[display directory tree demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/utilities/tree_demo.gif?raw=true
 [nomad]: https://github.com/JosephLai241/nomad
