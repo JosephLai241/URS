@@ -168,6 +168,7 @@ This is a shout-out section for my patrons - thank you so much for sponsoring th
 [codecov]: https://codecov.io/gh/JosephLai241/URS
 [mdbook]: https://github.com/rust-lang/mdBook
 [nomad]: https://github.com/JosephLai241/nomad
+[praw]: https://praw.readthedocs.io/en/stable/
 [releases]: https://github.com/JosephLai241/URS/releases
 
 <!--Sponsors links-->
