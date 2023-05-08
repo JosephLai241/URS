@@ -118,7 +118,7 @@ If applicable, describe more configuration settings. An example outline is shown
 
 # `pyproject.toml`
 
-```
+```toml
 Paste your new `pyproject.toml` here. Put "N/A" in this block if this is not applicable.
 ```
 
