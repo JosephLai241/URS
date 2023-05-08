@@ -16,6 +16,7 @@
   - [The `Forest`](#the-forest-1)
     - [The Root Node](#the-root-node)
     - [How `PRAW` Comments Are Linked](#how-praw-comments-are-linked)
+    - [The Insertion Methods](#the-insertion-methods)
   - [Serializing the `Forest`](#serializing-the-forest)
 
 # Introduction
@@ -123,7 +124,7 @@ Here is a second-level reply to the top comment. Note the `parent_id` contains t
 
 This pattern continues all the way down to the last level of comments. It is now very easy to link the correct comments together. I do this by calling `split("_", 1)` on the `parent_id` and then getting the second item in the split list to compare values. I also specify the `maxsplit` parameter to force one split.
 
-**The Insertion Methods**
+### The Insertion Methods
 
 I then defined the methods for `CommentNode` insertion.
 

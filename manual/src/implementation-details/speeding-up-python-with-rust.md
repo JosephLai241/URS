@@ -6,6 +6,10 @@
 
 - [Introduction](#introduction)
 - [Some Reasons Why I Love Rust](#some-reasons-why-i-love-rust)
+  - [Great Performance Without Sacrificing Memory Safety](#great-performance-without-sacrificing-memory-safety)
+  - [All Bases Covered](#all-bases-covered)
+  - [Compiler Error Messages Are Actually Useful](#compiler-error-messages-are-actually-useful)
+  - [Fantastic Developer Ecosystem](#fantastic-developer-ecosystem)
 - [Controllable Bottlenecks in `URS`](#controllable-bottlenecks-in-urs)
 - [Depth-First Search](#depth---first-search)
 - [Submission Comments Returned by PRAW](#submission-comments-returned-by-praw)
