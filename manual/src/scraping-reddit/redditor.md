@@ -111,4 +111,4 @@ The file names will follow this format:
 
 Scrape data is exported to the `redditors` directory.
 
-[redditor demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Redditor_demo.gif
+[redditor demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Redditor_demo.gif?raw=true

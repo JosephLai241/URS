@@ -58,6 +58,6 @@ Reddit object information will be displayed in a PrettyTable as they are submitt
 
 Include the `--nosave` flag if you do not want to save the livestream to file.
 
-[livestream subreddit demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/live_scrapers/livestream_subreddit_demo.gif
+[livestream subreddit demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/live_scrapers/livestream_subreddit_demo.gif?raw=true
 [prettytable]: https://pypi.org/project/prettytable/
 [subreddit stream disclaimer]: https://praw.readthedocs.io/en/latest/code_overview/other/subredditstream.html#praw.models.reddit.subreddit.SubredditStream

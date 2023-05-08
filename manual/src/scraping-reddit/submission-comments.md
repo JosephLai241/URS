@@ -85,4 +85,4 @@ Raw scrapes do not resemble comment threads, but returns all comments on a submi
 You can export to raw format by including the `--raw` flag. `-raw` will also be appended to the end of the file name.
 
 [depth-first search]: https://www.interviewcake.com/concept/java/dfs
-[submission comments demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif
+[submission comments demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/submission_comments_demo.gif?raw=true

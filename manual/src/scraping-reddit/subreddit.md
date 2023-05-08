@@ -106,4 +106,4 @@ If rules are included in your file, `-rules` will be appended to the end of the 
 
 After submitting the arguments and Reddit validation, `URS` will display a table of Subreddit scraping settings as a final check before executing. You can include the `-y` flag to bypass this and immediately scrape.
 
-[subreddit demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Subreddit_demo.gif
+[subreddit demo]: https://github.com/JosephLai241/URS/blob/demo-gifs/praw_scrapers/static_scrapers/Subreddit_demo.gif?raw=true
