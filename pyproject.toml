@@ -12,10 +12,10 @@ colorama = "^0.4.6"
 halo = "^0.0.31"
 praw = "^7.7.0"
 prettytable = "^3.7.0"
+pydantic = "^1.10.7"
 python-dotenv = "^1.0.0"
 rich = "^13.3.5"
 wordcloud = "^1.9.1.1"
-pydantic = "^1.10.7"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
