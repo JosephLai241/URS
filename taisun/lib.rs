@@ -3,7 +3,7 @@
 use pyo3::{prelude::*, types::PyDict, wrap_pymodule};
 
 use comments::{CommentNode, Forest};
-use utilities::read_help_text;
+use utilities::{is_valid_file, read_help_text};
 
 mod comments;
 mod utilities;
@@ -21,6 +21,7 @@ fn comments_utils(_python: Python, module: &PyModule) -> PyResult<()> {
 #[pymodule]
 fn utils(_python: Python, module: &PyModule) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(read_help_text, module)?)?;
+    module.add_function(wrap_pyfunction!(is_valid_file, module)?)?;
 
     Ok(())
 }
