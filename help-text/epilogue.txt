@@ -1,0 +1,30 @@
+[PRAW SUBREDDIT SCRAPING]
+
+Subreddit categories:
+    h     selecting Hot category
+    n     selecting New category
+    c     selecting Controversial category (time filter available)
+    t     selecting Top category           (time filter available)
+    r     selecting Rising category
+    s     selecting Search category        (time filter available)
+
+Subreddit time filters:
+    all (default)
+    day
+    hour
+    month
+    week
+    year
+
+[ANALYTICAL TOOLS]
+
+wordcloud export options:
+    eps     Encapsulated Postscript
+    jpeg
+    jpg
+    pdf
+    png
+    ps      Postscript
+    rgba    Raw RGBA bitmap
+    tif
+    tiff

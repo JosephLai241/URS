@@ -1,0 +1,29 @@
+$ poetry run python Urs.py 
+
+    [-h]
+    [-e]
+    [-v]
+
+    [-t [<optional_date>]]
+    [--check]
+
+    [-r <subreddit> <(h|n|c|t|r|s)> <n_results_or_keywords> [<optional_time_filter>]] 
+        [-y]
+        [--csv]
+        [--rules]
+    [-u <redditor> <n_results>] 
+    [-c <submission_url> <n_results>]
+        [--raw] 
+    [-b]
+        [--csv]
+
+    [-lr <subreddit>]
+    [-lu <redditor>]
+
+        [--nosave]
+        [--stream-submissions]
+
+    [-f <file_path>]
+        [--csv]
+    [-wc <file_path> [<optional_export_format>]]
+        [--nosave]
