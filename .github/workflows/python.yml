@@ -1,6 +1,9 @@
 name: Python code checks
 
 on:
+  push:
+    branches:
+      - "master"
   pull_request:
     branches-ignore:
       - "demo-gifs"
@@ -29,6 +32,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest]
 
+    if: github.ref == "refs/heads/master"
     steps:
       - uses: actions/checkout@v3
 
