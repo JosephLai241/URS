@@ -4,6 +4,7 @@ on:
   pull_request:
     branches-ignore:
       - "demo-gifs"
+      - "gh-pages"
       - "rust-demo"
       - "samples"
 
