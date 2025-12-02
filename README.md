@@ -13,6 +13,69 @@
 ![Total lines](https://img.shields.io/tokei/lines/github/JosephLai241/URS)
 ![License](https://img.shields.io/github/license/JosephLai241/URS)
 
+# Sponsors
+
+<p align="center">
+  <a href="https://dashboard.thordata.com/register?invitation_code=8I13V2C7">
+    <img src="https://github.com/user-attachments/assets/67052ea0-d05c-4fd5-998c-f819fd233a8a" />
+  </a>
+</p>
+
+<p align="center" style="max-width: 500px; margin: auto;">
+  <strong>Thordata</strong>’s tools are particularly useful in scenarios that require large-scale web scraping through their 
+  <a href="https://www.thordata.com/products/web-scraper/?ls=EDBORvrR&lk=wb">Web Scraper API</a>
+  , API-based data extraction, or reliable 
+  <a href="https://www.thordata.com/products/residential-proxies/?ls=EDBORvrR&lk=wb">Proxy</a> 
+  infrastructure.
+  If you plan to use Thordata's tools, you can support the project via this <a href="https://dashboard.thordata.com/register?invitation_code=8I13V2C7">affiliate link</a>.
+</p>
+
+## Previous Sponsors
+
+- [lolfilmworks][lolfilmworks]
+
+# Table of Contents
+
+- [Contact](#contact)
+- [Introduction](#introduction)
+- [Usage Overview](#usage-overview)
+- ["Where’s the Manual?"](#wheres-the-manual)
+  - [`URS` Manual](#urs-manual)
+- [Demo GIFs](#demo-gifs)
+  - [Subreddit Scraping](#subreddit-scraping)
+  - [Redditor Scraping](#redditor-scraping)
+  - [Submission Comments Scraping](#submission-comments-scraping)
+  - [Livestreaming Reddit](#livestreaming-reddit)
+  - [Generating Word Frequencies](#generating-word-frequencies)
+  - [Generating Wordclouds](#generating-wordclouds)
+  - [Checking PRAW Rate Limits](#checking-praw-rate-limits)
+  - [Displaying Directory Tree](#displaying-directory-tree)
+
+# Contact
+
+Whether you are using `URS` for enterprise or personal use, I am very interested in hearing about your use case and how it has helped you achieve a goal. Additionally, please send me an email if you would like to [contribute][contributing manual link], have questions, or want to share something you have built on top of it.
+
+You can send me an email by clicking on the badge. I look forward to hearing from you!
+
+[![ProtonMail](https://img.shields.io/badge/ProtonMail-urs__project%40protonmail.com-informational?logo=protonmail)][urs project email]
+
+# Introduction
+
+This is a comprehensive Reddit scraping tool that integrates multiple features:
+
+- Scrape Reddit via [`PRAW`][praw] (the official Python Reddit API Wrapper)
+  - Scrape Subreddits
+  - Scrape Redditors
+  - Scrape submission comments
+- Livestream Reddit via `PRAW`
+  - Livestream comments submitted within Subreddits or by Redditors
+  - Livestream submissions submitted within Subreddits or by Redditors
+- Analytical tools for scraped data
+  - Generate frequencies for words that are found in submission titles, bodies, and/or comments
+  - Generate a wordcloud from scrape results
+
+# Usage Overview
+
 ```
 [-h]
 [-e]
@@ -42,46 +105,6 @@
 [-wc <file_path> [<optional_export_format>]]
     [--nosave]
 ```
-
-# Table of Contents
-
-- [Contact](#contact)
-- [Introduction](#introduction)
-- ["Where’s the Manual?"](#wheres-the-manual)
-  - [`URS` Manual](#urs-manual)
-- [Demo GIFs](#demo-gifs)
-  - [Subreddit Scraping](#subreddit-scraping)
-  - [Redditor Scraping](#redditor-scraping)
-  - [Submission Comments Scraping](#submission-comments-scraping)
-  - [Livestreaming Reddit](#livestreaming-reddit)
-  - [Generating Word Frequencies](#generating-word-frequencies)
-  - [Generating Wordclouds](#generating-wordclouds)
-  - [Checking PRAW Rate Limits](#checking-praw-rate-limits)
-  - [Displaying Directory Tree](#displaying-directory-tree)
-- [Sponsors](#sponsors)
-
-# Contact
-
-Whether you are using `URS` for enterprise or personal use, I am very interested in hearing about your use case and how it has helped you achieve a goal. Additionally, please send me an email if you would like to [contribute][contributing manual link], have questions, or want to share something you have built on top of it.
-
-You can send me an email by clicking on the badge. I look forward to hearing from you!
-
-[![ProtonMail](https://img.shields.io/badge/ProtonMail-urs__project%40protonmail.com-informational?logo=protonmail)][urs project email]
-
-# Introduction
-
-This is a comprehensive Reddit scraping tool that integrates multiple features:
-
-- Scrape Reddit via [`PRAW`][praw] (the official Python Reddit API Wrapper)
-  - Scrape Subreddits
-  - Scrape Redditors
-  - Scrape submission comments
-- Livestream Reddit via `PRAW`
-  - Livestream comments submitted within Subreddits or by Redditors
-  - Livestream submissions submitted within Subreddits or by Redditors
-- Analytical tools for scraped data
-  - Generate frequencies for words that are found in submission titles, bodies, and/or comments
-  - Generate a wordcloud from scrape results
 
 # "Where’s the Manual?"
 
@@ -128,12 +151,6 @@ Here are all the demo GIFs recorded for `URS`.
 ## [Displaying Directory Tree][display directory tree manual link]
 
 ![display directory tree demo][display directory tree demo]
-
-# Sponsors
-
-This is a shout-out section for my patrons - thank you so much for sponsoring this project!
-
-- [lolfilmworks][lolfilmworks]
 
 <!--Manual links-->
 
