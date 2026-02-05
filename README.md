@@ -17,21 +17,6 @@
 
 # Sponsors
 
-<p align="center">
-  <a href="https://dashboard.thordata.com/register?invitation_code=8I13V2C7">
-    <img src="https://github.com/user-attachments/assets/67052ea0-d05c-4fd5-998c-f819fd233a8a" />
-  </a>
-</p>
-
-<p align="center" style="max-width: 500px; margin: auto;">
-  <strong>Thordata</strong>’s tools are particularly useful in scenarios that require large-scale web scraping through their 
-  <a href="https://www.thordata.com/products/web-scraper/?ls=EDBORvrR&lk=wb">Web Scraper API</a>
-  , API-based data extraction, or reliable 
-  <a href="https://www.thordata.com/products/residential-proxies/?ls=EDBORvrR&lk=wb">Proxy</a> 
-  infrastructure.
-  If you plan to use Thordata's tools, you can support the project via this <a href="https://dashboard.thordata.com/register?invitation_code=8I13V2C7">affiliate link</a>.
-</p>
-
 ## Previous Sponsors
 
 - [lolfilmworks]
