@@ -1,19 +1,51 @@
-[package]
+[workspace]
+resolver = "2"
+members = ["crates/urs-core", "crates/urs-cli"]
+# urs-python excluded - requires maturin build with Python
+
+[workspace.package]
 authors = ["Joseph Lai <urs_project@protonmail.com>"]
-description = "The heavy lifter for URS"
 edition = "2021"
-homepage = "https://github.com/JosephLai241/URS"
+rust-version = "1.83"
 license = "MIT"
-name = "taisun"
+homepage = "https://github.com/JosephLai241/URS"
 repository = "https://github.com/JosephLai241/URS"
-version = "1.0.0"
 
-[lib]
-crate-type = ["cdylib"]
-name = "taisun"
-path = "taisun/lib.rs"
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive", "env"] }
+thiserror = "2"
+chrono = { version = "0.4", features = ["serde"] }
+indicatif = "0.17"
+console = "0.15"
+colored = "3"
+directories = "6"
+dotenvy = "0.15"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+base64 = "0.22"
+url = "2"
+pyo3 = { version = "0.23", features = ["extension-module"] }
 
-[dependencies]
-pyo3 = { version = "0.17.3", features = ["extension-module", "serde"] }
-serde = { version = "1.0.148", features = ["derive"] }
-serde_json = "1.0.89"
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"
+nursery = "warn"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.release-with-debug]
+inherits = "release"
+debug = true
+strip = false
