@@ -1,51 +1,50 @@
 [workspace]
-resolver = "2"
 members = ["crates/urs-core", "crates/urs-cli"]
-# urs-python excluded - requires maturin build with Python
+resolver = "2"
 
 [workspace.package]
 authors = ["Joseph Lai <urs_project@protonmail.com>"]
-edition = "2021"
-rust-version = "1.83"
-license = "MIT"
+edition = "2024"
 homepage = "https://github.com/JosephLai241/URS"
+license = "MIT"
 repository = "https://github.com/JosephLai241/URS"
+rust-version = "1.85"
 
 [workspace.dependencies]
-tokio = { version = "1", features = ["full"] }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["derive", "env"] }
+colored = "3"
+console = "0.15"
+directories = "6"
+dotenvy = "0.15"
+indicatif = "0.17"
+pyo3 = { version = "0.23", features = ["extension-module"] }
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-clap = { version = "4", features = ["derive", "env"] }
 thiserror = "2"
-chrono = { version = "0.4", features = ["serde"] }
-indicatif = "0.17"
-console = "0.15"
-colored = "3"
-directories = "6"
-dotenvy = "0.15"
+tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-base64 = "0.22"
 url = "2"
-pyo3 = { version = "0.23", features = ["extension-module"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
 
 [workspace.lints.clippy]
 all = "warn"
-pedantic = "warn"
 nursery = "warn"
+pedantic = "warn"
 
 [profile.release]
-opt-level = "z"
-lto = true
 codegen-units = 1
+lto = true
+opt-level = "z"
 panic = "abort"
 strip = true
 
 [profile.release-with-debug]
-inherits = "release"
 debug = true
+inherits = "release"
 strip = false
