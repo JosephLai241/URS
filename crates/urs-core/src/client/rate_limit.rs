@@ -95,9 +95,10 @@ impl RateLimitInfo {
             Some(Duration::from_secs(self.reset))
         } else if self.is_low() && self.remaining > 0.0 {
             // Spread remaining requests evenly over the reset period.
-            #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
-            let delay_ms = (self.reset as f64 * 1000.0 / self.remaining) as u64;
-            Some(Duration::from_millis(delay_ms))
+            // Use `Duration::from_secs_f64` to avoid any int/float casts.
+            let delay_secs = f64::from(u32::try_from(self.reset).unwrap_or(u32::MAX))
+                / self.remaining;
+            Some(Duration::from_secs_f64(delay_secs))
         } else {
             None
         }
@@ -134,7 +135,7 @@ impl RateLimiter {
 
     /// Returns the current rate limit information, if available.
     #[must_use]
-    pub fn info(&self) -> Option<RateLimitInfo> {
+    pub const fn info(&self) -> Option<RateLimitInfo> {
         self.info
     }
 
