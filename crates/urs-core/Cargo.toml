@@ -1,23 +1,25 @@
 [package]
-name = "urs-core"
-version = "4.0.0"
 description = "Core library for Universal Reddit Scraper"
 edition.workspace = true
-rust-version.workspace = true
 license.workspace = true
+name = "urs-core"
 repository.workspace = true
+rust-version.workspace = true
+version = "4.0.0"
 
 [dependencies]
-tokio.workspace = true
+base64.workspace = true
+chrono.workspace = true
+dotenvy.workspace = true
+image.workspace = true
 reqwest.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
-chrono.workspace = true
-base64.workspace = true
-url.workspace = true
+tokio.workspace = true
 tracing.workspace = true
-dotenvy.workspace = true
+url.workspace = true
+wordcloud-rs.workspace = true
 
 [dev-dependencies]
 tokio-test = "0.4"
