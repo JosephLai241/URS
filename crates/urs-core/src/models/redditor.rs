@@ -153,7 +153,7 @@ impl<T> InteractionData<T> {
 
     /// Returns `true` if access was forbidden.
     #[must_use]
-    pub fn is_forbidden(&self) -> bool {
+    pub const fn is_forbidden(&self) -> bool {
         matches!(self, Self::Forbidden)
     }
 }
@@ -178,7 +178,7 @@ impl Redditor {
 
     /// Returns the total karma (link + comment).
     #[must_use]
-    pub fn total_karma(&self) -> i64 {
+    pub const fn total_karma(&self) -> i64 {
         self.link_karma + self.comment_karma
     }
 }
