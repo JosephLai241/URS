@@ -43,7 +43,7 @@ pub struct Comment {
     pub extra: BTreeMap<String, serde_json::Value>,
     /// Nested replies (for structured/tree output).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub replies: Vec<Comment>,
+    pub replies: Vec<Self>,
 }
 
 impl From<CommentData> for Comment {
@@ -61,7 +61,7 @@ impl From<CommentData> for Comment {
             parent_id: data.parent_id,
             score: data.score,
             stickied: data.stickied,
-            extra: data.extra.into_iter().collect(),
+            extra: data.extra,
             replies: Vec::new(),
         }
     }
@@ -70,16 +70,19 @@ impl From<CommentData> for Comment {
 impl Comment {
     /// Returns `true` if this comment has been edited.
     #[must_use]
-    pub fn is_edited(&self) -> bool {
+    pub const fn is_edited(&self) -> bool {
         self.edited.is_edited()
     }
 
     /// Returns the parent ID without the type prefix.
     ///
-    /// For example, "t1_abc123" becomes "abc123".
+    /// For example, `t1_abc123` becomes "abc123".
     #[must_use]
     pub fn parent_id_short(&self) -> &str {
-        self.parent_id.split('_').last().unwrap_or(&self.parent_id)
+        self.parent_id
+            .split('_')
+            .next_back()
+            .unwrap_or(&self.parent_id)
     }
 
     /// Returns `true` if this is a top-level comment (parent is a submission).
