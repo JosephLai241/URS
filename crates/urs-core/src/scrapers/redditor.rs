@@ -188,12 +188,14 @@ impl<'a> RedditorScraper<'a> {
 
         let mut interactions = RedditorInteractions::default();
 
+        // Fetch user profile.
         match self.about(username).await {
             Ok(user) => interactions.information = Some(user),
             Err(Error::NotFound(_)) => return Err(Error::NotFound(format!("User {username}"))),
             Err(e) => warn!(error = %e, "Failed to fetch user info"),
         }
 
+        // Fetch typed categories (comments and submissions get parsed into domain models).
         match self.comments(username, limit).await {
             Ok(comments) => interactions.comments = InteractionData::Data(comments),
             Err(Error::Forbidden(_)) => interactions.comments = InteractionData::Forbidden,
@@ -206,51 +208,155 @@ impl<'a> RedditorScraper<'a> {
             Err(e) => warn!(error = %e, "Failed to fetch submissions"),
         }
 
-        // Fetch private categories (accessible for the authenticated user).
+        // Fetch public listing categories.
+        interactions.controversial = self
+            .fetch_listing_category(username, "controversial", limit)
+            .await;
+        interactions.gilded = self.fetch_listing_category(username, "gilded", limit).await;
+        interactions.hot = self.fetch_listing_category(username, "hot", limit).await;
+        interactions.new = self.fetch_listing_category(username, "new", limit).await;
+        interactions.top = self.fetch_listing_category(username, "top", limit).await;
+
+        // Fetch private categories (only accessible for the authenticated user).
         interactions.downvoted = self
-            .fetch_private_category(username, "downvoted", limit)
+            .fetch_listing_category(username, "downvoted", limit)
             .await;
         interactions.upvoted = self
-            .fetch_private_category(username, "upvoted", limit)
+            .fetch_listing_category(username, "upvoted", limit)
             .await;
-        interactions.saved = self.fetch_private_category(username, "saved", limit).await;
-        interactions.hidden = self.fetch_private_category(username, "hidden", limit).await;
+        interactions.saved = self.fetch_listing_category(username, "saved", limit).await;
+        interactions.hidden = self.fetch_listing_category(username, "hidden", limit).await;
         interactions.gildings = self
-            .fetch_private_category(username, "gilded/given", limit)
+            .fetch_listing_category(username, "gilded/given", limit)
             .await;
+
+        // Fetch moderated Subreddits (non-listing endpoint).
+        interactions.moderated = self.fetch_moderated_subreddits(username).await;
+
+        // Fetch multireddits (non-listing endpoint).
+        interactions.multireddits = self.fetch_multireddits(username).await;
 
         info!("Redditor interactions fetch complete");
 
         Ok(interactions)
     }
 
-    /// Fetches a private interaction category, returning Forbidden if access denied.
-    async fn fetch_private_category(
+    /// Fetches a user listing category with pagination, returning `Forbidden` if access denied.
+    ///
+    /// This handles both public categories (hot, new, top, controversial, gilded) and private
+    /// categories (downvoted, upvoted, saved, hidden, gilded/given).
+    async fn fetch_listing_category(
         &self,
         username: &str,
         category: &str,
-        limit: u32,
+        limit: usize,
     ) -> InteractionData<serde_json::Value> {
-        let url = RedditorEndpoint::private_category(username, category, limit);
+        debug!(
+            username = username,
+            category = category,
+            limit = limit,
+            "Fetching listing category"
+        );
 
-        match self.client.get(&url).await {
-            Ok(response) => {
-                if let Ok(listing) = serde_json::from_value::<Listing<serde_json::Value>>(response)
-                {
-                    let items: Vec<serde_json::Value> = listing
+        let mut items = Vec::new();
+        let mut after: Option<String> = None;
+
+        while items.len() < limit {
+            let batch_limit = std::cmp::min(100, limit - items.len());
+            let batch_limit_u32 = u32::try_from(batch_limit).unwrap_or(100);
+            let url = RedditorEndpoint::private_category(
+                username,
+                category,
+                batch_limit_u32,
+                after.as_deref(),
+            );
+
+            match self.client.get(&url).await {
+                Ok(response) => {
+                    let Ok(listing) =
+                        serde_json::from_value::<Listing<serde_json::Value>>(response)
+                    else {
+                        break;
+                    };
+
+                    let batch: Vec<serde_json::Value> = listing
                         .data
                         .children
                         .into_iter()
                         .map(|thing| thing.data)
                         .collect();
-                    InteractionData::Data(items)
-                } else {
-                    InteractionData::Data(vec![])
+
+                    let batch_len = batch.len();
+                    items.extend(batch);
+
+                    debug!(
+                        fetched = batch_len,
+                        total = items.len(),
+                        category = category,
+                        "Fetched listing category batch"
+                    );
+
+                    after = listing.data.after;
+                    if after.is_none() || batch_len == 0 {
+                        break;
+                    }
                 }
+                Err(Error::Forbidden(_)) => return InteractionData::Forbidden,
+                Err(e) => {
+                    warn!(category = category, error = %e, "Failed to fetch category");
+                    break;
+                }
+            }
+        }
+
+        items.truncate(limit);
+        InteractionData::Data(items)
+    }
+
+    /// Fetches Subreddits moderated by the user.
+    ///
+    /// The `/user/{username}/moderated_subreddits` endpoint returns a JSON object with a `data`
+    /// array rather than a standard listing, so it needs special handling.
+    async fn fetch_moderated_subreddits(
+        &self,
+        username: &str,
+    ) -> InteractionData<serde_json::Value> {
+        let url = RedditorEndpoint::moderated_subreddits(username);
+
+        match self.client.get(&url).await {
+            Ok(response) => {
+                // Response shape: { "kind": "moderatedList", "data": [...] }
+                let items = response
+                    .get("data")
+                    .and_then(|d| d.as_array())
+                    .cloned()
+                    .unwrap_or_default();
+                InteractionData::Data(items)
             }
             Err(Error::Forbidden(_)) => InteractionData::Forbidden,
             Err(e) => {
-                warn!(category = category, error = %e, "Failed to fetch category");
+                warn!(error = %e, "Failed to fetch moderated Subreddits");
+                InteractionData::Data(vec![])
+            }
+        }
+    }
+
+    /// Fetches the user's multireddits.
+    ///
+    /// The `/api/multi/user/{username}` endpoint returns a JSON array of multireddit objects rather
+    /// than a standard listing, so it needs special handling.
+    async fn fetch_multireddits(&self, username: &str) -> InteractionData<serde_json::Value> {
+        let url = RedditorEndpoint::multireddits(username);
+
+        match self.client.get(&url).await {
+            Ok(response) => {
+                // Response is a JSON array of multireddit objects.
+                let items = response.as_array().cloned().unwrap_or_default();
+                InteractionData::Data(items)
+            }
+            Err(Error::Forbidden(_)) => InteractionData::Forbidden,
+            Err(e) => {
+                warn!(error = %e, "Failed to fetch multireddits");
                 InteractionData::Data(vec![])
             }
         }
