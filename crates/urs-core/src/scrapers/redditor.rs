@@ -25,7 +25,7 @@ impl<'a> RedditorScraper<'a> {
     ///
     /// * `client` - The authenticated Reddit client to use for requests
     #[must_use]
-    pub fn new(client: &'a RedditClient) -> Self {
+    pub const fn new(client: &'a RedditClient) -> Self {
         Self { client }
     }
 
@@ -34,6 +34,10 @@ impl<'a> RedditorScraper<'a> {
     /// # Arguments
     ///
     /// * `username` - The Reddit username (without u/ prefix)
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
     pub async fn about(&self, username: &str) -> Result<Redditor> {
         info!(username = username, "Fetching Redditor info...");
 
@@ -53,7 +57,11 @@ impl<'a> RedditorScraper<'a> {
     ///
     /// * `username` - The Reddit username
     /// * `limit` - Maximum number of submissions to fetch
-    pub async fn submissions(&self, username: &str, limit: u32) -> Result<Vec<Submission>> {
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
+    pub async fn submissions(&self, username: &str, limit: usize) -> Result<Vec<Submission>> {
         info!(
             username = username,
             limit = limit,
@@ -63,9 +71,10 @@ impl<'a> RedditorScraper<'a> {
         let mut submissions = Vec::new();
         let mut after: Option<String> = None;
 
-        while submissions.len() < limit as usize {
-            let batch_limit = std::cmp::min(100, limit - submissions.len() as u32);
-            let url = RedditorEndpoint::submitted(username, batch_limit, after.as_deref());
+        while submissions.len() < limit {
+            let batch_limit = std::cmp::min(100, limit - submissions.len());
+            let batch_limit_u32 = u32::try_from(batch_limit).unwrap_or(100);
+            let url = RedditorEndpoint::submitted(username, batch_limit_u32, after.as_deref());
 
             let response = self.client.get(&url).await?;
             let listing: Listing<SubmissionData> = serde_json::from_value(response)?;
@@ -92,7 +101,7 @@ impl<'a> RedditorScraper<'a> {
             }
         }
 
-        submissions.truncate(limit as usize);
+        submissions.truncate(limit);
 
         Ok(submissions)
     }
@@ -103,7 +112,11 @@ impl<'a> RedditorScraper<'a> {
     ///
     /// * `username` - The Reddit username
     /// * `limit` - Maximum number of comments to fetch
-    pub async fn comments(&self, username: &str, limit: u32) -> Result<Vec<Comment>> {
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
+    pub async fn comments(&self, username: &str, limit: usize) -> Result<Vec<Comment>> {
         info!(
             username = username,
             limit = limit,
@@ -113,9 +126,10 @@ impl<'a> RedditorScraper<'a> {
         let mut comments = Vec::new();
         let mut after: Option<String> = None;
 
-        while comments.len() < limit as usize {
-            let batch_limit = std::cmp::min(100, limit - comments.len() as u32);
-            let url = RedditorEndpoint::comments(username, batch_limit, after.as_deref());
+        while comments.len() < limit {
+            let batch_limit = std::cmp::min(100, limit - comments.len());
+            let batch_limit_u32 = u32::try_from(batch_limit).unwrap_or(100);
+            let url = RedditorEndpoint::comments(username, batch_limit_u32, after.as_deref());
 
             let response = self.client.get(&url).await?;
             let listing: Listing<CommentData> = serde_json::from_value(response)?;
@@ -142,7 +156,7 @@ impl<'a> RedditorScraper<'a> {
             }
         }
 
-        comments.truncate(limit as usize);
+        comments.truncate(limit);
 
         Ok(comments)
     }
@@ -157,10 +171,14 @@ impl<'a> RedditorScraper<'a> {
     ///
     /// * `username` - The Reddit username
     /// * `limit` - Maximum number of items per category
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the user is not found or the API request fails.
     pub async fn all_interactions(
         &self,
         username: &str,
-        limit: u32,
+        limit: usize,
     ) -> Result<RedditorInteractions> {
         info!(
             username = username,
