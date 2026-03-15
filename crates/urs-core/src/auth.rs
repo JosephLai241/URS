@@ -1,8 +1,7 @@
-//! OAuth2 authentication for the Reddit API.
+//! `OAuth2` authentication for the Reddit API.
 //!
-//! This module implements the OAuth2 "script" app flow for Reddit's API.
-//! It handles credential management, token acquisition, and automatic
-//! token refresh on expiry.
+//! This module implements the `OAuth2` "script" app flow for Reddit's API. It handles credential
+//! management, token acquisition, and automatic token refresh on expiry.
 //!
 //! # Authentication Flow
 //!
@@ -20,13 +19,13 @@ use tracing::{debug, info};
 
 use crate::error::{Error, Result};
 
-/// Reddit OAuth2 token endpoint.
+/// Reddit `OAuth2` token endpoint.
 const TOKEN_URL: &str = "https://www.reddit.com/api/v1/access_token";
 
 /// Buffer time before actual expiry to trigger a proactive refresh.
 const EXPIRY_BUFFER: Duration = Duration::from_secs(60);
 
-/// OAuth2 credentials for a Reddit "script" app.
+/// `OAuth2` credentials for a Reddit "script" app.
 ///
 /// These credentials are obtained by creating a "script" app at
 /// <https://www.reddit.com/prefs/apps/>.
@@ -42,9 +41,9 @@ const EXPIRY_BUFFER: Duration = Duration::from_secs(60);
 ///   (format: `<platform>:<app ID>:<version> (by /u/<username>)`)
 #[derive(Debug, Clone)]
 pub struct Credentials {
-    /// The OAuth2 client ID.
+    /// The `OAuth2` client ID.
     client_id: String,
-    /// The OAuth2 client secret.
+    /// The `OAuth2` client secret.
     client_secret: String,
     /// The Reddit account username.
     username: String,
@@ -59,8 +58,8 @@ impl Credentials {
     ///
     /// # Arguments
     ///
-    /// * `client_id` - The OAuth2 client ID
-    /// * `client_secret` - The OAuth2 client secret
+    /// * `client_id` - The `OAuth2` client ID
+    /// * `client_secret` - The `OAuth2` client secret
     /// * `username` - The Reddit account username
     /// * `password` - The Reddit account password
     /// * `user_agent` - The User-Agent header for requests
@@ -84,8 +83,8 @@ impl Credentials {
     /// Creates credentials from environment variables.
     ///
     /// Reads `CLIENT_ID`, `CLIENT_SECRET`, `REDDIT_USERNAME`, `REDDIT_PASSWORD`,
-    /// and optionally `USER_AGENT` from the environment. If a `.env` file exists
-    /// in the current directory, it will be loaded first.
+    /// and optionally `USER_AGENT` from the environment. If a `.env` file exists in the current
+    /// directory, it will be loaded first.
     ///
     /// # Errors
     ///
@@ -146,7 +145,7 @@ impl Credentials {
     }
 }
 
-/// An OAuth2 access token with expiry tracking.
+/// An `OAuth2` access token with expiry tracking.
 #[derive(Debug, Clone)]
 struct Token {
     /// The bearer access token.
@@ -167,7 +166,7 @@ impl Token {
     }
 }
 
-/// Response from Reddit's OAuth2 token endpoint.
+/// Response from Reddit's `OAuth2` token endpoint.
 #[derive(Debug, Deserialize)]
 struct TokenResponse {
     /// The bearer access token.
@@ -182,10 +181,10 @@ struct TokenResponse {
     scope: String,
 }
 
-/// Manages OAuth2 token lifecycle for the Reddit API.
+/// Manages `OAuth2` token lifecycle for the Reddit API.
 ///
-/// Handles initial authentication and automatic token refresh when the
-/// access token expires. Thread-safe via interior mutability with `RwLock`.
+/// Handles initial authentication and automatic token refresh when the access token expires.
+/// Thread-safe via interior mutability with `RwLock`.
 ///
 /// # Example
 ///
@@ -206,7 +205,7 @@ struct TokenResponse {
 /// ```
 #[derive(Debug)]
 pub struct TokenManager {
-    /// The OAuth2 credentials.
+    /// The `OAuth2` credentials.
     credentials: Credentials,
     /// The HTTP client used for token requests.
     http: reqwest::Client,
@@ -219,6 +218,10 @@ impl TokenManager {
     ///
     /// The manager does not authenticate immediately; call [`authenticate`](Self::authenticate)
     /// or [`access_token`](Self::access_token) to trigger the first token request.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the HTTP client cannot be created.
     #[must_use]
     pub fn new(credentials: Credentials) -> Self {
         let http = reqwest::Client::builder()
@@ -235,8 +238,8 @@ impl TokenManager {
 
     /// Authenticates with Reddit and obtains an access token.
     ///
-    /// This makes a POST request to Reddit's token endpoint with the
-    /// stored credentials. The token is cached for subsequent use.
+    /// This makes a POST request to Reddit's token endpoint with the stored credentials. The token
+    /// is cached for subsequent use.
     ///
     /// # Errors
     ///
@@ -291,8 +294,8 @@ impl TokenManager {
 
     /// Returns a valid access token, refreshing if expired.
     ///
-    /// If no token exists or the current token has expired, this method
-    /// automatically re-authenticates before returning the token.
+    /// If no token exists or the current token has expired, this method automatically
+    /// re-authenticates before returning the token.
     ///
     /// # Errors
     ///
@@ -327,7 +330,7 @@ impl TokenManager {
 
     /// Returns a reference to the credentials.
     #[must_use]
-    pub fn credentials(&self) -> &Credentials {
+    pub const fn credentials(&self) -> &Credentials {
         &self.credentials
     }
 }
