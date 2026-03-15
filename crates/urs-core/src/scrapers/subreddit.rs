@@ -26,7 +26,7 @@ impl<'a> SubredditScraper<'a> {
     ///
     /// * `client` - The authenticated Reddit client to use for requests
     #[must_use]
-    pub fn new(client: &'a RedditClient) -> Self {
+    pub const fn new(client: &'a RedditClient) -> Self {
         Self { client }
     }
 
@@ -36,7 +36,11 @@ impl<'a> SubredditScraper<'a> {
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
     /// * `limit` - Maximum number of posts to fetch
-    pub async fn hot(&self, subreddit: &str, limit: u32) -> Result<Vec<Submission>> {
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
+    pub async fn hot(&self, subreddit: &str, limit: usize) -> Result<Vec<Submission>> {
         self.fetch_listing(subreddit, SubredditSort::Hot, None, limit)
             .await
     }
@@ -47,7 +51,11 @@ impl<'a> SubredditScraper<'a> {
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
     /// * `limit` - Maximum number of posts to fetch
-    pub async fn new_posts(&self, subreddit: &str, limit: u32) -> Result<Vec<Submission>> {
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
+    pub async fn new_posts(&self, subreddit: &str, limit: usize) -> Result<Vec<Submission>> {
         self.fetch_listing(subreddit, SubredditSort::New, None, limit)
             .await
     }
@@ -59,11 +67,15 @@ impl<'a> SubredditScraper<'a> {
     /// * `subreddit` - The Subreddit name (without r/ prefix)
     /// * `time` - Time filter (hour, day, week, month, year, all)
     /// * `limit` - Maximum number of posts to fetch
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
     pub async fn top(
         &self,
         subreddit: &str,
         time: TimeFilter,
-        limit: u32,
+        limit: usize,
     ) -> Result<Vec<Submission>> {
         self.fetch_listing(subreddit, SubredditSort::Top, Some(time), limit)
             .await
@@ -76,11 +88,15 @@ impl<'a> SubredditScraper<'a> {
     /// * `subreddit` - The Subreddit name (without r/ prefix)
     /// * `time` - Time filter (hour, day, week, month, year, all)
     /// * `limit` - Maximum number of posts to fetch
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
     pub async fn controversial(
         &self,
         subreddit: &str,
         time: TimeFilter,
-        limit: u32,
+        limit: usize,
     ) -> Result<Vec<Submission>> {
         self.fetch_listing(subreddit, SubredditSort::Controversial, Some(time), limit)
             .await
@@ -92,7 +108,11 @@ impl<'a> SubredditScraper<'a> {
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
     /// * `limit` - Maximum number of posts to fetch
-    pub async fn rising(&self, subreddit: &str, limit: u32) -> Result<Vec<Submission>> {
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
+    pub async fn rising(&self, subreddit: &str, limit: usize) -> Result<Vec<Submission>> {
         self.fetch_listing(subreddit, SubredditSort::Rising, None, limit)
             .await
     }
@@ -105,12 +125,16 @@ impl<'a> SubredditScraper<'a> {
     /// * `query` - The search query
     /// * `time` - Optional time filter
     /// * `limit` - Maximum number of posts to fetch
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
     pub async fn search(
         &self,
         subreddit: &str,
         query: &str,
         time: Option<TimeFilter>,
-        limit: u32,
+        limit: usize,
     ) -> Result<Vec<Submission>> {
         info!(
             subreddit = subreddit,
@@ -122,10 +146,16 @@ impl<'a> SubredditScraper<'a> {
         let mut submissions = Vec::new();
         let mut after: Option<String> = None;
 
-        while submissions.len() < limit as usize {
-            let batch_limit = std::cmp::min(100, limit - submissions.len() as u32);
-            let url =
-                SubredditEndpoint::search(subreddit, query, time, batch_limit, after.as_deref());
+        while submissions.len() < limit {
+            let batch_limit = std::cmp::min(100, limit - submissions.len());
+            let batch_limit_u32 = u32::try_from(batch_limit).unwrap_or(100);
+            let url = SubredditEndpoint::search(
+                subreddit,
+                query,
+                time,
+                batch_limit_u32,
+                after.as_deref(),
+            );
 
             let response = self.client.get(&url).await?;
             let listing: Listing<SubmissionData> = serde_json::from_value(response)?;
@@ -152,7 +182,7 @@ impl<'a> SubredditScraper<'a> {
             }
         }
 
-        submissions.truncate(limit as usize);
+        submissions.truncate(limit);
 
         info!(count = submissions.len(), "Search complete");
 
@@ -164,6 +194,10 @@ impl<'a> SubredditScraper<'a> {
     /// # Arguments
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
     pub async fn about(&self, subreddit: &str) -> Result<Subreddit> {
         info!(subreddit = subreddit, "fetching Subreddit info");
 
@@ -183,6 +217,10 @@ impl<'a> SubredditScraper<'a> {
     /// # Arguments
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails.
     pub async fn rules(&self, subreddit: &str) -> Result<SubredditRules> {
         info!(subreddit = subreddit, "fetching Subreddit rules");
 
@@ -200,7 +238,7 @@ impl<'a> SubredditScraper<'a> {
         subreddit: &str,
         sort: SubredditSort,
         time: Option<TimeFilter>,
-        limit: u32,
+        limit: usize,
     ) -> Result<Vec<Submission>> {
         info!(
             subreddit = subreddit,
@@ -212,10 +250,16 @@ impl<'a> SubredditScraper<'a> {
         let mut submissions = Vec::new();
         let mut after: Option<String> = None;
 
-        while submissions.len() < limit as usize {
-            let batch_limit = std::cmp::min(100, limit - submissions.len() as u32);
-            let url =
-                SubredditEndpoint::listing(subreddit, sort, time, batch_limit, after.as_deref());
+        while submissions.len() < limit {
+            let batch_limit = std::cmp::min(100, limit - submissions.len());
+            let batch_limit_u32 = u32::try_from(batch_limit).unwrap_or(100);
+            let url = SubredditEndpoint::listing(
+                subreddit,
+                sort,
+                time,
+                batch_limit_u32,
+                after.as_deref(),
+            );
 
             let response = self.client.get(&url).await?;
             let listing: Listing<SubmissionData> = serde_json::from_value(response)?;
@@ -242,7 +286,7 @@ impl<'a> SubredditScraper<'a> {
             }
         }
 
-        submissions.truncate(limit as usize);
+        submissions.truncate(limit);
 
         info!(count = submissions.len(), "Listing fetch complete");
 
