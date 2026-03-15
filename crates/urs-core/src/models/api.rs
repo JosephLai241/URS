@@ -3,7 +3,7 @@
 //! These types represent the structure of Reddit's API responses before they are transformed into
 //! our domain models.
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
@@ -73,6 +73,7 @@ pub enum ThingData {
 }
 
 /// Raw submission data from the Reddit API.
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SubmissionData {
     /// The submission author's username.
@@ -99,7 +100,7 @@ pub struct SubmissionData {
     /// Whether the submission is locked.
     #[serde(default)]
     pub locked: bool,
-    /// The fullname of this submission (i.e. "t3_abc123").
+    /// The fullname of this submission (i.e. `t3_abc123`).
     pub name: String,
     /// Whether the submission is NSFW.
     #[serde(rename = "over_18")]
@@ -128,7 +129,7 @@ pub struct SubmissionData {
     pub url: String,
     /// Any additional fields not explicitly modeled.
     #[serde(flatten)]
-    pub extra: HashMap<String, serde_json::Value>,
+    pub extra: BTreeMap<String, serde_json::Value>,
 }
 
 /// Raw comment data from the Reddit API.
@@ -227,7 +228,7 @@ impl Default for EditedField {
 impl EditedField {
     /// Returns `true` if the item has been edited.
     #[must_use]
-    pub fn is_edited(&self) -> bool {
+    pub const fn is_edited(&self) -> bool {
         match self {
             Self::Bool(b) => *b,
             Self::Timestamp(_) => true,
@@ -236,7 +237,7 @@ impl EditedField {
 
     /// Returns the edit timestamp if available.
     #[must_use]
-    pub fn timestamp(&self) -> Option<f64> {
+    pub const fn timestamp(&self) -> Option<f64> {
         match self {
             Self::Bool(_) => None,
             Self::Timestamp(ts) => Some(*ts),
