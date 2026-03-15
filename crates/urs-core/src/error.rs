@@ -1,14 +1,14 @@
 //! Error types for the URS core library.
 //!
-//! This module defines all error types that can occur during Reddit API
-//! interactions, including authentication, rate limiting, and network errors.
+//! This module defines all error types that can occur during Reddit API interactions, including
+//! authentication, rate limiting, and network errors.
 
 use thiserror::Error;
 
 /// The main error type for all URS operations.
 ///
-/// This enum encompasses all possible errors that can occur when interacting
-/// with the Reddit API, from network issues to parsing failures.
+/// This enum encompasses all possible errors that can occur when interacting with the Reddit API,
+/// from network issues to parsing failures.
 #[derive(Debug, Error)]
 pub enum Error {
     /// Authentication failed (invalid credentials, revoked token, etc.).
@@ -17,14 +17,18 @@ pub enum Error {
 
     /// Access to the resource is forbidden.
     ///
-    /// This typically occurs when trying to access private user data
-    /// or subreddits that require special permissions.
+    /// This typically occurs when trying to access private user data or Subreddits that require
+    /// special permissions.
     #[error("Forbidden: {0}")]
     Forbidden(String),
 
     /// An HTTP request failed.
     #[error("HTTP error: {0}")]
     Http(#[from] reqwest::Error),
+
+    /// An image processing error occurred (wordcloud generation/saving).
+    #[error("Image error: {0}")]
+    Image(#[from] image::ImageError),
 
     /// An invalid argument was provided.
     #[error("Invalid argument: {0}")]
