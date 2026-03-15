@@ -1,5 +1,6 @@
 //! This module provides utilities for exporting data to CSV format.
 
+use std::fmt::Write as _;
 use std::io::Write;
 use std::path::Path;
 
@@ -13,7 +14,7 @@ pub struct CsvExporter;
 impl CsvExporter {
     /// Creates a new CSV exporter.
     #[must_use]
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self
     }
 
@@ -48,8 +49,9 @@ impl CsvExporter {
         csv.push_str("author,created_utc,title,score,num_comments,url,subreddit,is_self,nsfw\n");
 
         for sub in submissions {
-            csv.push_str(&format!(
-                "{},{},{},{},{},{},{},{},{}\n",
+            writeln!(
+                csv,
+                "{},{},{},{},{},{},{},{},{}",
                 escape_csv(&sub.author),
                 sub.created_utc,
                 escape_csv(&sub.title),
@@ -59,7 +61,8 @@ impl CsvExporter {
                 escape_csv(&sub.subreddit),
                 sub.is_self,
                 sub.nsfw,
-            ));
+            )
+            .expect("writing to String should never fail");
         }
 
         csv
@@ -105,15 +108,17 @@ impl CsvExporter {
 
         while let Some(slice) = stack.pop() {
             for comment in slice {
-                csv.push_str(&format!(
-                    "{},{},{},{},{},{}\n",
+                writeln!(
+                    csv,
+                    "{},{},{},{},{},{}",
                     escape_csv(&comment.author),
                     comment.created_utc,
                     escape_csv(&comment.body),
                     comment.score,
                     comment.is_submitter,
                     escape_csv(&comment.parent_id),
-                ));
+                )
+                .expect("writing to String should never fail");
 
                 if !comment.replies.is_empty() {
                     stack.push(&comment.replies);
