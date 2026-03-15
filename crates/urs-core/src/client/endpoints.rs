@@ -1,7 +1,7 @@
 //! Reddit API endpoint builders.
 //!
 //! This module provides type-safe builders for Reddit API endpoints, ensuring correct URL
-//! construction and query parameter handling. All endpoints use the Oauth base URL
+//! construction and query parameter handling. All endpoints use the OAuth base URL
 //! (`https://oauth.reddit.com`)
 
 use url::Url;
@@ -32,7 +32,7 @@ pub enum TimeFilter {
 impl TimeFilter {
     /// Returns the API parameter value for this time filter.
     #[must_use]
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match self {
             Self::All => "all",
             Self::Hour => "hour",
@@ -69,7 +69,7 @@ pub enum SubredditSort {
 impl SubredditSort {
     /// Returns the API path component for this sort option.
     #[must_use]
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match self {
             Self::Hot => "hot",
             Self::New => "new",
@@ -81,7 +81,7 @@ impl SubredditSort {
 
     /// Returns `true` if this sort requires a time filter.
     #[must_use]
-    pub fn requires_time_filter(&self) -> bool {
+    pub const fn requires_time_filter(&self) -> bool {
         matches!(self, Self::Top | Self::Controversial)
     }
 }
@@ -106,6 +106,10 @@ impl SubredditEndpoint {
     /// * `time` - The time filter (only used for top/controversial)
     /// * `limit` - Maximum number of posts to return (1-100)
     /// * `after` - Pagination cursor for the next page
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn listing(
         subreddit: &str,
@@ -145,6 +149,10 @@ impl SubredditEndpoint {
     /// * `time` - The time filter
     /// * `limit` - Maximum number of posts to return (1-100)
     /// * `after` - Pagination cursor for the next page
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn search(
         subreddit: &str,
@@ -181,6 +189,10 @@ impl SubredditEndpoint {
     /// # Arguments
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn about(subreddit: &str) -> Url {
         let path = format!("/r/{subreddit}/about");
@@ -197,6 +209,10 @@ impl SubredditEndpoint {
     /// # Arguments
     ///
     /// * `subreddit` - The Subreddit name (without r/ prefix)
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn rules(subreddit: &str) -> Url {
         let path = format!("/r/{subreddit}/about/rules");
@@ -204,6 +220,143 @@ impl SubredditEndpoint {
         let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
         url.set_path(&path);
         url.query_pairs_mut().append_pair("raw_json", "1");
+
+        url
+    }
+}
+
+/// Builds URLs for livestream polling endpoints.
+///
+/// These endpoints support the `before` parameter for cursor-based polling, returning only items
+/// newer than the given fullname.
+#[derive(Debug)]
+pub struct LivestreamEndpoint;
+
+impl LivestreamEndpoint {
+    /// Builds a URL for polling new submissions in a Subreddit.
+    ///
+    /// Uses `/r/{subreddit}/new` sorted by newest first. The `before` parameter acts as a cursor:
+    /// only items newer than the given fullname are returned.
+    ///
+    /// # Arguments
+    ///
+    /// * `subreddit` - The Subreddit name (without r/ prefix)
+    /// * `before` - Fullname cursor (e.g. `t3_abc123`) to fetch only newer items
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
+    #[must_use]
+    pub fn subreddit_submissions(subreddit: &str, before: Option<&str>) -> Url {
+        let path = format!("/r/{subreddit}/new");
+        let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
+        url.set_path(&path);
+
+        let mut query = url.query_pairs_mut();
+        query.append_pair("limit", "100");
+        query.append_pair("raw_json", "1");
+
+        if let Some(before) = before {
+            query.append_pair("before", before);
+        }
+
+        drop(query);
+
+        url
+    }
+
+    /// Builds a URL for polling new comments in a Subreddit.
+    ///
+    /// Uses `/r/{subreddit}/comments` which returns a flat listing of the most recent comments
+    /// across all submissions. The `before` parameter acts as a cursor.
+    ///
+    /// # Arguments
+    ///
+    /// * `subreddit` - The Subreddit name (without r/ prefix)
+    /// * `before` - Fullname cursor (e.g. `t1_abc123`) to fetch only newer items
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
+    #[must_use]
+    pub fn subreddit_comments(subreddit: &str, before: Option<&str>) -> Url {
+        let path = format!("/r/{subreddit}/comments");
+        let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
+        url.set_path(&path);
+
+        let mut query = url.query_pairs_mut();
+        query.append_pair("limit", "100");
+        query.append_pair("raw_json", "1");
+
+        if let Some(before) = before {
+            query.append_pair("before", before);
+        }
+
+        drop(query);
+
+        url
+    }
+
+    /// Builds a URL for polling new submissions by a Redditor.
+    ///
+    /// Uses `/user/{username}/submitted` sorted by new. The `before` parameter acts as a cursor.
+    ///
+    /// # Arguments
+    ///
+    /// * `username` - The Reddit username (without u/ prefix)
+    /// * `before` - Fullname cursor (e.g. `t3_abc123`) to fetch only newer items
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
+    #[must_use]
+    pub fn redditor_submissions(username: &str, before: Option<&str>) -> Url {
+        let path = format!("/user/{username}/submitted");
+        let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
+        url.set_path(&path);
+
+        let mut query = url.query_pairs_mut();
+        query.append_pair("sort", "new");
+        query.append_pair("limit", "100");
+        query.append_pair("raw_json", "1");
+
+        if let Some(before) = before {
+            query.append_pair("before", before);
+        }
+
+        drop(query);
+
+        url
+    }
+
+    /// Builds a URL for polling new comments by a Redditor.
+    ///
+    /// Uses `/user/{username}/comments` sorted by new. The `before` parameter acts as a cursor.
+    ///
+    /// # Arguments
+    ///
+    /// * `username` - The Reddit username (without u/ prefix)
+    /// * `before` - Fullname cursor (e.g. `t1_abc123`) to fetch only newer items
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
+    #[must_use]
+    pub fn redditor_comments(username: &str, before: Option<&str>) -> Url {
+        let path = format!("/user/{username}/comments");
+        let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
+        url.set_path(&path);
+
+        let mut query = url.query_pairs_mut();
+        query.append_pair("sort", "new");
+        query.append_pair("limit", "100");
+        query.append_pair("raw_json", "1");
+
+        if let Some(before) = before {
+            query.append_pair("before", before);
+        }
+
+        drop(query);
 
         url
     }
@@ -219,6 +372,10 @@ impl RedditorEndpoint {
     /// # Arguments
     ///
     /// * `username` - The Reddit username (without u/ prefix)
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn about(username: &str) -> Url {
         let path = format!("/user/{username}/about");
@@ -237,6 +394,10 @@ impl RedditorEndpoint {
     /// * `username` - The Reddit username
     /// * `limit` - Maximum number of submissions to return
     /// * `after` - Pagination cursor for the next page
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn submitted(username: &str, limit: u32, after: Option<&str>) -> Url {
         Self::user_listing(username, "submitted", limit, after)
@@ -249,6 +410,10 @@ impl RedditorEndpoint {
     /// * `username` - The Reddit username
     /// * `limit` - Maximum number of comments to return
     /// * `after` - Pagination cursor for the next page
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn comments(username: &str, limit: u32, after: Option<&str>) -> Url {
         Self::user_listing(username, "comments", limit, after)
@@ -261,6 +426,10 @@ impl RedditorEndpoint {
     /// * `username` - The Reddit username
     /// * `limit` - Maximum number of items to return
     /// * `after` - Pagination cursor for the next page
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn overview(username: &str, limit: u32, after: Option<&str>) -> Url {
         Self::user_listing(username, "overview", limit, after)
@@ -276,15 +445,57 @@ impl RedditorEndpoint {
     /// * `username` - The Reddit username
     /// * `category` - The interaction category name
     /// * `limit` - Maximum number of items to return
+    /// * `after` - Pagination cursor for the next page
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
-    pub fn private_category(username: &str, category: &str, limit: u32) -> Url {
-        let path = format!("/user/{username}/{category}");
+    pub fn private_category(
+        username: &str,
+        category: &str,
+        limit: u32,
+        after: Option<&str>,
+    ) -> Url {
+        Self::user_listing(username, category, limit, after)
+    }
+
+    /// Builds a URL for fetching Subreddits moderated by a user.
+    ///
+    /// # Arguments
+    ///
+    /// * `username` - The Reddit username
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
+    #[must_use]
+    pub fn moderated_subreddits(username: &str) -> Url {
+        let path = format!("/user/{username}/moderated_subreddits");
 
         let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
         url.set_path(&path);
-        url.query_pairs_mut()
-            .append_pair("limit", &limit.to_string())
-            .append_pair("raw_json", "1");
+        url.query_pairs_mut().append_pair("raw_json", "1");
+
+        url
+    }
+
+    /// Builds a URL for fetching a user's multireddits.
+    ///
+    /// # Arguments
+    ///
+    /// * `username` - The Reddit username
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
+    #[must_use]
+    pub fn multireddits(username: &str) -> Url {
+        let path = format!("/api/multi/user/{username}");
+
+        let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
+        url.set_path(&path);
+        url.query_pairs_mut().append_pair("raw_json", "1");
 
         url
     }
@@ -319,9 +530,13 @@ impl CommentsEndpoint {
     /// # Arguments
     ///
     /// * `subreddit` - The Subreddit name
-    /// * `submission_id` - The submission ID (without t3_ prefix)
+    /// * `submission_id` - The submission ID (without `t3_` prefix)
     /// * `limit` - Maximum number of top-level comments
     /// * `depth` - Maximum comment tree depth (None for unlimited)
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn submission(
         subreddit: &str,
@@ -349,9 +564,13 @@ impl CommentsEndpoint {
         url
     }
 
-    /// Builds a URL for the morechildren endpoint.
+    /// Builds a URL for the `morechildren` endpoint.
     ///
     /// This expands "more comments" placeholders returned by the comments API.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn more_children() -> Url {
         let mut url = Url::parse(OAUTH_BASE).expect("base URL is valid");
@@ -365,8 +584,12 @@ impl CommentsEndpoint {
     /// # Arguments
     ///
     /// * `subreddit` - The Subreddit name
-    /// * `submission_id` - The submission ID (without t3_ prefix)
-    /// * `comment_id` - The comment ID (without t1_ prefix)
+    /// * `submission_id` - The submission ID (without `t3_` prefix)
+    /// * `comment_id` - The comment ID (without `t1_` prefix)
+    ///
+    /// # Panics
+    ///
+    /// Panics if the hardcoded base URL is invalid (should never happen).
     #[must_use]
     pub fn comment_thread(subreddit: &str, submission_id: &str, comment_id: &str) -> Url {
         let path = format!("/r/{subreddit}/comments/{submission_id}/comment/{comment_id}");
@@ -488,10 +711,34 @@ mod tests {
 
     #[test]
     fn redditor_endpoint_private_category() {
-        let url = RedditorEndpoint::private_category("spez", "downvoted", 100);
+        let url = RedditorEndpoint::private_category("spez", "downvoted", 100, None);
 
         assert_eq!(url.path(), "/user/spez/downvoted");
         assert!(url.query().unwrap().contains("limit=100"));
+    }
+
+    #[test]
+    fn redditor_endpoint_moderated_subreddits() {
+        let url = RedditorEndpoint::moderated_subreddits("spez");
+
+        assert_eq!(url.path(), "/user/spez/moderated_subreddits");
+        assert_eq!(url.host_str(), Some("oauth.reddit.com"));
+    }
+
+    #[test]
+    fn redditor_endpoint_multireddits() {
+        let url = RedditorEndpoint::multireddits("spez");
+
+        assert_eq!(url.path(), "/api/multi/user/spez");
+        assert_eq!(url.host_str(), Some("oauth.reddit.com"));
+    }
+
+    #[test]
+    fn redditor_endpoint_private_category_with_pagination() {
+        let url = RedditorEndpoint::private_category("spez", "saved", 25, Some("t3_abc123"));
+
+        assert_eq!(url.path(), "/user/spez/saved");
+        assert!(url.query().unwrap().contains("after=t3_abc123"));
     }
 
     #[test]
@@ -519,5 +766,84 @@ mod tests {
     fn comments_endpoint_comment_thread() {
         let url = CommentsEndpoint::comment_thread("rust", "abc123", "def456");
         assert_eq!(url.path(), "/r/rust/comments/abc123/comment/def456");
+    }
+
+    #[test]
+    fn livestream_subreddit_submissions_no_cursor() {
+        let url = LivestreamEndpoint::subreddit_submissions("rust", None);
+
+        assert_eq!(url.path(), "/r/rust/new");
+        assert_eq!(url.host_str(), Some("oauth.reddit.com"));
+
+        let query = url.query().unwrap();
+
+        assert!(query.contains("limit=100"));
+        assert!(!query.contains("before"));
+    }
+
+    #[test]
+    fn livestream_subreddit_submissions_with_cursor() {
+        let url = LivestreamEndpoint::subreddit_submissions("rust", Some("t3_abc123"));
+
+        let query = url.query().unwrap();
+
+        assert!(query.contains("before=t3_abc123"));
+    }
+
+    #[test]
+    fn livestream_subreddit_comments_no_cursor() {
+        let url = LivestreamEndpoint::subreddit_comments("rust", None);
+
+        assert_eq!(url.path(), "/r/rust/comments");
+
+        let query = url.query().unwrap();
+
+        assert!(query.contains("limit=100"));
+        assert!(!query.contains("before"));
+    }
+
+    #[test]
+    fn livestream_subreddit_comments_with_cursor() {
+        let url = LivestreamEndpoint::subreddit_comments("rust", Some("t1_xyz"));
+
+        assert!(url.query().unwrap().contains("before=t1_xyz"));
+    }
+
+    #[test]
+    fn livestream_redditor_submissions() {
+        let url = LivestreamEndpoint::redditor_submissions("spez", None);
+
+        assert_eq!(url.path(), "/user/spez/submitted");
+
+        let query = url.query().unwrap();
+
+        assert!(query.contains("sort=new"));
+        assert!(query.contains("limit=100"));
+    }
+
+    #[test]
+    fn livestream_redditor_submissions_with_cursor() {
+        let url = LivestreamEndpoint::redditor_submissions("spez", Some("t3_abc"));
+
+        assert!(url.query().unwrap().contains("before=t3_abc"));
+    }
+
+    #[test]
+    fn livestream_redditor_comments() {
+        let url = LivestreamEndpoint::redditor_comments("spez", None);
+
+        assert_eq!(url.path(), "/user/spez/comments");
+
+        let query = url.query().unwrap();
+
+        assert!(query.contains("sort=new"));
+        assert!(query.contains("limit=100"));
+    }
+
+    #[test]
+    fn livestream_redditor_comments_with_cursor() {
+        let url = LivestreamEndpoint::redditor_comments("spez", Some("t1_def"));
+
+        assert!(url.query().unwrap().contains("before=t1_def"));
     }
 }
