@@ -32,7 +32,7 @@ impl<'a> CommentsScraper<'a> {
     ///
     /// * `client` - The authenticated Reddit client to use for requests
     #[must_use]
-    pub fn new(client: &'a RedditClient) -> Self {
+    pub const fn new(client: &'a RedditClient) -> Self {
         Self { client }
     }
 
@@ -46,10 +46,14 @@ impl<'a> CommentsScraper<'a> {
     /// * `url` - The full URL to the submission
     /// * `limit` - Maximum number of comments (`None` for all available)
     /// * `structured` - If true, returns threaded tree; if false, returns flat list
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the URL is invalid or the API request fails.
     pub async fn from_url(
         &self,
         url: &str,
-        limit: Option<u32>,
+        limit: Option<usize>,
         structured: bool,
     ) -> Result<Vec<Comment>> {
         let (subreddit, submission_id) = Self::parse_submission_url(url)?;
@@ -68,11 +72,15 @@ impl<'a> CommentsScraper<'a> {
     /// * `submission_id` - The submission ID (without t3_ prefix)
     /// * `limit` - Maximum number of comments (None for all available)
     /// * `structured` - If `true`, returns threaded tree; if `false`, returns flat list
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the API request fails or the response is malformed.
     pub async fn fetch(
         &self,
         subreddit: &str,
         submission_id: &str,
-        limit: Option<u32>,
+        limit: Option<usize>,
         structured: bool,
     ) -> Result<Vec<Comment>> {
         info!(
@@ -101,12 +109,7 @@ impl<'a> CommentsScraper<'a> {
         let mut comments: Vec<Comment> = Vec::new();
         let mut more_stubs: Vec<MoreComments> = Vec::new();
 
-        let children_values: Vec<serde_json::Value> = comments_listing
-            .data
-            .children
-            .into_iter()
-            .filter_map(|thing| serde_json::to_value(thing).ok())
-            .collect();
+        let children_values = Self::children_to_values(comments_listing.data.children);
 
         Self::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
 
@@ -187,7 +190,7 @@ impl<'a> CommentsScraper<'a> {
         }
 
         if let Some(limit) = limit {
-            comments.truncate(limit as usize);
+            comments.truncate(limit);
         }
 
         info!(count = comments.len(), "Comments fetch complete");
@@ -205,7 +208,7 @@ impl<'a> CommentsScraper<'a> {
         }
     }
 
-    /// Expands "more comments" by POSTing to `/api/morechildren`.
+    /// Expands "more comments" by posting to `/api/morechildren`.
     ///
     /// Handles batching since the API limits the number of child IDs per request.
     ///
@@ -286,18 +289,27 @@ impl<'a> CommentsScraper<'a> {
         let comments_listing: Listing<serde_json::Value> =
             serde_json::from_value(listings[1].clone())?;
 
-        let children_values: Vec<serde_json::Value> = comments_listing
-            .data
-            .children
-            .into_iter()
-            .filter_map(|thing| serde_json::to_value(thing).ok())
-            .collect();
+        let children_values = Self::children_to_values(comments_listing.data.children);
 
         let mut comments = Vec::new();
         let mut more_stubs = Vec::new();
         Self::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
 
         Ok((comments, more_stubs))
+    }
+
+    /// Converts listing children to JSON values, logging any conversion failures.
+    fn children_to_values<T: serde::Serialize>(children: Vec<T>) -> Vec<serde_json::Value> {
+        children
+            .into_iter()
+            .filter_map(|thing| match serde_json::to_value(thing) {
+                Ok(value) => Some(value),
+                Err(err) => {
+                    warn!("Failed to convert comment thing to JSON value: {err}");
+                    None
+                }
+            })
+            .collect()
     }
 
     /// Iteratively collects comments and "more" stubs from the API response.
@@ -365,7 +377,10 @@ impl<'a> CommentsScraper<'a> {
     fn parse_submission_url(url: &str) -> Result<(String, String)> {
         let url = url::Url::parse(url)?;
 
-        let path_segments: Vec<&str> = url.path_segments().map(|s| s.collect()).unwrap_or_default();
+        let path_segments: Vec<&str> = url
+            .path_segments()
+            .map(Iterator::collect)
+            .unwrap_or_default();
 
         // Expects segments that look like this: ["r", "subreddit", "comments", "id", ...]
         if path_segments.len() < 4 {
