@@ -12,6 +12,7 @@ use super::api::{EditedField, SubmissionData};
 ///
 /// This struct contains all the commonly used fields from a Reddit submission, with additional
 /// fields captured in `extra`.
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Submission {
     /// The submission author's username.
@@ -32,7 +33,7 @@ pub struct Submission {
     pub link_flair_text: Option<String>,
     /// Whether the submission is locked.
     pub locked: bool,
-    /// The fullname of this submission (i.e. "t3_abc123").
+    /// The fullname of this submission (i.e. `t3_abc123`).
     pub name: String,
     /// Whether the submission is NSFW.
     pub nsfw: bool,
@@ -85,7 +86,7 @@ impl From<SubmissionData> for Submission {
             title: data.title,
             upvote_ratio: data.upvote_ratio,
             url: data.url,
-            extra: data.extra.into_iter().collect(),
+            extra: data.extra,
         }
     }
 }
@@ -99,7 +100,7 @@ impl Submission {
 
     /// Returns `true` if this submission has been edited.
     #[must_use]
-    pub fn is_edited(&self) -> bool {
+    pub const fn is_edited(&self) -> bool {
         self.edited.is_edited()
     }
 }
