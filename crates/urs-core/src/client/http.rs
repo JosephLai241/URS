@@ -65,6 +65,10 @@ impl RedditClient {
     /// # Errors
     ///
     /// Returns an error if authentication fails.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the HTTP client cannot be created.
     pub async fn new(credentials: Credentials) -> Result<Self> {
         let user_agent = credentials.user_agent().to_string();
 
@@ -165,8 +169,7 @@ impl RedditClient {
             }
         }
 
-        // TODO: Revise this expect message.
-        Err(last_error.expect("At least one error occurred."))
+        Err(last_error.expect("Retry loop runs at least once, so last_error is always set"))
     }
 
     /// Executes a single request with authentication.
@@ -215,14 +218,13 @@ impl RedditClient {
                 Err(Error::NotFound(body))
             }
             429 => {
-                // Rate limited — extract reset time if available.
+                // Rate limited. Extract the reset time if available.
                 let reset_seconds = self
                     .rate_limiter
                     .read()
                     .await
                     .info()
-                    .map(|info| info.reset)
-                    .unwrap_or(60);
+                    .map_or(60, |info| info.reset);
 
                 Err(Error::RateLimited { reset_seconds })
             }
@@ -236,7 +238,7 @@ impl RedditClient {
     }
 
     /// Determines if a request should be retried based on the error.
-    fn should_retry(error: &Error) -> bool {
+    const fn should_retry(error: &Error) -> bool {
         matches!(
             error,
             Error::RateLimited { .. } | Error::Http(_) | Error::TokenExpired
