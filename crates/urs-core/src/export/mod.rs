@@ -8,6 +8,7 @@ mod json;
 pub use csv::CsvExporter;
 pub use json::JsonExporter;
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use chrono::Local;
@@ -50,7 +51,7 @@ pub fn subreddit_filename(
     let mut name = format!("{subreddit}-{category}-{count}-results");
 
     if let Some(t) = time {
-        name.push_str(&format!("-past-{t}"));
+        write!(name, "-past-{t}").expect("writing to String should never fail");
     }
     if include_rules {
         name.push_str("-rules");
@@ -95,6 +96,20 @@ pub fn comments_filename(title: &str, count: usize, all_comments: bool, raw: boo
     }
 
     name
+}
+
+/// Generates a filename for livestream output.
+///
+/// Format: `{target}-{source}-{count}-livestream`
+///
+/// # Arguments
+///
+/// * `target` - The target name (Subreddit or username)
+/// * `source` - The source type ("comments" or "submissions")
+/// * `count` - Number of items captured
+#[must_use]
+pub fn livestream_filename(target: &str, source: &str, count: usize) -> String {
+    format!("{target}-{source}-{count}-livestream")
 }
 
 /// Sanitizes a string for use as a filename.
@@ -184,5 +199,17 @@ mod tests {
     fn comments_filename_all_raw() {
         let name = comments_filename("Test", 50, true, true);
         assert_eq!(name, "test-50-results-all-raw");
+    }
+
+    #[test]
+    fn livestream_filename_basic() {
+        let name = livestream_filename("rust", "comments", 42);
+        assert_eq!(name, "rust-comments-42-livestream");
+    }
+
+    #[test]
+    fn livestream_filename_submissions() {
+        let name = livestream_filename("spez", "submissions", 100);
+        assert_eq!(name, "spez-submissions-100-livestream");
     }
 }
