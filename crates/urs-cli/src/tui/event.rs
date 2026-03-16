@@ -9,7 +9,7 @@ use anyhow::Result;
 use crossterm::event::{Event, EventStream, KeyCode, KeyEvent, KeyModifiers};
 use futures::StreamExt;
 use tokio::time::interval;
-use tracing::warn;
+use tracing::{debug, warn};
 use urs_core::scrapers::Livestreamer;
 
 use super::app::App;
@@ -81,6 +81,7 @@ pub async fn run_event_loop(
                 match streamer.poll().await {
                     Ok(events) => {
                         if !events.is_empty() {
+                            debug!(count = events.len(), "Polled new events");
                             ctx.append_events(&events)?;
                             app.push_events(events);
                         }

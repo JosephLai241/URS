@@ -5,6 +5,7 @@
 use anyhow::{Context, Result};
 use colored::Colorize;
 use tabled::{Table, Tabled, settings::Style};
+use tracing::info;
 use url::Url;
 
 use crate::helpers::{create_client, create_spinner};
@@ -35,6 +36,8 @@ const ME_ENDPOINT: &str = "https://oauth.reddit.com/api/v1/me";
 /// - `OAuth2` authentication fails
 /// - The API request fails
 pub async fn run() -> Result<()> {
+    info!("Starting credential check");
+
     println!(
         "{} {}",
         "→".bright_cyan(),
@@ -61,6 +64,8 @@ pub async fn run() -> Result<()> {
     );
 
     if let Some(name) = me.get("name").and_then(|v| v.as_str()) {
+        info!(username = name, "Credential check passed");
+
         println!(
             "  {} Logged in as {}",
             "→".dimmed(),

@@ -9,6 +9,7 @@ use std::time::Duration;
 
 use anyhow::{Context, Result, bail};
 use clap::Parser;
+use tracing::{debug, error};
 
 use crate::helpers::log_dir;
 
@@ -52,6 +53,7 @@ pub async fn run(args: LogArgs) -> Result<()> {
 /// Finds the most recently modified log file in the log directory.
 fn find_latest_log() -> Result<PathBuf> {
     let dir = log_dir();
+    debug!(dir = %dir.display(), "Searching for latest log file");
 
     if !dir.exists() {
         bail!("Log directory does not exist: {}", dir.display());
@@ -146,6 +148,7 @@ async fn tail_follow(path: &PathBuf, n: usize) -> Result<()> {
                 print!("{line_buf}");
             }
             Err(e) => {
+                error!("Error reading log: {e}");
                 eprintln!("Error reading log: {e}");
                 break;
             }

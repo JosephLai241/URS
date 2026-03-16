@@ -8,6 +8,7 @@ use std::path::PathBuf;
 use anyhow::Result;
 use clap::Args;
 use colored::Colorize;
+use tracing::info;
 use urs_core::export::{JsonExporter, comments_filename, ensure_dir, output_dir};
 use urs_core::scrapers::CommentsScraper;
 
@@ -63,6 +64,8 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
     );
     println!("  {} {}", "URL:".dimmed(), args.url.bright_blue());
 
+    info!(url = %args.url, mode = mode, count = %count_str, "Starting comments scrape");
+
     let spinner = create_spinner("Authenticating with Reddit...");
     let client = create_client().await?;
     let scraper = CommentsScraper::new(&client);
@@ -106,6 +109,8 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
         "→".dimmed(),
         path.display().to_string().bright_yellow()
     );
+
+    info!(total = total, path = %path.display(), "Comments scrape complete");
 
     Ok(())
 }

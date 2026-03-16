@@ -10,6 +10,7 @@ use std::time::Duration;
 
 use anyhow::{Context, Result};
 use clap::{Parser, ValueEnum};
+use tracing::{debug, info};
 use urs_core::export::{ensure_dir, livestream_filename, output_dir};
 use urs_core::scrapers::{LivestreamEvent, LivestreamSource, LivestreamTarget, Livestreamer};
 
@@ -104,6 +105,7 @@ impl StreamContext {
         ensure_dir(&dir).context("Failed to create output directory")?;
 
         let temp_path = dir.join(format!(".{target_name}-{source_name}-livestream.tmp.jsonl"));
+        debug!(path = %temp_path.display(), "Creating temp file for livestream");
 
         let file = fs::File::create(&temp_path)
             .with_context(|| format!("Failed to create temp file: {}", temp_path.display()))?;
@@ -163,6 +165,12 @@ impl StreamContext {
         drop(self.writer);
 
         if self.nosave || self.file_count == 0 {
+            debug!(
+                nosave = self.nosave,
+                file_count = self.file_count,
+                "Removing temp file"
+            );
+
             fs::remove_file(&self.temp_path).with_context(|| {
                 format!("Failed to remove temp file: {}", self.temp_path.display())
             })?;
@@ -180,6 +188,12 @@ impl StreamContext {
             )
         })?;
 
+        info!(
+            path = %final_path.display(),
+            count = self.file_count,
+            "Livestream finalized"
+        );
+
         Ok(Some(final_path))
     }
 }
@@ -190,6 +204,15 @@ impl StreamContext {
 ///
 /// Returns an error if authentication, terminal setup, or the event loop fails.
 pub async fn run(args: LivestreamArgs) -> Result<()> {
+    info!(
+        target = %args.target,
+        r#type = ?args.r#type,
+        source = ?args.source,
+        interval = args.interval,
+        buffer_size = args.buffer_size,
+        "Starting livestream"
+    );
+
     let client = create_client().await?;
 
     let target = match args.r#type {

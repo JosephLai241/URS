@@ -9,6 +9,7 @@ use anyhow::{Result, bail};
 use clap::{Args, ValueEnum};
 use colored::Colorize;
 use serde::Serialize;
+use tracing::{debug, info, warn};
 use urs_core::client::endpoints::TimeFilter;
 use urs_core::export::{CsvExporter, JsonExporter, ensure_dir, output_dir, subreddit_filename};
 use urs_core::models::{Submission, SubredditRules};
@@ -119,6 +120,7 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
     let category_str = format!("{:?}", args.category).to_lowercase();
 
     if matches!(args.category, Category::Search) && args.query.is_none() {
+        warn!("Search category used without --query flag");
         bail!("The --query flag is required when using the 'search' category");
     }
 
@@ -130,6 +132,13 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         category_str.bright_yellow(),
         "—".dimmed(),
         format!("{} posts", args.count).bright_cyan(),
+    );
+
+    info!(
+        subreddit = %args.subreddit,
+        category = %category_str,
+        count = args.count,
+        "Starting subreddit scrape"
     );
 
     let spinner = create_spinner("Authenticating with Reddit...");
@@ -182,6 +191,9 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         args.rules,
     );
 
+    let format = if args.csv { "CSV" } else { "JSON" };
+    debug!(format = format, "Exporting results");
+
     if args.csv {
         let path = dir.join(format!("{base_name}.csv"));
         CsvExporter::new().export_submissions(&posts, &path)?;
@@ -201,6 +213,8 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         spinner.finish_and_clear();
         print_summary(&path, 0);
     }
+
+    info!("Subreddit scrape complete");
 
     Ok(())
 }

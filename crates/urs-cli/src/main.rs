@@ -40,7 +40,10 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::fmt::layer().with_writer(non_blocking))
         .init();
 
+    tracing::info!(log_dir = %log_dir.display(), "Logging initialized");
+
     helpers::print_banner();
 
+    tracing::info!(command = ?cli.command, "Dispatching command");
     dispatch(cli).await
 }

@@ -6,6 +6,7 @@
 use anyhow::{Context, Result};
 use colored::Colorize;
 use indicatif::{ProgressBar, ProgressStyle};
+use tracing::{debug, info};
 use urs_core::auth::Credentials;
 use urs_core::client::RedditClient;
 
@@ -20,12 +21,16 @@ use urs_core::client::RedditClient;
 /// - Required environment variables are missing
 /// - `OAuth2` authentication fails
 pub async fn create_client() -> Result<RedditClient> {
+    debug!("Loading Reddit credentials from environment");
     let credentials =
         Credentials::from_env().context("Failed to load Reddit credentials from environment")?;
 
+    debug!("Authenticating with Reddit API");
     let client = RedditClient::new(credentials)
         .await
         .context("Failed to authenticate with Reddit")?;
+
+    info!("Authenticated with Reddit API");
 
     Ok(client)
 }

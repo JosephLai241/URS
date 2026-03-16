@@ -11,7 +11,7 @@ use crossterm::terminal::{
 };
 use ratatui::Terminal;
 use ratatui::backend::CrosstermBackend;
-use tracing::error;
+use tracing::{debug, error};
 
 /// The terminal type used by the TUI.
 pub type Tui = Terminal<CrosstermBackend<Stdout>>;
@@ -41,6 +41,8 @@ pub fn setup_terminal() -> io::Result<Tui> {
     let backend = CrosstermBackend::new(stdout);
     let terminal = Terminal::new(backend)?;
 
+    debug!("Terminal configured for TUI");
+
     Ok(terminal)
 }
 
@@ -55,6 +57,8 @@ pub fn restore_terminal(terminal: &mut Tui) -> io::Result<()> {
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
     terminal.show_cursor()?;
+
+    debug!("Terminal restored");
 
     Ok(())
 }

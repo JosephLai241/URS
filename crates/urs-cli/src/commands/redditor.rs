@@ -8,6 +8,7 @@ use std::path::PathBuf;
 use anyhow::Result;
 use clap::Args;
 use colored::Colorize;
+use tracing::info;
 use urs_core::export::{JsonExporter, ensure_dir, output_dir, redditor_filename};
 use urs_core::scrapers::RedditorScraper;
 
@@ -48,6 +49,12 @@ pub async fn run(args: RedditorArgs) -> Result<()> {
         format!("{} items per category", args.count).bright_cyan(),
     );
 
+    info!(
+        username = %args.username,
+        count = args.count,
+        "Starting redditor scrape"
+    );
+
     let spinner = create_spinner("Authenticating with Reddit...");
     let client = create_client().await?;
     let scraper = RedditorScraper::new(&client);
@@ -77,6 +84,8 @@ pub async fn run(args: RedditorArgs) -> Result<()> {
         "→".dimmed(),
         path.display().to_string().bright_yellow()
     );
+
+    info!(path = %path.display(), "Redditor scrape complete");
 
     Ok(())
 }
