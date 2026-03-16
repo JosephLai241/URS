@@ -57,7 +57,7 @@ pub enum Error {
         reset_seconds: u64,
     },
 
-    /// The OAuth2 access token has expired and needs to be refreshed.
+    /// The `OAuth2` access token has expired and needs to be refreshed.
     #[error("Access token expired")]
     TokenExpired,
 

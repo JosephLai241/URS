@@ -63,7 +63,7 @@ impl<'a> CommentsScraper<'a> {
 
     /// Fetches comments from a submission.
     ///
-    /// With OAuth2 authentication, "more comments" placeholders are automatically expanded to
+    /// With `OAuth2` authentication, "more comments" placeholders are automatically expanded to
     /// retrieve the full comment tree.
     ///
     /// # Arguments

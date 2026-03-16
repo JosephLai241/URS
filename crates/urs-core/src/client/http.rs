@@ -1,6 +1,6 @@
 //! HTTP client wrapper for the Reddit OAuth API.
 //!
-//! This module provides a high-level HTTP client that handles OAuth2 authentication, rate
+//! This module provides a high-level HTTP client that handles `OAuth2` authentication, rate
 //! limiting, automatic retries, and token refresh for the Reddit API.
 
 use std::sync::Arc;
@@ -21,7 +21,7 @@ const MAX_RETRIES: u32 = 3;
 /// Initial delay for exponential backoff on retries.
 const INITIAL_RETRY_DELAY: Duration = Duration::from_secs(1);
 
-/// A Reddit API client using OAuth2 authentication.
+/// A Reddit API client using `OAuth2` authentication.
 ///
 /// All requests are sent to `https://oauth.reddit.com` with bearer token authentication. The
 /// client handles rate limiting and automatic token refresh on expiry.
@@ -44,7 +44,7 @@ const INITIAL_RETRY_DELAY: Duration = Duration::from_secs(1);
 /// ```
 #[derive(Debug)]
 pub struct RedditClient {
-    /// The OAuth2 token manager.
+    /// The `OAuth2` token manager.
     token_manager: Arc<TokenManager>,
     /// The underlying HTTP client.
     http: reqwest::Client,
@@ -60,7 +60,7 @@ impl RedditClient {
     ///
     /// # Arguments
     ///
-    /// * `credentials` - The OAuth2 credentials for authentication
+    /// * `credentials` - The `OAuth2` credentials for authentication
     ///
     /// # Errors
     ///

@@ -1,6 +1,6 @@
-//! Reddit API client implementation with OAuth2 authentication.
+//! Reddit API client implementation with `OAuth2` authentication.
 //!
-//! This module provides a Reddit API client that uses OAuth2 bearer tokens for authenticated
+//! This module provides a Reddit API client that uses `OAuth2` bearer tokens for authenticated
 //! access to `https://oauth.reddit.com`. This enables higher rate limits (60 requests/minute) and
 //! access to authenticated endpoints.
 //!
