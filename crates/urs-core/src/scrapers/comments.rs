@@ -47,6 +47,11 @@ impl<'a> CommentsScraper<'a> {
     /// * `limit` - Maximum number of comments (`None` for all available)
     /// * `structured` - If true, returns threaded tree; if false, returns flat list
     ///
+    /// # Returns
+    ///
+    /// A tuple of `(comments, total_count)`. The total count reflects the number of comments
+    /// before tree structuring, so callers don't need to re-traverse the tree to count.
+    ///
     /// # Errors
     ///
     /// Returns an error if the URL is invalid or the API request fails.
@@ -55,7 +60,7 @@ impl<'a> CommentsScraper<'a> {
         url: &str,
         limit: Option<usize>,
         structured: bool,
-    ) -> Result<Vec<Comment>> {
+    ) -> Result<(Vec<Comment>, usize)> {
         let (subreddit, submission_id) = Self::parse_submission_url(url)?;
         self.fetch(&subreddit, &submission_id, limit, structured)
             .await
@@ -73,6 +78,11 @@ impl<'a> CommentsScraper<'a> {
     /// * `limit` - Maximum number of comments (None for all available)
     /// * `structured` - If `true`, returns threaded tree; if `false`, returns flat list
     ///
+    /// # Returns
+    ///
+    /// A tuple of `(comments, total_count)`. The total count reflects the number of comments
+    /// before tree structuring, so callers don't need to re-traverse the tree to count.
+    ///
     /// # Errors
     ///
     /// Returns an error if the API request fails or the response is malformed.
@@ -82,7 +92,7 @@ impl<'a> CommentsScraper<'a> {
         submission_id: &str,
         limit: Option<usize>,
         structured: bool,
-    ) -> Result<Vec<Comment>> {
+    ) -> Result<(Vec<Comment>, usize)> {
         info!(
             subreddit = subreddit,
             submission_id = submission_id,
@@ -193,7 +203,8 @@ impl<'a> CommentsScraper<'a> {
             comments.truncate(limit);
         }
 
-        info!(count = comments.len(), "Comments fetch complete");
+        let total = comments.len();
+        info!(count = total, "Comments fetch complete");
 
         if structured {
             let mut tree = CommentTree::new(submission_id);
@@ -202,9 +213,9 @@ impl<'a> CommentsScraper<'a> {
                 tree.insert(comment);
             }
 
-            Ok(tree.into_comments())
+            Ok((tree.into_comments(), total))
         } else {
-            Ok(comments)
+            Ok((comments, total))
         }
     }
 
