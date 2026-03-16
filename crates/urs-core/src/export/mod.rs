@@ -48,7 +48,8 @@ pub fn subreddit_filename(
     time: Option<&str>,
     include_rules: bool,
 ) -> String {
-    let mut name = format!("{subreddit}-{category}-{count}-results");
+    let sub = sanitize_filename(subreddit, MAX_COMPONENT_LEN);
+    let mut name = format!("{sub}-{category}-{count}-results");
 
     if let Some(t) = time {
         write!(name, "-past-{t}").expect("writing to String should never fail");
@@ -70,7 +71,8 @@ pub fn subreddit_filename(
 /// * `count` - Number of results
 #[must_use]
 pub fn redditor_filename(username: &str, count: usize) -> String {
-    format!("{username}-{count}-results")
+    let user = sanitize_filename(username, MAX_COMPONENT_LEN);
+    format!("{user}-{count}-results")
 }
 
 /// Generates a filename for comments scrape output.
@@ -100,29 +102,46 @@ pub fn comments_filename(title: &str, count: usize, all_comments: bool, raw: boo
 
 /// Generates a filename for livestream output.
 ///
-/// Format: `{target}-{source}-{count}-livestream`
+/// Format: `{target}-{source}-{start_time}-{duration}`
+///
+/// Times use `HH_MM_SS` format (colons replaced with underscores).
 ///
 /// # Arguments
 ///
 /// * `target` - The target name (Subreddit or username)
 /// * `source` - The source type ("comments" or "submissions")
-/// * `count` - Number of items captured
+/// * `start_time` - The stream start time formatted as `HH:MM:SS` or `HH_MM_SS`
+/// * `duration` - The stream duration formatted as `HH:MM:SS` or `HH_MM_SS`
 #[must_use]
-pub fn livestream_filename(target: &str, source: &str, count: usize) -> String {
-    format!("{target}-{source}-{count}-livestream")
+pub fn livestream_filename(target: &str, source: &str, start_time: &str, duration: &str) -> String {
+    let tgt = sanitize_filename(target, MAX_COMPONENT_LEN);
+    let start = start_time.replace(':', "_");
+    let dur = duration.replace(':', "_");
+
+    format!("{tgt}-{source}-{start}-{dur}")
 }
 
-/// Sanitizes a string for use as a filename.
+/// Maximum length for individual components in filenames.
+const MAX_COMPONENT_LEN: usize = 50;
+
+/// Sanitizes a string for use as a filename component.
 ///
-/// Removes invalid characters and truncates to the specified length.
+/// Removes invalid characters, replaces spaces with underscores, lowercases, and truncates to
+/// `max_len`. If truncated, appends `…` to indicate the name was shortened.
 fn sanitize_filename(s: &str, max_len: usize) -> String {
     let sanitized: String = s
         .chars()
         .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_' || *c == ' ')
-        .take(max_len)
-        .collect();
+        .collect::<String>()
+        .trim()
+        .replace(' ', "_")
+        .to_lowercase();
 
-    sanitized.trim().replace(' ', "_").to_lowercase()
+    if sanitized.len() > max_len {
+        format!("{}…", &sanitized[..max_len])
+    } else {
+        sanitized
+    }
 }
 
 /// Ensures a directory exists, creating it if necessary.
@@ -162,7 +181,12 @@ mod tests {
     #[test]
     fn sanitize_filename_truncate() {
         let long_title = "a".repeat(100);
-        assert_eq!(sanitize_filename(&long_title, 50).len(), 50);
+        let result = sanitize_filename(&long_title, 50);
+
+        assert!(result.starts_with("aaaa"));
+        assert!(result.ends_with('…'));
+        // 50 ASCII chars + the multi-byte '…' character.
+        assert_eq!(result.chars().count(), 51);
     }
 
     #[test]
@@ -203,13 +227,19 @@ mod tests {
 
     #[test]
     fn livestream_filename_basic() {
-        let name = livestream_filename("rust", "comments", 42);
-        assert_eq!(name, "rust-comments-42-livestream");
+        let name = livestream_filename("rust", "comments", "14:30:45", "00:15:30");
+        assert_eq!(name, "rust-comments-14_30_45-00_15_30");
     }
 
     #[test]
     fn livestream_filename_submissions() {
-        let name = livestream_filename("spez", "submissions", 100);
-        assert_eq!(name, "spez-submissions-100-livestream");
+        let name = livestream_filename("spez", "submissions", "09:45:22", "01:00:00");
+        assert_eq!(name, "spez-submissions-09_45_22-01_00_00");
+    }
+
+    #[test]
+    fn livestream_filename_already_underscored() {
+        let name = livestream_filename("rust", "comments", "14_30_45", "00_15_30");
+        assert_eq!(name, "rust-comments-14_30_45-00_15_30");
     }
 }
