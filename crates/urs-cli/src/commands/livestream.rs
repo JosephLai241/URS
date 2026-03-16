@@ -6,13 +6,17 @@
 use std::fs;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, bail};
+use chrono::Local;
 use clap::{Parser, ValueEnum};
 use tracing::{debug, info};
 use urs_core::export::{ensure_dir, livestream_filename, output_dir};
-use urs_core::scrapers::{LivestreamEvent, LivestreamSource, LivestreamTarget, Livestreamer};
+use urs_core::scrapers::{
+    LivestreamEvent, LivestreamSource, LivestreamTarget, Livestreamer, RedditorScraper,
+    SubredditScraper,
+};
 
 use crate::helpers::create_client;
 use crate::tui::app::App;
@@ -81,6 +85,10 @@ pub struct StreamContext {
     poll_duration: Duration,
     /// Source name for the final filename.
     source_name: String,
+    /// Monotonic instant for computing duration.
+    started_at: Instant,
+    /// Wall-clock start time formatted as `HH:MM:SS`.
+    start_time: String,
     /// Target name for the final filename.
     target_name: String,
     /// Path to the temporary file.
@@ -116,6 +124,8 @@ impl StreamContext {
             output_dir: dir,
             poll_duration,
             source_name: source_name.to_string(),
+            start_time: Local::now().format("%H:%M:%S").to_string(),
+            started_at: Instant::now(),
             target_name: target_name.to_string(),
             temp_path,
             writer: BufWriter::new(file),
@@ -177,7 +187,20 @@ impl StreamContext {
             return Ok(None);
         }
 
-        let filename = livestream_filename(&self.target_name, &self.source_name, self.file_count);
+        let elapsed = self.started_at.elapsed();
+        let total_secs = elapsed.as_secs();
+        let duration = format!(
+            "{:02}:{:02}:{:02}",
+            total_secs / 3600,
+            (total_secs % 3600) / 60,
+            total_secs % 60,
+        );
+        let filename = livestream_filename(
+            &self.target_name,
+            &self.source_name,
+            &self.start_time,
+            &duration,
+        );
         let final_path = self.output_dir.join(format!("{filename}.jsonl"));
 
         fs::rename(&self.temp_path, &final_path).with_context(|| {
@@ -214,6 +237,21 @@ pub async fn run(args: LivestreamArgs) -> Result<()> {
     );
 
     let client = create_client().await?;
+
+    match args.r#type {
+        TargetType::Redditor => {
+            let scraper = RedditorScraper::new(&client);
+            if let Err(e) = scraper.about(&args.target).await {
+                bail!("Redditor u/{} does not exist or is suspended: {e}", args.target);
+            }
+        }
+        TargetType::Subreddit => {
+            let scraper = SubredditScraper::new(&client);
+            if let Err(e) = scraper.about(&args.target).await {
+                bail!("Subreddit r/{} does not exist or is inaccessible: {e}", args.target);
+            }
+        }
+    }
 
     let target = match args.r#type {
         TargetType::Redditor => LivestreamTarget::Redditor(args.target.clone()),

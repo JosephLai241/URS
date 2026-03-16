@@ -5,7 +5,7 @@
 
 use std::path::PathBuf;
 
-use anyhow::Result;
+use anyhow::{Result, bail};
 use clap::Args;
 use colored::Colorize;
 use tracing::info;
@@ -58,6 +58,11 @@ pub async fn run(args: RedditorArgs) -> Result<()> {
     let spinner = create_spinner("Authenticating with Reddit...");
     let client = create_client().await?;
     let scraper = RedditorScraper::new(&client);
+
+    spinner.set_message(format!("Validating u/{}...", args.username));
+    if let Err(e) = scraper.about(&args.username).await {
+        bail!("Redditor u/{} does not exist or is suspended: {e}", args.username);
+    }
 
     spinner.set_message(format!("Fetching interactions for u/{}...", args.username));
     let interactions = scraper.all_interactions(&args.username, args.count).await?;

@@ -5,7 +5,7 @@
 
 use std::path::PathBuf;
 
-use anyhow::Result;
+use anyhow::{Result, bail};
 use clap::Args;
 use colored::Colorize;
 use tracing::info;
@@ -69,6 +69,11 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
     let spinner = create_spinner("Authenticating with Reddit...");
     let client = create_client().await?;
     let scraper = CommentsScraper::new(&client);
+
+    spinner.set_message("Validating submission URL...");
+    if let Err(e) = scraper.validate_url(&args.url).await {
+        bail!("Submission does not exist or is inaccessible: {e}");
+    }
 
     spinner.set_message("Fetching comments...");
 

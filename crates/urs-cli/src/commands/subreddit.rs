@@ -144,6 +144,12 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
     let spinner = create_spinner("Authenticating with Reddit...");
     let client = create_client().await?;
     let scraper = SubredditScraper::new(&client);
+
+    spinner.set_message(format!("Validating r/{}...", args.subreddit));
+    if let Err(e) = scraper.about(&args.subreddit).await {
+        bail!("Subreddit r/{} does not exist or is inaccessible: {e}", args.subreddit);
+    }
+
     spinner.set_message("Fetching posts...");
 
     let time = args.time.to_core();

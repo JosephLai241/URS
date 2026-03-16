@@ -36,6 +36,27 @@ impl<'a> CommentsScraper<'a> {
         Self { client }
     }
 
+    /// Validates that a submission URL points to an accessible submission.
+    ///
+    /// Makes a lightweight request (zero comments, zero depth) to verify the submission exists
+    /// and is accessible.
+    ///
+    /// # Arguments
+    ///
+    /// * `url` - The full URL to the submission
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the URL is invalid, the submission does not exist, or the API
+    /// request fails.
+    pub async fn validate_url(&self, url: &str) -> Result<()> {
+        let (subreddit, submission_id) = Self::parse_submission_url(url)?;
+        let endpoint = CommentsEndpoint::submission(&subreddit, &submission_id, Some(0), Some(0));
+        self.client.get(&endpoint).await?;
+
+        Ok(())
+    }
+
     /// Fetches comments from a submission URL.
     ///
     /// This is a convenience method that parses the URL to extract the Subreddit and submission
