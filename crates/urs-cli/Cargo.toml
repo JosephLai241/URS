@@ -9,20 +9,26 @@ version = "4.0.0"
 
 [dependencies]
 anyhow = "1"
+askama.workspace = true
+axum.workspace = true
 chrono.workspace = true
 clap.workspace = true
 colored.workspace = true
 crossterm.workspace = true
+csv.workspace = true
 directories.workspace = true
 dotenvy.workspace = true
 futures.workspace = true
 indicatif.workspace = true
+mime_guess.workspace = true
 open = "5.3.3"
+pulldown-cmark.workspace = true
 ratatui.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 tabled = "0.17"
 tokio.workspace = true
+tower-http.workspace = true
 tracing.workspace = true
 tracing-appender.workspace = true
 tracing-subscriber.workspace = true
