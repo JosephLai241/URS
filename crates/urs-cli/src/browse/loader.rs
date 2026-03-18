@@ -11,7 +11,7 @@ use urs_core::models::{Comment, CommentsResult, RedditorInteractions, Submission
 /// A file or directory entry in the scrapes tree.
 #[derive(Debug, Clone)]
 pub struct FileEntry {
-    /// Children entries (for pre-loaded directories; unused with lazy htmx loading).
+    /// Children entries (for pre-loaded directories; unused with lazy HTMX loading).
     #[allow(dead_code)]
     pub children: Vec<Self>,
     /// Whether this is a directory.
