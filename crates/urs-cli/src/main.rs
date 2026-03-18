@@ -4,6 +4,7 @@
 //! Supports scraping subreddits, redditor profiles, and submission comments, with export to JSON
 //! or CSV.
 
+mod browse;
 mod commands;
 mod helpers;
 mod tui;
@@ -35,15 +36,26 @@ async fn main() -> anyhow::Result<()> {
             .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"))
     };
 
-    tracing_subscriber::registry()
-        .with(env_filter)
-        .with(tracing_subscriber::fmt::layer().with_writer(non_blocking))
-        .init();
+    // Browse command gets stderr logging so users see server activity in the terminal. Other
+    // commands only log to the file to keep terminal output clean.
+    let is_browse = matches!(cli.command, commands::Commands::Browse(_));
 
-    tracing::info!(log_dir = %log_dir.display(), "Logging initialized");
+    let registry = tracing_subscriber::registry()
+        .with(env_filter)
+        .with(tracing_subscriber::fmt::layer().with_writer(non_blocking));
+
+    if is_browse {
+        registry
+            .with(tracing_subscriber::fmt::layer().with_writer(std::io::stderr))
+            .init();
+    } else {
+        registry.init();
+    }
+
+    tracing::debug!(log_dir = %log_dir.display(), "Logging initialized");
 
     helpers::print_banner();
 
-    tracing::info!(command = ?cli.command, "Dispatching command");
+    tracing::debug!(command = ?cli.command, "Dispatching command");
     dispatch(cli).await
 }
