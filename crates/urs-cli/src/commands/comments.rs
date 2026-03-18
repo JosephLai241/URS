@@ -10,6 +10,7 @@ use clap::Args;
 use colored::Colorize;
 use tracing::info;
 use urs_core::export::{JsonExporter, comments_filename, ensure_dir, output_dir};
+use urs_core::models::CommentsResult;
 use urs_core::scrapers::CommentsScraper;
 
 use crate::helpers::{create_client, create_spinner};
@@ -83,7 +84,7 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
         Some(args.count)
     };
     let structured = !args.raw;
-    let (comments, total) = scraper.from_url(&args.url, limit, structured).await?;
+    let (submission, comments, total) = scraper.from_url(&args.url, limit, structured).await?;
 
     spinner.set_message("Exporting results...");
 
@@ -95,7 +96,11 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
     let filename = comments_filename(&title, total, all_comments, args.raw);
     let path = dir.join(format!("{filename}.json"));
 
-    JsonExporter::new().export_to_file(&comments, &path)?;
+    let result = CommentsResult {
+        submission,
+        comments,
+    };
+    JsonExporter::new().export_to_file(&result, &path)?;
 
     spinner.finish_and_clear();
 
