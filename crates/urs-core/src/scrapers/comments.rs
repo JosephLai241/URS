@@ -5,8 +5,9 @@ use tracing::{debug, info, warn};
 use crate::client::RedditClient;
 use crate::client::endpoints::CommentsEndpoint;
 use crate::error::{Error, Result};
+use crate::models::Submission;
 use crate::models::api::{
-    CommentData, Listing, MoreChildrenResponse, MoreCommentsData, RepliesField,
+    CommentData, Listing, MoreChildrenResponse, MoreCommentsData, RepliesField, SubmissionData,
 };
 use crate::models::{Comment, CommentTree, MoreComments};
 
@@ -70,8 +71,9 @@ impl<'a> CommentsScraper<'a> {
     ///
     /// # Returns
     ///
-    /// A tuple of `(comments, total_count)`. The total count reflects the number of comments
-    /// before tree structuring, so callers don't need to re-traverse the tree to count.
+    /// A tuple of `(submission, comments, total_count)`. The submission is the parent post's
+    /// metadata. The total count reflects the number of comments before tree structuring, so
+    /// callers don't need to re-traverse the tree to count.
     ///
     /// # Errors
     ///
@@ -81,7 +83,7 @@ impl<'a> CommentsScraper<'a> {
         url: &str,
         limit: Option<usize>,
         structured: bool,
-    ) -> Result<(Vec<Comment>, usize)> {
+    ) -> Result<(Submission, Vec<Comment>, usize)> {
         let (subreddit, submission_id) = Self::parse_submission_url(url)?;
         self.fetch(&subreddit, &submission_id, limit, structured)
             .await
@@ -101,8 +103,9 @@ impl<'a> CommentsScraper<'a> {
     ///
     /// # Returns
     ///
-    /// A tuple of `(comments, total_count)`. The total count reflects the number of comments
-    /// before tree structuring, so callers don't need to re-traverse the tree to count.
+    /// A tuple of `(submission, comments, total_count)`. The submission is the parent post's
+    /// metadata. The total count reflects the number of comments before tree structuring, so
+    /// callers don't need to re-traverse the tree to count.
     ///
     /// # Errors
     ///
@@ -113,7 +116,7 @@ impl<'a> CommentsScraper<'a> {
         submission_id: &str,
         limit: Option<usize>,
         structured: bool,
-    ) -> Result<(Vec<Comment>, usize)> {
+    ) -> Result<(Submission, Vec<Comment>, usize)> {
         info!(
             subreddit = subreddit,
             submission_id = submission_id,
@@ -122,8 +125,41 @@ impl<'a> CommentsScraper<'a> {
             "Fetching comments"
         );
 
+        let (submission, mut comments, more_stubs) =
+            self.fetch_initial(subreddit, submission_id).await?;
+
+        self.expand_all_stubs(subreddit, submission_id, more_stubs, &mut comments)
+            .await;
+
+        if let Some(limit) = limit {
+            comments.truncate(limit);
+        }
+
+        let total = comments.len();
+        info!(count = total, "Comments fetch complete");
+
+        if structured {
+            let mut tree = CommentTree::new(submission_id);
+
+            for comment in comments {
+                tree.insert(comment);
+            }
+
+            Ok((submission, tree.into_comments(), total))
+        } else {
+            Ok((submission, comments, total))
+        }
+    }
+
+    /// Fetches the initial submission metadata and top-level comments from the API.
+    ///
+    /// Returns the submission, parsed comments, and any "more comments" stubs that need further expansion.
+    async fn fetch_initial(
+        &self,
+        subreddit: &str,
+        submission_id: &str,
+    ) -> Result<(Submission, Vec<Comment>, Vec<MoreComments>)> {
         // Request the maximum number of comments upfront (Reddit caps at 500).
-        // This reduces the number of "more" stubs we need to expand later.
         let url = CommentsEndpoint::submission(subreddit, submission_id, Some(500), None);
         let response = self.client.get(&url).await?;
 
@@ -134,6 +170,25 @@ impl<'a> CommentsScraper<'a> {
             ));
         }
 
+        // Parse the submission metadata from listings[0].
+        let submission_listing: Listing<serde_json::Value> =
+            serde_json::from_value(listings[0].clone())?;
+        let submission_thing = submission_listing
+            .data
+            .children
+            .into_iter()
+            .next()
+            .ok_or_else(|| Error::UnexpectedResponse("No submission in listings[0]".to_string()))?;
+        let submission_data: SubmissionData = serde_json::from_value(submission_thing.data)?;
+        let submission = Submission::from(submission_data);
+
+        debug!(
+            title = %submission.title,
+            author = %submission.author,
+            score = submission.score,
+            "Parsed submission metadata"
+        );
+
         let comments_listing: Listing<serde_json::Value> =
             serde_json::from_value(listings[1].clone())?;
 
@@ -141,7 +196,6 @@ impl<'a> CommentsScraper<'a> {
         let mut more_stubs: Vec<MoreComments> = Vec::new();
 
         let children_values = Self::children_to_values(comments_listing.data.children);
-
         Self::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
 
         debug!(
@@ -150,11 +204,22 @@ impl<'a> CommentsScraper<'a> {
             "Collected initial comments"
         );
 
-        // Expand "more comments" stubs via POST /api/morechildren.
-        // This runs iteratively: expanding one batch of stubs may yield new "more" stubs that need
-        // further expansion.
+        Ok((submission, comments, more_stubs))
+    }
+
+    /// Iteratively expands all "more comments" stubs.
+    ///
+    /// Expanding one batch of stubs may yield new stubs that need further expansion, so this loops
+    /// until no pending stubs remain.
+    async fn expand_all_stubs(
+        &self,
+        subreddit: &str,
+        submission_id: &str,
+        initial_stubs: Vec<MoreComments>,
+        comments: &mut Vec<Comment>,
+    ) {
         let link_id = format!("t3_{submission_id}");
-        let mut pending_stubs = more_stubs;
+        let mut pending_stubs = initial_stubs;
 
         while !pending_stubs.is_empty() {
             let mut next_stubs: Vec<MoreComments> = Vec::new();
@@ -218,25 +283,6 @@ impl<'a> CommentsScraper<'a> {
             }
 
             pending_stubs = next_stubs;
-        }
-
-        if let Some(limit) = limit {
-            comments.truncate(limit);
-        }
-
-        let total = comments.len();
-        info!(count = total, "Comments fetch complete");
-
-        if structured {
-            let mut tree = CommentTree::new(submission_id);
-
-            for comment in comments {
-                tree.insert(comment);
-            }
-
-            Ok((tree.into_comments(), total))
-        } else {
-            Ok((comments, total))
         }
     }
 
