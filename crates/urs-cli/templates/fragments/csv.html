@@ -1,0 +1,88 @@
+<div class="content-header">
+  <div class="breadcrumbs">
+    {% for crumb in breadcrumbs %} {% if crumb.href.is_some() %}
+    <a href="{{ crumb.href.as_ref().unwrap() }}">{{ crumb.label }}</a>
+    {% else %}
+    <span>{{ crumb.label }}</span>
+    {% endif %} {% if !loop.last %}<span class="sep">&#x203A;</span>{% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="csv-controls">
+  <input
+    type="text"
+    class="csv-filter-input"
+    name="filter"
+    placeholder="Filter rows..."
+    value="{{ filter }}"
+    hx-get="/view/{{ file_path }}"
+    hx-trigger="keyup changed delay:300ms"
+    hx-target="#csv-tbody"
+    hx-swap="innerHTML"
+    hx-include="this"
+    hx-params="filter"
+  />
+</div>
+<div class="csv-table-wrap">
+  <table class="csv-table">
+    <thead>
+      <tr>
+        {% for h in headers %}
+        <th>
+          {% if sort_col.as_deref() == Some(h.as_str()) && sort_dir == "asc" %}
+          <a
+            href="/view/{{ file_path }}?sort={{ h }}&dir=desc&filter={{ filter }}"
+            hx-get="/view/{{ file_path }}?sort={{ h }}&dir=desc&filter={{ filter }}"
+            hx-target="#main-content"
+            hx-swap="innerHTML"
+            style="color: inherit; text-decoration: none"
+          >
+            {{ h }} <span class="sort-indicator">&#x25B2;</span>
+          </a>
+          {% else if sort_col.as_deref() == Some(h.as_str()) && sort_dir ==
+          "desc" %}
+          <a
+            href="/view/{{ file_path }}?sort={{ h }}&dir=asc&filter={{ filter }}"
+            hx-get="/view/{{ file_path }}?sort={{ h }}&dir=asc&filter={{ filter }}"
+            hx-target="#main-content"
+            hx-swap="innerHTML"
+            style="color: inherit; text-decoration: none"
+          >
+            {{ h }} <span class="sort-indicator">&#x25BC;</span>
+          </a>
+          {% else %}
+          <a
+            href="/view/{{ file_path }}?sort={{ h }}&dir=asc&filter={{ filter }}"
+            hx-get="/view/{{ file_path }}?sort={{ h }}&dir=asc&filter={{ filter }}"
+            hx-target="#main-content"
+            hx-swap="innerHTML"
+            style="color: inherit; text-decoration: none"
+          >
+            {{ h }}
+          </a>
+          {% endif %}
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody id="csv-tbody">
+      {% for row in rows %}
+      <tr>
+        {% for cell in row %}
+        <td title="{{ cell }}">{{ cell }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %} {% if rows.is_empty() %}
+      <tr>
+        <td
+          colspan="{{ headers.len() }}"
+          style="text-align: center; color: var(--text-muted)"
+        >
+          No matching rows
+        </td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,71 @@
+<div class="content-header">
+  <div class="breadcrumbs">
+    {% for crumb in breadcrumbs %} {% if crumb.href.is_some() %}
+    <a href="{{ crumb.href.as_ref().unwrap() }}">{{ crumb.label }}</a>
+    {% else %}
+    <span>{{ crumb.label }}</span>
+    {% endif %} {% if !loop.last %}<span class="sep">&#x203A;</span>{% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="submission-card submission-header-card">
+  <div class="vote-column">
+    <span class="vote-arrow up">&#x25B2;</span>
+    <span class="vote-score">{{ submission.score }}</span>
+    <span class="vote-arrow down">&#x25BC;</span>
+  </div>
+  <div class="submission-content">
+    <div class="submission-title">
+      <a href="{{ submission.permalink }}">{{ submission.title }}</a>
+    </div>
+    <div class="submission-meta">
+      <span class="subreddit">r/{{ submission.subreddit }}</span>
+      <span>&middot;</span>
+      <span>Posted by u/{{ submission.author }}</span>
+      <span>&middot;</span>
+      <span>{{ submission.time_ago }}</span>
+      <button
+        class="item-json-btn"
+        data-url="/api/item-json/{{ file_path }}?id={{ submission.id }}&type=submission"
+        onclick="toggleItemJson(this)"
+      >
+        {} Show JSON
+      </button>
+    </div>
+    <div class="submission-badges">
+      {% if submission.flair.is_some() %}
+      <span class="badge badge-flair"
+        >{{ submission.flair.as_ref().unwrap() }}</span
+      >
+      {% endif %} {% if submission.is_nsfw %}<span class="badge badge-nsfw"
+        >NSFW</span
+      >{% endif %} {% if submission.is_spoiler %}<span
+        class="badge badge-spoiler"
+        >Spoiler</span
+      >{% endif %} {% if submission.is_locked %}<span class="badge badge-locked"
+        >&#x1F512; Locked</span
+      >{% endif %} {% if submission.is_stickied %}<span
+        class="badge badge-stickied"
+        >&#x1F4CC; Stickied</span
+      >{% endif %} {% if submission.is_oc %}<span class="badge badge-oc"
+        >OC</span
+      >{% endif %}
+      <span class="text-muted text-sm"
+        >{{ submission.num_comments }} comments &middot; {{
+        submission.upvote_ratio }} upvoted</span
+      >
+    </div>
+    {% if !submission.selftext_html.is_empty() %}
+    <div class="selftext-preview expanded">
+      {{ submission.selftext_html|safe }}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="page-header">
+  <p class="subtitle">{{ total_count }} comments</p>
+</div>
+
+<div class="comment-thread">{{ comments_html|safe }}</div>

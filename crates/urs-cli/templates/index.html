@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block sidebar %} {% for entry in entries %} {% if
+entry.is_dir %}
+<div
+  class="tree-item"
+  hx-get="/api/tree?path={{ entry.relative_path }}"
+  hx-target="next .tree-children"
+  hx-swap="innerHTML"
+  hx-trigger="click once"
+  onclick="toggleDir(this)"
+>
+  <span class="tree-chevron">&#x25B6;</span>
+  <span class="tree-icon">&#x1F4C1;</span>
+  <span class="tree-name tree-dir-name">{{ entry.name }}/</span>
+</div>
+<div class="tree-children"></div>
+{% else %}
+<div class="tree-item">
+  <span style="width: 12px"></span>
+  <span class="tree-icon">&#x1F4C4;</span>
+  <span class="tree-name"
+    ><a
+      href="/view/{{ entry.relative_path }}"
+      data-path="{{ entry.relative_path }}"
+      hx-get="/view/{{ entry.relative_path }}"
+      hx-target="#main-content"
+      hx-swap="innerHTML"
+      hx-push-url="/view/{{ entry.relative_path }}"
+      >{{ entry.name }}</a
+    ></span
+  >
+  <span class="tree-size">{{ entry.size|filesize }}</span>
+</div>
+{% endif %} {% endfor %} {% if entries.is_empty() %}
+<div class="tree-item">
+  <span class="text-muted"
+    >No scrape data found. Run a scrape command first.</span
+  >
+</div>
+{% endif %} {% endblock %} {% block content %}
+<div class="welcome-message">
+  <h2>Browse Scrapes</h2>
+  <p class="text-muted">Select a file from the sidebar to view its contents.</p>
+</div>
+{% endblock %}

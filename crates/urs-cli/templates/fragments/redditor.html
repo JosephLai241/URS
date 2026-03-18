@@ -1,0 +1,48 @@
+<div class="content-header">
+  <div class="breadcrumbs">
+    {% for crumb in breadcrumbs %} {% if crumb.href.is_some() %}
+    <a href="{{ crumb.href.as_ref().unwrap() }}">{{ crumb.label }}</a>
+    {% else %}
+    <span>{{ crumb.label }}</span>
+    {% endif %} {% if !loop.last %}<span class="sep">&#x203A;</span>{% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="profile-header">
+  <div class="profile-username">u/{{ username }}</div>
+  <div class="profile-stats">
+    <span>{{ total_karma }} karma</span>
+    <span class="dot">&middot;</span>
+    <span>{{ account_age }}</span>
+  </div>
+  <div class="profile-karma-breakdown">
+    Link: {{ link_karma }} &middot; Comment: {{ comment_karma }}
+  </div>
+  <div class="profile-badges">
+    {% if is_gold %}<span class="badge badge-oc">&#x2B50; Premium</span>{% endif
+    %} {% if is_mod %}<span class="badge badge-mod">&#x1F6E1;&#xFE0F; Mod</span
+    >{% endif %} {% if has_verified_email %}<span class="badge badge-flair"
+      >&#x2709;&#xFE0F; Verified</span
+    >{% endif %}
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab-nav">
+    {% for tab in tabs %}
+    <a
+      href="/view/{{ file_path }}?tab={{ tab.name }}"
+      hx-get="/view/{{ file_path }}?tab={{ tab.name }}"
+      hx-target="#tab-content"
+      hx-swap="innerHTML"
+      class="{% if tab.name == active_tab %}active{% endif %}"
+      onclick="document.querySelectorAll('.tab-nav a').forEach(a => a.classList.remove('active')); this.classList.add('active')"
+    >
+      {{ tab.label }}{% if tab.count.is_some() %}({{ tab.count.unwrap() }}){%
+      endif %} {% if tab.is_forbidden %}&#x1F512;{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+  <div class="tab-content" id="tab-content">{{ tab_content|safe }}</div>
+</div>
