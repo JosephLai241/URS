@@ -30,13 +30,14 @@
       <span>Posted by u/{{ post.author }}</span>
       <span>&middot;</span>
       <span>{{ post.time_ago }}</span>
-      <button
-        class="item-json-btn"
-        data-url="/api/item-json/{{ file_path }}?id={{ post.id }}"
-        onclick="toggleItemJson(this)"
-      >
+      <button class="item-json-btn" onclick="toggleItemJson(this)">
         {} Show JSON
       </button>
+      <template class="item-json-data">
+        <div class="item-json-content">
+          <pre>{{ post.json_html|safe }}</pre>
+        </div>
+      </template>
     </div>
     <div class="submission-badges">
       {% if post.flair.is_some() %}

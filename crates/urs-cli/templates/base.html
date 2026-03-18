@@ -78,17 +78,20 @@
         );
         if (item) item.classList.add("inspecting");
 
-        // Open panel and fetch content.
-        body.innerHTML = '<div class="inspector-loading">Loading...</div>';
+        // Open panel and read embedded JSON from the sibling <template>.
+        var tmpl = btn.nextElementSibling;
+        if (tmpl && tmpl.classList.contains("item-json-data")) {
+          body.innerHTML = tmpl.innerHTML;
+        } else {
+          body.innerHTML =
+            '<div class="inspector-loading">No JSON data available</div>';
+        }
+
         panel.classList.add("open");
+
         document
           .getElementById("inspector-resize-handle")
           .classList.add("open");
-
-        htmx.ajax("GET", btn.getAttribute("data-url"), {
-          target: body,
-          swap: "innerHTML",
-        });
       }
 
       /**

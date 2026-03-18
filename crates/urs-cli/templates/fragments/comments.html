@@ -25,13 +25,14 @@
       <span>Posted by u/{{ submission.author }}</span>
       <span>&middot;</span>
       <span>{{ submission.time_ago }}</span>
-      <button
-        class="item-json-btn"
-        data-url="/api/item-json/{{ file_path }}?id={{ submission.id }}&type=submission"
-        onclick="toggleItemJson(this)"
-      >
+      <button class="item-json-btn" onclick="toggleItemJson(this)">
         {} Show JSON
       </button>
+      <template class="item-json-data">
+        <div class="item-json-content">
+          <pre>{{ submission.json_html|safe }}</pre>
+        </div>
+      </template>
     </div>
     <div class="submission-badges">
       {% if submission.flair.is_some() %}

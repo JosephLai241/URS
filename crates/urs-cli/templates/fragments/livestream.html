@@ -25,13 +25,14 @@
         {% if !event.subreddit.is_empty() %}
         <span class="text-muted">&middot; r/{{ event.subreddit }}</span>
         {% endif %}
-        <button
-          class="item-json-btn"
-          data-url="/api/item-json/{{ file_path }}?index={{ loop.index0 }}"
-          onclick="toggleItemJson(this)"
-        >
+        <button class="item-json-btn" onclick="toggleItemJson(this)">
           {} Show JSON
         </button>
+        <template class="item-json-data">
+          <div class="item-json-content">
+            <pre>{{ event.json_html|safe }}</pre>
+          </div>
+        </template>
       </div>
       {% if event.title.is_some() %}
       <div class="submission-title" style="margin-bottom: 4px">
