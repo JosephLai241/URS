@@ -7,6 +7,7 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
+use super::Submission;
 use super::api::{CommentData, EditedField, MoreCommentsData};
 
 /// A Reddit comment.
@@ -280,6 +281,18 @@ impl Serialize for CommentTree {
     {
         self.comments.serialize(serializer)
     }
+}
+
+/// The exported format for a comments scrape.
+///
+/// Wraps the parent submission metadata together with the scraped comments. This is the structure
+/// serialized to JSON when exporting comments scrape results.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CommentsResult {
+    /// The parent submission's metadata.
+    pub submission: Submission,
+    /// The scraped comments (threaded or flat depending on scrape options).
+    pub comments: Vec<Comment>,
 }
 
 #[cfg(test)]
