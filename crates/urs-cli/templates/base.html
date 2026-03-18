@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>URS — Browse Scrapes</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+    <script src="/assets/htmx.min.js"></script>
+    <script>
+      /**
+       * Toggles a directory node open/closed in the sidebar file tree.
+       * Rotates the chevron icon and shows/hides the children container.
+       * @param {HTMLElement} el - The tree-item element that was clicked.
+       */
+      function toggleDir(el) {
+        var chevron = el.querySelector(".tree-chevron");
+        var children = el.nextElementSibling;
+
+        if (chevron.classList.contains("open")) {
+          chevron.classList.remove("open");
+          if (children) children.classList.add("collapsed");
+        } else {
+          chevron.classList.add("open");
+          if (children) children.classList.remove("collapsed");
+        }
+      }
+
+      /**
+       * Toggles a comment node between collapsed and expanded states.
+       * Updates the button text between [+] and [-].
+       * @param {HTMLElement} el - The collapse toggle element that was clicked.
+       */
+      function toggleComment(el) {
+        var node = el.closest(".comment-node");
+        node.classList.toggle("collapsed");
+        el.textContent = node.classList.contains("collapsed") ? "[+]" : "[-]";
+      }
+
+      /**
+       * Tracks which "Show JSON" button is currently active so we can toggle it
+       * off when another is clicked or the inspector is closed.
+       * @type {HTMLButtonElement|null}
+       */
+      var _activeJsonBtn = null;
+
+      /**
+       * Opens the JSON inspector side panel for the item associated with the
+       * clicked button. If the same button is clicked again, closes the panel.
+       * Highlights the inspected item (submission card, comment node, or livestream
+       * event) with an accent border.
+       * @param {HTMLButtonElement} btn - The "Show JSON" button that was clicked.
+       */
+      function toggleItemJson(btn) {
+        var panel = document.getElementById("json-inspector");
+        var body = document.getElementById("json-inspector-body");
+
+        // Clicking the same button again closes it.
+        if (_activeJsonBtn === btn) {
+          closeInspector();
+          return;
+        }
+
+        // Deactivate previous button.
+        if (_activeJsonBtn) {
+          _activeJsonBtn.textContent = "{} Show JSON";
+          var prev = _activeJsonBtn.closest(
+            ".submission-card, .comment-node, .livestream-event",
+          );
+          if (prev) prev.classList.remove("inspecting");
+        }
+
+        // Activate new button.
+        _activeJsonBtn = btn;
+        btn.textContent = "{} Hide JSON";
+
+        var item = btn.closest(
+          ".submission-card, .comment-node, .livestream-event",
+        );
+        if (item) item.classList.add("inspecting");
+
+        // Open panel and fetch content.
+        body.innerHTML = '<div class="inspector-loading">Loading...</div>';
+        panel.classList.add("open");
+        document
+          .getElementById("inspector-resize-handle")
+          .classList.add("open");
+
+        htmx.ajax("GET", btn.getAttribute("data-url"), {
+          target: body,
+          swap: "innerHTML",
+        });
+      }
+
+      /**
+       * Closes the JSON inspector side panel, resets the active button text back
+       * to "Show JSON", and removes the inspecting highlight from the previously
+       * selected item.
+       */
+      function closeInspector() {
+        var panel = document.getElementById("json-inspector");
+        var body = document.getElementById("json-inspector-body");
+        panel.classList.remove("open");
+
+        document
+          .getElementById("inspector-resize-handle")
+          .classList.remove("open");
+        body.innerHTML = "";
+
+        if (_activeJsonBtn) {
+          _activeJsonBtn.textContent = "{} Show JSON";
+
+          var item = _activeJsonBtn.closest(
+            ".submission-card, .comment-node, .livestream-event",
+          );
+
+          if (item) item.classList.remove("inspecting");
+
+          _activeJsonBtn = null;
+        }
+      }
+
+      /**
+       * After htmx swaps new content into the main area, closes the inspector
+       * and updates the sidebar to highlight the active file by matching the current
+       * URL path against sidebar link data-path attributes.
+       */
+      document.addEventListener("htmx:afterSwap", function (e) {
+        if (e.target.id === "main-content") {
+          closeInspector();
+
+          document
+            .querySelectorAll(".sidebar .tree-name a")
+            .forEach(function (a) {
+              a.classList.remove("active");
+            });
+
+          var path = window.location.pathname.replace("/view/", "");
+
+          document
+            .querySelectorAll(".sidebar .tree-name a")
+            .forEach(function (a) {
+              if (a.getAttribute("data-path") === path) {
+                a.classList.add("active");
+              }
+            });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">URS</a>
+      <div class="navbar-actions">
+        <div id="content-actions">{% block actions %}{% endblock %}</div>
+      </div>
+    </nav>
+    <div class="app-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h3>Scrapes</h3>
+        </div>
+        <div class="file-tree" id="file-tree">
+          {% block sidebar %}{% endblock %}
+        </div>
+      </aside>
+      <div class="sidebar-resize-handle" id="sidebar-resize-handle"></div>
+      <main class="main-content" id="main-content">
+        {% block content %}{% endblock %}
+      </main>
+      <div class="inspector-resize-handle" id="inspector-resize-handle"></div>
+      <aside class="json-inspector" id="json-inspector">
+        <div class="inspector-header">
+          <span class="inspector-title">JSON Inspector</span>
+          <button class="inspector-close" onclick="closeInspector()">
+            &times;
+          </button>
+        </div>
+        <div class="inspector-body" id="json-inspector-body"></div>
+      </aside>
+    </div>
+    <script>
+      /**
+       * Sidebar resize: lets the user drag the sidebar's right edge to adjust
+       * its width. Persists the width to localStorage so it survives page reloads.
+       * Double-click resets to default width.
+       */
+      (function () {
+        var DEFAULT_WIDTH = 280;
+        var MIN_WIDTH = 160;
+        var MAX_WIDTH = 600;
+        var sidebar = document.getElementById("sidebar");
+        var handle = document.getElementById("sidebar-resize-handle");
+
+        // Restore saved width from a previous session.
+        var saved = localStorage.getItem("urs-sidebar-width");
+        if (saved) sidebar.style.width = saved + "px";
+
+        var startX, startWidth;
+
+        /**
+         * Begin drag: capture initial mouse position and sidebar width, set cursor
+         * to col-resize, and attach move/up listeners.
+         * @param {MouseEvent} e
+         */
+        handle.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+
+          startX = e.clientX;
+          startWidth = sidebar.getBoundingClientRect().width;
+
+          document.body.style.cursor = "col-resize";
+          document.body.style.userSelect = "none";
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        });
+
+        /**
+         * During drag: compute new width from mouse delta, clamped between `MIN_WIDTH`
+         * and `MAX_WIDTH`.
+         * @param {MouseEvent} e
+         */
+        function onMouseMove(e) {
+          var w = Math.min(
+            MAX_WIDTH,
+            Math.max(MIN_WIDTH, startWidth + e.clientX - startX),
+          );
+
+          sidebar.style.width = w + "px";
+        }
+
+        /** End drag: restore cursor, remove listeners, persist width. */
+        function onMouseUp() {
+          document.body.style.cursor = "";
+          document.body.style.userSelect = "";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+
+          localStorage.setItem(
+            "urs-sidebar-width",
+            Math.round(sidebar.getBoundingClientRect().width),
+          );
+        }
+
+        /** Double-click resets sidebar to default width. */
+        handle.addEventListener("dblclick", function () {
+          sidebar.style.width = DEFAULT_WIDTH + "px";
+          localStorage.setItem("urs-sidebar-width", DEFAULT_WIDTH);
+        });
+      })();
+
+      /**
+       * Inspector resize: same drag-to-resize pattern as the sidebar, but for
+       * the JSON inspector panel on the right. Dragging left increases width
+       * (opposite direction from sidebar).
+       */
+      (function () {
+        var DEFAULT_WIDTH = 400;
+        var MIN_WIDTH = 250;
+        var MAX_WIDTH = 800;
+        var inspector = document.getElementById("json-inspector");
+        var handle = document.getElementById("inspector-resize-handle");
+
+        // Restore saved width from a previous session.
+        var saved = localStorage.getItem("urs-inspector-width");
+        if (saved) inspector.style.width = saved + "px";
+
+        var startX, startWidth;
+
+        /**
+         * Begin drag: capture initial mouse position and inspector width.
+         * @param {MouseEvent} e
+         */
+        handle.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+
+          startX = e.clientX;
+          startWidth = inspector.getBoundingClientRect().width;
+
+          document.body.style.cursor = "col-resize";
+          document.body.style.userSelect = "none";
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        });
+
+        /**
+         * During drag: compute new width. Subtracts delta because dragging left
+         * (negative delta) should increase width.
+         * @param {MouseEvent} e
+         */
+        function onMouseMove(e) {
+          var w = Math.min(
+            MAX_WIDTH,
+            Math.max(MIN_WIDTH, startWidth - (e.clientX - startX)),
+          );
+
+          inspector.style.width = w + "px";
+        }
+
+        /** End drag: restore cursor, remove listeners, persist width. */
+        function onMouseUp() {
+          document.body.style.cursor = "";
+          document.body.style.userSelect = "";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+
+          localStorage.setItem(
+            "urs-inspector-width",
+            Math.round(inspector.getBoundingClientRect().width),
+          );
+        }
+
+        /** Double-click resets inspector to default width. */
+        handle.addEventListener("dblclick", function () {
+          inspector.style.width = DEFAULT_WIDTH + "px";
+          localStorage.setItem("urs-inspector-width", DEFAULT_WIDTH);
+        });
+      })();
+    </script>
+  </body>
+</html>
