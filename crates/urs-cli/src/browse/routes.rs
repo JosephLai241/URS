@@ -20,8 +20,9 @@ use super::templates::{IndexTemplate, TreeFragmentTemplate};
 use super::views;
 
 /// Embedded static assets.
-const STYLE_CSS: &str = include_str!("assets/style.css");
+const FAVICON_SVG: &str = include_str!("assets/favicon.svg");
 const HTMX_JS: &str = include_str!("assets/htmx.min.js");
+const STYLE_CSS: &str = include_str!("assets/style.css");
 
 /// Creates the application router with all routes.
 pub fn router() -> Router<AppState> {
@@ -219,16 +220,22 @@ async fn raw_file(
 /// Serve embedded static assets.
 async fn serve_asset(AxumPath(path): AxumPath<String>) -> Response {
     match path.as_str() {
-        "style.css" => (
+        "favicon.svg" => (
             StatusCode::OK,
-            [(header::CONTENT_TYPE, "text/css")],
-            STYLE_CSS,
+            [(header::CONTENT_TYPE, "image/svg+xml")],
+            FAVICON_SVG,
         )
             .into_response(),
         "htmx.min.js" => (
             StatusCode::OK,
             [(header::CONTENT_TYPE, "application/javascript")],
             HTMX_JS,
+        )
+            .into_response(),
+        "style.css" => (
+            StatusCode::OK,
+            [(header::CONTENT_TYPE, "text/css")],
+            STYLE_CSS,
         )
             .into_response(),
         _ => (StatusCode::NOT_FOUND, "Not found").into_response(),
