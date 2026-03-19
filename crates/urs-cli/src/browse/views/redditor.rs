@@ -228,7 +228,7 @@ fn write_submissions_tab(subs: &[urs_core::models::Submission], html: &mut Strin
                     <span class="vote-arrow down">&#x25BC;</span>
                 </div>
                 <div class="submission-content">
-                    <div class="submission-title"><a href="{url}">{title}</a></div>
+                    <div class="submission-title"><a href="{url}" target="_blank" rel="noopener">{title}</a></div>
                     <div class="submission-meta">
                         <span class="subreddit">r/{sub}</span>
                         <span>Posted by u/{author}</span>

@@ -13,19 +13,17 @@
 </div>
 <div class="tree-children"></div>
 {% else %}
-<div class="tree-item">
+<div
+  class="tree-item tree-file"
+  hx-get="/view/{{ entry.relative_path }}"
+  hx-target="#main-content"
+  hx-swap="innerHTML"
+  hx-push-url="/view/{{ entry.relative_path }}"
+>
   <span style="width: 12px"></span>
   <span class="tree-icon">&#x1F4C4;</span>
   <span class="tree-name"
-    ><a
-      href="/view/{{ entry.relative_path }}"
-      data-path="{{ entry.relative_path }}"
-      hx-get="/view/{{ entry.relative_path }}"
-      hx-target="#main-content"
-      hx-swap="innerHTML"
-      hx-push-url="/view/{{ entry.relative_path }}"
-      >{{ entry.name }}</a
-    ></span
+    ><a data-path="{{ entry.relative_path }}">{{ entry.name }}</a></span
   >
   <span class="tree-size">{{ entry.size|filesize }}</span>
 </div>

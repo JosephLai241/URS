@@ -2,8 +2,10 @@
 
 /* ===== CSS Custom Properties ===== */
 :root {
-    --accent: #D34516;
+    --accent: #7B290D;
     --accent-blue: #0079d3;
+    --accent-light: #D34516;
+    --accent-mid: #A73812;
     --badge-admin: #ff4500;
     --badge-locked: #ffb000;
     --badge-mod: #28a745;
@@ -22,7 +24,6 @@
     --downvote: #7193ff;
     --link: #4fbcff;
     --link-hover: #7fcdff;
-    --rust-blue: #1E2650;
     --scrollbar-thumb: #474748;
     --scrollbar-track: #272729;
     --shadow: 0 1px 3px rgba(0,0,0,0.4);
@@ -90,7 +91,7 @@ a:hover {
 }
 
 .sidebar-header {
-    background: var(--rust-blue);
+    background: var(--accent);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     padding: 12px 16px 8px;
@@ -139,7 +140,7 @@ a:hover {
 
 /* Active file highlighting in sidebar */
 .sidebar .tree-name a.active {
-    color: var(--accent);
+    color: var(--accent-light);
     font-weight: 600;
 }
 
@@ -196,7 +197,7 @@ a:hover {
 /* ===== Nav Bar ===== */
 .navbar {
     align-items: center;
-    background: var(--rust-blue);
+    background: var(--accent);
     border-bottom: 1px solid var(--border);
     display: flex;
     gap: 12px;
@@ -208,14 +209,14 @@ a:hover {
 }
 
 .navbar-brand {
-    color: var(--accent);
+    color: #fff;
     font-size: 1.2rem;
     font-weight: 700;
     text-decoration: none;
 }
 
 .navbar-brand:hover {
-    color: var(--accent);
+    color: #fff;
     text-decoration: none;
 }
 
@@ -320,8 +321,8 @@ a:hover {
     color: var(--text-primary);
 }
 
-.tree-name a:hover {
-    color: var(--accent);
+.tree-file:hover .tree-name a {
+    color: var(--accent-mid);
     text-decoration: none;
 }
 
@@ -441,11 +442,15 @@ a:hover {
 }
 
 .submission-title a {
+    border-bottom: 1px solid transparent;
     color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
 .submission-title a:hover {
-    color: var(--link);
+    border-bottom-color: var(--accent-light);
+    color: var(--accent-light);
 }
 
 .submission-meta {
@@ -529,7 +534,7 @@ a:hover {
 }
 
 .comment-body-wrap {
-    border-left: 2px solid var(--rust-blue);
+    border-left: 2px solid var(--accent);
     margin-left: 8px;
     padding-left: 24px;
 }
@@ -1023,9 +1028,9 @@ a:hover {
 .item-json-btn {
     align-self: center;
     background: none;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--accent-light);
     border-radius: 3px;
-    color: var(--accent);
+    color: var(--accent-light);
     cursor: pointer;
     flex-shrink: 0;
     font-size: 11px;
@@ -1042,21 +1047,21 @@ a:hover {
 
 /* Highlight the item being inspected */
 .comment-node.inspecting > .comment-body-wrap {
-    border-left-color: var(--accent);
+    border-left-color: #888;
     border-left-width: 3px;
     border-radius: 4px;
-    outline: 1px solid var(--accent);
+    outline: 1px solid #888;
     outline-offset: 2px;
 }
 
 .livestream-event.inspecting {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent);
+    border-color: #888;
+    box-shadow: 0 0 0 1px #888;
 }
 
 .submission-card.inspecting {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent);
+    border-color: #888;
+    box-shadow: 0 0 0 1px #888;
 }
 
 /* ===== JSON Inspector Side Panel ===== */
@@ -1098,7 +1103,7 @@ a:hover {
 
 .inspector-header {
     align-items: center;
-    background: var(--rust-blue);
+    background: var(--accent);
     border-bottom: 1px solid var(--border);
     display: flex;
     flex-shrink: 0;
