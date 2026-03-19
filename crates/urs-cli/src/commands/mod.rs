@@ -1,9 +1,9 @@
 //! CLI command definitions and dispatch.
 //!
 //! This module defines the top-level CLI structure with subcommands for scraping Subreddits,
-//! Redditors, submission comments, livestreaming Reddit activity, viewing logs, and checking
-//! credentials.
+//! Redditors, submission comments, livestreaming Reddit activity, and additional utilities.
 
+pub mod browse;
 pub mod check;
 pub mod comments;
 pub mod livestream;
@@ -18,23 +18,23 @@ use clap::{Parser, Subcommand};
 #[command(name = "urs")]
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
-    /// Enable debug-level logging (default is INFO).
-    #[arg(long, global = true, default_value_t = false)]
-    pub debug: bool,
-
     /// The subcommand to execute.
     #[command(subcommand)]
     pub command: Commands,
+
+    /// Enable debug-level logging (default is INFO).
+    #[arg(long, global = true, default_value_t = false)]
+    pub debug: bool,
 }
 
 /// Available CLI commands.
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    /// Scrape posts from a Subreddit.
-    Subreddit(subreddit::SubredditArgs),
+    /// Browse scraped data in a local web viewer.
+    Browse(browse::BrowseArgs),
 
-    /// Scrape a Redditor's profile and interactions.
-    Redditor(redditor::RedditorArgs),
+    /// Check Reddit API credentials and rate limits.
+    Check,
 
     /// Scrape comments from a submission.
     Comments(comments::CommentsArgs),
@@ -45,8 +45,11 @@ pub enum Commands {
     /// View URS log output.
     Log(log::LogArgs),
 
-    /// Check Reddit API credentials and rate limits.
-    Check,
+    /// Scrape a Redditor's profile and interactions.
+    Redditor(redditor::RedditorArgs),
+
+    /// Scrape posts from a Subreddit.
+    Subreddit(subreddit::SubredditArgs),
 }
 
 /// Dispatches the parsed CLI command to its handler.
@@ -56,11 +59,12 @@ pub enum Commands {
 /// Returns an error if the command handler fails.
 pub async fn dispatch(cli: Cli) -> anyhow::Result<()> {
     match cli.command {
-        Commands::Subreddit(args) => subreddit::run(args).await,
-        Commands::Redditor(args) => redditor::run(args).await,
+        Commands::Browse(args) => browse::run(args).await,
+        Commands::Check => check::run().await,
         Commands::Comments(args) => comments::run(args).await,
         Commands::Livestream(args) => livestream::run(args).await,
         Commands::Log(args) => log::run(args).await,
-        Commands::Check => check::run().await,
+        Commands::Redditor(args) => redditor::run(args).await,
+        Commands::Subreddit(args) => subreddit::run(args).await,
     }
 }
