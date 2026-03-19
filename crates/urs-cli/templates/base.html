@@ -124,6 +124,22 @@
       }
 
       /**
+       * Before HTMX sends a request that targets #main-content, replaces the
+       * current content with a loading spinner. The spinner is naturally replaced
+       * when the response swaps in.
+       */
+      document.addEventListener("htmx:beforeRequest", function (e) {
+        var target = e.detail.target || e.target;
+        if (target && target.id === "main-content") {
+          target.innerHTML =
+            '<div class="loading-spinner" style="display:flex">' +
+            '<div class="spinner"></div>' +
+            '<span class="spinner-text">Loading\u2026</span>' +
+            "</div>";
+        }
+      });
+
+      /**
        * After HTMX swaps new content into the main area, closes the inspector
        * and updates the sidebar to highlight the active file by matching the current
        * URL path against sidebar link data-path attributes.
