@@ -33,6 +33,10 @@ pub fn render_redditor_html(
     let is_gold = info.is_some_and(|i| i.is_gold);
     let is_mod = info.is_some_and(|i| i.is_mod);
     let has_verified_email = info.is_some_and(|i| i.has_verified_email);
+    let created_date = info.map_or_else(
+        || "unknown".to_string(),
+        |i| time::format_date(i.created_utc),
+    );
 
     let tabs = build_redditor_tabs(interactions);
 
@@ -54,6 +58,7 @@ pub fn render_redditor_html(
         active_tab,
         breadcrumbs,
         comment_karma,
+        created_date,
         file_path: file_path.to_string(),
         has_verified_email,
         is_gold,
