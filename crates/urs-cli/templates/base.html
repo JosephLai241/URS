@@ -124,6 +124,33 @@
       }
 
       /**
+       * Converts all data-utc attributes within a container into local time tooltips
+       * using the browser's timezone. Called on page load and after * each HTMX
+       * swap.
+       * @param {HTMLElement} root - The container to scan for data-utc elements.
+       */
+      function applyLocalTimeTitles(root) {
+        root.querySelectorAll("[data-utc]").forEach(function (el) {
+          var utc = parseFloat(el.getAttribute("data-utc"));
+
+          if (!isNaN(utc)) {
+            var d = new Date(utc * 1000);
+
+            el.title = d.toLocaleString(undefined, {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              second: "2-digit",
+              timeZoneName: "short",
+            });
+          }
+        });
+      }
+
+      /**
        * Before HTMX sends a request that targets #main-content, replaces the
        * current content with a loading spinner. The spinner is naturally replaced
        * when the response swaps in.
@@ -139,12 +166,20 @@
         }
       });
 
+      // Apply local time tooltips on initial page load.
+      document.addEventListener("DOMContentLoaded", function () {
+        applyLocalTimeTitles(document);
+      });
+
       /**
-       * After HTMX swaps new content into the main area, closes the inspector
-       * and updates the sidebar to highlight the active file by matching the current
-       * URL path against sidebar link data-path attributes.
+       * After HTMX swaps new content into the main area, closes the inspector,
+       * applies local time tooltips to new content, and updates the sidebar to
+       * highlight the active file by matching the current URL path against sidebar
+       * link data-path attributes.
        */
       document.addEventListener("htmx:afterSwap", function (e) {
+        applyLocalTimeTitles(e.target);
+
         if (e.target.id === "main-content") {
           closeInspector();
 

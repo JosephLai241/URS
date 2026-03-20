@@ -10,11 +10,15 @@
 </div>
 
 <div class="profile-header">
-  <div class="profile-username">u/{{ username }}</div>
+  <div class="profile-username">
+    <a href="https://www.reddit.com/user/{{ username }}" target="_blank" rel="noopener">u/{{ username }}</a>
+  </div>
   <div class="profile-stats">
     <span>{{ total_karma }} karma</span>
     <span class="dot">&middot;</span>
     <span>{{ account_age }}</span>
+    <span class="dot">&middot;</span>
+    <span>Created {{ created_date }}</span>
   </div>
   <div class="profile-karma-breakdown">
     Link: {{ link_karma }} &middot; Comment: {{ comment_karma }}

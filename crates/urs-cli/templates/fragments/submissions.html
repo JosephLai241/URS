@@ -29,7 +29,7 @@
       <span>&middot;</span>
       <span>Posted by u/{{ post.author }}</span>
       <span>&middot;</span>
-      <span>{{ post.time_ago }}</span>
+      <span data-utc="{{ post.time_utc }}">{{ post.time_ago }}</span>
       <button class="item-json-btn" onclick="toggleItemJson(this)">
         {} Show JSON
       </button>

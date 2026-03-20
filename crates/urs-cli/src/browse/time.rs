@@ -171,27 +171,33 @@ pub fn account_age(created_utc: f64) -> String {
     }
 }
 
-/// Formats a Unix timestamp as a human-readable date (e.g. "March 15, 2020").
-#[must_use]
-#[allow(clippy::cast_possible_truncation)]
-pub fn format_date(created_utc: f64) -> String {
-    const MONTHS: [&str; 12] = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ];
+/// Month names for formatting dates.
+const MONTHS: [&str; 12] = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
 
+/// Decomposed date parts from a Unix timestamp.
+struct DateParts {
+    day: i64,
+    month: usize,
+    year: i32,
+}
+
+/// Breaks a Unix timestamp into date components.
+#[allow(clippy::cast_possible_truncation)]
+fn decompose(created_utc: f64) -> DateParts {
     let secs = created_utc as i64;
-    // Days since Unix epoch.
     let mut days = secs / 86400;
     let mut year = 1970i32;
 
@@ -233,9 +239,18 @@ pub fn format_date(created_utc: f64) -> String {
         days -= md;
     }
 
-    let day = days + 1;
+    DateParts {
+        day: days + 1,
+        month,
+        year,
+    }
+}
 
-    format!("{} {day}, {year}", MONTHS[month])
+/// Formats a Unix timestamp as a human-readable date (e.g. "March 15, 2020").
+#[must_use]
+pub fn format_date(created_utc: f64) -> String {
+    let d = decompose(created_utc);
+    format!("{} {}, {}", MONTHS[d.month], d.day, d.year)
 }
 
 /// Formats a number with commas (e.g. 1234567 -> "1,234,567").

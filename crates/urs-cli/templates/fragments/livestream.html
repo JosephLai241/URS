@@ -20,7 +20,7 @@
     <span class="event-icon">{{ event.icon|safe }}</span>
     <div class="event-content">
       <div class="event-header">
-        <span class="event-time">{{ event.time_str }}</span>
+        <span class="event-time" data-utc="{{ event.time_utc }}">{{ event.time_str }}</span>
         <span class="comment-author">u/{{ event.author }}</span>
         {% if !event.subreddit.is_empty() %}
         <span class="text-muted">&middot; r/{{ event.subreddit }}</span>
