@@ -95,6 +95,8 @@ pub struct RedditorFragment {
     pub breadcrumbs: Vec<BreadcrumbItem>,
     /// Formatted comment karma.
     pub comment_karma: String,
+    /// Formatted account creation date (e.g. "March 15, 2020").
+    pub created_date: String,
     /// Relative path to the scrape file (used for JSON inspector API calls).
     pub file_path: String,
     /// Whether the Redditor has a verified email.

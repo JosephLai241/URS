@@ -52,6 +52,8 @@ pub struct SubmissionView {
     pub subreddit: String,
     /// Relative timestamp (e.g. "2 hours ago").
     pub time_ago: String,
+    /// Raw UTC timestamp for client-side tooltip formatting.
+    pub time_utc: f64,
     /// Post title.
     pub title: String,
     /// Formatted upvote ratio (e.g. "96%").
@@ -86,6 +88,8 @@ pub struct LivestreamEventView {
     pub subreddit: String,
     /// Formatted timestamp (time only, e.g. "14:30:45").
     pub time_str: String,
+    /// Raw UTC timestamp for client-side tooltip formatting.
+    pub time_utc: f64,
     /// Submission title, if this is a submission event.
     pub title: Option<String>,
 }
@@ -138,6 +142,7 @@ pub fn render_rich_html(
                         .unwrap_or_default(),
                     subreddit: p.subreddit.clone(),
                     time_ago: time::relative_time(p.created_utc),
+                    time_utc: p.created_utc,
                     title: p.title.clone(),
                     upvote_ratio: format!("{:.0}%", p.upvote_ratio * 100.0),
                 })

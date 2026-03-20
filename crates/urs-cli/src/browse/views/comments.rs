@@ -39,6 +39,7 @@ pub fn render_comments_view(
             .unwrap_or_default(),
         subreddit: submission.subreddit.clone(),
         time_ago: time::relative_time(submission.created_utc),
+        time_utc: submission.created_utc,
         title: submission.title.clone(),
         upvote_ratio: format!("{:.0}%", submission.upvote_ratio * 100.0),
     };
@@ -131,7 +132,8 @@ fn write_comment_open(
 
     write!(
         out,
-        r#" <span class="comment-score">{score} points</span><span class="comment-time">&middot; {time_ago}</span><button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button><template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template></div><div class="comment-body">{body}</div>"#
+        r#" <span class="comment-score">{score} points</span><span class="comment-time" data-utc="{utc}">&middot; {time_ago}</span><button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button><template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template></div><div class="comment-body">{body}</div>"#,
+        utc = comment.created_utc
     )?;
 
     Ok(())

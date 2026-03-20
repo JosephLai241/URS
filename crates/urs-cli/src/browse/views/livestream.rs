@@ -63,6 +63,7 @@ pub fn render_livestream_html(
                 json_html: highlight_json(&e.data),
                 subreddit,
                 time_str: time::time_only(created_utc),
+                time_utc: created_utc,
                 title,
             }
         })

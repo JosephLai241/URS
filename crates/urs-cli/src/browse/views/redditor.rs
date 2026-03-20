@@ -185,7 +185,7 @@ fn write_comments_tab(comments: &[urs_core::models::Comment], html: &mut String)
                     <div class="comment-header">
                         <span class="comment-author">u/{author}</span>
                         <span class="comment-score">{score} points</span>
-                        <span class="comment-time">{time}</span>
+                        <span class="comment-time" data-utc="{utc}">{time}</span>
                         <span class="text-muted">r/{sub}</span>
                         <button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button>
                         <template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template>
@@ -196,6 +196,7 @@ fn write_comments_tab(comments: &[urs_core::models::Comment], html: &mut String)
             author = c.author,
             score = time::format_score(c.score),
             time = time::relative_time(c.created_utc),
+            utc = c.created_utc,
             sub = subreddit,
         )?;
     }
@@ -238,7 +239,7 @@ fn write_submissions_tab(subs: &[urs_core::models::Submission], html: &mut Strin
                         <span class="subreddit">r/{sub}</span>
                         <span>Posted by u/{author}</span>
                         <span>&middot;</span>
-                        <span>{time}</span>
+                        <span data-utc="{utc}">{time}</span>
                         <button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button>
                         <template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template>
                     </div>
@@ -250,6 +251,7 @@ fn write_submissions_tab(subs: &[urs_core::models::Submission], html: &mut Strin
             sub = p.subreddit,
             author = p.author,
             time = time::relative_time(p.created_utc),
+            utc = p.created_utc,
         )?;
     }
 
