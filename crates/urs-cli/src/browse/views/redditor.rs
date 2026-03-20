@@ -259,6 +259,9 @@ fn write_submissions_tab(subs: &[urs_core::models::Submission], html: &mut Strin
 }
 
 /// Renders a generic JSON value tab for a Redditor profile.
+///
+/// Attempts to deserialize values as submissions or comments for rich rendering, falling back to
+/// raw JSON if neither works.
 fn render_json_tab(interactions: &urs_core::models::RedditorInteractions, tab: &str) -> String {
     let data = match tab {
         "hot" => &interactions.hot,
@@ -284,11 +287,66 @@ fn render_json_tab(interactions: &urs_core::models::RedditorInteractions, tab: &
 
     let mut html = String::new();
 
-    if let Err(e) = write_json_tab(items, &mut html) {
-        tracing::error!(error = %e, "Failed to render redditor JSON tab");
+    // Detect item type from the first item and render as rich cards.
+    let rich_result: Option<fmt::Result> = match detect_json_item_kind(&items[0]) {
+        JsonItemKind::Comment => {
+            let comments: Vec<urs_core::models::Comment> = deserialize_items(items);
+            Some(write_comments_tab(&comments, &mut html))
+        }
+        JsonItemKind::Submission => {
+            let submissions: Vec<urs_core::models::Submission> = deserialize_items(items);
+            Some(write_submissions_tab(&submissions, &mut html))
+        }
+        JsonItemKind::Unknown => None,
+    };
+
+    if let Some(Err(e)) = rich_result {
+        tracing::error!(error = %e, "Failed to render rich JSON tab");
+    }
+
+    // Fallback to raw JSON if rich rendering produced nothing.
+    if html.is_empty() {
+        if let Err(e) = write_json_tab(items, &mut html) {
+            tracing::error!(error = %e, "Failed to render redditor JSON tab");
+        }
     }
 
     html
+}
+
+/// Detected kind of a JSON item in a Redditor tab.
+enum JsonItemKind {
+    /// Item has `body`, so it's probably a comment.
+    Comment,
+    /// Item has `title`, so it's probably a submission.
+    Submission,
+    /// Item has an unrecognized structure.
+    Unknown,
+}
+
+/// Inspects a JSON value to determine if it represents a submission or comment.
+fn detect_json_item_kind(value: &serde_json::Value) -> JsonItemKind {
+    if value.get("title").is_some() {
+        JsonItemKind::Submission
+    } else if value.get("body").is_some() {
+        JsonItemKind::Comment
+    } else {
+        JsonItemKind::Unknown
+    }
+}
+
+/// Deserializes JSON values into typed items, logging and skipping failures.
+fn deserialize_items<T: serde::de::DeserializeOwned>(items: &[serde_json::Value]) -> Vec<T> {
+    items
+        .iter()
+        .filter_map(|v| match serde_json::from_value(v.clone()) {
+            Ok(item) => Some(item),
+            Err(e) => {
+                tracing::warn!(error = %e, "Failed to deserialize JSON tab item");
+                None
+            }
+        })
+        .collect()
 }
 
 /// Writes formatted JSON blocks for a generic Redditor tab.
