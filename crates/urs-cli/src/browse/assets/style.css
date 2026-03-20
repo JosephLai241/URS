@@ -648,6 +648,18 @@ a:hover {
     margin-bottom: 4px;
 }
 
+.profile-username a {
+    border-bottom: 1px solid transparent;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.profile-username a:hover {
+    border-bottom-color: var(--accent-light);
+    color: var(--accent-light);
+}
+
 .profile-stats {
     align-items: center;
     color: var(--text-secondary);
