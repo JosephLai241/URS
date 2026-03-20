@@ -36,6 +36,7 @@ pub struct Submission {
     /// The fullname of this submission (i.e. `t3_abc123`).
     pub name: String,
     /// Whether the submission is NSFW.
+    #[serde(alias = "over_18")]
     pub nsfw: bool,
     /// The number of comments.
     pub num_comments: u32,
