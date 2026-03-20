@@ -171,6 +171,73 @@ pub fn account_age(created_utc: f64) -> String {
     }
 }
 
+/// Formats a Unix timestamp as a human-readable date (e.g. "March 15, 2020").
+#[must_use]
+#[allow(clippy::cast_possible_truncation)]
+pub fn format_date(created_utc: f64) -> String {
+    const MONTHS: [&str; 12] = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+    let secs = created_utc as i64;
+    // Days since Unix epoch.
+    let mut days = secs / 86400;
+    let mut year = 1970i32;
+
+    loop {
+        let days_in_year = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+        if days < days_in_year {
+            break;
+        }
+        days -= days_in_year;
+        year += 1;
+    }
+
+    let is_leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    let month_days = [
+        31,
+        if is_leap { 29 } else { 28 },
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
+
+    let mut month = 0;
+    for (i, &md) in month_days.iter().enumerate() {
+        if days < md {
+            month = i;
+            break;
+        }
+        days -= md;
+    }
+
+    let day = days + 1;
+
+    format!("{} {day}, {year}", MONTHS[month])
+}
+
 /// Formats a number with commas (e.g. 1234567 -> "1,234,567").
 #[must_use]
 pub fn format_number(n: i64) -> String {
