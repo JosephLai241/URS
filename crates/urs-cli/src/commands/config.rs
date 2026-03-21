@@ -56,6 +56,9 @@ pub struct ConfigArgs {
 /// Config subcommands.
 #[derive(Debug, Subcommand)]
 pub enum ConfigAction {
+    /// Delete the config file entirely.
+    Delete,
+
     /// Get a config value.
     Get {
         /// The config key (e.g. "browse.port").
@@ -70,6 +73,12 @@ pub enum ConfigAction {
         /// Print just the directory, not the full file path.
         #[arg(long, default_value_t = false)]
         dir: bool,
+    },
+
+    /// Reset a config key to its default value, or reset all keys.
+    Reset {
+        /// The config key to reset (e.g. "browse.port"). Omit to reset all.
+        key: Option<String>,
     },
 
     /// Set a config value.
@@ -92,6 +101,7 @@ pub enum ConfigAction {
 /// Returns an error if the config file cannot be read, written, or a key is invalid.
 pub fn run(args: ConfigArgs) -> Result<()> {
     match args.action {
+        ConfigAction::Delete => run_delete(),
         ConfigAction::Get { key } => run_get(&key),
         ConfigAction::Init => config::init::run_init(),
         ConfigAction::Path { dir } => {
@@ -102,6 +112,7 @@ pub fn run(args: ConfigArgs) -> Result<()> {
             }
             Ok(())
         }
+        ConfigAction::Reset { key } => run_reset(key.as_deref()),
         ConfigAction::Set { key, value } => run_set(&key, &value),
         ConfigAction::Show => run_show(),
     }
@@ -136,6 +147,67 @@ fn run_set(key: &str, value: &str) -> Result<()> {
         "=".dimmed(),
         value
     );
+
+    Ok(())
+}
+
+/// Handles `urs config delete`.
+fn run_delete() -> Result<()> {
+    let path = config::config_path();
+
+    if !path.exists() {
+        println!("{}", "No config file found.".dimmed());
+        return Ok(());
+    }
+
+    std::fs::remove_file(&path)?;
+
+    println!(
+        "{} Deleted {}",
+        "✓".bright_green().bold(),
+        path.display().to_string().dimmed()
+    );
+
+    Ok(())
+}
+
+/// Handles `urs config reset [key]`.
+fn run_reset(key: Option<&str>) -> Result<()> {
+    if let Some(key) = key {
+        if !config::CONFIG_KEYS.contains(&key) {
+            bail!("Unknown config key: {key}");
+        }
+
+        let mut cfg = config::load_config()?;
+        let defaults = config::UrsConfig::default();
+
+        let default_value = config::get_value(&defaults, key);
+        if let Some(ref val) = default_value {
+            config::set_value(&mut cfg, key, val)?;
+        } else {
+            config::reset_key(&mut cfg, key);
+        }
+
+        config::save_config(&cfg)?;
+
+        let display = default_value.unwrap_or_else(|| "(not set)".to_string());
+        println!(
+            "{} {} {} {}",
+            "✓".bright_green().bold(),
+            key.bold(),
+            "reset to".dimmed(),
+            display
+        );
+    } else {
+        let cfg = config::UrsConfig::default();
+        config::save_config(&cfg)?;
+
+        println!(
+            "{} {}",
+            "✓".bright_green().bold(),
+            "All settings reset to defaults".bold()
+        );
+    }
 
     Ok(())
 }
