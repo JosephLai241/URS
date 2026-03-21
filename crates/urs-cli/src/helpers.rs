@@ -89,6 +89,7 @@ fn resolve_credentials() -> Result<Credentials> {
 ///
 /// The `URS_API_TOKEN` environment variable takes precedence over the `api.token` value in
 /// `config.toml`. Returns `None` if neither is set.
+#[cfg(feature = "api")]
 #[must_use]
 pub fn resolve_api_token() -> Option<String> {
     let cfg = config::load_config().unwrap_or_default();
