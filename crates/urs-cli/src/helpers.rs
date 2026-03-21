@@ -10,29 +10,86 @@ use tracing::{debug, info};
 use urs_core::auth::Credentials;
 use urs_core::client::RedditClient;
 
-/// Creates an authenticated Reddit client from environment variables.
+use crate::config;
+
+/// Creates an authenticated Reddit client.
 ///
-/// Loads credentials from the `.env` file (via `dotenvy`) and environment variables, then
-/// authenticates with Reddit's `OAuth2` API.
+/// Resolves credentials with the following precedence (highest to lowest):
+/// 1. Environment variables (`CLIENT_ID`, `CLIENT_SECRET`, `REDDIT_USERNAME`, `REDDIT_PASSWORD`)
+/// 2. Config file (`~/.config/urs/config.toml` or platform equivalent)
+///
+/// If authentication fails, prints a hint to run `urs config init`.
 ///
 /// # Errors
 ///
-/// Returns an error if:
-/// - Required environment variables are missing
-/// - `OAuth2` authentication fails
+/// Returns an error if credentials are incomplete or `OAuth2` authentication fails.
 pub async fn create_client() -> Result<RedditClient> {
-    debug!("Loading Reddit credentials from environment");
-    let credentials =
-        Credentials::from_env().context("Failed to load Reddit credentials from environment")?;
+    debug!("Resolving Reddit credentials");
+
+    let credentials = resolve_credentials().inspect_err(|_| print_auth_hint())?;
 
     debug!("Authenticating with Reddit API");
+
     let client = RedditClient::new(credentials)
         .await
+        .inspect_err(|_| print_auth_hint())
         .context("Failed to authenticate with Reddit")?;
 
     info!("Authenticated with Reddit API");
 
     Ok(client)
+}
+
+/// Resolves credentials from config file + environment variable overrides.
+fn resolve_credentials() -> Result<Credentials> {
+    let cfg = config::load_config().unwrap_or_default();
+
+    // Environment variables override config file values.
+    let client_id = std::env::var("CLIENT_ID")
+        .ok()
+        .or(cfg.credentials.client_id);
+    let client_secret = std::env::var("CLIENT_SECRET")
+        .ok()
+        .or(cfg.credentials.client_secret);
+    let username = std::env::var("REDDIT_USERNAME")
+        .ok()
+        .or(cfg.credentials.username);
+    let password = std::env::var("REDDIT_PASSWORD")
+        .ok()
+        .or(cfg.credentials.password);
+
+    let client_id = client_id.context("Missing CLIENT_ID (set via env var or urs config init)")?;
+    let client_secret =
+        client_secret.context("Missing CLIENT_SECRET (set via env var or urs config init)")?;
+    let username =
+        username.context("Missing REDDIT_USERNAME (set via env var or urs config init)")?;
+    let password =
+        password.context("Missing REDDIT_PASSWORD (set via env var or urs config init)")?;
+
+    let user_agent = std::env::var("USER_AGENT").unwrap_or_else(|_| {
+        format!(
+            "{}:com.{username}.urs:v{} (by /u/{username})",
+            std::env::consts::OS,
+            env!("CARGO_PKG_VERSION"),
+        )
+    });
+
+    Ok(Credentials::new(
+        client_id,
+        client_secret,
+        username,
+        password,
+        user_agent,
+    ))
+}
+
+/// Prints a hint to run `urs config init` when authentication fails.
+fn print_auth_hint() {
+    eprintln!(
+        "\n{} Run {} to configure your Reddit API credentials.",
+        "hint:".bright_yellow().bold(),
+        "urs config init".bold(),
+    );
 }
 
 /// Creates a styled spinner progress bar with the given message.
