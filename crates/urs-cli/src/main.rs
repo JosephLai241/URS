@@ -6,6 +6,7 @@
 
 mod browse;
 mod commands;
+mod config;
 mod helpers;
 mod tui;
 
