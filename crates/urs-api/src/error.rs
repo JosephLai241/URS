@@ -6,6 +6,7 @@
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use serde::Serialize;
+use tracing::warn;
 
 /// An API error that maps [`urs_core::Error`] variants to HTTP status codes.
 ///
@@ -37,6 +38,8 @@ struct ErrorBody {
 
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
+        warn!(error = %self.0, "API error");
+
         let (status, message) = match &self.0 {
             urs_core::Error::NotFound(msg) => (StatusCode::NOT_FOUND, msg.clone()),
             urs_core::Error::Forbidden(msg) => (StatusCode::FORBIDDEN, msg.clone()),
