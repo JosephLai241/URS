@@ -10,6 +10,8 @@ pub mod config;
 pub mod livestream;
 pub mod log;
 pub mod redditor;
+#[cfg(feature = "api")]
+pub mod serve;
 pub mod subreddit;
 
 use clap::{Parser, Subcommand};
@@ -70,6 +72,10 @@ pub enum Commands {
     /// Scrape a Redditor's profile and interactions.
     Redditor(redditor::RedditorArgs),
 
+    /// Start the REST API server (requires the `api` feature).
+    #[cfg(feature = "api")]
+    Serve(serve::ServeArgs),
+
     /// Scrape posts from a Subreddit.
     Subreddit(subreddit::SubredditArgs),
 }
@@ -92,6 +98,8 @@ pub async fn dispatch(cli: Cli) -> anyhow::Result<()> {
         Commands::Livestream(args) => livestream::run(args).await,
         Commands::Log(args) => log::run(args).await,
         Commands::Redditor(args) => redditor::run(args).await,
+        #[cfg(feature = "api")]
+        Commands::Serve(args) => serve::run(args).await,
         Commands::Subreddit(args) => subreddit::run(args).await,
     }
 }
