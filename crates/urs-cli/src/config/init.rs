@@ -129,13 +129,14 @@ fn prompt_scraping_settings(config: &mut UrsConfig) -> Result<()> {
         .required(false)
         .interact()?;
 
-    let raw = if scrapes_dir.is_empty() {
-        std::path::PathBuf::from(&default_dir)
+    let raw_str = if scrapes_dir.is_empty() {
+        &default_dir
     } else {
-        std::path::PathBuf::from(&scrapes_dir)
+        &scrapes_dir
     };
 
-    // Resolve relative paths to absolute so the config works from any cwd.
+    // Expand tilde and resolve relative paths to absolute so the config works from any cwd.
+    let raw = super::expand_tilde(raw_str);
     let path = if raw.is_absolute() {
         raw
     } else {
