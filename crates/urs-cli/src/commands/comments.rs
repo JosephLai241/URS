@@ -9,10 +9,13 @@ use anyhow::{Result, bail};
 use clap::Args;
 use colored::Colorize;
 use tracing::info;
-use urs_core::export::{JsonExporter, comments_filename, ensure_dir, output_dir};
+use urs_core::export::{
+    JsonExporter, comments_filename, ensure_dir, output_dir, output_dir_with_base,
+};
 use urs_core::models::CommentsResult;
 use urs_core::scrapers::CommentsScraper;
 
+use crate::config;
 use crate::helpers::{create_client, create_spinner};
 
 /// Arguments for the `comments` subcommand.
@@ -118,7 +121,13 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
     let title = extract_title_from_url(&args.url);
     let all_comments = args.count == 0;
 
-    let dir = args.output.unwrap_or_else(|| output_dir("comments"));
+    let cfg = config::load_config().unwrap_or_default();
+    let dir = args.output.unwrap_or_else(|| {
+        cfg.scraping
+            .scrapes_dir
+            .as_ref()
+            .map_or_else(|| output_dir("comments"), |base| output_dir_with_base(base, "comments"))
+    });
     ensure_dir(&dir)?;
     let filename = comments_filename(&title, total, all_comments, args.raw);
     let path = dir.join(format!("{filename}.json"));

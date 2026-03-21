@@ -9,6 +9,7 @@ use clap::Args;
 use colored::Colorize;
 
 use crate::browse;
+use crate::config;
 
 /// Arguments for the `browse` command.
 #[derive(Debug, Args)]
@@ -40,20 +41,20 @@ use crate::browse;
   raw JSON data for that specific object.")]
 pub struct BrowseArgs {
     /// Address to bind the web server on.
-    #[arg(short, long, default_value = "127.0.0.1")]
-    pub address: String,
+    #[arg(short, long)]
+    pub address: Option<String>,
 
     /// Don't automatically open the browser.
     #[arg(long, default_value_t = false)]
     pub no_open: bool,
 
     /// Port to bind the web server on.
-    #[arg(short, long, default_value_t = 8080)]
-    pub port: u16,
+    #[arg(short, long)]
+    pub port: Option<u16>,
 
     /// Root directory containing scraped data.
-    #[arg(short = 'd', long, default_value = "scrapes")]
-    pub scrapes_dir: PathBuf,
+    #[arg(short = 'd', long)]
+    pub scrapes_dir: Option<PathBuf>,
 }
 
 /// Runs the browse command.
@@ -64,10 +65,22 @@ pub struct BrowseArgs {
 ///
 /// Returns an error if the server fails to bind or an I/O error occurs.
 pub async fn run(args: BrowseArgs) -> anyhow::Result<()> {
-    let scrapes_dir = args.scrapes_dir.canonicalize().unwrap_or_else(|_| {
+    let cfg = config::load_config().unwrap_or_default();
+
+    let address = args
+        .address
+        .unwrap_or_else(|| cfg.browse.address.clone());
+    let port = args.port.unwrap_or(cfg.browse.port);
+    let open_browser = !args.no_open && cfg.browse.auto_open;
+    let raw_dir = args
+        .scrapes_dir
+        .or_else(|| cfg.scraping.scrapes_dir.clone())
+        .unwrap_or_else(|| PathBuf::from("scrapes"));
+
+    let scrapes_dir = raw_dir.canonicalize().unwrap_or_else(|_| {
         std::env::current_dir()
             .expect("Failed to get current directory")
-            .join(&args.scrapes_dir)
+            .join(&raw_dir)
     });
 
     if !scrapes_dir.is_dir() {
@@ -80,7 +93,7 @@ pub async fn run(args: BrowseArgs) -> anyhow::Result<()> {
     println!(
         "{} Launching browse server at {}",
         "▸".cyan(),
-        format!("http://{}:{}", args.address, args.port)
+        format!("http://{address}:{port}")
             .bold()
             .underline()
     );
@@ -92,16 +105,16 @@ pub async fn run(args: BrowseArgs) -> anyhow::Result<()> {
     println!("  {} Ctrl+C to stop\n", "Tip:".dimmed());
 
     tracing::info!(
-        address = %args.address,
-        port = args.port,
+        address = %address,
+        port = port,
         scrapes_dir = %scrapes_dir.display(),
         "Starting browse server"
     );
 
     browse::server::run(browse::server::ServerConfig {
-        address: args.address,
-        open_browser: !args.no_open,
-        port: args.port,
+        address,
+        open_browser,
+        port,
         scrapes_dir,
     })
     .await

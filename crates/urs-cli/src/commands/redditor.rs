@@ -9,9 +9,10 @@ use anyhow::{Result, bail};
 use clap::Args;
 use colored::Colorize;
 use tracing::info;
-use urs_core::export::{JsonExporter, ensure_dir, output_dir, redditor_filename};
+use urs_core::export::{JsonExporter, ensure_dir, output_dir, output_dir_with_base, redditor_filename};
 use urs_core::scrapers::RedditorScraper;
 
+use crate::config;
 use crate::helpers::{create_client, create_spinner};
 
 /// Arguments for the `redditor` subcommand.
@@ -42,9 +43,8 @@ pub struct RedditorArgs {
     /// Reddit username (without the `u/` prefix).
     pub username: String,
 
-    /// Number of items to scrape per category.
-    #[arg(default_value_t = 25)]
-    pub count: usize,
+    /// Number of items to scrape per category (default: 25, or config value).
+    pub count: Option<usize>,
 
     /// Custom output directory.
     #[arg(short, long)]
@@ -63,17 +63,24 @@ pub struct RedditorArgs {
 /// - The Reddit API request fails
 /// - File export fails
 pub async fn run(args: RedditorArgs) -> Result<()> {
+    let cfg = config::load_config().unwrap_or_default();
+
+    let count = args
+        .count
+        .or_else(|| cfg.scraping.default_limit.map(|n| n as usize))
+        .unwrap_or(25);
+
     println!(
         "{} {} {} {}",
         "Scraping".bright_green(),
         format!("u/{}", args.username).bold(),
         "—".dimmed(),
-        format!("{} items per category", args.count).bright_cyan(),
+        format!("{count} items per category").bright_cyan(),
     );
 
     info!(
         username = %args.username,
-        count = args.count,
+        count = count,
         "Starting redditor scrape"
     );
 
@@ -87,14 +94,19 @@ pub async fn run(args: RedditorArgs) -> Result<()> {
     }
 
     spinner.set_message(format!("Fetching interactions for u/{}...", args.username));
-    let interactions = scraper.all_interactions(&args.username, args.count).await?;
+    let interactions = scraper.all_interactions(&args.username, count).await?;
 
     spinner.set_message("Exporting results...");
 
-    let dir = args.output.unwrap_or_else(|| output_dir("redditors"));
+    let dir = args.output.unwrap_or_else(|| {
+        cfg.scraping
+            .scrapes_dir
+            .as_ref()
+            .map_or_else(|| output_dir("redditors"), |base| output_dir_with_base(base, "redditors"))
+    });
     ensure_dir(&dir)?;
 
-    let filename = redditor_filename(&args.username, args.count);
+    let filename = redditor_filename(&args.username, count);
     let path = dir.join(format!("{filename}.json"));
 
     JsonExporter::new().export_to_file(&interactions, &path)?;

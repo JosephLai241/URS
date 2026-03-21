@@ -11,10 +11,14 @@ use colored::Colorize;
 use serde::Serialize;
 use tracing::{debug, info, warn};
 use urs_core::client::endpoints::TimeFilter;
-use urs_core::export::{CsvExporter, JsonExporter, ensure_dir, output_dir, subreddit_filename};
+use urs_core::export::{
+    CsvExporter, JsonExporter, ensure_dir, output_dir, output_dir_with_base, subreddit_filename,
+};
 use urs_core::models::{Submission, SubredditRules};
 use urs_core::scrapers::SubredditScraper;
 
+use crate::config;
+use crate::config::ExportFormat;
 use crate::helpers::{create_client, create_spinner};
 
 /// Arguments for the `subreddit` subcommand.
@@ -58,9 +62,8 @@ pub struct SubredditArgs {
     /// Sort category for posts.
     pub category: Category,
 
-    /// Number of posts to scrape.
-    #[arg(default_value_t = 25)]
-    pub count: usize,
+    /// Number of posts to scrape (default: 25, or config value).
+    pub count: Option<usize>,
 
     /// Time filter for top/controversial categories.
     #[arg(short, long, default_value = "all")]
@@ -149,6 +152,14 @@ struct SubredditOutput {
 /// - The Reddit API request fails
 /// - File export fails
 pub async fn run(args: SubredditArgs) -> Result<()> {
+    let cfg = config::load_config().unwrap_or_default();
+
+    let count = args
+        .count
+        .or_else(|| cfg.scraping.default_limit.map(|n| n as usize))
+        .unwrap_or(25);
+    let use_csv = args.csv || matches!(cfg.scraping.default_format, ExportFormat::Csv);
+
     let category_str = format!("{:?}", args.category).to_lowercase();
 
     if matches!(args.category, Category::Search) && args.query.is_none() {
@@ -163,13 +174,13 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         "—".dimmed(),
         category_str.bright_yellow(),
         "—".dimmed(),
-        format!("{} posts", args.count).bright_cyan(),
+        format!("{count} posts").bright_cyan(),
     );
 
     info!(
         subreddit = %args.subreddit,
         category = %category_str,
-        count = args.count,
+        count = count,
         "Starting subreddit scrape"
     );
 
@@ -189,19 +200,19 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
 
     let time = args.time.to_core();
     let posts = match args.category {
-        Category::Hot => scraper.hot(&args.subreddit, args.count).await?,
-        Category::New => scraper.new_posts(&args.subreddit, args.count).await?,
-        Category::Top => scraper.top(&args.subreddit, time, args.count).await?,
+        Category::Hot => scraper.hot(&args.subreddit, count).await?,
+        Category::New => scraper.new_posts(&args.subreddit, count).await?,
+        Category::Top => scraper.top(&args.subreddit, time, count).await?,
         Category::Controversial => {
             scraper
-                .controversial(&args.subreddit, time, args.count)
+                .controversial(&args.subreddit, time, count)
                 .await?
         }
-        Category::Rising => scraper.rising(&args.subreddit, args.count).await?,
+        Category::Rising => scraper.rising(&args.subreddit, count).await?,
         Category::Search => {
             let query = args.query.as_deref().expect("validated above");
             scraper
-                .search(&args.subreddit, query, Some(time), args.count)
+                .search(&args.subreddit, query, Some(time), count)
                 .await?
         }
     };
@@ -221,7 +232,12 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         None
     };
 
-    let dir = args.output.unwrap_or_else(|| output_dir("subreddits"));
+    let dir = args.output.unwrap_or_else(|| {
+        cfg.scraping
+            .scrapes_dir
+            .as_ref()
+            .map_or_else(|| output_dir("subreddits"), |base| output_dir_with_base(base, "subreddits"))
+    });
     ensure_dir(&dir)?;
 
     let base_name = subreddit_filename(
@@ -232,10 +248,26 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         args.rules,
     );
 
-    let format = if args.csv { "CSV" } else { "JSON" };
+    export_results(&dir, &base_name, use_csv, posts, rules, &spinner)?;
+
+    info!("Subreddit scrape complete");
+
+    Ok(())
+}
+
+/// Exports scrape results to CSV or JSON.
+fn export_results(
+    dir: &std::path::Path,
+    base_name: &str,
+    use_csv: bool,
+    posts: Vec<Submission>,
+    rules: Option<SubredditRules>,
+    spinner: &indicatif::ProgressBar,
+) -> Result<()> {
+    let format = if use_csv { "CSV" } else { "JSON" };
     debug!(format = format, "Exporting results");
 
-    if args.csv {
+    if use_csv {
         let path = dir.join(format!("{base_name}.csv"));
         CsvExporter::new().export_submissions(&posts, &path)?;
         spinner.finish_and_clear();
@@ -254,8 +286,6 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         spinner.finish_and_clear();
         print_summary(&path, 0);
     }
-
-    info!("Subreddit scrape complete");
 
     Ok(())
 }
