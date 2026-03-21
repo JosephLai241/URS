@@ -33,11 +33,11 @@ const EXPIRY_BUFFER: Duration = Duration::from_secs(60);
 /// # Environment Variables
 ///
 /// The [`Credentials::from_env`] method reads these variables:
-/// - `CLIENT_ID` — the app's client ID (14-character string)
-/// - `CLIENT_SECRET` — the app's secret key
-/// - `REDDIT_USERNAME` — the Reddit account username
-/// - `REDDIT_PASSWORD` — the Reddit account password
-/// - `USER_AGENT` — optional custom user agent string
+/// - `URS_CLIENT_ID` — the app's client ID (14-character string)
+/// - `URS_CLIENT_SECRET` — the app's secret key
+/// - `URS_REDDIT_USERNAME` — the Reddit account username
+/// - `URS_REDDIT_PASSWORD` — the Reddit account password
+/// - `URS_USER_AGENT` — optional custom user agent string
 ///   (format: `<platform>:<app ID>:<version> (by /u/<username>)`)
 #[derive(Debug, Clone)]
 pub struct Credentials {
@@ -82,18 +82,18 @@ impl Credentials {
 
     /// Creates credentials from environment variables.
     ///
-    /// Reads `CLIENT_ID`, `CLIENT_SECRET`, `REDDIT_USERNAME`, `REDDIT_PASSWORD`,
-    /// and optionally `USER_AGENT` from the environment.
+    /// Reads `URS_CLIENT_ID`, `URS_CLIENT_SECRET`, `URS_REDDIT_USERNAME`, `URS_REDDIT_PASSWORD`,
+    /// and optionally `URS_USER_AGENT` from the environment.
     ///
     /// # Errors
     ///
     /// Returns an error if any required environment variable is missing.
     pub fn from_env() -> Result<Self> {
-        let client_id = Self::require_env("CLIENT_ID")?;
-        let client_secret = Self::require_env("CLIENT_SECRET")?;
-        let username = Self::require_env("REDDIT_USERNAME")?;
-        let password = Self::require_env("REDDIT_PASSWORD")?;
-        let user_agent = std::env::var("USER_AGENT").unwrap_or_else(|_| {
+        let client_id = Self::require_env("URS_CLIENT_ID")?;
+        let client_secret = Self::require_env("URS_CLIENT_SECRET")?;
+        let username = Self::require_env("URS_REDDIT_USERNAME")?;
+        let password = Self::require_env("URS_REDDIT_PASSWORD")?;
+        let user_agent = std::env::var("URS_USER_AGENT").unwrap_or_else(|_| {
             format!(
                 "{}:com.{username}.urs:v{} (by /u/{username})",
                 std::env::consts::OS,

@@ -9,6 +9,7 @@ version = "4.0.0"
 
 [dependencies]
 anyhow = "1"
+base64.workspace = true
 askama.workspace = true
 axum.workspace = true
 chrono.workspace = true
@@ -22,6 +23,7 @@ futures.workspace = true
 indicatif.workspace = true
 mime_guess.workspace = true
 open = "5.3.3"
+rand.workspace = true
 pulldown-cmark.workspace = true
 ratatui.workspace = true
 reqwest = { version = "0.12", features = ["blocking", "json", "rustls-tls"] }

@@ -3,8 +3,10 @@
 //! Provides subcommands for initializing, viewing, and modifying URS configuration.
 
 use anyhow::{Result, bail};
+use base64::Engine;
 use clap::{Args, Subcommand};
 use colored::Colorize;
+use rand::RngCore;
 use tabled::{Table, Tabled, settings::Style};
 
 use crate::config;
@@ -37,6 +39,7 @@ use crate::config;
 
 \x1b[1;4mAvailable keys:\x1b[0m
 
+  api.token                     Bearer token for API authentication
   browse.address                Browse server bind address (default: 127.0.0.1)
   browse.auto_open              Auto-open browser on browse (default: true)
   browse.port                   Browse server port (default: 8080)
@@ -58,6 +61,11 @@ pub struct ConfigArgs {
 pub enum ConfigAction {
     /// Delete the config file entirely.
     Delete,
+
+    /// Generate a cryptographically secure API token and save it to config.
+    ///
+    /// Running this command again will replace any existing API token.
+    GenerateApiToken,
 
     /// Get a config value.
     Get {
@@ -102,6 +110,7 @@ pub enum ConfigAction {
 pub fn run(args: ConfigArgs) -> Result<()> {
     match args.action {
         ConfigAction::Delete => run_delete(),
+        ConfigAction::GenerateApiToken => run_generate_api_token(),
         ConfigAction::Get { key } => run_get(&key),
         ConfigAction::Init => config::init::run_init(),
         ConfigAction::Path { dir } => {
@@ -116,6 +125,36 @@ pub fn run(args: ConfigArgs) -> Result<()> {
         ConfigAction::Set { key, value } => run_set(&key, &value),
         ConfigAction::Show => run_show(),
     }
+}
+
+/// Token length in bytes (32 bytes = 256 bits of entropy).
+const TOKEN_BYTES: usize = 32;
+
+/// Handles `urs config generate-api-token`.
+fn run_generate_api_token() -> Result<()> {
+    let mut bytes = [0u8; TOKEN_BYTES];
+    rand::rng().fill_bytes(&mut bytes);
+    let token = base64::engine::general_purpose::URL_SAFE_NO_PAD.encode(bytes);
+
+    let mut cfg = config::load_config()?;
+    cfg.api.token = Some(token.clone());
+    config::save_config(&cfg)?;
+
+    println!(
+        "{} Generated API token and saved to config\n",
+        "✓".bright_green().bold(),
+    );
+    println!("  {token}\n");
+    println!(
+        "{}",
+        "Include this token in API requests as:".dimmed()
+    );
+    println!(
+        "  {}",
+        format!("Authorization: Bearer {token}").bold()
+    );
+
+    Ok(())
 }
 
 /// Handles `urs config get <key>`.

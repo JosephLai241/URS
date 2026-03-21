@@ -94,6 +94,9 @@ pub fn save_config(config: &UrsConfig) -> Result<()> {
 /// Top-level URS configuration.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct UrsConfig {
+    /// REST API server settings.
+    #[serde(default)]
+    pub api: ApiConfig,
     /// Browse server settings.
     #[serde(default)]
     pub browse: BrowseConfig,
@@ -103,6 +106,16 @@ pub struct UrsConfig {
     /// Scraping defaults.
     #[serde(default)]
     pub scraping: ScrapingConfig,
+}
+
+/// REST API server settings.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct ApiConfig {
+    /// Bearer token for API authentication.
+    ///
+    /// When set, all API endpoints (except `/api/health`) require an
+    /// `Authorization: Bearer <token>` header.
+    pub token: Option<String>,
 }
 
 /// Reddit `OAuth2` API credentials.
@@ -219,6 +232,7 @@ pub fn expand_tilde(path: &str) -> PathBuf {
 
 /// All recognized config keys for `get`/`set` operations.
 pub const CONFIG_KEYS: &[&str] = &[
+    "api.token",
     "browse.address",
     "browse.auto_open",
     "browse.port",
@@ -237,6 +251,7 @@ pub const CONFIG_KEYS: &[&str] = &[
 #[must_use]
 pub fn get_value(config: &UrsConfig, key: &str) -> Option<String> {
     match key {
+        "api.token" => config.api.token.clone(),
         "browse.address" => Some(config.browse.address.clone()),
         "browse.auto_open" => Some(config.browse.auto_open.to_string()),
         "browse.port" => Some(config.browse.port.to_string()),
@@ -262,6 +277,7 @@ pub fn get_value(config: &UrsConfig, key: &str) -> Option<String> {
 /// Returns an error if the key is unrecognized or the value is invalid.
 pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
     match key {
+        "api.token" => config.api.token = Some(value.to_string()),
         "browse.address" => config.browse.address = value.to_string(),
         "browse.auto_open" => {
             config.browse.auto_open = value
@@ -324,6 +340,7 @@ pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
 /// value instead.
 pub fn reset_key(config: &mut UrsConfig, key: &str) {
     match key {
+        "api.token" => config.api.token = None,
         "credentials.client_id" => config.credentials.client_id = None,
         "credentials.client_secret" => config.credentials.client_secret = None,
         "credentials.password" => config.credentials.password = None,
@@ -337,6 +354,30 @@ pub fn reset_key(config: &mut UrsConfig, key: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn get_set_api_token() {
+        let mut config = UrsConfig::default();
+
+        assert!(get_value(&config, "api.token").is_none());
+
+        set_value(&mut config, "api.token", "my-secret").unwrap();
+
+        assert_eq!(
+            get_value(&config, "api.token"),
+            Some("my-secret".to_string())
+        );
+    }
+
+    #[test]
+    fn reset_api_token() {
+        let mut config = UrsConfig::default();
+        config.api.token = Some("my-secret".to_string());
+
+        reset_key(&mut config, "api.token");
+
+        assert!(config.api.token.is_none());
+    }
 
     #[test]
     fn default_config_round_trips() {
