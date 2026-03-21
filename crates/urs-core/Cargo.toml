@@ -10,7 +10,6 @@ version = "4.0.0"
 [dependencies]
 base64.workspace = true
 chrono.workspace = true
-dotenvy.workspace = true
 image.workspace = true
 reqwest.workspace = true
 serde.workspace = true

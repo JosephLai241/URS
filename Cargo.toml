@@ -21,7 +21,6 @@ console = "0.15"
 crossterm = { version = "0.28", features = ["event-stream"] }
 csv = "1"
 directories = "6"
-dotenvy = "0.15"
 futures = "0.3"
 image = "0.25"
 indicatif = "0.17"

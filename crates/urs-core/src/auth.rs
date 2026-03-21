@@ -83,16 +83,12 @@ impl Credentials {
     /// Creates credentials from environment variables.
     ///
     /// Reads `CLIENT_ID`, `CLIENT_SECRET`, `REDDIT_USERNAME`, `REDDIT_PASSWORD`,
-    /// and optionally `USER_AGENT` from the environment. If a `.env` file exists in the current
-    /// directory, it will be loaded first.
+    /// and optionally `USER_AGENT` from the environment.
     ///
     /// # Errors
     ///
     /// Returns an error if any required environment variable is missing.
     pub fn from_env() -> Result<Self> {
-        // Load .env file if it exists (ignore errors).
-        let _ = dotenvy::dotenv();
-
         let client_id = Self::require_env("CLIENT_ID")?;
         let client_secret = Self::require_env("CLIENT_SECRET")?;
         let username = Self::require_env("REDDIT_USERNAME")?;
