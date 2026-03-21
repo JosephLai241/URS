@@ -35,15 +35,18 @@ async fn main() -> anyhow::Result<()> {
             .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"))
     };
 
-    // Browse command gets stderr logging so users see server activity in the terminal. Other
-    // commands only log to the file to keep terminal output clean.
-    let is_browse = matches!(cli.command, commands::Commands::Browse(_));
+    // Server commands get stderr logging so users see activity in the terminal. Other commands
+    // only log to the file to keep terminal output clean.
+    let is_server = matches!(cli.command, commands::Commands::Browse(_));
+
+    #[cfg(feature = "api")]
+    let is_server = is_server || matches!(cli.command, commands::Commands::Serve(_));
 
     let registry = tracing_subscriber::registry()
         .with(env_filter)
         .with(tracing_subscriber::fmt::layer().with_writer(non_blocking));
 
-    if is_browse {
+    if is_server {
         registry
             .with(tracing_subscriber::fmt::layer().with_writer(std::io::stderr))
             .init();
