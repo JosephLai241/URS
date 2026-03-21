@@ -85,6 +85,16 @@ fn resolve_credentials() -> Result<Credentials> {
     ))
 }
 
+/// Resolves the API token from environment variable or config file.
+///
+/// The `URS_API_TOKEN` environment variable takes precedence over the `api.token` value in
+/// `config.toml`. Returns `None` if neither is set.
+#[must_use]
+pub fn resolve_api_token() -> Option<String> {
+    let cfg = config::load_config().unwrap_or_default();
+    std::env::var("URS_API_TOKEN").ok().or(cfg.api.token)
+}
+
 /// Prints a hint to run `urs config init` when authentication fails.
 fn print_auth_hint() {
     eprintln!(
