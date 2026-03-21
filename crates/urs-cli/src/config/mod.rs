@@ -258,6 +258,8 @@ pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
         }
         "credentials.client_id" => config.credentials.client_id = Some(value.to_string()),
         "credentials.client_secret" => config.credentials.client_secret = Some(value.to_string()),
+        "credentials.password" => config.credentials.password = Some(value.to_string()),
+        "credentials.username" => config.credentials.username = Some(value.to_string()),
         "scraping.default_format" => {
             config.scraping.default_format = match value {
                 "json" => ExportFormat::Json,
@@ -280,7 +282,12 @@ pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
             config.scraping.scrapes_dir = if value == "none" || value.is_empty() {
                 None
             } else {
-                Some(PathBuf::from(value))
+                let path = PathBuf::from(value);
+                if path.is_absolute() {
+                    Some(path)
+                } else {
+                    Some(std::env::current_dir().unwrap_or_default().join(path))
+                }
             };
         }
         _ => anyhow::bail!("Unknown config key: {key}"),
