@@ -65,7 +65,7 @@
         if (_activeJsonBtn) {
           _activeJsonBtn.textContent = "{} Show JSON";
           var prev = _activeJsonBtn.closest(
-            ".submission-card, .comment-node, .livestream-event",
+            ".submission-card, .comment-node, .livestream-event, .profile-header, .subreddit-card",
           );
           if (prev) prev.classList.remove("inspecting");
         }
@@ -75,7 +75,7 @@
         btn.textContent = "{} Hide JSON";
 
         var item = btn.closest(
-          ".submission-card, .comment-node, .livestream-event",
+          ".submission-card, .comment-node, .livestream-event, .profile-header, .subreddit-card",
         );
         if (item) item.classList.add("inspecting");
 
@@ -114,7 +114,7 @@
           _activeJsonBtn.textContent = "{} Show JSON";
 
           var item = _activeJsonBtn.closest(
-            ".submission-card, .comment-node, .livestream-event",
+            ".submission-card, .comment-node, .livestream-event, .profile-header, .subreddit-card",
           );
 
           if (item) item.classList.remove("inspecting");

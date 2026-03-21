@@ -10,8 +10,18 @@
 </div>
 
 <div class="profile-header">
-  <div class="profile-username">
-    <a href="https://www.reddit.com/user/{{ username }}" target="_blank" rel="noopener">u/{{ username }}</a>
+  <div class="profile-top">
+    {% if avatar_url.is_some() %}
+    <img class="profile-avatar" src="{{ avatar_url.as_ref().unwrap() }}" alt="u/{{ username }}" />
+    {% endif %}
+    <div class="profile-identity">
+      <div class="profile-username">
+        <a href="https://www.reddit.com/user/{{ username }}" target="_blank" rel="noopener">u/{{ username }}</a>
+      </div>
+      {% if bio.is_some() %}
+      <div class="profile-bio">{{ bio.as_ref().unwrap() }}</div>
+      {% endif %}
+    </div>
   </div>
   <div class="profile-stats">
     <span>{{ total_karma }} karma</span>
@@ -21,15 +31,24 @@
     <span>Created {{ created_date }}</span>
   </div>
   <div class="profile-karma-breakdown">
-    Link: {{ link_karma }} &middot; Comment: {{ comment_karma }}
+    Link: {{ link_karma }} &middot; Comment: {{ comment_karma }} &middot; Awardee: {{ awardee_karma }} &middot; Awarder: {{ awarder_karma }}
   </div>
   <div class="profile-badges">
-    {% if is_gold %}<span class="badge badge-oc">&#x2B50; Premium</span>{% endif
+    {% if is_employee %}<span class="badge badge-admin">&#x1F4BC; Employee</span>{% endif
+    %} {% if is_gold %}<span class="badge badge-oc">&#x2B50; Premium</span>{% endif
     %} {% if is_mod %}<span class="badge badge-mod">&#x1F6E1;&#xFE0F; Mod</span
     >{% endif %} {% if has_verified_email %}<span class="badge badge-flair"
       >&#x2709;&#xFE0F; Verified</span
-    >{% endif %}
+    >{% endif %} {% if is_nsfw %}<span class="badge badge-nsfw">NSFW</span>{% endif %}
   </div>
+  {% if !information_json.is_empty() %}
+  <div class="profile-json-toggle">
+    <button class="item-json-btn" onclick="toggleItemJson(this)">{} Show JSON</button>
+    <template class="item-json-data">
+      <div class="item-json-content"><pre>{{ information_json|safe }}</pre></div>
+    </template>
+  </div>
+  {% endif %}
 </div>
 
 <div class="tabs">

@@ -21,7 +21,7 @@
     --bg-primary: #1a1a1b;
     --border: #343536;
     --border-light: #474748;
-    --downvote: #7193ff;
+    --downvote: #9a9a9a;
     --link: #4fbcff;
     --link-hover: #7fcdff;
     --scrollbar-thumb: #474748;
@@ -467,6 +467,94 @@ a:hover {
     font-weight: 500;
 }
 
+/* ===== Subreddit Icon (inline) ===== */
+
+.subreddit-icon {
+    border-radius: 50%;
+    flex-shrink: 0;
+    height: 20px;
+    object-fit: cover;
+    vertical-align: text-bottom;
+    width: 20px;
+}
+
+/* ===== Subreddit Cards (moderated tab) ===== */
+
+.subreddit-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    margin-bottom: 8px;
+    padding: 10px 14px;
+}
+
+.subreddit-card:hover {
+    border-color: var(--border-light);
+}
+
+.subreddit-card-header {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    line-height: 20px;
+}
+
+.subreddit-card-name {
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 20px;
+    text-decoration: none;
+}
+
+.subreddit-card-name:hover {
+    text-decoration: underline;
+}
+
+.subreddit-card-subscribers {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 20px;
+}
+
+.subreddit-card-description {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-top: 4px;
+}
+
+.subreddit-card-title {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 20px;
+}
+
+.multireddit-visibility {
+    background: var(--bg-primary);
+    border-radius: 3px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    padding: 1px 6px;
+}
+
+.multireddit-subs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.multireddit-sub {
+    background: var(--bg-primary);
+    border-radius: 3px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding: 2px 8px;
+}
+
 .submission-badges {
     display: flex;
     flex-wrap: wrap;
@@ -642,10 +730,35 @@ a:hover {
     padding: 20px;
 }
 
+.profile-top {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.profile-avatar {
+    border-radius: 50%;
+    flex-shrink: 0;
+    height: 64px;
+    object-fit: cover;
+    width: 64px;
+}
+
+.profile-identity {
+    min-width: 0;
+}
+
 .profile-username {
     font-size: 1.6rem;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+}
+
+.profile-bio {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
 }
 
 .profile-username a {
@@ -685,6 +798,10 @@ a:hover {
     margin-top: 8px;
 }
 
+.profile-json-toggle {
+    margin-top: 10px;
+}
+
 /* ===== Tabs ===== */
 .tabs {
     background: var(--bg-card);
@@ -706,6 +823,7 @@ a:hover {
     border-bottom: 2px solid transparent;
     color: var(--text-secondary);
     font-size: 0.9rem;
+    font-weight: 600;
     padding: 10px 16px;
     text-decoration: none;
     transition: all 0.15s;
@@ -719,9 +837,8 @@ a:hover {
 }
 
 .tab-nav a.active {
-    border-bottom-color: var(--accent-blue);
-    color: var(--accent-blue);
-    font-weight: 600;
+    border-bottom-color: var(--accent-light);
+    color: var(--accent-light);
 }
 
 .tab-content {
@@ -1071,7 +1188,9 @@ a:hover {
     box-shadow: 0 0 0 1px #888;
 }
 
-.submission-card.inspecting {
+.submission-card.inspecting,
+.profile-header.inspecting,
+.subreddit-card.inspecting {
     border-color: #888;
     box-shadow: 0 0 0 1px #888;
 }

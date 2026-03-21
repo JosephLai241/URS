@@ -86,11 +86,20 @@ pub struct CommentsFragment {
 /// Fragment: Redditor profile view.
 #[derive(Template)]
 #[template(path = "fragments/redditor.html")]
+#[allow(clippy::struct_excessive_bools)]
 pub struct RedditorFragment {
     /// Human-readable account age (e.g. "3 years").
     pub account_age: String,
     /// Name of the currently selected tab.
     pub active_tab: String,
+    /// URL to the Redditor's avatar/icon image, if available.
+    pub avatar_url: Option<String>,
+    /// Formatted awardee karma (karma from receiving awards).
+    pub awardee_karma: String,
+    /// Formatted awarder karma (karma from giving awards).
+    pub awarder_karma: String,
+    /// The user's bio/tagline from their profile (`subreddit.public_description`).
+    pub bio: Option<String>,
     /// Navigation breadcrumb trail.
     pub breadcrumbs: Vec<BreadcrumbItem>,
     /// Formatted comment karma.
@@ -101,10 +110,16 @@ pub struct RedditorFragment {
     pub file_path: String,
     /// Whether the Redditor has a verified email.
     pub has_verified_email: bool,
+    /// Syntax-highlighted JSON of the Redditor's information block.
+    pub information_json: String,
+    /// Whether the Redditor is a Reddit employee.
+    pub is_employee: bool,
     /// Whether the Redditor has Reddit Gold/Premium.
     pub is_gold: bool,
     /// Whether the Redditor is a moderator.
     pub is_mod: bool,
+    /// Whether the Redditor's profile is marked NSFW.
+    pub is_nsfw: bool,
     /// Formatted link karma.
     pub link_karma: String,
     /// Pre-rendered HTML for the active tab's content.
