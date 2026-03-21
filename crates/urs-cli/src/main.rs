@@ -18,8 +18,6 @@ use commands::{Cli, dispatch};
 /// Run `URS`.
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    dotenvy::dotenv().ok();
-
     let cli = Cli::parse();
 
     let log_dir = helpers::log_dir();
