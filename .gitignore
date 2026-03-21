@@ -1,6 +1,2 @@
-__pycache__/
-
-scrapes/*
-target/*
-
-Cargo.lock
+/scrapes/
+/target/
