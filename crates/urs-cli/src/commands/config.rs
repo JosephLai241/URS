@@ -39,6 +39,8 @@ use crate::config;
 
 \x1b[1;4mAvailable keys:\x1b[0m
 
+  api.address                   API server bind address (default: 127.0.0.1)
+  api.port                      API server port (default: 3000)
   api.token                     Bearer token for API authentication
   browse.address                Browse server bind address (default: 127.0.0.1)
   browse.auto_open              Auto-open browser on browse (default: true)
