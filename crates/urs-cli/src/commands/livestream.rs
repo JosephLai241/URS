@@ -285,13 +285,19 @@ pub async fn run(args: LivestreamArgs) -> Result<()> {
         TargetType::Redditor => {
             let scraper = RedditorScraper::new(&client);
             if let Err(e) = scraper.about(&args.target).await {
-                bail!("Redditor u/{} does not exist or is suspended: {e}", args.target);
+                bail!(
+                    "Redditor u/{} does not exist or is suspended: {e}",
+                    args.target
+                );
             }
         }
         TargetType::Subreddit => {
             let scraper = SubredditScraper::new(&client);
             if let Err(e) = scraper.about(&args.target).await {
-                bail!("Subreddit r/{} does not exist or is inaccessible: {e}", args.target);
+                bail!(
+                    "Subreddit r/{} does not exist or is inaccessible: {e}",
+                    args.target
+                );
             }
         }
     }

@@ -179,7 +179,10 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
 
     spinner.set_message(format!("Validating r/{}...", args.subreddit));
     if let Err(e) = scraper.about(&args.subreddit).await {
-        bail!("Subreddit r/{} does not exist or is inaccessible: {e}", args.subreddit);
+        bail!(
+            "Subreddit r/{} does not exist or is inaccessible: {e}",
+            args.subreddit
+        );
     }
 
     spinner.set_message("Fetching posts...");
