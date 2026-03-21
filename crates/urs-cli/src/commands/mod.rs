@@ -6,6 +6,7 @@
 pub mod browse;
 pub mod check;
 pub mod comments;
+pub mod config;
 pub mod livestream;
 pub mod log;
 pub mod redditor;
@@ -21,7 +22,7 @@ use clap::{Parser, Subcommand};
 \x1b[1;4mQuick start:\x1b[0m
 
   1. Create a Reddit \"script\" app at https://www.reddit.com/prefs/apps
-  2. Copy .env.example to .env and fill in your credentials
+  2. Run the setup wizard: urs config init
   3. Run a scrape:
 
      urs subreddit rust hot 50
@@ -57,6 +58,9 @@ pub enum Commands {
     /// Scrape comments from a submission.
     Comments(comments::CommentsArgs),
 
+    /// Manage URS configuration.
+    Config(config::ConfigArgs),
+
     /// Livestream new Reddit activity in a TUI.
     Livestream(livestream::LivestreamArgs),
 
@@ -80,6 +84,11 @@ pub async fn dispatch(cli: Cli) -> anyhow::Result<()> {
         Commands::Browse(args) => browse::run(args).await,
         Commands::Check => check::run().await,
         Commands::Comments(args) => comments::run(args).await,
+        Commands::Config(args) => {
+            tokio::task::spawn_blocking(move || config::run(args))
+                .await
+                .expect("Config task panicked")
+        }
         Commands::Livestream(args) => livestream::run(args).await,
         Commands::Log(args) => log::run(args).await,
         Commands::Redditor(args) => redditor::run(args).await,
