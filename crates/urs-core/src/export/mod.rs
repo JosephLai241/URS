@@ -16,7 +16,7 @@ use chrono::Local;
 /// The base directory for scraped data.
 const SCRAPES_DIR: &str = "scrapes";
 
-/// Generates the output directory path for scraped data.
+/// Generates the output directory path for scraped data using the default base directory.
 ///
 /// Format: `scrapes/{YYYY-MM-DD}/{type}/`
 ///
@@ -27,6 +27,20 @@ const SCRAPES_DIR: &str = "scrapes";
 pub fn output_dir(scrape_type: &str) -> PathBuf {
     let today = Local::now().format("%Y-%m-%d").to_string();
     PathBuf::from(SCRAPES_DIR).join(today).join(scrape_type)
+}
+
+/// Generates the output directory path for scraped data using a custom base directory.
+///
+/// Format: `{base}/{YYYY-MM-DD}/{type}/`
+///
+/// # Arguments
+///
+/// * `base` - The base directory for scraped data
+/// * `scrape_type` - The type of scrape (e.g., "subreddits", "redditors", "comments")
+#[must_use]
+pub fn output_dir_with_base(base: &Path, scrape_type: &str) -> PathBuf {
+    let today = Local::now().format("%Y-%m-%d").to_string();
+    base.join(today).join(scrape_type)
 }
 
 /// Generates a filename for Subreddit scrape output.
