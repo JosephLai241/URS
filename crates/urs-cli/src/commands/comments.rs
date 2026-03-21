@@ -17,6 +17,33 @@ use crate::helpers::{create_client, create_spinner};
 
 /// Arguments for the `comments` subcommand.
 #[derive(Debug, Args)]
+#[command(after_long_help = "\
+\x1b[1;4mExamples:\x1b[0m
+
+  Scrape all comments from a submission:
+    urs comments https://www.reddit.com/r/rust/comments/abc123/my_post/
+
+  Scrape only the top 50 comments:
+    urs comments https://www.reddit.com/r/rust/comments/abc123/my_post/ 50
+
+  Output as a flat list instead of a threaded tree:
+    urs comments https://www.reddit.com/r/rust/comments/abc123/my_post/ --raw
+
+  Save to a custom directory:
+    urs comments https://www.reddit.com/r/rust/comments/abc123/my_post/ -o ./data/
+
+\x1b[1;4mOutput formats:\x1b[0m
+
+  Structured (default):
+    Comments are nested in a tree with parent-child reply relationships.
+
+  Raw (--raw):
+    Comments are output as a flat list sorted by depth level.
+
+\x1b[1;4mCount behavior:\x1b[0m
+
+  0 (default)   Fetch all available comments, expanding collapsed threads
+  N             Fetch the top N comments only")]
 pub struct CommentsArgs {
     /// Full Reddit submission URL.
     pub url: String,

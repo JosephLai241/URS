@@ -17,6 +17,24 @@ use clap::{Parser, Subcommand};
 #[derive(Debug, Parser)]
 #[command(name = "urs")]
 #[command(author, version, about, long_about = None)]
+#[command(after_long_help = "\
+\x1b[1;4mQuick start:\x1b[0m
+
+  1. Create a Reddit \"script\" app at https://www.reddit.com/prefs/apps
+  2. Copy .env.example to .env and fill in your credentials
+  3. Run a scrape:
+
+     urs subreddit rust hot 50
+     urs comments https://reddit.com/r/rust/comments/abc123/post_title/
+     urs redditor spez
+
+  4. Browse the results:
+
+     urs browse
+
+\x1b[1;4mGlobal options:\x1b[0m
+
+  --debug    Enable debug-level logging for troubleshooting")]
 pub struct Cli {
     /// The subcommand to execute.
     #[command(subcommand)]

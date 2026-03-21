@@ -15,6 +15,32 @@ use crate::helpers::log_dir;
 
 /// View URS log output.
 #[derive(Debug, Parser)]
+#[command(after_long_help = "\
+\x1b[1;4mExamples:\x1b[0m
+
+  Show the last 50 lines of the most recent log:
+    urs log
+
+  Show the last 200 lines:
+    urs log --lines 200
+
+  Follow the log in real-time (like tail -f):
+    urs log --follow
+
+  Follow with more initial context:
+    urs log -f -l 100
+
+  Show logs from a specific date:
+    urs log --date 2026-03-15
+
+\x1b[1;4mLog location:\x1b[0m
+
+  Logs are stored as daily rolling files named urs.log.YYYY-MM-DD in a
+  platform-specific directory:
+
+    Linux:   ~/.local/share/urs/logs/
+    macOS:   ~/Library/Application Support/urs/logs/
+    Windows: C:\\Users\\<user>\\AppData\\Roaming\\urs\\logs\\")]
 pub struct LogArgs {
     /// Follow the log file in real-time (like `tail -f`).
     #[arg(short, long, default_value_t = false)]

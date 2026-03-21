@@ -16,6 +16,28 @@ use crate::helpers::{create_client, create_spinner};
 
 /// Arguments for the `redditor` subcommand.
 #[derive(Debug, Args)]
+#[command(after_long_help = "\
+\x1b[1;4mExamples:\x1b[0m
+
+  Scrape the last 25 items per category for u/spez:
+    urs redditor spez
+
+  Scrape 100 items per category:
+    urs redditor spez 100
+
+  Save to a custom directory:
+    urs redditor spez 50 --output ./my-data/
+
+\x1b[1;4mScraped categories:\x1b[0m
+
+  Public (always available):
+    submissions, comments, hot, new, top, controversial, gilded
+
+  Private (requires the authenticated user's own account):
+    upvoted, downvoted, saved, hidden, gildings
+
+  Categories that are private or inaccessible are marked as \"FORBIDDEN\"
+  in the output rather than causing an error.")]
 pub struct RedditorArgs {
     /// Reddit username (without the `u/` prefix).
     pub username: String,

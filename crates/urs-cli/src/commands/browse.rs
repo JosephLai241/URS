@@ -12,6 +12,32 @@ use crate::browse;
 
 /// Arguments for the `browse` command.
 #[derive(Debug, Args)]
+#[command(after_long_help = "\
+\x1b[1;4mExamples:\x1b[0m
+
+  Browse scraped data (opens browser automatically):
+    urs browse
+
+  Use a custom port:
+    urs browse --port 3000
+
+  Browse a different scrapes directory:
+    urs browse --scrapes-dir ./my-scrapes/
+
+  Don't auto-open the browser:
+    urs browse --no-open
+
+  Bind to all interfaces (e.g. for access from another device):
+    urs browse --address 0.0.0.0 --port 8080
+
+\x1b[1;4mFeatures:\x1b[0m
+
+  Renders scraped data in a Reddit-like UI. Comment threads with nested
+  replies, submission cards with scores and flair, Redditor profiles with
+  tabbed categories, and livestream event feeds.
+
+  Each item has a \"Show JSON\" button that opens a sidebar panel with the
+  raw JSON data for that specific object.")]
 pub struct BrowseArgs {
     /// Address to bind the web server on.
     #[arg(short, long, default_value = "127.0.0.1")]

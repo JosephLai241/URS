@@ -45,6 +45,49 @@ pub enum TargetType {
 
 /// Livestream new Reddit activity in a TUI.
 #[derive(Debug, Parser)]
+#[command(after_long_help = "\
+\x1b[1;4mExamples:\x1b[0m
+
+  Livestream new comments in r/rust (default):
+    urs livestream rust
+
+  Livestream new submissions in r/rust:
+    urs livestream rust --source submissions
+
+  Livestream a Redditor's new comments:
+    urs livestream spez --type redditor
+
+  Poll every 10 seconds instead of the default 5:
+    urs livestream rust --interval 10
+
+  Don't save the output file on exit:
+    urs livestream rust --nosave
+
+  Limit the scroll buffer to 5000 items:
+    urs livestream rust --buffer-size 5000
+
+\x1b[1;4mTUI keybindings:\x1b[0m
+
+  Table view:
+    ↑/↓, j/k        Scroll through items
+    Enter           Open detail view for selected item
+    g, Home         Jump to top (re-enables auto-scroll)
+    G, End          Jump to bottom
+    Ctrl+U/D        Half-page scroll up/down
+    o               Open item permalink in browser
+    q, Esc          Quit
+
+  Detail view:
+    ↑/↓, j/k        Switch between fields and body panes
+    Enter           Enter the highlighted pane (scroll its contents)
+    Esc             Exit pane → exit detail view → quit
+    o               Open item permalink in browser
+
+\x1b[1;4mOutput:\x1b[0m
+
+  Events are streamed to a JSONL file (one JSON object per line) for
+  crash-safe capture. The file is written to scrapes/{date}/livestreams/
+  and renamed with the final duration on clean exit.")]
 pub struct LivestreamArgs {
     /// Maximum items to keep in the TUI scroll buffer.
     #[arg(short, long, default_value_t = 10_000)]

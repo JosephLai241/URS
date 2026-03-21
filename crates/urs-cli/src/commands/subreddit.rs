@@ -19,6 +19,38 @@ use crate::helpers::{create_client, create_spinner};
 
 /// Arguments for the `subreddit` subcommand.
 #[derive(Debug, Args)]
+#[command(after_long_help = "\
+\x1b[1;4mExamples:\x1b[0m
+
+  Scrape the 50 hottest posts from r/rust:
+    urs subreddit rust hot 50
+
+  Scrape the top 100 posts from r/python from the past week:
+    urs subreddit python top 100 --time week
+
+  Scrape controversial posts from r/news from the past month:
+    urs subreddit news controversial 25 --time month
+
+  Search r/learnprogramming for posts about async:
+    urs subreddit learnprogramming search --query \"async programming\"
+
+  Scrape r/rust with Subreddit rules included in the output:
+    urs subreddit rust hot 25 --rules
+
+  Export to CSV instead of JSON:
+    urs subreddit rust new 50 --csv
+
+  Save to a custom directory:
+    urs subreddit rust hot 25 -o ./my-data/
+
+\x1b[1;4mCategories:\x1b[0m
+
+  hot             Default Reddit front page sort
+  new             Newest posts first
+  top             Top posts (use --time to filter: hour, day, week, month, year, all)
+  controversial   Most controversial (use --time to filter)
+  rising          Currently rising posts
+  search          Full-text search (requires --query)")]
 pub struct SubredditArgs {
     /// Subreddit name (without the `r/` prefix).
     pub subreddit: String,
