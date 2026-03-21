@@ -1,0 +1,25 @@
+[package]
+authors.workspace = true
+description = "REST API layer for Universal Reddit Scraper"
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+name = "urs-api"
+repository.workspace = true
+rust-version.workspace = true
+version = "4.0.0"
+
+[dependencies]
+async-stream = "0.3"
+axum = { workspace = true, features = ["macros"] }
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tokio-stream = "0.1"
+tower-http = { workspace = true, features = ["compression-gzip", "cors", "trace"] }
+tracing.workspace = true
+urs-core = { path = "../urs-core" }
+
+[lints]
+workspace = true
