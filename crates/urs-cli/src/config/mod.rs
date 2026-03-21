@@ -109,13 +109,39 @@ pub struct UrsConfig {
 }
 
 /// REST API server settings.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiConfig {
+    /// Bind address for the API server.
+    #[serde(default = "default_api_address")]
+    pub address: String,
+    /// HTTP port for the API server.
+    #[serde(default = "default_api_port")]
+    pub port: u16,
     /// Bearer token for API authentication.
     ///
     /// When set, all API endpoints (except `/api/health`) require an
     /// `Authorization: Bearer <token>` header.
     pub token: Option<String>,
+}
+
+impl Default for ApiConfig {
+    fn default() -> Self {
+        Self {
+            address: default_api_address(),
+            port: default_api_port(),
+            token: None,
+        }
+    }
+}
+
+/// Default API server address.
+fn default_api_address() -> String {
+    "127.0.0.1".to_string()
+}
+
+/// Default API server port.
+const fn default_api_port() -> u16 {
+    3000
 }
 
 /// Reddit `OAuth2` API credentials.
@@ -232,6 +258,8 @@ pub fn expand_tilde(path: &str) -> PathBuf {
 
 /// All recognized config keys for `get`/`set` operations.
 pub const CONFIG_KEYS: &[&str] = &[
+    "api.address",
+    "api.port",
     "api.token",
     "browse.address",
     "browse.auto_open",
@@ -251,6 +279,8 @@ pub const CONFIG_KEYS: &[&str] = &[
 #[must_use]
 pub fn get_value(config: &UrsConfig, key: &str) -> Option<String> {
     match key {
+        "api.address" => Some(config.api.address.clone()),
+        "api.port" => Some(config.api.port.to_string()),
         "api.token" => config.api.token.clone(),
         "browse.address" => Some(config.browse.address.clone()),
         "browse.auto_open" => Some(config.browse.auto_open.to_string()),
@@ -277,6 +307,16 @@ pub fn get_value(config: &UrsConfig, key: &str) -> Option<String> {
 /// Returns an error if the key is unrecognized or the value is invalid.
 pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
     match key {
+        "api.address" => config.api.address = value.to_string(),
+        "api.port" => {
+            let port: u16 = value
+                .parse()
+                .context("Invalid value for api.port (expected a number 1-65535)")?;
+            if port == 0 {
+                anyhow::bail!("Invalid port: 0 (must be 1-65535)");
+            }
+            config.api.port = port;
+        }
         "api.token" => config.api.token = Some(value.to_string()),
         "browse.address" => config.browse.address = value.to_string(),
         "browse.auto_open" => {
