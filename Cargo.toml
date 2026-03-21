@@ -28,6 +28,7 @@ image = "0.25"
 indicatif = "0.17"
 mime_guess = "2"
 pulldown-cmark = "0.12"
+rand = "0.9"
 pyo3 = { version = "0.23", features = ["extension-module"] }
 ratatui = "0.29"
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
