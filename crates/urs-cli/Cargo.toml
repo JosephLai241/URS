@@ -37,8 +37,12 @@ tracing.workspace = true
 tracing-appender.workspace = true
 tracing-subscriber.workspace = true
 url.workspace = true
-urs-api = { path = "../urs-api" }
+urs-api = { path = "../urs-api", optional = true }
 urs-core = { path = "../urs-core" }
+
+[features]
+api = ["dep:urs-api"]
+default = []
 
 [lints]
 workspace = true
