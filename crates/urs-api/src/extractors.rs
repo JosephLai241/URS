@@ -123,18 +123,36 @@ impl CommentsQueryParams {
     }
 }
 
+/// Default poll interval in seconds for livestream endpoints.
+const DEFAULT_POLL_INTERVAL_SECS: u64 = 5;
+
+/// Maximum poll interval in seconds.
+const MAX_POLL_INTERVAL_SECS: u64 = 300;
+
 /// Parameters for livestream SSE endpoints.
 ///
 /// # Example Query String
 ///
-/// `?source=submissions`
+/// `?source=submissions&interval=10`
 #[derive(Debug, Deserialize)]
 pub struct LivestreamParams {
+    /// Poll interval in seconds (1–300, default 5).
+    interval: Option<u64>,
     /// Content source: `comments` (default) or `submissions`.
     source: Option<String>,
 }
 
 impl LivestreamParams {
+    /// Returns the poll interval as a [`Duration`](std::time::Duration), clamped to `1..=300`.
+    #[must_use]
+    pub fn interval(&self) -> std::time::Duration {
+        let secs = self.interval.map_or(DEFAULT_POLL_INTERVAL_SECS, |i| {
+            i.clamp(1, MAX_POLL_INTERVAL_SECS)
+        });
+
+        std::time::Duration::from_secs(secs)
+    }
+
     /// Parses the source string into a [`LivestreamSource`](urs_core::scrapers::LivestreamSource).
     #[must_use]
     pub fn source(&self) -> urs_core::scrapers::LivestreamSource {
@@ -243,7 +261,10 @@ mod tests {
 
     #[test]
     fn livestream_defaults_to_comments() {
-        let params = LivestreamParams { source: None };
+        let params = LivestreamParams {
+            interval: None,
+            source: None,
+        };
 
         assert!(matches!(
             params.source(),
@@ -254,6 +275,7 @@ mod tests {
     #[test]
     fn livestream_submissions() {
         let params = LivestreamParams {
+            interval: None,
             source: Some("submissions".to_string()),
         };
 
@@ -261,5 +283,45 @@ mod tests {
             params.source(),
             urs_core::scrapers::LivestreamSource::Submissions
         ));
+    }
+
+    #[test]
+    fn livestream_interval_defaults_to_5s() {
+        let params = LivestreamParams {
+            interval: None,
+            source: None,
+        };
+
+        assert_eq!(params.interval(), std::time::Duration::from_secs(5));
+    }
+
+    #[test]
+    fn livestream_interval_custom() {
+        let params = LivestreamParams {
+            interval: Some(10),
+            source: None,
+        };
+
+        assert_eq!(params.interval(), std::time::Duration::from_secs(10));
+    }
+
+    #[test]
+    fn livestream_interval_clamps_to_max() {
+        let params = LivestreamParams {
+            interval: Some(600),
+            source: None,
+        };
+
+        assert_eq!(params.interval(), std::time::Duration::from_secs(300));
+    }
+
+    #[test]
+    fn livestream_interval_clamps_to_min() {
+        let params = LivestreamParams {
+            interval: Some(0),
+            source: None,
+        };
+
+        assert_eq!(params.interval(), std::time::Duration::from_secs(1));
     }
 }
