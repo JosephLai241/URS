@@ -200,6 +200,23 @@ const fn default_port() -> u16 {
     8080
 }
 
+/// Expands a leading `~` in a path to the user's home directory.
+///
+/// Shell tilde expansion doesn't happen when arguments are quoted, so `urs config set
+/// scraping.scrapes_dir "~/data"` would store a literal `~/data`. This function handles that case.
+pub fn expand_tilde(path: &str) -> PathBuf {
+    if let Some(rest) = path.strip_prefix("~/") {
+        if let Some(home) = directories::UserDirs::new() {
+            return home.home_dir().join(rest);
+        }
+    } else if path == "~" {
+        if let Some(home) = directories::UserDirs::new() {
+            return home.home_dir().to_path_buf();
+        }
+    }
+    PathBuf::from(path)
+}
+
 /// All recognized config keys for `get`/`set` operations.
 pub const CONFIG_KEYS: &[&str] = &[
     "browse.address",
@@ -252,9 +269,13 @@ pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
                 .context("Invalid value for browse.auto_open (expected true or false)")?;
         }
         "browse.port" => {
-            config.browse.port = value
+            let port: u16 = value
                 .parse()
                 .context("Invalid value for browse.port (expected a number 1-65535)")?;
+            if port == 0 {
+                anyhow::bail!("Invalid port: 0 (must be 1-65535)");
+            }
+            config.browse.port = port;
         }
         "credentials.client_id" => config.credentials.client_id = Some(value.to_string()),
         "credentials.client_secret" => config.credentials.client_secret = Some(value.to_string()),
@@ -282,7 +303,7 @@ pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
             config.scraping.scrapes_dir = if value == "none" || value.is_empty() {
                 None
             } else {
-                let path = PathBuf::from(value);
+                let path = expand_tilde(value);
                 if path.is_absolute() {
                     Some(path)
                 } else {
@@ -294,6 +315,23 @@ pub fn set_value(config: &mut UrsConfig, key: &str, value: &str) -> Result<()> {
     }
 
     Ok(())
+}
+
+/// Resets a config key to its default (unset) state for `Option`-backed fields.
+///
+/// For keys backed by `Option<T>`, this sets the field to `None`.
+/// For keys with non-optional defaults (e.g. `browse.port`), use [`set_value`] with the default
+/// value instead.
+pub fn reset_key(config: &mut UrsConfig, key: &str) {
+    match key {
+        "credentials.client_id" => config.credentials.client_id = None,
+        "credentials.client_secret" => config.credentials.client_secret = None,
+        "credentials.password" => config.credentials.password = None,
+        "credentials.username" => config.credentials.username = None,
+        "scraping.default_limit" => config.scraping.default_limit = None,
+        "scraping.scrapes_dir" => config.scraping.scrapes_dir = None,
+        _ => {} // Non-optional fields are handled via set_value with default value
+    }
 }
 
 #[cfg(test)]
@@ -378,6 +416,68 @@ mod tests {
         let result = set_value(&mut config, "scraping.default_format", "xml");
 
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn set_port_zero_returns_error() {
+        let mut config = UrsConfig::default();
+        let result = set_value(&mut config, "browse.port", "0");
+
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn reset_key_clears_optional_field() {
+        let mut config = UrsConfig::default();
+        config.credentials.client_id = Some("test".to_string());
+
+        reset_key(&mut config, "credentials.client_id");
+
+        assert!(config.credentials.client_id.is_none());
+    }
+
+    #[test]
+    fn reset_key_clears_scrapes_dir() {
+        let mut config = UrsConfig::default();
+        config.scraping.scrapes_dir = Some(PathBuf::from("/some/path"));
+
+        reset_key(&mut config, "scraping.scrapes_dir");
+
+        assert!(config.scraping.scrapes_dir.is_none());
+    }
+
+    #[test]
+    fn expand_tilde_expands_home() {
+        let result = expand_tilde("~/data");
+
+        // Should not start with ~ anymore
+        assert!(!result.to_string_lossy().starts_with('~'));
+        assert!(result.to_string_lossy().ends_with("/data"));
+    }
+
+    #[test]
+    fn expand_tilde_leaves_absolute_paths() {
+        let result = expand_tilde("/usr/local/data");
+
+        assert_eq!(result, PathBuf::from("/usr/local/data"));
+    }
+
+    #[test]
+    fn expand_tilde_leaves_relative_paths() {
+        let result = expand_tilde("my-data");
+
+        assert_eq!(result, PathBuf::from("my-data"));
+    }
+
+    #[test]
+    fn set_scrapes_dir_expands_tilde() {
+        let mut config = UrsConfig::default();
+        set_value(&mut config, "scraping.scrapes_dir", "~/reddit-data").unwrap();
+
+        let dir = config.scraping.scrapes_dir.unwrap();
+
+        assert!(!dir.to_string_lossy().starts_with('~'));
+        assert!(dir.to_string_lossy().ends_with("/reddit-data"));
     }
 
     #[test]
