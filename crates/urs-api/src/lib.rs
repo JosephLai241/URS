@@ -1,8 +1,8 @@
 //! REST API layer for the Universal Reddit Scraper.
 //!
 //! This crate exposes an Axum [`Router`] that wraps `urs-core` scrapers in HTTP endpoints. The
-//! consuming binary (e.g., `urs-cli`) creates a [`RedditClient`](urs_core::client::RedditClient),
-//! calls [`build_router()`], and serves the result with `axum::serve`.
+//! consuming binary (e.g., `urs-cli`) creates a [`RedditClient`], calls [`build_router()`], and
+//! serves the result with `axum::serve`.
 //!
 //! # Quick Start
 //!
