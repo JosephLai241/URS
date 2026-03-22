@@ -28,19 +28,22 @@ async fn main() -> anyhow::Result<()> {
     let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
 
     // `--debug` flag overrides RUST_LOG; default is INFO.
+    // The `wordcloud` crate emits noisy INFO/WARN logs during rendering (placement coordinates,
+    // retry attempts); keep them at debug level unless the user explicitly requests debug mode.
     let env_filter = if cli.debug {
         tracing_subscriber::EnvFilter::new("debug")
     } else {
         tracing_subscriber::EnvFilter::try_from_default_env()
-            .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"))
+            .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info,wordcloud=error"))
     };
 
     // Server commands get stderr logging so users see activity in the terminal. Other commands
     // only log to the file to keep terminal output clean.
-    let is_server = matches!(cli.command, commands::Commands::Browse(_));
+    // `None` (bare `urs`) launches the web UI, which is a server command.
+    let is_server = cli.command.is_none();
 
     #[cfg(feature = "api")]
-    let is_server = is_server || matches!(cli.command, commands::Commands::Serve(_));
+    let is_server = is_server || matches!(cli.command, Some(commands::Commands::Serve(_)));
 
     let registry = tracing_subscriber::registry()
         .with(env_filter)
