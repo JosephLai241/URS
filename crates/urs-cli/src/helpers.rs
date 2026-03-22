@@ -41,6 +41,25 @@ pub async fn create_client() -> Result<RedditClient> {
     Ok(client)
 }
 
+/// Attempts to create an authenticated Reddit client, returning `None` on failure.
+///
+/// Unlike [`create_client`], this function does not print error hints or bail. It silently returns
+/// `None` if credentials are missing or authentication fails. Used by the web UI to determine
+/// whether scrape functionality should be enabled.
+pub async fn try_create_client() -> Option<RedditClient> {
+    debug!("Attempting to resolve Reddit credentials for web UI");
+
+    let credentials = resolve_credentials().ok()?;
+
+    debug!("Attempting Reddit API authentication for web UI");
+
+    let client = RedditClient::new(credentials).await.ok()?;
+
+    info!("Web UI authenticated with Reddit API");
+
+    Some(client)
+}
+
 /// Resolves credentials from config file + environment variable overrides.
 fn resolve_credentials() -> Result<Credentials> {
     let cfg = config::load_config().unwrap_or_default();
