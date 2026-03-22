@@ -22,9 +22,11 @@ console = "0.15"
 crossterm = { version = "0.28", features = ["event-stream"] }
 csv = "1"
 cliclack = "0.3"
+dashmap = "6"
 directories = "6"
 futures = "0.3"
 image = "0.25"
+palette = "0.7"
 indicatif = "0.17"
 mime_guess = "2"
 pulldown-cmark = "0.12"
@@ -43,6 +45,7 @@ tracing = "0.1"
 tracing-appender = "0.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 url = "2"
+uuid = { version = "1", features = ["v4"] }
 wordcloud-rs = "0.1"
 
 [workspace.lints.rust]
