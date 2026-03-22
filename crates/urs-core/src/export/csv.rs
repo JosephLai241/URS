@@ -5,6 +5,7 @@ use std::io::Write;
 use std::path::Path;
 
 use crate::error::Result;
+use crate::models::api::EditedField;
 use crate::models::{Comment, Submission};
 
 /// Exporter for CSV format.
@@ -46,21 +47,29 @@ impl CsvExporter {
     pub fn submissions_to_csv(&self, submissions: &[Submission]) -> String {
         let mut csv = String::new();
 
-        csv.push_str("author,created_utc,title,score,num_comments,url,subreddit,is_self,nsfw\n");
+        csv.push_str("author,created_utc,edited,is_original_content,is_self,link_flair_text,locked,nsfw,num_comments,permalink,score,spoiler,stickied,subreddit,title,upvote_ratio,url\n");
 
         for sub in submissions {
             writeln!(
                 csv,
-                "{},{},{},{},{},{},{},{},{}",
+                "{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
                 escape_csv(&sub.author),
                 sub.created_utc,
-                escape_csv(&sub.title),
-                sub.score,
-                sub.num_comments,
-                escape_csv(&sub.url),
-                escape_csv(&sub.subreddit),
+                format_edited(&sub.edited),
+                sub.is_original_content,
                 sub.is_self,
+                escape_csv(&format_option(&sub.link_flair_text)),
+                sub.locked,
                 sub.nsfw,
+                sub.num_comments,
+                escape_csv(&sub.permalink),
+                sub.score,
+                sub.spoiler,
+                sub.stickied,
+                escape_csv(&sub.subreddit),
+                escape_csv(&sub.title),
+                sub.upvote_ratio,
+                escape_csv(&sub.url),
             )
             .expect("writing to String should never fail");
         }
@@ -95,7 +104,7 @@ impl CsvExporter {
     #[must_use]
     pub fn comments_to_csv(&self, comments: &[Comment]) -> String {
         let mut csv = String::new();
-        csv.push_str("author,created_utc,body,score,is_submitter,parent_id\n");
+        csv.push_str("author,body,created_utc,edited,id,is_submitter,link_id,parent_id,score,stickied\n");
 
         Self::flatten_comments_to_csv(comments, &mut csv);
 
@@ -110,13 +119,17 @@ impl CsvExporter {
             for comment in slice {
                 writeln!(
                     csv,
-                    "{},{},{},{},{},{}",
+                    "{},{},{},{},{},{},{},{},{},{}",
                     escape_csv(&comment.author),
-                    comment.created_utc,
                     escape_csv(&comment.body),
-                    comment.score,
+                    comment.created_utc,
+                    format_edited(&comment.edited),
+                    escape_csv(&comment.id),
                     comment.is_submitter,
+                    escape_csv(&comment.link_id),
                     escape_csv(&comment.parent_id),
+                    comment.score,
+                    comment.stickied,
                 )
                 .expect("writing to String should never fail");
 
@@ -137,6 +150,23 @@ fn escape_csv(s: &str) -> String {
     } else {
         s.to_string()
     }
+}
+
+/// Formats an `EditedField` for CSV output.
+///
+/// Returns `"false"` if not edited, or the UTC timestamp as a string.
+fn format_edited(edited: &EditedField) -> String {
+    match edited {
+        EditedField::Bool(b) => b.to_string(),
+        EditedField::Timestamp(ts) => ts.to_string(),
+    }
+}
+
+/// Formats an `Option<String>` for CSV output.
+///
+/// Returns an empty string for `None`.
+fn format_option(opt: &Option<String>) -> String {
+    opt.as_deref().unwrap_or("").to_string()
 }
 
 #[cfg(test)]
@@ -169,7 +199,7 @@ mod tests {
         let csv = exporter.submissions_to_csv(&[]);
 
         assert!(csv.starts_with(
-            "author,created_utc,title,score,num_comments,url,subreddit,is_self,nsfw\n"
+            "author,created_utc,edited,is_original_content,is_self,link_flair_text,locked,nsfw,num_comments,permalink,score,spoiler,stickied,subreddit,title,upvote_ratio,url\n"
         ));
     }
 
@@ -178,6 +208,33 @@ mod tests {
         let exporter = CsvExporter::new();
         let csv = exporter.comments_to_csv(&[]);
 
-        assert!(csv.starts_with("author,created_utc,body,score,is_submitter,parent_id\n"));
+        assert!(csv.starts_with(
+            "author,body,created_utc,edited,id,is_submitter,link_id,parent_id,score,stickied\n",
+        ));
+    }
+
+    #[test]
+    fn format_edited_false() {
+        assert_eq!(format_edited(&EditedField::Bool(false)), "false");
+    }
+
+    #[test]
+    fn format_edited_timestamp() {
+        assert_eq!(
+            format_edited(&EditedField::Timestamp(1_234_567_890.0)),
+            "1234567890"
+        );
+    }
+
+    #[test]
+    fn format_option_some() {
+        let val = Some("hello".to_string());
+        assert_eq!(format_option(&val), "hello");
+    }
+
+    #[test]
+    fn format_option_none() {
+        let val: Option<String> = None;
+        assert_eq!(format_option(&val), "");
     }
 }
