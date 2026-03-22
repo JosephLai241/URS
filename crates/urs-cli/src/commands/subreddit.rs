@@ -14,7 +14,7 @@ use urs_core::client::endpoints::TimeFilter;
 use urs_core::export::{
     CsvExporter, JsonExporter, ensure_dir, output_dir, output_dir_with_base, subreddit_filename,
 };
-use urs_core::models::{Submission, SubredditRules};
+use urs_core::models::{Submission, Subreddit, SubredditRules};
 use urs_core::scrapers::SubredditScraper;
 
 use crate::config;
@@ -135,11 +135,16 @@ impl CliTimeFilter {
     }
 }
 
-/// Combined output for Subreddit scrapes that include rules.
+/// Combined output for Subreddit scrapes.
 #[derive(Debug, Serialize)]
 struct SubredditOutput {
-    posts: Vec<Submission>,
-    rules: SubredditRules,
+    /// Subreddit metadata from the about endpoint.
+    information: Subreddit,
+    /// Optional Subreddit posting rules.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    rules: Option<SubredditRules>,
+    /// The scraped submissions.
+    submissions: Vec<Submission>,
 }
 
 /// Executes the Subreddit scraping command.
@@ -189,12 +194,15 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
     let scraper = SubredditScraper::new(&client);
 
     spinner.set_message(format!("Validating r/{}...", args.subreddit));
-    if let Err(e) = scraper.about(&args.subreddit).await {
-        bail!(
-            "Subreddit r/{} does not exist or is inaccessible: {e}",
-            args.subreddit
-        );
-    }
+    let about = match scraper.about(&args.subreddit).await {
+        Ok(info) => info,
+        Err(e) => {
+            bail!(
+                "Subreddit r/{} does not exist or is inaccessible: {e}",
+                args.subreddit
+            );
+        }
+    };
 
     spinner.set_message("Fetching posts...");
 
@@ -203,11 +211,7 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         Category::Hot => scraper.hot(&args.subreddit, count).await?,
         Category::New => scraper.new_posts(&args.subreddit, count).await?,
         Category::Top => scraper.top(&args.subreddit, time, count).await?,
-        Category::Controversial => {
-            scraper
-                .controversial(&args.subreddit, time, count)
-                .await?
-        }
+        Category::Controversial => scraper.controversial(&args.subreddit, time, count).await?,
         Category::Rising => scraper.rising(&args.subreddit, count).await?,
         Category::Search => {
             let query = args.query.as_deref().expect("validated above");
@@ -233,10 +237,10 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
     };
 
     let dir = args.output.unwrap_or_else(|| {
-        cfg.scraping
-            .scrapes_dir
-            .as_ref()
-            .map_or_else(|| output_dir("subreddits"), |base| output_dir_with_base(base, "subreddits"))
+        cfg.scraping.scrapes_dir.as_ref().map_or_else(
+            || output_dir("subreddits"),
+            |base| output_dir_with_base(base, "subreddits"),
+        )
     });
     ensure_dir(&dir)?;
 
@@ -248,7 +252,7 @@ pub async fn run(args: SubredditArgs) -> Result<()> {
         args.rules,
     );
 
-    export_results(&dir, &base_name, use_csv, posts, rules, &spinner)?;
+    export_results(&dir, &base_name, use_csv, about, posts, rules, &spinner)?;
 
     info!("Subreddit scrape complete");
 
@@ -260,6 +264,7 @@ fn export_results(
     dir: &std::path::Path,
     base_name: &str,
     use_csv: bool,
+    information: Subreddit,
     posts: Vec<Submission>,
     rules: Option<SubredditRules>,
     spinner: &indicatif::ProgressBar,
@@ -274,14 +279,12 @@ fn export_results(
         print_summary(&path, posts.len());
     } else {
         let path = dir.join(format!("{base_name}.json"));
-        let exporter = JsonExporter::new();
-
-        if let Some(rules) = rules {
-            let output = SubredditOutput { posts, rules };
-            exporter.export_to_file(&output, &path)?;
-        } else {
-            exporter.export_to_file(&posts, &path)?;
-        }
+        let output = SubredditOutput {
+            information,
+            rules,
+            submissions: posts,
+        };
+        JsonExporter::new().export_to_file(&output, &path)?;
 
         spinner.finish_and_clear();
         print_summary(&path, 0);
