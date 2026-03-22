@@ -8,22 +8,155 @@
 //! ```no_run
 //! use std::path::Path;
 //!
-//! use urs_core::analytics::{WordCloudGenerator, WordFrequencyAnalyzer};
+//! use urs_core::analytics::{ColorScheme, WordCloudGenerator, WordFrequencyAnalyzer};
 //!
 //! let analyzer = WordFrequencyAnalyzer::new();
 //! let freqs = analyzer.analyze_str(&["rust rust rust code code programming"]);
 //!
-//! let generator = WordCloudGenerator::new();
+//! let generator = WordCloudGenerator::new()
+//!     .color_scheme(ColorScheme::Ocean);
 //! generator.save(&freqs, Path::new("wordcloud.png")).unwrap();
 //! ```
 
 use std::path::Path;
 
 use image::RgbaImage;
-use wordcloud_rs::{Token, WordCloud};
+use wordcloud_rs::{Colors, Token, WordCloud};
 
 use super::word_freq::WordFrequencies;
 use crate::error::Result;
+
+/// Color scheme for word cloud generation.
+///
+/// Each variant maps to a [`wordcloud_rs::Colors`] scheme. The default is [`Rainbow`](Self::Rainbow).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum ColorScheme {
+    /// Full rainbow spectrum — evenly distributed hues.
+    #[default]
+    Rainbow,
+    /// Monochrome blue.
+    Blue,
+    /// Cool tones centered on blue/cyan.
+    Cool,
+    /// Forest tones — greens and browns.
+    Forest,
+    /// Monochrome green.
+    Green,
+    /// Ocean tones — blues and greens.
+    Ocean,
+    /// Monochrome purple.
+    Purple,
+    /// Sunset tones — reds, oranges, and purples.
+    Sunset,
+    /// Warm tones centered on red/orange.
+    Warm,
+}
+
+impl ColorScheme {
+    /// All available color schemes, in display order.
+    pub const ALL: &[Self] = &[
+        Self::Rainbow,
+        Self::Blue,
+        Self::Cool,
+        Self::Forest,
+        Self::Green,
+        Self::Ocean,
+        Self::Purple,
+        Self::Sunset,
+        Self::Warm,
+    ];
+
+    /// Returns the scheme's display name.
+    #[must_use]
+    pub const fn label(self) -> &'static str {
+        match self {
+            Self::Rainbow => "Rainbow",
+            Self::Blue => "Blue",
+            Self::Cool => "Cool",
+            Self::Forest => "Forest",
+            Self::Green => "Green",
+            Self::Ocean => "Ocean",
+            Self::Purple => "Purple",
+            Self::Sunset => "Sunset",
+            Self::Warm => "Warm",
+        }
+    }
+
+    /// Returns the scheme's slug (used in query params and URLs).
+    #[must_use]
+    pub const fn slug(self) -> &'static str {
+        match self {
+            Self::Rainbow => "rainbow",
+            Self::Blue => "blue",
+            Self::Cool => "cool",
+            Self::Forest => "forest",
+            Self::Green => "green",
+            Self::Ocean => "ocean",
+            Self::Purple => "purple",
+            Self::Sunset => "sunset",
+            Self::Warm => "warm",
+        }
+    }
+
+    /// Parses a slug string into a `ColorScheme`, defaulting to [`Rainbow`](Self::Rainbow).
+    #[must_use]
+    pub fn from_slug(s: &str) -> Self {
+        match s {
+            "blue" => Self::Blue,
+            "cool" => Self::Cool,
+            "forest" => Self::Forest,
+            "green" => Self::Green,
+            "ocean" => Self::Ocean,
+            "purple" => Self::Purple,
+            "sunset" => Self::Sunset,
+            "warm" => Self::Warm,
+            _ => Self::Rainbow,
+        }
+    }
+
+    /// Converts this scheme into the `wordcloud_rs::Colors` representation.
+    const fn to_wordcloud_colors(self) -> Colors {
+        use palette::rgb::Rgb;
+
+        match self {
+            Self::Blue => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.15, 0.3, 0.85),
+                variance: 15.,
+            },
+            Self::Cool => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.1, 0.4, 0.9),
+                variance: 40.,
+            },
+            Self::Forest => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.2, 0.6, 0.15),
+                variance: 25.,
+            },
+            Self::Green => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.1, 0.7, 0.3),
+                variance: 15.,
+            },
+            Self::Ocean => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.0, 0.5, 0.7),
+                variance: 30.,
+            },
+            Self::Purple => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.55, 0.1, 0.8),
+                variance: 20.,
+            },
+            Self::Rainbow => Colors::Rainbow {
+                luminance: 70.,
+                chroma: 100.,
+            },
+            Self::Sunset => Colors::DoubleSplitCompl {
+                anchor: Rgb::new(0.9, 0.3, 0.2),
+            },
+            Self::Warm => Colors::BiaisedRainbow {
+                anchor: Rgb::new(0.9, 0.3, 0.1),
+                variance: 40.,
+            },
+        }
+    }
+}
 
 /// Generates word cloud images from word frequency data.
 ///
@@ -35,20 +168,24 @@ use crate::error::Result;
 /// ```no_run
 /// use std::path::Path;
 ///
-/// use urs_core::analytics::{WordCloudGenerator, WordFrequencyAnalyzer};
+/// use urs_core::analytics::{ColorScheme, WordCloudGenerator, WordFrequencyAnalyzer};
 ///
 /// let analyzer = WordFrequencyAnalyzer::new();
 /// let freqs = analyzer.analyze_str(&["hello hello world rust rust rust"]);
 ///
-/// let generator = WordCloudGenerator::new().dimensions(800, 600);
+/// let generator = WordCloudGenerator::new()
+///     .dimensions(800, 600)
+///     .color_scheme(ColorScheme::Ocean);
 /// generator.save(&freqs, Path::new("output.png")).unwrap();
 /// ```
 #[derive(Debug)]
 pub struct WordCloudGenerator {
-    /// Output image width in pixels.
-    width: usize,
+    /// Color scheme for word rendering.
+    color_scheme: ColorScheme,
     /// Output image height in pixels.
     height: usize,
+    /// Output image width in pixels.
+    width: usize,
 }
 
 impl Default for WordCloudGenerator {
@@ -58,15 +195,21 @@ impl Default for WordCloudGenerator {
 }
 
 impl WordCloudGenerator {
-    /// Creates a new generator with default dimensions (896x448).
-    ///
-    /// These defaults match the `wordcloud-rs` library defaults.
+    /// Creates a new generator with default settings (2048x1024, Rainbow colors).
     #[must_use]
     pub const fn new() -> Self {
         Self {
-            width: 896,
-            height: 448,
+            color_scheme: ColorScheme::Rainbow,
+            height: 1024,
+            width: 2048,
         }
+    }
+
+    /// Sets the color scheme.
+    #[must_use]
+    pub const fn color_scheme(mut self, scheme: ColorScheme) -> Self {
+        self.color_scheme = scheme;
+        self
     }
 
     /// Sets the output image dimensions.
@@ -77,15 +220,16 @@ impl WordCloudGenerator {
     /// * `height` - Image height in pixels
     #[must_use]
     pub const fn dimensions(mut self, width: usize, height: usize) -> Self {
-        self.width = width;
         self.height = height;
+        self.width = width;
 
         self
     }
 
     /// Generates a word cloud image from word frequencies.
     ///
-    /// Converts the frequency data into weighted tokens and renders them into an image.
+    /// Converts the frequency data into weighted tokens and renders them into an image using the
+    /// configured color scheme and dimensions.
     ///
     /// # Arguments
     ///
@@ -103,7 +247,9 @@ impl WordCloudGenerator {
             .map(|(word, count)| (Token::Text(word.clone()), *count as f32))
             .collect();
 
-        let mut wc = WordCloud::new().dim(self.width, self.height);
+        let mut wc = WordCloud::new()
+            .dim(self.width, self.height)
+            .colors(self.color_scheme.to_wordcloud_colors());
 
         wc.generate(tokens)
     }
@@ -136,8 +282,8 @@ mod tests {
     fn default_dimensions() {
         let generator = WordCloudGenerator::new();
 
-        assert_eq!(generator.width, 896);
-        assert_eq!(generator.height, 448);
+        assert_eq!(generator.width, 2048);
+        assert_eq!(generator.height, 1024);
     }
 
     #[test]
@@ -146,6 +292,33 @@ mod tests {
 
         assert_eq!(generator.width, 1024);
         assert_eq!(generator.height, 768);
+    }
+
+    #[test]
+    fn default_color_scheme() {
+        let generator = WordCloudGenerator::new();
+
+        assert_eq!(generator.color_scheme, ColorScheme::Rainbow);
+    }
+
+    #[test]
+    fn custom_color_scheme() {
+        let generator = WordCloudGenerator::new().color_scheme(ColorScheme::Ocean);
+
+        assert_eq!(generator.color_scheme, ColorScheme::Ocean);
+    }
+
+    #[test]
+    fn color_scheme_slug_roundtrip() {
+        for scheme in ColorScheme::ALL {
+            assert_eq!(ColorScheme::from_slug(scheme.slug()), *scheme);
+        }
+    }
+
+    #[test]
+    fn color_scheme_unknown_slug_defaults_to_rainbow() {
+        assert_eq!(ColorScheme::from_slug("unknown"), ColorScheme::Rainbow);
+        assert_eq!(ColorScheme::from_slug(""), ColorScheme::Rainbow);
     }
 
     #[test]
