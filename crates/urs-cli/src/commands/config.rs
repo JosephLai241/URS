@@ -147,14 +147,8 @@ fn run_generate_api_token() -> Result<()> {
         "✓".bright_green().bold(),
     );
     println!("  {token}\n");
-    println!(
-        "{}",
-        "Include this token in API requests as:".dimmed()
-    );
-    println!(
-        "  {}",
-        format!("Authorization: Bearer {token}").bold()
-    );
+    println!("{}", "Include this token in API requests as:".dimmed());
+    println!("  {}", format!("Authorization: Bearer {token}").bold());
 
     Ok(())
 }

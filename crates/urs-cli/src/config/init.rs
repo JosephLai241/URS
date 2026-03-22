@@ -140,9 +140,7 @@ fn prompt_scraping_settings(config: &mut UrsConfig) -> Result<()> {
     let path = if raw.is_absolute() {
         raw
     } else {
-        std::env::current_dir()
-            .unwrap_or_default()
-            .join(raw)
+        std::env::current_dir().unwrap_or_default().join(raw)
     };
 
     config.scraping.scrapes_dir = Some(path);

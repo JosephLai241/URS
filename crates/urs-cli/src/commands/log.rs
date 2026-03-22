@@ -123,7 +123,10 @@ fn find_log_for_date(date: &str) -> Result<PathBuf> {
     if path.is_file() {
         Ok(path)
     } else {
-        bail!("No log file found for date {date} (expected {})", path.display());
+        bail!(
+            "No log file found for date {date} (expected {})",
+            path.display()
+        );
     }
 }
 

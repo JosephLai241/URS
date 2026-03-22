@@ -9,7 +9,9 @@ use anyhow::{Result, bail};
 use clap::Args;
 use colored::Colorize;
 use tracing::info;
-use urs_core::export::{JsonExporter, ensure_dir, output_dir, output_dir_with_base, redditor_filename};
+use urs_core::export::{
+    JsonExporter, ensure_dir, output_dir, output_dir_with_base, redditor_filename,
+};
 use urs_core::scrapers::RedditorScraper;
 
 use crate::config;
@@ -90,7 +92,10 @@ pub async fn run(args: RedditorArgs) -> Result<()> {
 
     spinner.set_message(format!("Validating u/{}...", args.username));
     if let Err(e) = scraper.about(&args.username).await {
-        bail!("Redditor u/{} does not exist or is suspended: {e}", args.username);
+        bail!(
+            "Redditor u/{} does not exist or is suspended: {e}",
+            args.username
+        );
     }
 
     spinner.set_message(format!("Fetching interactions for u/{}...", args.username));
@@ -99,10 +104,10 @@ pub async fn run(args: RedditorArgs) -> Result<()> {
     spinner.set_message("Exporting results...");
 
     let dir = args.output.unwrap_or_else(|| {
-        cfg.scraping
-            .scrapes_dir
-            .as_ref()
-            .map_or_else(|| output_dir("redditors"), |base| output_dir_with_base(base, "redditors"))
+        cfg.scraping.scrapes_dir.as_ref().map_or_else(
+            || output_dir("redditors"),
+            |base| output_dir_with_base(base, "redditors"),
+        )
     });
     ensure_dir(&dir)?;
 

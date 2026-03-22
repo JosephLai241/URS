@@ -123,10 +123,10 @@ pub async fn run(args: CommentsArgs) -> Result<()> {
 
     let cfg = config::load_config().unwrap_or_default();
     let dir = args.output.unwrap_or_else(|| {
-        cfg.scraping
-            .scrapes_dir
-            .as_ref()
-            .map_or_else(|| output_dir("comments"), |base| output_dir_with_base(base, "comments"))
+        cfg.scraping.scrapes_dir.as_ref().map_or_else(
+            || output_dir("comments"),
+            |base| output_dir_with_base(base, "comments"),
+        )
     });
     ensure_dir(&dir)?;
     let filename = comments_filename(&title, total, all_comments, args.raw);
