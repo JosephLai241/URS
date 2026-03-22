@@ -26,4 +26,4 @@ mod wordcloud;
 
 pub use stop_words::ENGLISH_STOP_WORDS;
 pub use word_freq::{TextExtractable, WordFrequencies, WordFrequencyAnalyzer};
-pub use wordcloud::WordCloudGenerator;
+pub use wordcloud::{ColorScheme, WordCloudGenerator};
