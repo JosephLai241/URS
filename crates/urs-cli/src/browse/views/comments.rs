@@ -15,6 +15,7 @@ use super::{SubmissionView, highlight_json};
 pub fn render_comments_view(
     submission: &urs_core::models::Submission,
     comments: &[urs_core::models::Comment],
+    file_path: &str,
     breadcrumbs: Vec<BreadcrumbItem>,
 ) -> String {
     let total_count = count_comments(comments);
@@ -52,6 +53,7 @@ pub fn render_comments_view(
     let template = CommentsFragment {
         breadcrumbs,
         comments_html,
+        file_path: file_path.to_string(),
         submission: submission_view,
         total_count,
     };
@@ -70,10 +72,7 @@ enum Action<'a> {
 }
 
 /// Renders a comment tree to HTML iteratively using an explicit stack.
-fn render_comment_html(
-    roots: &[urs_core::models::Comment],
-    out: &mut String,
-) -> fmt::Result {
+fn render_comment_html(roots: &[urs_core::models::Comment], out: &mut String) -> fmt::Result {
     let mut stack: Vec<Action<'_>> = roots.iter().rev().map(|c| Action::Render(c, 0)).collect();
 
     while let Some(action) = stack.pop() {
@@ -132,7 +131,7 @@ fn write_comment_open(
 
     write!(
         out,
-        r#" <span class="comment-score">{score} points</span><span class="comment-time" data-utc="{utc}">&middot; {time_ago}</span><button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button><template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template></div><div class="comment-body">{body}</div>"#,
+        r#" <span class="comment-score">{score} points</span><span class="comment-time" data-utc="{utc}">&middot; {time_ago}</span><button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button><template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template></div><div class="comment-body rendered-markdown">{body}</div>"#,
         utc = comment.created_utc
     )?;
 
