@@ -1,7 +1,7 @@
-//! CSV table rendering with sorting and filtering.
+//! CSV table rendering with sorting.
 //!
-//! Parses CSV scrape files and renders them as sortable, filterable HTML tables with HTMX-powered
-//! column sorting and debounced text filtering.
+//! Parses CSV scrape files and renders them as sortable HTML tables with HTMX-powered
+//! column sorting.
 
 use std::path::Path;
 
@@ -10,7 +10,7 @@ use super::loader::{self, ScrapeData, ScrapeType};
 use super::routes::ViewQuery;
 use super::templates::{BreadcrumbItem, CsvFragment, ErrorFragment};
 
-/// Renders CSV data as a sortable/filterable table to an HTML string.
+/// Renders CSV data as a sortable table to an HTML string.
 pub fn render_csv_html(
     full_path: &Path,
     file_path: &str,
@@ -19,16 +19,6 @@ pub fn render_csv_html(
 ) -> String {
     match loader::parse_file(full_path, ScrapeType::Csv) {
         Ok(ScrapeData::Csv { headers, mut rows }) => {
-            // Apply filter.
-            let filter = query.filter.clone().unwrap_or_default();
-            if !filter.is_empty() {
-                let filter_lower = filter.to_lowercase();
-                rows.retain(|row| {
-                    row.iter()
-                        .any(|cell| cell.to_lowercase().contains(&filter_lower))
-                });
-            }
-
             // Apply sort.
             let sort_dir = query.dir.clone().unwrap_or_else(|| "asc".to_string());
             if let Some(ref sort_col) = query.sort {
@@ -63,7 +53,6 @@ pub fn render_csv_html(
             let template = CsvFragment {
                 breadcrumbs,
                 file_path: file_path.to_string(),
-                filter,
                 headers,
                 rows,
                 sort_col: query.sort.clone(),
