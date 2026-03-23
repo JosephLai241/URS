@@ -62,7 +62,9 @@ pub fn wrap_in_shell(state: &AppState, content_html: &str, status: StatusCode) -
     let sidebar_entries = loader::scan_directory(&state.scrapes_dir, "").unwrap_or_default();
     let template = ShellTemplate {
         content_html: content_html.to_string(),
+        scrape_enabled: state.client.is_some(),
         sidebar_entries,
+        username: state.username.as_deref().map(String::from),
     };
 
     match template.render() {
