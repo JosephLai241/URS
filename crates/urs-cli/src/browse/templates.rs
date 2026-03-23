@@ -43,8 +43,6 @@ pub struct ShellTemplate {
     pub username: Option<String>,
 }
 
-// ===== HTMX Partials =====
-
 /// HTMX partial: directory tree children.
 #[derive(Template)]
 #[template(path = "tree_fragment.html")]
@@ -148,14 +146,34 @@ pub struct RedditorFragment {
 pub struct LivestreamFragment {
     /// Navigation breadcrumb trail.
     pub breadcrumbs: Vec<BreadcrumbItem>,
+    /// Formatted elapsed duration (e.g. "00:12:34").
+    pub duration: String,
     /// Total number of livestream events.
     pub event_count: usize,
     /// Livestream events to render in the feed.
     pub events: Vec<LivestreamEventView>,
+    /// Formatted timestamp of the first event.
+    pub first_event_time: String,
+    /// Formatted timestamp of the last event.
+    pub last_event_time: String,
     /// Livestream source type (e.g. "comments", "submissions").
     pub source: String,
     /// Livestream target (e.g. Subreddit name).
     pub target: String,
+}
+
+/// Fragment: live livestream feed (for active streaming).
+#[derive(Template)]
+#[template(path = "fragments/livestream_live.html")]
+pub struct LivestreamLiveFragment {
+    /// Livestream source type (e.g. "comments", "submissions").
+    pub source: String,
+    /// Unix timestamp (seconds) when the livestream started.
+    pub started_at: f64,
+    /// Livestream target (e.g. "r/rust", "u/spez").
+    pub target: String,
+    /// Task ID for the livestream.
+    pub task_id: String,
 }
 
 /// Fragment: CSV table view.
