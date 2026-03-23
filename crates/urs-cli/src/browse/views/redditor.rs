@@ -276,7 +276,7 @@ fn write_comments_tab(comments: &[urs_core::models::Comment], html: &mut String)
                         <button class="item-json-btn" onclick="toggleItemJson(this)">{{}} Show JSON</button>
                         <template class="item-json-data"><div class="item-json-content"><pre>{json_html}</pre></div></template>
                     </div>
-                    <div class="comment-body">{body}</div>
+                    <div class="comment-body rendered-markdown">{body}</div>
                 </div>
             </div>"#,
             author = c.author,
