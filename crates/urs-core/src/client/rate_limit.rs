@@ -19,7 +19,7 @@ use tracing::debug;
 ///
 /// This struct captures the current rate limit state and provides methods for determining if
 /// requests should be delayed.
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy, Default, serde::Serialize)]
 pub struct RateLimitInfo {
     /// Approximate number of requests remaining in the current period.
     pub remaining: f64,
