@@ -6,9 +6,7 @@
 use askama::Template;
 
 use super::loader::{FileEntry, format_size};
-use super::views::{LivestreamEventView, SubmissionView, TabInfo};
-
-// ===== View Models =====
+use super::views::{LivestreamEventView, RuleView, SubmissionView, SubredditInfoView, TabInfo};
 
 /// A breadcrumb navigation item.
 #[derive(Debug, Clone)]
@@ -19,14 +17,16 @@ pub struct BreadcrumbItem {
     pub label: String,
 }
 
-// ===== Full-Page Templates =====
-
 /// Full-page shell: landing page with sidebar + empty content.
 #[derive(Template)]
 #[template(path = "index.html")]
 pub struct IndexTemplate {
     /// Top-level directory entries to display in the file tree.
     pub entries: Vec<FileEntry>,
+    /// Whether scraping is enabled (Reddit credentials are configured).
+    pub scrape_enabled: bool,
+    /// Reddit username of the authenticated account (None if no credentials).
+    pub username: Option<String>,
 }
 
 /// Full-page shell: sidebar + pre-loaded content (for direct URL access).
@@ -35,8 +35,12 @@ pub struct IndexTemplate {
 pub struct ShellTemplate {
     /// Pre-rendered HTML content for the main area.
     pub content_html: String,
+    /// Whether scraping is enabled (Reddit credentials are configured).
+    pub scrape_enabled: bool,
     /// File tree entries for the sidebar navigation.
     pub sidebar_entries: Vec<FileEntry>,
+    /// Reddit username of the authenticated account (None if no credentials).
+    pub username: Option<String>,
 }
 
 // ===== HTMX Partials =====
@@ -57,16 +61,20 @@ pub struct RedditorTabTemplate {
     pub tab_content: String,
 }
 
-// ===== Content Fragments =====
-
 /// Fragment: submissions view (swapped into #main-content).
 #[derive(Template)]
 #[template(path = "fragments/submissions.html")]
 pub struct SubmissionsFragment {
     /// Navigation breadcrumb trail.
     pub breadcrumbs: Vec<BreadcrumbItem>,
+    /// Relative path to the scrape file (used for analytics link).
+    pub file_path: String,
     /// Submission cards to render.
     pub posts: Vec<SubmissionView>,
+    /// Subreddit rules, if included in the scrape.
+    pub rules: Vec<RuleView>,
+    /// Subreddit metadata extracted from the posts, if available.
+    pub subreddit_info: Option<SubredditInfoView>,
 }
 
 /// Fragment: comments view.
@@ -77,6 +85,8 @@ pub struct CommentsFragment {
     pub breadcrumbs: Vec<BreadcrumbItem>,
     /// Pre-rendered HTML for the nested comment thread.
     pub comments_html: String,
+    /// Relative path to the scrape file (used for analytics link).
+    pub file_path: String,
     /// The parent submission displayed as a header card.
     pub submission: SubmissionView,
     /// Total number of comments (including nested replies).
@@ -156,8 +166,6 @@ pub struct CsvFragment {
     pub breadcrumbs: Vec<BreadcrumbItem>,
     /// Relative path to the scrape file (used for download link).
     pub file_path: String,
-    /// Current filter text (shown in the search input).
-    pub filter: String,
     /// Column headers for the table.
     pub headers: Vec<String>,
     /// Table rows (each row is a vector of cell values).
@@ -166,6 +174,69 @@ pub struct CsvFragment {
     pub sort_col: Option<String>,
     /// Sort direction: "asc" or "desc".
     pub sort_dir: String,
+}
+
+/// Fragment: word frequency analytics view.
+#[derive(Template)]
+#[template(path = "fragments/analytics.html")]
+pub struct AnalyticsFragment {
+    /// Navigation breadcrumb trail.
+    pub breadcrumbs: Vec<BreadcrumbItem>,
+    /// Available color schemes for the word cloud.
+    pub color_schemes: Vec<ColorSchemeOption>,
+    /// Word frequency entries to display.
+    pub entries: Vec<WordFreqEntry>,
+    /// Relative path to the scrape file (used for download URLs).
+    pub file_path: String,
+    /// Total number of words counted.
+    pub total_count: u32,
+    /// Number of unique words.
+    pub unique_count: usize,
+    /// Base64-encoded PNG word cloud image, or empty if generation failed.
+    pub wordcloud_base64: String,
+}
+
+/// A single word frequency entry for the analytics table.
+#[derive(Debug, Clone)]
+pub struct WordFreqEntry {
+    /// The count of occurrences.
+    pub count: u32,
+    /// Percentage relative to the most frequent word (for bar width).
+    pub percentage: f32,
+    /// The word.
+    pub word: String,
+}
+
+/// A color scheme option for the word cloud customization form.
+#[derive(Debug, Clone)]
+pub struct ColorSchemeOption {
+    /// Display name.
+    pub label: String,
+    /// Whether this is the currently selected scheme.
+    pub selected: bool,
+    /// URL slug.
+    pub slug: String,
+}
+
+/// Fragment: scrape form with tabbed interface.
+#[derive(Template)]
+#[template(path = "fragments/scrape_form.html")]
+pub struct ScrapeFormFragment {
+    /// Whether scraping is enabled (Reddit credentials are configured).
+    pub scrape_enabled: bool,
+}
+
+/// Fragment: scrape result success message.
+#[allow(dead_code)]
+#[derive(Template)]
+#[template(path = "fragments/scrape_result.html")]
+pub struct ScrapeResultFragment {
+    /// Number of items scraped.
+    pub count: usize,
+    /// Description of what was scraped (e.g. "posts from r/rust").
+    pub description: String,
+    /// Relative path to the scraped file for viewing.
+    pub view_path: String,
 }
 
 /// Fragment: error message.
