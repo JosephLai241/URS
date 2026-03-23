@@ -52,6 +52,8 @@ pub struct ScrapeTask {
     pub stage_total: u8,
     /// Unix timestamp (seconds) when this task was created.
     pub started_at: f64,
+    /// Task type: "batch" for standard scrapes, "livestream" for streaming scrapes.
+    pub task_type: String,
     /// Display title (e.g. "r/rust — hot").
     pub title: String,
 }
@@ -61,6 +63,10 @@ pub struct ScrapeTask {
 pub struct AppState {
     /// Authenticated Reddit client for scraping (None = scraping disabled).
     pub client: Option<Arc<RedditClient>>,
+    /// In-memory event buffers for active livestream tasks, keyed by task ID.
+    pub livestream_events: Arc<DashMap<String, Vec<serde_json::Value>>>,
+    /// Per-task cancellation tokens for stopping individual livestream tasks.
+    pub livestream_tokens: Arc<DashMap<String, CancellationToken>>,
     /// Active and recently completed scrape tasks.
     pub scrape_tasks: Arc<DashMap<String, ScrapeTask>>,
     /// Root directory containing scraped data.
@@ -122,6 +128,8 @@ pub async fn run(config: ServerConfig) -> anyhow::Result<()> {
 
     let state = AppState {
         client,
+        livestream_events: Arc::new(DashMap::new()),
+        livestream_tokens: Arc::new(DashMap::new()),
         scrape_tasks,
         scrapes_dir: Arc::new(config.scrapes_dir),
         shutdown: shutdown.clone(),
