@@ -9,6 +9,7 @@ version = "4.0.0"
 
 [dependencies]
 anyhow = "1"
+async-stream.workspace = true
 base64.workspace = true
 askama.workspace = true
 axum.workspace = true
@@ -18,8 +19,10 @@ colored.workspace = true
 crossterm.workspace = true
 csv.workspace = true
 cliclack.workspace = true
+dashmap.workspace = true
 directories.workspace = true
 futures.workspace = true
+image.workspace = true
 indicatif.workspace = true
 mime_guess.workspace = true
 open = "5.3.3"
@@ -37,8 +40,10 @@ tracing.workspace = true
 tracing-appender.workspace = true
 tracing-subscriber.workspace = true
 url.workspace = true
+uuid.workspace = true
 urs-api = { path = "../urs-api", optional = true }
 urs-core = { path = "../urs-core" }
+tokio-util = "0.7.18"
 
 [features]
 api = ["dep:urs-api"]
