@@ -7,8 +7,9 @@ use askama::Template;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Response};
 
+use std::path::Path;
+
 use super::loader;
-use super::server::AppState;
 use super::templates::{BreadcrumbItem, ErrorFragment, ShellTemplate};
 
 /// Converts a template to an axum HTML response.
@@ -46,25 +47,41 @@ pub fn error_html(status: u16, message: &str) -> String {
 }
 
 /// Creates an error response, wrapping in shell for direct access.
-pub fn error_response(status: u16, message: &str, is_htmx: bool, state: &AppState) -> Response {
+pub fn error_response(
+    status: u16,
+    message: &str,
+    is_htmx: bool,
+    scrapes_dir: &Path,
+    scrape_enabled: bool,
+    username: Option<&str>,
+) -> Response {
     let html = error_html(status, message);
     let status_code = StatusCode::from_u16(status).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
 
     if is_htmx {
         (status_code, Html(html)).into_response()
     } else {
-        wrap_in_shell(state, &html, status_code)
+        wrap_in_shell(scrapes_dir, scrape_enabled, username, &html, status_code)
     }
 }
 
 /// Wraps a content HTML string in the full SPA shell for direct URL access.
-pub fn wrap_in_shell(state: &AppState, content_html: &str, status: StatusCode) -> Response {
-    let sidebar_entries = loader::scan_directory(&state.scrapes_dir, "").unwrap_or_default();
+///
+/// Accepts pre-computed `scrape_enabled` and `username` values so the caller can read them from
+/// the `RwLock`-wrapped `AppState` fields before calling this synchronous function.
+pub fn wrap_in_shell(
+    scrapes_dir: &Path,
+    scrape_enabled: bool,
+    username: Option<&str>,
+    content_html: &str,
+    status: StatusCode,
+) -> Response {
+    let sidebar_entries = loader::scan_directory(scrapes_dir, "").unwrap_or_default();
     let template = ShellTemplate {
         content_html: content_html.to_string(),
-        scrape_enabled: state.client.is_some(),
+        scrape_enabled,
         sidebar_entries,
-        username: state.username.as_deref().map(String::from),
+        username: username.map(String::from),
     };
 
     match template.render() {
