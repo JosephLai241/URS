@@ -11,6 +11,7 @@ use axum::Router;
 use dashmap::DashMap;
 use tokio::net::TcpListener;
 use tokio::signal;
+use tokio::sync::RwLock;
 use tokio_util::sync::CancellationToken;
 use url::Url;
 use urs_core::client::RedditClient;
@@ -62,7 +63,10 @@ pub struct ScrapeTask {
 #[derive(Debug, Clone)]
 pub struct AppState {
     /// Authenticated Reddit client for scraping (None = scraping disabled).
-    pub client: Option<Arc<RedditClient>>,
+    ///
+    /// Wrapped in `RwLock` so the settings page can swap in a new client after
+    /// credentials are saved without restarting the server.
+    pub client: Arc<RwLock<Option<Arc<RedditClient>>>>,
     /// In-memory event buffers for active livestream tasks, keyed by task ID.
     pub livestream_events: Arc<DashMap<String, Vec<serde_json::Value>>>,
     /// Per-task cancellation tokens for stopping individual livestream tasks.
@@ -74,7 +78,9 @@ pub struct AppState {
     /// Token that signals server shutdown to long-lived connections (e.g. SSE streams).
     pub shutdown: CancellationToken,
     /// Reddit username of the authenticated account (None if no credentials).
-    pub username: Option<Arc<str>>,
+    ///
+    /// Wrapped in `RwLock` alongside `client` for hot-reload after credential changes.
+    pub username: Arc<RwLock<Option<Arc<str>>>>,
 }
 
 /// Starts the browse web server.
@@ -127,13 +133,13 @@ pub async fn run(config: ServerConfig) -> anyhow::Result<()> {
     let shutdown = CancellationToken::new();
 
     let state = AppState {
-        client,
+        client: Arc::new(RwLock::new(client)),
         livestream_events: Arc::new(DashMap::new()),
         livestream_tokens: Arc::new(DashMap::new()),
         scrape_tasks,
         scrapes_dir: Arc::new(config.scrapes_dir),
         shutdown: shutdown.clone(),
-        username,
+        username: Arc::new(RwLock::new(username)),
     };
 
     let app = Router::new().merge(routes::router()).with_state(state);
