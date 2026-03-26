@@ -1,4 +1,10 @@
-//! This module provides functionality to scrape submission comments.
+//! Scraper for submission comments with "more comments" expansion.
+//!
+//! This module provides [`CommentsScraper`], which fetches comments from Reddit submissions
+//! and builds comment trees. It handles pagination through Reddit's "more comments" stubs,
+//! including both batched child expansion and deep thread fetching.
+
+mod parser;
 
 use tracing::{debug, info, warn};
 
@@ -7,7 +13,7 @@ use crate::client::endpoints::CommentsEndpoint;
 use crate::error::{Error, Result};
 use crate::models::Submission;
 use crate::models::api::{
-    CommentData, Listing, MoreChildrenResponse, MoreCommentsData, RepliesField, SubmissionData,
+    CommentData, Listing, MoreChildrenResponse, MoreCommentsData, SubmissionData,
 };
 use crate::models::{Comment, CommentTree, MoreComments};
 
@@ -153,7 +159,8 @@ impl<'a> CommentsScraper<'a> {
 
     /// Fetches the initial submission metadata and top-level comments from the API.
     ///
-    /// Returns the submission, parsed comments, and any "more comments" stubs that need further expansion.
+    /// Returns the submission, parsed comments, and any "more comments" stubs that need further
+    /// expansion.
     async fn fetch_initial(
         &self,
         subreddit: &str,
@@ -195,8 +202,8 @@ impl<'a> CommentsScraper<'a> {
         let mut comments: Vec<Comment> = Vec::new();
         let mut more_stubs: Vec<MoreComments> = Vec::new();
 
-        let children_values = Self::children_to_values(comments_listing.data.children);
-        Self::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
+        let children_values = parser::children_to_values(comments_listing.data.children);
+        parser::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
 
         debug!(
             initial_comments = comments.len(),
@@ -226,7 +233,7 @@ impl<'a> CommentsScraper<'a> {
 
             for stub in &pending_stubs {
                 if stub.children.is_empty() {
-                    // "Continue this thread" stub — fetch the deep thread by requesting the parent
+                    // "Continue this thread" stub. Fetch the deep thread by requesting the parent
                     // comment's permalink.
                     let parent_id = stub
                         .parent_id
@@ -367,83 +374,13 @@ impl<'a> CommentsScraper<'a> {
         let comments_listing: Listing<serde_json::Value> =
             serde_json::from_value(listings[1].clone())?;
 
-        let children_values = Self::children_to_values(comments_listing.data.children);
+        let children_values = parser::children_to_values(comments_listing.data.children);
 
         let mut comments = Vec::new();
         let mut more_stubs = Vec::new();
-        Self::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
+        parser::collect_comments(&children_values, &mut comments, &mut more_stubs)?;
 
         Ok((comments, more_stubs))
-    }
-
-    /// Converts listing children to JSON values, logging any conversion failures.
-    fn children_to_values<T: serde::Serialize>(children: Vec<T>) -> Vec<serde_json::Value> {
-        children
-            .into_iter()
-            .filter_map(|thing| match serde_json::to_value(thing) {
-                Ok(value) => Some(value),
-                Err(err) => {
-                    warn!("Failed to convert comment thing to JSON value: {err}");
-                    None
-                }
-            })
-            .collect()
-    }
-
-    /// Iteratively collects comments and "more" stubs from the API response.
-    ///
-    /// Uses a stack-based DFS to avoid stack overflow on deeply nested threads.
-    fn collect_comments(
-        children: &[serde_json::Value],
-        comments: &mut Vec<Comment>,
-        more_stubs: &mut Vec<MoreComments>,
-    ) -> Result<()> {
-        let mut stack: Vec<Vec<serde_json::Value>> = vec![children.to_vec()];
-
-        while let Some(current_children) = stack.pop() {
-            for child in &current_children {
-                let kind = child.get("kind").and_then(|k| k.as_str()).unwrap_or("");
-
-                match kind {
-                    "t1" => {
-                        if let Some(data) = child.get("data") {
-                            let comment_data: CommentData = serde_json::from_value(data.clone())?;
-
-                            if let RepliesField::Listing(replies_listing) = &comment_data.replies {
-                                let reply_values: Vec<serde_json::Value> = replies_listing
-                                    .data
-                                    .children
-                                    .iter()
-                                    .map(|c| serde_json::to_value(c).unwrap_or_default())
-                                    .collect();
-
-                                if !reply_values.is_empty() {
-                                    stack.push(reply_values);
-                                }
-                            }
-
-                            comments.push(Comment::from(comment_data));
-                        }
-                    }
-                    "more" => {
-                        if let Some(data) = child.get("data") {
-                            if let Ok(more_data) =
-                                serde_json::from_value::<MoreCommentsData>(data.clone())
-                            {
-                                if !more_data.children.is_empty() || more_data.count > 0 {
-                                    more_stubs.push(MoreComments::from(more_data));
-                                }
-                            }
-                        }
-                    }
-                    _ => {
-                        debug!(kind = kind, "Unknown child kind in comments");
-                    }
-                }
-            }
-        }
-
-        Ok(())
     }
 
     /// Parses a Reddit submission URL to extract Subreddit and submission ID.
@@ -460,7 +397,7 @@ impl<'a> CommentsScraper<'a> {
             .map(Iterator::collect)
             .unwrap_or_default();
 
-        // Expects segments that look like this: ["r", "subreddit", "comments", "id", ...]
+        // Expects segments that look like this: ["r", "subreddit", "comments", "id", ...].
         if path_segments.len() < 4 {
             return Err(Error::InvalidArgument(format!(
                 "Invalid submission URL: {url}"
