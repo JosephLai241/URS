@@ -6,7 +6,9 @@
 use std::path::Path;
 
 use serde::Deserialize;
-use urs_core::models::{Comment, CommentsResult, RedditorInteractions, Submission, SubredditRules};
+use urs_core::models::{
+    Comment, CommentsResult, RedditorInteractions, Submission, Subreddit, SubredditRules,
+};
 
 /// A file or directory entry in the scrapes tree.
 #[derive(Debug, Clone)]
@@ -58,8 +60,10 @@ pub enum ScrapeData {
     Livestream(Vec<LivestreamEvent>),
     /// Redditor profile with interaction categories.
     Redditor(Box<RedditorInteractions>),
-    /// Subreddit submissions, optionally with rules.
+    /// Subreddit submissions with metadata and optional rules.
     Submissions {
+        /// Subreddit metadata from the about endpoint.
+        information: Box<Subreddit>,
         /// The list of submissions.
         posts: Vec<Submission>,
         /// Optional Subreddit rules.
@@ -82,13 +86,16 @@ pub enum ScrapeType {
     Subreddit,
 }
 
-/// Helper struct for deserializing Subreddit JSON that may include rules.
+/// Helper struct for deserializing the Subreddit JSON shape.
 #[derive(Deserialize)]
-struct SubredditWithRules {
-    /// The list of submissions.
-    posts: Vec<Submission>,
-    /// Optional subreddit rules.
+struct SubredditWithInfo {
+    /// Subreddit metadata from the about endpoint.
+    information: Subreddit,
+    /// Optional Subreddit rules.
     rules: Option<SubredditRules>,
+    /// The list of submissions.
+    #[serde(default)]
+    submissions: Vec<Submission>,
 }
 
 /// Scans a directory and returns its immediate children as `FileEntry` items.
@@ -213,13 +220,15 @@ pub fn detect_type(file_path: &Path) -> ScrapeType {
     tracing::debug!(path = %file_path.display(), "Falling back to content inspection for type detection");
 
     if let Ok(contents) = std::fs::read_to_string(file_path) {
+        // Subreddit format has "submissions" key; check before Redditor "information" since the
+        // Subreddit format also has an "information" section.
+        if contents.contains("\"submissions\"") {
+            tracing::debug!(path = %file_path.display(), "Detected type by content: Subreddit");
+            return ScrapeType::Subreddit;
+        }
         if contents.contains("\"information\"") {
             tracing::debug!(path = %file_path.display(), "Detected type by content: Redditor");
             return ScrapeType::Redditor;
-        }
-        if contents.contains("\"posts\"") {
-            tracing::debug!(path = %file_path.display(), "Detected type by content: Subreddit");
-            return ScrapeType::Subreddit;
         }
     }
 
@@ -346,7 +355,7 @@ fn parse_livestream(file_path: &Path) -> anyhow::Result<ScrapeData> {
     Ok(ScrapeData::Livestream(events))
 }
 
-/// Parses a redditor JSON file.
+/// Parses a Redditor JSON file.
 fn parse_redditor(file_path: &Path) -> anyhow::Result<ScrapeData> {
     let contents = std::fs::read_to_string(file_path)?;
     let interactions: RedditorInteractions = serde_json::from_str(&contents)?;
@@ -356,7 +365,7 @@ fn parse_redditor(file_path: &Path) -> anyhow::Result<ScrapeData> {
             .information
             .as_ref()
             .map_or("unknown", |i| &i.name),
-        "Parsed redditor profile"
+        "Parsed Redditor profile"
     );
 
     Ok(ScrapeData::Redditor(Box::new(interactions)))
@@ -365,29 +374,19 @@ fn parse_redditor(file_path: &Path) -> anyhow::Result<ScrapeData> {
 /// Parses a Subreddit JSON file.
 fn parse_subreddit(file_path: &Path) -> anyhow::Result<ScrapeData> {
     let contents = std::fs::read_to_string(file_path)?;
-    let value: serde_json::Value = serde_json::from_str(&contents)?;
+    let data: SubredditWithInfo = serde_json::from_str(&contents)?;
 
-    // Try as {posts, rules} object first.
-    if value.is_object() && value.get("posts").is_some() {
-        let data: SubredditWithRules = serde_json::from_value(value)?;
+    tracing::debug!(
+        count = data.submissions.len(),
+        has_rules = data.rules.is_some(),
+        "Parsed Subreddit data"
+    );
 
-        tracing::debug!(
-            count = data.posts.len(),
-            has_rules = data.rules.is_some(),
-            "Parsed Subreddit with rules"
-        );
-
-        return Ok(ScrapeData::Submissions {
-            posts: data.posts,
-            rules: data.rules,
-        });
-    }
-
-    // Otherwise it's a plain array of submissions.
-    let posts: Vec<Submission> = serde_json::from_value(value)?;
-    tracing::debug!(count = posts.len(), "Parsed Subreddit submissions");
-
-    Ok(ScrapeData::Submissions { posts, rules: None })
+    Ok(ScrapeData::Submissions {
+        information: Box::new(data.information),
+        posts: data.submissions,
+        rules: data.rules,
+    })
 }
 
 #[cfg(test)]
