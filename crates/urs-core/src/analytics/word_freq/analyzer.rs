@@ -1,110 +1,13 @@
-//! Word frequency analysis for scraped Reddit data.
+//! Word frequency analyzer with configurable filtering.
 //!
-//! This module provides a configurable word frequency analyzer that extracts and counts words from
-//! Reddit submissions, comments, and raw text. It supports stop word filtering, case normalization,
-//! and minimum word length filtering.
-//!
-//! # Example
-//!
-//! ```
-//! use urs_core::analytics::{WordFrequencyAnalyzer, ENGLISH_STOP_WORDS};
-//!
-//! let analyzer = WordFrequencyAnalyzer::new()
-//!     .min_word_length(3);
-//!
-//! let freqs = analyzer.analyze_str(&["hello world hello rust", "rust is great"]);
-//! assert_eq!(freqs.unique_count(), 4); // hello, world, rust, great ("is" is a stop word)
-//! ```
+//! Provides the [`WordFrequencyAnalyzer`] struct that tokenizes text and produces word frequency
+//! counts with support for stop word filtering, case normalization, and minimum word length.
 
 use std::collections::{HashMap, HashSet};
 
-use serde::{Deserialize, Serialize};
-
-use super::stop_words::ENGLISH_STOP_WORDS;
-use crate::models::{Comment, Submission};
-
-/// A type that can provide text content for frequency analysis.
-///
-/// Implement this trait for any data model whose text fields should be analyzed for word
-/// frequencies.
-pub trait TextExtractable {
-    /// Extracts all analyzable text from this item.
-    ///
-    /// Returns a vector of string slices representing distinct text fields (e.g., title, body).
-    /// Each field is tokenized separately but frequencies are accumulated together.
-    fn extract_text(&self) -> Vec<&str>;
-}
-
-impl TextExtractable for Submission {
-    fn extract_text(&self) -> Vec<&str> {
-        let mut texts = vec![self.title.as_str()];
-
-        if let Some(ref selftext) = self.selftext {
-            if !selftext.is_empty() {
-                texts.push(selftext.as_str());
-            }
-        }
-
-        texts
-    }
-}
-
-impl TextExtractable for Comment {
-    fn extract_text(&self) -> Vec<&str> {
-        // Skip deleted/removed comment placeholders.
-        if self.body == "[deleted]" || self.body == "[removed]" {
-            return vec![];
-        }
-
-        vec![self.body.as_str()]
-    }
-}
-
-/// Sorted word frequency results.
-///
-/// Contains word-count pairs sorted by frequency in descending order. This is the output of
-/// [`WordFrequencyAnalyzer::analyze`] and can be used for display, export, or passed to a word
-/// cloud generator for visualization.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordFrequencies {
-    /// Word-count pairs sorted by frequency (descending).
-    entries: Vec<(String, u32)>,
-}
-
-impl WordFrequencies {
-    /// Returns the frequency entries as a slice.
-    #[must_use]
-    pub fn entries(&self) -> &[(String, u32)] {
-        &self.entries
-    }
-
-    /// Returns the top N most frequent words.
-    ///
-    /// If `n` exceeds the number of unique words, all entries are returned.
-    #[must_use]
-    pub fn top_n(&self, n: usize) -> &[(String, u32)] {
-        let end = n.min(self.entries.len());
-        &self.entries[..end]
-    }
-
-    /// Returns the total number of unique words.
-    #[must_use]
-    pub fn unique_count(&self) -> usize {
-        self.entries.len()
-    }
-
-    /// Returns the total number of words counted (sum of all frequencies).
-    #[must_use]
-    pub fn total_count(&self) -> u32 {
-        self.entries.iter().map(|(_, count)| count).sum()
-    }
-
-    /// Consumes the frequencies and returns the underlying word-count pairs.
-    #[must_use]
-    pub fn into_entries(self) -> Vec<(String, u32)> {
-        self.entries
-    }
-}
+use super::extractable::TextExtractable;
+use super::frequencies::WordFrequencies;
+use crate::analytics::stop_words::ENGLISH_STOP_WORDS;
 
 /// Analyzes text to produce word frequency counts.
 ///
@@ -125,12 +28,12 @@ impl WordFrequencies {
 /// ```
 #[derive(Debug)]
 pub struct WordFrequencyAnalyzer {
-    /// Words to exclude from frequency counts.
-    stop_words: HashSet<String>,
     /// Whether to preserve case during analysis.
     case_sensitive: bool,
     /// Minimum word length to include in results.
     min_word_length: usize,
+    /// Words to exclude from frequency counts.
+    stop_words: HashSet<String>,
 }
 
 impl Default for WordFrequencyAnalyzer {
@@ -146,12 +49,12 @@ impl WordFrequencyAnalyzer {
     #[must_use]
     pub fn new() -> Self {
         Self {
+            case_sensitive: false,
+            min_word_length: 1,
             stop_words: ENGLISH_STOP_WORDS
                 .iter()
                 .map(|w| (*w).to_string())
                 .collect(),
-            case_sensitive: false,
-            min_word_length: 1,
         }
     }
 
@@ -189,6 +92,7 @@ impl WordFrequencyAnalyzer {
         for word in words {
             self.stop_words.insert(word.to_lowercase());
         }
+
         self
     }
 
@@ -260,6 +164,7 @@ mod tests {
 
     use super::*;
     use crate::models::api::EditedField;
+    use crate::models::{Comment, Submission};
 
     fn sample_submission(title: &str, selftext: Option<&str>) -> Submission {
         Submission {
@@ -340,7 +245,6 @@ mod tests {
         let analyzer = WordFrequencyAnalyzer::new();
         let freqs = analyzer.analyze_str(&["the quick brown fox is a test"]);
 
-        // "the", "is", "a" should be filtered.
         let words: Vec<&str> = freqs.entries().iter().map(|(w, _)| w.as_str()).collect();
 
         assert!(!words.contains(&"the"));
@@ -484,7 +388,6 @@ mod tests {
         let analyzer = WordFrequencyAnalyzer::new();
         let freqs = analyzer.analyze(&subs);
 
-        // "Rust" appears 5 times, "is" is a stop word.
         assert_eq!(freqs.entries()[0], ("rust".to_string(), 5));
     }
 
@@ -500,7 +403,6 @@ mod tests {
         let freqs = analyzer.analyze(&comments);
 
         assert_eq!(freqs.entries()[0], ("great".to_string(), 3));
-        // "[deleted]" comment should be skipped entirely.
         let words: Vec<&str> = freqs.entries().iter().map(|(w, _)| w.as_str()).collect();
         assert!(!words.contains(&"deleted"));
     }
@@ -522,7 +424,6 @@ mod tests {
             .min_word_length(4);
         let freqs = analyzer.analyze_str(&["check https://www.reddit.com/r/rust"]);
 
-        // URL gets split on non-alphanumeric chars; short segments filtered by min_word_length.
         let words: Vec<&str> = freqs.entries().iter().map(|(w, _)| w.as_str()).collect();
 
         assert!(words.contains(&"check"));
