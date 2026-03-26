@@ -58,7 +58,7 @@ impl CsvExporter {
                 format_edited(&sub.edited),
                 sub.is_original_content,
                 sub.is_self,
-                escape_csv(&format_option(&sub.link_flair_text)),
+                escape_csv(&format_option(sub.link_flair_text.as_ref())),
                 sub.locked,
                 sub.nsfw,
                 sub.num_comments,
@@ -165,8 +165,8 @@ fn format_edited(edited: &EditedField) -> String {
 /// Formats an `Option<String>` for CSV output.
 ///
 /// Returns an empty string for `None`.
-fn format_option(opt: &Option<String>) -> String {
-    opt.as_deref().unwrap_or("").to_string()
+fn format_option(opt: Option<&String>) -> String {
+    opt.map_or_else(String::new, String::clone)
 }
 
 #[cfg(test)]
@@ -229,12 +229,12 @@ mod tests {
     #[test]
     fn format_option_some() {
         let val = Some("hello".to_string());
-        assert_eq!(format_option(&val), "hello");
+        assert_eq!(format_option(val.as_ref()), "hello");
     }
 
     #[test]
     fn format_option_none() {
         let val: Option<String> = None;
-        assert_eq!(format_option(&val), "");
+        assert_eq!(format_option(val.as_ref()), "");
     }
 }
