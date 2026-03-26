@@ -236,6 +236,26 @@ pub struct ColorSchemeOption {
     pub slug: String,
 }
 
+/// Fragment: settings page with credentials form.
+#[derive(Template)]
+#[template(path = "fragments/settings.html")]
+pub struct SettingsFragment {
+    /// Whether the server is currently authenticated with Reddit.
+    pub authenticated: bool,
+    /// Pre-filled client ID from config (empty if not set).
+    pub client_id: String,
+    /// Pre-filled client secret from config (empty if not set).
+    pub client_secret: String,
+    /// Path to the config file on disk.
+    pub config_path: String,
+    /// Pre-filled username from config (empty if not set).
+    pub config_username: String,
+    /// Currently authenticated Reddit username (empty if not connected).
+    pub current_username: String,
+    /// Pre-filled password from config (empty if not set).
+    pub password: String,
+}
+
 /// Fragment: scrape form with tabbed interface.
 #[derive(Template)]
 #[template(path = "fragments/scrape_form.html")]
