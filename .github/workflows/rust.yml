@@ -1,38 +1,75 @@
-name: Rust code checks
+name: Rust (check, test, format, Clippy)
 
 on:
+  push:
+    branches-ignore:
+      - "demo-gifs"
+      - "gh-pages"
+      - "samples"
   pull_request:
     branches-ignore:
       - "demo-gifs"
       - "gh-pages"
-      - "rust-demo"
       - "samples"
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  rustfmt:
+  check:
+    name: cargo check
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Rustfmt check
-        uses: mbrobbel/rustfmt-check@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: Swatinem/rust-cache@v2
 
-  clippy:
+      - name: Cargo check
+        run: cargo check --all
+
+  test:
+    name: cargo test
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Add clippy via rustup
-        run: rustup component add clippy
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Run tests
+        run: cargo test --all
+
+  fmt:
+    name: rustfmt
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Rustfmt check
+        run: cargo fmt --all -- --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
 
       - name: Clippy check
-        uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features
+        run: cargo clippy --all --no-deps -- -D warnings
