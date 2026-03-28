@@ -264,19 +264,6 @@ pub struct ScrapeFormFragment {
     pub scrape_enabled: bool,
 }
 
-/// Fragment: scrape result success message.
-#[allow(dead_code)]
-#[derive(Template)]
-#[template(path = "fragments/scrape_result.html")]
-pub struct ScrapeResultFragment {
-    /// Number of items scraped.
-    pub count: usize,
-    /// Description of what was scraped (e.g. "posts from r/rust").
-    pub description: String,
-    /// Relative path to the scraped file for viewing.
-    pub view_path: String,
-}
-
 /// Fragment: error message.
 #[derive(Template)]
 #[template(path = "fragments/error.html")]

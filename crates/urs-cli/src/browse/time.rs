@@ -35,7 +35,7 @@ pub fn relative_time(created_utc: f64) -> String {
 ///
 /// A formatted datetime string (e.g. "2026-03-16 14:30:45 UTC").
 #[must_use]
-#[allow(dead_code, clippy::cast_possible_truncation)]
+#[allow(clippy::cast_possible_truncation)]
 pub fn absolute_time(created_utc: f64) -> String {
     let secs = created_utc as i64;
     let dt = chrono::DateTime::from_timestamp(secs, 0);

@@ -38,14 +38,11 @@ pub struct LivestreamEvent {
 
 /// Parsed scrape data ready for rendering.
 #[derive(Debug)]
-#[allow(dead_code)]
 pub enum ScrapeData {
     /// Comment thread (nested with replies).
     Comments {
         /// Top-level comments with nested replies.
         comments: Vec<Comment>,
-        /// Whether this is raw (flat) format.
-        is_raw: bool,
         /// The parent submission's metadata.
         submission: Box<Submission>,
     },
@@ -298,23 +295,12 @@ fn is_date_dir(name: &str) -> bool {
 fn parse_comments(file_path: &Path) -> anyhow::Result<ScrapeData> {
     let contents = std::fs::read_to_string(file_path)?;
 
-    // Detect if raw (flat) format: raw comments have no nested replies.
-    let is_raw = file_path
-        .file_name()
-        .and_then(|n| n.to_str())
-        .is_some_and(|n| n.contains("-raw"));
-
     let result: CommentsResult = serde_json::from_str(&contents)?;
 
-    tracing::debug!(
-        count = result.comments.len(),
-        is_raw = is_raw,
-        "Parsed comments"
-    );
+    tracing::debug!(count = result.comments.len(), "Parsed comments");
 
     Ok(ScrapeData::Comments {
         comments: result.comments,
-        is_raw,
         submission: Box::new(result.submission),
     })
 }
