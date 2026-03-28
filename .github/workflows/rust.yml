@@ -56,7 +56,7 @@ jobs:
           components: rustfmt
 
       - name: Rustfmt check
-        run: cargo fmt --all -- --check
+        run: cargo fmt --all -- --check --color always
 
   clippy:
     name: Clippy
