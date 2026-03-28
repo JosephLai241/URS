@@ -1,200 +1,14 @@
-//! TUI application state for the livestream viewer.
+//! Methods that mutate [`App`] state.
 //!
-//! Manages the display buffer of livestream events, scroll position, auto-scroll behavior, and
-//! detail view state.
+//! Includes event handling, scrolling, detail view management, and other state transitions.
 
 use std::collections::BTreeMap;
 
 use urs_core::scrapers::LivestreamEvent;
 
-/// The interaction state within the detail view.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DetailMode {
-    /// Inside a pane — scroll controls apply to its contents.
-    Active,
-    /// Choosing which pane to enter. The highlighted pane is stored separately.
-    Selecting,
-}
-
-/// Which pane is highlighted or active in the detail view.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DetailPane {
-    /// The body/selftext content area.
-    Body,
-    /// The metadata fields table.
-    Fields,
-}
-
-/// The current view mode of the TUI.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ViewMode {
-    /// Detail view showing full content of the selected item.
-    Detail,
-    /// The main scrolling table view.
-    Table,
-}
-
-/// Field names that contain long text content shown in the body pane.
-const BODY_FIELDS: &[&str] = &["body", "body_html", "selftext"];
-
-/// Application state for the livestream TUI.
-#[derive(Debug)]
-pub struct App {
-    /// Whether auto-scroll is enabled (follows newest items).
-    auto_scroll: bool,
-    /// Maximum number of events to keep in the display buffer.
-    buffer_limit: usize,
-    /// Cached body text for the detail view (body for comments, selftext for submissions).
-    detail_body: String,
-    /// Scroll offset for the body pane in the detail view.
-    detail_body_scroll: u16,
-    /// Cached metadata fields for the currently open detail view (excludes body content).
-    detail_fields: Vec<(String, serde_json::Value)>,
-    /// Whether we're selecting a pane or active inside one.
-    detail_mode: DetailMode,
-    /// Which pane is highlighted in the detail view.
-    detail_pane: DetailPane,
-    /// Selected row index within the detail view field table.
-    detail_scroll: u16,
-    /// The URL associated with the currently open detail view item.
-    detail_url: String,
-    /// The display buffer of livestream events (newest first).
-    events: Vec<LivestreamEvent>,
-    /// Timestamp of the last successful poll.
-    last_poll: Option<std::time::Instant>,
-    /// The index of the currently selected row.
-    selected: usize,
-    /// Whether the application should quit.
-    should_quit: bool,
-    /// Render tick counter for animations (wraps around).
-    tick: u64,
-    /// Total number of events ever received (including those dropped from the buffer).
-    total_count: usize,
-    /// The current view mode.
-    view_mode: ViewMode,
-}
+use super::{App, BODY_FIELDS, DetailMode, DetailPane, ViewMode};
 
 impl App {
-    /// Creates a new application state with the given buffer limit.
-    ///
-    /// # Arguments
-    ///
-    /// * `buffer_limit` - Maximum number of events to keep in the display buffer
-    #[must_use]
-    pub const fn new(buffer_limit: usize) -> Self {
-        Self {
-            auto_scroll: true,
-            buffer_limit,
-            detail_body: String::new(),
-            detail_body_scroll: 0,
-            detail_fields: Vec::new(),
-            detail_mode: DetailMode::Selecting,
-            detail_pane: DetailPane::Fields,
-            detail_scroll: 0,
-            detail_url: String::new(),
-            events: Vec::new(),
-            last_poll: None,
-            selected: 0,
-            should_quit: false,
-            tick: 0,
-            total_count: 0,
-            view_mode: ViewMode::Table,
-        }
-    }
-
-    /// Returns the events in the display buffer.
-    #[must_use]
-    pub fn events(&self) -> &[LivestreamEvent] {
-        &self.events
-    }
-
-    /// Returns the index of the currently selected row.
-    #[must_use]
-    pub const fn selected(&self) -> usize {
-        self.selected
-    }
-
-    /// Returns whether auto-scroll is enabled.
-    #[must_use]
-    pub const fn auto_scroll(&self) -> bool {
-        self.auto_scroll
-    }
-
-    /// Returns the current view mode.
-    #[must_use]
-    pub const fn view_mode(&self) -> ViewMode {
-        self.view_mode
-    }
-
-    /// Returns the total number of events ever received.
-    #[must_use]
-    pub const fn total_count(&self) -> usize {
-        self.total_count
-    }
-
-    /// Returns the instant of the last successful poll.
-    #[must_use]
-    pub const fn last_poll(&self) -> Option<std::time::Instant> {
-        self.last_poll
-    }
-
-    /// Returns whether the application should quit.
-    #[must_use]
-    pub const fn should_quit(&self) -> bool {
-        self.should_quit
-    }
-
-    /// Returns the detail view selected row index.
-    #[must_use]
-    pub const fn detail_scroll(&self) -> u16 {
-        self.detail_scroll
-    }
-
-    /// Clamps the body scroll offset to `max` and returns the clamped value.
-    ///
-    /// Called by the UI after computing the actual scrollable range so that the internal state
-    /// stays in sync with what is rendered.
-    pub fn clamp_body_scroll(&mut self, max: u16) -> u16 {
-        self.detail_body_scroll = self.detail_body_scroll.min(max);
-        self.detail_body_scroll
-    }
-
-    /// Returns which pane is currently highlighted in the detail view.
-    #[must_use]
-    pub const fn detail_pane(&self) -> DetailPane {
-        self.detail_pane
-    }
-
-    /// Returns the current detail view interaction mode.
-    #[must_use]
-    pub const fn detail_mode(&self) -> DetailMode {
-        self.detail_mode
-    }
-
-    /// Returns the cached detail view metadata fields.
-    #[must_use]
-    pub fn detail_fields(&self) -> &[(String, serde_json::Value)] {
-        &self.detail_fields
-    }
-
-    /// Returns the cached detail view body text.
-    #[must_use]
-    pub fn detail_body(&self) -> &str {
-        &self.detail_body
-    }
-
-    /// Returns the URL associated with the detail view item.
-    #[must_use]
-    pub fn detail_url(&self) -> &str {
-        &self.detail_url
-    }
-
-    /// Returns the current render tick counter.
-    #[must_use]
-    pub const fn tick(&self) -> u64 {
-        self.tick
-    }
-
     /// Increments the render tick counter.
     pub const fn advance_tick(&mut self) {
         self.tick = self.tick.wrapping_add(1);
@@ -208,6 +22,15 @@ impl App {
     /// Records that a poll just completed.
     pub fn mark_poll(&mut self) {
         self.last_poll = Some(std::time::Instant::now());
+    }
+
+    /// Clamps the body scroll offset to `max` and returns the clamped value.
+    ///
+    /// Called by the UI after computing the actual scrollable range so that the internal state
+    /// stays in sync with what is rendered.
+    pub fn clamp_body_scroll(&mut self, max: u16) -> u16 {
+        self.detail_body_scroll = self.detail_body_scroll.min(max);
+        self.detail_body_scroll
     }
 
     /// Pushes new events into the display buffer.
@@ -382,6 +205,7 @@ impl App {
             ViewMode::Table => {
                 if let Some(event) = self.events.get(self.selected) {
                     let all_fields = Self::event_to_fields(event);
+
                     self.detail_body = Self::extract_body(event);
                     self.detail_body_scroll = 0;
                     self.detail_fields = all_fields
@@ -415,11 +239,6 @@ impl App {
         self.detail_scroll = 0;
         self.detail_url.clear();
         self.view_mode = ViewMode::Table;
-    }
-
-    /// Returns the maximum valid selection index.
-    fn max_index(&self) -> usize {
-        self.events.len().saturating_sub(1)
     }
 
     /// Extracts the URL from a livestream event.
@@ -468,8 +287,9 @@ impl App {
 mod tests {
     use urs_core::models::Comment;
     use urs_core::models::api::EditedField;
+    use urs_core::scrapers::LivestreamEvent;
 
-    use super::*;
+    use crate::tui::app::{App, DetailMode, DetailPane, ViewMode};
 
     fn make_comment_event(id: &str, body: &str) -> LivestreamEvent {
         LivestreamEvent::Comment(Comment {
@@ -742,7 +562,7 @@ mod tests {
         app.toggle_detail();
         assert_eq!(app.view_mode(), ViewMode::Detail);
 
-        // New event arrives — selected should shift to keep tracking "2".
+        // New event arrives, so selected should shift to keep tracking "2".
         app.push_events(vec![make_comment_event("3", "c")]);
 
         assert_eq!(app.selected(), 1);
