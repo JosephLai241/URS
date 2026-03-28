@@ -251,7 +251,6 @@ impl RedditClient {
     pub async fn rate_limit_info(&self) -> Option<super::rate_limit::RateLimitInfo> {
         self.rate_limiter.read().await.info()
     }
-
 }
 
 #[cfg(test)]

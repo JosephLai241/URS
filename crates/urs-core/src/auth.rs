@@ -299,7 +299,6 @@ impl TokenManager {
             .filter(|token| !token.is_expired())
             .map(|token| token.access_token.clone())
     }
-
 }
 
 #[cfg(test)]
@@ -347,5 +346,4 @@ mod tests {
 
         assert!(token.is_expired());
     }
-
 }

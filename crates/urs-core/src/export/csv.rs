@@ -104,7 +104,9 @@ impl CsvExporter {
     #[must_use]
     pub fn comments_to_csv(&self, comments: &[Comment]) -> String {
         let mut csv = String::new();
-        csv.push_str("author,body,created_utc,edited,id,is_submitter,link_id,parent_id,score,stickied\n");
+        csv.push_str(
+            "author,body,created_utc,edited,id,is_submitter,link_id,parent_id,score,stickied\n",
+        );
 
         Self::flatten_comments_to_csv(comments, &mut csv);
 

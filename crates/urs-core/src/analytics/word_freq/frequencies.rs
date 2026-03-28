@@ -43,5 +43,4 @@ impl WordFrequencies {
     pub fn total_count(&self) -> u32 {
         self.entries.iter().map(|(_, count)| count).sum()
     }
-
 }
