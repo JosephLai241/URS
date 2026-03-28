@@ -10,6 +10,12 @@ use super::super::templates::{BreadcrumbItem, LivestreamFragment};
 use super::super::time;
 use super::{LivestreamEventView, highlight_json};
 
+/// SVG icon for submission events (document/post icon).
+const SUBMISSION_ICON: &str = r#"<svg class="event-type-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 1 1-1h6l5 5v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1zm1 0v14h10V6h-4a1 1 0 0 1-1-1V1H3z"/></svg>"#;
+
+/// SVG icon for comment events (speech bubble icon).
+const COMMENT_ICON: &str = r#"<svg class="event-type-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h11A1.5 1.5 0 0 1 15 2.5v8A1.5 1.5 0 0 1 13.5 12H5l-4 3V2.5zM2.5 2a.5.5 0 0 0-.5.5v9.793l2.146-2.147A.5.5 0 0 1 4.5 10h9a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5h-11z"/></svg>"#;
+
 /// Renders the livestream feed view to an HTML string.
 pub fn render_livestream_html(
     events: &[LivestreamEvent],
@@ -49,11 +55,16 @@ pub fn render_livestream_html(
                 .get("title")
                 .and_then(|v| v.as_str())
                 .map(String::from);
+            let permalink = e
+                .data
+                .get("permalink")
+                .and_then(|v| v.as_str())
+                .map(|p| format!("https://www.reddit.com{p}"));
 
             let icon = if e.event_type == "submission" {
-                "&#x1F4DD;"
+                SUBMISSION_ICON
             } else {
-                "&#x1F4AC;"
+                COMMENT_ICON
             };
 
             LivestreamEventView {
@@ -61,6 +72,7 @@ pub fn render_livestream_html(
                 body_html: markdown::render_comment(body, body_html_raw),
                 icon: icon.to_string(),
                 json_html: highlight_json(&e.data),
+                permalink,
                 subreddit,
                 time_str: time::time_only(created_utc),
                 time_utc: created_utc,
