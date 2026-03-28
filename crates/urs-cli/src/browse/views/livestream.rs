@@ -3,6 +3,8 @@
 //! Renders a chronological feed of livestream events with timestamps, author info, event type
 //! icons, and per-event JSON inspector buttons.
 
+use std::fmt::Write as _;
+
 use super::super::helpers::render_template;
 use super::super::loader::LivestreamEvent;
 use super::super::markdown;
@@ -81,15 +83,130 @@ pub fn render_livestream_html(
         })
         .collect();
 
+    // Compute start/end timestamps and duration from events.
+    let first_utc = event_views.first().map_or(0.0, |e| e.time_utc);
+    let last_utc = event_views.last().map_or(0.0, |e| e.time_utc);
+
+    #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
+    let duration_secs = if last_utc > first_utc {
+        (last_utc - first_utc) as u64
+    } else {
+        0
+    };
+
+    let hours = duration_secs / 3600;
+    let minutes = (duration_secs % 3600) / 60;
+    let secs = duration_secs % 60;
+
     let template = LivestreamFragment {
         breadcrumbs,
+        duration: format!("{hours:02}:{minutes:02}:{secs:02}"),
         event_count: event_views.len(),
         events: event_views,
+        first_event_time: if first_utc > 0.0 {
+            time::absolute_time(first_utc)
+        } else {
+            String::new()
+        },
+        last_event_time: if last_utc > 0.0 {
+            time::absolute_time(last_utc)
+        } else {
+            String::new()
+        },
         source,
         target,
     };
 
     render_template(template)
+}
+
+/// Renders a single livestream event as an HTML fragment for the live SSE stream.
+///
+/// Returns the inner `.livestream-event` div HTML string. Reuses the same view construction logic
+/// as `render_livestream_html`.
+pub fn render_single_event_html(data: &serde_json::Value, event_type: &str) -> String {
+    let author = data
+        .get("author")
+        .and_then(|v| v.as_str())
+        .unwrap_or("unknown");
+    let subreddit = data.get("subreddit").and_then(|v| v.as_str()).unwrap_or("");
+    let created_utc = data
+        .get("created_utc")
+        .and_then(serde_json::Value::as_f64)
+        .unwrap_or(0.0);
+    let body = data.get("body").and_then(|v| v.as_str()).unwrap_or("");
+    let body_html_raw = data.get("body_html").and_then(|v| v.as_str()).unwrap_or("");
+    let title = data.get("title").and_then(|v| v.as_str()).map(String::from);
+    let permalink = data
+        .get("permalink")
+        .and_then(|v| v.as_str())
+        .map(|p| format!("https://www.reddit.com{p}"));
+
+    let icon = if event_type == "submission" {
+        SUBMISSION_ICON
+    } else {
+        COMMENT_ICON
+    };
+
+    let body_html = markdown::render_comment(body, body_html_raw);
+    let json_html = highlight_json(data);
+    let time_str = time::time_only(created_utc);
+
+    let mut html = String::new();
+    html.push_str("<div class=\"livestream-event\">");
+    write!(html, "<span class=\"event-icon\">{icon}</span>")
+        .expect("writing to String is infallible");
+    html.push_str("<div class=\"event-content\">");
+    html.push_str("<div class=\"event-header\">");
+    write!(
+        html,
+        "<span class=\"event-time\" data-utc=\"{created_utc}\">{time_str}</span>"
+    )
+    .expect("writing to String is infallible");
+    write!(html, "<span class=\"comment-author\">u/{author}</span>")
+        .expect("writing to String is infallible");
+
+    if !subreddit.is_empty() {
+        write!(
+            html,
+            "<span class=\"text-muted\">&middot; r/{subreddit}</span>"
+        )
+        .expect("writing to String is infallible");
+    }
+
+    html.push_str(
+        "<button class=\"item-json-btn\" onclick=\"toggleItemJson(this)\">{} Show JSON</button>",
+    );
+    write!(
+        html,
+        "<template class=\"item-json-data\"><div class=\"item-json-content\"><pre>{json_html}</pre></div></template>"
+    )
+    .expect("writing to String is infallible");
+
+    html.push_str("</div>"); // Close event-header.
+
+    if let Some(ref t) = title {
+        if let Some(ref href) = permalink {
+            write!(
+                html,
+                "<div class=\"submission-title\" style=\"margin-bottom: 4px\"><a href=\"{href}\" target=\"_blank\" rel=\"noopener\">{t}</a></div>"
+            )
+            .expect("writing to String is infallible");
+        } else {
+            write!(
+                html,
+                "<div class=\"submission-title\" style=\"margin-bottom: 4px\">{t}</div>"
+            )
+            .expect("writing to String is infallible");
+        }
+    }
+
+    write!(html, "<div class=\"event-body\">{body_html}</div>")
+        .expect("writing to String is infallible");
+    html.push_str("</div>"); // Close event-content.
+    html.push_str("</div>"); // Close livestream-event.
+
+    html
 }
 
 /// Parses livestream filename to extract target and source.
