@@ -1,4 +1,4 @@
-name: Rust (check, test, format, Clippy)
+name: Rust
 
 on:
   push:
