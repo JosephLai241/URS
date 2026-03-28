@@ -9,8 +9,9 @@
 //! - [`livestream`]: Chronological event feed
 //! - [`redditor`]: Tabbed Redditor profile
 
+pub mod analytics;
 mod comments;
-mod livestream;
+pub(super) mod livestream;
 mod redditor;
 
 use super::helpers::{render_template, syntax_highlight_json};
@@ -80,10 +81,12 @@ pub struct LivestreamEventView {
     pub author: String,
     /// Markdown-rendered event body.
     pub body_html: String,
-    /// HTML entity for the event type icon.
+    /// SVG icon HTML for the event type.
     pub icon: String,
     /// Pre-rendered syntax-highlighted JSON for the inspector panel.
     pub json_html: String,
+    /// Permalink URL for submissions (full Reddit URL).
+    pub permalink: Option<String>,
     /// Subreddit the event belongs to.
     pub subreddit: String,
     /// Formatted timestamp (time only, e.g. "14:30:45").
@@ -94,6 +97,91 @@ pub struct LivestreamEventView {
     pub title: Option<String>,
 }
 
+/// View model for the Subreddit info card shown above submissions.
+#[derive(Debug, Clone)]
+pub struct SubredditInfoView {
+    /// Active users online (e.g. "1,234").
+    pub active_users: Option<String>,
+    /// Formatted creation date (e.g. "March 15, 2020").
+    pub created_date: Option<String>,
+    /// Short description from the Subreddit sidebar.
+    pub description: Option<String>,
+    /// URL to the Subreddit's icon image, if available.
+    pub icon_url: Option<String>,
+    /// Pre-rendered syntax-highlighted JSON for the inspector panel.
+    pub information_json: String,
+    /// Subreddit display name (without `r/` prefix).
+    pub name: String,
+    /// Whether the Subreddit is NSFW.
+    pub nsfw: bool,
+    /// Whether the Subreddit is quarantined.
+    pub quarantined: bool,
+    /// Formatted subscriber count (e.g. "2,330,872").
+    pub subscribers: Option<String>,
+    /// Subreddit type (e.g. "public", "private", "restricted").
+    pub subreddit_type: Option<String>,
+    /// Human-readable Subreddit title (e.g. "The Rust Programming Language").
+    pub title: Option<String>,
+}
+
+/// View model for a Subreddit rule.
+#[derive(Debug, Clone)]
+pub struct RuleView {
+    /// The rule description rendered as HTML.
+    pub description_html: String,
+    /// The rule kind (e.g. "all", "link", "comment").
+    pub kind: String,
+    /// Short name/title of the rule.
+    pub short_name: String,
+}
+
+/// Converts a `Subreddit` model into a `SubredditInfoView` for rendering.
+fn subreddit_info_from_model(info: &urs_core::models::Subreddit) -> SubredditInfoView {
+    #[allow(clippy::cast_possible_wrap)]
+    let subscribers = Some(time::format_number(info.subscribers as i64));
+
+    #[allow(clippy::cast_possible_wrap)]
+    let active_users = info.accounts_active.map(|n| time::format_number(n as i64));
+
+    let description = if info.public_description.is_empty() {
+        None
+    } else {
+        Some(info.public_description.clone())
+    };
+
+    let icon_url = info
+        .icon_img
+        .as_deref()
+        .filter(|s| !s.is_empty())
+        .map(String::from);
+
+    let title = if info.title.is_empty() || info.title == info.display_name {
+        None
+    } else {
+        Some(info.title.clone())
+    };
+
+    SubredditInfoView {
+        active_users,
+        created_date: Some(time::format_date(info.created_utc)),
+        description,
+        icon_url,
+        information_json: highlight_json(info),
+        name: info.display_name.clone(),
+        nsfw: info.nsfw,
+        quarantined: info
+            .extra
+            .get("quarantine")
+            .and_then(serde_json::Value::as_bool)
+            .unwrap_or(false),
+        subscribers,
+        subreddit_type: Some(info.subreddit_type.clone()),
+        title,
+    }
+}
+
+/// Extracts Subreddit metadata from the first post's extra fields.
+///
 /// Serializes a value to pretty JSON and syntax-highlights it for the inspector panel.
 fn highlight_json<T: serde::Serialize>(value: &T) -> String {
     let pretty = serde_json::to_string_pretty(value).unwrap_or_default();
@@ -119,7 +207,30 @@ pub fn render_rich_html(
     query: &ViewQuery,
 ) -> String {
     match data {
-        ScrapeData::Submissions { posts, .. } => {
+        ScrapeData::Submissions {
+            information,
+            posts,
+            rules,
+        } => {
+            let subreddit_info = Some(subreddit_info_from_model(&information));
+
+            let rule_views: Vec<RuleView> = rules
+                .map(|r| {
+                    r.rules
+                        .iter()
+                        .map(|rule| RuleView {
+                            description_html: if rule.description.is_empty() {
+                                String::new()
+                            } else {
+                                markdown::render(&rule.description)
+                            },
+                            kind: rule.kind.clone(),
+                            short_name: rule.short_name.clone(),
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+
             let post_views: Vec<SubmissionView> = posts
                 .iter()
                 .map(|p| SubmissionView {
@@ -150,16 +261,19 @@ pub fn render_rich_html(
 
             let template = SubmissionsFragment {
                 breadcrumbs,
+                file_path: file_path.to_string(),
                 posts: post_views,
+                rules: rule_views,
+                subreddit_info,
             };
 
             render_template(template)
         }
         ScrapeData::Comments {
-            submission,
             comments,
+            submission,
             ..
-        } => comments::render_comments_view(&submission, &comments, breadcrumbs),
+        } => comments::render_comments_view(&submission, &comments, file_path, breadcrumbs),
         ScrapeData::Redditor(interactions) => {
             redditor::render_redditor_html(&interactions, file_path, breadcrumbs, query)
         }
