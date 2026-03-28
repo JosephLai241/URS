@@ -252,11 +252,6 @@ impl RedditClient {
         self.rate_limiter.read().await.info()
     }
 
-    /// Returns a reference to the token manager.
-    #[must_use]
-    pub fn token_manager(&self) -> &TokenManager {
-        &self.token_manager
-    }
 }
 
 #[cfg(test)]

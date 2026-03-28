@@ -61,22 +61,6 @@ impl RedditorEndpoint {
         Self::user_listing(username, "comments", limit, after)
     }
 
-    /// Builds a URL for fetching a user's overview (submissions + comments).
-    ///
-    /// # Arguments
-    ///
-    /// * `username` - The Reddit username
-    /// * `limit` - Maximum number of items to return
-    /// * `after` - Pagination cursor for the next page
-    ///
-    /// # Panics
-    ///
-    /// Panics if the hardcoded base URL is invalid (should never happen).
-    #[must_use]
-    pub fn overview(username: &str, limit: u32, after: Option<&str>) -> Url {
-        Self::user_listing(username, "overview", limit, after)
-    }
-
     /// Builds a URL for fetching a private user category.
     ///
     /// These categories (downvoted, upvoted, saved, hidden, gilded/given) are only accessible for

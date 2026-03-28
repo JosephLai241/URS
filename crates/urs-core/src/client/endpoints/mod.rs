@@ -9,10 +9,10 @@ mod livestream;
 mod redditor;
 mod subreddit;
 
-pub use comments::CommentsEndpoint;
-pub use livestream::LivestreamEndpoint;
-pub use redditor::RedditorEndpoint;
-pub use subreddit::SubredditEndpoint;
+pub(crate) use comments::CommentsEndpoint;
+pub(crate) use livestream::LivestreamEndpoint;
+pub(crate) use redditor::RedditorEndpoint;
+pub(crate) use subreddit::SubredditEndpoint;
 
 /// The base URL for the Reddit OAuth API.
 pub const OAUTH_BASE: &str = "https://oauth.reddit.com";

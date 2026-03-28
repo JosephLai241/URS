@@ -7,7 +7,7 @@
 //! # Example
 //!
 //! ```
-//! use urs_core::analytics::{WordFrequencyAnalyzer, ENGLISH_STOP_WORDS};
+//! use urs_core::analytics::WordFrequencyAnalyzer;
 //!
 //! let analyzer = WordFrequencyAnalyzer::new()
 //!     .min_word_length(3);
@@ -21,5 +21,4 @@ mod extractable;
 mod frequencies;
 
 pub use analyzer::WordFrequencyAnalyzer;
-pub use extractable::TextExtractable;
 pub use frequencies::WordFrequencies;

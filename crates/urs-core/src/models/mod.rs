@@ -10,7 +10,6 @@ mod redditor;
 mod submission;
 mod subreddit;
 
-pub use api::{Listing, ListingData, Thing, ThingData};
 pub use comment::{Comment, CommentTree, CommentsResult, MoreComments};
 pub use redditor::{InteractionData, Redditor, RedditorInteractions};
 pub use submission::Submission;

@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 /// Reddit wraps most objects in a `{ kind, data }` structure where `kind` indicates the type of
 /// object (i.e. "t1" for comment, "t3" for link/submission).
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Thing<T> {
+pub(crate) struct Thing<T> {
     /// The kind of thing:
     /// - t1 = comment
     /// - t2 = account
@@ -20,9 +20,9 @@ pub struct Thing<T> {
     /// - t4 = message
     /// - t5 = Subreddit
     /// - t6 = award
-    pub kind: String,
+    pub(crate) kind: String,
     /// The actual data for this thing.
-    pub data: T,
+    pub(crate) data: T,
 }
 
 /// A listing response from Reddit.
@@ -30,52 +30,35 @@ pub struct Thing<T> {
 /// Listings are paginated collections of things, used for subreddit posts, user content, comments,
 /// etc.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Listing<T> {
+pub(crate) struct Listing<T> {
     /// The kind (always "Listing").
-    pub kind: String,
+    pub(crate) kind: String,
     /// The listing data containing the items and pagination info.
-    pub data: ListingData<T>,
+    pub(crate) data: ListingData<T>,
 }
 
 /// The data portion of a listing.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListingData<T> {
+pub(crate) struct ListingData<T> {
     /// The fullname of the thing that follows after this page (for pagination).
-    pub after: Option<String>,
+    pub(crate) after: Option<String>,
     /// The fullname of the thing that follows before this page.
-    pub before: Option<String>,
+    pub(crate) before: Option<String>,
     /// The number of items in this listing.
     #[serde(default)]
-    pub dist: Option<u32>,
+    pub(crate) dist: Option<u32>,
     /// The modhash (deprecated, usually null).
-    pub modhash: Option<String>,
+    pub(crate) modhash: Option<String>,
     /// The geo filter (usually null).
-    pub geo_filter: Option<String>,
+    pub(crate) geo_filter: Option<String>,
     /// The actual items in this listing.
-    pub children: Vec<Thing<T>>,
-}
-
-/// Raw thing data that can be any Reddit object type.
-///
-/// This is used when the exact type isn't known at compile time,
-/// such as in comment listings that may contain both comments and "more" stubs.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum ThingData {
-    /// A submission/link.
-    Submission(Box<SubmissionData>),
-    /// A comment.
-    Comment(Box<CommentData>),
-    /// A "more comments" placeholder.
-    More(MoreCommentsData),
-    /// Unknown data (captured as raw JSON).
-    Unknown(serde_json::Value),
+    pub(crate) children: Vec<Thing<T>>,
 }
 
 /// Raw submission data from the Reddit API.
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SubmissionData {
+pub(crate) struct SubmissionData {
     /// The submission author's username.
     pub author: String,
     /// The author's flair text.
@@ -138,7 +121,7 @@ pub struct SubmissionData {
 /// comments. This ensures they deserialize successfully with placeholder values rather than
 /// failing.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommentData {
+pub(crate) struct CommentData {
     /// The comment author's username.
     ///
     /// Set to `"[deleted]"` by Reddit when the author has deleted their account or comment.
@@ -194,7 +177,7 @@ impl CommentData {
 
 /// Data for a "more comments" placeholder.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MoreCommentsData {
+pub(crate) struct MoreCommentsData {
     /// The IDs of comments that can be loaded.
     pub children: Vec<String>,
     /// The count of additional comments.
@@ -252,7 +235,7 @@ impl EditedField {
 /// values.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RepliesField {
+pub(crate) enum RepliesField {
     /// A listing of reply comments.
     Listing(Box<Listing<CommentData>>),
     /// Empty string (Reddit sometimes returns this).
@@ -267,37 +250,26 @@ impl Default for RepliesField {
     }
 }
 
-impl RepliesField {
-    /// Returns the replies as a vector of comment data, or empty if none.
-    #[must_use]
-    pub fn into_vec(self) -> Vec<Thing<CommentData>> {
-        match self {
-            Self::Listing(listing) => listing.data.children,
-            Self::EmptyString(_) | Self::Other(_) => vec![],
-        }
-    }
-}
-
 /// Response from the `/api/morechildren` endpoint.
 ///
 /// This wraps the JSON response which has the structure:
 /// `{ "json": { "data": { "things": [...] } } }`
 #[derive(Debug, Clone, Deserialize)]
-pub struct MoreChildrenResponse {
+pub(crate) struct MoreChildrenResponse {
     /// The JSON wrapper.
     pub json: MoreChildrenJson,
 }
 
 /// Inner JSON wrapper for morechildren response.
 #[derive(Debug, Clone, Deserialize)]
-pub struct MoreChildrenJson {
+pub(crate) struct MoreChildrenJson {
     /// The data containing the expanded comments.
     pub data: MoreChildrenJsonData,
 }
 
 /// Data portion of the morechildren response.
 #[derive(Debug, Clone, Deserialize)]
-pub struct MoreChildrenJsonData {
+pub(crate) struct MoreChildrenJsonData {
     /// The expanded comment/more things.
     pub things: Vec<Thing<serde_json::Value>>,
 }
@@ -325,6 +297,6 @@ mod tests {
     #[test]
     fn replies_field_empty_string() {
         let replies: RepliesField = serde_json::from_str(r#""""#).unwrap();
-        assert!(replies.into_vec().is_empty());
+        assert!(matches!(replies, RepliesField::EmptyString(_)));
     }
 }

@@ -44,9 +44,4 @@ impl WordFrequencies {
         self.entries.iter().map(|(_, count)| count).sum()
     }
 
-    /// Consumes the frequencies and returns the underlying word-count pairs.
-    #[must_use]
-    pub fn into_entries(self) -> Vec<(String, u32)> {
-        self.entries
-    }
 }

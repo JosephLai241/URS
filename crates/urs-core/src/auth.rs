@@ -181,26 +181,8 @@ struct TokenResponse {
 ///
 /// Handles initial authentication and automatic token refresh when the access token expires.
 /// Thread-safe via interior mutability with `RwLock`.
-///
-/// # Example
-///
-/// ```no_run
-/// use urs_core::auth::{Credentials, TokenManager};
-///
-/// # async fn example() -> urs_core::Result<()> {
-/// let credentials = Credentials::from_env()?;
-/// let manager = TokenManager::new(credentials);
-///
-/// // Authenticate (fetches initial token)
-/// manager.authenticate().await?;
-///
-/// // Get a valid access token (auto-refreshes if expired)
-/// let token = manager.access_token().await?;
-/// # Ok(())
-/// # }
-/// ```
 #[derive(Debug)]
-pub struct TokenManager {
+pub(crate) struct TokenManager {
     /// The `OAuth2` credentials.
     credentials: Credentials,
     /// The HTTP client used for token requests.
@@ -219,7 +201,7 @@ impl TokenManager {
     ///
     /// Panics if the HTTP client cannot be created.
     #[must_use]
-    pub fn new(credentials: Credentials) -> Self {
+    pub(crate) fn new(credentials: Credentials) -> Self {
         let http = reqwest::Client::builder()
             .timeout(Duration::from_secs(30))
             .build()
@@ -241,7 +223,7 @@ impl TokenManager {
     ///
     /// Returns an error if authentication fails (invalid credentials,
     /// network error, etc.).
-    pub async fn authenticate(&self) -> Result<()> {
+    pub(crate) async fn authenticate(&self) -> Result<()> {
         info!("Authenticating with Reddit OAuth2...");
 
         let response = self
@@ -296,7 +278,7 @@ impl TokenManager {
     /// # Errors
     ///
     /// Returns an error if authentication fails.
-    pub async fn access_token(&self) -> Result<String> {
+    pub(crate) async fn access_token(&self) -> Result<String> {
         if let Some(token) = self.get_valid_token().await {
             return Ok(token);
         }
@@ -318,17 +300,6 @@ impl TokenManager {
             .map(|token| token.access_token.clone())
     }
 
-    /// Returns the user agent string from the credentials.
-    #[must_use]
-    pub fn user_agent(&self) -> &str {
-        self.credentials.user_agent()
-    }
-
-    /// Returns a reference to the credentials.
-    #[must_use]
-    pub const fn credentials(&self) -> &Credentials {
-        &self.credentials
-    }
 }
 
 #[cfg(test)]
@@ -377,11 +348,4 @@ mod tests {
         assert!(token.is_expired());
     }
 
-    #[test]
-    fn token_manager_creation() {
-        let creds = Credentials::new("id", "secret", "user", "pass", "agent");
-        let manager = TokenManager::new(creds);
-
-        assert_eq!(manager.user_agent(), "agent");
-    }
 }

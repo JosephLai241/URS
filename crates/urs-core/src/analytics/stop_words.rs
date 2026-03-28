@@ -7,15 +7,6 @@
 /// Standard English stop words from the NLTK corpus.
 ///
 /// Contains ~179 common English words that are typically excluded from word frequency analysis.
-///
-/// # Example
-///
-/// ```
-/// use urs_core::analytics::ENGLISH_STOP_WORDS;
-///
-/// assert!(ENGLISH_STOP_WORDS.contains(&"the"));
-/// assert!(!ENGLISH_STOP_WORDS.contains(&"rust"));
-/// ```
 pub const ENGLISH_STOP_WORDS: &[&str] = &[
     "a",
     "about",

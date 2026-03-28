@@ -11,7 +11,7 @@
 //! # Example
 //!
 //! ```
-//! use urs_core::analytics::{WordFrequencyAnalyzer, ENGLISH_STOP_WORDS};
+//! use urs_core::analytics::WordFrequencyAnalyzer;
 //!
 //! let analyzer = WordFrequencyAnalyzer::new()
 //!     .min_word_length(3);
@@ -24,6 +24,5 @@ mod stop_words;
 mod word_freq;
 mod wordcloud;
 
-pub use stop_words::ENGLISH_STOP_WORDS;
-pub use word_freq::{TextExtractable, WordFrequencies, WordFrequencyAnalyzer};
+pub use word_freq::{WordFrequencies, WordFrequencyAnalyzer};
 pub use wordcloud::{ColorScheme, WordCloudGenerator};
