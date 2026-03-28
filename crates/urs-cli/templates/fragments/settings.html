@@ -1,0 +1,60 @@
+<div class="settings-container">
+  <h2>Settings</h2>
+
+  <div class="settings-section">
+    <h3>Reddit API Credentials</h3>
+    <div class="settings-status">
+      {% if authenticated %}
+      <span class="status-badge status-connected">Connected as u/{{ current_username }}</span>
+      {% else %}
+      <span class="status-badge status-disconnected">Not connected</span>
+      {% endif %}
+    </div>
+
+    <form id="settings-credentials-form" action="/settings/credentials" method="post" onsubmit="saveCredentials(event)" novalidate>
+      <div class="form-group">
+        <label for="settings-client-id">Client ID</label>
+        <input type="text" id="settings-client-id" name="client_id" value="{{ client_id }}" placeholder="Your Reddit app client ID" />
+      </div>
+      <div class="form-group">
+        <label for="settings-client-secret">Client Secret</label>
+        <div class="password-input-wrap">
+          <input type="password" id="settings-client-secret" name="client_secret" value="{{ client_secret }}" placeholder="Your Reddit app client secret" />
+          <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Show/hide">
+            <svg class="eye-icon eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-icon eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="settings-username">Reddit Username</label>
+        <input type="text" id="settings-username" name="username" value="{{ config_username }}" placeholder="Your Reddit username" />
+      </div>
+      <div class="form-group">
+        <label for="settings-password">Reddit Password</label>
+        <div class="password-input-wrap">
+          <input type="password" id="settings-password" name="password" value="{{ password }}" placeholder="Your Reddit password" />
+          <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Show/hide">
+            <svg class="eye-icon eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-icon eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="settings-actions">
+        <button type="button" class="settings-test-btn" onclick="testCredentials(this)">Test Connection</button>
+        <button type="submit" class="settings-save-btn">Save &amp; Connect</button>
+      </div>
+      <div id="settings-result"></div>
+    </form>
+  </div>
+
+  <div class="settings-section settings-info">
+    <h3>Config File</h3>
+    <p class="text-muted">{{ config_path }}</p>
+    <p class="text-muted settings-hint">
+      Credentials can also be set via environment variables:
+      <code>URS_CLIENT_ID</code>, <code>URS_CLIENT_SECRET</code>,
+      <code>URS_REDDIT_USERNAME</code>, <code>URS_REDDIT_PASSWORD</code>
+    </p>
+  </div>
+</div>

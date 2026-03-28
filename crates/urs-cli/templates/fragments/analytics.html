@@ -1,0 +1,175 @@
+<div class="content-header">
+  <div class="breadcrumbs">
+    {% for crumb in breadcrumbs %} {% if crumb.href.is_some() %}
+    <a href="{{ crumb.href.as_ref().unwrap() }}">{{ crumb.label }}</a>
+    {% else %}
+    <span>{{ crumb.label }}</span>
+    {% endif %} {% if !loop.last %}<span class="sep">&#x203A;</span>{% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="page-action">
+  <a class="new-scrape-btn analytics-btn back-btn" hx-get="/view/{{ file_path }}" hx-target="#main-content" hx-push-url="true">
+    <svg class="btn-icon" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>
+    Back to data
+  </a>
+</div>
+
+<div class="page-header">
+  <p class="subtitle-lg">Word Frequency Analysis</p>
+  <p class="stats-lg">{{ unique_count }} unique words &middot; {{ total_count }} total words</p>
+</div>
+
+{% if !wordcloud_base64.is_empty() %}
+<div class="analytics-wordcloud">
+  <div class="analytics-section-header">
+    <h3>Wordcloud</h3>
+    <div class="analytics-actions">
+      <a href="/api/analytics/wordcloud/{{ file_path }}" class="new-scrape-btn analytics-action-btn" title="Download as PNG">&#x2B07; Download PNG</a>
+    </div>
+  </div>
+
+  <img src="data:image/png;base64,{{ wordcloud_base64 }}" alt="Word Cloud" class="wordcloud-img" id="wordcloud-img" />
+
+  <div class="wordcloud-controls">
+    <div class="control-group">
+      <label>Color Scheme</label>
+      <div class="custom-select" id="wc-color" data-value="{% for scheme in color_schemes %}{% if scheme.selected %}{{ scheme.slug }}{% endif %}{% endfor %}">
+        <div class="custom-select-trigger" onclick="toggleCustomSelect(this)">
+          <span class="custom-select-label">{% for scheme in color_schemes %}{% if scheme.selected %}{{ scheme.label }}{% endif %}{% endfor %}</span>
+          <svg class="custom-select-arrow" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </div>
+        <div class="custom-select-options">
+          {% for scheme in color_schemes %}
+          <div class="custom-select-option{% if scheme.selected %} selected{% endif %}" data-value="{{ scheme.slug }}" onclick="selectOption(this)">{{ scheme.label }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Resolution</label>
+      <div class="custom-select" id="wc-resolution" data-value="2048x1024">
+        <div class="custom-select-trigger" onclick="toggleCustomSelect(this)">
+          <span class="custom-select-label">2048 &times; 1024</span>
+          <svg class="custom-select-arrow" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </div>
+        <div class="custom-select-options">
+          <div class="custom-select-option" data-value="896x448" onclick="selectOption(this)">896 &times; 448</div>
+          <div class="custom-select-option" data-value="1280x640" onclick="selectOption(this)">1280 &times; 640</div>
+          <div class="custom-select-option" data-value="1600x832" onclick="selectOption(this)">1600 &times; 832</div>
+          <div class="custom-select-option selected" data-value="2048x1024" onclick="selectOption(this)">2048 &times; 1024</div>
+        </div>
+      </div>
+    </div>
+    <button class="new-scrape-btn preview-btn" onclick="previewWordcloud('{{ file_path }}')" title="Generate wordcloud with current settings">
+      <svg class="btn-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1v6h6"/><path d="M3.51 10a5 5 0 1 0 .74-5.36L1 7"/></svg>
+      Generate Wordcloud
+    </button>
+  </div>
+</div>
+{% endif %}
+
+<div class="analytics-table">
+  <div class="analytics-section-header">
+    <h3>Word Frequencies ({{ entries.len() }} words)</h3>
+    <div class="analytics-actions">
+      <a href="/api/analytics/frequencies/{{ file_path }}?format=csv" class="new-scrape-btn analytics-action-btn" title="Download as CSV">&#x2B07; Download CSV</a>
+      <a href="/api/analytics/frequencies/{{ file_path }}?format=json" class="new-scrape-btn analytics-action-btn" title="Download as JSON">&#x2B07; Download JSON</a>
+    </div>
+  </div>
+  <table class="freq-table">
+    <thead>
+      <tr>
+        <th class="rank-col">#</th>
+        <th class="word-col">Word</th>
+        <th class="count-col">Count</th>
+        <th class="bar-col">Frequency</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+      <tr>
+        <td class="rank-col">{{ loop.index }}</td>
+        <td class="word-col">{{ entry.word }}</td>
+        <td class="count-col">{{ entry.count }}</td>
+        <td class="bar-col">
+          <div class="freq-bar" style="width: {{ entry.percentage }}%"></div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if entries.is_empty() %}
+<div class="error-page">
+  <p>No words found in this file.</p>
+</div>
+{% endif %}
+
+<script>
+/**
+ * Returns the current resolution as {width, height} from the dropdown.
+ */
+function getResolution() {
+  var sel = document.getElementById("wc-resolution");
+  var parts = sel.getAttribute("data-value").split("x");
+  return { width: parts[0], height: parts[1] };
+}
+
+/**
+ * Updates the wordcloud download links to include the current customization settings.
+ */
+function updateWordcloudDownloads() {
+  var color = document.getElementById("wc-color").getAttribute("data-value");
+  var res = getResolution();
+  var base = "/api/analytics/wordcloud/{{ file_path }}";
+  var params = "color=" + color + "&width=" + res.width + "&height=" + res.height;
+
+  var links = document.querySelectorAll(".analytics-wordcloud .analytics-action-btn");
+  links.forEach(function(a) {
+    a.href = base + "?" + params;
+  });
+}
+
+/**
+ * Fetches a new wordcloud with the current settings and replaces the image.
+ * @param {string} filePath - The relative path to the scrape file.
+ */
+function previewWordcloud(filePath) {
+  var color = document.getElementById("wc-color").getAttribute("data-value");
+  var res = getResolution();
+
+  var img = document.getElementById("wordcloud-img");
+  var btn = document.querySelector(".preview-btn");
+  btn.disabled = true;
+  btn.innerHTML = "\u23F3 Generating...";
+
+  var url = "/api/analytics/wordcloud/" + filePath + "?color=" + color + "&width=" + res.width + "&height=" + res.height;
+
+  fetch(url)
+    .then(function(r) {
+      if (!r.ok) throw new Error("Failed to generate word cloud");
+      return r.blob();
+    })
+    .then(function(blob) {
+      var reader = new FileReader();
+      reader.onload = function() {
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(blob);
+    })
+    .catch(function(err) {
+      alert("Error: " + err.message);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<svg class="btn-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1v6h6"/><path d="M3.51 10a5 5 0 1 0 .74-5.36L1 7"/></svg> Generate Wordcloud';
+    });
+}
+
+// Update download links when any wordcloud dropdown changes.
+document.getElementById("wc-color").addEventListener("select-change", updateWordcloudDownloads);
+document.getElementById("wc-resolution").addEventListener("select-change", updateWordcloudDownloads);
+</script>

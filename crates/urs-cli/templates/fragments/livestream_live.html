@@ -1,0 +1,16 @@
+<div class="livestream-header">
+  <h2><span class="livestream-live-badge"><span class="live-dot"></span>LIVE</span> {{ target }}: {{ source }}</h2>
+  <div class="livestream-live-stats">
+    <span id="live-event-count">0</span> events
+    &middot;
+    <span id="live-elapsed" class="livestream-elapsed" data-started="{{ started_at }}">00:00:00</span>
+  </div>
+  <div class="livestream-timestamps">
+    <span class="livestream-timestamp">Started: <span id="live-started-at" data-utc="{{ started_at }}"></span></span>
+    <span class="livestream-timestamp" id="live-stopped-row" style="display:none">Stopped: <span id="live-stopped-at"></span></span>
+    <span class="livestream-timestamp" id="live-duration-row" style="display:none">Elapsed: <span id="live-duration"></span></span>
+  </div>
+  <button class="task-stop-btn" onclick="stopLivestream('{{ task_id }}')">Stop</button>
+</div>
+<div id="livestream-feed" class="livestream-feed" data-task-id="{{ task_id }}"></div>
+<script>initLivestreamFeed('{{ task_id }}');</script>

@@ -9,6 +9,15 @@
   </div>
 </div>
 
+{% if !file_path.is_empty() %}
+<div class="page-action">
+  <button class="new-scrape-btn analytics-btn" hx-get="/analytics/{{ file_path }}" hx-target="#main-content" hx-push-url="true">
+    <svg class="btn-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="10" width="3" height="5" rx="0.5"/><rect x="6" y="6" width="3" height="9" rx="0.5"/><rect x="11" y="2" width="3" height="13" rx="0.5"/></svg>
+    Generate Word Frequency Analysis
+  </button>
+</div>
+{% endif %}
+
 <div class="submission-card submission-header-card">
   <div class="vote-column">
     <span class="vote-arrow up">&#x2B06;</span>
@@ -58,7 +67,7 @@
       >
     </div>
     {% if !submission.selftext_html.is_empty() %}
-    <div class="selftext-preview expanded">
+    <div class="selftext-preview rendered-markdown expanded">
       {{ submission.selftext_html|safe }}
     </div>
     {% endif %}

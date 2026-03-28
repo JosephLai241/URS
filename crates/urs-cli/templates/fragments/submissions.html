@@ -9,6 +9,89 @@
   </div>
 </div>
 
+{% if !file_path.is_empty() %}
+<div class="page-action">
+  <button class="new-scrape-btn analytics-btn" hx-get="/analytics/{{ file_path }}" hx-target="#main-content" hx-push-url="true">
+    <svg class="btn-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="10" width="3" height="5" rx="0.5"/><rect x="6" y="6" width="3" height="9" rx="0.5"/><rect x="11" y="2" width="3" height="13" rx="0.5"/></svg>
+    Generate Word Frequency Analysis
+  </button>
+</div>
+{% endif %}
+
+{% if subreddit_info.is_some() %}
+{% let info = subreddit_info.as_ref().unwrap() %}
+<div class="profile-header subreddit-header">
+  <div class="profile-top">
+    {% if info.icon_url.is_some() %}
+    <img class="profile-avatar" src="{{ info.icon_url.as_ref().unwrap() }}" alt="r/{{ info.name }}" />
+    {% endif %}
+    <div class="profile-identity">
+      <div class="profile-username">
+        <a href="https://www.reddit.com/r/{{ info.name }}" target="_blank" rel="noopener">r/{{ info.name }}</a>
+      </div>
+      {% if info.title.is_some() %}
+      <div class="profile-bio">{{ info.title.as_ref().unwrap() }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="profile-stats">
+    {% if info.subscribers.is_some() %}
+    <span>{{ info.subscribers.as_ref().unwrap() }} subscribers</span>
+    {% endif %}
+    {% if info.active_users.is_some() %}
+    <span class="dot">&middot;</span>
+    <span>{{ info.active_users.as_ref().unwrap() }} online</span>
+    {% endif %}
+    {% if info.subreddit_type.is_some() %}
+    <span class="dot">&middot;</span>
+    <span>{{ info.subreddit_type.as_ref().unwrap() }}</span>
+    {% endif %}
+    {% if info.created_date.is_some() %}
+    <span class="dot">&middot;</span>
+    <span>Created {{ info.created_date.as_ref().unwrap() }}</span>
+    {% endif %}
+  </div>
+  {% if info.description.is_some() %}
+  <div class="profile-bio">{{ info.description.as_ref().unwrap() }}</div>
+  {% endif %}
+  <div class="profile-badges">
+    {% if info.nsfw %}<span class="badge badge-nsfw">NSFW</span>{% endif %}
+    {% if info.quarantined %}<span class="badge badge-locked">Quarantined</span>{% endif %}
+  </div>
+  {% if !info.information_json.is_empty() %}
+  <div class="profile-json-toggle">
+    <button class="item-json-btn" onclick="toggleItemJson(this)">{} Show JSON</button>
+    <template class="item-json-data">
+      <div class="item-json-content"><pre>{{ info.information_json|safe }}</pre></div>
+    </template>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if !rules.is_empty() %}
+<div class="rules-card">
+  <div class="rules-header" onclick="this.parentElement.classList.toggle('expanded')">
+    <span class="rules-title">Subreddit Rules ({{ rules.len() }})</span>
+    <span class="rules-chevron">&#x25B6;</span>
+  </div>
+  <div class="rules-body">
+    {% for rule in rules %}
+    <div class="rule-item">
+      <div class="rule-name">
+        <span class="rule-number">{{ loop.index }}.</span>
+        {{ rule.short_name }}
+        <span class="rule-kind badge badge-flair">{{ rule.kind }}</span>
+      </div>
+      {% if !rule.description_html.is_empty() %}
+      <div class="rule-description rendered-markdown">{{ rule.description_html|safe }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 <div class="page-header">
   <p class="subtitle">{{ posts.len() }} submissions</p>
 </div>
@@ -58,7 +141,7 @@
     </div>
     {% if !post.selftext_html.is_empty() %}
     <div
-      class="selftext-preview"
+      class="selftext-preview rendered-markdown"
       id="selftext-{{ loop.index }}"
       onclick="this.classList.toggle('expanded')"
     >

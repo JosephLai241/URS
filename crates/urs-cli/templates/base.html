@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>URS — Browse Scrapes</title>
+    <title>URS</title>
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="stylesheet" href="/assets/style.css" />
     <script src="/assets/htmx.min.js"></script>
+    <script src="/assets/scrape.js"></script>
     <script>
       /**
        * Toggles a directory node open/closed in the sidebar file tree.
@@ -166,9 +167,10 @@
         }
       });
 
-      // Apply local time tooltips on initial page load.
+      // Apply local time tooltips on initial page load and start SSE progress listener.
       document.addEventListener("DOMContentLoaded", function () {
         applyLocalTimeTitles(document);
+        initScrapeProgress();
       });
 
       /**
@@ -183,21 +185,26 @@
         if (e.target.id === "main-content") {
           closeInspector();
 
+          // Clear all sidebar highlights first.
           document
             .querySelectorAll(".sidebar .tree-name a")
             .forEach(function (a) {
               a.classList.remove("active");
             });
 
-          var path = window.location.pathname.replace("/view/", "");
+          // Re-highlight the active file only if viewing a file.
+          var pathname = window.location.pathname;
+          if (pathname.indexOf("/view/") === 0) {
+            var path = pathname.replace("/view/", "");
 
-          document
-            .querySelectorAll(".sidebar .tree-name a")
-            .forEach(function (a) {
-              if (a.getAttribute("data-path") === path) {
-                a.classList.add("active");
-              }
-            });
+            document
+              .querySelectorAll(".sidebar .tree-name a")
+              .forEach(function (a) {
+                if (a.getAttribute("data-path") === path) {
+                  a.classList.add("active");
+                }
+              });
+          }
         }
       });
     </script>
@@ -208,12 +215,37 @@
       <div class="navbar-actions">
         <div id="content-actions">{% block actions %}{% endblock %}</div>
       </div>
+      {% if let Some(username) = username %}
+      <div id="rate-limit-info" class="rate-limit-info">
+        <span class="rate-limit-text">
+          Requests Remaining:
+          <span id="rate-limit-remaining">--</span>/<span id="rate-limit-total">600</span>
+          <span class="rate-limit-sep">&middot;</span>
+          Resets in <span id="rate-limit-timer">--:--:--</span>
+        </span>
+        <button id="rate-limit-refresh" class="rate-limit-refresh-btn"
+                title="Refresh (uses 1 API request)" onclick="refreshRateLimit()">
+          &#x21BB;
+        </button>
+      </div>
+      {% else %}
+      <div class="navbar-warning">Configure Reddit credentials to run scrapes</div>
+      {% endif %}
+      <button class="navbar-settings-btn" onclick="htmx.ajax('GET','/settings',{target:'#main-content',swap:'innerHTML'});history.pushState({},'','/settings');" title="Settings">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7.07 0l-.26 1.59a5.97 5.97 0 0 0-1.55.64L3.89 1.3l-1.42 1.42.93 1.37a5.97 5.97 0 0 0-.64 1.55L1.17 5.9v2l1.59.26c.14.55.36 1.07.64 1.55l-.93 1.37 1.42 1.42 1.37-.93c.48.28 1 .5 1.55.64l.26 1.59h2l.26-1.59a5.97 5.97 0 0 0 1.55-.64l1.37.93 1.42-1.42-.93-1.37c.28-.48.5-1 .64-1.55l1.59-.26v-2l-1.59-.26a5.97 5.97 0 0 0-.64-1.55l.93-1.37-1.42-1.42-1.37.93a5.97 5.97 0 0 0-1.55-.64L9.07 0H7.07zM8 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+        {% if let Some(username) = username %}
+        <span class="navbar-settings-user">u/{{ username }}</span>
+        {% endif %}
+      </button>
     </nav>
     <div class="app-layout">
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
           <h3>Scrapes</h3>
+          {% block sidebar_actions %}{% endblock %}
         </div>
+        <div id="scrape-tasks"></div>
+        <div class="sidebar-split-handle" id="sidebar-split-handle"></div>
         <div class="file-tree" id="file-tree">
           {% block sidebar %}{% endblock %}
         </div>
@@ -300,6 +332,76 @@
         handle.addEventListener("dblclick", function () {
           sidebar.style.width = DEFAULT_WIDTH + "px";
           localStorage.setItem("urs-sidebar-width", DEFAULT_WIDTH);
+        });
+      })();
+
+      /**
+       * Sidebar split handle: lets the user drag the divider between the scrape
+       * tasks area and the file tree to adjust how much vertical space each gets.
+       * The tasks area height is stored in localStorage. Double-click resets to
+       * the default max-height.
+       */
+      (function () {
+        var DEFAULT_MAX = 0.4; // 40% of sidebar height
+        var MIN_HEIGHT = 60;
+        var tasksEl = document.getElementById("scrape-tasks");
+        var handle = document.getElementById("sidebar-split-handle");
+        var sidebar = document.getElementById("sidebar");
+
+        // Restore saved height from a previous session.
+        var saved = localStorage.getItem("urs-tasks-height");
+        if (saved) tasksEl.style.maxHeight = saved + "px";
+
+        var startY, startHeight;
+
+        /**
+         * Begin drag: capture initial mouse position and tasks height.
+         * @param {MouseEvent} e
+         */
+        handle.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+
+          startY = e.clientY;
+          startHeight = tasksEl.getBoundingClientRect().height;
+
+          document.body.style.cursor = "row-resize";
+          document.body.style.userSelect = "none";
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        });
+
+        /**
+         * During drag: compute new max-height for the tasks area.
+         * @param {MouseEvent} e
+         */
+        function onMouseMove(e) {
+          var sidebarHeight = sidebar.getBoundingClientRect().height;
+          var maxH = sidebarHeight * 0.8; // cap at 80% of sidebar
+          var h = Math.min(
+            maxH,
+            Math.max(MIN_HEIGHT, startHeight + e.clientY - startY),
+          );
+
+          tasksEl.style.maxHeight = h + "px";
+        }
+
+        /** End drag: restore cursor, remove listeners, persist height. */
+        function onMouseUp() {
+          document.body.style.cursor = "";
+          document.body.style.userSelect = "";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+
+          localStorage.setItem(
+            "urs-tasks-height",
+            Math.round(tasksEl.getBoundingClientRect().height),
+          );
+        }
+
+        /** Double-click resets tasks area to default max-height. */
+        handle.addEventListener("dblclick", function () {
+          tasksEl.style.maxHeight = "";
+          localStorage.removeItem("urs-tasks-height");
         });
       })();
 

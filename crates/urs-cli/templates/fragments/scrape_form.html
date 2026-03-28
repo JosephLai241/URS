@@ -1,0 +1,153 @@
+<div class="scrape-form-container">
+  <h2 class="scrape-card-title">New Scrape</h2>
+
+  {% if !scrape_enabled %}
+  <div class="scrape-warning">
+    <span class="warning-icon">&#x26A0;</span>
+    <div>
+      <strong>Reddit credentials not configured.</strong>
+      <span><a href="/settings" hx-get="/settings" hx-target="#main-content" hx-push-url="true">Configure credentials</a> to enable scraping.</span>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="scrape-tabs">
+    <button class="scrape-tab active" onclick="switchScrapeTab(this, 'subreddit')">Subreddit</button>
+    <button class="scrape-tab" onclick="switchScrapeTab(this, 'comments')">Comments</button>
+    <button class="scrape-tab" onclick="switchScrapeTab(this, 'redditor')">Redditor</button>
+    <button class="scrape-tab" onclick="switchScrapeTab(this, 'livestream')">Livestream</button>
+  </div>
+
+  <!-- Subreddit Tab -->
+  <form id="scrape-form-subreddit" class="scrape-form scrape-panel active" action="/scrape/subreddit" onsubmit="startScrape(event)" novalidate>
+    <div class="form-group">
+      <label for="sub-name">Subreddit</label>
+      <input type="text" id="sub-name" name="subreddit" placeholder="rust" required {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <div class="custom-select" id="sub-category" data-value="hot">
+        <input type="hidden" name="category" value="hot" />
+        <div class="custom-select-trigger" onclick="toggleCustomSelect(this)">
+          <span class="custom-select-label">Hot</span>
+          <svg class="custom-select-arrow" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </div>
+        <div class="custom-select-options">
+          <div class="custom-select-option selected" data-value="hot" onclick="selectOption(this)">Hot</div>
+          <div class="custom-select-option" data-value="new" onclick="selectOption(this)">New</div>
+          <div class="custom-select-option" data-value="top" onclick="selectOption(this)">Top</div>
+          <div class="custom-select-option" data-value="controversial" onclick="selectOption(this)">Controversial</div>
+          <div class="custom-select-option" data-value="rising" onclick="selectOption(this)">Rising</div>
+          <div class="custom-select-option" data-value="search" onclick="selectOption(this)">Search</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="sub-count">Count</label>
+      <input type="number" id="sub-count" name="count" value="25" min="1" {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group" id="sub-time-group" style="display:none">
+      <label>Time Filter</label>
+      <div class="custom-select" id="sub-time" data-value="all">
+        <input type="hidden" name="time" value="all" />
+        <div class="custom-select-trigger" onclick="toggleCustomSelect(this)">
+          <span class="custom-select-label">All Time</span>
+          <svg class="custom-select-arrow" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </div>
+        <div class="custom-select-options">
+          <div class="custom-select-option selected" data-value="all" onclick="selectOption(this)">All Time</div>
+          <div class="custom-select-option" data-value="hour" onclick="selectOption(this)">Past Hour</div>
+          <div class="custom-select-option" data-value="day" onclick="selectOption(this)">Past 24 Hours</div>
+          <div class="custom-select-option" data-value="week" onclick="selectOption(this)">Past Week</div>
+          <div class="custom-select-option" data-value="month" onclick="selectOption(this)">Past Month</div>
+          <div class="custom-select-option" data-value="year" onclick="selectOption(this)">Past Year</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group" id="sub-query-group" style="display:none">
+      <label for="sub-query">Search Query</label>
+      <input type="text" id="sub-query" name="query" placeholder="async programming" {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group form-checkbox">
+      <label>
+        <input type="checkbox" name="rules" value="true" {% if !scrape_enabled %}disabled{% endif %} />
+        <span class="custom-checkbox"></span>
+        Include subreddit rules
+      </label>
+    </div>
+    <div class="form-group form-radio">
+      <span class="form-radio-label">Format:</span>
+      <label><input type="radio" name="format" value="json" checked {% if !scrape_enabled %}disabled{% endif %} /><span class="custom-radio"></span> JSON</label>
+      <label><input type="radio" name="format" value="csv" {% if !scrape_enabled %}disabled{% endif %} /><span class="custom-radio"></span> CSV</label>
+    </div>
+    <button type="submit" class="scrape-submit" {% if !scrape_enabled %}disabled{% endif %}>Start Scrape</button>
+  </form>
+
+  <!-- Comments Tab -->
+  <form id="scrape-form-comments" class="scrape-form scrape-panel" action="/scrape/comments" onsubmit="startScrape(event)" novalidate>
+    <div class="form-group">
+      <label for="cmt-url">Submission URL</label>
+      <input type="url" id="cmt-url" name="url" placeholder="https://www.reddit.com/r/rust/comments/..." required {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="cmt-count">Comment Limit <span class="form-hint">(0 = all)</span></label>
+      <input type="number" id="cmt-count" name="count" value="0" min="0" {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group form-checkbox">
+      <label>
+        <input type="checkbox" name="raw" value="true" {% if !scrape_enabled %}disabled{% endif %} />
+        <span class="custom-checkbox"></span>
+        Raw / flat output (no threading)
+      </label>
+    </div>
+    <button type="submit" class="scrape-submit" {% if !scrape_enabled %}disabled{% endif %}>Start Scrape</button>
+  </form>
+
+  <!-- Redditor Tab -->
+  <form id="scrape-form-redditor" class="scrape-form scrape-panel" action="/scrape/redditor" onsubmit="startScrape(event)" novalidate>
+    <div class="form-group">
+      <label for="red-username">Username</label>
+      <input type="text" id="red-username" name="username" placeholder="spez" required {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="red-count">Limit per Category</label>
+      <input type="number" id="red-count" name="count" value="25" min="1" {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <button type="submit" class="scrape-submit" {% if !scrape_enabled %}disabled{% endif %}>Start Scrape</button>
+  </form>
+
+  <!-- Livestream Tab -->
+  <form id="scrape-form-livestream" class="scrape-form scrape-panel" action="/scrape/livestream" onsubmit="startScrape(event)" novalidate>
+    <div class="form-group form-radio">
+      <span class="form-radio-label">Target Type:</span>
+      <label><input type="radio" name="target_type" value="subreddit" checked {% if !scrape_enabled %}disabled{% endif %} /><span class="custom-radio"></span> Subreddit</label>
+      <label><input type="radio" name="target_type" value="redditor" {% if !scrape_enabled %}disabled{% endif %} /><span class="custom-radio"></span> Redditor</label>
+    </div>
+    <div class="form-group">
+      <label for="ls-target">Target Name</label>
+      <input type="text" id="ls-target" name="target" placeholder="rust" required {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <div class="form-group">
+      <label>Source</label>
+      <div class="custom-select" id="ls-source" data-value="comments">
+        <input type="hidden" name="source" value="comments" />
+        <div class="custom-select-trigger" onclick="toggleCustomSelect(this)">
+          <span class="custom-select-label">Comments</span>
+          <svg class="custom-select-arrow" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </div>
+        <div class="custom-select-options">
+          <div class="custom-select-option selected" data-value="comments" onclick="selectOption(this)">Comments</div>
+          <div class="custom-select-option" data-value="submissions" onclick="selectOption(this)">Submissions</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="ls-interval">Poll Interval <span class="form-hint">(seconds)</span></label>
+      <input type="number" id="ls-interval" name="interval" value="5" min="2" {% if !scrape_enabled %}disabled{% endif %} />
+    </div>
+    <button type="submit" class="scrape-submit" {% if !scrape_enabled %}disabled{% endif %}>Start Livestream</button>
+  </form>
+
+  <!-- Progress area (hidden until scrape starts) -->
+  <div id="scrape-progress" class="scrape-progress" style="display:none"></div>
+</div>

@@ -10,8 +10,15 @@
 </div>
 
 <div class="livestream-header">
-  <h2>r/{{ target }} &mdash; {{ source }}</h2>
+  <h2>r/{{ target }}: {{ source }}</h2>
   <div class="livestream-stats">{{ event_count }} events</div>
+  {% if !first_event_time.is_empty() %}
+  <div class="livestream-timestamps">
+    <span class="livestream-timestamp">Started: {{ first_event_time }}</span>
+    <span class="livestream-timestamp">Stopped: {{ last_event_time }}</span>
+    <span class="livestream-timestamp">Elapsed: {{ duration }}</span>
+  </div>
+  {% endif %}
 </div>
 
 <div class="livestream-feed">
@@ -36,7 +43,11 @@
       </div>
       {% if event.title.is_some() %}
       <div class="submission-title" style="margin-bottom: 4px">
+        {% if event.permalink.is_some() %}
+        <a href="{{ event.permalink.as_ref().unwrap() }}" target="_blank" rel="noopener">{{ event.title.as_ref().unwrap() }}</a>
+        {% else %}
         {{ event.title.as_ref().unwrap() }}
+        {% endif %}
       </div>
       {% endif %}
       <div class="event-body">{{ event.body_html|safe }}</div>

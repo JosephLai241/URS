@@ -1,5 +1,16 @@
-{% extends "base.html" %} {% block sidebar %} {% for entry in entries %} {% if
-entry.is_dir %}
+{% extends "base.html" %}
+
+{% block sidebar_actions %}
+<button class="new-scrape-btn{% if !scrape_enabled %} disabled{% endif %}"
+        hx-get="/scrape" hx-target="#main-content" hx-push-url="/scrape"
+        {% if !scrape_enabled %}title="Reddit credentials not configured. Run urs config init to enable."{% endif %}>
+  + New Scrape
+</button>
+{% endblock %}
+
+{% block sidebar %}
+{% for entry in entries %}
+{% if entry.is_dir %}
 <div
   class="tree-item"
   hx-get="/api/tree?path={{ entry.relative_path }}"
@@ -9,8 +20,8 @@ entry.is_dir %}
   onclick="toggleDir(this)"
 >
   <span class="tree-chevron">&#x25B6;</span>
-  <span class="tree-icon">&#x1F4C1;</span>
-  <span class="tree-name tree-dir-name">{{ entry.name }}/</span>
+  <svg class="tree-icon tree-icon-dir" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h3.172a1.5 1.5 0 0 1 1.06.44l.658.658A.5.5 0 0 0 7.744 3.25H13.5A1.5 1.5 0 0 1 15 4.75v7.75A1.5 1.5 0 0 1 13.5 14h-11A1.5 1.5 0 0 1 1 12.5V3.5z"/></svg>
+  <span class="tree-name tree-dir-name" title="{{ entry.name }}">{{ entry.name }}/</span>
 </div>
 <div class="tree-children"></div>
 {% else %}
@@ -22,21 +33,29 @@ entry.is_dir %}
   hx-push-url="/view/{{ entry.relative_path }}"
 >
   <span style="width: 12px"></span>
-  <span class="tree-icon">&#x1F4C4;</span>
-  <span class="tree-name"
+  <svg class="tree-icon tree-icon-file" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 1 1-1h6l5 5v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1zm1 0v14h10V6h-4a1 1 0 0 1-1-1V1H3z"/></svg>
+  <span class="tree-name" title="{{ entry.name }}"
     ><a data-path="{{ entry.relative_path }}">{{ entry.name }}</a></span
   >
   <span class="tree-size">{{ entry.size|filesize }}</span>
 </div>
-{% endif %} {% endfor %} {% if entries.is_empty() %}
+{% endif %}
+{% endfor %}
+{% if entries.is_empty() %}
 <div class="tree-item">
   <span class="text-muted"
-    >No scrape data found. Run a scrape command first.</span
+    >No scrape data found. Run a scrape to get started.</span
   >
 </div>
-{% endif %} {% endblock %} {% block content %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
 <div class="welcome-message">
-  <h2>Browse Scrapes</h2>
-  <p class="text-muted">Select a file from the sidebar to view its contents.</p>
+  <h2>Welcome to URS</h2>
+  <p class="text-muted">
+    Select a file from the sidebar to view your scraped data{% if scrape_enabled %}, or click
+    <strong>New Scrape</strong> to start a new scrape{% endif %}.
+  </p>
 </div>
 {% endblock %}
