@@ -17,9 +17,30 @@
 
 # Sponsors
 
-## Previous Sponsors
+<div align="center">
+  <h4>If this project has saved you time, consider sponsoring its development.</h4>
+  <a href="https://github.com/sponsors/JosephLai241">
+    <img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github&style=for-the-badge" alt="Sponsor on GitHub" />
+  </a>
+</div>
 
-- [lolfilmworks]
+<br />
+
+<div align="center">
+  <table width="100%">
+    <tr>
+      <td valign="middle" align="right" width="300">
+        <a href="https://mangoproxy.com">
+           <img width="300" alt="Horizontal Logo For White Background (10)" src="https://github.com/user-attachments/assets/7d78f840-2ad7-4ece-af3f-b876066668dc" />
+        </a>
+      </td>
+      <td valign="middle" width="300">
+        <p>MangoProxy provides residential, ISP, datacenter, and mobile proxies in 200+ countries. Trusted by businesses worldwide for stable connections, fast response times, and scalable proxy infrastructure.</p>
+        <p>Use <a href="https://mangoproxy.com?ref=urs-project">my affiliate link</a> to sign up for an account, and use promo code <code>JOSEPH</code> to save 8% on Static ISP Proxies.</p>
+      </td>
+    </tr>
+  </table>
+</div>
 
 # Table of Contents
 
