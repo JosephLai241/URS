@@ -39,6 +39,17 @@
         <p>Use <a href="https://mangoproxy.com?ref=urs-project">my affiliate link</a> to sign up for an account, and use promo code <code>JOSEPH</code> to save 8% on Static ISP Proxies.</p>
       </td>
     </tr>
+    <tr>
+      <td valign="middle" align="right" width="300">
+        <a href="https://www.rapidproxy.io/?ref=urs">
+          <img width="300" alt="RapidProxy logo" src="https://github.com/user-attachments/assets/5ae34111-fb2e-4451-89b9-c9f93121c262" />
+        </a>
+      </td>
+      <td valign="middle" width="300">
+        <p>RapidProxy is a global residential proxy platform built for scraping developers and data collection teams, offering 90M+ real residential IPs across 200+ countries and regions. It supports dynamic rotation, precise geo-targeting, and high-concurrency data collection, helping improve success rates and reduce ban risks. Start your free trial today!</p>
+        <p>Sign up with <a href="https://www.rapidproxy.io/?ref=urs">my affiliate link</a> and use discount code <b>RAPID10</b> to get <b>10% off</b>.</p>
+      </td>
+    </tr>
   </table>
 </div>
 
