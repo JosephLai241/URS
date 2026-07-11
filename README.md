@@ -50,6 +50,19 @@
         <p>Sign up with <a href="https://www.rapidproxy.io/?ref=urs">my affiliate link</a> and use discount code <b>RAPID10</b> to get <b>10% off</b>.</p>
       </td>
     </tr>
+    <tr>
+      <td valign="middle" align="right" width="300">
+        <a href="https://www.swiftproxy.net/?ref=URS">
+          <img width="325" height="87" alt="Swiftproxy logo" src="https://github.com/user-attachments/assets/e661305b-ce68-4d2c-8916-4cc7291c5421" />
+        </a>
+      </td>
+      <td valign="middle" width="300">
+        <p><b>Swiftproxy</b> — Premium residential proxies for web scraping, browser automation, AI workflows, and large-scale data collection. Access <b>80M+ real residential IPs across 190+ countries</b> with rotating and sticky sessions, non-expiring traffic, and support for <b>HTTP, HTTPS, and SOCKS5</b>.</p>
+       <p>🎁 <b>Free Trial Available</b></p>
+       <p>🏷️ <b>10% OFF</b> with code: <b>PROXY90</b></p>
+       <p>Sign up today with <a href="https://www.swiftproxy.net/?code=MYMEH7J9Q">my affiliate link</a>!</p>
+      </td>
+    </tr>
   </table>
 </div>
 
