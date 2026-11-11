@@ -854,6 +854,26 @@ class TestCheckPRAWCliCheckSubredditMethod:
         except SystemExit:
             assert True
 
+    def test_check_subreddit_with_missing_category_and_n_results(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit"]])
+
+        try:
+            Cli.CheckPRAWCli().check_subreddit(args)
+            assert False
+        except SystemExit:
+            assert True
+
+    def test_check_subreddit_with_missing_n_results(self):
+        parser = MakeArgs.make_scraper_args()
+        args = parser.parse_args(["--subreddit", ["test_subreddit", "h"]])
+
+        try:
+            Cli.CheckPRAWCli().check_subreddit(args)
+            assert False
+        except SystemExit:
+            assert True
+
 
 class TestCheckPRAWCliCheckRedditorMethod:
     """

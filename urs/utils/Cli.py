@@ -821,9 +821,15 @@ class CheckPRAWCli:
         """
 
         for sub in args.subreddit:
-            if sub[1].upper() not in short_cat or len(sub) > 4:
-                if sub[1].upper() not in short_cat:
-                    print(Fore.RED + Style.BRIGHT + "\nINVALID CATEGORY.")
+            if len(sub) < 3 or len(sub) > 4:
+                print(
+                    Fore.RED
+                    + Style.BRIGHT
+                    + "\nINVALID NUMBER OF SUBREDDIT ARGUMENTS."
+                )
+                raise ValueError
+            if sub[1].upper() not in short_cat:
+                print(Fore.RED + Style.BRIGHT + "\nINVALID CATEGORY.")
                 raise ValueError
             elif sub[1].upper() in short_cat:
                 ### Check args if a time filter is present.
